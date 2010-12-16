@@ -55,7 +55,7 @@ namespace MCForge
                 "// As a note, MCForge is designed for .NET 3.5." + Environment.NewLine +
                 "using System;" + Environment.NewLine +
                 Environment.NewLine +
-                "namespace MCLawl" + Environment.NewLine +
+                "namespace MCForge" + Environment.NewLine +
                 "{" + Environment.NewLine +
                 "\tpublic class " + ClassName(CmdName) + " : Command" + Environment.NewLine +
                 "\t{" + Environment.NewLine +
@@ -124,7 +124,7 @@ namespace MCForge
             parameters.OutputAssembly = dllpath + "Cmd" + commandName + ".dll";
             parameters.ReferencedAssemblies.Add("MCForge_.dll");
             StreamReader sr = new StreamReader(sourcepath + "cmd" + commandName + ".cs");
-            results = compiler.CompileAssemblyFromSource(parameters, sr.ReadToEnd());
+            results = compiler.CompileAssemblyFromSource(parameters, sr.ReadToEnd().Replace("namespace MCLawl", "namespace MCForge"));
             sr.Dispose();
             switch (results.Errors.Count)
             {
