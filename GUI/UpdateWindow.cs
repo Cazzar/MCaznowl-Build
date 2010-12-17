@@ -23,7 +23,7 @@ namespace MCForge.Gui
         {
             UpdLoadProp("properties/update.properties");
             WebClient client = new WebClient();
-            client.DownloadFile("http://www.mcforge.co.cc/revs.txt", "text/revs.txt");
+            client.DownloadFile(ServerSettings.RevisionList, "text/revs.txt");
             listRevisions.Items.Clear();
             FileInfo file = new FileInfo("text/revs.txt");
             StreamReader stRead = file.OpenText();

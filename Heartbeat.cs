@@ -120,7 +120,7 @@ namespace MCForge
                             throw new Exception("Hash not set");
                         }
 
-                        url = "http://files.mdnserver.info/hbannounce.php";
+                        url = ServerSettings.HeartbeatAnnounce;
 
                         if (Player.number > 0)
                         {

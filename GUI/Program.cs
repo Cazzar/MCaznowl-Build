@@ -180,7 +180,7 @@ namespace MCForge_.Gui
                 if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
                 try
                 {
-                    if (Client.DownloadString("http://files.mdnserver.info/curversion.txt") != Server.Version)
+                    if (Client.DownloadString(ServerSettings.CurrentVersionFile) != Server.Version)
                     {
                         if (Server.autoupdate == true || p != null)
                         {
@@ -242,7 +242,7 @@ namespace MCForge_.Gui
                                 ConsoleColor prevColor = Console.ForegroundColor;
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("An update was found!");
-                                Console.WriteLine("Update using the file at www.files.mdnserver.info/MCForge_.dll and placing it over the top of your current MCForge_.dll!");
+                                Console.WriteLine("Update using the file at " + ServerSettings.DLLLocation + " and placing it over the top of your current MCForge_.dll!");
                                 Console.ForegroundColor = prevColor;
                             }
                         }
@@ -305,7 +305,7 @@ namespace MCForge_.Gui
                     SW.WriteLine("kill $2");
                     SW.WriteLine("rm MCForge_.dll.backup");
                     SW.WriteLine("mv MCForge_.dll MCForge.dll_.backup");
-                    SW.WriteLine("wget http://files.mdnserver.info/MCForge_.dll");
+                    SW.WriteLine("wget " + ServerSettings.DLLLocation);
                     SW.WriteLine("mono MCForge.exe");
                 }
 
@@ -318,16 +318,16 @@ namespace MCForge_.Gui
                 if (!oldrevision)
                 {
                     WebClient client = new WebClient();
-                    Server.selectedrevision = client.DownloadString("http://files.mdnserver.info/curversion.txt");
+                    Server.selectedrevision = client.DownloadString(ServerSettings.CurrentVersionFile);
                     client.Dispose();
                 }
                 verscheck = Server.selectedrevision.TrimStart('r');
                 int vers = int.Parse(verscheck.Split('.')[0]);
-                if (oldrevision) { filelocation = ("http://files.mdnserver.info/archives/exe/" + Server.selectedrevision + ".exe"); }
-                if (!oldrevision) { filelocation = ("http://files.mdnserver.info/MCForge_.dll"); }
+                if (oldrevision) { filelocation = (ServerSettings.ArchivePath + Server.selectedrevision + ".exe"); }
+                if (!oldrevision) { filelocation = (ServerSettings.DLLLocation); }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
-                Client.DownloadFile("http://files.mdnserver.info/changelog.txt", "extra/Changelog.txt");
+                Client.DownloadFile(ServerSettings.ChangelogLocation, "extra/Changelog.txt");
                 
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale
