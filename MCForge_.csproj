@@ -302,6 +302,7 @@
     <Compile Include="Queue\TorrentException.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="ServerSettings.cs" />
     <Compile Include="Updater.cs" />
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
