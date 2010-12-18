@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MCForge")]
-[assembly: AssemblyDescription("The most epic Minecraft server ever")]
+[assembly: AssemblyDescription("Forging the Way")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MCforge Dev Team")]
 [assembly: AssemblyProduct("MCForge")]
 [assembly: AssemblyCopyright("Copyright © 2010")]
 [assembly: AssemblyTrademark("")]
