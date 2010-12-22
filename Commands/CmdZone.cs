@@ -32,15 +32,25 @@ namespace MCForge
 
             if (message.IndexOf(' ') == -1)
             {
-                switch (message.ToLower())
+                if (p.canBuild == true) //Checks if player can build there
                 {
-                    case "del":
-                        p.zoneDel = true;
-                        Player.SendMessage(p, "Place a block where you would like to delete a zone.");
-                        return;
-                    default:
-                        Help(p);
-                        return;
+                    switch (message.ToLower()) //If true - they can delete the zone
+                    {
+                        case "del":
+                            p.zoneDel = true;
+                            Player.SendMessage(p, "Place a block where you would like to delete a zone.");
+                            return;
+                        default:
+                            Help(p);
+                            return;
+                    }
+                }
+                else //if they cant, it warns them, the ops and logs it on the server!
+                {
+                    Player.SendMessage(p, "You can't delete a zone which is above your rank!" );
+                    Player.GlobalMessageOps( p.name + "Tried to delete a zone that is above their rank!!");
+                    Server.s.Log(p.name + "Tried to delete a zone that is above their rank!!");
+                    return;
                 }
             }
 

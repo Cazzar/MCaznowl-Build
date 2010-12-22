@@ -113,6 +113,8 @@ namespace MCForge
             all.Add(new CmdNewLvl());
             all.Add(new CmdOpChat());
             all.Add(new CmdOutline());
+            all.Add(new CmdOverseer());
+            all.Add(new CmdOZone());
             all.Add(new CmdPaint());
             all.Add(new CmdPaste());
             all.Add(new CmdPause());
@@ -185,6 +187,8 @@ namespace MCForge
             all.Add(new CmdWhois());
             all.Add(new CmdWhowas());
             all.Add(new CmdWrite());
+            all.Add(new CmdXban());
+            all.Add(new CmdXJail());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
             all.Add(new CmdZone());

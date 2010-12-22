@@ -14,7 +14,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message.ToLower() == "create" || message.ToLower() == "") && p != null)
+            if ((message.ToLower() == "set") && p != null)
             {
                 p.level.jailx = p.pos[0]; p.level.jaily = p.pos[1]; p.level.jailz = p.pos[2];
                 p.level.jailrotx = p.rot[0]; p.level.jailroty = p.rot[1];
@@ -28,7 +28,6 @@ namespace MCForge
                     if (!who.jailed)
                     {
                         if (p != null) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot jail someone of equal or greater rank."); return; }
-                        if (who.level != p.level) Command.all.Find("goto").Use(who, p.level.name);
                         Player.GlobalDie(who, false);
                         Player.GlobalSpawn(who, p.level.jailx, p.level.jaily, p.level.jailz, p.level.jailrotx, p.level.jailroty, true);
                         who.jailed = true;
@@ -49,7 +48,8 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/jail [user] - Places [user] in jail unable to use commands.");
-            Player.SendMessage(p, "/jail [create] - Creates the jail point for the map.");
+            Player.SendMessage(p, "/jail [set] - Creates the jail point for the map.");
+            Player.SendMessage(p, "This command has been deprecated in favor of /xjail.");
         }
     }
 }

@@ -17,6 +17,13 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (message.ToLower() == "superops" || message.ToLower() == "ops" || message.ToLower() == "advbuilders" || message.ToLower() == "builders")
+            {
+                Player.SendMessage(p, "You cannot try to promote yourself with /text! You have been reported to all Ops!");
+                Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " tried to promote theirself by using /text, they should be banned!");
+                return;
+            }
+            
             if (!Directory.Exists("extra/text/")) Directory.CreateDirectory("extra/text");
             if (message.IndexOf(' ') == -1) { Help(p); return; }
 
