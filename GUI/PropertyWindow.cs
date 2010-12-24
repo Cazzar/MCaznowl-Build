@@ -7,13 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        public PropertyWindow() {
+        public PropertyWindow()
+        {
             InitializeComponent();
+            {
+                ChkPortResult.Text = "Port Check Not Started";
+            }
         }
 
         private void PropertyWindow_Load(object sender, EventArgs e) {
@@ -825,5 +831,53 @@ namespace MCForge.Gui
             messageInfo += Player.storedHelp;
             MessageBox.Show(messageInfo);
         }
+
+        private void ChkPort_Click(object sender, EventArgs e)
+        {
+            int txtportasint;
+            txtportasint = Convert.ToInt32(txtPort); 
+            this.Enabled = false;
+            TcpListener listener = null;
+
+            try {
+                listener = new TcpListener( IPAddress.Any, (int)txtportasint);
+                listener.Start();
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + txtportasint);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if( response.StatusCode == HttpStatusCode.OK ) {
+                    using( Stream stream = response.GetResponseStream() ) {
+                        StreamReader reader = new StreamReader( stream );
+                        if( reader.ReadLine().StartsWith( "ok" ) ) {
+                            MessageBox.Show("Port " + txtportasint + " is open!", "Port check succeeded!");
+                            ChkPortResult.Text = "Port Check Succeeded!";
+                            return;
+                        }
+                    }
+                }
+                MessageBox.Show("Port " + txtportasint + " is closed. You will need to set up forwarding.", "Port check failed");
+                ChkPortResult.Text = "Port Check Failed";
+
+            } catch {
+                MessageBox.Show("Could not start listening on port " + txtportasint + ". Another program may be using the port.", "Port check failed");
+                ChkPortResult.Text = "Port Check Failed";
+            } finally {
+                if( listener != null ) {
+                    listener.Stop();
+                }
+                this.Enabled = true;
+            }
+        
+        }
+
+
+
+
+
+
+
+
+
     }
 }

@@ -34,12 +34,18 @@ namespace MCForge
                 Player.SendMessage(p, "Stop your current possession first.");
                 return;
             }
+            Command opchat = Command.all.Find("opchat");
             p.hidden = !p.hidden;
             if (p.hidden)
             {
                 Player.GlobalDie(p, true);
                 Player.GlobalMessageOps("To Ops -" + p.color + p.name + "-" + Server.DefaultColor + " is now &finvisible" + Server.DefaultColor + ".");
                 Player.GlobalChat(p, "&c- " + p.color + p.prefix + p.name + Server.DefaultColor + " disconnected.", false);
+                if (p.opchat == false)
+                {
+                    opchat.Use(p, message);
+                }
+                else { }
                 //Player.SendMessage(p, "You're now &finvisible&e.");
             }
             else
@@ -47,12 +53,17 @@ namespace MCForge
                 Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
                 Player.GlobalMessageOps("To Ops -" + p.color + p.name + "-" + Server.DefaultColor + " is now &8visible" + Server.DefaultColor + ".");
                 Player.GlobalChat(p, "&a+ " + p.color + p.prefix + p.name + Server.DefaultColor + " joined the game.", false);
+                if (p.opchat == true)
+                {
+                    opchat.Use(p, message);
+                }
+                else { }
                 //Player.SendMessage(p, "You're now &8visible&e.");
             }
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/hide - Makes yourself (in)visible to other players.");
+            Player.SendMessage(p, "/hide - Makes yourself (in)visible to other players also turns opchat on and off.");
         }
     }
 }

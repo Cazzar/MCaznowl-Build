@@ -108,7 +108,7 @@ namespace MCForge
                 else if (p.group.Permission < LevelPermission.Operator && seconds > 1200) { Player.SendMessage(p, "AdvBuilders may only undo 1200 seconds."); return; }
                 else if (p.group.Permission == LevelPermission.Operator && seconds > 5400) { Player.SendMessage(p, "Operators may only undo 5400 seconds."); return; }
 
-                Command.all.Find("pause").Use(p, "120");
+                Command.all.Find("physics").Use(p, "0");
                 Level.UndoPos uP;
                 ushort x, y, z;
 
@@ -162,7 +162,6 @@ namespace MCForge
                     }
                 }
 
-                Command.all.Find("pause").Use(p, "");
                 Player.GlobalMessage("Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
             }
             else

