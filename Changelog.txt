@@ -1,3 +1,11 @@
+v1.2.0.1
+-Added /ozone 
+-Added /Overseer
+-Added /xban
+-Added /warn
+-Added a checker for /fly making to check to see if a game of CTF is being played, if one is the player can't use /fly.
+-Added port checker to Console
+
 v1.1.1.0
  - MCLawl Custom commands may now be used
  - /inv is the new shorthand for /Invincible

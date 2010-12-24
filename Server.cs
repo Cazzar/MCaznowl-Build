@@ -78,8 +78,7 @@ namespace MCForge
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
-        //public static List<string> devs = new List<string>(new string[] { "Dmitchell94", "Jordanneil23", "HyprDmg", "SebbiUltimate", "fenderrock87" });
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "hyprdmg", "sebbiultimate", "fenderrock87", "edh649" });
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "sebbiultimate", "fenderrock87", "edh649" });
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
