@@ -1144,6 +1144,7 @@
             // 
             // ChkPortResult
             // 
+            this.ChkPortResult.BackColor = System.Drawing.SystemColors.Control;
             this.ChkPortResult.Location = new System.Drawing.Point(11, 87);
             this.ChkPortResult.Name = "ChkPortResult";
             this.ChkPortResult.ReadOnly = true;

@@ -22,18 +22,19 @@ namespace MCForge.Gui
             }
         }
 
-        private void PropertyWindow_Load(object sender, EventArgs e) {
+        private void PropertyWindow_Load(object sender, EventArgs e)
+        {
             Icon = Gui.Window.ActiveForm.Icon;
 
             Object[] colors = new Object[16];
-            colors[0] = ("black");      colors[1] = ("navy");
-            colors[2] = ("green");      colors[3] = ("teal");
-            colors[4] = ("maroon");     colors[5] = ("purple");
-            colors[6] = ("gold");       colors[7] = ("silver");
-            colors[8] = ("gray");       colors[9] = ("blue");
-            colors[10] = ("lime");      colors[11] = ("aqua");
-            colors[12] = ("red");       colors[13] = ("pink");
-            colors[14] = ("yellow");    colors[15] = ("white");
+            colors[0] = ("black"); colors[1] = ("navy");
+            colors[2] = ("green"); colors[3] = ("teal");
+            colors[4] = ("maroon"); colors[5] = ("purple");
+            colors[6] = ("gold"); colors[7] = ("silver");
+            colors[8] = ("gray"); colors[9] = ("blue");
+            colors[10] = ("lime"); colors[11] = ("aqua");
+            colors[12] = ("red"); colors[13] = ("pink");
+            colors[14] = ("yellow"); colors[15] = ("white");
             cmbDefaultColour.Items.AddRange(colors);
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
@@ -50,7 +51,7 @@ namespace MCForge.Gui
             }
             cmbDefaultRank.SelectedIndex = 1;
             cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
-            
+
             //Load server stuff
             LoadProp("properties/server.properties");
             LoadRanks();
@@ -65,7 +66,8 @@ namespace MCForge.Gui
             }
         }
 
-        private void PropertyWindow_Unload(object sender, EventArgs e) {
+        private void PropertyWindow_Unload(object sender, EventArgs e)
+        {
             Window.prevLoaded = false;
         }
 
@@ -94,11 +96,11 @@ namespace MCForge.Gui
             LoadRanks();
         }
 
-        public void LoadCommands() 
+        public void LoadCommands()
         {
             listCommands.Items.Clear();
             storedCommands.Clear();
-            foreach (GrpCommands.rankAllowance aV in GrpCommands.allowedCommands) 
+            foreach (GrpCommands.rankAllowance aV in GrpCommands.allowedCommands)
             {
                 storedCommands.Add(aV);
                 listCommands.Items.Add(aV.commandName);
@@ -133,12 +135,16 @@ namespace MCForge.Gui
             LoadBlocks();
         }
 
-        public void LoadProp(string givenPath) {
-            if (File.Exists(givenPath)) {
+        public void LoadProp(string givenPath)
+        {
+            if (File.Exists(givenPath))
+            {
                 string[] lines = File.ReadAllLines(givenPath);
 
-                foreach (string line in lines) {
-                    if (line != "" && line[0] != '#') {
+                foreach (string line in lines)
+                {
+                    if (line != "" && line[0] != '#')
+                    {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
                         string value = line.Split('=')[1].Trim();
@@ -168,27 +174,39 @@ namespace MCForge.Gui
                                 chkWorld.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "max-players":
-                                try {
-                                    if (Convert.ToByte(value) > 128) {
+                                try
+                                {
+                                    if (Convert.ToByte(value) > 128)
+                                    {
                                         value = "128";
-                                    } else if (Convert.ToByte(value) < 1) {
+                                    }
+                                    else if (Convert.ToByte(value) < 1)
+                                    {
                                         value = "1";
                                     }
                                     txtPlayers.Text = value;
-                                } catch { 
+                                }
+                                catch
+                                {
                                     Server.s.Log("max-players invalid! setting to default.");
                                     txtPlayers.Text = "12";
                                 }
                                 break;
                             case "max-maps":
-                                try {
-                                    if (Convert.ToByte(value) > 100) {
+                                try
+                                {
+                                    if (Convert.ToByte(value) > 100)
+                                    {
                                         value = "100";
-                                    } else if (Convert.ToByte(value) < 1) {
+                                    }
+                                    else if (Convert.ToByte(value) < 1)
+                                    {
                                         value = "1";
                                     }
                                     txtMaps.Text = value;
-                                } catch {
+                                }
+                                catch
+                                {
                                     Server.s.Log("max-maps invalid! setting to default.");
                                     txtMaps.Text = "5";
                                 }
@@ -212,14 +230,16 @@ namespace MCForge.Gui
                                 ChkTunnels.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "max-depth":
-                                txtDepth.Text= value;
+                                txtDepth.Text = value;
                                 break;
 
                             case "rplimit":
-                                try { txtRP.Text = value; } catch { txtRP.Text = "500"; }
+                                try { txtRP.Text = value; }
+                                catch { txtRP.Text = "500"; }
                                 break;
                             case "rplimit-norm":
-                                try { txtNormRp.Text = value; } catch { txtNormRp.Text = "10000"; }
+                                try { txtNormRp.Text = value; }
+                                catch { txtNormRp.Text = "10000"; }
                                 break;
 
                             case "log-heartbeat":
@@ -248,26 +268,30 @@ namespace MCForge.Gui
 
                             case "defaultcolor":
                                 color = c.Parse(value);
-                                if (color == "") {
+                                if (color == "")
+                                {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
                                 cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(value)); break;
 
                             case "irc-color":
                                 color = c.Parse(value);
-                                if (color == "") {
+                                if (color == "")
+                                {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
                                 cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(value)); break;
                             case "default-rank":
-                                try {
+                                try
+                                {
                                     if (cmbDefaultRank.Items.IndexOf(value.ToLower()) != -1)
                                         cmbDefaultRank.SelectedIndex = cmbDefaultRank.Items.IndexOf(value.ToLower());
-                                } catch { cmbDefaultRank.SelectedIndex = 1; }
+                                }
+                                catch { cmbDefaultRank.SelectedIndex = 1; }
                                 break;
 
                             case "old-help":
-                                chkHelp.Checked = (value.ToLower() == "true") ? true : false;                                
+                                chkHelp.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
                             case "cheapmessage":
@@ -304,11 +328,13 @@ namespace MCForge.Gui
                                 txtRestartTime.Text = value;
                                 break;
                             case "afk-minutes":
-                                try { txtafk.Text = Convert.ToInt16(value).ToString(); } catch { txtafk.Text = "10"; }
+                                try { txtafk.Text = Convert.ToInt16(value).ToString(); }
+                                catch { txtafk.Text = "10"; }
                                 break;
 
                             case "afk-kick":
-                                try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); } catch { txtAFKKick.Text = "45"; }
+                                try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); }
+                                catch { txtAFKKick.Text = "45"; }
                                 break;
 
                             case "check-updates":
@@ -348,19 +374,25 @@ namespace MCForge.Gui
             }
             //else Save(givenPath);
         }
-        public bool ValidString(string str, string allowed) {
+        public bool ValidString(string str, string allowed)
+        {
             string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890" + allowed;
-            foreach (char ch in str) {
-                if (allowedchars.IndexOf(ch) == -1) {
+            foreach (char ch in str)
+            {
+                if (allowedchars.IndexOf(ch) == -1)
+                {
                     return false;
                 }
             } return true;
         }
 
-        public void Save(string givenPath) {
-            try {
+        public void Save(string givenPath)
+        {
+            try
+            {
                 StreamWriter w = new StreamWriter(File.Create(givenPath));
-                if (givenPath.IndexOf("server") != -1) {
+                if (givenPath.IndexOf("server") != -1)
+                {
                     w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
                     w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
                     w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
@@ -486,18 +518,24 @@ namespace MCForge.Gui
             }
         }
 
-        private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e) {
+        private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)
+        {
             lblDefault.BackColor = Color.FromName(cmbDefaultColour.Items[cmbDefaultColour.SelectedIndex].ToString());
         }
 
-        private void cmbIRCColour_SelectedIndexChanged(object sender, EventArgs e) {
+        private void cmbIRCColour_SelectedIndexChanged(object sender, EventArgs e)
+        {
             lblIRC.BackColor = Color.FromName(cmbIRCColour.Items[cmbIRCColour.SelectedIndex].ToString());
         }
 
-        void removeDigit(TextBox foundTxt) {
-            try {
+        void removeDigit(TextBox foundTxt)
+        {
+            try
+            {
                 int lastChar = int.Parse(foundTxt.Text[foundTxt.Text.Length - 1].ToString());
-            } catch {
+            }
+            catch
+            {
                 foundTxt.Text = "";
             }
         }
@@ -511,14 +549,16 @@ namespace MCForge.Gui
         private void btnSave_Click(object sender, EventArgs e) { saveStuff(); Dispose(); }
         private void btnApply_Click(object sender, EventArgs e) { saveStuff(); }
 
-        void saveStuff() {
+        void saveStuff()
+        {
             foreach (Control tP in tabControl.Controls)
-                if (tP is TabPage && tP != tabPage3 && tP != tabPage5) 
+                if (tP is TabPage && tP != tabPage3 && tP != tabPage5)
                     foreach (Control ctrl in tP.Controls)
-                        if (ctrl is TextBox) 
-                            if (ctrl.Text == "") {
+                        if (ctrl is TextBox)
+                            if (ctrl.Text == "")
+                            {
                                 MessageBox.Show("A textbox has been left empty. It must be filled.\n" + ctrl.Name);
-                                return; 
+                                return;
                             }
 
             Save("properties/server.properties");
@@ -530,7 +570,8 @@ namespace MCForge.Gui
             GrpCommands.fillRanks();
         }
 
-        private void btnDiscard_Click(object sender, EventArgs e) {
+        private void btnDiscard_Click(object sender, EventArgs e)
+        {
             this.Dispose();
         }
 
@@ -559,7 +600,8 @@ namespace MCForge.Gui
 
         }
 
-        private void btnBackup_Click(object sender, EventArgs e) {
+        private void btnBackup_Click(object sender, EventArgs e)
+        {
             /*FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             folderDialog.Description = "Select Folder";
             if (folderDialog.ShowDialog() == DialogResult.OK) {
@@ -568,7 +610,7 @@ namespace MCForge.Gui
             MessageBox.Show("Currently glitchy! Just type in the location by hand.");
         }
 
-#region rankTab
+        #region rankTab
         private void cmbColor_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblColor.BackColor = Color.FromName(cmbColor.Items[cmbColor.SelectedIndex].ToString());
@@ -581,7 +623,7 @@ namespace MCForge.Gui
             if (skip) return;
             Group foundRank = storedRanks.Find(grp => grp.trueName == listRanks.Items[listRanks.SelectedIndex].ToString().Split('=')[0].Trim());
             if (foundRank.Permission == LevelPermission.Nobody) { listRanks.SelectedIndex = 0; return; }
-            
+
             txtRankName.Text = foundRank.trueName;
             txtPermission.Text = ((int)foundRank.Permission).ToString();
             txtLimit.Text = foundRank.maxBlocks.ToString();
@@ -675,9 +717,9 @@ namespace MCForge.Gui
                 listRanks.SelectedIndex = 0;
             }
         }
-#endregion
+        #endregion
 
-#region commandTab
+        #region commandTab
         private void listCommands_SelectedIndexChanged(object sender, EventArgs e)
         {
             Command cmd = Command.all.Find(listCommands.SelectedItem.ToString());
@@ -694,7 +736,7 @@ namespace MCForge.Gui
                 txtCmdDisallow.Text += "," + (int)perm;
             }
             if (foundOne) txtCmdDisallow.Text = txtCmdDisallow.Text.Remove(0, 1);
-            
+
             foundOne = false;
             txtCmdAllow.Text = "";
             foreach (LevelPermission perm in allowVar.allow)
@@ -716,9 +758,9 @@ namespace MCForge.Gui
         {
             fillAllowance(ref txtCmdAllow, ref storedCommands[listCommands.SelectedIndex].allow);
         }
-#endregion
+        #endregion
 
-#region BlockTab
+        #region BlockTab
         private void listBlocks_SelectedIndexChanged(object sender, EventArgs e)
         {
             byte b = Block.Byte(listBlocks.SelectedItem.ToString());
@@ -756,7 +798,7 @@ namespace MCForge.Gui
         {
             fillAllowance(ref txtBlAllow, ref storedBlocks[listBlocks.SelectedIndex].allow);
         }
-#endregion
+        #endregion
         private void fillAllowance(ref TextBox txtBox, ref List<LevelPermission> addTo)
         {
             addTo.Clear();
@@ -832,52 +874,79 @@ namespace MCForge.Gui
             MessageBox.Show(messageInfo);
         }
 
+
         private void ChkPort_Click(object sender, EventArgs e)
         {
-            int txtportasint;
-            txtportasint = Convert.ToInt32(txtPort); 
-            this.Enabled = false;
+            int nPort = 0;
+            nPort = Int32.Parse(txtPort.Text);
+
             TcpListener listener = null;
+            try
+            {
+                // Try to open the port.  If it fails, the port is probably open already.
+                try
+                {
+                    listener = new TcpListener(IPAddress.Any, (int)nPort);
+                    listener.Start();
+                }
+                catch
+                {
+                    // Port is probably open already by the server, so let's just continue :)
+                    listener = null;
+                }
 
-            try {
-                listener = new TcpListener( IPAddress.Any, (int)txtportasint);
-                listener.Start();
+                ChkPortResult.Text = "Testing Port!";
+                ChkPortResult.BackColor = SystemColors.Control;
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + txtportasint);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                if( response.StatusCode == HttpStatusCode.OK ) {
-                    using( Stream stream = response.GetResponseStream() ) {
-                        StreamReader reader = new StreamReader( stream );
-                        if( reader.ReadLine().StartsWith( "ok" ) ) {
-                            MessageBox.Show("Port " + txtportasint + " is open!", "Port check succeeded!");
-                            ChkPortResult.Text = "Port Check Succeeded!";
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(stream);
+                        if (reader.ReadLine().StartsWith("ok"))
+                        {
+                            ChkPortResult.Text = "Port Open!";
+                            ChkPortResult.BackColor = Color.Lime;
+                            MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
                             return;
                         }
                     }
                 }
-                MessageBox.Show("Port " + txtportasint + " is closed. You will need to set up forwarding.", "Port check failed");
-                ChkPortResult.Text = "Port Check Failed";
 
-            } catch {
-                MessageBox.Show("Could not start listening on port " + txtportasint + ". Another program may be using the port.", "Port check failed");
-                ChkPortResult.Text = "Port Check Failed";
-            } finally {
-                if( listener != null ) {
+                MessageBox.Show("Port " + nPort + " is closed. You will need to set up port forwarding!", "Port check failed");
+                ChkPortResult.Text = "Port Not Open";
+                ChkPortResult.BackColor = Color.Red;
+
+            }
+            catch (Exception ex)
+            {
+                ChkPortResult.Text = "Testing Port Failed!";
+                ChkPortResult.BackColor = Color.Red;
+                MessageBox.Show("Could not start listening on port " + nPort + ". Another program may be using the port.", "Port check failed");
+
+            }
+            finally
+            {
+                if (listener != null)
+                {
                     listener.Stop();
                 }
-                this.Enabled = true;
             }
-        
+
         }
 
-
-
-
-
-
-
-
-
     }
+
 }
+
+
+
+
+
+
+
+    
+
