@@ -1,3 +1,7 @@
+v1.2.0.2
+- Edited /crashserver
+- Edited /hacks
+- Fixed Port Checker
 v1.2.0.1
 -Added /ozone 
 -Added /Overseer

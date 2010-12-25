@@ -199,6 +199,7 @@ namespace MCLawl
             if (GroupList.Find(grp => grp.Permission == LevelPermission.AdvBuilder) == null) GroupList.Add(new Group(LevelPermission.AdvBuilder, 1200, "AdvBuilder", '3', "advbuilders.txt"));
             if (GroupList.Find(grp => grp.Permission == LevelPermission.Operator) == null) GroupList.Add(new Group(LevelPermission.Operator, 2500, "Operator", 'c', "operators.txt"));
             if (GroupList.Find(grp => grp.Permission == LevelPermission.Admin) == null) GroupList.Add(new Group(LevelPermission.Admin, 65536, "SuperOP", 'e', "uberOps.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Developer) == null) GroupList.Add(new Group(LevelPermission.Developer, 65536, "Developer", 'e', "Developer.txt"));
             GroupList.Add(new Group(LevelPermission.Nobody, 65536, "Nobody", '0', "nobody.txt"));
 
             bool swap = true; Group storedGroup;
@@ -285,6 +286,7 @@ namespace MCLawl
             if (name == "op") name = "operator";
             if (name == "super" || name == "admin") name = "superop";
             if (name == "noone") name = "nobody";
+            if (name == "dev") name = "Developer";
 
             foreach (Group gr in GroupList)
             {

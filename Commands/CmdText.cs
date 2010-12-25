@@ -20,7 +20,8 @@ namespace MCForge
             if (message.ToLower() == "superops" || message.ToLower() == "ops" || message.ToLower() == "advbuilders" || message.ToLower() == "builders")
             {
                 Player.SendMessage(p, "You cannot try to promote yourself with /text! You have been reported to all Ops!");
-                Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " tried to promote theirself by using /text, they should be banned!");
+                Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " tried to promote theirself by using /text!!");
+				Server.s.Log(p.name + " tried to promote themselves using /text!!");
                 return;
             }
             
