@@ -1,7 +1,12 @@
+v1.2.1.0
+ - Revamped the heartbeat, which fixed a few issues
+ - Fixed issue where tray icon sometimes didn't disappear after the server shutdown
+
 v1.2.0.2
 - Edited /crashserver
 - Edited /hacks
 - Fixed Port Checker
+
 v1.2.0.1
 -Added /ozone 
 -Added /Overseer

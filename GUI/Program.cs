@@ -370,6 +370,7 @@ namespace MCForge_.Gui
                     {
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
+                        MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
                     }
                 }
                 catch { }
@@ -401,6 +402,7 @@ namespace MCForge_.Gui
                     {
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
+                        MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
                     }
                 }
                 catch { }
