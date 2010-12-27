@@ -241,6 +241,7 @@ namespace MCForge.Gui
         private void Window_FormClosing(object sender, FormClosingEventArgs e) {
             if (notifyIcon1 != null) {
                 notifyIcon1.Visible = false;
+                notifyIcon1.Dispose();
             }
             MCForge_.Gui.Program.ExitProgram(false);
         }
