@@ -275,6 +275,10 @@
     <Compile Include="GUI\UpdateWindow.Designer.cs">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Heartbeat\Beat.cs" />
+    <Compile Include="Heartbeat\MCForgeBeat.cs" />
+    <Compile Include="Heartbeat\MinecraftBeat.cs" />
+    <Compile Include="Heartbeat\TChaloBeat.cs" />
     <Compile Include="IRCBot.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\ConvertDAT.cs" />
@@ -282,7 +286,7 @@
     <Compile Include="Player\Team.cs" />
     <Compile Include="Player\Group.cs" />
     <Compile Include="GUI\Program.cs" />
-    <Compile Include="Heartbeat.cs" />
+    <Compile Include="Heart.cs" />
     <Compile Include="Levels\MapGenerator.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Misc.cs" />

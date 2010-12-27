@@ -32,7 +32,7 @@ namespace MCForge
         {
             try
             {
-                Heartbeat.Pump(Beat.MCForge);
+                Heart.Pump(new MCForgeBeat());
             }
             catch (Exception e)
             {

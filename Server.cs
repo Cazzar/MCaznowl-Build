@@ -59,6 +59,9 @@ namespace MCForge
 
         public static string Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); } }
 
+        // URL hash for connecting to the server
+        public static string Hash = String.Empty;
+        
         public static Socket listen;
         public static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
@@ -460,7 +463,7 @@ namespace MCForge
             {
                 try
                 {
-                    Heartbeat.Init();
+                    Heart.Init();
                 }
                 catch (Exception e)
                 {
