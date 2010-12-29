@@ -219,9 +219,17 @@ namespace MCForge
             try
             {
                 Assembly asm = Assembly.LoadFrom("extra/commands/dll/" + command + ".dll");
-                Type type = asm.GetTypes()[0];
-                object instance = Activator.CreateInstance(type);
-                Command.all.Add((Command)instance);
+                Type[] types = asm.GetTypes();
+                foreach(var type in types)
+                {
+                    if(type.BaseType == typeof(Command))
+                    {
+                        object instance = Activator.CreateInstance(type);
+                        Command.all.Add((Command)instance);
+                    }
+                }
+                //Type type = asm.GetTypes()[0];
+                
             }
             catch (FileNotFoundException e)
             {
