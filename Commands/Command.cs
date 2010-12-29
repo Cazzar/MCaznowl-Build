@@ -46,6 +46,7 @@ namespace MCForge
             all.Add(new CmdBots());
             all.Add(new CmdBotSet());
             all.Add(new CmdBotSummon());
+            all.Add(new CmdChangeLog());
             all.Add(new CmdClearBlockChanges());
             all.Add(new CmdClick());
             all.Add(new CmdClones());

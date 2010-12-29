@@ -42,6 +42,7 @@ namespace MCForge.Gui
         
         internal static Server s;
 
+        bool restarting = false;
         bool shuttingDown = false;
         public Window() {
             InitializeComponent();
@@ -239,11 +240,17 @@ namespace MCForge.Gui
         }
 
         private void Window_FormClosing(object sender, FormClosingEventArgs e) {
-            if (notifyIcon1 != null) {
-                notifyIcon1.Visible = false;
-                notifyIcon1.Dispose();
+
+            if (restarting == true || MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                RemoveNotifyIcon();
+                MCForge_.Gui.Program.ExitProgram(false);
             }
-            MCForge_.Gui.Program.ExitProgram(false);
+            else
+            {
+                // Prevents form from closing when user clicks the X and then hits 'cancel'
+                e.Cancel = true;
+            }
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
@@ -309,10 +316,10 @@ namespace MCForge.Gui
         }
 
         private void btnClose_Click_1(object sender, EventArgs e) { 
-            if (notifyIcon1 != null) {
-                notifyIcon1.Visible = false;
+            if (MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                MCForge_.Gui.Program.ExitProgram(false);
             }
-            MCForge_.Gui.Program.ExitProgram(false); 
         }
 
         public void newCommand(string p) { 
@@ -391,10 +398,7 @@ namespace MCForge.Gui
                     Server.s.Log("The time is now " + DateTime.Now.TimeOfDay);
                     Server.s.Log("The server will now begin auto restart procedures.");
 
-                    if (notifyIcon1 != null) {
-                        notifyIcon1.Icon = null;
-                        notifyIcon1.Visible = false;
-                    }
+                    RemoveNotifyIcon();
                     MCForge_.Gui.Program.ExitProgram(true);
                 }
             }
@@ -413,11 +417,20 @@ namespace MCForge.Gui
 
         private void shutdownServer_Click(object sender, EventArgs e)
         {
-            if (notifyIcon1 != null)
+            if (MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                notifyIcon1.Visible = false;
+                RemoveNotifyIcon();
+                MCForge_.Gui.Program.ExitProgram(false); 
             }
-            MCForge_.Gui.Program.ExitProgram(false); 
+            
+        }
+
+        private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.liClients.SelectedIndex != -1)
+            {
+                Command.all.Find("clones").Use(null, this.liClients.SelectedItem.ToString());
+            }
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -593,5 +606,58 @@ namespace MCForge.Gui
                 }
             }
         }
+
+        private void Restart_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                restarting = true;
+                RemoveNotifyIcon();
+                MCForge_.Gui.Program.restartMe();
+            }
+            
+        }
+
+        private void restartServerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Restart_Click(sender, e);
+        }
+
+        private void DatePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            int dayofmonth = dateTimePicker1.Value.Day;
+            int year = dateTimePicker1.Value.Year;
+            int month = dateTimePicker1.Value.Month;
+
+            string ymd = year + "-" + month + "-" + dayofmonth;
+            string filename = ymd + ".txt";
+
+            if (!File.Exists(Path.Combine("logs/", filename)))
+            {
+                //MessageBox.Show("Sorry, the log for " + ymd + " doesn't exist, please select another one");
+                LogsTxtBox.Text = "No logs found for: " + ymd;
+            }
+            else
+            {
+                LogsTxtBox.Text = null;
+                LogsTxtBox.Text = File.ReadAllText(Path.Combine("logs/", filename));
+            }
+
+        }
+
+        private void txtUrl_DoubleClick(object sender, EventArgs e)
+        {
+            txtUrl.SelectAll();
+        }
+
+        private void RemoveNotifyIcon()
+        {
+            if (notifyIcon1 != null)
+            {
+                notifyIcon1.Visible = false;
+                notifyIcon1.Dispose();
+            }
+        }
+        
     }
 }

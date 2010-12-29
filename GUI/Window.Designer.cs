@@ -98,18 +98,25 @@ namespace MCForge.Gui
             this.kickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.banToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.voiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtSystem = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.txtChangelog = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.txtErrors = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.LogsTxtBox = new System.Windows.Forms.RichTextBox();
             this.tmrRestart = new System.Windows.Forms.Timer(this.components);
             this.iconContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownServer = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnProperties = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.Restart = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.mapsStrip.SuspendLayout();
@@ -119,6 +126,7 @@ namespace MCForge.Gui
             this.tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.iconContext.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,6 +136,7 @@ namespace MCForge.Gui
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabControl1.Font = new System.Drawing.Font("Calibri", 8.25F);
             this.tabControl1.Location = new System.Drawing.Point(1, 12);
@@ -202,7 +211,7 @@ namespace MCForge.Gui
             this.toolStripMenuItem5,
             this.toolStripMenuItem6});
             this.physicsToolStripMenuItem.Name = "physicsToolStripMenuItem";
-            this.physicsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.physicsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.physicsToolStripMenuItem.Text = "Physics";
             // 
             // toolStripMenuItem2
@@ -243,7 +252,7 @@ namespace MCForge.Gui
             // unloadToolStripMenuItem
             // 
             this.unloadToolStripMenuItem.Name = "unloadToolStripMenuItem";
-            this.unloadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.unloadToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.unloadToolStripMenuItem.Text = "Unload";
             this.unloadToolStripMenuItem.Click += new System.EventHandler(this.unloadToolStripMenuItem_Click);
             // 
@@ -258,7 +267,7 @@ namespace MCForge.Gui
             this.killerBlocksToolStripMenuItem,
             this.rPChatToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // finiteModeToolStripMenuItem
@@ -313,7 +322,7 @@ namespace MCForge.Gui
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -436,6 +445,7 @@ namespace MCForge.Gui
             this.txtUrl.ReadOnly = true;
             this.txtUrl.Size = new System.Drawing.Size(428, 21);
             this.txtUrl.TabIndex = 25;
+            this.txtUrl.DoubleClick += new System.EventHandler(this.txtUrl_DoubleClick);
             // 
             // liClients
             // 
@@ -455,37 +465,45 @@ namespace MCForge.Gui
             this.whoisToolStripMenuItem,
             this.kickToolStripMenuItem,
             this.banToolStripMenuItem,
-            this.voiceToolStripMenuItem});
+            this.voiceToolStripMenuItem,
+            this.clonesToolStripMenuItem});
             this.playerStrip.Name = "playerStrip";
-            this.playerStrip.Size = new System.Drawing.Size(106, 92);
+            this.playerStrip.Size = new System.Drawing.Size(109, 114);
             // 
             // whoisToolStripMenuItem
             // 
             this.whoisToolStripMenuItem.Name = "whoisToolStripMenuItem";
-            this.whoisToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.whoisToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.whoisToolStripMenuItem.Text = "whois";
             this.whoisToolStripMenuItem.Click += new System.EventHandler(this.whoisToolStripMenuItem_Click);
             // 
             // kickToolStripMenuItem
             // 
             this.kickToolStripMenuItem.Name = "kickToolStripMenuItem";
-            this.kickToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.kickToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.kickToolStripMenuItem.Text = "kick";
             this.kickToolStripMenuItem.Click += new System.EventHandler(this.kickToolStripMenuItem_Click);
             // 
             // banToolStripMenuItem
             // 
             this.banToolStripMenuItem.Name = "banToolStripMenuItem";
-            this.banToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.banToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.banToolStripMenuItem.Text = "ban";
             this.banToolStripMenuItem.Click += new System.EventHandler(this.banToolStripMenuItem_Click);
             // 
             // voiceToolStripMenuItem
             // 
             this.voiceToolStripMenuItem.Name = "voiceToolStripMenuItem";
-            this.voiceToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.voiceToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.voiceToolStripMenuItem.Text = "voice";
             this.voiceToolStripMenuItem.Click += new System.EventHandler(this.voiceToolStripMenuItem_Click);
+            // 
+            // clonesToolStripMenuItem
+            // 
+            this.clonesToolStripMenuItem.Name = "clonesToolStripMenuItem";
+            this.clonesToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.clonesToolStripMenuItem.Text = "clones";
+            this.clonesToolStripMenuItem.Click += new System.EventHandler(this.clonesToolStripMenuItem_Click);
             // 
             // tabPage4
             // 
@@ -556,6 +574,45 @@ namespace MCForge.Gui
             this.txtErrors.Size = new System.Drawing.Size(557, 471);
             this.txtErrors.TabIndex = 1;
             // 
+            // tabPage5
+            // 
+            this.tabPage5.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage5.Controls.Add(this.label3);
+            this.tabPage5.Controls.Add(this.dateTimePicker1);
+            this.tabPage5.Controls.Add(this.LogsTxtBox);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(573, 488);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Logs";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 11);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "View logs from:";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(92, 5);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 21);
+            this.dateTimePicker1.TabIndex = 2;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.DatePicker1_ValueChanged);
+            // 
+            // LogsTxtBox
+            // 
+            this.LogsTxtBox.BackColor = System.Drawing.SystemColors.Window;
+            this.LogsTxtBox.Location = new System.Drawing.Point(3, 32);
+            this.LogsTxtBox.Name = "LogsTxtBox";
+            this.LogsTxtBox.ReadOnly = true;
+            this.LogsTxtBox.Size = new System.Drawing.Size(567, 453);
+            this.LogsTxtBox.TabIndex = 0;
+            this.LogsTxtBox.Text = "";
+            // 
             // tmrRestart
             // 
             this.tmrRestart.Enabled = true;
@@ -565,9 +622,10 @@ namespace MCForge.Gui
             // 
             this.iconContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openConsole,
-            this.shutdownServer});
+            this.shutdownServer,
+            this.restartServerToolStripMenuItem});
             this.iconContext.Name = "iconContext";
-            this.iconContext.Size = new System.Drawing.Size(164, 48);
+            this.iconContext.Size = new System.Drawing.Size(164, 70);
             // 
             // openConsole
             // 
@@ -583,11 +641,18 @@ namespace MCForge.Gui
             this.shutdownServer.Text = "Shutdown Server";
             this.shutdownServer.Click += new System.EventHandler(this.shutdownServer_Click);
             // 
+            // restartServerToolStripMenuItem
+            // 
+            this.restartServerToolStripMenuItem.Name = "restartServerToolStripMenuItem";
+            this.restartServerToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.restartServerToolStripMenuItem.Text = "Restart Server";
+            this.restartServerToolStripMenuItem.Click += new System.EventHandler(this.restartServerToolStripMenuItem_Click);
+            // 
             // btnProperties
             // 
             this.btnProperties.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnProperties.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProperties.Location = new System.Drawing.Point(392, 5);
+            this.btnProperties.Location = new System.Drawing.Point(298, 5);
             this.btnProperties.Name = "btnProperties";
             this.btnProperties.Size = new System.Drawing.Size(80, 23);
             this.btnProperties.TabIndex = 34;
@@ -607,12 +672,25 @@ namespace MCForge.Gui
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click_1);
             // 
+            // Restart
+            // 
+            this.Restart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Restart.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Restart.Location = new System.Drawing.Point(384, 5);
+            this.Restart.Name = "Restart";
+            this.Restart.Size = new System.Drawing.Size(88, 23);
+            this.Restart.TabIndex = 36;
+            this.Restart.Text = "Restart";
+            this.Restart.UseVisualStyleBackColor = true;
+            this.Restart.Click += new System.EventHandler(this.Restart_Click);
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(580, 523);
             this.Controls.Add(this.btnProperties);
+            this.Controls.Add(this.Restart);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -636,6 +714,8 @@ namespace MCForge.Gui
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.iconContext.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -693,5 +773,12 @@ namespace MCForge.Gui
         private ToolStripMenuItem killerBlocksToolStripMenuItem;
         private ToolStripMenuItem rPChatToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem clonesToolStripMenuItem;
+        private Button Restart;
+        private ToolStripMenuItem restartServerToolStripMenuItem;
+        private TabPage tabPage5;
+        private RichTextBox LogsTxtBox;
+        private DateTimePicker dateTimePicker1;
+        private Label label3;
     }
 }

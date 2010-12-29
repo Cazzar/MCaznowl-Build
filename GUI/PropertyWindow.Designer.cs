@@ -33,16 +33,6 @@
             this.btnDiscard = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.btnCmdHelp = new System.Windows.Forms.Button();
-            this.txtCmdRanks = new System.Windows.Forms.TextBox();
-            this.txtCmdAllow = new System.Windows.Forms.TextBox();
-            this.txtCmdLowest = new System.Windows.Forms.TextBox();
-            this.txtCmdDisallow = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.listCommands = new System.Windows.Forms.ListBox();
             this.txtBackup = new System.Windows.Forms.TextBox();
             this.txtafk = new System.Windows.Forms.TextBox();
             this.txtAFKKick = new System.Windows.Forms.TextBox();
@@ -74,6 +64,29 @@
             this.cmbDefaultRank = new System.Windows.Forms.ComboBox();
             this.cmbOpChat = new System.Windows.Forms.ComboBox();
             this.chkLogBeat = new System.Windows.Forms.CheckBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnCmdHelp = new System.Windows.Forms.Button();
+            this.txtCmdRanks = new System.Windows.Forms.TextBox();
+            this.txtCmdAllow = new System.Windows.Forms.TextBox();
+            this.txtCmdLowest = new System.Windows.Forms.TextBox();
+            this.txtCmdDisallow = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.listCommands = new System.Windows.Forms.ListBox();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.CancelCustCmdTxtBox = new System.Windows.Forms.Button();
+            this.ClrCustCmdTxtBox = new System.Windows.Forms.Button();
+            this.SaveCustCmd = new System.Windows.Forms.Button();
+            this.LoadIntoTxtBox = new System.Windows.Forms.Button();
+            this.CustCmdTxtBox2 = new System.Windows.Forms.RichTextBox();
+            this.LoadCustCmd = new System.Windows.Forms.Button();
+            this.CompileCustCmd = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
+            this.CrtCustCmd = new System.Windows.Forms.Button();
+            this.CustCmdtxtBox = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -148,6 +161,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage3.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -197,104 +213,6 @@
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Information";
             this.toolTip.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip_Popup);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.AutoScroll = true;
-            this.tabPage3.Controls.Add(this.btnCmdHelp);
-            this.tabPage3.Controls.Add(this.txtCmdRanks);
-            this.tabPage3.Controls.Add(this.txtCmdAllow);
-            this.tabPage3.Controls.Add(this.txtCmdLowest);
-            this.tabPage3.Controls.Add(this.txtCmdDisallow);
-            this.tabPage3.Controls.Add(this.label17);
-            this.tabPage3.Controls.Add(this.label15);
-            this.tabPage3.Controls.Add(this.label8);
-            this.tabPage3.Controls.Add(this.listCommands);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(337, 404);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Commands";
-            this.toolTip.SetToolTip(this.tabPage3, "Which ranks can use which commands.");
-            // 
-            // btnCmdHelp
-            // 
-            this.btnCmdHelp.Location = new System.Drawing.Point(211, 6);
-            this.btnCmdHelp.Name = "btnCmdHelp";
-            this.btnCmdHelp.Size = new System.Drawing.Size(120, 23);
-            this.btnCmdHelp.TabIndex = 25;
-            this.btnCmdHelp.Text = "Help information";
-            this.btnCmdHelp.UseVisualStyleBackColor = true;
-            this.btnCmdHelp.Click += new System.EventHandler(this.btnCmdHelp_Click);
-            // 
-            // txtCmdRanks
-            // 
-            this.txtCmdRanks.Location = new System.Drawing.Point(11, 122);
-            this.txtCmdRanks.Multiline = true;
-            this.txtCmdRanks.Name = "txtCmdRanks";
-            this.txtCmdRanks.ReadOnly = true;
-            this.txtCmdRanks.Size = new System.Drawing.Size(194, 268);
-            this.txtCmdRanks.TabIndex = 15;
-            // 
-            // txtCmdAllow
-            // 
-            this.txtCmdAllow.Location = new System.Drawing.Point(113, 95);
-            this.txtCmdAllow.Name = "txtCmdAllow";
-            this.txtCmdAllow.Size = new System.Drawing.Size(92, 21);
-            this.txtCmdAllow.TabIndex = 14;
-            this.txtCmdAllow.LostFocus += new System.EventHandler(this.txtCmdAllow_TextChanged);
-            // 
-            // txtCmdLowest
-            // 
-            this.txtCmdLowest.Location = new System.Drawing.Point(113, 41);
-            this.txtCmdLowest.Name = "txtCmdLowest";
-            this.txtCmdLowest.Size = new System.Drawing.Size(92, 21);
-            this.txtCmdLowest.TabIndex = 14;
-            this.txtCmdLowest.LostFocus += new System.EventHandler(this.txtCmdLowest_TextChanged);
-            // 
-            // txtCmdDisallow
-            // 
-            this.txtCmdDisallow.Location = new System.Drawing.Point(113, 68);
-            this.txtCmdDisallow.Name = "txtCmdDisallow";
-            this.txtCmdDisallow.Size = new System.Drawing.Size(92, 21);
-            this.txtCmdDisallow.TabIndex = 14;
-            this.txtCmdDisallow.LostFocus += new System.EventHandler(this.txtCmdDisallow_TextChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(57, 99);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(56, 13);
-            this.label17.TabIndex = 3;
-            this.label17.Text = "And allow:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(33, 72);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(80, 13);
-            this.label15.TabIndex = 2;
-            this.label15.Text = "But don\'t allow:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 44);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(105, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Lowest rank needed:";
-            // 
-            // listCommands
-            // 
-            this.listCommands.FormattingEnabled = true;
-            this.listCommands.Location = new System.Drawing.Point(211, 35);
-            this.listCommands.Name = "listCommands";
-            this.listCommands.Size = new System.Drawing.Size(120, 355);
-            this.listCommands.TabIndex = 0;
-            this.listCommands.SelectedIndexChanged += new System.EventHandler(this.listCommands_SelectedIndexChanged);
             // 
             // txtBackup
             // 
@@ -619,6 +537,237 @@
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
                     " server gets a URL slowly or not at all.");
             this.chkLogBeat.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.AutoScroll = true;
+            this.tabPage3.Controls.Add(this.tabControl1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(337, 404);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Commands";
+            this.toolTip.SetToolTip(this.tabPage3, "Which ranks can use which commands.");
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Location = new System.Drawing.Point(9, 4);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(325, 397);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage6.Controls.Add(this.btnCmdHelp);
+            this.tabPage6.Controls.Add(this.txtCmdRanks);
+            this.tabPage6.Controls.Add(this.txtCmdAllow);
+            this.tabPage6.Controls.Add(this.txtCmdLowest);
+            this.tabPage6.Controls.Add(this.txtCmdDisallow);
+            this.tabPage6.Controls.Add(this.label17);
+            this.tabPage6.Controls.Add(this.label15);
+            this.tabPage6.Controls.Add(this.label8);
+            this.tabPage6.Controls.Add(this.listCommands);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(317, 371);
+            this.tabPage6.TabIndex = 0;
+            this.tabPage6.Text = "Commands";
+            // 
+            // btnCmdHelp
+            // 
+            this.btnCmdHelp.Location = new System.Drawing.Point(200, 19);
+            this.btnCmdHelp.Name = "btnCmdHelp";
+            this.btnCmdHelp.Size = new System.Drawing.Size(111, 23);
+            this.btnCmdHelp.TabIndex = 34;
+            this.btnCmdHelp.Text = "Help information";
+            this.btnCmdHelp.UseVisualStyleBackColor = true;
+            // 
+            // txtCmdRanks
+            // 
+            this.txtCmdRanks.Location = new System.Drawing.Point(9, 109);
+            this.txtCmdRanks.Multiline = true;
+            this.txtCmdRanks.Name = "txtCmdRanks";
+            this.txtCmdRanks.ReadOnly = true;
+            this.txtCmdRanks.Size = new System.Drawing.Size(185, 255);
+            this.txtCmdRanks.TabIndex = 33;
+            // 
+            // txtCmdAllow
+            // 
+            this.txtCmdAllow.Location = new System.Drawing.Point(108, 82);
+            this.txtCmdAllow.Name = "txtCmdAllow";
+            this.txtCmdAllow.Size = new System.Drawing.Size(86, 21);
+            this.txtCmdAllow.TabIndex = 31;
+            // 
+            // txtCmdLowest
+            // 
+            this.txtCmdLowest.Location = new System.Drawing.Point(108, 28);
+            this.txtCmdLowest.Name = "txtCmdLowest";
+            this.txtCmdLowest.Size = new System.Drawing.Size(86, 21);
+            this.txtCmdLowest.TabIndex = 32;
+            // 
+            // txtCmdDisallow
+            // 
+            this.txtCmdDisallow.Location = new System.Drawing.Point(108, 55);
+            this.txtCmdDisallow.Name = "txtCmdDisallow";
+            this.txtCmdDisallow.Size = new System.Drawing.Size(86, 21);
+            this.txtCmdDisallow.TabIndex = 30;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(52, 85);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.TabIndex = 29;
+            this.label17.Text = "And allow:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(28, 58);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(80, 13);
+            this.label15.TabIndex = 28;
+            this.label15.Text = "But don\'t allow:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 31);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(105, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Lowest rank needed:";
+            // 
+            // listCommands
+            // 
+            this.listCommands.FormattingEnabled = true;
+            this.listCommands.Location = new System.Drawing.Point(200, 48);
+            this.listCommands.Name = "listCommands";
+            this.listCommands.Size = new System.Drawing.Size(111, 316);
+            this.listCommands.TabIndex = 26;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage7.Controls.Add(this.CancelCustCmdTxtBox);
+            this.tabPage7.Controls.Add(this.ClrCustCmdTxtBox);
+            this.tabPage7.Controls.Add(this.SaveCustCmd);
+            this.tabPage7.Controls.Add(this.LoadIntoTxtBox);
+            this.tabPage7.Controls.Add(this.CustCmdTxtBox2);
+            this.tabPage7.Controls.Add(this.LoadCustCmd);
+            this.tabPage7.Controls.Add(this.CompileCustCmd);
+            this.tabPage7.Controls.Add(this.label33);
+            this.tabPage7.Controls.Add(this.CrtCustCmd);
+            this.tabPage7.Controls.Add(this.CustCmdtxtBox);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(317, 371);
+            this.tabPage7.TabIndex = 1;
+            this.tabPage7.Text = "Custom Commands";
+            // 
+            // CancelCustCmdTxtBox
+            // 
+            this.CancelCustCmdTxtBox.Location = new System.Drawing.Point(235, 342);
+            this.CancelCustCmdTxtBox.Name = "CancelCustCmdTxtBox";
+            this.CancelCustCmdTxtBox.Size = new System.Drawing.Size(75, 23);
+            this.CancelCustCmdTxtBox.TabIndex = 9;
+            this.CancelCustCmdTxtBox.Text = "Cancel";
+            this.CancelCustCmdTxtBox.UseVisualStyleBackColor = true;
+            this.CancelCustCmdTxtBox.Click += new System.EventHandler(this.CancelCustCmdTxtBox_Click);
+            // 
+            // ClrCustCmdTxtBox
+            // 
+            this.ClrCustCmdTxtBox.Location = new System.Drawing.Point(149, 342);
+            this.ClrCustCmdTxtBox.Name = "ClrCustCmdTxtBox";
+            this.ClrCustCmdTxtBox.Size = new System.Drawing.Size(80, 23);
+            this.ClrCustCmdTxtBox.TabIndex = 8;
+            this.ClrCustCmdTxtBox.Text = "Clear Text Box";
+            this.ClrCustCmdTxtBox.UseVisualStyleBackColor = true;
+            this.ClrCustCmdTxtBox.Click += new System.EventHandler(this.ClrCustCmdTxtBox_Click);
+            // 
+            // SaveCustCmd
+            // 
+            this.SaveCustCmd.Location = new System.Drawing.Point(7, 342);
+            this.SaveCustCmd.Name = "SaveCustCmd";
+            this.SaveCustCmd.Size = new System.Drawing.Size(136, 23);
+            this.SaveCustCmd.TabIndex = 7;
+            this.SaveCustCmd.Text = "Save Custom Command";
+            this.SaveCustCmd.UseVisualStyleBackColor = true;
+            this.SaveCustCmd.Click += new System.EventHandler(this.SaveCustCmd_Click);
+            // 
+            // LoadIntoTxtBox
+            // 
+            this.LoadIntoTxtBox.Location = new System.Drawing.Point(6, 121);
+            this.LoadIntoTxtBox.Name = "LoadIntoTxtBox";
+            this.LoadIntoTxtBox.Size = new System.Drawing.Size(305, 23);
+            this.LoadIntoTxtBox.TabIndex = 6;
+            this.LoadIntoTxtBox.Text = "Load Into Text Box";
+            this.LoadIntoTxtBox.UseVisualStyleBackColor = true;
+            this.LoadIntoTxtBox.Click += new System.EventHandler(this.LoadIntoTxtBox_Click);
+            // 
+            // CustCmdTxtBox2
+            // 
+            this.CustCmdTxtBox2.BackColor = System.Drawing.SystemColors.Window;
+            this.CustCmdTxtBox2.Location = new System.Drawing.Point(6, 151);
+            this.CustCmdTxtBox2.Name = "CustCmdTxtBox2";
+            this.CustCmdTxtBox2.ReadOnly = true;
+            this.CustCmdTxtBox2.Size = new System.Drawing.Size(305, 185);
+            this.CustCmdTxtBox2.TabIndex = 5;
+            this.CustCmdTxtBox2.Text = "";
+            // 
+            // LoadCustCmd
+            // 
+            this.LoadCustCmd.Location = new System.Drawing.Point(6, 92);
+            this.LoadCustCmd.Name = "LoadCustCmd";
+            this.LoadCustCmd.Size = new System.Drawing.Size(305, 23);
+            this.LoadCustCmd.TabIndex = 4;
+            this.LoadCustCmd.Text = "Load Custom Command";
+            this.LoadCustCmd.UseVisualStyleBackColor = true;
+            this.LoadCustCmd.Click += new System.EventHandler(this.LoadCustCmd_Click);
+            // 
+            // CompileCustCmd
+            // 
+            this.CompileCustCmd.Location = new System.Drawing.Point(6, 62);
+            this.CompileCustCmd.Name = "CompileCustCmd";
+            this.CompileCustCmd.Size = new System.Drawing.Size(305, 23);
+            this.CompileCustCmd.TabIndex = 3;
+            this.CompileCustCmd.Text = "Compile Custom Command";
+            this.CompileCustCmd.UseVisualStyleBackColor = true;
+            this.CompileCustCmd.Click += new System.EventHandler(this.CompileCustCmd_Click);
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(3, 12);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(38, 13);
+            this.label33.TabIndex = 2;
+            this.label33.Text = "Name:";
+            // 
+            // CrtCustCmd
+            // 
+            this.CrtCustCmd.Location = new System.Drawing.Point(6, 33);
+            this.CrtCustCmd.Name = "CrtCustCmd";
+            this.CrtCustCmd.Size = new System.Drawing.Size(305, 23);
+            this.CrtCustCmd.TabIndex = 1;
+            this.CrtCustCmd.Text = "Create New Custom Command";
+            this.CrtCustCmd.UseVisualStyleBackColor = true;
+            this.CrtCustCmd.Click += new System.EventHandler(this.CrtCustCmd_Click);
+            // 
+            // CustCmdtxtBox
+            // 
+            this.CustCmdtxtBox.Location = new System.Drawing.Point(47, 9);
+            this.CustCmdtxtBox.Name = "CustCmdtxtBox";
+            this.CustCmdtxtBox.Size = new System.Drawing.Size(264, 21);
+            this.CustCmdtxtBox.TabIndex = 0;
+            this.toolTip.SetToolTip(this.CustCmdtxtBox, "Write the command name here (dont write the cmd before it or the .cs after it!!)");
             // 
             // tabPage5
             // 
@@ -1400,7 +1549,11 @@
             this.Load += new System.EventHandler(this.PropertyWindow_Load);
             this.Disposed += new System.EventHandler(this.PropertyWindow_Unload);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -1430,16 +1583,6 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.ListBox listBlocks;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.Button btnCmdHelp;
-        private System.Windows.Forms.TextBox txtCmdRanks;
-        private System.Windows.Forms.TextBox txtCmdAllow;
-        private System.Windows.Forms.TextBox txtCmdLowest;
-        private System.Windows.Forms.TextBox txtCmdDisallow;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ListBox listCommands;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label lblColor;
         private System.Windows.Forms.ComboBox cmbColor;
@@ -1534,5 +1677,28 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.Button ChkPort;
         private System.Windows.Forms.TextBox ChkPortResult;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.Button btnCmdHelp;
+        private System.Windows.Forms.TextBox txtCmdRanks;
+        private System.Windows.Forms.TextBox txtCmdAllow;
+        private System.Windows.Forms.TextBox txtCmdLowest;
+        private System.Windows.Forms.TextBox txtCmdDisallow;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ListBox listCommands;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Button CrtCustCmd;
+        private System.Windows.Forms.TextBox CustCmdtxtBox;
+        private System.Windows.Forms.Button CompileCustCmd;
+        private System.Windows.Forms.Button LoadCustCmd;
+        private System.Windows.Forms.Button CancelCustCmdTxtBox;
+        private System.Windows.Forms.Button ClrCustCmdTxtBox;
+        private System.Windows.Forms.Button SaveCustCmd;
+        private System.Windows.Forms.Button LoadIntoTxtBox;
+        private System.Windows.Forms.RichTextBox CustCmdTxtBox2;
     }
 }
