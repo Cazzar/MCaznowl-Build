@@ -64,7 +64,6 @@ namespace MCForge
             all.Add(new CmdDeleteLvl());
             all.Add(new CmdDevs());
             all.Add(new CmdDrop());
-            /*
             all.Add(new CmdEconomy());
             all.Add(new CmdEconomyBuyColor());
             all.Add(new CmdEconomyBuyMap());
@@ -72,7 +71,6 @@ namespace MCForge
             all.Add(new CmdEconomyBuyTitle());
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
-            */
             all.Add(new CmdEmote());
             all.Add(new CmdFill());
             all.Add(new CmdFixGrass());
@@ -158,6 +156,7 @@ namespace MCForge
             all.Add(new CmdSay());
             all.Add(new CmdSend());
             all.Add(new CmdServerReport());
+            all.Add(new CmdSetOwnMapSpawn());
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
             all.Add(new CmdShutdown());

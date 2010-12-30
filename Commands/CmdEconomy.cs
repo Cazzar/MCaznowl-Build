@@ -1,6 +1,10 @@
 using System;
 using System.IO;
+using MySql.Data.MySqlClient;
 using System.Text;
+using MCForge;
+using MCForge_;
+using System.Collections.Generic;
 
 namespace MCForge
 {
@@ -124,7 +128,6 @@ namespace MCForge
                 Player.SendMessage(p, "============================================================");
                 Player.SendMessage(p, Server.moneys + ": &b$" + p.money);
                 Player.SendMessage(p, "Blocks Modified Overall :: &b" + p.overallBlocks + "    &fSince Login :: &b" + p.loginBlocks);
-                Player.SendMessage(p, "Next Rank : " + nextRank.color + nextRank.name);
             }
 
             else
@@ -143,9 +146,7 @@ namespace MCForge
                     Player.SendMessage(p, Server.moneys + ": &b$" + player.money);
                     Player.SendMessage(p, "Blocks Modified Overall :: &b" + player.overallBlocks + "    &fSince Login :: &b" + player.loginBlocks);
                     Player.SendMessage(p, "Blocks Modified Overall :: &b" + player.overallBlocks + "    &fSince Login :: &b" + player.loginBlocks);
-                    Player.SendMessage(p, "Next Rank : " + player.nextRank.color + player.nextRank.name);
-
-                    Player.SendMessage(player, "Player " + p.color + p.name + Server.DefaultColor + " has just viewed your stats.");
+					Player.SendMessage(player, "Player " + p.color + p.name + Server.DefaultColor + " has just viewed your stats.");
                 }
             }
         }
@@ -690,14 +691,14 @@ namespace MCForge
                             count = count + 1;
 
                         //Price
-                        int price = listlines8asint;
                         int tprice = count * listlines11asint;
+						int price = listlines8asint + tprice;
 
                         if (p.money >= tprice)
                         {
                             {
                                 Command.all.Find("title").Use(p, p.name + " " + message);
-                                p.money = p.money - tprice;
+                                p.money = p.money - price;
                                 Player.SendMessage(p, "You now have the title of " + message + " !");
                                 Player.SendMessage(p, "You now have " + p.money + " left.");
                                 return;
@@ -705,7 +706,7 @@ namespace MCForge
                         }
                         else
                         {
-                            Player.SendMessage(p, "You do not have " + tprice + " " + Server.moneys + " to use this command.");
+                            Player.SendMessage(p, "You do not have " + price + " " + Server.moneys + " to use this command.");
                             return;
                         }
                     }
@@ -905,9 +906,12 @@ namespace MCForge
                                         {
                                             
                                                 //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                                Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno(p, false));
+                                                Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
 
-                                                if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno(p, false) + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + par2 + "');") == true)
+                                                
+												
+												
+												if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") ==(bool)true)
                                                 {
                                                     //Command.all.Find("unload").Use(p, p.name);
                                                     Player.SendMessage(p, "Zoning Succesful!!" );
@@ -941,9 +945,9 @@ namespace MCForge
                                         {
 
                                             //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno(p, false));
+                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
 
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno(p, false) + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + par2 + "');") == true)
+                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
                                             {
                                                 //Command.all.Find("unload").Use(p, p.name);
                                                 Player.SendMessage(p, "Zoning Succesful!!");
@@ -978,9 +982,9 @@ namespace MCForge
                                         {
 
                                             //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno(p, false));
+                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
 
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno(p, false) + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + par2 + "');") == true)
+                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
                                             {
                                                 //Command.all.Find("unload").Use(p, p.name);
                                                 Player.SendMessage(p, "Zoning Succesful!!");
@@ -1014,9 +1018,9 @@ namespace MCForge
                                         {
 
                                             //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno(p, false));
+                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
 
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno(p, false) + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + par2 + "');") == true)
+                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
                                             {
                                                 //Command.all.Find("unload").Use(p, p.name);
                                                 Player.SendMessage(p, "Zoning Succesful!!");
@@ -1324,7 +1328,7 @@ namespace MCForge
 
                                 p.color = group.color;
 
-                                Player.GlobalMessage(p, p.color + p.name + Server.DefaultColor + " just purchased the " + group.color + group.name + Server.DefaultColor + " rank!" );
+                                Player.GlobalMessage(p.color + p.name + " " + Server.DefaultColor + " just purchased the " + group.color + group.name + " " + Server.DefaultColor + " rank!");
 
                                 return;
 
@@ -1380,7 +1384,7 @@ namespace MCForge
         public override string shortcut { get { return "onwmapspawn"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.guest; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public override void Use(Player p, string message)
         {
             {
