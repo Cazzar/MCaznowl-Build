@@ -976,6 +976,8 @@ namespace MCForge
                 case Block.door9_air:
                 case Block.door10_air:
                 case Block.door_iron_air:
+				case Block.door_gold_air:
+                case Block.door_cobblestone_air:
                 case Block.door_dirt_air:
                 case Block.door_grass_air:
                 case Block.door_blue_air:

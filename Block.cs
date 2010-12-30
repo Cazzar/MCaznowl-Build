@@ -75,6 +75,10 @@ namespace MCForge
 
         //Custom blocks
         public const byte flagbase = (byte)70;
+
+        public const byte door_cobblestone = (byte)80;
+        public const byte door_cobblestone_air = (byte)81;
+
         public const byte op_glass = (byte)100;
         public const byte opsidian = (byte)101;
         public const byte op_brick = (byte)102;
@@ -245,6 +249,9 @@ namespace MCForge
 
         public const byte snake = (byte)251;
         public const byte snaketail = (byte)252;
+		
+		public const byte door_gold = (byte)253;
+		public const byte door_gold_air = (byte)254;
 
         public static List<Blocks> BlockList = new List<Blocks>();
         public class Blocks
@@ -338,6 +345,8 @@ namespace MCForge
                     case door13_air:
                     case door14_air:
                     case door_iron_air:
+					case door_gold_air:
+                    case door_cobblestone_air:
                     case door_grass_air:
                     case door_dirt_air:
                     case door_blue_air:
@@ -414,10 +423,12 @@ namespace MCForge
                     case water_door:
                     case lava_door:
                     case door_iron:
+					case door_gold:
                     case door_grass:
                     case door_dirt:
                     case door_blue:
                     case door_book:
+                    case door_cobblestone:
 
                     case tdoor:
                     case tdoor2:
@@ -677,10 +688,12 @@ namespace MCForge
                 case Block.door9:
                 case Block.door10:
                 case door_iron:
+				case door_gold:
                 case door_dirt:
                 case door_grass:
                 case door_blue:
                 case door_book:
+                case door_cobblestone:
 
                 case Block.smalltnt:
                 case Block.bigtnt:
@@ -1008,10 +1021,12 @@ namespace MCForge
                 case Block.door9:
                 case Block.door10:
                 case door_iron:
+				case door_gold:
                 case door_dirt:
                 case door_grass:
                 case door_blue:
                 case door_book:
+                case door_cobblestone:
 
                 case tdoor:
                 case tdoor2:
@@ -1133,6 +1148,8 @@ namespace MCForge
                 case door9: return "door_tnt";
                 case door10: return "door_stair";
                 case door_iron: return "door_iron";
+				case door_gold: return "door_gold";
+                case door_cobblestone: return "door_cobblestone";
                 case door_grass: return "door_grass";
                 case door_dirt: return "door_dirt";
                 case door_blue: return "door_blue";
@@ -1244,10 +1261,12 @@ namespace MCForge
                 case 216: return "door13_air";
                 case 217: return "door14_air";
                 case door_iron_air: return "door_iron_air";
+				case door_gold_air: return "door_gold_air";
                 case door_dirt_air: return "door_dirt_air";
                 case door_grass_air: return "door_grass_air";
                 case door_blue_air: return "door_blue_air";
                 case door_book_air: return "door_book_air";
+                case door_cobblestone_air: return "door_cobblestone_air";
 
                 //"AI" blocks
                 case train: return "train";
@@ -1378,6 +1397,10 @@ namespace MCForge
                 case "door_blue": return door_blue;
                 case "door15":
                 case "door_book": return door_book;
+				case "door16":
+				case "door_gold": return door_gold;
+                case "door17":
+                case "door_cobblestone": return door_cobblestone;
 
                 case "tdoor_tree":
                 case "tdoor": return tdoor;
@@ -1507,6 +1530,8 @@ namespace MCForge
                 case "door_grass_air": return door_grass_air;
                 case "door_blue_air": return door_blue_air;
                 case "door_book_air": return door_book_air;
+				case "door_gold_air": return door_gold_air;
+                case "door_cobblestone_air": return door_cobblestone_air;
 
                 case "train": return train;
 
@@ -1567,6 +1592,8 @@ namespace MCForge
                 case door_grass: return grass;
                 case door_blue: return blue;
                 case door_book: return bookcase;
+				case door_gold: return goldsolid;
+                case door_cobblestone: return 4;
 
                 case tdoor: return trunk;//tdoor show by treetype
                 case tdoor2: return obsidian;//tdoor show by obsidian
@@ -1658,6 +1685,8 @@ namespace MCForge
                 case 216: //door10_air
                 case door14_air:
                 case door_iron_air:
+				case door_gold_air:
+                case door_cobblestone_air:
                 case door_dirt_air:
                 case door_grass_air:
                 case door_blue_air:
@@ -1732,10 +1761,12 @@ namespace MCForge
                 case 216: return (byte)167; //door_air back into door
                 case 217: return air_door; //door_air back into door
                 case door_iron_air: return door_iron;
+				case door_gold_air: return door_gold;
                 case door_dirt_air: return door_dirt;
                 case door_grass_air: return door_grass;
                 case door_blue_air: return door_blue;
                 case door_book_air: return door_book;
+                case door_cobblestone_air: return door_cobblestone;
 
                 case odoor1_air:
                 case odoor2_air:
@@ -1773,10 +1804,12 @@ namespace MCForge
                 case lava_door: return door13_air;
                 case air_door: return door14_air;
                 case door_iron: return door_iron_air;
+				case door_gold: return door_gold_air;
                 case door_dirt: return door_dirt_air;
                 case door_grass: return door_grass_air;
                 case door_blue: return door_blue_air;
                 case door_book: return door_book_air;
+                case door_cobblestone: return door_cobblestone_air;
                 default: return 0;
             }
         }
