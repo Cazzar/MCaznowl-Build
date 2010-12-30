@@ -160,6 +160,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1021,6 +1022,7 @@
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.chkProfanityFilter);
             this.tabPage4.Controls.Add(this.chkRepeatMessages);
             this.tabPage4.Controls.Add(this.chkForceCuboid);
             this.tabPage4.Controls.Add(this.txtShutdown);
@@ -1108,7 +1110,7 @@
             // 
             // txtMoneys
             // 
-            this.txtMoneys.Location = new System.Drawing.Point(239, 284);
+            this.txtMoneys.Location = new System.Drawing.Point(239, 253);
             this.txtMoneys.Name = "txtMoneys";
             this.txtMoneys.Size = new System.Drawing.Size(82, 21);
             this.txtMoneys.TabIndex = 1;
@@ -1182,7 +1184,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(162, 287);
+            this.label34.Location = new System.Drawing.Point(162, 256);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(71, 13);
             this.label34.TabIndex = 11;
@@ -1375,7 +1377,7 @@
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(11, 341);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(105, 23);
+            this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -1434,7 +1436,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(205, 119);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(57, 13);
+            this.label22.Size = new System.Drawing.Size(58, 13);
             this.label22.TabIndex = 3;
             this.label22.Text = "Max Maps:";
             // 
@@ -1443,7 +1445,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(196, 90);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(66, 13);
+            this.label21.Size = new System.Drawing.Size(67, 13);
             this.label21.TabIndex = 3;
             this.label21.Text = "Max Players:";
             // 
@@ -1532,6 +1534,17 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
+            // 
+            // chkProfanityFilter
+            // 
+            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkProfanityFilter.AutoSize = true;
+            this.chkProfanityFilter.Location = new System.Drawing.Point(235, 283);
+            this.chkProfanityFilter.Name = "chkProfanityFilter";
+            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
+            this.chkProfanityFilter.TabIndex = 30;
+            this.chkProfanityFilter.Text = "Profanity Filter";
+            this.chkProfanityFilter.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
@@ -1700,5 +1713,6 @@
         private System.Windows.Forms.Button SaveCustCmd;
         private System.Windows.Forms.Button LoadIntoTxtBox;
         private System.Windows.Forms.RichTextBox CustCmdTxtBox2;
+        private System.Windows.Forms.CheckBox chkProfanityFilter;
     }
 }

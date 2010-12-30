@@ -253,6 +253,10 @@ namespace MCForge.Gui
                                 chkForceCuboid.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
+                            case "profanity-filter":
+                                chkProfanityFilter.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+
                             case "backup-time":
                                 if (Convert.ToInt32(value) > 1) txtBackup.Text = value; else txtBackup.Text = "300";
                                 break;
@@ -421,6 +425,7 @@ namespace MCForge.Gui
                     w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
                     w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
                     w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
+                    w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -474,6 +479,7 @@ namespace MCForge.Gui
                     w.WriteLine("opchat-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbOpChat.Items[cmbOpChat.SelectedIndex].ToString()).Permission).ToString());
                     w.WriteLine("log-heartbeat = " + chkLogBeat.Checked.ToString().ToLower());
                     w.WriteLine("force-cuboid = " + chkForceCuboid.Checked.ToString().ToLower());
+                    w.WriteLine("profanity-filter = " + chkProfanityFilter.Checked.ToString().ToLower());
                     w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
                     w.WriteLine("host-state = " + txtHost.Text.ToString());
                     w.WriteLine();

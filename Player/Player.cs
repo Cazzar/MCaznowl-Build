@@ -1392,6 +1392,11 @@ namespace MCForge
                 if (Server.chatmod && !this.voice) { this.SendMessage("Chat moderation is on, you cannot speak."); return; }
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
 
+                // Filter out bad words
+                if (Server.profanityFilter == true)
+                {
+                    text = ProfanityFilter.Parse(text);
+                }
 
                 if (text[0] == '@' || whisper)
                 {

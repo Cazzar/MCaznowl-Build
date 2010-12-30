@@ -255,6 +255,10 @@ namespace MCForge
                                 try { Server.forceCuboid = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
                                 break;
+                            case "profanity-filter":
+                                try { Server.profanityFilter = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
+                                break;
                             case "cheapmessage":
                                 try { Server.cheapMessage = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
