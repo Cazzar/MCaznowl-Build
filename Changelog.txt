@@ -1,3 +1,29 @@
+v2.0.0.0
+- New profanity filter (optional)
+- Revamped the heartbeat system
+  - Prevents the initial failure and gets the server URL much faster 
+- Fixed a couple issues with the application and notification icons
+- New Economy System
+  - /economy
+  - /economystats
+  - /economysetup
+  - /economybuyrank
+  - /economybuytitle
+  - /economybuycolor
+  - /economybuymap
+- Added /changelog
+- Added restart button
+- Added shortcut to /clones command to the right-click player list
+- Added confirmations to shutdown/close/restart actions
+- Added Custom Commands Tab
+- Added Logs tab to read previous server logs
+- Double-clicking the server URL causes it to become highlighted - easier for copypasting
+- Scripting - if a custom command DLL has multiple commands inside it, all commands will be loaded!
+- New Doors!
+  - Door_Gold
+  - Door_Cobblestone
+- Added $banned (shows the total number of people banned)
+
 v1.2.1.0
  - Revamped the heartbeat, which fixed a few issues
  - Fixed issue where tray icon sometimes didn't disappear after the server shutdown
