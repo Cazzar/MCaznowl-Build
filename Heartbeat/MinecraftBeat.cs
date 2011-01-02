@@ -17,16 +17,22 @@ namespace MCForge
 
         public void OnPump(string line)
         {
-            // Only run the code below if we receive a response and don't already know the server's URL hash
-            if (!String.IsNullOrEmpty(line) && String.IsNullOrEmpty(Server.Hash))
+            // Only run the code below if we receive a response
+            if (!String.IsNullOrEmpty(line))
             {
-                Server.Hash = line.Substring(line.LastIndexOf('=') + 1);
-                string serverURL = line;
+                string newHash = line.Substring(line.LastIndexOf('=') + 1);
 
-                //serverURL = "http://" + serverURL.Substring(serverURL.IndexOf('.') + 1);
-                Server.s.UpdateUrl(serverURL);
-                File.WriteAllText("text/externalurl.txt", serverURL);
-                Server.s.Log("URL found: " + serverURL);
+                // Run this code if we don't already have a hash or if the hash has changed
+                if (String.IsNullOrEmpty(Server.Hash) || !newHash.Equals(Server.Hash))
+                {
+                    Server.Hash = newHash;
+                    string serverURL = line;
+
+                    //serverURL = "http://" + serverURL.Substring(serverURL.IndexOf('.') + 1);
+                    Server.s.UpdateUrl(serverURL);
+                    File.WriteAllText("text/externalurl.txt", serverURL);
+                    Server.s.Log("URL found: " + serverURL);
+                }
             }
         }
     }
