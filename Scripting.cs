@@ -1,5 +1,7 @@
 ﻿/*
 	Copyright 2010 MCLawl Team - Written by Valek
+
+	Edited for use with MCForge
  
     Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may

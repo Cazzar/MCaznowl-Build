@@ -241,7 +241,7 @@ namespace MCForge.Gui
 
         private void Window_FormClosing(object sender, FormClosingEventArgs e) {
 
-            if (restarting == true || MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (restarting == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
                 MCForge_.Gui.Program.ExitProgram(false);
@@ -316,7 +316,7 @@ namespace MCForge.Gui
         }
 
         private void btnClose_Click_1(object sender, EventArgs e) { 
-            if (MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 MCForge_.Gui.Program.ExitProgram(false);
             }
