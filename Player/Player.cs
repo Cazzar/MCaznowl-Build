@@ -27,7 +27,7 @@ namespace MCForge
 {
     public sealed class Player
     {
-        public static List<Player> players = new List<Player>();
+        public static PlayerCollection players = new PlayerCollection(new PlayerListView());
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
@@ -707,7 +707,8 @@ namespace MCForge
             if (emoteList.Contains(name)) parseSmiley = false;
             GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
-            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] has joined the server.", System.Windows.Forms.ToolTipIcon.Info);
+            if(Server.notifyOnJoinLeave)
+                ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] has joined the server.", System.Windows.Forms.ToolTipIcon.Info);
         }
 
         public void SetPrefix()
@@ -2183,7 +2184,8 @@ namespace MCForge
                         if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
-                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] disconnected.", System.Windows.Forms.ToolTipIcon.Info);
+                        if (Server.notifyOnJoinLeave)
+                            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] disconnected.", System.Windows.Forms.ToolTipIcon.Info);
                     }
                     else
                     {
@@ -2191,7 +2193,8 @@ namespace MCForge
                         GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + ").", false);
                         IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
-                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " kicked (" + kickString + ").", System.Windows.Forms.ToolTipIcon.Info);
+                        if (Server.notifyOnJoinLeave)
+                            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " kicked (" + kickString + ").", System.Windows.Forms.ToolTipIcon.Info);
                     }
 
                     try { save(); }
@@ -2245,7 +2248,8 @@ namespace MCForge
                 {
                     connections.Remove(this);
                     Server.s.Log(ip + " disconnected.");
-                    ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, ip + " disconnected.", System.Windows.Forms.ToolTipIcon.Info);
+                    if (Server.notifyOnJoinLeave)
+                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, ip + " disconnected.", System.Windows.Forms.ToolTipIcon.Info);
                 }
 
             }

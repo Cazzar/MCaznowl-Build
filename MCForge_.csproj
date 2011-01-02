@@ -128,7 +128,6 @@
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CTFGame.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Commands\CmdBotAdd.cs" />
@@ -266,6 +265,7 @@
     <Compile Include="Commands\CmdText.cs" />
     <Compile Include="Commands\CmdView.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Player\PlayerCollection.cs" />
     <Compile Include="GUI\PropertyWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,6 +317,7 @@
     <Compile Include="Server.cs" />
     <Compile Include="ServerSettings.cs" />
     <Compile Include="Updater.cs" />
+    <Compile Include="Util\Extensions.cs" />
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
       <SubType>Designer</SubType>

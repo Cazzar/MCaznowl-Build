@@ -113,6 +113,7 @@
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
             this.txtShutdown = new System.Windows.Forms.TextBox();
             this.txtBanMessage = new System.Windows.Forms.TextBox();
@@ -160,7 +161,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
+            this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1022,6 +1023,7 @@
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.chkNotifyOnJoinLeave);
             this.tabPage4.Controls.Add(this.chkProfanityFilter);
             this.tabPage4.Controls.Add(this.chkRepeatMessages);
             this.tabPage4.Controls.Add(this.chkForceCuboid);
@@ -1059,6 +1061,17 @@
             this.tabPage4.Size = new System.Drawing.Size(337, 404);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
+            // 
+            // chkProfanityFilter
+            // 
+            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkProfanityFilter.AutoSize = true;
+            this.chkProfanityFilter.Location = new System.Drawing.Point(234, 341);
+            this.chkProfanityFilter.Name = "chkProfanityFilter";
+            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
+            this.chkProfanityFilter.TabIndex = 30;
+            this.chkProfanityFilter.Text = "Profanity Filter";
+            this.chkProfanityFilter.UseVisualStyleBackColor = true;
             // 
             // chkRepeatMessages
             // 
@@ -1154,7 +1167,7 @@
             // 
             this.chk17Dollar.Appearance = System.Windows.Forms.Appearance.Button;
             this.chk17Dollar.AutoSize = true;
-            this.chk17Dollar.Location = new System.Drawing.Point(231, 340);
+            this.chk17Dollar.Location = new System.Drawing.Point(137, 341);
             this.chk17Dollar.Name = "chk17Dollar";
             this.chk17Dollar.Size = new System.Drawing.Size(91, 23);
             this.chk17Dollar.TabIndex = 22;
@@ -1165,7 +1178,7 @@
             // 
             this.chkSmile.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSmile.AutoSize = true;
-            this.chkSmile.Location = new System.Drawing.Point(240, 311);
+            this.chkSmile.Location = new System.Drawing.Point(239, 283);
             this.chkSmile.Name = "chkSmile";
             this.chkSmile.Size = new System.Drawing.Size(82, 23);
             this.chkSmile.TabIndex = 19;
@@ -1535,16 +1548,16 @@
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
             // 
-            // chkProfanityFilter
+            // chkNotifyOnJoinLeave
             // 
-            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkProfanityFilter.AutoSize = true;
-            this.chkProfanityFilter.Location = new System.Drawing.Point(235, 283);
-            this.chkProfanityFilter.Name = "chkProfanityFilter";
-            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
-            this.chkProfanityFilter.TabIndex = 30;
-            this.chkProfanityFilter.Text = "Profanity Filter";
-            this.chkProfanityFilter.UseVisualStyleBackColor = true;
+            this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotifyOnJoinLeave.AutoSize = true;
+            this.chkNotifyOnJoinLeave.Location = new System.Drawing.Point(181, 312);
+            this.chkNotifyOnJoinLeave.Name = "chkNotifyOnJoinLeave";
+            this.chkNotifyOnJoinLeave.Size = new System.Drawing.Size(140, 23);
+            this.chkNotifyOnJoinLeave.TabIndex = 31;
+            this.chkNotifyOnJoinLeave.Text = "Notify popup on join/leave";
+            this.chkNotifyOnJoinLeave.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
@@ -1714,5 +1727,6 @@
         private System.Windows.Forms.Button LoadIntoTxtBox;
         private System.Windows.Forms.RichTextBox CustCmdTxtBox2;
         private System.Windows.Forms.CheckBox chkProfanityFilter;
+        private System.Windows.Forms.CheckBox chkNotifyOnJoinLeave;
     }
 }

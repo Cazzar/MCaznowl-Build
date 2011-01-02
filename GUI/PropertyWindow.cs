@@ -257,6 +257,10 @@ namespace MCForge.Gui
                                 chkProfanityFilter.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
+                            case "notify-on-join-leave":
+                                chkNotifyOnJoinLeave.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+
                             case "backup-time":
                                 if (Convert.ToInt32(value) > 1) txtBackup.Text = value; else txtBackup.Text = "300";
                                 break;
@@ -480,6 +484,7 @@ namespace MCForge.Gui
                     w.WriteLine("log-heartbeat = " + chkLogBeat.Checked.ToString().ToLower());
                     w.WriteLine("force-cuboid = " + chkForceCuboid.Checked.ToString().ToLower());
                     w.WriteLine("profanity-filter = " + chkProfanityFilter.Checked.ToString().ToLower());
+                    w.WriteLine("notify-on-join-leave = " + chkNotifyOnJoinLeave.Checked.ToString().ToLower());
                     w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
                     w.WriteLine("host-state = " + txtHost.Text.ToString());
                     w.WriteLine();

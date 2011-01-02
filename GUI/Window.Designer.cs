@@ -117,6 +117,7 @@ namespace MCForge.Gui
             this.btnProperties = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.Restart = new System.Windows.Forms.Button();
+            this.dgvPlayers = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.mapsStrip.SuspendLayout();
@@ -128,6 +129,7 @@ namespace MCForge.Gui
             this.tabPage3.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.iconContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -684,11 +686,23 @@ namespace MCForge.Gui
             this.Restart.UseVisualStyleBackColor = true;
             this.Restart.Click += new System.EventHandler(this.Restart_Click);
             // 
+            // dgvPlayers
+            // 
+            this.dgvPlayers.AllowUserToAddRows = false;
+            this.dgvPlayers.AllowUserToDeleteRows = false;
+            this.dgvPlayers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPlayers.Location = new System.Drawing.Point(759, 162);
+            this.dgvPlayers.Name = "dgvPlayers";
+            this.dgvPlayers.ReadOnly = true;
+            this.dgvPlayers.Size = new System.Drawing.Size(240, 150);
+            this.dgvPlayers.TabIndex = 37;
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 523);
+            this.ClientSize = new System.Drawing.Size(1006, 523);
+            this.Controls.Add(this.dgvPlayers);
             this.Controls.Add(this.btnProperties);
             this.Controls.Add(this.Restart);
             this.Controls.Add(this.btnClose);
@@ -717,6 +731,7 @@ namespace MCForge.Gui
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.iconContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -780,5 +795,6 @@ namespace MCForge.Gui
         private RichTextBox LogsTxtBox;
         private DateTimePicker dateTimePicker1;
         private Label label3;
+        private DataGridView dgvPlayers;
     }
 }

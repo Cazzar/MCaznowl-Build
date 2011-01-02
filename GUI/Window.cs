@@ -30,6 +30,7 @@ namespace MCForge.Gui
     {
         Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
                                 "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
+
         // for cross thread use
         delegate void StringCallback(string s);
         delegate void PlayerListCallback(List<Player> players);
@@ -120,6 +121,9 @@ namespace MCForge.Gui
                     txtChangelog.AppendText("\r\n           " + line);
                 }            
             }
+
+            // Bind player list
+            dgvPlayers.DataSource = Player.players;
         }
 
         void SettingsUpdate()
@@ -203,13 +207,16 @@ namespace MCForge.Gui
         /// </summary>
         /// <param name="players">The list of players to add</param>
         public void UpdateClientList(List<Player> players) {
+            /*
             if (this.InvokeRequired) {
                 PlayerListCallback d = new PlayerListCallback(UpdateClientList);
                 this.Invoke(d, new object[] { players });
             } else {
+                pc.Clear();
                 liClients.Items.Clear();
                 Player.players.ForEach(delegate(Player p) { liClients.Items.Add(p.name); });
             }
+            */
         }
 
         public void UpdateMapList(string blah) {            
@@ -425,44 +432,60 @@ namespace MCForge.Gui
             
         }
 
+        private Player GetSelectedPlayer()
+        {
+            if(this.dgvPlayers.SelectedRows == null)
+                return null;
+
+            if(this.dgvPlayers.SelectedRows.Count == 0)
+                return null;
+
+            return (Player)(this.dgvPlayers.SelectedRows[0].DataBoundItem);
+        }
+
         private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("clones").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("clones").Use(null, p.name);
             }
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("voice").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("voice").Use(null, p.name);
             }
         }
 
         private void whoisToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("whois").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("whois").Use(null, p.name);
             }
         }
 
         private void kickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("kick").Use(null, this.liClients.SelectedItem.ToString() + " You have been kicked by the console.");
+                Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
             }
         }
 
 
         private void banToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("ban").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("ban").Use(null, p.name);
             }
         }
 

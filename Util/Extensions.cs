@@ -6,8 +6,16 @@ using System.IO.Compression;
 
 namespace MCForge
 {
-    public class Extensions
+    public static class Extensions
     {
+        public static string Truncate(this string source, int maxLength)
+        {
+            if (source.Length > maxLength)
+            {
+                source = source.Substring(0, maxLength);
+            }
+            return source;
+        }
         public static byte[] GZip(this byte[] bytes)
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream();

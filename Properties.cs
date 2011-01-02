@@ -259,6 +259,10 @@ namespace MCForge
                                 try { Server.profanityFilter = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
+                            case "notify-on-join-leave":
+                                try { Server.notifyOnJoinLeave = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
+                                break;
                             case "cheapmessage":
                                 try { Server.cheapMessage = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
