@@ -707,6 +707,7 @@ namespace MCForge
             if (emoteList.Contains(name)) parseSmiley = false;
             GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
+            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] has joined the server.", System.Windows.Forms.ToolTipIcon.Info);
         }
 
         public void SetPrefix()
@@ -1854,7 +1855,7 @@ namespace MCForge
                 buffer[4 + i] = Block.Convert(level.blocks[i]);
             }
 
-            buffer = GZip(buffer);
+            buffer = buffer.GZip();
             int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
             for (int i = 1; buffer.Length > 0; ++i)
             {
@@ -2182,6 +2183,7 @@ namespace MCForge
                         if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
+                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] disconnected.", System.Windows.Forms.ToolTipIcon.Info);
                     }
                     else
                     {
@@ -2189,6 +2191,7 @@ namespace MCForge
                         GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + ").", false);
                         IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
+                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " kicked (" + kickString + ").", System.Windows.Forms.ToolTipIcon.Info);
                     }
 
                     try { save(); }
@@ -2242,7 +2245,9 @@ namespace MCForge
                 {
                     connections.Remove(this);
                     Server.s.Log(ip + " disconnected.");
+                    ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, ip + " disconnected.", System.Windows.Forms.ToolTipIcon.Info);
                 }
+
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
@@ -2404,20 +2409,7 @@ namespace MCForge
             string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
             foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
         }
-        public static byte[] GZip(byte[] bytes)
-        {
-            System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            GZipStream gs = new GZipStream(ms, CompressionMode.Compress, true);
-            gs.Write(bytes, 0, bytes.Length);
-            gs.Close();
-            gs.Dispose();
-            ms.Position = 0;
-            bytes = new byte[ms.Length];
-            ms.Read(bytes, 0, (int)ms.Length);
-            ms.Close();
-            ms.Dispose();
-            return bytes;
-        }
+        
         public static int GetBannedCount()
         {
             try
