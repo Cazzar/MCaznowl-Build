@@ -758,5 +758,18 @@ namespace MCForge
             }
             return Group.standard.color;
         }
+
+        public static void PopupNotify(string message)
+        {
+            PopupNotify(message, System.Windows.Forms.ToolTipIcon.Info);
+        }
+        public static void PopupNotify(string message, System.Windows.Forms.ToolTipIcon icon)
+        {
+            try
+            {
+                Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
+            }
+            catch { }
+        }
     }
 }

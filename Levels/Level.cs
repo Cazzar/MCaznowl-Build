@@ -866,6 +866,7 @@ namespace MCForge
 
                             Player.GlobalMessage("Physics shutdown on &b" + Cause.name);
                             Server.s.Log("Physics shutdown on " + name);
+                            Server.PopupNotify("Physics shutdown on " + name, System.Windows.Forms.ToolTipIcon.Error);
 
                             wait = speedPhysics;
                         }
@@ -876,6 +877,7 @@ namespace MCForge
                                 if (p.level == this) Player.SendMessage(p, "Physics warning!");
                             }
                             Server.s.Log("Physics warning on " + name);
+                            Server.PopupNotify("Physics warning on " + name, System.Windows.Forms.ToolTipIcon.Warning);
                         }
                     }
                 }

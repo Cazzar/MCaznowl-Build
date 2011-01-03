@@ -707,8 +707,10 @@ namespace MCForge
             if (emoteList.Contains(name)) parseSmiley = false;
             GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
-            if(Server.notifyOnJoinLeave)
-                ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] has joined the server.", System.Windows.Forms.ToolTipIcon.Info);
+            if (Server.notifyOnJoinLeave)
+            {
+                Server.PopupNotify(name + " [" + ip + "] has joined the server.");
+            }
         }
 
         public void SetPrefix()
@@ -2185,7 +2187,9 @@ namespace MCForge
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
-                            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " [" + ip + "] disconnected.", System.Windows.Forms.ToolTipIcon.Info);
+                        {
+                            Server.PopupNotify(name + " [" + ip + "] disconnected.");
+                        }
                     }
                     else
                     {
@@ -2194,7 +2198,7 @@ namespace MCForge
                         IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
                         if (Server.notifyOnJoinLeave)
-                            ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, name + " kicked (" + kickString + ").", System.Windows.Forms.ToolTipIcon.Info);
+                            Server.PopupNotify(name + " kicked (" + kickString + ").");
                     }
 
                     try { save(); }
@@ -2249,7 +2253,7 @@ namespace MCForge
                     connections.Remove(this);
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
-                        ((MCForge.Gui.Window)MCForge.Gui.Window.ActiveForm).notifyIcon1.ShowBalloonTip(3000, Server.name, ip + " disconnected.", System.Windows.Forms.ToolTipIcon.Info);
+                        Server.PopupNotify(ip + " disconnected.");
                 }
 
             }
