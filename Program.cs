@@ -12,16 +12,7 @@ namespace Starter
         {
             get
             {
-                try
-                {
-                    if (String.IsNullOrEmpty(MCForge.ServerSettings.DLLLocation))
-                        throw new ApplicationException("Could not read location from the current DLL! Using the default instead.");
-                    return MCForge.ServerSettings.DLLLocation;
-                }
-                catch (Exception ex)
-                {
-                    return "http://www.files.mdnserver.info/MCForge_.dll";
-                }
+                return "http://www.files.mdnserver.info/MCForge_.dll";
             }
         }
 

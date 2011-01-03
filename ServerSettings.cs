@@ -7,6 +7,8 @@ namespace MCForge
 {
     public static class ServerSettings
     {
+        // The Update URL must be hardcoded in Program.cs!!
+        // Don't even try referencing this from Program.cs it will fail miserably.
         public static string CurrentVersionFile = "http://files.mdnserver.info/curversion.txt";
         public static string DLLLocation = "http://www.files.mdnserver.info/MCForge_.dll";
         public static string ChangelogLocation = "http://files.mdnserver.info/changelog.txt";
