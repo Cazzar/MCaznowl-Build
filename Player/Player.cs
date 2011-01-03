@@ -1465,11 +1465,15 @@ namespace MCForge
                         while (!(stRead.Peek() == -1))
                             lines.Add(stRead.ReadLine());
 
-                        i = rnd.Next(lines.Count);
-
                         stRead.Close();
                         stRead.Dispose();
-                        text = lines[i];
+
+                        if (lines.Count > 0)
+                        {
+                            i = rnd.Next(lines.Count);
+                            text = lines[i];
+                        }
+                        
                     }
                     else { File.Create("text/joker.txt"); }
 
