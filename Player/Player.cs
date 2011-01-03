@@ -27,7 +27,7 @@ namespace MCForge
 {
     public sealed class Player
     {
-        public static PlayerCollection players = new PlayerCollection(new PlayerListView());
+        public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();

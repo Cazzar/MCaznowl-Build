@@ -113,6 +113,7 @@
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
             this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
             this.txtShutdown = new System.Windows.Forms.TextBox();
@@ -161,7 +162,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1062,6 +1062,17 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
             // 
+            // chkNotifyOnJoinLeave
+            // 
+            this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotifyOnJoinLeave.AutoSize = true;
+            this.chkNotifyOnJoinLeave.Location = new System.Drawing.Point(181, 312);
+            this.chkNotifyOnJoinLeave.Name = "chkNotifyOnJoinLeave";
+            this.chkNotifyOnJoinLeave.Size = new System.Drawing.Size(140, 23);
+            this.chkNotifyOnJoinLeave.TabIndex = 31;
+            this.chkNotifyOnJoinLeave.Text = "Notify popup on join/leave";
+            this.chkNotifyOnJoinLeave.UseVisualStyleBackColor = true;
+            // 
             // chkProfanityFilter
             // 
             this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
@@ -1547,17 +1558,6 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
-            // 
-            // chkNotifyOnJoinLeave
-            // 
-            this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNotifyOnJoinLeave.AutoSize = true;
-            this.chkNotifyOnJoinLeave.Location = new System.Drawing.Point(181, 312);
-            this.chkNotifyOnJoinLeave.Name = "chkNotifyOnJoinLeave";
-            this.chkNotifyOnJoinLeave.Size = new System.Drawing.Size(140, 23);
-            this.chkNotifyOnJoinLeave.TabIndex = 31;
-            this.chkNotifyOnJoinLeave.Text = "Notify popup on join/leave";
-            this.chkNotifyOnJoinLeave.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
