@@ -82,9 +82,9 @@ namespace MCForge.Gui
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
-            this.txtCommandsUsed = new System.Windows.Forms.TextBox();
+            this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.gBChat = new System.Windows.Forms.GroupBox();
-            this.txtLog = new System.Windows.Forms.TextBox();
+            this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.txtCommands = new System.Windows.Forms.TextBox();
@@ -743,9 +743,9 @@ namespace MCForge.Gui
         private Button btnExtra;
         private Button button1;
         private GroupBox gBCommands;
-        private TextBox txtCommandsUsed;
+        private AutoScrollTextBox txtCommandsUsed;
         private GroupBox gBChat;
-        private TextBox txtLog;
+        private AutoScrollTextBox txtLog;
         private Label label2;
         private TextBox txtCommands;
         private TextBox txtInput;

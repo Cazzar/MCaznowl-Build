@@ -22,6 +22,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using MCForge;
 
 namespace MCForge.Gui
@@ -181,19 +182,6 @@ namespace MCForge.Gui
         delegate void LogDelegate(string message);
 
         /// <summary>
-        /// Does the same as Console.Write() only in the form
-        /// </summary>
-        /// <param name="s">The string to write</param>
-        public void Write(string s) {
-            if (shuttingDown) return;
-            if (txtLog.InvokeRequired) {
-                LogDelegate d = new LogDelegate(Write);
-                this.Invoke(d, new object[] { s });
-            } else {
-                txtLog.AppendText(s);
-            }
-        }
-        /// <summary>
         /// Does the same as Console.WriteLine() only in the form
         /// </summary>
         /// <param name="s">The line to write</param>
@@ -204,9 +192,11 @@ namespace MCForge.Gui
                 LogDelegate d = new LogDelegate(WriteLine);
                 this.Invoke(d, new object[] { s });
             } else {
-                txtLog.AppendText("\r\n" + s);
+                //txtLog.AppendText(Environment.NewLine + s);
+                txtLog.AppendTextAndScroll(s);
             }
         }
+
         /// <summary>
         /// Updates the list of client names in the window
         /// </summary>
@@ -343,7 +333,7 @@ namespace MCForge.Gui
             }
             else
             {
-                txtCommandsUsed.AppendText("\r\n" + p); 
+                txtCommandsUsed.AppendTextAndScroll(p); 
             }
         }
 
