@@ -15,7 +15,12 @@ namespace MCForge
             Player player = Player.Find(message.Split(' ')[0]);
             if (player == null)
             {
-                Player.SendMessage(p, "Player is not found, check your spelling.");
+                Player.SendMessage(p, "Error: " + player.color + player.name + Server.DefaultColor + " was not found");
+                return;
+            }
+            if (player == p)
+            {
+                Player.SendMessage(p, "Error: Seriously? Just use /spawn!");
                 return;
             }
             Command.all.Find("spawn").Use(player, "");
@@ -24,8 +29,8 @@ namespace MCForge
         }
 		public override void Help(Player p)
 		{
-			Player.SendMessage(p, "/xspawn - Used to make other players spawn.");
-                        Player.SendMessage(p, "WARNING: It says who used it!");
+			Player.SendMessage(p, "/xspawn - Spawn another player.");
+            Player.SendMessage(p, "WARNING: It says who used it!");
 		}
 	}
 }
