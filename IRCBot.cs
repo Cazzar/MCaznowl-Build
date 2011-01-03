@@ -226,6 +226,26 @@ namespace MCForge
                                 irc.SendMessage(SendType.Message, e.Data.Nick, "Player not found.");
                             }
                             break;
+                        case "promote":
+                            if (Player.Find(msg.Split(' ')[0]) != null)
+                            {
+                                Command.all.Find("promote").Use(null, msg);
+                            }
+                            else
+                            {
+                                irc.SendMessage(SendType.Message, e.Data.Nick, "Player not found.");
+                            }
+                            break;
+                        case "demote":
+                            if (Player.Find(msg.Split(' ')[0]) != null)
+                            {
+                                Command.all.Find("demote").Use(null, msg);
+                            }
+                            else
+                            {
+                                irc.SendMessage(SendType.Message, e.Data.Nick, "Player not found.");
+                            }
+                            break;
                         case "mute":
                             if (Player.Find(msg) != null)
                             {
