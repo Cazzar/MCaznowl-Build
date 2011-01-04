@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace MCForge
 {
@@ -19,59 +19,88 @@ namespace MCForge
         {
             if (message.ToLower() == "superops" || message.ToLower() == "ops" || message.ToLower() == "advbuilders" || message.ToLower() == "builders")
             {
-                Player.SendMessage(p, "You cannot try to promote yourself with /text! You have been reported to all Ops!");
+                p.SendMessage("You cannot try to promote yourself with /text! You have been reported to all Ops!");
                 Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " tried to promote theirself by using /text!!");
-				Server.s.Log(p.name + " tried to promote themselves using /text!!");
+                Server.s.Log(p.name + " tried to promote themselves using /text!!");
                 return;
             }
             
-            if (!Directory.Exists("extra/text/")) Directory.CreateDirectory("extra/text");
-            if (message.IndexOf(' ') == -1) { Help(p); return; }
+            // Create the directory if it doesn't exist
+            if (!Directory.Exists("extra/text/"))
+                Directory.CreateDirectory("extra/text");
+
+            // Show the help if the message doesn't contain enough parameters
+            if (message.IndexOf(' ') == -1)
+            {
+                Help(p);
+                return;
+            }
+
+            string[] param = message.Split(' ');
 
             try
             {
-                if (message.Split(' ')[0].ToLower() == "delete")
+                if (param[0].ToLower() == "delete")
                 {
-                    if (File.Exists("extra/text/" + message.Split(' ')[1] + ".txt"))
+                    string filename = SanitizeFileName(param[1]) + ".txt";
+                    if (File.Exists("extra/text/" + filename))
                     {
-                        File.Delete("extra/text/" + message.Split(' ')[1] + ".txt");
-                        Player.SendMessage(p, "Deleted file");
+                        File.Delete("extra/text/" + filename);
+                        p.SendMessage("Deleted file: " + filename);
+                        return;
                     }
                     else
                     {
-                        Player.SendMessage(p, "Could not find file specified");
+                        p.SendMessage("Could not find file: " + filename);
+                        return;
                     }
                 }
                 else
                 {
                     bool again = false;
-                    string fileName = "extra/text/" + message.Split(' ')[0] + ".txt";
+                    string filename = SanitizeFileName(param[0]) + ".txt";
+                    string path = "extra/text/" + filename;
+                    
+                    // See if we match the group
                     string group = Group.findPerm(LevelPermission.Guest).name;
-                    if (Group.Find(message.Split(' ')[1]) != null)
+                    if (Group.Find(param[1]) != null)
                     {
-                        group = Group.Find(message.Split(' ')[1]).name;
+                        group = Group.Find(param[1]).name;
                         again = true;
                     }
+
                     message = message.Substring(message.IndexOf(' ') + 1);
                     if (again)
                         message = message.Substring(message.IndexOf(' ') + 1);
+
                     string contents = message;
-                    if (contents == "") { Help(p); return; }
-                    if (!File.Exists(fileName))
+                    if (contents == "")
+                    {
+                        Help(p);
+                        return;
+                    }
+
+                    if (!File.Exists(path))
                         contents = "#" + group + System.Environment.NewLine + contents;
                     else
                         contents = " " + contents;
-                    File.AppendAllText(fileName, contents);
-                    Player.SendMessage(p, "Added text");
+
+                    File.AppendAllText(path, contents);
+                    p.SendMessage("Added text to: " + filename);
                 }
             } catch { Help(p); }
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/text [file] [rank] [message] - Makes a /view-able text");
-            Player.SendMessage(p, "The [rank] entered is the minimum rank to view the file");
-            Player.SendMessage(p, "The [message] is entered into the text file");
-            Player.SendMessage(p, "If the file already exists, text will be added to the end");
+            p.SendMessage("/text [file] [rank] [message] - Makes a /view-able text");
+            p.SendMessage("The [rank] entered is the minimum rank to view the file");
+            p.SendMessage("The [message] is entered into the text file");
+            p.SendMessage("If the file already exists, text will be added to the end");
+        }
+
+        private string SanitizeFileName(string filename)
+        {
+            return Regex.Replace(filename, @"[^\d\w\-]", "");
         }
     }
 }
