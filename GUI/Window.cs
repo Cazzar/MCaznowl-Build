@@ -625,9 +625,9 @@ namespace MCForge.Gui
 
         private void DatePicker1_ValueChanged(object sender, EventArgs e)
         {
-            int dayofmonth = dateTimePicker1.Value.Day;
-            int year = dateTimePicker1.Value.Year;
-            int month = dateTimePicker1.Value.Month;
+            string dayofmonth = dateTimePicker1.Value.Day.ToString().PadLeft(2, '0');
+            string year = dateTimePicker1.Value.Year.ToString();
+            string month = dateTimePicker1.Value.Month.ToString().PadLeft(2, '0');
 
             string ymd = year + "-" + month + "-" + dayofmonth;
             string filename = ymd + ".txt";
