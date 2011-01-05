@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
@@ -37,6 +38,8 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
+
+        PlayerCollection pc = new PlayerCollection(new PlayerListView());
 
         public static event EventHandler Minimize;
         public NotifyIcon notifyIcon1 = new NotifyIcon();
@@ -124,7 +127,7 @@ namespace MCForge.Gui
             }
 
             // Bind player list
-            dgvPlayers.DataSource = new PlayerCollection(new PlayerListView());
+            dgvPlayers.DataSource = pc;
             dgvPlayers.Font = new Font("Calibri", 8.25f);
 
             dgvMaps.DataSource = new LevelCollection(new LevelListView());
@@ -207,10 +210,36 @@ namespace MCForge.Gui
                 PlayerListCallback d = new PlayerListCallback(UpdateClientList);
                 this.Invoke(d, new object[] { players });
             } else {
-                PlayerCollection pc = new PlayerCollection(new PlayerListView());
+
+                if(dgvPlayers.DataSource == null)
+                    dgvPlayers.DataSource = pc;
+
+                // Try to keep the same selection on update
+                string selected = null;
+                if(pc.Count > 0 && dgvPlayers.SelectedRows.Count > 0)
+                {
+                    selected = (from DataGridViewRow row in dgvPlayers.Rows where row.Selected select pc[row.Index]).First().name;
+                }
+
+                // Update the data source and control
+                //dgvPlayers.SuspendLayout();
+
+                pc.Clear();
                 Player.players.ForEach(delegate(Player p) { pc.Add(p); });
+
+                //dgvPlayers.Invalidate();
                 dgvPlayers.DataSource = pc;
-                dgvPlayers.Invalidate();
+                // Reselect player
+                if (selected != null)
+                {
+                    foreach (Player p in Player.players)
+                        foreach (DataGridViewRow row in dgvPlayers.Rows)
+                            if (String.Equals(row.Cells[0].Value, selected))
+                                row.Selected = true;
+                }
+
+                dgvPlayers.Refresh();
+                //dgvPlayers.ResumeLayout();
             }
             
         }
@@ -222,8 +251,10 @@ namespace MCForge.Gui
             } else {
                 LevelCollection lc = new LevelCollection(new LevelListView());
                 Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
+                dgvMaps.SuspendLayout();
                 dgvMaps.DataSource = lc;
-                dgvMaps.Invalidate();
+                //dgvMaps.Invalidate();
+                dgvMaps.ResumeLayout();
             }
         }
 
