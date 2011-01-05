@@ -40,6 +40,7 @@ namespace MCForge.Gui
         delegate void VoidDelegate();
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
+        LevelCollection lc = new LevelCollection(new LevelListView());
 
         public static event EventHandler Minimize;
         public NotifyIcon notifyIcon1 = new NotifyIcon();
@@ -224,7 +225,7 @@ namespace MCForge.Gui
                 // Update the data source and control
                 //dgvPlayers.SuspendLayout();
 
-                pc.Clear();
+                pc = new PlayerCollection(new PlayerListView());
                 Player.players.ForEach(delegate(Player p) { pc.Add(p); });
 
                 //dgvPlayers.Invalidate();
@@ -245,6 +246,7 @@ namespace MCForge.Gui
         }
 
         public void UpdateMapList(string blah) {            
+            /*
             if (this.InvokeRequired) {
                 LogDelegate d = new LogDelegate(UpdateMapList);
                 this.Invoke(d, new object[] { blah });
@@ -255,6 +257,45 @@ namespace MCForge.Gui
                 dgvMaps.DataSource = lc;
                 //dgvMaps.Invalidate();
                 dgvMaps.ResumeLayout();
+            }
+            */
+            if (this.InvokeRequired)
+            {
+                LogDelegate d = new LogDelegate(UpdateMapList);
+                this.Invoke(d, new object[] { blah });
+            }
+            else
+            {
+
+                if (dgvMaps.DataSource == null)
+                    dgvMaps.DataSource = lc;
+
+                // Try to keep the same selection on update
+                string selected = null;
+                if (lc.Count > 0 && dgvMaps.SelectedRows.Count > 0)
+                {
+                    selected = (from DataGridViewRow row in dgvMaps.Rows where row.Selected select lc[row.Index]).First().name;
+                }
+
+                // Update the data source and control
+                //dgvPlayers.SuspendLayout();
+
+                lc = new LevelCollection(new LevelListView());
+                Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
+
+                //dgvPlayers.Invalidate();
+                dgvMaps.DataSource = lc;
+                // Reselect map
+                if (selected != null)
+                {
+                    foreach (Level l in Server.levels)
+                        foreach (DataGridViewRow row in dgvMaps.Rows)
+                            if (String.Equals(row.Cells[0].Value, selected))
+                                row.Selected = true;
+                }
+
+                dgvMaps.Refresh();
+                //dgvPlayers.ResumeLayout();
             }
         }
 
