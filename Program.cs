@@ -12,7 +12,7 @@ namespace Starter
         {
             get
             {
-                return "http://www.files.mdnserver.info/MCForge_.dll";
+                return "http://www.mcforge.co.cc/MCForge_.dll";
             }
         }
 
@@ -25,6 +25,7 @@ namespace Starter
                 Console.WriteLine("I'm afraid I can't download the file for some reason!");
                 Console.WriteLine("Go to " + DLLLocation + " yourself and download it, please");
                 Console.WriteLine("Place it inside my folder, near me, and restart me.");
+                Console.WriteLine("If you have any issues, get the files from the www.mcforge.co.cc download page and try again.");
                 Console.WriteLine("Press any key to close me...");
                 Console.ReadLine();
                 goto exit;
