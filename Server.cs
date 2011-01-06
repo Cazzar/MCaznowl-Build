@@ -170,6 +170,7 @@ namespace MCForge
         public static bool useWhitelist = false;
         public static bool forceCuboid = false;
         public static bool profanityFilter = false;
+        public static bool notifyOnJoinLeave = false;
         public static bool repeatMessage = false;
 
         public static bool checkUpdates = true;
@@ -756,6 +757,19 @@ namespace MCForge
                 if (grp.playerList.Contains(Username)) return grp.color;
             }
             return Group.standard.color;
+        }
+
+        public static void PopupNotify(string message)
+        {
+            PopupNotify(message, System.Windows.Forms.ToolTipIcon.Info);
+        }
+        public static void PopupNotify(string message, System.Windows.Forms.ToolTipIcon icon)
+        {
+            try
+            {
+                Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
+            }
+            catch { }
         }
     }
 }

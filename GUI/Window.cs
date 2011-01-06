@@ -18,10 +18,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using MCForge;
 
 namespace MCForge.Gui
@@ -30,11 +32,15 @@ namespace MCForge.Gui
     {
         Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
                                 "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
+
         // for cross thread use
         delegate void StringCallback(string s);
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
+
+        PlayerCollection pc = new PlayerCollection(new PlayerListView());
+        LevelCollection lc = new LevelCollection(new LevelListView());
 
         public static event EventHandler Minimize;
         public NotifyIcon notifyIcon1 = new NotifyIcon();
@@ -120,6 +126,14 @@ namespace MCForge.Gui
                     txtChangelog.AppendText("\r\n           " + line);
                 }            
             }
+
+            // Bind player list
+            dgvPlayers.DataSource = pc;
+            dgvPlayers.Font = new Font("Calibri", 8.25f);
+
+            dgvMaps.DataSource = new LevelCollection(new LevelListView());
+            dgvMaps.Font = new Font("Calibri", 8.25f);
+
         }
 
         void SettingsUpdate()
@@ -172,19 +186,6 @@ namespace MCForge.Gui
         delegate void LogDelegate(string message);
 
         /// <summary>
-        /// Does the same as Console.Write() only in the form
-        /// </summary>
-        /// <param name="s">The string to write</param>
-        public void Write(string s) {
-            if (shuttingDown) return;
-            if (txtLog.InvokeRequired) {
-                LogDelegate d = new LogDelegate(Write);
-                this.Invoke(d, new object[] { s });
-            } else {
-                txtLog.AppendText(s);
-            }
-        }
-        /// <summary>
         /// Does the same as Console.WriteLine() only in the form
         /// </summary>
         /// <param name="s">The line to write</param>
@@ -195,32 +196,106 @@ namespace MCForge.Gui
                 LogDelegate d = new LogDelegate(WriteLine);
                 this.Invoke(d, new object[] { s });
             } else {
-                txtLog.AppendText("\r\n" + s);
+                //txtLog.AppendText(Environment.NewLine + s);
+                txtLog.AppendTextAndScroll(s);
             }
         }
+
         /// <summary>
         /// Updates the list of client names in the window
         /// </summary>
         /// <param name="players">The list of players to add</param>
         public void UpdateClientList(List<Player> players) {
+            
             if (this.InvokeRequired) {
                 PlayerListCallback d = new PlayerListCallback(UpdateClientList);
                 this.Invoke(d, new object[] { players });
             } else {
-                liClients.Items.Clear();
-                Player.players.ForEach(delegate(Player p) { liClients.Items.Add(p.name); });
+
+                if(dgvPlayers.DataSource == null)
+                    dgvPlayers.DataSource = pc;
+
+                // Try to keep the same selection on update
+                string selected = null;
+                if(pc.Count > 0 && dgvPlayers.SelectedRows.Count > 0)
+                {
+                    selected = (from DataGridViewRow row in dgvPlayers.Rows where row.Selected select pc[row.Index]).First().name;
+                }
+
+                // Update the data source and control
+                //dgvPlayers.SuspendLayout();
+
+                pc = new PlayerCollection(new PlayerListView());
+                Player.players.ForEach(delegate(Player p) { pc.Add(p); });
+
+                //dgvPlayers.Invalidate();
+                dgvPlayers.DataSource = pc;
+                // Reselect player
+                if (selected != null)
+                {
+                    foreach (Player p in Player.players)
+                        foreach (DataGridViewRow row in dgvPlayers.Rows)
+                            if (String.Equals(row.Cells[0].Value, selected))
+                                row.Selected = true;
+                }
+
+                dgvPlayers.Refresh();
+                //dgvPlayers.ResumeLayout();
             }
+            
         }
 
         public void UpdateMapList(string blah) {            
+            /*
             if (this.InvokeRequired) {
                 LogDelegate d = new LogDelegate(UpdateMapList);
                 this.Invoke(d, new object[] { blah });
             } else {
-                liMaps.Items.Clear();
-                foreach (Level level in Server.levels) {
-                    liMaps.Items.Add(level.name + " - " + level.physics);
+                LevelCollection lc = new LevelCollection(new LevelListView());
+                Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
+                dgvMaps.SuspendLayout();
+                dgvMaps.DataSource = lc;
+                //dgvMaps.Invalidate();
+                dgvMaps.ResumeLayout();
+            }
+            */
+            if (this.InvokeRequired)
+            {
+                LogDelegate d = new LogDelegate(UpdateMapList);
+                this.Invoke(d, new object[] { blah });
+            }
+            else
+            {
+
+                if (dgvMaps.DataSource == null)
+                    dgvMaps.DataSource = lc;
+
+                // Try to keep the same selection on update
+                string selected = null;
+                if (lc.Count > 0 && dgvMaps.SelectedRows.Count > 0)
+                {
+                    selected = (from DataGridViewRow row in dgvMaps.Rows where row.Selected select lc[row.Index]).First().name;
                 }
+
+                // Update the data source and control
+                //dgvPlayers.SuspendLayout();
+
+                lc = new LevelCollection(new LevelListView());
+                Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
+
+                //dgvPlayers.Invalidate();
+                dgvMaps.DataSource = lc;
+                // Reselect map
+                if (selected != null)
+                {
+                    foreach (Level l in Server.levels)
+                        foreach (DataGridViewRow row in dgvMaps.Rows)
+                            if (String.Equals(row.Cells[0].Value, selected))
+                                row.Selected = true;
+                }
+
+                dgvMaps.Refresh();
+                //dgvPlayers.ResumeLayout();
             }
         }
 
@@ -330,7 +405,7 @@ namespace MCForge.Gui
             }
             else
             {
-                txtCommandsUsed.AppendText("\r\n" + p); 
+                txtCommandsUsed.AppendTextAndScroll(p); 
             }
         }
 
@@ -425,173 +500,200 @@ namespace MCForge.Gui
             
         }
 
+        private Player GetSelectedPlayer()
+        {
+            if(this.dgvPlayers.SelectedRows == null)
+                return null;
+
+            if(this.dgvPlayers.SelectedRows.Count == 0)
+                return null;
+
+            return (Player)(this.dgvPlayers.SelectedRows[0].DataBoundItem);
+        }
+
+        private Level GetSelectedLevel()
+        {
+            if (this.dgvMaps.SelectedRows == null)
+                return null;
+
+            if (this.dgvMaps.SelectedRows.Count == 0)
+                return null;
+
+            return (Level)(this.dgvMaps.SelectedRows[0].DataBoundItem);
+        }
+
         private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("clones").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("clones").Use(null, p.name);
             }
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("voice").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("voice").Use(null, p.name);
             }
         }
 
         private void whoisToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("whois").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("whois").Use(null, p.name);
             }
         }
 
         private void kickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("kick").Use(null, this.liClients.SelectedItem.ToString() + " You have been kicked by the console.");
+                Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
             }
         }
 
 
         private void banToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liClients.SelectedIndex != -1)
+            Player p = GetSelectedPlayer();
+            if (p != null)
             {
-                Command.all.Find("ban").Use(null, this.liClients.SelectedItem.ToString());
+                Command.all.Find("ban").Use(null, p.name);
             }
-        }
-
-        private void liClients_MouseDown(object sender, MouseEventArgs e)
-        {
-            int i;
-            i = liClients.IndexFromPoint(e.X, e.Y);
-            liClients.SelectedIndex = i;
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("physics").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " 0");
+                Command.all.Find("physics").Use(null, l.name + " 0");
             }
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("physics").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " 1");
+                Command.all.Find("physics").Use(null, l.name + " 1");
             }
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("physics").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " 2");
+                Command.all.Find("physics").Use(null, l.name + " 2");
             }
         }
 
         private void toolStripMenuItem5_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("physics").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " 3");
+                Command.all.Find("physics").Use(null, l.name + " 3");
             }
         }
 
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("physics").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " 4");
+                Command.all.Find("physics").Use(null, l.name + " 4");
             }
         }
 
         private void unloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("unload").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)));
+                Command.all.Find("unload").Use(null, l.name);
             }
         }
 
         private void finiteModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " finite");
+                Command.all.Find("map").Use(null, l.name + " finite");
             }
         }
 
         private void animalAIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " ai");
+                Command.all.Find("map").Use(null, l.name + " ai");
             }
         }
 
         private void edgeWaterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " edge");
+                Command.all.Find("map").Use(null, l.name + " edge");
             }
         }
 
         private void growingGrassToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " grass");
+                Command.all.Find("map").Use(null, l.name + " grass");
             }
         }
 
         private void survivalDeathToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " death");
+                Command.all.Find("map").Use(null, l.name + " death");
             }
         }
 
         private void killerBlocksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " killer");
+                Command.all.Find("map").Use(null, l.name + " killer");
             }
         }
 
         private void rPChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("map").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)) + " chat");
+                Command.all.Find("map").Use(null, l.name + " chat");
             }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.liMaps.SelectedIndex != -1)
+            Level l = GetSelectedLevel();
+            if (l != null)
             {
-                Command.all.Find("save").Use(null, this.liMaps.SelectedItem.ToString().Remove((this.liMaps.SelectedItem.ToString().Length - 4)));
+                Command.all.Find("save").Use(null, l.name);
             }
         }
-
-        private void liMaps_MouseDown(object sender, MouseEventArgs e)
-        {
-            int i;
-            i = liMaps.IndexFromPoint(e.X, e.Y);
-            liMaps.SelectedIndex = i;
-        }
-
+        
         private void tabControl1_Click(object sender, EventArgs e)
         {
             foreach (TabPage tP in tabControl1.TabPages)
@@ -657,6 +759,11 @@ namespace MCForge.Gui
                 notifyIcon1.Visible = false;
                 notifyIcon1.Dispose();
             }
+        }
+
+        private void dgvPlayers_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            e.PaintParts &= ~DataGridViewPaintParts.Focus;
         }
         
     }

@@ -94,7 +94,7 @@ namespace MCForge
                     for (int i = 0; i < level.blocks.Length; ++i)
                         buffer[4 + i] = Block.Convert(level.blocks[i]);
 
-                    buffer = Player.GZip(buffer);
+                    buffer = buffer.GZip();
                     int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
                     for (int i = 1; buffer.Length > 0; ++i)
                     {

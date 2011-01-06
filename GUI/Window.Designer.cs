@@ -63,7 +63,6 @@ namespace MCForge.Gui
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnExtra = new System.Windows.Forms.Button();
-            this.liMaps = new System.Windows.Forms.ListBox();
             this.mapsStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.physicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,16 +82,15 @@ namespace MCForge.Gui
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
-            this.txtCommandsUsed = new System.Windows.Forms.TextBox();
+            this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.gBChat = new System.Windows.Forms.GroupBox();
-            this.txtLog = new System.Windows.Forms.TextBox();
+            this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.txtCommands = new System.Windows.Forms.TextBox();
             this.txtInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtUrl = new System.Windows.Forms.TextBox();
-            this.liClients = new System.Windows.Forms.ListBox();
             this.playerStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,6 +115,8 @@ namespace MCForge.Gui
             this.btnProperties = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.Restart = new System.Windows.Forms.Button();
+            this.dgvPlayers = new System.Windows.Forms.DataGridView();
+            this.dgvMaps = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.mapsStrip.SuspendLayout();
@@ -128,6 +128,8 @@ namespace MCForge.Gui
             this.tabPage3.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.iconContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -142,7 +144,7 @@ namespace MCForge.Gui
             this.tabControl1.Location = new System.Drawing.Point(1, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(581, 514);
+            this.tabControl1.Size = new System.Drawing.Size(706, 514);
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Click += new System.EventHandler(this.tabControl1_Click);
             // 
@@ -150,28 +152,28 @@ namespace MCForge.Gui
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.btnExtra);
-            this.tabPage1.Controls.Add(this.liMaps);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.gBCommands);
+            this.tabPage1.Controls.Add(this.dgvMaps);
             this.tabPage1.Controls.Add(this.gBChat);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.txtHost);
             this.tabPage1.Controls.Add(this.txtCommands);
             this.tabPage1.Controls.Add(this.txtInput);
+            this.tabPage1.Controls.Add(this.dgvPlayers);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.txtUrl);
-            this.tabPage1.Controls.Add(this.liClients);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(573, 488);
+            this.tabPage1.Size = new System.Drawing.Size(698, 488);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
             // btnExtra
             // 
             this.btnExtra.Font = new System.Drawing.Font("Calibri", 8.25F);
-            this.btnExtra.Location = new System.Drawing.Point(539, 458);
+            this.btnExtra.Location = new System.Drawing.Point(664, 457);
             this.btnExtra.Name = "btnExtra";
             this.btnExtra.Size = new System.Drawing.Size(28, 23);
             this.btnExtra.TabIndex = 35;
@@ -179,18 +181,6 @@ namespace MCForge.Gui
             this.btnExtra.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnExtra.UseVisualStyleBackColor = true;
             this.btnExtra.Click += new System.EventHandler(this.btnExtra_Click_1);
-            // 
-            // liMaps
-            // 
-            this.liMaps.ContextMenuStrip = this.mapsStrip;
-            this.liMaps.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.liMaps.FormattingEnabled = true;
-            this.liMaps.Location = new System.Drawing.Point(447, 237);
-            this.liMaps.Name = "liMaps";
-            this.liMaps.ScrollAlwaysVisible = true;
-            this.liMaps.Size = new System.Drawing.Size(120, 186);
-            this.liMaps.TabIndex = 33;
-            this.liMaps.MouseDown += new System.Windows.Forms.MouseEventHandler(this.liMaps_MouseDown);
             // 
             // mapsStrip
             // 
@@ -390,7 +380,7 @@ namespace MCForge.Gui
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(384, 463);
+            this.label2.Location = new System.Drawing.Point(444, 462);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 29;
@@ -399,7 +389,7 @@ namespace MCForge.Gui
             // txtHost
             // 
             this.txtHost.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtHost.Location = new System.Drawing.Point(447, 428);
+            this.txtHost.Location = new System.Drawing.Point(573, 7);
             this.txtHost.Name = "txtHost";
             this.txtHost.Size = new System.Drawing.Size(120, 21);
             this.txtHost.TabIndex = 28;
@@ -411,9 +401,9 @@ namespace MCForge.Gui
             // txtCommands
             // 
             this.txtCommands.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCommands.Location = new System.Drawing.Point(447, 460);
+            this.txtCommands.Location = new System.Drawing.Point(507, 459);
             this.txtCommands.Name = "txtCommands";
-            this.txtCommands.Size = new System.Drawing.Size(86, 21);
+            this.txtCommands.Size = new System.Drawing.Size(151, 21);
             this.txtCommands.TabIndex = 28;
             this.txtCommands.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCommands_KeyDown);
             // 
@@ -422,7 +412,7 @@ namespace MCForge.Gui
             this.txtInput.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtInput.Location = new System.Drawing.Point(57, 459);
             this.txtInput.Name = "txtInput";
-            this.txtInput.Size = new System.Drawing.Size(321, 21);
+            this.txtInput.Size = new System.Drawing.Size(375, 21);
             this.txtInput.TabIndex = 27;
             this.txtInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInput_KeyDown);
             // 
@@ -446,18 +436,6 @@ namespace MCForge.Gui
             this.txtUrl.Size = new System.Drawing.Size(428, 21);
             this.txtUrl.TabIndex = 25;
             this.txtUrl.DoubleClick += new System.EventHandler(this.txtUrl_DoubleClick);
-            // 
-            // liClients
-            // 
-            this.liClients.ContextMenuStrip = this.playerStrip;
-            this.liClients.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.liClients.FormattingEnabled = true;
-            this.liClients.Location = new System.Drawing.Point(447, 32);
-            this.liClients.Name = "liClients";
-            this.liClients.ScrollAlwaysVisible = true;
-            this.liClients.Size = new System.Drawing.Size(120, 199);
-            this.liClients.TabIndex = 23;
-            this.liClients.MouseDown += new System.Windows.Forms.MouseEventHandler(this.liClients_MouseDown);
             // 
             // playerStrip
             // 
@@ -684,11 +662,46 @@ namespace MCForge.Gui
             this.Restart.UseVisualStyleBackColor = true;
             this.Restart.Click += new System.EventHandler(this.Restart_Click);
             // 
+            // dgvPlayers
+            // 
+            this.dgvPlayers.AllowUserToAddRows = false;
+            this.dgvPlayers.AllowUserToDeleteRows = false;
+            this.dgvPlayers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvPlayers.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvPlayers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPlayers.ContextMenuStrip = this.playerStrip;
+            this.dgvPlayers.Location = new System.Drawing.Point(447, 34);
+            this.dgvPlayers.MultiSelect = false;
+            this.dgvPlayers.Name = "dgvPlayers";
+            this.dgvPlayers.ReadOnly = true;
+            this.dgvPlayers.RowHeadersVisible = false;
+            this.dgvPlayers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPlayers.Size = new System.Drawing.Size(246, 214);
+            this.dgvPlayers.TabIndex = 37;
+            this.dgvPlayers.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvPlayers_RowPrePaint);
+            // 
+            // dgvMaps
+            // 
+            this.dgvMaps.AllowUserToAddRows = false;
+            this.dgvMaps.AllowUserToDeleteRows = false;
+            this.dgvMaps.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvMaps.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvMaps.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMaps.ContextMenuStrip = this.mapsStrip;
+            this.dgvMaps.Location = new System.Drawing.Point(447, 254);
+            this.dgvMaps.MultiSelect = false;
+            this.dgvMaps.Name = "dgvMaps";
+            this.dgvMaps.ReadOnly = true;
+            this.dgvMaps.RowHeadersVisible = false;
+            this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvMaps.Size = new System.Drawing.Size(246, 188);
+            this.dgvMaps.TabIndex = 38;
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 523);
+            this.ClientSize = new System.Drawing.Size(707, 523);
             this.Controls.Add(this.btnProperties);
             this.Controls.Add(this.Restart);
             this.Controls.Add(this.btnClose);
@@ -717,6 +730,8 @@ namespace MCForge.Gui
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.iconContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -726,18 +741,16 @@ namespace MCForge.Gui
         private TabControl tabControl1;
         private TabPage tabPage1;
         private Button btnExtra;
-        private ListBox liMaps;
         private Button button1;
         private GroupBox gBCommands;
-        private TextBox txtCommandsUsed;
+        private AutoScrollTextBox txtCommandsUsed;
         private GroupBox gBChat;
-        private TextBox txtLog;
+        private AutoScrollTextBox txtLog;
         private Label label2;
         private TextBox txtCommands;
         private TextBox txtInput;
         private Label label1;
         private TextBox txtUrl;
-        private ListBox liClients;
         private TabPage tabPage2;
         private TextBox txtChangelog;
         private TabPage tabPage3;
@@ -780,5 +793,7 @@ namespace MCForge.Gui
         private RichTextBox LogsTxtBox;
         private DateTimePicker dateTimePicker1;
         private Label label3;
+        private DataGridView dgvPlayers;
+        private DataGridView dgvMaps;
     }
 }
