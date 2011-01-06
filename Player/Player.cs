@@ -1650,6 +1650,9 @@ namespace MCForge
         }
         public void SendRaw(int id, byte[] send)
         {
+            // Abort if socket has been closed
+            if (socket == null || !socket.Connected)
+                return;
             byte[] buffer = new byte[send.Length + 1];
             buffer[0] = (byte)id;
 
@@ -2148,13 +2151,33 @@ namespace MCForge
         public void Disconnect() { leftGame(); }
         public void Kick(string kickString) { leftGame(kickString); }
 
+        private void CloseSocket()
+        {
+            try
+            {
+                // Close the damn socket connection!
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+                Server.s.Log("Socket was closed for " + this.name ?? this.ip);
+            }
+            catch (Exception e)
+            {
+                Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
+                Server.ErrorLog(ex);
+            }
+        }
+
         public void leftGame(string kickString = "", bool skip = false)
         {
             try
             {
                 if (disconnected)
                 {
-                    if (connections.Contains(this)) connections.Remove(this);
+                    this.CloseSocket();
+                    if (connections.Contains(this))
+                    {
+                        connections.Remove(this);
+                    }
                     return;
                 }
                 //   FlyBuffer.Clear();
@@ -2249,6 +2272,7 @@ namespace MCForge
                 }
             }
             catch (Exception e) { Server.ErrorLog(e); }
+            finally { this.CloseSocket(); }
         }
 
 
