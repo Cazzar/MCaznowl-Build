@@ -344,7 +344,7 @@ namespace MCForge
         {
         //    Server.s.Log(result.AsyncState.ToString());
             Player p = (Player)result.AsyncState;
-            if (p.disconnected)
+            if (p.disconnected || p.socket == null)
                 return;
             try
             {
@@ -362,6 +362,16 @@ namespace MCForge
             catch (SocketException e)
             {
                 p.Disconnect();
+            }
+            catch (ObjectDisposedException e)
+            {
+                // Player is no longer connected, socket was closed
+                // Mark this as disconnected and remove them from active connection list
+                p.disconnected = true;
+                if (connections.Contains(p))
+                {
+                    connections.Remove(p);
+                }
             }
             catch (Exception e)
             {
