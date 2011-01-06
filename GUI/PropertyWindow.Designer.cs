@@ -113,6 +113,7 @@
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
             this.txtShutdown = new System.Windows.Forms.TextBox();
             this.txtBanMessage = new System.Windows.Forms.TextBox();
@@ -160,7 +161,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -175,7 +175,7 @@
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(4, 447);
+            this.btnSave.Location = new System.Drawing.Point(189, 448);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 1;
@@ -186,7 +186,7 @@
             // btnDiscard
             // 
             this.btnDiscard.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDiscard.Location = new System.Drawing.Point(85, 447);
+            this.btnDiscard.Location = new System.Drawing.Point(4, 448);
             this.btnDiscard.Name = "btnDiscard";
             this.btnDiscard.Size = new System.Drawing.Size(75, 23);
             this.btnDiscard.TabIndex = 1;
@@ -581,7 +581,7 @@
             // 
             // btnCmdHelp
             // 
-            this.btnCmdHelp.Location = new System.Drawing.Point(200, 19);
+            this.btnCmdHelp.Location = new System.Drawing.Point(200, 341);
             this.btnCmdHelp.Name = "btnCmdHelp";
             this.btnCmdHelp.Size = new System.Drawing.Size(111, 23);
             this.btnCmdHelp.TabIndex = 34;
@@ -648,7 +648,7 @@
             // listCommands
             // 
             this.listCommands.FormattingEnabled = true;
-            this.listCommands.Location = new System.Drawing.Point(200, 48);
+            this.listCommands.Location = new System.Drawing.Point(200, 19);
             this.listCommands.Name = "listCommands";
             this.listCommands.Size = new System.Drawing.Size(111, 316);
             this.listCommands.TabIndex = 26;
@@ -718,7 +718,6 @@
             this.CustCmdTxtBox2.BackColor = System.Drawing.SystemColors.Window;
             this.CustCmdTxtBox2.Location = new System.Drawing.Point(6, 151);
             this.CustCmdTxtBox2.Name = "CustCmdTxtBox2";
-            this.CustCmdTxtBox2.ReadOnly = true;
             this.CustCmdTxtBox2.Size = new System.Drawing.Size(305, 185);
             this.CustCmdTxtBox2.TabIndex = 5;
             this.CustCmdTxtBox2.Text = "";
@@ -791,7 +790,7 @@
             // 
             // btnBlHelp
             // 
-            this.btnBlHelp.Location = new System.Drawing.Point(211, 6);
+            this.btnBlHelp.Location = new System.Drawing.Point(211, 367);
             this.btnBlHelp.Name = "btnBlHelp";
             this.btnBlHelp.Size = new System.Drawing.Size(120, 23);
             this.btnBlHelp.TabIndex = 23;
@@ -862,7 +861,7 @@
             // listBlocks
             // 
             this.listBlocks.FormattingEnabled = true;
-            this.listBlocks.Location = new System.Drawing.Point(211, 35);
+            this.listBlocks.Location = new System.Drawing.Point(211, 6);
             this.listBlocks.Name = "listBlocks";
             this.listBlocks.Size = new System.Drawing.Size(120, 355);
             this.listBlocks.TabIndex = 15;
@@ -1059,6 +1058,17 @@
             this.tabPage4.Size = new System.Drawing.Size(337, 404);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
+            // 
+            // chkProfanityFilter
+            // 
+            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkProfanityFilter.AutoSize = true;
+            this.chkProfanityFilter.Location = new System.Drawing.Point(235, 283);
+            this.chkProfanityFilter.Name = "chkProfanityFilter";
+            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
+            this.chkProfanityFilter.TabIndex = 30;
+            this.chkProfanityFilter.Text = "Profanity Filter";
+            this.chkProfanityFilter.UseVisualStyleBackColor = true;
             // 
             // chkRepeatMessages
             // 
@@ -1377,7 +1387,7 @@
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(11, 341);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(106, 23);
+            this.chkMono.Size = new System.Drawing.Size(105, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -1436,7 +1446,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(205, 119);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(58, 13);
+            this.label22.Size = new System.Drawing.Size(57, 13);
             this.label22.TabIndex = 3;
             this.label22.Text = "Max Maps:";
             // 
@@ -1445,7 +1455,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(196, 90);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(67, 13);
+            this.label21.Size = new System.Drawing.Size(66, 13);
             this.label21.TabIndex = 3;
             this.label21.Text = "Max Players:";
             // 
@@ -1534,17 +1544,6 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
-            // 
-            // chkProfanityFilter
-            // 
-            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkProfanityFilter.AutoSize = true;
-            this.chkProfanityFilter.Location = new System.Drawing.Point(235, 283);
-            this.chkProfanityFilter.Name = "chkProfanityFilter";
-            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
-            this.chkProfanityFilter.TabIndex = 30;
-            this.chkProfanityFilter.Text = "Profanity Filter";
-            this.chkProfanityFilter.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
