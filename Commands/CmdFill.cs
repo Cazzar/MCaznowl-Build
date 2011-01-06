@@ -28,33 +28,33 @@ namespace MCForge
 
                 if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); return; }
 
-                if (s == "up") cpos.FillType = 1;
-                else if (s == "down") cpos.FillType = 2;
-                else if (s == "layer") cpos.FillType = 3;
-                else if (s == "vertical_x") cpos.FillType = 4;
-                else if (s == "vertical_z") cpos.FillType = 5;
+                if (s == "up") cpos.fillType = FillType.Up;
+                else if (s == "down") cpos.fillType = FillType.Down;
+                else if (s == "layer") cpos.fillType = FillType.Layer;
+                else if (s == "vertical_x") cpos.fillType = FillType.VerticalX;
+                else if (s == "vertical_z") cpos.fillType = FillType.VerticalZ;
                 else { Player.SendMessage(p, "Invalid fill type"); return; }
             }
             else if (message != "")
             {
                 message = message.ToLower();
-                if (message == "up") { cpos.FillType = 1; cpos.type = Block.Zero; }
-                else if (message == "down") { cpos.FillType = 2; cpos.type = Block.Zero; }
-                else if (message == "layer") { cpos.FillType = 3; cpos.type = Block.Zero; }
-                else if (message == "vertical_x") { cpos.FillType = 4; cpos.type = Block.Zero; }
-                else if (message == "vertical_z") { cpos.FillType = 5; cpos.type = Block.Zero; }
+                if (message == "up") { cpos.fillType = FillType.Up; cpos.type = Block.Zero; }
+                else if (message == "down") { cpos.fillType = FillType.Down; cpos.type = Block.Zero; }
+                else if (message == "layer") { cpos.fillType = FillType.Layer; cpos.type = Block.Zero; }
+                else if (message == "vertical_x") { cpos.fillType = FillType.VerticalX; cpos.type = Block.Zero; }
+                else if (message == "vertical_z") { cpos.fillType = FillType.VerticalZ; cpos.type = Block.Zero; }
                 else
                 {
                     cpos.type = Block.Byte(message);
                     if (cpos.type == (byte)255) { Player.SendMessage(p, "Invalid block or fill type"); return; }
                     if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); return; }
 
-                    cpos.FillType = 0;
+                    cpos.fillType = FillType.Default;
                 }
             }
             else
             {
-                cpos.type = Block.Zero; cpos.FillType = 0;
+                cpos.type = Block.Zero; cpos.fillType = FillType.Default;
             }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
@@ -88,7 +88,7 @@ namespace MCForge
 
                 fromWhere.Clear();
                 deep = 0;
-                FloodFill(p, x, y, z, cpos.type, oldType, cpos.FillType, ref mapBlocks, ref buffer);
+                FloodFill(p, x, y, z, cpos.type, oldType, cpos.fillType, ref mapBlocks, ref buffer);
 
                 int totalFill = fromWhere.Count;
                 for (int i = 0; i < totalFill; i++)
@@ -96,7 +96,7 @@ namespace MCForge
                     totalFill = fromWhere.Count;
                     Pos pos = fromWhere[i];
                     deep = 0;
-                    FloodFill(p, pos.x, pos.y, pos.z, cpos.type, oldType, cpos.FillType, ref mapBlocks, ref buffer);
+                    FloodFill(p, pos.x, pos.y, pos.z, cpos.type, oldType, cpos.fillType, ref mapBlocks, ref buffer);
                     totalFill = fromWhere.Count;
                 }
                 fromWhere.Clear();
@@ -126,7 +126,7 @@ namespace MCForge
 
         int deep;
         List<Pos> fromWhere = new List<Pos>();
-        public void FloodFill(Player p, ushort x, ushort y, ushort z, byte b, byte oldType, int fillType, ref byte[] blocks, ref List<Pos> buffer)
+        public void FloodFill(Player p, ushort x, ushort y, ushort z, byte b, byte oldType, FillType fillType, ref byte[] blocks, ref List<Pos> buffer)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace MCForge
                 buffer.Add(pos);
 
                 //x
-                if (fillType != 4)
+                if (fillType != FillType.VerticalX)
                 {
                     if (GetTile((ushort)(x + 1), y, z, p.level, blocks) == oldType)
                     {
@@ -162,7 +162,7 @@ namespace MCForge
                 }
 
                 //z
-                if (fillType != 5)
+                if (fillType != FillType.VerticalZ)
                 {
                     if (GetTile(x, y, (ushort)(z + 1), p.level, blocks) == oldType)
                     {
@@ -181,7 +181,7 @@ namespace MCForge
                 }
 
                 //y
-                if (fillType == 0 || fillType == 1 || fillType > 3)
+                if (fillType == 0 || fillType == FillType.Up || fillType > FillType.Layer)
                 {
                     if (GetTile(x, (ushort)(y + 1), z, p.level, blocks) == oldType)
                     {
@@ -191,7 +191,7 @@ namespace MCForge
                     }
                 }
 
-                if (fillType == 0 || fillType == 2 || fillType > 3)
+                if (fillType == 0 || fillType == FillType.Down || fillType > FillType.Layer)
                 {
                     if (y - 1 > 0)
                         if (GetTile(x, (ushort)(y - 1), z, p.level, blocks) == oldType)
@@ -221,7 +221,16 @@ namespace MCForge
             catch (Exception e) { Server.ErrorLog(e); return Block.Zero; }
         }
 
-        struct CatchPos { public ushort x, y, z; public byte type; public int FillType; }
+        struct CatchPos { public ushort x, y, z; public byte type; public FillType fillType; }
         public struct Pos { public ushort x, y, z; }
+        public enum FillType : int
+        {
+            Default = 0,
+            Up = 1,
+            Down = 2,
+            Layer = 3,
+            VerticalX = 4,
+            VerticalZ = 5
+        }
     }
 }
