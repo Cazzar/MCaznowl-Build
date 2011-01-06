@@ -21,6 +21,7 @@ namespace MCForge
             RegexReduce.Add("e", "[3]");
             RegexReduce.Add("f", "ph");
             RegexReduce.Add("g", "[6]");
+            RegexReduce.Add("h", "#");
             // Because Is and Ls are similar, the swear list will contain a lowercase I instead of Ls.
             // For example, the word "asshole" would be saved as "asshoie".
             RegexReduce.Add("i", "[l!1]");
