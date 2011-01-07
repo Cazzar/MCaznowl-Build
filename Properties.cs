@@ -408,6 +408,8 @@ namespace MCForge
                     w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
                     w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
                     w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
+                    w.WriteLine("#   profanity-filter\t=\tFilter bad words from the chat.  Default false.");
+                    w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -466,6 +468,8 @@ namespace MCForge
                     w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
                     w.WriteLine("log-heartbeat = " + Server.logbeat.ToString());
                     w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString());
+                    w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString());
+                    w.WriteLine("notify-on-join-leave = " + Server.notifyOnJoinLeave.ToString());
                     w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString());
                     w.WriteLine("host-state = " + Server.ZallState.ToString());
                     w.WriteLine();
