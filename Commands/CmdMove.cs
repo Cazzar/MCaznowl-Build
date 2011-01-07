@@ -17,12 +17,22 @@ namespace MCForge
             // /move x y z
             // /move name x y z
 
-            if (message.Split(' ').Length < 2 || message.Split(' ').Length > 4) { Help(p); return; }
+            string[] param = message.Split(' ');
 
-            if (message.Split(' ').Length == 2)     // /move name map
+            if (param.Length < 1 || param.Length > 4) { Help(p); return; }
+
+            // /move name
+            if (param.Length == 1)
             {
-                Player who = Player.Find(message.Split(' ')[0]);
-                Level where = Level.Find(message.Split(' ')[1]);
+                // Use main world by default
+                // Add the world name to the 2nd param so that the IF block below is used
+                param = new string[] { param[0], Server.mainLevel.name };
+            }
+
+            if (param.Length == 2)     // /move name map
+            {
+                Player who = Player.Find(param[0]);
+                Level where = Level.Find(param[1]);
                 if (who == null) { Player.SendMessage(p, "Could not find player specified"); return; }
                 if (where == null) { Player.SendMessage(p, "Could not find level specified"); return; }
                 if (p != null && who.group.Permission > p.group.Permission) { Player.SendMessage(p, "Cannot move someone of greater rank"); return; }
@@ -40,9 +50,9 @@ namespace MCForge
 
                 Player who;
 
-                if (message.Split(' ').Length == 4)
+                if (param.Length == 4)
                 {
-                    who = Player.Find(message.Split(' ')[0]);
+                    who = Player.Find(param[0]);
                     if (who == null) { Player.SendMessage(p, "Could not find player specified"); return; }
                     if (p != null && who.group.Permission > p.group.Permission) { Player.SendMessage(p, "Cannot move someone of greater rank"); return; }
                     message = message.Substring(message.IndexOf(' ') + 1);
@@ -68,8 +78,9 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/move <player> <map> <x> <y> <z> - Move <player>");
+            Player.SendMessage(p, "/move <player> <map> <x> <y> <z> - Move <player> to <map> or given coordinates");
             Player.SendMessage(p, "<map> must be blank if x, y or z is used and vice versa");
+            Player.SendMessage(p, "If <map> is empty, the main level be assumed");
         }
     }
 }
