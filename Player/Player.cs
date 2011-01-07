@@ -2172,7 +2172,9 @@ namespace MCForge
                 // Close the damn socket connection!
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
+#if DEBUG
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
+#endif
             }
             catch (Exception e)
             {
