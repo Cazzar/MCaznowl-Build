@@ -22,7 +22,11 @@ namespace MCForge
 
             if (message.Split(' ').Length == 2)
             {
-                if (message.Split(' ')[1].ToLower() == "all" && p != null && p.group.Permission > LevelPermission.Operator)
+                if (message.Split(' ')[1].ToLower() == "all" && p == null)
+                {
+                    seconds = 500000;
+                }
+                else if (message.Split(' ')[1].ToLower() == "all" && p.group.Permission > LevelPermission.Operator)
                 {
                     seconds = 500000;
                 }
