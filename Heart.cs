@@ -43,6 +43,8 @@ namespace MCForge
         static System.Timers.Timer MinecraftBeatTimer = new System.Timers.Timer(500);
         static System.Timers.Timer MCForgeBeatTimer;
 
+        static object Lock = new object();
+
         public static void Init()
         {
             if(Server.logbeat)
@@ -72,6 +74,8 @@ namespace MCForge
                 };
                 MinecraftBeatTimer.Start();
 
+                Thread.Sleep(5000);
+
                 MCForgeBeatTimer.Elapsed += delegate
                 {
                     MCForgeBeatTimer.Interval = 300000;
@@ -91,128 +95,130 @@ namespace MCForge
 
         public static bool Pump(Beat beat)
         {
-            String beattype = beat.GetType().Name;
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(beat.URL));
-
-            beat.Parameters = DefaultParameters;
-
-            if(beat.Log)
+            lock (Lock)
             {
-                beatlogger = new StreamWriter("heartbeat.log", true);
-            }
+                String beattype = beat.GetType().Name;
 
-            int totalTries = 0;
-            
-    retry:  try
-            {
-                totalTries++;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(beat.URL));
 
-                beat.Prepare();
+                beat.Parameters = DefaultParameters;
 
-                // Set all the request settings
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                byte[] formData = Encoding.ASCII.GetBytes(beat.Parameters);
-                request.ContentLength = formData.Length;
-                request.Timeout = 15000; // 15 seconds
-
-   retryStream: try
+                if (beat.Log)
                 {
-                    using (Stream requestStream = request.GetRequestStream())
+                    beatlogger = new StreamWriter("heartbeat.log", true);
+                }
+
+                int totalTries = 0;
+
+            retry: try
+                {
+                    totalTries++;
+
+                    beat.Prepare();
+
+                    // Set all the request settings
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                    byte[] formData = Encoding.ASCII.GetBytes(beat.Parameters);
+                    request.ContentLength = formData.Length;
+                    request.Timeout = 15000; // 15 seconds
+
+          retryStream: try
                     {
-                        requestStream.Write(formData, 0, formData.Length);
-                        if (Server.logbeat && beat.Log)
+                        using (Stream requestStream = request.GetRequestStream())
                         {
-                            beatlogger.WriteLine(beattype + " request sent at " + DateTime.Now.ToString());
+                            requestStream.Write(formData, 0, formData.Length);
+                            if (Server.logbeat && beat.Log)
+                            {
+                                beatlogger.WriteLine(beattype + " request sent at " + DateTime.Now.ToString());
+                            }
+                            requestStream.Flush();
+                            requestStream.Close();
                         }
-                        requestStream.Flush();
-                        requestStream.Close();
+                    }
+                    catch (WebException e)
+                    {
+                        //Server.ErrorLog(e);
+                        if (e.Status == WebExceptionStatus.Timeout)
+                        {
+                            if (Server.logbeat && beat.Log)
+                            {
+                                beatlogger.WriteLine(beattype + " timeout detected at " + DateTime.Now.ToString());
+                            }
+                            goto retryStream;
+                            //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
+                        }
+                        else if (Server.logbeat && beat.Log)
+                        {
+                            beatlogger.WriteLine(beattype + " non-timeout exception detected: " + e.Message);
+                            beatlogger.Write("Stack Trace: " + e.StackTrace);
+                        }
+                    }
+
+                    //if (hash == null)
+                    //{
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        using (StreamReader responseReader = new StreamReader(response.GetResponseStream()))
+                        {
+                            if (Server.logbeat && beat.Log)
+                            {
+                                beatlogger.WriteLine(beattype + " response received at " + DateTime.Now.ToString());
+                            }
+
+                            if (hash == null && response.ContentLength > 0)
+                            {
+                                string line = responseReader.ReadLine();
+                                if (Server.logbeat && beat.Log)
+                                {
+                                    beatlogger.WriteLine("Received: " + line);
+                                }
+
+                                beat.OnPump(line);
+                            }
+                            else
+                            {
+                                beat.OnPump(String.Empty);
+                            }
+                        }
                     }
                 }
                 catch (WebException e)
                 {
-                    //Server.ErrorLog(e);
                     if (e.Status == WebExceptionStatus.Timeout)
                     {
                         if (Server.logbeat && beat.Log)
                         {
-                            beatlogger.WriteLine(beattype + " timeout detected at " + DateTime.Now.ToString());
+                            beatlogger.WriteLine("Timeout detected at " + DateTime.Now.ToString());
                         }
-                        goto retryStream;
-                        //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
-                    }
-                    else if (Server.logbeat && beat.Log)
-                    {
-                        beatlogger.WriteLine(beattype + " non-timeout exception detected: " + e.Message);
-                        beatlogger.Write("Stack Trace: " + e.StackTrace);
+                        Pump(beat);
                     }
                 }
-
-                //if (hash == null)
-                //{
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (StreamReader responseReader = new StreamReader(response.GetResponseStream()))
-                    {
-                        if (Server.logbeat && beat.Log)
-                        {
-                            beatlogger.WriteLine(beattype + " response received at " + DateTime.Now.ToString());
-                        }
-
-                        if (hash == null && response.ContentLength > 0)
-                        {
-                            string line = responseReader.ReadLine();
-                            if (Server.logbeat && beat.Log)
-                            {        
-                                beatlogger.WriteLine("Received: " + line);
-                            }
-
-                            beat.OnPump(line);
-                        }
-                        else 
-                        {
-                            beat.OnPump(String.Empty);
-                        }
-                    }
-                }
-            }
-            catch (WebException e)
-            {
-                if (e.Status == WebExceptionStatus.Timeout)
+                catch (Exception e)
                 {
                     if (Server.logbeat && beat.Log)
                     {
-                        beatlogger.WriteLine("Timeout detected at " + DateTime.Now.ToString());
+                        beatlogger.WriteLine(beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
                     }
-                    Pump(beat);
+                    if (totalTries < 3) goto retry;
+                    if (Server.logbeat && beat.Log)
+                    {
+                        beatlogger.WriteLine("Failed three times.  Stopping.");
+                        beatlogger.Close();
+                    }
+                    return false;
                 }
-            }
-            catch (Exception e)
-            {
-                if (Server.logbeat && beat.Log)
+                finally
                 {
-                    beatlogger.WriteLine(beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
+                    request.Abort();
                 }
-                if (totalTries < 3) goto retry;
-                if (Server.logbeat && beat.Log)
+                if (beatlogger != null)
                 {
-                    beatlogger.WriteLine("Failed three times.  Stopping.");
                     beatlogger.Close();
                 }
-                return false;
-            }
-            finally
-            {
-                request.Abort();
-            }
-            if (beatlogger != null)
-            {
-                beatlogger.Close();
             }
             return true;
-            
         }
 
         public static string UrlEncode(string input)
