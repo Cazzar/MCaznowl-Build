@@ -14,6 +14,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MCForge
 {
@@ -213,6 +214,17 @@ namespace MCForge
                                 if (rand.Next(1, 11) <= 5 && p.level.GetTile(xx, yy, zz) != type) { BufferAdd(buffer, xx, yy, zz); }
                             }
                     break;
+            }
+
+            // Check to see if user is subject to anti-tunneling
+            if (Server.antiTunnel && p.group.Permission == LevelPermission.Guest && !p.ignoreGrief)
+            {
+                int CheckForBlocksBelowY = p.level.depth / 2 - Server.maxDepth;
+                if (buffer.Any(pos => pos.y < CheckForBlocksBelowY))
+                {
+                    p.SendMessage("You're not allowed to build this far down!");
+                    return;
+                }
             }
 
             if (Server.forceCuboid)
