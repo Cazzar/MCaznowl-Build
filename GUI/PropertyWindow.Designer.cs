@@ -604,6 +604,7 @@
             this.txtCmdAllow.Name = "txtCmdAllow";
             this.txtCmdAllow.Size = new System.Drawing.Size(86, 21);
             this.txtCmdAllow.TabIndex = 31;
+            this.txtCmdAllow.LostFocus +=new System.EventHandler(this.txtCmdAllow_TextChanged);
             // 
             // txtCmdLowest
             // 
@@ -611,6 +612,7 @@
             this.txtCmdLowest.Name = "txtCmdLowest";
             this.txtCmdLowest.Size = new System.Drawing.Size(86, 21);
             this.txtCmdLowest.TabIndex = 32;
+            this.txtCmdLowest.LostFocus += new System.EventHandler(this.txtCmdLowest_TextChanged);
             // 
             // txtCmdDisallow
             // 
@@ -618,6 +620,7 @@
             this.txtCmdDisallow.Name = "txtCmdDisallow";
             this.txtCmdDisallow.Size = new System.Drawing.Size(86, 21);
             this.txtCmdDisallow.TabIndex = 30;
+            this.txtCmdDisallow.LostFocus +=new System.EventHandler(this.txtCmdDisallow_TextChanged);
             // 
             // label17
             // 
@@ -653,6 +656,7 @@
             this.listCommands.Name = "listCommands";
             this.listCommands.Size = new System.Drawing.Size(111, 316);
             this.listCommands.TabIndex = 26;
+            this.listCommands.SelectedIndexChanged += new System.EventHandler(this.listCommands_SelectedIndexChanged);
             // 
             // tabPage7
             // 
@@ -1400,7 +1404,7 @@
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(11, 341);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(105, 23);
+            this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -1459,7 +1463,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(205, 119);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(57, 13);
+            this.label22.Size = new System.Drawing.Size(58, 13);
             this.label22.TabIndex = 3;
             this.label22.Text = "Max Maps:";
             // 
@@ -1468,7 +1472,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(196, 90);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(66, 13);
+            this.label21.Size = new System.Drawing.Size(67, 13);
             this.label21.TabIndex = 3;
             this.label21.Text = "Max Players:";
             // 
