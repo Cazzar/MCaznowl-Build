@@ -50,9 +50,14 @@ namespace MCForge
                     {
                         foundLevel.Save(true);
                         Player.SendMessage(p, "Level \"" + foundLevel.name + "\" saved.");
-                        int backupNumber = p.level.Backup(true);
+                        int backupNumber = foundLevel.Backup(true);
                         if (backupNumber != -1)
-                            p.level.ChatLevel("Backup " + backupNumber + " saved.");
+                        {
+                            if (p == null)
+                                Player.SendMessage(null, "Backup " + backupNumber + " saved.");
+                            else
+                                p.level.ChatLevel("Backup " + backupNumber + " saved.");
+                        }
                     }
                     else
                     {

@@ -95,8 +95,8 @@ namespace MCForge
 
         public static bool Pump(Beat beat)
         {
-            lock (Lock)
-            {
+            //lock (Lock)
+            //{
                 String beattype = beat.GetType().Name;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(beat.URL));
@@ -217,7 +217,7 @@ namespace MCForge
                 {
                     beatlogger.Close();
                 }
-            }
+            //}
             return true;
         }
 
