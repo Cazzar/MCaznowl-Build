@@ -82,6 +82,7 @@ namespace MCForge
             all.Add(new CmdGive());
             all.Add(new CmdGoto());
             all.Add(new CmdGun());
+            all.Add(new CmdHackRank());
             all.Add(new CmdHacks());
             all.Add(new CmdHasirc());
             // all.Add(new CmdHeartbeat()); DEBUG COMMAND DO NOT USE
