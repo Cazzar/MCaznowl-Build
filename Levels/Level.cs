@@ -1582,6 +1582,7 @@ namespace MCForge
                                     case Block.door_iron_air:
                                     case Block.door_gold_air:
                                     case Block.door_cobblestone_air:
+                                    case Block.door_red_air:
                                     case Block.door_dirt_air:
                                     case Block.door_grass_air:
                                     case Block.door_blue_air:
@@ -2527,7 +2528,7 @@ namespace MCForge
                                             Firework(x, y, z, 4); break;
                                         }
                                         break;
-
+									//Zombie + creeper stuff
                                     case Block.zombiehead:
                                         if (GetTile(IntOffset(C.b, 0, -1, 0)) != Block.zombiebody && GetTile(IntOffset(C.b, 0, -1, 0)) != Block.creeper)
                                             C.extraInfo = "revert 0";

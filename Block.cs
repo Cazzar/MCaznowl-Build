@@ -78,6 +78,8 @@ namespace MCForge
 
         public const byte door_cobblestone = (byte)80;
         public const byte door_cobblestone_air = (byte)81;
+        public const byte door_red = (byte)84;
+        public const byte door_red_air = (byte)85;
 
         public const byte op_glass = (byte)100;
         public const byte opsidian = (byte)101;
@@ -347,6 +349,7 @@ namespace MCForge
                     case door_iron_air:
 					case door_gold_air:
                     case door_cobblestone_air:
+                    case door_red_air:
                     case door_grass_air:
                     case door_dirt_air:
                     case door_blue_air:
@@ -429,6 +432,7 @@ namespace MCForge
                     case door_blue:
                     case door_book:
                     case door_cobblestone:
+                    case door_red:
 
                     case tdoor:
                     case tdoor2:
@@ -694,6 +698,7 @@ namespace MCForge
                 case door_blue:
                 case door_book:
                 case door_cobblestone:
+                case door_red:
 
                 case Block.smalltnt:
                 case Block.bigtnt:
@@ -1027,6 +1032,7 @@ namespace MCForge
                 case door_blue:
                 case door_book:
                 case door_cobblestone:
+                case door_red:
 
                 case tdoor:
                 case tdoor2:
@@ -1150,6 +1156,7 @@ namespace MCForge
                 case door_iron: return "door_iron";
 				case door_gold: return "door_gold";
                 case door_cobblestone: return "door_cobblestone";
+                case door_red: return "door_red";
                 case door_grass: return "door_grass";
                 case door_dirt: return "door_dirt";
                 case door_blue: return "door_blue";
@@ -1267,6 +1274,7 @@ namespace MCForge
                 case door_blue_air: return "door_blue_air";
                 case door_book_air: return "door_book_air";
                 case door_cobblestone_air: return "door_cobblestone_air";
+                case door_red_air: return "door_red_air";
 
                 //"AI" blocks
                 case train: return "train";
@@ -1401,6 +1409,8 @@ namespace MCForge
 				case "door_gold": return door_gold;
                 case "door17":
                 case "door_cobblestone": return door_cobblestone;
+                case "door18":
+                case "door_red": return door_red;
 
                 case "tdoor_tree":
                 case "tdoor": return tdoor;
@@ -1532,6 +1542,7 @@ namespace MCForge
                 case "door_book_air": return door_book_air;
 				case "door_gold_air": return door_gold_air;
                 case "door_cobblestone_air": return door_cobblestone_air;
+                case "door_red_air": return door_red_air;
 
                 case "train": return train;
 
@@ -1594,6 +1605,7 @@ namespace MCForge
                 case door_book: return bookcase;
 				case door_gold: return goldsolid;
                 case door_cobblestone: return 4;
+                case door_red: return red; 
 
                 case tdoor: return trunk;//tdoor show by treetype
                 case tdoor2: return obsidian;//tdoor show by obsidian
@@ -1687,6 +1699,7 @@ namespace MCForge
                 case door_iron_air:
 				case door_gold_air:
                 case door_cobblestone_air:
+                case door_red_air: 
                 case door_dirt_air:
                 case door_grass_air:
                 case door_blue_air:
@@ -1767,6 +1780,7 @@ namespace MCForge
                 case door_blue_air: return door_blue;
                 case door_book_air: return door_book;
                 case door_cobblestone_air: return door_cobblestone;
+                case door_red_air: return door_red;
 
                 case odoor1_air:
                 case odoor2_air:
@@ -1810,6 +1824,7 @@ namespace MCForge
                 case door_blue: return door_blue_air;
                 case door_book: return door_book_air;
                 case door_cobblestone: return door_cobblestone_air;
+                case door_red: return door_red_air;
                 default: return 0;
             }
         }
