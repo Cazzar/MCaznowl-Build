@@ -16,9 +16,21 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             byte b; Int64 seconds; Player who; Player.UndoPos Pos; int CurrentPos = 0;
-            if (p != null) p.RedoBuffer.Clear();
+            if (p != null)
+                p.RedoBuffer.Clear();
 
-            if (message == "") message = p.name + " 30";
+            if (message == "")
+            {
+                if (p == null)
+                {
+                    Player.SendMessage(null, "Console doesn't have an undo buffer.");
+                    return;
+                }
+                else
+                {
+                    message = p.name + " 30";
+                }
+            }
 
             if (message.Split(' ').Length == 2)
             {
@@ -183,7 +195,8 @@ namespace MCForge
                     DirectoryInfo di;
                     string[] fileContent;
 
-                    p.RedoBuffer.Clear();
+                    if(p != null)
+                        p.RedoBuffer.Clear();
 
                     if (Directory.Exists("extra/undo/" + message.Split(' ')[0]))
                     {
