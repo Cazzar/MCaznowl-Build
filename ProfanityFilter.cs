@@ -51,11 +51,17 @@ namespace MCForge
 
         public static string Parse(string text)
         {
+            //return ParseMatchWholeWords(text);
+            return ParseMatchPartialWords(text);
+        }
 
+        // Replace bad words only if the whole word matches
+        private static string ParseMatchWholeWords(string text)
+        {
             var result = new List<string>();
             var originalWords = text.Split(' ');
             var reducedWords = Reduce(text).Split(' ');
-            for(var i=0; i < originalWords.Length; i++)
+            for (var i = 0; i < originalWords.Length; i++)
             {
                 if (BadWords.Contains(reducedWords[i].ToLower()))
                 {
@@ -68,6 +74,41 @@ namespace MCForge
                 }
             }
 
+            return String.Join(" ", result.ToArray());
+        }
+
+        // Replace any whole word containing a bad word inside it (including partial word matches)
+        private static string ParseMatchPartialWords(string text)
+        {
+            var result = new List<string>();
+            var originalWords = text.Split(' ');
+            var reducedWords = Reduce(text).Split(' ');
+
+            // Loop through each reduced word, looking for a badword
+            for(int i=0; i<reducedWords.Length; i++)
+            {
+                bool badwordfound = false;
+                foreach (string badword in BadWords)
+                {
+                    if (reducedWords[i].Contains(badword))
+                    {
+                        badwordfound = true;
+                        break;   
+                    }
+                }
+
+                if (badwordfound)
+                {
+                    // If a badword is found anywhere in the string, replace the whole word
+                    result.Add(new String('*', originalWords[i].Length));
+                }
+                else
+                {
+                    // Nothing found, so use the original word
+                    result.Add(originalWords[i]);
+                }
+            }
+            
             return String.Join(" ", result.ToArray());
         }
 
