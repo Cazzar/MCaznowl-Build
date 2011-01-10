@@ -115,6 +115,7 @@ namespace MCForge
             all.Add(new CmdMissile());
             all.Add(new CmdMode());
             all.Add(new CmdModerate());
+            all.Add(new CmdMoney());
             all.Add(new CmdMove());
             all.Add(new CmdMuseum());
             all.Add(new CmdMute());
