@@ -87,6 +87,7 @@
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
+    <Compile Include="Commands\CmdFetch.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />

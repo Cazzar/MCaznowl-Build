@@ -72,6 +72,7 @@ namespace MCForge
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
             all.Add(new CmdEmote());
+            all.Add(new CmdFetch());
             all.Add(new CmdFill());
             all.Add(new CmdFixGrass());
             all.Add(new CmdFlipHeads());
