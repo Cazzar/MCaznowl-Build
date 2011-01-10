@@ -88,6 +88,7 @@
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
+    <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
     <Compile Include="Commands\CmdReload.cs" />
