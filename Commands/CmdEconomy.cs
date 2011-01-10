@@ -321,7 +321,7 @@ namespace MCForge
         public override string shortcut { get { return "ecobuycolor"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
         public override void Use(Player p, string message)
         {
             {
@@ -575,7 +575,7 @@ namespace MCForge
         public override string shortcut { get { return "ecobuytitle"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
         public override void Use(Player p, string message)
         {
             {
@@ -779,7 +779,7 @@ namespace MCForge
         public override string shortcut { get { return "ecobuymap"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
         public override void Use(Player p, string message)
         {
             {
@@ -1137,7 +1137,7 @@ namespace MCForge
         public override string shortcut { get { return "ecobuyrank"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
         public override void Use(Player p, string message)
         {
             {
@@ -1384,7 +1384,7 @@ namespace MCForge
         public override string shortcut { get { return "onwmapspawn"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
         public override void Use(Player p, string message)
         {
             {
