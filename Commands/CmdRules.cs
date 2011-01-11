@@ -45,8 +45,11 @@ namespace MCForge
             Player who = null;
             if (message != "")
             {
-                if (p.group.Permission <= LevelPermission.Guest)
-                { Player.SendMessage(p, "You cant send /rules to another player!"); return; }
+                if (p == null || p.group.Permission <= LevelPermission.Guest)
+                {
+                    Player.SendMessage(p, "You cant send /rules to another player!");
+                    return;
+                }
                 who = Player.Find(message);
             }
             else
@@ -60,6 +63,12 @@ namespace MCForge
                 who.SendMessage("Server Rules:");
                 foreach (string s in rules)
                     who.SendMessage(s);
+            }
+            else if (p == null && String.IsNullOrEmpty(message))
+            {
+                Player.SendMessage(null, "Server Rules:");
+                foreach (string s in rules)
+                    Player.SendMessage(null, s);
             }
             else
             {
