@@ -53,9 +53,9 @@ namespace MCForge
                         int backupNumber = foundLevel.Backup(true);
                         if (backupNumber != -1)
                         {
-                            if (p == null)
-                                Player.SendMessage(null, "Backup " + backupNumber + " saved.");
-                            else
+                            // Notify console and the player who called /save
+                            Player.SendMessage(null, "Backup " + backupNumber + " saved.");
+                            if (p != null)
                                 p.level.ChatLevel("Backup " + backupNumber + " saved.");
                         }
                     }
@@ -73,6 +73,7 @@ namespace MCForge
                         foundLevel.Save(true);
                         int backupNumber = p.level.Backup(true, restoreName);
                         Player.GlobalMessage(foundLevel.name + " had a backup created named &b" + restoreName);
+                        Player.SendMessage(null, foundLevel.name + " had a backup created named &b" + restoreName);
                     }
                     else
                     {
@@ -92,7 +93,12 @@ namespace MCForge
 
                         int backupNumber = p.level.Backup(true);
                         if (backupNumber != -1)
-                            p.level.ChatLevel("Backup " + backupNumber + " saved.");
+                        {
+                            // Notify console and the player who called /save
+                            Player.SendMessage(null, "Backup " + backupNumber + " saved.");
+                            if (p != null)
+                                p.level.ChatLevel("Backup " + backupNumber + " saved.");
+                        }
                     }
                 }
             }
