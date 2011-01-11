@@ -2081,8 +2081,7 @@ namespace MCForge
         public static void GlobalChat(Player from, string message, bool showname)
         {
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p == null || p.level.worldChat) Player.SendMessage(p, message); });
-            Player.SendMessage(null, "(Global) " + message);
+            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
