@@ -114,8 +114,16 @@ namespace MCForge
                     catch { }
                 }
 
-                if (p != who) Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.", false);
-                else Player.SendMessage(p, "Undid your actions for the past &b" + seconds + Server.DefaultColor + " seconds.");
+                if (p == who)
+                {
+                    Player.SendMessage(p, "Undid your actions for the past &b" + seconds + Server.DefaultColor + " seconds.");
+                }
+                else
+                {
+                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.", false);
+                    // Also notify console
+                    Player.SendMessage(null, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.");
+                }
                 return;
             }
             else if (message.Split(' ')[0].ToLower() == "physics")
@@ -179,6 +187,8 @@ namespace MCForge
                 }
 
                 Player.GlobalMessage("Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
+                // Also notify console
+                Player.SendMessage(null, "Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
             }
             else
             {
@@ -221,8 +231,13 @@ namespace MCForge
                         }
                         FoundUser = true;
                     }
-                    
-                    if (FoundUser) Player.GlobalChat(p, Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.", false);
+
+                    if (FoundUser)
+                    {
+                        Player.GlobalChat(p, Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.", false);
+                        // Also notify console
+                        Player.SendMessage(null, Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.");
+                    }
                     else Player.SendMessage(p, "Could not find player specified.");
                 }
                 catch (Exception e)
