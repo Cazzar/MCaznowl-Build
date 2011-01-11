@@ -38,13 +38,8 @@ namespace MCForge
 
             if (Server.levels != null && Server.levels.Count > 0)
             {
-                string worlds = "";
-                foreach (Level l in Server.levels)
-                {
-                    worlds += l.name + ",";
-                }
-
-                Parameters += "&worlds=" + worlds.Substring(0, worlds.Length - 1);
+                IEnumerable<string> worlds = from l in Server.levels select l.name;
+                Parameters += "&worlds=" + String.Join(", ", worlds.ToArray());
             }
 
             Parameters += "&motd=" + Heart.UrlEncode(Server.motd) +
