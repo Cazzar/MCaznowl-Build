@@ -1,3 +1,35 @@
+v3.0.0.0
+- Sockets are now closed when a player disconnects instead of hanging around in a CLOSE_WAIT state
+- Heartbeat will save new hash/URL if it happens to change sometime after server startup
+- Economy system permission changes (everything except for stats and setup is disabled by default)
+  - Change the command permissions via console properties to selectively enable features
+- Fixed the updater that we broke... derp
+- Fixed the broken Commands tab
+- Joker no longer fails horribly if file is empty
+- Minor text changes in commands
+- Fixed security issue with CmdText
+- UI Tweaks:
+   - Balloon popups when users enter and disconnect
+   - Enhanced player list - shows name, rank, and level they're on
+   - Enhanced map list - Shows name, # of players, physics level, and build/visit permission
+   - Autoscrolling boxes for console and commands won't autoscroll if you're not at the bottom
+- Fixed issues where log viewer failed when month/day is a single digit
+- Changed default permission of  /shutdown to Admin
+- Fixed issue where /cuboid (and commands using it like /zz) didn't respect the anti-tunneling limit
+- Fixed issue where profanity filter setting didn't save on Apply/Save
+- /undo will now work if used by console (no redo though)
+- Profanity filter tweaks
+- CmdSave now displays the proper backup # and also works via console
+- Added Door_red block
+- New Commands!
+  - /fetch -forcefetching over levels (should we merge this with summon?)
+  - /hackrank
+  - /money - shows your amount of servermoneys
+- Global messages will now appear in the console
+- New IRC commands:
+   - promote
+   - demote
+
 v2.0.0.0
 - New profanity filter (optional)
 - Revamped the heartbeat system
