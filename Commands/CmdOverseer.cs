@@ -40,12 +40,13 @@ namespace MCForge
             // Go to Home Map (/OS GO or /OS X (inside Mac joke))
             if ((cmd == "GO") || (cmd == "X"))
             {
+                Command.all.Find("load").Use(p, properMapName(p, false));
                 Command.all.Find("goto").Use(p, properMapName(p, false));
             }
             // Set Spawn (if you are on your own map level)
             else if (cmd == "SPAWN")
             {
-                if ( (p.name.ToUpper() == p.level.name.ToUpper()) || (p.name.ToUpper() + "00" == p.level.name.ToUpper()))
+                if ((p.name.ToUpper() == p.level.name.ToUpper()) || (p.name.ToUpper() + "00" == p.level.name.ToUpper()))
                 {
                     Command.all.Find("setspawn").Use(p, "");
                 }
@@ -58,7 +59,7 @@ namespace MCForge
                 if (par == "ADD")
                 {
                     // Add User Map (if it doesn't already exist)
-                    if ((File.Exists(@"levels\" + p.name + ".lvl")) || (File.Exists(@"levels\" + p.name + "00.lvl")))
+                    if ((File.Exists(@"levels\" + p.name + ".lvl")) || (File.Exists(@"levels\" + p.name + ".lvl")))
                     {
                         Player.SendMessage(p, "I am sorry " + p.name + ", but you already have a map.");
                     }
@@ -76,7 +77,8 @@ namespace MCForge
                                 mType = "flat";
                             }
                             Player.SendMessage(p, "Creating your map, " + p.name);
-                            Command.all.Find("newlvl").Use(p, p.name + "00 " + mSize(p) + " " + mType);
+                            Command.all.Find("newlvl").Use(p, p.name + mSize(p) + " " + mType);
+                            Command.all.Find("load").Use(p, properMapName(p, false));
                         }
                         else
                         {
@@ -138,11 +140,13 @@ namespace MCForge
 
                         if (runSQL(p, "DELETE FROM zone" + properMapName(p, false)) == true)
                         {
-                            Player.SendMessage(p, "All zones have been deleted. Remember to zone yourself or your map will become a public map.");
+                            Player.SendMessage(p, "All zones have been deleted. Remember to zone yourself or anyone can build on it.");
+                            Command.all.Find("load").Use(p, properMapName(p, false));
                         }
                         else
                         {
                             Player.SendMessage(p, "Unable to unzone for everyone.");
+                            Command.all.Find("load").Use(p, properMapName(p, false));
                         }
                     }
                     else if (par2 != "")
@@ -171,11 +175,17 @@ namespace MCForge
                     Player.SendMessage(p, "/overseer ZONE list -- show active zones on brick");
                 }
             }
-/* Spoof Commands, just for fun - can be left out :) */
+            //Lets player load the level
+            else if (cmd == "LOAD")
+            {
+                Command.all.Find("load").Use(p, properMapName(p, false));
+                Player.SendMessage(p, "Your level is now loaded.");
+            }
             else if (cmd == "MAKEMEOP")
             {
                 Player.SendMessage(p, "Come on, you didn't really think that would work? :)");
-            } else
+            }
+            else
             {
                 //Player.SendMessage(p, "I did not understand your request.");
                 Help(p);
@@ -187,7 +197,8 @@ namespace MCForge
             // Remember to include or exclude the spoof command(s) -- MakeMeOp
             Player.SendMessage(p, "/overseer [command string] - sends command to The Overseer");
             Player.SendMessage(p, "Accepted Commands:");
-            Player.SendMessage(p, "  Go, Map, Spawn, Vote, Zone, MakeMeOP");
+            Player.SendMessage(p, "  Go, Map, Spawn, Zone, MakeMeOP, Load");
+            Player.SendMessage(p, "/os - Command shortcut.");
         }
 
         public bool runSQL(Player p, string strQuery)
@@ -210,7 +221,7 @@ namespace MCForge
                     myCommand.ExecuteNonQuery();
                     res = true;
                 }
-                catch(Exception excp)
+                catch (Exception excp)
                 {
                     Player.SendMessage(p, "Unable to run SQL Query: " + excp.Message);
                 }
