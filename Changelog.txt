@@ -1,3 +1,6 @@
+v3.0.0.1
+- Fixed issue where 'Help' button in Commands tab didn't do anything
+
 v3.0.0.0
 - Sockets are now closed when a player disconnects instead of hanging around in a CLOSE_WAIT state
 - Heartbeat will save new hash/URL if it happens to change sometime after server startup

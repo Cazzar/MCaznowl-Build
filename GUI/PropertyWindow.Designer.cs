@@ -588,6 +588,7 @@
             this.btnCmdHelp.TabIndex = 34;
             this.btnCmdHelp.Text = "Help information";
             this.btnCmdHelp.UseVisualStyleBackColor = true;
+            this.btnCmdHelp.Click += new System.EventHandler(this.btnCmdHelp_Click);
             // 
             // txtCmdRanks
             // 
@@ -604,7 +605,7 @@
             this.txtCmdAllow.Name = "txtCmdAllow";
             this.txtCmdAllow.Size = new System.Drawing.Size(86, 21);
             this.txtCmdAllow.TabIndex = 31;
-            this.txtCmdAllow.LostFocus +=new System.EventHandler(this.txtCmdAllow_TextChanged);
+            this.txtCmdAllow.LostFocus += new System.EventHandler(this.txtCmdAllow_TextChanged);
             // 
             // txtCmdLowest
             // 
@@ -620,7 +621,7 @@
             this.txtCmdDisallow.Name = "txtCmdDisallow";
             this.txtCmdDisallow.Size = new System.Drawing.Size(86, 21);
             this.txtCmdDisallow.TabIndex = 30;
-            this.txtCmdDisallow.LostFocus +=new System.EventHandler(this.txtCmdDisallow_TextChanged);
+            this.txtCmdDisallow.LostFocus += new System.EventHandler(this.txtCmdDisallow_TextChanged);
             // 
             // label17
             // 
