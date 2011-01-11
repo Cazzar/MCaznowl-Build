@@ -22,9 +22,16 @@ v3.0.0.0
 - CmdSave now displays the proper backup # and also works via console
 - Added Door_red block
 - New Commands!
-  - /fetch -forcefetching over levels (should we merge this with summon?)
-  - /hackrank
-  - /money - shows your amount of servermoneys
+   - /fetch -forcefetching over levels (should we merge this with summon?)
+   - /hackrank
+   - /main - moves player to main level
+   - /money - shows your amount of servermoneys
+   - /moveall - moves all players to <map>
+   - /unflood - unfloods the current map
+- Improved /overseer
+   - Levels shouldnt be saved as player00, they should be just player
+   - when the level is made through /overseer it loads itself
+   - add /overseer load, loads the players ma
 - Global messages will now appear in the console
 - New IRC commands:
    - promote
