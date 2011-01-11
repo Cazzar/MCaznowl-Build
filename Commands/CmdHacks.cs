@@ -17,12 +17,12 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            p.Kick("You have been banned from All MCForge servers and reported to Notch!");
+            p.Kick("You are now banned from All MCForge servers and reported to Notch!");
 
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/hacks - HACK THE PLANET");
+            Player.SendMessage(p, "/hacks - GIVE YOU CONTROL OF THE SERVER!");
         }
     }
 
