@@ -108,6 +108,7 @@ namespace MCForge
             all.Add(new CmdLine());
             all.Add(new CmdLoad());
             all.Add(new CmdLowlag());
+            all.Add(new CmdMain());
             all.Add(new CmdMap());
             all.Add(new CmdMapInfo());
             all.Add(new CmdMe());
@@ -119,6 +120,7 @@ namespace MCForge
             all.Add(new CmdModerate());
             all.Add(new CmdMoney());
             all.Add(new CmdMove());
+            all.Add(new CmdMoveAll());
             all.Add(new CmdMuseum());
             all.Add(new CmdMute());
             all.Add(new CmdNewLvl());
@@ -187,6 +189,7 @@ namespace MCForge
             all.Add(new CmdUnban());
             all.Add(new CmdUnbanip());
             all.Add(new CmdUndo());
+            all.Add(new CmdUnflood());
             all.Add(new CmdUnload());
             all.Add(new CmdUnloaded());
             all.Add(new CmdUpdate());
