@@ -1,3 +1,11 @@
+v3.0.1.0
+- Undid change where all global messages appeared in console (caused alot of console spam)
+- /save will now notify console of which backup # was created
+- Shortened the length of the /hacks message
+- /rules is now usable by the console
+- /undo [player] will now report actions to the console
+- Fixed issue where "/overseer map add" failed to create the level
+
 v3.0.0.1
 - Fixed issue where 'Help' button in Commands tab didn't do anything
 
