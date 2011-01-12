@@ -18,6 +18,7 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using MCForge.Gui;
+using System.Windows.Forms;
 
 namespace MCForge
 {
@@ -135,8 +136,14 @@ namespace MCForge
                     NeedRestart = false;
                 }
             } catch (Exception e) {
-                File.AppendAllText("ErrorLogError.log", getErrorText(e));
-                Server.s.Log("There was an error in the error logger!");
+                try
+                {
+                    File.AppendAllText("ErrorLogError.log", getErrorText(e));
+                }
+                catch (Exception _ex)
+                {
+                    MessageBox.Show("ErrorLogError Error:\n Could not log the error logs error. This is a big error. \n" + _ex.Message);
+                }
             }
         }
 
