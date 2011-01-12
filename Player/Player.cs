@@ -55,6 +55,7 @@ namespace MCForge
         public bool disconnected = false;
 
         public string name;
+        public int warn = 0;
         public string realName;
         public byte id;
         public int userID = -1;
