@@ -25,7 +25,7 @@ namespace MCForge
                     Player.GlobalMessage(playerName + ": &f" + message);
                 }
             }
-            else { Player.SendMessage(p, "Dude, no message was given."); }
+            else { Player.SendMessage(p, "No message was given."); }
         }
         public override void Use(Player p, string message)
         {
@@ -53,7 +53,7 @@ namespace MCForge
                         if (p.group.Permission >= LevelPermission.Admin)
                         {
                             if (Group.findPlayerGroup(message.Split(' ')[0]).Permission < p.group.Permission) { this.SendIt(p, message, null); }
-                            else { Player.SendMessage(p, "You cannot impersonate a player of equal or greater rank.Derp."); }
+                            else { Player.SendMessage(p, "You cannot impersonate a player of equal or greater rank."); }
                         }
                         else { Player.SendMessage(p, "You are not allowed to impersonate offline players"); }
                     }

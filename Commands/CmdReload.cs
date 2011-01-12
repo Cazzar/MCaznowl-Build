@@ -6,7 +6,7 @@ namespace MCForge
    {
       public override string name { get { return "reload"; } }
       public override string shortcut { get { return "re"; } }
-      public override string type { get { return "other"; } }
+      public override string type { get { return "map"; } }
       public override bool museumUsable { get { return false; } }
       public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
       public override void Use(Player p, string message)
