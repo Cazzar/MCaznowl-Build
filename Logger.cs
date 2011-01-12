@@ -57,6 +57,7 @@ namespace MCForge
         static string _errorPath = "logs/errors/" + DateTime.Now.ToString("yyyy-MM-dd").Replace("/", "-") + "error.log";
 
         static object _lockObject = new object();
+        static object _fileLockObject = new object();
         static Thread _workingThread;
         static Queue<string> _messageCache = new Queue<string>();
         static Queue<string> _errorCache = new Queue<string>(); //always handle this first!
@@ -160,35 +161,46 @@ namespace MCForge
         //Only call from within synchronised code or all hell will break loose
         static void FlushCache(string path, Queue<string> cache)
         {
-            FileStream fs = null;
-            try
+            // Extra layer of protection
+            lock (_fileLockObject)
             {
-                //TODO: not happy about constantly opening and closing a stream like this but I suppose its ok (Pidgeon)
-                fs = new FileStream(path, FileMode.Append, FileAccess.Write);
-                while (cache.Count > 0)
+                FileStream fs = null;
+                try
                 {
-                    byte[] tmp = Encoding.Default.GetBytes(cache.Dequeue());
-                    fs.Write(tmp, 0, tmp.Length);
+                    //TODO: not happy about constantly opening and closing a stream like this but I suppose its ok (Pidgeon)
+                    fs = new FileStream(path, FileMode.Append, FileAccess.Write);
+                    while (cache.Count > 0)
+                    {
+                        byte[] tmp = Encoding.Default.GetBytes(cache.Dequeue());
+                        fs.Write(tmp, 0, tmp.Length);
+                    }
+                    fs.Close();
                 }
-                fs.Close();
-            }
-            catch
-            {
+                catch
+                {
 
+                }
+                finally
+                {
+                    fs.Dispose();
+                }
             }
-            fs.Dispose();
         }
         static string getErrorText(Exception e)
         {
+            if(e == null)
+                return String.Empty;
+
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("Type: " + e.GetType().Name);
-            sb.AppendLine("Source: " + e.Source);
-            sb.AppendLine("Message: " + e.Message);
-            sb.AppendLine("Target: " + e.TargetSite.Name);
-            sb.AppendLine("Trace: " + e.StackTrace);
+            // Attempt to gather this info.  Skip anything that you can't read for whatever reason
+            try { sb.AppendLine("Type: " + e.GetType().Name); } catch { }
+            try { sb.AppendLine("Source: " + e.Source); } catch { }
+            try { sb.AppendLine("Message: " + e.Message); } catch { }
+            try { sb.AppendLine("Target: " + e.TargetSite.Name); } catch { }
+            try { sb.AppendLine("Trace: " + e.StackTrace); } catch { }
 
-            if (e.Message.IndexOf("An existing connection was forcibly closed by the remote host") != -1)
+            if (e.Message != null && e.Message.IndexOf("An existing connection was forcibly closed by the remote host") != -1)
             {
                 NeedRestart = true;
             }
