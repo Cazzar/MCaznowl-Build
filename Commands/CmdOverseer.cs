@@ -77,8 +77,7 @@ namespace MCForge
                                 mType = "flat";
                             }
                             Player.SendMessage(p, "Creating your map, " + p.name);
-                            Command.all.Find("newlvl").Use(p, p.name + mSize(p) + " " + mType);
-                            Command.all.Find("load").Use(p, properMapName(p, false));
+                            Command.all.Find("newlvl").Use(p, p.name + " " + mSize(p) + " " + mType);
                         }
                         else
                         {
