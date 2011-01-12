@@ -42,7 +42,7 @@ namespace MCForge
             }
 
             // OK the file should exist now
-            var tempBadWords = File.ReadAllLines("text/badwords.txt").Where(s => s.StartsWith("#") == false);
+            var tempBadWords = File.ReadAllLines("text/badwords.txt").Where(s => s.StartsWith("#") == false || s.Trim().Equals(String.Empty));
 
             // Run the badwords through the reducer to ensure things like Ls become Is and everything is lowercase
             // Also remove lines starting with a "#" since they are comments
