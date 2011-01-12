@@ -54,7 +54,7 @@ namespace MCForge
                         if (backupNumber != -1)
                         {
                             // Notify console and the player who called /save
-                            Player.SendMessage(null, "Backup " + backupNumber + " saved.");
+                            Player.SendMessage(null, "Backup " + backupNumber + " saved for " + foundLevel.name);
                             if (p != null)
                                 p.level.ChatLevel("Backup " + backupNumber + " saved.");
                         }
@@ -95,7 +95,7 @@ namespace MCForge
                         if (backupNumber != -1)
                         {
                             // Notify console and the player who called /save
-                            Player.SendMessage(null, "Backup " + backupNumber + " saved.");
+                            Player.SendMessage(null, "Backup " + backupNumber + " saved for " + p.level.name);
                             if (p != null)
                                 p.level.ChatLevel("Backup " + backupNumber + " saved.");
                         }
