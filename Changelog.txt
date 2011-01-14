@@ -1,3 +1,10 @@
+v3.0.1.1
+- Profanity filter now ignores empty lines in badwords.txt
+- Added extra layers of protection to help prevent the error logger from crashing
+- Profanity filter will reload when you save/apply server Properties
+   - Not the best way, but it works
+- Added current and banned number of players to /info
+
 v3.0.1.0
 - Undid change where all global messages appeared in console (caused alot of console spam)
 - /save will now notify console of which backup # was created
