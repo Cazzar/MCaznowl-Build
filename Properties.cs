@@ -89,6 +89,21 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("max-players invalid! setting to default."); }
                                 break;
+                            case "max-guests":
+                                try
+                                {
+                                    if (Convert.ToByte(value) > Server.players)
+                                    {
+                                        value = Server.players.ToString(); Server.s.Log("Max guests has been lowered to " + Server.players.ToString());
+                                    }
+                                    else if (Convert.ToByte(value) < 0)
+                                    {
+                                        value = "0"; Server.s.Log("Max guests has been increased to 0.");
+                                    }
+                                    Server.maxGuests = Convert.ToByte(value);
+                                }
+                                catch { Server.s.Log("max-guests invalid! setting to default."); }
+                                break;
                             case "max-maps":
                                 try
                                 {
@@ -391,6 +406,7 @@ namespace MCForge
                     w.WriteLine("#   verify-names\t=\tVerify the validity of names");
                     w.WriteLine("#   public\t=\tSet to true to appear in the public server list");
                     w.WriteLine("#   max-players\t=\tThe maximum number of connections");
+                    w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
                     w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
                     w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
                     w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
@@ -432,6 +448,7 @@ namespace MCForge
                     w.WriteLine("verify-names = " + Server.verify.ToString().ToLower());
                     w.WriteLine("public = " + Server.pub.ToString().ToLower());
                     w.WriteLine("max-players = " + Server.players.ToString());
+                    w.WriteLine("max-guests = " + Server.maxGuests.ToString());
                     w.WriteLine("max-maps = " + Server.maps.ToString());
                     w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
                     w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());

@@ -187,12 +187,34 @@ namespace MCForge.Gui
                                     {
                                         value = "1";
                                     }
-                                    txtPlayers.Text = value;
+                                    numPlayers.Value = Convert.ToInt16(value);
                                 }
                                 catch
                                 {
                                     Server.s.Log("max-players invalid! setting to default.");
-                                    txtPlayers.Text = "12";
+                                    numPlayers.Value = 12;
+                                }
+                                numGuests.Maximum = numPlayers.Value;
+                                break;
+                            case "max-guests":
+                                try
+                                {
+                                    if (Convert.ToByte(value) > numPlayers.Value)
+                                    {
+                                        value = numPlayers.Value.ToString();
+                                    }
+                                    else if (Convert.ToByte(value) < 0)
+                                    {
+                                        value = "0";
+                                    }
+                                    numGuests.Minimum = 0;
+                                    numGuests.Maximum = numPlayers.Value;
+                                    numGuests.Value = Convert.ToInt16(value);
+                                }
+                                catch
+                                {
+                                    Server.s.Log("max-guests invalid! setting to default.");
+                                    numGuests.Value = 10;
                                 }
                                 break;
                             case "max-maps":
@@ -412,6 +434,7 @@ namespace MCForge.Gui
                     w.WriteLine("#   verify-names\t=\tVerify the validity of names");
                     w.WriteLine("#   public\t=\tSet to true to appear in the public server list");
                     w.WriteLine("#   max-players\t=\tThe maximum number of connections");
+                    w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
                     w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
                     w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
                     w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
@@ -446,7 +469,8 @@ namespace MCForge.Gui
                     w.WriteLine("port = " + txtPort.Text);
                     w.WriteLine("verify-names = " + chkVerify.Checked.ToString().ToLower());
                     w.WriteLine("public = " + chkPublic.Checked.ToString().ToLower());
-                    w.WriteLine("max-players = " + txtPlayers.Text);
+                    w.WriteLine("max-players = " + numPlayers.Value.ToString());
+                    w.WriteLine("max-guests = " + numGuests.Value.ToString());
                     w.WriteLine("max-maps = " + txtMaps.Text);
                     w.WriteLine("world-chat = " + chkWorld.Checked.ToString().ToLower());
                     w.WriteLine("check-updates = " + chkUpdates.Checked.ToString().ToLower());
@@ -555,7 +579,6 @@ namespace MCForge.Gui
         }
 
         private void txtPort_TextChanged(object sender, EventArgs e) { removeDigit(txtPort); }
-        private void txtPlayers_TextChanged(object sender, EventArgs e) { removeDigit(txtPlayers); }
         private void txtMaps_TextChanged(object sender, EventArgs e) { removeDigit(txtMaps); }
         private void txtBackup_TextChanged(object sender, EventArgs e) { removeDigit(txtBackup); }
         private void txtDepth_TextChanged(object sender, EventArgs e) { removeDigit(txtDepth); }
@@ -1045,6 +1068,16 @@ namespace MCForge.Gui
         private void CancelCustCmdTxtBox_Click(object sender, EventArgs e)
         {
             CustCmdTxtBox2.Text = null;
+        }
+
+        private void numPlayers_ValueChanged(object sender, EventArgs e)
+        {
+            // Ensure that number of guests is never more than number of players
+            if (numGuests.Value > numPlayers.Value)
+            {
+                numGuests.Value = numPlayers.Value;
+            }
+            numGuests.Maximum = numPlayers.Value;
         }
 
 

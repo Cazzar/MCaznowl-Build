@@ -121,6 +121,9 @@ namespace MCForge
         public static string name = "[MCForge] Default";
         public static string motd = "Welcome!";
         public static byte players = 12;
+		//for the limiting no. of guests:
+		public static byte maxGuests = 10;
+		
         public static byte maps = 5;
         public static int port = 25565;
         public static bool pub = true;

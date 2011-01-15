@@ -22,6 +22,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Data;
+using System.Linq;
 
 namespace MCForge
 {
@@ -542,6 +543,19 @@ namespace MCForge
                     }
                 }
                 if (Player.players.Count >= Server.players && ip != "127.0.0.1") { Kick("Server full!"); return; }
+				// Code for limiting no. of guests
+                if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
+                {
+                    // Check to see how many guests we have
+                    int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
+                    if (currentNumOfGuests >= Server.maxGuests)
+                    {
+                        GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
+                        Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
+                        Kick("Server has reached max number of guests");
+                        return;
+                    }
+                }
                 if (version != Server.version) { Kick("Wrong version!"); return; }
                 if (name.Length > 16 || !ValidName(name)) { Kick("Illegal name!"); return; }
 
