@@ -7,7 +7,7 @@ namespace MCForge
     {
         public string URL { get { return "http://www.minecraft.net/heartbeat.jsp"; } }
         public string Parameters { get; set; }
-        public bool Log { get { return true; } }
+        public bool Log { get { return false; } }
 
         public void Prepare()
         {
