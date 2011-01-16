@@ -109,10 +109,12 @@ namespace MCForge
                 }
 
                 int totalTries = 0;
+                int totalTriesStream = 0;
 
             retry: try
                 {
                     totalTries++;
+                    totalTriesStream = 0;
 
                     beat.Prepare();
 
@@ -126,12 +128,13 @@ namespace MCForge
 
           retryStream: try
                     {
+                        totalTriesStream++;
                         using (Stream requestStream = request.GetRequestStream())
                         {
                             requestStream.Write(formData, 0, formData.Length);
                             if (Server.logbeat && beat.Log)
                             {
-                                beatlogger.WriteLine(beattype + " request sent at " + DateTime.Now.ToString());
+                                BeatLog(beat, beattype + " request sent at " + DateTime.Now.ToString());
                             }
                             requestStream.Flush();
                             requestStream.Close();
@@ -144,15 +147,32 @@ namespace MCForge
                         {
                             if (Server.logbeat && beat.Log)
                             {
-                                beatlogger.WriteLine(beattype + " timeout detected at " + DateTime.Now.ToString());
+#if DEBUG
+                                Server.s.Log(beattype + " timeout detected at " + DateTime.Now.ToString());
+#endif
+                                BeatLog(beat, beattype + " timeout detected at " + DateTime.Now.ToString());
                             }
-                            goto retryStream;
-                            //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
+                            if (totalTriesStream < 3)
+                            {
+                                goto retryStream;
+                            }
+                            else
+                            {
+                                if (Server.logbeat && beat.Log)
+                                    BeatLog(beat, beattype + " timed out 3 times. Aborting this request. " + DateTime.Now.ToString());
+                                Server.s.Log(beattype + " timed out 3 times. Aborting this request.");
+                                //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
+                                beatlogger.Close();
+                                return false;
+                            }
                         }
                         else if (Server.logbeat && beat.Log)
                         {
-                            beatlogger.WriteLine(beattype + " non-timeout exception detected: " + e.Message);
-                            beatlogger.Write("Stack Trace: " + e.StackTrace);
+#if DEBUG
+                            Server.s.Log(beattype + " non-timeout exception detected: " + e.Message);
+#endif
+                            BeatLog(beat, beattype + " non-timeout exception detected: " + e.Message);
+                            BeatLog(beat, "Stack Trace: " + e.StackTrace);
                         }
                     }
 
@@ -164,7 +184,10 @@ namespace MCForge
                         {
                             if (Server.logbeat && beat.Log)
                             {
-                                beatlogger.WriteLine(beattype + " response received at " + DateTime.Now.ToString());
+#if DEBUG
+                                Server.s.Log(beattype + " response received at " + DateTime.Now.ToString());
+#endif
+                                BeatLog(beat, beattype + " response received at " + DateTime.Now.ToString());
                             }
 
                             if (hash == null && response.ContentLength > 0)
@@ -172,7 +195,7 @@ namespace MCForge
                                 string line = responseReader.ReadLine();
                                 if (Server.logbeat && beat.Log)
                                 {
-                                    beatlogger.WriteLine("Received: " + line);
+                                    BeatLog(beat, "Received: " + line);
                                 }
 
                                 beat.OnPump(line);
@@ -190,7 +213,10 @@ namespace MCForge
                     {
                         if (Server.logbeat && beat.Log)
                         {
-                            beatlogger.WriteLine("Timeout detected at " + DateTime.Now.ToString());
+#if DEBUG
+                            Server.s.Log(beattype + " timeout detected at " + DateTime.Now.ToString());
+#endif
+                            BeatLog(beat, "Timeout detected at " + DateTime.Now.ToString());
                         }
                         Pump(beat);
                     }
@@ -199,12 +225,15 @@ namespace MCForge
                 {
                     if (Server.logbeat && beat.Log)
                     {
-                        beatlogger.WriteLine(beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
+                        BeatLog(beat, beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
                     }
                     if (totalTries < 3) goto retry;
                     if (Server.logbeat && beat.Log)
                     {
-                        beatlogger.WriteLine("Failed three times.  Stopping.");
+#if DEBUG
+                        Server.s.Log(beattype + " failed three times.  Stopping.");
+#endif
+                        BeatLog(beat, "Failed three times.  Stopping.");
                         beatlogger.Close();
                     }
                     return false;
@@ -239,6 +268,18 @@ namespace MCForge
                 }
             }
             return output.ToString();
+        }
+
+        private static void BeatLog(Beat beat, string text)
+        {
+            if (Server.logbeat && beat.Log && beatlogger != null)
+            {
+                try
+                {
+                    beatlogger.WriteLine(text);
+                }
+                catch { }
+            }
         }
 
         /* public static Int32 MACToInt()
