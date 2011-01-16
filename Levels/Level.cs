@@ -831,8 +831,10 @@ namespace MCForge
             if (physics == 0 && newValue != 0)
             {
                 for (int i = 0; i < blocks.Length; i++)
-                    if (Block.NeedRestart(blocks[i]))
-                        AddCheck(i);
+                    // Optimization hack, since no blocks under 183 ever need a restart
+                    if(blocks[i] > 183)
+                        if (Block.NeedRestart(blocks[i]))
+                            AddCheck(i);
             }
             physics = newValue;
             

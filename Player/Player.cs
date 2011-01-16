@@ -26,7 +26,7 @@ using System.Linq;
 
 namespace MCForge
 {
-    public sealed class Player
+    public sealed class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
@@ -234,6 +234,7 @@ namespace MCForge
                             File.WriteAllText("text/welcome.txt", "Welcome to my server!");
                         }
                         extraTimer.Start();
+                        loginTimer.Dispose();
                     }
                 }; loginTimer.Start();
 
@@ -271,6 +272,8 @@ namespace MCForge
                         if (!Group.Find("Nobody").commands.Contains("award") && !Group.Find("Nobody").commands.Contains("awards") && !Group.Find("Nobody").commands.Contains("awardmod")) SendMessage("You have " + Awards.awardAmount(name) + " awards.");
                     }
                     catch { }
+
+                    extraTimer.Dispose();
                 };
 
                 afkTimer.Elapsed += delegate
@@ -2214,7 +2217,9 @@ namespace MCForge
                 //   FlyBuffer.Clear();
                 disconnected = true;
                 pingTimer.Stop();
+                pingTimer.Dispose();
                 afkTimer.Stop();
+                afkTimer.Dispose();
                 afkCount = 0;
                 afkStart = DateTime.Now;
 
@@ -2300,7 +2305,7 @@ namespace MCForge
                     }
                     catch (Exception e) { Server.ErrorLog(e); }
 
-                    UndoBuffer.Clear();
+                    this.Dispose();
                 }
                 else
                 {
@@ -2315,6 +2320,18 @@ namespace MCForge
             finally { this.CloseSocket(); }
         }
 
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+            CopyBuffer.Clear();
+            RedoBuffer.Clear();
+            UndoBuffer.Clear();
+            try
+            {
+                this.commThread.Abort();
+            }
+            catch { }
+        }
 
         #endregion
         #region == CHECKING ==
@@ -2555,5 +2572,6 @@ namespace MCForge
         }
 
 #endregion
+
     }
 }
