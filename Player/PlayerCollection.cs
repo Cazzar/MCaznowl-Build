@@ -63,6 +63,16 @@ namespace MCForge
             };
             props.Add(new PlayerMethodDescriptor("Rank", del, typeof(string)));
 
+            del = delegate(Player p)
+            {
+                if (p.hidden)
+                    return "hidden";
+                if (Server.afkset.Contains(p.name))
+                    return "afk";
+                return "active";
+            };
+            props.Add(new PlayerMethodDescriptor("Status", del, typeof(string)));
+
             PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
             props.CopyTo(propArray);
             return new PropertyDescriptorCollection(propArray);
