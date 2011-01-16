@@ -1,3 +1,15 @@
+v4.0.0.0
+- Heartbeat will no longer loop infinitely if the beat timed out
+   - This was the cause of high CPU load on the servers
+- Guest limit has been added
+   - Limits the total number of guests (perm = 0) allowed on the server
+- More UI Tweaks
+   - Added hidden/afk status to player list UI
+   - Moved IRC stuff to its own tab
+   - Max players and max guests are now numeric up/down boxes
+- Minor physics optimization added
+- Player timers and buffers are disposed on disconnect (memory optimization)
+
 v3.0.1.1
 - Profanity filter now ignores empty lines in badwords.txt
 - Added extra layers of protection to help prevent the error logger from crashing
