@@ -2185,10 +2185,27 @@ namespace MCForge
 
         private void CloseSocket()
         {
+            // Try to close the socket.
+            // Sometimes its already closed so these lines will cause an error
+            // We just trap them and hide them from view :P
             try
             {
                 // Close the damn socket connection!
                 socket.Shutdown(SocketShutdown.Both);
+#if DEBUG
+                Server.s.Log("Socket was shutdown for " + this.name ?? this.ip);
+#endif
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                    Exception ex = new Exception("Failed to shutdown socket for " + this.name ?? this.ip, e);
+                    Server.ErrorLog(ex);
+#endif
+            }
+
+            try
+            {
                 socket.Close();
 #if DEBUG
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
@@ -2196,8 +2213,10 @@ namespace MCForge
             }
             catch (Exception e)
             {
-                Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
-                Server.ErrorLog(ex);
+#if DEBUG
+                    Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
+                    Server.ErrorLog(ex);
+#endif
             }
         }
 
