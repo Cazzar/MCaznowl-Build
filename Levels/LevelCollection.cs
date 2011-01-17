@@ -67,14 +67,22 @@ namespace MCForge
             del = delegate(Level l)
             {
                 //return l.permissionvisit.ToString();
-                return Group.GroupList.Find(grp => grp.Permission == l.permissionvisit).name;
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionvisit);
+                if (grp == null)
+                    return l.permissionvisit.ToString();
+                else
+                    return grp.name;
             };
             props.Add(new LevelMethodDescriptor("PerVisit", del, typeof(string)));
 
             del = delegate(Level l)
             {
                 //return l.permissionbuild.ToString();
-                return Group.GroupList.Find(grp => grp.Permission == l.permissionbuild).name;
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionbuild);
+                if (grp == null)
+                    return l.permissionbuild.ToString();
+                else
+                    return grp.name;
             };
             props.Add(new LevelMethodDescriptor("PerBuild", del, typeof(string)));
 
