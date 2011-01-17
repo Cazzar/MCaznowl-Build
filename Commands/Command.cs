@@ -100,6 +100,7 @@ namespace MCForge
             all.Add(new CmdJail());
             all.Add(new CmdJoker());
             all.Add(new CmdKick());
+            all.Add(new CmdKickAll());
             all.Add(new CmdKickban());
             all.Add(new CmdKill());
             all.Add(new CmdLastCmd());
@@ -107,6 +108,7 @@ namespace MCForge
             all.Add(new CmdLimit());
             all.Add(new CmdLine());
             all.Add(new CmdLoad());
+            all.Add(new CmdLockdown());
             all.Add(new CmdLowlag());
             all.Add(new CmdMain());
             all.Add(new CmdMap());
@@ -192,6 +194,7 @@ namespace MCForge
             all.Add(new CmdUnflood());
             all.Add(new CmdUnload());
             all.Add(new CmdUnloaded());
+            all.Add(new CmdUnlock());
             all.Add(new CmdUpdate());
             all.Add(new CmdView());
             all.Add(new CmdViewRanks());
