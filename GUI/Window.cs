@@ -111,11 +111,6 @@ namespace MCForge.Gui
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
 
-            System.Timers.Timer MapTimer = new System.Timers.Timer(10000);
-            MapTimer.Elapsed += delegate {
-                UpdateMapList("'");
-            }; MapTimer.Start();
-
             //if (File.Exists(Logger.ErrorLogPath))
                 //txtErrors.Lines = File.ReadAllLines(Logger.ErrorLogPath);
             if (File.Exists("extra/Changelog.txt"))
@@ -133,6 +128,13 @@ namespace MCForge.Gui
 
             dgvMaps.DataSource = new LevelCollection(new LevelListView());
             dgvMaps.Font = new Font("Calibri", 8.25f);
+
+            System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000);
+            UpdateListTimer.Elapsed += delegate
+            {
+                UpdateClientList(Player.players);
+                UpdateMapList("'");
+            }; UpdateListTimer.Start();
 
         }
 
