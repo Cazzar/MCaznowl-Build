@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using MySql.Data.MySqlClient;
+using System.Linq;
 namespace MCForge
 {
     public class CmdOverseer : Command
     {
         public override string name { get { return "overseer"; } }
         public override string shortcut { get { return "os"; } }
-        public override string type { get { return "other"; } }
+        public override string type { get { return "commands"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
         public CmdOverseer() { }
@@ -18,7 +18,6 @@ namespace MCForge
             Player who = Player.Find(message.Split(' ')[0]);
             string cmd = message.Split(' ')[0].ToUpper();
 
-            /* This part can be optimized, but will do for now with limited C# skills */
             string par;
             try
             { par = message.Split(' ')[1].ToUpper(); }
@@ -37,16 +36,31 @@ namespace MCForge
             catch
             { par3 = ""; }
 
-            // Go to Home Map (/OS GO or /OS X (inside Mac joke))
-            if ((cmd == "GO") || (cmd == "X"))
+            if (cmd == "GO")
             {
-                Command.all.Find("load").Use(p, properMapName(p, false));
-                Command.all.Find("goto").Use(p, properMapName(p, false));
+                if ((par == "1") || (par == ""))
+                {
+                    string mapname = properMapName(p, false);
+                    if (!Server.levels.Any(l => l.name == mapname))
+                    {
+                        Command.all.Find("load").Use(p, mapname);
+                    }
+                    Command.all.Find("goto").Use(p, mapname);
+                }
+                else if (par == "2")
+                {
+                    string mapname = p.name + "2";
+                    if (!Server.levels.Any(l => l.name == mapname))
+                    {
+                        Command.all.Find("load").Use(p, mapname);
+                    }
+                    Command.all.Find("goto").Use(p, mapname);
+                }
             }
             // Set Spawn (if you are on your own map level)
             else if (cmd == "SPAWN")
             {
-                if ((p.name.ToUpper() == p.level.name.ToUpper()) || (p.name.ToUpper() + "00" == p.level.name.ToUpper()))
+                if ((p.name.ToUpper() == p.level.name.ToUpper()) || (p.name.ToUpper() + "00" == p.level.name.ToUpper()) || (p.name.ToUpper() + "2" == p.level.name.ToUpper()))
                 {
                     Command.all.Find("setspawn").Use(p, "");
                 }
@@ -55,15 +69,39 @@ namespace MCForge
             // Map Commands
             else if (cmd == "MAP")
             {
-                // Add Map (/OS MAP ADD [type])
                 if (par == "ADD")
                 {
-                    // Add User Map (if it doesn't already exist)
-                    if ((File.Exists(@"levels\" + p.name + ".lvl")) || (File.Exists(@"levels\" + p.name + ".lvl")))
+                    if ((File.Exists(@"levels\" + p.name + ".lvl")) || (File.Exists(@"levels\" + p.name + "00.lvl")))
                     {
-                        Player.SendMessage(p, "I am sorry " + p.name + ", but you already have a map.");
+                        if (!File.Exists(@"levels\" + p.name + "2.lvl"))
+                        {
+                            Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have a map, let me create a second one for you.");
+                            string mType;
+                            if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL")
+                            {
+                                if (par2 != "")
+                                {
+                                    mType = par2;
+                                }
+                                else
+                                {
+                                    mType = "flat";
+                                }
+                                Player.SendMessage(p, "Creating your 2nd map, " + p.color + p.name);
+                                Command.all.Find("newlvl").Use(p, p.name + "2 " + mSize(p) + " " + mType);
+                            }
+                            else
+                            {
+                                Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean.");
+                            }
+                        }
+                        else 
+                        {
+                            Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have two maps.");
+                            Player.SendMessage(p, "If you would like to delete one type /os map delete <1 or 2>");
+                        }
                     }
-                    else
+                        else
                     {
                         string mType;
                         if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL")
@@ -76,117 +114,149 @@ namespace MCForge
                             {
                                 mType = "flat";
                             }
-                            Player.SendMessage(p, "Creating your map, " + p.name);
+                            Player.SendMessage(p, "Creating your map, " + p.color + p.name);
                             Command.all.Find("newlvl").Use(p, p.name + " " + mSize(p) + " " + mType);
                         }
                         else
                         {
-                            Player.SendMessage(p, "A wrong map type was specified.");
+                            Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean.");
                         }
                     }
+                    
+                }
+                else if (par == "PHYSICS")
+                {
+                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
+                    {
+                        if (par2 != "")
+                        {
+                            if (par2 == "0")
+                            {
+                                    Command.all.Find("physics").Use(p, p.level.name + " 0");
+                            }
+                            else if (par2 == "1")
+                            {
+                                    Command.all.Find("physics").Use(p, p.level.name + " 1");
+                            }
+                            else if (par2 == "2")
+                            {
+                                    Command.all.Find("physics").Use(p, p.level.name + " 2");
+                            }
+                            else if (par2 == "3")
+                            {
+                                    Command.all.Find("physics").Use(p, p.level.name + " 3");
+                            }
+                            else if (par2 == "4")
+                            {
+                                    Command.all.Find("physics").Use(p, p.level.name + " 4");
+                            }
+                        }
+                        else { Player.SendMessage(p, "You didn't enter a number! Please enter one of these numbers: 0, 1, 2, 3, 4"); }
+                    }
+                    else { Player.SendMessage(p, "You have to be on one of your maps to set its physics!"); }
                 }
                 // Delete your map
                 else if (par == "DELETE")
                 {
-                    Command.all.Find("unload").Use(p, properMapName(p, false)); // Unload
-                    Command.all.Find("deletelvl").Use(p, properMapName(p, false)); // Delete
-                    Player.SendMessage(p, "Your map has been removed.");
+                    if (par == "")
+                    {
+                        Player.SendMessage(p, "To delete one of your maps type /os map delete <1 or 2> 1 is your first map 2 is your second.");
+                    }
+                    else if (par2 == "1")
+                    {
+                        Command.all.Find("deletelvl").Use(p, properMapName(p, false));
+                        Player.SendMessage(p, "Your 1st map has been removed.");
+                    }
+                    else if (par2 == "2")
+                    {
+                        Command.all.Find("deletelvl").Use(p, p.name + "2");
+                        Player.SendMessage(p, "Your 2nd map has been removed.");
+                    }
+
                 }
                 else
                 {
+                    //all is good here :)
                     Player.SendMessage(p, "/overseer map add [type - default is flat] -- Creates your map");
+                    Player.SendMessage(p, "/overseer map physics -- Sets the physics on your map.");
                     Player.SendMessage(p, "/overseer map delete -- Deletes your map");
                     Player.SendMessage(p, "  Map Types: desert, flat, forest, island, mountains, ocean, pixel");
                 }
-
             }
             else if (cmd == "ZONE")
             {
-                // List zones on a single block
+                // List zones on a single block(dont need to touch this :) )
                 if (par == "LIST")
                 {
-                    Command.all.Find("zone").Use(p, "");
+                    Command zone = Command.all.Find("zone");
+                    zone.Use(p, "");
+
                 }
-                // Add Zone to your personal map
+                // Add Zone to your personal map(took a while to get it to work(it was a big derp))
                 else if (par == "ADD")
                 {
-                    if (par2 != "")
+                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
                     {
-                        //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                        Command.all.Find("unload").Use(p, properMapName(p, false));
-
-                        if (runSQL(p, "INSERT INTO zone" + properMapName(p, false) + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + par2 + "');") == true)
+                        if (par2 != "")
                         {
-                            //Command.all.Find("unload").Use(p, p.name);
+                            Command.all.Find("ozone").Use(p, par2);
                             Player.SendMessage(p, par2 + " has been allowed building on your map.");
                         }
-                        else { Player.SendMessage(p, "Unable to zone your map."); }
-
+                        else
+                        {
+                            Player.SendMessage(p, "You did not specify a name to allow building on your map.");
+                        }
                     }
-                    else
-                    {
-                        // Missing a player name!
-                        Player.SendMessage(p, "You did not specify a name to be added to your map.");
-                    }
+                    else { Player.SendMessage(p, "You must be on one of your maps to add or delete zones"); }
                 }
-                else if (par == "DELETE")
+                else if (par == "DEL")
                 {
-                    // Delete zone
-                    if (par2.ToUpper() == "ALL")
+                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
                     {
-                        // Delete ALL zones
-                        Command.all.Find("unload").Use(p, properMapName(p, false));
-
-                        if (runSQL(p, "DELETE FROM zone" + properMapName(p, false)) == true)
+                        // I need to add the ability to delete a single zone, I need help!
+                        if ((par2.ToUpper() == "ALL") || (par2.ToUpper() == ""))
                         {
-                            Player.SendMessage(p, "All zones have been deleted. Remember to zone yourself or anyone can build on it.");
-                            Command.all.Find("load").Use(p, properMapName(p, false));
-                        }
-                        else
-                        {
-                            Player.SendMessage(p, "Unable to unzone for everyone.");
-                            Command.all.Find("load").Use(p, properMapName(p, false));
+                            Command zone = Command.all.Find("zone");
+                            Command click = Command.all.Find("click");
+                            zone.Use(p, "del all");
+                            click.Use(p, 0 + " " + 0 + " " + 0);
                         }
                     }
-                    else if (par2 != "")
-                    {
-                        // Delete a single Zone
-                        if (runSQL(p, "DELETE FROM zone" + properMapName(p, false) + " WHERE owner = '" + par2 + "'") == true)
-                        {
-                            Player.SendMessage(p, par2 + " has been allowing building on your map.");
-                        }
-                        else
-                        {
-                            Player.SendMessage(p, "Unable to unzone for " + par2 + ".");
-                        }
-                    }
-                    else
-                    {
-                        Player.SendMessage(p, "Please specify a name (or ALL) to delete a zone.");
-                    }
+                    else { Player.SendMessage(p, "You have to be on one of your maps to delete or add zones!"); }
                 }
                 else
                 {
                     // Unknown Zone Request
-                    Player.SendMessage(p, "/overseer ZONE add [playername] -- Add zone to player");
-                    Player.SendMessage(p, "/overseer ZONE delete [playername] -- Deletes a zone");
-                    Player.SendMessage(p, "/overseer ZONE delete [all] -- Deletes all zones");
-                    Player.SendMessage(p, "/overseer ZONE list -- show active zones on brick");
+                    Player.SendMessage(p, "/overseer ZONE add [playername or rank] -- Add a zone for a player or a rank."); ;
+                    Player.SendMessage(p, "/overseer ZONE del [all] -- Deletes all zones.");
+                    Player.SendMessage(p, "/overseer ZONE list -- show active zones on brick.");
+                    Player.SendMessage(p, "You can only delete all zones for now.");
                 }
             }
             //Lets player load the level
             else if (cmd == "LOAD")
             {
-                Command.all.Find("load").Use(p, properMapName(p, false));
-                Player.SendMessage(p, "Your level is now loaded.");
+                if (par != "")
+                {
+                    if (par == "1")
+                    {
+                        Command.all.Find("load").Use(p, properMapName(p, false));
+                        Player.SendMessage(p, "Your level is now loaded.");
+                    }
+                    else if (par == "2")
+                    {
+                        Command.all.Find("load").Use(p, p.name + "2");
+                        Player.SendMessage(p, "Your 2nd level is now loaded.");
+                    }
+                }
+                else {Player.SendMessage(p, "Type /os load <1 or 2> to load one of your maps");}
             }
-            else if (cmd == "MAKEMEOP")
+            else if (cmd == "KICKALL")
             {
-                Player.SendMessage(p, "Come on, you didn't really think that would work? :)");
+                Command.all.Find("kickall").Use(p, "");
             }
             else
             {
-                //Player.SendMessage(p, "I did not understand your request.");
                 Help(p);
             }
         }
@@ -196,49 +266,17 @@ namespace MCForge
             // Remember to include or exclude the spoof command(s) -- MakeMeOp
             Player.SendMessage(p, "/overseer [command string] - sends command to The Overseer");
             Player.SendMessage(p, "Accepted Commands:");
-            Player.SendMessage(p, "  Go, Map, Spawn, Zone, MakeMeOP, Load");
+            Player.SendMessage(p, "Go, map, spawn, zone, kickall, load");
             Player.SendMessage(p, "/os - Command shortcut.");
-        }
-
-        public bool runSQL(Player p, string strQuery)
-        {
-            /*
-             * Very basic SQL Runner
-             * 
-             * Functionality exists in MCLawl/MCForge, revice to use any built-in MySQL Connection instead
-             * of opening a new connection
-             */
-            bool res = false;
-
-            try
-            {
-                MySqlConnection myConn = new MySqlConnection("user id=" + MCForge.Server.MySQLUsername + "; password=" + MCForge.Server.MySQLPassword + "; database=" + MCForge.Server.MySQLDatabaseName + "; server=" + MCForge.Server.MySQLHost);
-                myConn.Open();
-                try
-                {
-                    MySqlCommand myCommand = new MySqlCommand(strQuery, myConn);
-                    myCommand.ExecuteNonQuery();
-                    res = true;
-                }
-                catch (Exception excp)
-                {
-                    Player.SendMessage(p, "Unable to run SQL Query: " + excp.Message);
-                }
-                myConn.Close();
-            }
-            catch (Exception excp)
-            {
-                Player.SendMessage(p, "Unable to connect to MCForge: " + excp.Message);
-            }
-            return res;
         }
 
         public string properMapName(Player p, bool Ext)
         {
             /* Returns the proper name of the User Level. By default the User Level will be named
-             * "UserName00" but was earlier named "UserName". Therefore the Script checks if the old
+             * "UserName" but was earlier named "UserName00". Therefore the Script checks if the old
              * map name exists before trying the new (and correct) name. All Operations will work with
              * both map names (UserName and UserName00)
+             * I need to figure out how to add a system to do this with the players second map.
              */
             string r = "";
             if (File.Exists(Directory.GetCurrentDirectory() + "\\levels\\" + p.name + "00.lvl"))
@@ -255,8 +293,8 @@ namespace MCForge
 
         public string mSize(Player p)
         {
-            // Later this map size may differ depending on the rank
-            return "128 64 128";
+
+                return "128 64 128";
         }
     }
 }
