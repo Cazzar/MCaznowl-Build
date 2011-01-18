@@ -400,6 +400,12 @@ namespace MCForge.Gui
                             case "host-state":
                                 if (value != "") txtHost.Text = value;
                                 break;
+                            case "kick-on-hackrank":
+                                hackrank_kick.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "hackrank-kick-time":
+                                hackrank_kick_time.Text = value;
+                                break;
                         }
                     }
                 }
@@ -511,6 +517,8 @@ namespace MCForge.Gui
                     w.WriteLine("notify-on-join-leave = " + chkNotifyOnJoinLeave.Checked.ToString().ToLower());
                     w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
                     w.WriteLine("host-state = " + txtHost.Text.ToString());
+                    w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
+                    w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
                     w.WriteLine();
                     w.WriteLine("# backup options");
                     w.WriteLine("backup-time = " + txtBackup.Text);
@@ -1079,9 +1087,6 @@ namespace MCForge.Gui
             }
             numGuests.Maximum = numPlayers.Value;
         }
-
-
-
     }
 
 }

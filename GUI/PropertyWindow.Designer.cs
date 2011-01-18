@@ -80,6 +80,12 @@
             this.label33 = new System.Windows.Forms.Label();
             this.CrtCustCmd = new System.Windows.Forms.Button();
             this.CustCmdtxtBox = new System.Windows.Forms.TextBox();
+            this.txtOpChannel = new System.Windows.Forms.TextBox();
+            this.txtChannel = new System.Windows.Forms.TextBox();
+            this.txtIRCServer = new System.Windows.Forms.TextBox();
+            this.txtNick = new System.Windows.Forms.TextBox();
+            this.cmbIRCColour = new System.Windows.Forms.ComboBox();
+            this.chkIRC = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -129,6 +135,9 @@
             this.label32 = new System.Windows.Forms.Label();
             this.chkRestartTime = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.numPlayers = new System.Windows.Forms.NumericUpDown();
+            this.numGuests = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
             this.ChkPortResult = new System.Windows.Forms.TextBox();
             this.ChkPort = new System.Windows.Forms.Button();
             this.lblOpChat = new System.Windows.Forms.Label();
@@ -150,21 +159,15 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabIRC = new System.Windows.Forms.TabPage();
-            this.txtOpChannel = new System.Windows.Forms.TextBox();
-            this.txtChannel = new System.Windows.Forms.TextBox();
-            this.txtIRCServer = new System.Windows.Forms.TextBox();
-            this.txtNick = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
             this.lblIRC = new System.Windows.Forms.Label();
-            this.cmbIRCColour = new System.Windows.Forms.ComboBox();
-            this.chkIRC = new System.Windows.Forms.CheckBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.numGuests = new System.Windows.Forms.NumericUpDown();
-            this.numPlayers = new System.Windows.Forms.NumericUpDown();
+            this.hackrank_kick = new System.Windows.Forms.CheckBox();
+            this.hackrank_kick_time = new System.Windows.Forms.TextBox();
+            this.label36 = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -173,10 +176,10 @@
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numGuests)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabIRC.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGuests)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSave
@@ -296,7 +299,7 @@
             // chkCheap
             // 
             this.chkCheap.AutoSize = true;
-            this.chkCheap.Location = new System.Drawing.Point(12, 174);
+            this.chkCheap.Location = new System.Drawing.Point(13, 149);
             this.chkCheap.Name = "chkCheap";
             this.chkCheap.Size = new System.Drawing.Size(103, 17);
             this.chkCheap.TabIndex = 23;
@@ -715,6 +718,63 @@
             this.CustCmdtxtBox.TabIndex = 0;
             this.toolTip.SetToolTip(this.CustCmdtxtBox, "Write the command name here (dont write the cmd before it or the .cs after it!!)");
             // 
+            // txtOpChannel
+            // 
+            this.txtOpChannel.Location = new System.Drawing.Point(80, 127);
+            this.txtOpChannel.Name = "txtOpChannel";
+            this.txtOpChannel.Size = new System.Drawing.Size(106, 21);
+            this.txtOpChannel.TabIndex = 26;
+            this.toolTip.SetToolTip(this.txtOpChannel, "The IRC channel to be used.");
+            // 
+            // txtChannel
+            // 
+            this.txtChannel.Location = new System.Drawing.Point(80, 100);
+            this.txtChannel.Name = "txtChannel";
+            this.txtChannel.Size = new System.Drawing.Size(106, 21);
+            this.txtChannel.TabIndex = 17;
+            this.toolTip.SetToolTip(this.txtChannel, "The IRC channel to be used.");
+            // 
+            // txtIRCServer
+            // 
+            this.txtIRCServer.Location = new System.Drawing.Point(80, 46);
+            this.txtIRCServer.Name = "txtIRCServer";
+            this.txtIRCServer.Size = new System.Drawing.Size(211, 21);
+            this.txtIRCServer.TabIndex = 15;
+            this.toolTip.SetToolTip(this.txtIRCServer, "The IRC server to be used.\nDefault = irc.esper.net\nBetter choice = irc.foonetic.n" +
+                    "et");
+            // 
+            // txtNick
+            // 
+            this.txtNick.Location = new System.Drawing.Point(80, 73);
+            this.txtNick.Name = "txtNick";
+            this.txtNick.Size = new System.Drawing.Size(106, 21);
+            this.txtNick.TabIndex = 16;
+            this.toolTip.SetToolTip(this.txtNick, "The Nick that the IRC bot will try and use.");
+            // 
+            // cmbIRCColour
+            // 
+            this.cmbIRCColour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbIRCColour.FormattingEnabled = true;
+            this.cmbIRCColour.Location = new System.Drawing.Point(80, 154);
+            this.cmbIRCColour.Name = "cmbIRCColour";
+            this.cmbIRCColour.Size = new System.Drawing.Size(74, 21);
+            this.cmbIRCColour.TabIndex = 23;
+            this.toolTip.SetToolTip(this.cmbIRCColour, "The colour of the IRC nicks used in the IRC.");
+            this.cmbIRCColour.SelectedIndexChanged += new System.EventHandler(this.cmbIRCColour_SelectedIndexChanged);
+            // 
+            // chkIRC
+            // 
+            this.chkIRC.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkIRC.AutoSize = true;
+            this.chkIRC.Location = new System.Drawing.Point(22, 14);
+            this.chkIRC.Name = "chkIRC";
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+            this.chkIRC.TabIndex = 22;
+            this.chkIRC.Text = "Use IRC";
+            this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
+                    "for communication with the server while outside Minecraft.");
+            this.chkIRC.UseVisualStyleBackColor = true;
+            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
@@ -967,6 +1027,9 @@
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.label36);
+            this.tabPage4.Controls.Add(this.hackrank_kick_time);
+            this.tabPage4.Controls.Add(this.hackrank_kick);
             this.tabPage4.Controls.Add(this.chkNotifyOnJoinLeave);
             this.tabPage4.Controls.Add(this.chkProfanityFilter);
             this.tabPage4.Controls.Add(this.chkRepeatMessages);
@@ -1041,7 +1104,7 @@
             // 
             // txtShutdown
             // 
-            this.txtShutdown.Location = new System.Drawing.Point(176, 226);
+            this.txtShutdown.Location = new System.Drawing.Point(177, 198);
             this.txtShutdown.MaxLength = 128;
             this.txtShutdown.Name = "txtShutdown";
             this.txtShutdown.Size = new System.Drawing.Size(145, 21);
@@ -1049,7 +1112,7 @@
             // 
             // txtBanMessage
             // 
-            this.txtBanMessage.Location = new System.Drawing.Point(148, 199);
+            this.txtBanMessage.Location = new System.Drawing.Point(148, 170);
             this.txtBanMessage.MaxLength = 128;
             this.txtBanMessage.Name = "txtBanMessage";
             this.txtBanMessage.Size = new System.Drawing.Size(173, 21);
@@ -1085,14 +1148,14 @@
             // 
             // txtCheap
             // 
-            this.txtCheap.Location = new System.Drawing.Point(121, 172);
+            this.txtCheap.Location = new System.Drawing.Point(121, 145);
             this.txtCheap.Name = "txtCheap";
             this.txtCheap.Size = new System.Drawing.Size(200, 21);
             this.txtCheap.TabIndex = 1;
             // 
             // txtRestartTime
             // 
-            this.txtRestartTime.Location = new System.Drawing.Point(149, 145);
+            this.txtRestartTime.Location = new System.Drawing.Point(148, 118);
             this.txtRestartTime.Name = "txtRestartTime";
             this.txtRestartTime.Size = new System.Drawing.Size(172, 21);
             this.txtRestartTime.TabIndex = 1;
@@ -1101,7 +1164,7 @@
             // chkShutdown
             // 
             this.chkShutdown.AutoSize = true;
-            this.chkShutdown.Location = new System.Drawing.Point(12, 229);
+            this.chkShutdown.Location = new System.Drawing.Point(13, 202);
             this.chkShutdown.Name = "chkShutdown";
             this.chkShutdown.Size = new System.Drawing.Size(158, 17);
             this.chkShutdown.TabIndex = 26;
@@ -1111,7 +1174,7 @@
             // chkBanMessage
             // 
             this.chkBanMessage.AutoSize = true;
-            this.chkBanMessage.Location = new System.Drawing.Point(12, 202);
+            this.chkBanMessage.Location = new System.Drawing.Point(13, 174);
             this.chkBanMessage.Name = "chkBanMessage";
             this.chkBanMessage.Size = new System.Drawing.Size(129, 17);
             this.chkBanMessage.TabIndex = 25;
@@ -1197,7 +1260,7 @@
             // chkRestartTime
             // 
             this.chkRestartTime.AutoSize = true;
-            this.chkRestartTime.Location = new System.Drawing.Point(12, 147);
+            this.chkRestartTime.Location = new System.Drawing.Point(13, 118);
             this.chkRestartTime.Name = "chkRestartTime";
             this.chkRestartTime.Size = new System.Drawing.Size(131, 17);
             this.chkRestartTime.TabIndex = 0;
@@ -1250,6 +1313,50 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // numPlayers
+            // 
+            this.numPlayers.Location = new System.Drawing.Point(81, 138);
+            this.numPlayers.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numPlayers.Name = "numPlayers";
+            this.numPlayers.Size = new System.Drawing.Size(60, 21);
+            this.numPlayers.TabIndex = 29;
+            this.numPlayers.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.numPlayers.ValueChanged += new System.EventHandler(this.numPlayers_ValueChanged);
+            // 
+            // numGuests
+            // 
+            this.numGuests.Location = new System.Drawing.Point(81, 164);
+            this.numGuests.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numGuests.Name = "numGuests";
+            this.numGuests.Size = new System.Drawing.Size(60, 21);
+            this.numGuests.TabIndex = 28;
+            this.numGuests.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(8, 167);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(65, 13);
+            this.label35.TabIndex = 27;
+            this.label35.Text = "Max Guests:";
             // 
             // ChkPortResult
             // 
@@ -1463,39 +1570,6 @@
             this.tabIRC.Text = "IRC";
             this.tabIRC.UseVisualStyleBackColor = true;
             // 
-            // txtOpChannel
-            // 
-            this.txtOpChannel.Location = new System.Drawing.Point(80, 127);
-            this.txtOpChannel.Name = "txtOpChannel";
-            this.txtOpChannel.Size = new System.Drawing.Size(106, 21);
-            this.txtOpChannel.TabIndex = 26;
-            this.toolTip.SetToolTip(this.txtOpChannel, "The IRC channel to be used.");
-            // 
-            // txtChannel
-            // 
-            this.txtChannel.Location = new System.Drawing.Point(80, 100);
-            this.txtChannel.Name = "txtChannel";
-            this.txtChannel.Size = new System.Drawing.Size(106, 21);
-            this.txtChannel.TabIndex = 17;
-            this.toolTip.SetToolTip(this.txtChannel, "The IRC channel to be used.");
-            // 
-            // txtIRCServer
-            // 
-            this.txtIRCServer.Location = new System.Drawing.Point(80, 46);
-            this.txtIRCServer.Name = "txtIRCServer";
-            this.txtIRCServer.Size = new System.Drawing.Size(211, 21);
-            this.txtIRCServer.TabIndex = 15;
-            this.toolTip.SetToolTip(this.txtIRCServer, "The IRC server to be used.\nDefault = irc.esper.net\nBetter choice = irc.foonetic.n" +
-                    "et");
-            // 
-            // txtNick
-            // 
-            this.txtNick.Location = new System.Drawing.Point(80, 73);
-            this.txtNick.Name = "txtNick";
-            this.txtNick.Size = new System.Drawing.Size(106, 21);
-            this.txtNick.TabIndex = 16;
-            this.toolTip.SetToolTip(this.txtNick, "The Nick that the IRC bot will try and use.");
-            // 
             // label31
             // 
             this.label31.AutoSize = true;
@@ -1511,30 +1585,6 @@
             this.lblIRC.Name = "lblIRC";
             this.lblIRC.Size = new System.Drawing.Size(26, 23);
             this.lblIRC.TabIndex = 24;
-            // 
-            // cmbIRCColour
-            // 
-            this.cmbIRCColour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbIRCColour.FormattingEnabled = true;
-            this.cmbIRCColour.Location = new System.Drawing.Point(80, 154);
-            this.cmbIRCColour.Name = "cmbIRCColour";
-            this.cmbIRCColour.Size = new System.Drawing.Size(74, 21);
-            this.cmbIRCColour.TabIndex = 23;
-            this.toolTip.SetToolTip(this.cmbIRCColour, "The colour of the IRC nicks used in the IRC.");
-            this.cmbIRCColour.SelectedIndexChanged += new System.EventHandler(this.cmbIRCColour_SelectedIndexChanged);
-            // 
-            // chkIRC
-            // 
-            this.chkIRC.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkIRC.AutoSize = true;
-            this.chkIRC.Location = new System.Drawing.Point(22, 14);
-            this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
-            this.chkIRC.TabIndex = 22;
-            this.chkIRC.Text = "Use IRC";
-            this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
-                    "for communication with the server while outside Minecraft.");
-            this.chkIRC.UseVisualStyleBackColor = true;
             // 
             // label23
             // 
@@ -1572,49 +1622,33 @@
             this.label4.TabIndex = 20;
             this.label4.Text = "Nick:";
             // 
-            // label35
+            // hackrank_kick
             // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(8, 167);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(65, 13);
-            this.label35.TabIndex = 27;
-            this.label35.Text = "Max Guests:";
+            this.hackrank_kick.AutoSize = true;
+            this.hackrank_kick.Location = new System.Drawing.Point(13, 226);
+            this.hackrank_kick.Name = "hackrank_kick";
+            this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
+            this.hackrank_kick.TabIndex = 32;
+            this.hackrank_kick.Text = "Kick people who use hackrank after ";
+            this.toolTip.SetToolTip(this.hackrank_kick, "Hackrank kicks people? Or not?");
+            this.hackrank_kick.UseVisualStyleBackColor = true;
             // 
-            // numGuests
+            // hackrank_kick_time
             // 
-            this.numGuests.Location = new System.Drawing.Point(81, 164);
-            this.numGuests.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.numGuests.Name = "numGuests";
-            this.numGuests.Size = new System.Drawing.Size(60, 21);
-            this.numGuests.TabIndex = 28;
-            this.numGuests.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
+            this.hackrank_kick_time.Location = new System.Drawing.Point(212, 224);
+            this.hackrank_kick_time.Name = "hackrank_kick_time";
+            this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
+            this.hackrank_kick_time.TabIndex = 33;
+            this.hackrank_kick_time.Text = "5";
             // 
-            // numPlayers
+            // label36
             // 
-            this.numPlayers.Location = new System.Drawing.Point(81, 138);
-            this.numPlayers.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.numPlayers.Name = "numPlayers";
-            this.numPlayers.Size = new System.Drawing.Size(60, 21);
-            this.numPlayers.TabIndex = 29;
-            this.numPlayers.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-            this.numPlayers.ValueChanged += new System.EventHandler(this.numPlayers_ValueChanged);
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(274, 227);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(46, 13);
+            this.label36.TabIndex = 34;
+            this.label36.Text = "Seconds";
             // 
             // PropertyWindow
             // 
@@ -1645,11 +1679,11 @@
             this.tabPage4.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numGuests)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabIRC.ResumeLayout(false);
             this.tabIRC.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numGuests)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1792,5 +1826,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numPlayers;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.TextBox hackrank_kick_time;
+        private System.Windows.Forms.CheckBox hackrank_kick;
     }
 }

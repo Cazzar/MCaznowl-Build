@@ -371,6 +371,14 @@ namespace MCForge
                                 if (value != "")
                                     Server.ZallState = value;
                                 break;
+                            case "kick-on-hackrank":
+                                try { Server.hackrank_kick = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "hackrank-kick-time":
+                                try { Server.hackrank_kick_time = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                         }
                     }
                 }
@@ -439,6 +447,9 @@ namespace MCForge
                     w.WriteLine("#   Op-limit\t=\tThe limit for building commands for Operators");
                     w.WriteLine("#   Adv-limit\t=\tThe limit for building commands for AdvBuilders");
                     w.WriteLine("#   Builder-limit\t=\tThe limit for building commands for Builders");
+					w.WriteLine();
+					w.WriteLine("#   kick-on-hackrank\t=\tSet to true if hackrank should kick players");
+					w.WriteLine("#   hackrank-kick-time\t=\tNumber of seconds until player is kicked");
                     w.WriteLine();
                     w.WriteLine();
                     w.WriteLine("# Server options");
@@ -524,6 +535,9 @@ namespace MCForge
                     w.WriteLine("rank-super = " + Server.rankSuper.ToString().ToLower());
                     try { w.WriteLine("default-rank = " + Server.defaultRank); }
                     catch { w.WriteLine("default-rank = guest"); }
+					w.WriteLine();
+					w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString().ToLower());
+					w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString());
                 }
                 w.Flush();
                 w.Close();

@@ -211,6 +211,11 @@ namespace MCForge
         public static bool flipHead = false;
 
         public static bool shuttingDown = false;
+
+        //hackrank stuff
+        public static bool hackrank_kick = true;
+        public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
+
         #endregion
 
         public static MainLoop ml;
