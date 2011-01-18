@@ -112,6 +112,10 @@ namespace MCForge
 
         public static bool chatmod = false;
 
+        //Global VoteKick In Progress Flag
+        public static bool voteKickInProgress = false;
+        public static int voteKickVotesNeeded = 0;
+
 
         //Settings
         #region Server Settings

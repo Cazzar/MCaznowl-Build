@@ -193,6 +193,9 @@ namespace MCForge
         public static int spamChatTimer = 4;
         Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
 
+        // CmdVoteKick
+        public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
+
         public bool loggedIn = false;
         public Player(Socket s)
         {
@@ -1422,8 +1425,28 @@ namespace MCForge
                     return;
                 }
 
-                if (Server.chatmod && !this.voice) { this.SendMessage("Chat moderation is on, you cannot speak."); return; }
+                // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
+
+                //CmdVoteKick core vote recorder
+                if (Server.voteKickInProgress && text.Length == 1)
+                {
+                    if (text.ToLower() == "y")
+                    {
+                        this.voteKickChoice = VoteKickChoice.Yes;
+                        SendMessage("Thanks for voting!");
+                        return;
+                    }
+                    if (text.ToLower() == "n")
+                    {
+                        this.voteKickChoice = VoteKickChoice.No;
+                        SendMessage("Thanks for voting!");
+                        return;
+                    }
+                }
+
+                // Put this after vote collection so that people can vote even when chat is moderated
+                if (Server.chatmod && !this.voice) { this.SendMessage("Chat moderation is on, you cannot speak."); return; }
 
                 // Filter out bad words
                 if (Server.profanityFilter == true)

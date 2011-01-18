@@ -368,6 +368,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Commands\CmdVoteKick.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt">
@@ -375,6 +376,7 @@
     </Content>
     <Compile Include="Commands\CmdWarn.cs" />
     <Content Include="MCForge.ico" />
+    <Compile Include="Player\VoteKickChoice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

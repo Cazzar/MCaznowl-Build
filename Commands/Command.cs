@@ -199,6 +199,7 @@ namespace MCForge
             all.Add(new CmdView());
             all.Add(new CmdViewRanks());
             all.Add(new CmdVoice());
+            all.Add(new CmdVoteKick());
             all.Add(new CmdWarn());
             all.Add(new CmdWhisper());
             if (Server.useWhitelist) { all.Add(new CmdWhitelist()); }
