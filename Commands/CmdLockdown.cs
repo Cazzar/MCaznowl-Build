@@ -32,7 +32,7 @@ namespace MCForge
                 p.SendMessage("Could not locate the folder creating one now.");
                 Directory.CreateDirectory("text/lockdown");
                 Directory.CreateDirectory("text/lockdown/map");
-                p.SendMessage("Added the settings for the command"); return;
+                p.SendMessage("Added the settings for the command");
             }
             string[] param = message.Split(' ');
             {
@@ -44,15 +44,15 @@ namespace MCForge
                         {
                             p.SendMessage("Could not locate the map folder, creating one now.");
                             Directory.CreateDirectory("text/lockdown/map");
-                            p.SendMessage("Added the map settings Directory within 'text/Economy'!"); return;
+                            p.SendMessage("Added the map settings Directory within 'text/Economy'!");
                         }
                         if (!File.Exists("text/lockdown/map/" + param[1] + ""))
                         {
                             File.Create("text/lockdown/map/" + param[1] + "");
-                            Player.SendMessage(p, "the map " + param[1] + " have been locked"); return;
+                            Player.SendMessage(p, "the map " + param[1] + " have been locked");
                         }
                         else
-                            Player.SendMessage(p, "the map " + param[1] + " is locked"); return;
+                            Player.SendMessage(p, "the map " + param[1] + " is locked");
                     }
                 }
                 if (param.Length == 2)
@@ -61,8 +61,7 @@ namespace MCForge
                     {
                         Player who = Player.Find(param[1]);
 
-                        if (Server.devs.Contains(who.name))
-                        {
+                        if (Server.devs.Contains(who.name)) { Player.SendMessage(p, "u can't lockdown a dev!"); return; }
 
                             if (who != null)
                             {
@@ -83,11 +82,10 @@ namespace MCForge
                                     Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " have been locked down!", true);
                                     return;
                                 }
-                                else Player.SendMessage(p, "the player " + param[1] + " is already locked down!"); return;
+                                else Player.SendMessage(p, "the player " + param[1] + " is already locked down!");
                             }
                             else Player.SendMessage(p, "there is no player with such name online"); return;
-                        }
-                        else Player.SendMessage(p, "u can't lockdown a dev!"); return;
+                       
                     }
                 }
             }

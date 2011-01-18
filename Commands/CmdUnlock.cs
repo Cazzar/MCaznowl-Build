@@ -31,7 +31,7 @@ namespace MCForge
                 p.SendMessage("Could not locate the folder creating one now.");
                 Directory.CreateDirectory("text/lockdown");
                 Directory.CreateDirectory("text/lockdown/map");
-                p.SendMessage("Added the settings for the command"); return;
+                p.SendMessage("Added the settings for the command");
             }
             string[] param = message.Split(' ');
             {
@@ -42,10 +42,10 @@ namespace MCForge
                         if (File.Exists("text/lockdown/map/" + param[1] + ""))
                         {
                             File.Delete("text/lockdown/map/" + param[1] + "");
-                            Player.SendMessage(p, "the map " + param[1] + " have been unlocked"); return;
+                            Player.SendMessage(p, "the map " + param[1] + " have been unlocked");
                         }
                         else
-                            Player.SendMessage(p, "the map " + param[1] + " is not locked or does not exist"); return;
+                            Player.SendMessage(p, "the map " + param[1] + " is not locked or does not exist");
                     }
                 }
                 if (param.Length == 2) // shift number to the next lockdown command
