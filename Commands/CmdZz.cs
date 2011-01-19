@@ -4,7 +4,7 @@ namespace MCForge
 {
 	public class CmdZz : Command
 	{
-                public override string name { get { return "zz"; } }
+        public override string name { get { return "zz"; } }
 		public override string shortcut { get { return ""; } }
         public override string type { get { return "mod"; } }
 		public override bool museumUsable { get { return false; } }

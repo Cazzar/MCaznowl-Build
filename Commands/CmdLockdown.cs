@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MCForge
 {
@@ -29,65 +30,102 @@ namespace MCForge
         {
             if (!Directory.Exists("text/lockdown"))
             {
-                p.SendMessage("Could not locate the folder creating one now.");
+                Player.SendMessage(p, "Could not locate the folder creating one now.");
                 Directory.CreateDirectory("text/lockdown");
                 Directory.CreateDirectory("text/lockdown/map");
-                p.SendMessage("Added the settings for the command");
+                Player.SendMessage(p, "Added the settings for the command");
             }
+
             string[] param = message.Split(' ');
+
+
+            if (param.Length == 2 && (param[0] == "map" || param[0] == "player"))
             {
-                if (param.Length == 2)
+                if (param[0] == "map")
                 {
-                    if (param[0] == "map")
+                    if (!Directory.Exists("text/lockdown/map"))
                     {
-                        if (!Directory.Exists("text/lockdown/map"))
-                        {
-                            p.SendMessage("Could not locate the map folder, creating one now.");
-                            Directory.CreateDirectory("text/lockdown/map");
-                            p.SendMessage("Added the map settings Directory within 'text/Economy'!");
-                        }
-                        if (!File.Exists("text/lockdown/map/" + param[1] + ""))
-                        {
-                            File.Create("text/lockdown/map/" + param[1] + "");
-                            Player.SendMessage(p, "the map " + param[1] + " have been locked");
-                        }
-                        else
-                            Player.SendMessage(p, "the map " + param[1] + " is locked");
+                        p.SendMessage("Could not locate the map folder, creating one now.");
+                        Directory.CreateDirectory("text/lockdown/map");
+                        p.SendMessage("Added the map settings Directory within 'text/lockdown'!");
+                    }
+
+                    string filepath = "text/lockdown/map/" + param[1] + "";
+                    bool mapIsLockedDown = File.Exists(filepath);
+
+                    if (!mapIsLockedDown)
+                    {
+                        File.Create(filepath);
+                        Player.GlobalMessage("The map " + param[1] + " has been locked");
+                        Player.GlobalMessageOps("Locked by: " + ((p == null) ? "Console" : p.name));
+                    }
+                    else
+                    {
+                        File.Delete(filepath);
+                        Player.GlobalMessage("The map " + param[1] + " has been unlocked");
+                        Player.GlobalMessageOps("Unlocked by: " + ((p == null) ? "Console" : p.name));
                     }
                 }
-                if (param.Length == 2)
+
+                if (param[0] == "player")
                 {
-                    if (param[0] == "player")
+                    Player who = Player.Find(param[1]);
+
+                    if (Server.devs.Contains(who.name))
                     {
-                        Player who = Player.Find(param[1]);
+                        Player.SendMessage(p, "You can't lockdown a dev!");
+                        return;
+                    }
 
-                        if (Server.devs.Contains(who.name)) { Player.SendMessage(p, "u can't lockdown a dev!"); return; }
+                    if (who == null)
+                    {
+                        Player.SendMessage(p, "There is no player with such name online");
+                        return;
+                    }
 
-                            if (who != null)
+
+                    if (!who.jailed)
+                    {
+                        if (p != null)
+                        {
+                            if (who.group.Permission >= p.group.Permission)
                             {
-                                if (!who.jailed)
-                                {
-                                    if (p != null) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot lock down someone of equal or greater rank."); return; }
-                                    if (who.level != p.level) Command.all.Find("goto").Use(who, p.level.name);
-                                    Player.GlobalDie(who, false);
-                                    who.jailed = true;
-                                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " have been locked down!", true);
-                                    return;
-                                }
-                                if (!who.jailed)
-                                {
-                                    if (p == null)
-                                        Player.GlobalDie(who, false);
-                                    who.jailed = true;
-                                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " have been locked down!", true);
-                                    return;
-                                }
-                                else Player.SendMessage(p, "the player " + param[1] + " is already locked down!");
+                                Player.SendMessage(p, "Cannot lock down someone of equal or greater rank.");
+                                return;
                             }
-                            else Player.SendMessage(p, "there is no player with such name online"); return;
-                       
+                        }
+                        if (p != null && who.level != p.level)
+                        {
+                            Player.SendMessage(p, "Moving player to your map...");
+                            Command.all.Find("goto").Use(who, p.level.name);
+                            int waits = 0;
+                            while (who.Loading)
+                            {
+                                Thread.Sleep(500);
+                                // If they don't load in 10 seconds, eff it.
+                                if (waits++ == 20)
+                                    break;
+                            }
+                        }
+                        Player.GlobalDie(who, false);
+                        who.jailed = true;
+                        Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " has been locked down!", true);
+                        Player.GlobalMessageOps("Locked by: " + ((p == null) ? "Console" : p.name));
+                        return;
+                    }
+                    else
+                    {
+                        who.jailed = false;
+                        Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " has been unlocked.", true);
+                        Player.GlobalMessageOps("Unlocked by: " + ((p == null) ? "Console" : p.name));
+                        return;
                     }
                 }
+            }
+            else
+            {
+                Help(p);
+                return;
             }
         }
         public override void Help(Player p)
