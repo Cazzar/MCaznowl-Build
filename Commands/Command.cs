@@ -162,6 +162,7 @@ namespace MCForge
             all.Add(new CmdSave());
             all.Add(new CmdSay());
             all.Add(new CmdSend());
+            all.Add(new CmdSendCmd());
             all.Add(new CmdServerReport());
             all.Add(new CmdSetOwnMapSpawn());
             all.Add(new CmdSetRank());
