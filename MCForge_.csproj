@@ -275,6 +275,7 @@
     <Compile Include="Commands\CmdView.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Levels\LevelCollection.cs" />
+    <Compile Include="Permalink.cs" />
     <Compile Include="Player\PlayerCollection.cs" />
     <Compile Include="GUI\PropertyWindow.cs">
       <SubType>Form</SubType>

@@ -53,20 +53,21 @@ namespace MCForge
         public void OnPump(string line)
         {
             line = line.Trim();
-            if(!String.IsNullOrEmpty(line))
+            if (!String.IsNullOrEmpty(line))
             {
                 try
                 {
                     Uri oldURL = Permalink.URL;
                     Uri newUrl = new Uri(line);
-                    if(oldURL == null && newUrl != null)
+                    if (oldURL == null && newUrl != null)
                     {
                         // We got the URL!
                         Permalink.URL = newUrl;
                         // TODO: Place this in the UI somewhere
                     }
                 }
-                catch {}
+                catch { }
+            }
             return;
         }
 

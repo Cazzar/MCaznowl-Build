@@ -32,15 +32,15 @@ namespace MCForge
             macs += Server.port.ToString();
 
             // generate hash
-            HMACSHA256 hmac = new HMACSHA256();
-            hmac.Key = Encoding.ASCII.GetBytes("mcforge dummy key");
-            hmac.ComputeHash(Encoding.ASCII.GetBytes(macs));
+            var md5 = new MD5CryptoServiceProvider();
+            byte[] originalBytes = Encoding.ASCII.GetBytes(macs);
+            byte[] hash = md5.ComputeHash(originalBytes);
 
             // convert hash to hex string
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hmac.Hash.Length; i++)
+            for (int i = 0; i < hash.Length; i++)
             {
-                sb.Append(hmac.Hash[i].ToString("X2"));
+                sb.Append(hash[i].ToString("X2"));
             }
 
             // the the final hash as a string
