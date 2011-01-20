@@ -1,3 +1,23 @@
+v4.1.0.0
+- New commands
+  - /kickall - Give it a try ;)
+  - /lockdown
+    - /lockdown player <player> - sends player to caller's map and jails them
+	- /lockdown map <map> - prevents anybody from visiting that map
+  - /sendcmd - Makes a player do a command (this command is disabled by default)
+  - /votekick - Calls a 30 second vote to kick a player
+- Updated commands
+  - /overseer
+    - Fixed /os zone - it wasn't working before.  Downside is that player can't delete a single zone, its all or nothing (for now)
+	- Added ability for player to have max of 2 maps
+	- Added /os map physics
+	- Changed most of /os so it can handle 2 maps
+  - /warn - kicks a player after so many warnings
+  - /zz - Checks if player has permission to use static or cuboid first
+- UI Tweaks
+  - Player and Map lists now auto-update themselves every 10 seconds
+  - Map list shows correct rank for visit and build permissions
+
 v4.0.0.0
 - Heartbeat will no longer loop infinitely if the beat timed out
    - This was the cause of high CPU load on the servers
