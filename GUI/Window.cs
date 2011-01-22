@@ -48,8 +48,6 @@ namespace MCForge.Gui
         
         internal static Server s;
 
-        bool restarting = false;
-        bool shuttingDown = false;
         public Window() {
             InitializeComponent();
         }
@@ -140,7 +138,7 @@ namespace MCForge.Gui
 
         void SettingsUpdate()
         {
-            if (shuttingDown) return;
+            if (Server.shuttingDown) return;
             if (txtLog.InvokeRequired)
             {
                 VoidDelegate d = new VoidDelegate(SettingsUpdate);
@@ -193,7 +191,7 @@ namespace MCForge.Gui
         /// <param name="s">The line to write</param>
         public void WriteLine(string s)
         {
-            if (shuttingDown) return;
+            if (Server.shuttingDown) return;
             if (this.InvokeRequired) {
                 LogDelegate d = new LogDelegate(WriteLine);
                 this.Invoke(d, new object[] { s });
@@ -318,7 +316,7 @@ namespace MCForge.Gui
 
         private void Window_FormClosing(object sender, FormClosingEventArgs e) {
 
-            if (restarting == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (Server.restarting == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
                 MCForge_.Gui.Program.ExitProgram(false);
@@ -715,7 +713,7 @@ namespace MCForge.Gui
         {
             if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                restarting = true;
+                Server.restarting = true;
                 RemoveNotifyIcon();
                 MCForge_.Gui.Program.restartMe();
             }

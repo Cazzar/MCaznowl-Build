@@ -396,6 +396,7 @@ namespace MCForge_.Gui
                 saveAll();
 
                 Server.shuttingDown = true;
+                Server.restarting = true;
                 try
                 {
                     if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)

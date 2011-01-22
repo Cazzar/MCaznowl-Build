@@ -215,6 +215,7 @@ namespace MCForge
         public static bool flipHead = false;
 
         public static bool shuttingDown = false;
+        public static bool restarting = false;
 
         //hackrank stuff
         public static bool hackrank_kick = true;
