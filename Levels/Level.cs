@@ -27,7 +27,7 @@ using System.Threading;
 
 namespace MCForge
 {
-    public enum LevelPermission
+    public enum LevelPermission : int
     {
         Banned = -20,
         Guest = 0,

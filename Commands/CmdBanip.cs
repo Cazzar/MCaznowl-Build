@@ -15,6 +15,8 @@
 using System;
 using System.IO;
 using System.Data;
+using System.Linq;
+using System.Collections.Generic;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -81,6 +83,42 @@ namespace MCForge
             if (message.Split('.').Length != 4) { Player.SendMessage(p, "Invalid IP!"); return; }
             if (p != null) { if (p.ip == message) { Player.SendMessage(p, "You can't ip-ban yourself.!"); return; } }
             if (Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " is already ip-banned."); return; }
+
+            // Console can ban anybody, so skip this section
+            if (p != null)
+            {
+                // Check if IP belongs to an op+
+                // First get names of active ops+ with that ip
+                List<string> opNamesWithThatIP = (from pl in Player.players where (pl.ip == message && pl.@group.Permission >= LevelPermission.Operator) select pl.name).ToList();
+                // Next, add names from the database
+                DataTable dbnames = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
+                foreach (DataRow row in dbnames.Rows)
+                {
+                    opNamesWithThatIP.Add(row[0].ToString());
+                }
+
+                if (opNamesWithThatIP != null && opNamesWithThatIP.Count > 0)
+                {
+                    // We have at least one op+ with a matching IP
+                    // Check permissions of everybody who matched that IP
+                    foreach (string opname in opNamesWithThatIP)
+                    {
+                        // If one of these guys matches a player with a higher rank, don't allow the ipban to proceed!
+                        Group grp = Group.findPlayerGroup(opname);
+                        if (grp != null)
+                        {
+                            if (grp.Permission >= p.group.Permission)
+                            {
+                                Player.SendMessage(p, "You can only ipban IPs used by players with a lower rank.");
+                                Player.SendMessage(p, Server.DefaultColor + opname + "(" + grp.color + grp.name + Server.DefaultColor + ") uses that IP.");
+                                Server.s.Log("Failed to ipban " + message + " - IP is also used by: " + opname + "(" + grp.name + ")");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
             Player.GlobalMessage(message + " got &8ip-banned!");
             if (p != null)
             {
