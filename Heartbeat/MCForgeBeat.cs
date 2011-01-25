@@ -46,11 +46,28 @@ namespace MCForge
                     "&lvlcount=" + (byte)Server.levels.Count +
                     "&serverversion=" + Server.Version/*.Replace(".0", "")*/ +
                     "&hash=" + Server.Hash +
-                    "&users=" + (Player.number - hidden);
+                    "&users=" + (Player.number - hidden) +
+                    "&permalinkhash=" + Permalink.UniqueHash;
         }
 
         public void OnPump(string line)
         {
+            line = line.Trim();
+            if (!String.IsNullOrEmpty(line))
+            {
+                try
+                {
+                    Uri oldURL = Permalink.URL;
+                    Uri newUrl = new Uri(line);
+                    if (oldURL == null && newUrl != null)
+                    {
+                        // We got the URL!
+                        Permalink.URL = newUrl;
+                        // TODO: Place this in the UI somewhere
+                    }
+                }
+                catch { }
+            }
             return;
         }
 
