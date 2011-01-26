@@ -1,3 +1,9 @@
+v4.1.1.0
+- Fixed /banip so that people can ban IPs used by other with higher ranks.
+- Fixed /restart so that in-game operators can successfully restart the server without being prevented by a console dialog box
+- Unique identifier is now sent with the heartbeat
+- Fixed some spelling in /warn
+
 v4.1.0.0
 - New commands
   - /kickall - Give it a try ;)
