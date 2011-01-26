@@ -19,7 +19,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message.Split(' ')[1] == "")
-                reason = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1));
+                reason = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1));            		
             else reason = "you know why.";
 
             if (message == "") { Help(p); return; }
@@ -60,7 +60,7 @@ namespace MCForge
                         Player.GlobalMessage("console have warn kicked" + who.color + who.name + "%ebecause : &c");
                         Player.GlobalMessage(reason);
                         who.warn = 0;
-                        who.Kick("BEACAUSE " + reason + "");
+                        who.Kick("BECAUSE " + reason + "");
                         return;
                     }
                 }
@@ -79,7 +79,7 @@ namespace MCForge
             }
             if (p.group.Permission <= who.group.Permission)
             {
-                Player.SendMessage(p, "you can't warn a player eqaul or higher rank.");
+                Player.SendMessage(p, "you can't warn a player equal or higher rank.");
                 return;
             }
             if (Server.devs.Contains(who.name))
@@ -108,7 +108,7 @@ namespace MCForge
                     {
                         Player.GlobalMessage(p.color + p.name + "have warn kicked" + who.color + who.name + "");                       
                         who.warn = 0;
-                        who.Kick("BEACUASE " + reason + "");
+                        who.Kick("BECAUSE " + reason + "");
                         return;
                     }
                 }
