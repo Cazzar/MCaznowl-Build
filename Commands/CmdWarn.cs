@@ -18,101 +18,85 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message.Split(' ')[1] == "")
-                reason = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1));            		
-            else reason = "you know why.";
-
             if (message == "") { Help(p); return; }
+
             Player who = Player.Find(message.Split(' ')[0]);
 
-
-            if (p == null)
-            {
-                if (who == null)
-                {
-                    Player.SendMessage(p, "Player not found!");
-                    return;
-                }
-
-                if (Server.devs.Contains(who.name))
-                {
-                    Player.SendMessage(p, "why are you warning a dev??");
-                    return;
-                }
-                Player.GlobalMessage("console %ewarned " + who.color + who.name + " %ebecause : &c");
-                Player.GlobalMessage(reason);
-                Player.SendMessage(who, "Do it again ");
-                {
-                    if (who.warn == 0)
-                    {
-                        Player.SendMessage(who, "twice and you get kicked!");
-                        who.warn = 1;
-                        return;
-                    }
-                    if (who.warn == 1)
-                    {
-                        Player.SendMessage(who, "one more time and you get kicked!");
-                        who.warn = 2;
-                        return;
-                    }
-                    if (who.warn == 2)
-                    {
-                        Player.GlobalMessage("console have warn kicked" + who.color + who.name + "%ebecause : &c");
-                        Player.GlobalMessage(reason);
-                        who.warn = 0;
-                        who.Kick("BECAUSE " + reason + "");
-                        return;
-                    }
-                }
-            }
-
-
+            // Make sure we have a valid player
             if (who == null)
             {
                 Player.SendMessage(p, "Player not found!");
                 return;
             }
-            if (who == p)
-            {
-                Player.SendMessage(p, "you can't warn yourself");
-                return;
-            }
-            if (p.group.Permission <= who.group.Permission)
-            {
-                Player.SendMessage(p, "you can't warn a player equal or higher rank.");
-                return;
-            }
+
+            // Don't warn a dev
             if (Server.devs.Contains(who.name))
             {
                 Player.SendMessage(p, "why are you warning a dev??");
                 return;
             }
+
+            // Don't warn yourself... derp
+            if (who == p)
+            {
+                Player.SendMessage(p, "you can't warn yourself");
+                return;
+            }
+
+            // Check the caller's rank
+            if (p != null && p.group.Permission <= who.group.Permission)
+            {
+                Player.SendMessage(p, "you can't warn a player equal or higher rank.");
+                return;
+            }
+            
+            // We need a reason
+            if (message.Split(' ').Length == 1)
+            {
+                // No reason was given
+                reason = "you know why.";
+            }
+            else
+            {
+                reason = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1));
+            }
+
+
+            if (p == null)
+            {
+                Player.GlobalMessage("console %ewarned " + who.color + who.name + " %ebecause : &c");
+            }
+            else
             {
                 Player.GlobalMessage(p.color + p.name + " %ewarned " + who.color + who.name + " %ebecause : &c");
-                Player.GlobalMessage(reason);
-                Player.SendMessage(who, "Do it again ");
-                {
-                    if (who.warn == 0)
-                    {
-                        Player.SendMessage(who, "twice and you get kicked!");
-                        who.warn = 1;
-                        return;
-                    }
-                    if (who.warn == 1)
-                    {
-                        Player.SendMessage(who, "one more time and you get kicked!");
-                        who.warn = 2;
-                        return;
-                    }
-                    if (who.warn == 2)
-                    {
-                        Player.GlobalMessage(p.color + p.name + "have warn kicked" + who.color + who.name + "");                       
-                        who.warn = 0;
-                        who.Kick("BECAUSE " + reason + "");
-                        return;
-                    }
-                }
             }
+            Player.GlobalMessage(reason);
+
+            //Player.SendMessage(who, "Do it again ");
+            if (who.warn == 0)
+            {
+                Player.SendMessage(who, "Do it again twice and you will get kicked!");
+                who.warn = 1;
+                return;
+            }
+            if (who.warn == 1)
+            {
+                Player.SendMessage(who, "Do it one more time and you will get kicked!");
+                who.warn = 2;
+                return;
+            }
+            if (who.warn == 2)
+            {
+                if(p == null)
+                    Player.GlobalMessage("console has warn-kicked" + who.color + who.name + "%ebecause : &c");
+                else
+                    Player.GlobalMessage(p.color + p.name + "has warn-kicked" + who.color + who.name + "");
+                Player.GlobalMessage(reason);
+                who.warn = 0;
+                who.Kick("KICKED BECAUSE " + reason + "");
+                return;
+            }
+
         }
         public override void Help(Player p)
         {
