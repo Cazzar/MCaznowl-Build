@@ -1,6 +1,7 @@
 v4.1.2.0
 - Fixed issue caused by Minecraft.net's changes to the heartbeat
   - They made it so MCForge wouldn't understand the server URL, but we fixed that :)
+- Fixed issue where /warn always required a reason or it would fail
 
 v4.1.1.0
 - Fixed /banip so that people can ban IPs used by other with higher ranks.
