@@ -1,3 +1,7 @@
+v4.1.2.0
+- Fixed issue caused by Minecraft.net's changes to the heartbeat
+  - They made it so MCForge wouldn't understand the server URL, but we fixed that :)
+
 v4.1.1.0
 - Fixed /banip so that people can ban IPs used by other with higher ranks.
 - Fixed /restart so that in-game operators can successfully restart the server without being prevented by a console dialog box
