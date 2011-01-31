@@ -18,7 +18,7 @@ namespace MCForge
         public void OnPump(string line)
         {
             // Only run the code below if we receive a response
-            if (!String.IsNullOrEmpty(line))
+            if (!String.IsNullOrEmpty(line.Trim()))
             {
                 string newHash = line.Substring(line.LastIndexOf('=') + 1);
 

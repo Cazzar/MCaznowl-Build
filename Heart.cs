@@ -30,6 +30,8 @@ namespace MCForge
     {
         //static int _timeout = 60 * 1000;
 
+        private static int max_retries = 3;
+
         static string hash;
         public static string serverURL;
         static string DefaultParameters;
@@ -152,15 +154,15 @@ namespace MCForge
 #endif
                                 BeatLog(beat, beattype + " timeout detected at " + DateTime.Now.ToString());
                             }
-                            if (totalTriesStream < 3)
+                            if (totalTriesStream < max_retries)
                             {
                                 goto retryStream;
                             }
                             else
                             {
                                 if (Server.logbeat && beat.Log)
-                                    BeatLog(beat, beattype + " timed out 3 times. Aborting this request. " + DateTime.Now.ToString());
-                                Server.s.Log(beattype + " timed out 3 times. Aborting this request.");
+                                    BeatLog(beat, beattype + " timed out " + max_retries + " times. Aborting this request. " + DateTime.Now.ToString());
+                                Server.s.Log(beattype + " timed out " + max_retries + " times. Aborting this request.");
                                 //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
                                 beatlogger.Close();
                                 return false;
@@ -190,9 +192,10 @@ namespace MCForge
                                 BeatLog(beat, beattype + " response received at " + DateTime.Now.ToString());
                             }
 
-                            if (hash == null && response.ContentLength > 0)
+                            if (String.IsNullOrEmpty(hash) && response.ContentLength > 0)
                             {
-                                string line = responseReader.ReadLine();
+                                // Instead of getting a single line, get the whole damn thing and we'll strip stuff out
+                                string line = responseReader.ReadToEnd().Trim();
                                 if (Server.logbeat && beat.Log)
                                 {
                                     BeatLog(beat, "Received: " + line);
@@ -227,13 +230,13 @@ namespace MCForge
                     {
                         BeatLog(beat, beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
                     }
-                    if (totalTries < 3) goto retry;
+                    if (totalTries < max_retries) goto retry;
                     if (Server.logbeat && beat.Log)
                     {
 #if DEBUG
-                        Server.s.Log(beattype + " failed three times.  Stopping.");
+                        Server.s.Log(beattype + " failed " + max_retries + " times.  Stopping.");
 #endif
-                        BeatLog(beat, "Failed three times.  Stopping.");
+                        BeatLog(beat, "Failed " + max_retries + " times.  Stopping.");
                         beatlogger.Close();
                     }
                     return false;

@@ -15,7 +15,9 @@ namespace MCForge
         {
             if (String.IsNullOrEmpty(Server.Hash))
             {
-                throw new Exception("Hash not set");
+                Server.Hash = "";
+                // THIS IS TEMPORARILY COMMENTED OUT SO PEOPLE CAN STILL HEARTBEAT WITH US USING A SAVED HASH!!
+                //throw new Exception("Hash not set");
             }
 
             int hidden = 0;
