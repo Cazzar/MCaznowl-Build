@@ -18,6 +18,8 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            string warnedby;
+
             if (message == "") { Help(p); return; }
 
             Player who = Player.Find(message.Split(' ')[0]);
@@ -58,19 +60,12 @@ namespace MCForge
             }
             else
             {
-                reason = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1));
+                reason = message.Substring(message.IndexOf(' ') + 1).Trim();
             }
 
-
-            if (p == null)
-            {
-                Player.GlobalMessage("console %ewarned " + who.color + who.name + " %ebecause : &c");
-            }
-            else
-            {
-                Player.GlobalMessage(p.color + p.name + " %ewarned " + who.color + who.name + " %ebecause : &c");
-            }
-            Player.GlobalMessage(reason);
+            warnedby = (p == null) ? "console" : p.color + p.name;
+            Player.GlobalMessage(warnedby + " %ewarned " + who.color + who.name + " %ebecause:");
+            Player.GlobalMessage("&c" + reason);
 
             //Player.SendMessage(who, "Do it again ");
             if (who.warn == 0)
@@ -87,11 +82,7 @@ namespace MCForge
             }
             if (who.warn == 2)
             {
-                if(p == null)
-                    Player.GlobalMessage("console has warn-kicked" + who.color + who.name + "%ebecause : &c");
-                else
-                    Player.GlobalMessage(p.color + p.name + "has warn-kicked" + who.color + who.name + "");
-                Player.GlobalMessage(reason);
+                Player.GlobalMessage(who.color + who.name + " " + Server.DefaultColor + "was warn-kicked by " + warnedby);
                 who.warn = 0;
                 who.Kick("KICKED BECAUSE " + reason + "");
                 return;

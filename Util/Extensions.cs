@@ -30,5 +30,30 @@ namespace MCForge
             ms.Dispose();
             return bytes;
         }
+        public static string[] Slice(this string[] str, int offset)
+        {
+            return str.Slice(offset, 0);
+        }
+        public static string[] Slice(this string[] str, int offset, int length)
+        {
+            IEnumerable<string> tmp = str.ToList();
+            if (offset > 0)
+            {
+                tmp = str.Skip(offset);
+            }
+            else throw new NotImplementedException("This function only supports positive integers for offset");
+
+            if(length > 0)
+            {
+                tmp = tmp.Take(length);
+            }
+            else if (length == 0)
+            {
+                // Do nothing
+            }
+            else throw new NotImplementedException("This function only supports non-negative integers for length");
+            
+            return tmp.ToArray();
+        }
     }
 }
