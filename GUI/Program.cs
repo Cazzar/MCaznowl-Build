@@ -22,6 +22,8 @@ namespace MCForge_.Gui
     {
         public static bool usingConsole = false;
 
+        private static string DLLLocation = "http://www.mcforge.co.cc/MCForge_.dll";
+
         [DllImport("kernel32")]
         public static extern IntPtr GetConsoleWindow();
         [DllImport("user32.dll")]
@@ -242,7 +244,7 @@ namespace MCForge_.Gui
                                 ConsoleColor prevColor = Console.ForegroundColor;
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("An update was found!");
-                                Console.WriteLine("Update using the file at " + ServerSettings.DLLLocation + " and placing it over the top of your current MCForge_.dll!");
+                                Console.WriteLine("Update using the file at " + DLLLocation + " and placing it over the top of your current MCForge_.dll!");
                                 Console.ForegroundColor = prevColor;
                             }
                         }
@@ -305,7 +307,7 @@ namespace MCForge_.Gui
                     SW.WriteLine("kill $2");
                     SW.WriteLine("rm MCForge_.dll.backup");
                     SW.WriteLine("mv MCForge_.dll MCForge.dll_.backup");
-                    SW.WriteLine("wget " + ServerSettings.DLLLocation);
+                    SW.WriteLine("wget " + DLLLocation);
                     SW.WriteLine("mono MCForge.exe");
                 }
 
@@ -324,7 +326,7 @@ namespace MCForge_.Gui
                 verscheck = Server.selectedrevision.TrimStart('r');
                 int vers = int.Parse(verscheck.Split('.')[0]);
                 if (oldrevision) { filelocation = (ServerSettings.ArchivePath + Server.selectedrevision + ".exe"); }
-                if (!oldrevision) { filelocation = (ServerSettings.DLLLocation); }
+                if (!oldrevision) { filelocation = (DLLLocation); }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
                 Client.DownloadFile(ServerSettings.ChangelogLocation, "extra/Changelog.txt");
