@@ -1,3 +1,9 @@
+v4.1.3.0
+- Fixed issue where /warn always skipped the first word in the reason given
+- MCForge now has a new icon!
+- (Hopefully) fixed the auto updater
+  - Note: You probably have to manually download/replace MCForge.exe for this to work!
+
 v4.1.2.0
 - Fixed issue caused by Minecraft.net's changes to the heartbeat
   - They made it so MCForge wouldn't understand the server URL, but we fixed that :)
