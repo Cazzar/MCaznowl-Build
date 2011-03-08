@@ -213,7 +213,7 @@ namespace MCForge
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
             all.Add(new CmdZone());
-            all.Add(new CmdZombies());
+            all.Add(new CmdZombieSpawn());
             all.Add(new CmdZz());
             all.Add(new CmdCrashServer());
             all.Add(new CmdPromote());

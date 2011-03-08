@@ -133,7 +133,7 @@
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXspawn.cs" />
     <Compile Include="Commands\CmdXundo.cs" />
-    <Compile Include="Commands\CmdZombies.cs" />
+    <Compile Include="Commands\CmdZombieSpawn.cs" />
     <Compile Include="Commands\CmdZz.cs" />
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />

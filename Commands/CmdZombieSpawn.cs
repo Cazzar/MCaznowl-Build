@@ -3,9 +3,9 @@ using System.Threading;
 
 namespace MCForge
 {
-    public class CmdZombies : Command
+    public class CmdZombieSpawn : Command
     {
-        public override string name { get { return "zombies"; } }
+        public override string name { get { return "zombiesspawn"; } }
         public override string shortcut { get { return "zs"; } }
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
