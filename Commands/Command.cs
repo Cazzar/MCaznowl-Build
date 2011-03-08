@@ -161,6 +161,7 @@ namespace MCForge
             all.Add(new CmdRules());
             all.Add(new CmdSave());
             all.Add(new CmdSay());
+            all.Add(new CmdSeen());
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
             all.Add(new CmdServerReport());

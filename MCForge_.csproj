@@ -98,6 +98,7 @@
     <Compile Include="Commands\CmdOverseer.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
     <Compile Include="Commands\CmdReload.cs" />
+    <Compile Include="Commands\CmdSeen.cs" />
     <Compile Include="Commands\CmdSendCmd.cs" />
     <Compile Include="Commands\CmdShutdown.cs" />
     <Compile Include="Commands\CmdTColor.cs" />
