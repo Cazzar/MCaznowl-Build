@@ -84,6 +84,7 @@
                             mute.Use(p, message);
                             jail.Use(p, message);
                             freeze.Use(p, message);
+                            spawn.Use(player, "");
                             Player.GlobalMessage(player.color + player.name + Server.DefaultColor + " was released from XJail!");
                             return;
                         }
