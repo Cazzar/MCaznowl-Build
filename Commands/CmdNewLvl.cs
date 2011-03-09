@@ -43,10 +43,11 @@ namespace MCForge
                     case "ocean":
                     case "forest":
                     case "desert":
+                    case "space":
                         break;
 
                     default:
-                        Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert"); return;
+                        Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space"); return;
                 }
 
                 string name = parameters[0].ToLower();
@@ -101,7 +102,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/newlvl - creates a new level.");
             Player.SendMessage(p, "/newlvl mapname 128 64 128 type");
-            Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert");
+            Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
         }
 
         public bool isGood(ushort value)

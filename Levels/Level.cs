@@ -164,6 +164,34 @@ namespace MCForge
                     }
                     break;
 
+                case "space":
+                    Random rand = new Random();
+
+                    for (x = 0; x < width; ++x)
+                    {
+                        for (z = 0; z < height; ++z)
+                        {
+                            for (y = 0; y < depth; ++y)
+                            {
+                                if (y == 0)
+								{
+                                    SetTile(x, y, z, Block.blackrock);
+								}
+                                else
+								{
+                                    if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
+                                    {
+                                        if (rand.Next(100) == 0)
+                                            SetTile(x, y, z, Block.iron);
+                                        else
+                                            SetTile(x, y, z, Block.obsidian);
+                                    }
+								}
+                            }
+                        }
+                    }
+                	break;
+
                 case "island":
                 case "mountains":
                 case "ocean":
