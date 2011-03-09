@@ -169,7 +169,7 @@ namespace MCForge
         public static bool physicsRestart = true;
         public static bool deathcount = true;
         public static bool AutoLoad = false;
-        public static int physUndo = 60000;
+        public static int physUndo = 20000;
         public static int totalUndo = 200;
         public static bool rankSuper = true;
         public static bool oldHelp = false;
