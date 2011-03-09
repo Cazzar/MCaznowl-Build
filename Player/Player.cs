@@ -1948,8 +1948,8 @@ namespace MCForge
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
         {
-            pos = new ushort[3] { x, y, z }; // This could be remove and not effect the server :/
-            rot = new byte[2] { rotx, roty };
+            //pos = new ushort[3] { x, y, z }; // This could be remove and not effect the server :/
+            //rot = new byte[2] { rotx, roty };
             byte[] buffer = new byte[73]; buffer[0] = id;
             StringFormat(name, 64).CopyTo(buffer, 1);
             HTNO(x).CopyTo(buffer, 65);
