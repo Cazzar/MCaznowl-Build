@@ -28,7 +28,18 @@ namespace MCForge
             {
                 if (p.group.Permission > LevelPermission.AdvBuilder)
                 {
-                    p.BlockAction = 14; Player.SendMessage(p, "TNT mode is now &aON" + Server.DefaultColor + ".");
+                    p.BlockAction = 14; Player.SendMessage(p, "TNT (Big) mode is now &aON" + Server.DefaultColor + ".");
+                }
+                else
+                {
+                    Player.SendMessage(p, "This mode is reserved for OPs");
+                }
+            }
+            else if (message.ToLower() == "nuke")
+            {
+                if (p.group.Permission > LevelPermission.AdvBuilder)
+                {
+                    p.BlockAction = 15; Player.SendMessage(p, "TNT (Nuke) mode is now &aON" + Server.DefaultColor + ".");
                 }
                 else
                 {
@@ -44,8 +55,8 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/tnt [small/big] - Creates exploding TNT (with Physics 3).");
-            Player.SendMessage(p, "Big TNT is reserved for OP+.");
+            Player.SendMessage(p, "/tnt [small/big/nuke] - Creates exploding TNT (with Physics 3).");
+            Player.SendMessage(p, "Big and Nuke TNT is reserved for OP+.");
         }
     }
 }

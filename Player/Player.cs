@@ -1108,8 +1108,11 @@ namespace MCForge
                 case 13:    //Small TNT
                     level.Blockchange(this, x, y, z, Block.smalltnt);
                     break;
-                case 14:    //Small TNT
+                case 14:    //Big TNT
                     level.Blockchange(this, x, y, z, Block.bigtnt);
+                    break;
+                case 15:    //Nuke TNT
+                    level.Blockchange(this, x, y, z, Block.nuketnt);
                     break;
                 default:
                     Server.s.Log(name + " is breaking something");

@@ -1720,6 +1720,31 @@ namespace MCForge
                                         else { this.Blockchange(x, y, z, Block.air); }
                                         break;
 
+                                    case Block.nuketnt:
+                                        if (physics < 3) this.Blockchange(x, y, z, Block.air);
+
+                                        if (physics >= 3)
+                                        {
+                                            rand = new Random();
+
+                                            if (C.time < 5 && physics == 3)
+                                            {
+                                                C.time += 1;
+                                                if (this.GetTile(x, (ushort)(y + 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 2), z, Block.air); else this.Blockchange(x, (ushort)(y + 2), z, Block.lavastill);
+                                                if (this.GetTile(x, (ushort)(y - 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y - 2), z, Block.air); else this.Blockchange(x, (ushort)(y - 2), z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x + 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x + 1), y, z, Block.air); else this.Blockchange((ushort)(x + 1), y, z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x - 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x - 1), y, z, Block.air); else this.Blockchange((ushort)(x - 1), y, z, Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z + 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z + 1), Block.air); else this.Blockchange(x, y, (ushort)(z + 1), Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z - 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z - 1), Block.air); else this.Blockchange(x, y, (ushort)(z - 1), Block.lavastill);
+
+                                                break;
+                                            }
+
+                                            MakeExplosion(x, y, z, 4);
+                                        }
+                                        else { this.Blockchange(x, y, z, Block.air); }
+                                        break;
+
                                     case Block.tntexplosion:
                                         if (rand.Next(1, 11) <= 7) AddUpdate(C.b, Block.air);
                                         break;
@@ -3348,7 +3373,7 @@ namespace MCForge
                             {
                                 AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
                             }
-                            else if (b != Block.smalltnt && b != Block.bigtnt)
+                            else if (b != Block.smalltnt && b != Block.bigtnt && b != Block.nuketnt)
                             {
                                 if (rand.Next(1, 11) <= 4) AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8) AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.air);

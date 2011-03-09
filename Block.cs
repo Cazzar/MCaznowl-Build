@@ -182,6 +182,8 @@ namespace MCForge
         public const byte tntexplosion = (byte)184;
 
         public const byte fire = (byte)185;
+		
+		public const byte nuketnt = (byte)186;
 
         public const byte rocketstart = (byte)187;
         public const byte rockethead = (byte)188;
@@ -305,6 +307,7 @@ namespace MCForge
                     case air_flood_up:
 
                     case bigtnt:
+                    case nuketnt:
                     case rocketstart:
                     case rockethead:
 
@@ -702,6 +705,7 @@ namespace MCForge
 
                 case Block.smalltnt:
                 case Block.bigtnt:
+                case Block.nuketnt:
                 case Block.rocketstart:
                 case Block.firework:
 
@@ -1231,6 +1235,7 @@ namespace MCForge
 
                 case 182: return "small_tnt";
                 case 183: return "big_tnt";
+                case 186: return "nuke_tnt";
                 case 184: return "tnt_explosion";
 
                 case fire: return "fire";
@@ -1497,6 +1502,7 @@ namespace MCForge
 
                 case "small_tnt": return 182;
                 case "big_tnt": return 183;
+                case "nuke_tnt": return 186;
                 case "tnt_explosion": return 184;
 
                 case "fire": return fire;
@@ -1663,6 +1669,7 @@ namespace MCForge
 
                 case 182: return (byte)46;//smalltnt
                 case 183: return (byte)46;//bigtnt
+                case 186: return (byte)46;//nuketnt
                 case 184: return (byte)10;//explosion
 
                 case fire: return lava;
