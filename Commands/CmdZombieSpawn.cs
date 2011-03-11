@@ -5,7 +5,7 @@ namespace MCForge
 {
     public class CmdZombieSpawn : Command
     {
-        public override string name { get { return "zombiesspawn"; } }
+        public override string name { get { return "zombiespawn"; } }
         public override string shortcut { get { return "zs"; } }
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
