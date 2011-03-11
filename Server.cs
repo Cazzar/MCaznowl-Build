@@ -362,7 +362,13 @@ namespace MCForge
                         mainLevel.permissionbuild = LevelPermission.Guest;
                         mainLevel.Save();
                     }
+
                     addLevel(mainLevel);
+                    
+                    // fenderrock - Make sure the level does have a physics thread
+                    if(mainLevel.physThread == null)
+                        mainLevel.physThread = new Thread(new ThreadStart(mainLevel.Physics));
+
                     mainLevel.physThread.Start();
                 } catch (Exception e) { Server.ErrorLog(e); }
             });
