@@ -119,7 +119,9 @@ namespace MCForge
 
                 sb.AppendLine(new string('-', 25));
 
-                Server.s.ErrorCase(sb.ToString());
+                if(Server.s != null)
+                    Server.s.ErrorCase(sb.ToString());
+
                 lock (_lockObject)
                 {
                     _errorCache.Enqueue(sb.ToString());
