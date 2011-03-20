@@ -196,6 +196,9 @@ namespace MCForge
         // CmdVoteKick
         public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
 
+        // Extra storage for custom commands
+        public Dictionary<string, string> Extras = new Dictionary<string, string>();
+
         public bool loggedIn = false;
         public Player(Socket s)
         {
@@ -2369,6 +2372,7 @@ namespace MCForge
         public void Dispose()
         {
             //throw new NotImplementedException();
+            Extras.Clear();
             CopyBuffer.Clear();
             RedoBuffer.Clear();
             UndoBuffer.Clear();

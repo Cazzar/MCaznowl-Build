@@ -39,7 +39,7 @@ namespace MCForge
         Null = 150
     }
 
-    public class Level
+    public class Level : IDisposable
     {
         public int id;
         public string name;
@@ -114,6 +114,10 @@ namespace MCForge
 
         public bool changed = false;
         public bool backedup = false;
+
+        // Extra storage for custom commands
+        public Dictionary<string, string> Extras = new Dictionary<string, string>();
+
         public Level(string n, ushort x, ushort y, ushort z, string type)
         {
             width = x; depth = y; height = z;
@@ -3567,6 +3571,13 @@ namespace MCForge
             return foundPlayers;
         }
 
+
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+            // This doesn't do a whole let right now
+            Extras.Clear();
+        }
     }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
