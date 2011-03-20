@@ -22,7 +22,7 @@ namespace MCForge_.Gui
     {
         public static bool usingConsole = false;
 
-        private static string DLLLocation = "http://www.mcforge.co.cc/MCForge_.dll";
+        private static string DLLLocation = "http://www.mcforge.net/MCForge_.dll";
 
         [DllImport("kernel32")]
         public static extern IntPtr GetConsoleWindow();
