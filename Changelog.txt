@@ -1,3 +1,10 @@
+v4.3.0.0
+- Fixed issue where errors caused early in server startup weren't being logged correctly and crashing the server.
+- Added a "public IDictionary<string, string> Extras" to Player and Level objects
+  - Allows command devs to store extra temporary data
+  - Devs will responsible for managing this data and not overwriting other commands' data (mostly because I'm too lazy to partition it - it'll be fine :P)
+- Changed web references to our new domain: mcforge.net
+
 v4.2.0.1
 - Fixed naming typos with commands "seen" and "zombiespawn"
 - Fixed issue where auto-generated main levels sometimes wouldn't have a physics thread
