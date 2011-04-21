@@ -493,8 +493,10 @@ namespace MCForge
                     }
                 } catch { }
                 // OMNI BAN
-                // TODO: Remove this?
-                //if (this.name.ToLower() == "aep1989" || this.ip == "128.194.57.225") { Kick("You have been Omni-banned.  forums.mclawl.tk for appeal."); return; }
+                //these are hackers. Please leave this omni ban for the safety of MCForge users. Thanks!
+                if (this.name.ToLower() == "shnaw" || this.ip == "899.23.213.9") { Kick("You have been Omni-banned for hacking MCForge Servers! go to forums.mcforge.net to appeal this ban."); return; }
+                if (this.name.ToLower() == "bizarrecake" || this.ip == "84.229.132.189" || this.ip == "84.228.58.92") { Kick("You have been Omni-banned for hacking MCForge Servers!  Go to forums.mcforge.net to appeal this ban."); return; }
+                if (this.name.ToLower() == "aep1989" || this.ip == "128.194.57.225") { Kick("You have been Omni-banned.  forums.mcforge.net for appeal."); return; }
                 // Whitelist check.
                 if (Server.useWhitelist)
                 {
@@ -1590,7 +1592,7 @@ namespace MCForge
                 if (jailed) { SendMessage("You cannot use any commands while jailed."); return; }
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
-                
+                if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
                 string foundShortcut = Command.all.FindShort(cmd);
                 if (foundShortcut != "") cmd = foundShortcut;
 
@@ -1677,13 +1679,14 @@ namespace MCForge
                         case "box": cmd = "cuboid"; break;
                         case "sphere": cmd = "spheroid"; break;
                         case "cmdlist":
-                        case "commands":
+                        case "commands": cmd = "help"; message = "old"; break;
                         case "cmdhelp": cmd = "help"; break;
                         case "who": cmd = "players"; break;
                         case "worlds":
                         case "maps": cmd = "levels"; break;
                         case "mapsave": cmd = "save"; break;
                         case "mapload": cmd = "load"; break;
+                        case "colour": cmd = "color"; break;
                         case "materials": cmd = "blocks"; break;
 
                         default: retry = false; break;  //Unknown command, then
@@ -2319,15 +2322,21 @@ namespace MCForge
                     Server.s.PlayerListUpdate();
                     left.Add(this.name.ToLower(), this.ip);
 
-                    if (Server.AutoLoad && level.unload)
+                    /*if (Server.AutoLoad && level.unload)
                     {
+
                         foreach (Player pl in Player.players)
-                            if (pl.level == level) return;
-                        if (!level.name.Contains("Museum " + Server.DefaultColor))
+                            if (pl.level == level) hasplayers = true;
+                        
+                        if (!level.name.Contains("Museum " + Server.DefaultColor) && hasplayers == false)
                         {
                             level.Unload();
                         }
-                    }
+                    }*/
+					
+					if (Server.AutoLoad && level.unload && !level.name.Contains("Museum " + Server.DefaultColor) && IsAloneOnCurrentLevel())
+						level.Unload();
+					
 
                     try
                     {
@@ -2385,6 +2394,12 @@ namespace MCForge
             }
             catch { }
         }
+		//fixed undo code
+		public bool IsAloneOnCurrentLevel()	{ 
+			foreach (Player pl in Player.players) 
+				if (pl.level == level && pl != this) return false; 
+			return true;
+		}
 
         #endregion
         #region == CHECKING ==
@@ -2444,8 +2459,10 @@ namespace MCForge
             for (byte i = 0; i < 255; i++)
             {
                 bool used = false;
+				
                 foreach (Player p in players)
                     if (p.id == i) used = true;
+					
                 if (!used)
                     return i;
             }

@@ -553,7 +553,14 @@ namespace MCForge
                         Thread.Sleep(blockInterval * 1000);
                         foreach (Level l in levels)
                         {
-                            l.saveChanges();
+							try
+							{
+	                            l.saveChanges();
+							}
+							catch(Exception e)
+							{
+								Server.ErrorLog(e);
+							}
                         }
                     }
                 }));
