@@ -132,6 +132,8 @@ namespace MCForge
 
                 Player.SendMessage(p, "Filled " + buffer.Count + " blocks.");
                 buffer.Clear();
+                buffer = null;
+                mapBlocks = null;
 
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
             }

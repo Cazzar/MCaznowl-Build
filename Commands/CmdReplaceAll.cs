@@ -40,6 +40,8 @@ namespace MCForge
             b2 = Block.Byte(message.Split(' ')[1]);
 
             if (b1 == Block.Zero || b2 == Block.Zero) { Player.SendMessage(p, "Could not find specified blocks."); return; }
+            if (!Block.canPlace(p, b1) && !Block.BuildIn(b2)) { Player.SendMessage(p, "Cannot replace that."); return; }
+            if (!Block.canPlace(p, b2)) { Player.SendMessage(p, "Cannot place that."); return; }
             ushort x, y, z; int currentBlock = 0;
             List<Pos> stored = new List<Pos>(); Pos pos;
 

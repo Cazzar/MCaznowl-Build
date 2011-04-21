@@ -198,6 +198,7 @@
     <Compile Include="Commands\CmdRules.cs" />
     <Compile Include="Commands\CmdSave.cs" />
     <Compile Include="Commands\CmdSay.cs" />
+    <Compile Include="Commands\CmdServerInfo.cs" />
     <Compile Include="Commands\CmdServerReport.cs" />
     <Compile Include="Commands\CmdSetRank.cs" />
     <Compile Include="Commands\CmdSetspawn.cs" />
