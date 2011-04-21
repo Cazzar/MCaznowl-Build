@@ -129,6 +129,7 @@ namespace MCForge
             all.Add(new CmdMuseum());
             all.Add(new CmdMute());
             all.Add(new CmdNewLvl());
+			all.Add(new CmdOHide());
             all.Add(new CmdOpChat());
             all.Add(new CmdOutline());
             all.Add(new CmdOverseer());
@@ -213,6 +214,7 @@ namespace MCForge
             all.Add(new CmdWhowas());
             all.Add(new CmdWrite());
             all.Add(new CmdXban());
+			all.Add(new CmdXhide());
             all.Add(new CmdXJail());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());

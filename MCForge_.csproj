@@ -180,6 +180,7 @@
     <Compile Include="Commands\CmdMove.cs" />
     <Compile Include="Commands\CmdMute.cs" />
     <Compile Include="Commands\CmdNewLvl.cs" />
+    <Compile Include="Commands\CmdOhide.cs" />
     <Compile Include="Commands\CmdPaint.cs" />
     <Compile Include="Commands\CmdPaste.cs" />
     <Compile Include="Commands\CmdPermissionBuild.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Commands\CmdWhitelist.cs" />
     <Compile Include="Commands\CmdWhois.cs" />
     <Compile Include="Commands\CmdWhowas.cs" />
+    <Compile Include="Commands\CmdXhide.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandList.cs" />
     <Compile Include="Commands\CmdMegaboid.cs" />
