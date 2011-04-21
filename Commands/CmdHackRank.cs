@@ -1,11 +1,23 @@
 ﻿/*
- * Created by SharpDevelop.
- * User: 501st_commander
- * Date: 1/9/2011
- * Time: 11:21 AM
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
+	Copyright 2011 MCForge
+	
+    Made originally by 501st_commander, in something called SharpDevelop. 
+    Made into a safe and reasonabal command by EricKilla, in Visual Studio 2010.
+	
+	Dual-licensed under the	Educational Community License, Version 2.0 and
+	the GNU General Public License, Version 3 (the "Licenses"); you may
+	not use this file except in compliance with the Licenses. You may
+	obtain a copy of the Licenses at
+	
+	http://www.osedu.org/licenses/ECL-2.0
+	http://www.gnu.org/licenses/gpl-3.0.html
+	
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the Licenses are distributed on an "AS IS"
+	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+	or implied. See the Licenses for the specific language governing
+	permissions and limitations under the Licenses.
+*/
 using System;
 using System.Collections.Generic;
 using System.Data;

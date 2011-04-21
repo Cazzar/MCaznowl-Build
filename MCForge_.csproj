@@ -372,12 +372,18 @@
   <ItemGroup>
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
+    <None Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Commands\CmdWarn.cs" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
   </ItemGroup>
