@@ -34,14 +34,22 @@ namespace MCForge
             if (message == "") { Help(p); return; }
             if (message.ToLower() == "all")
             {
-                foreach (Player pl in Player.players)
+                try
                 {
-                    if (pl.level == p.level && pl != p)
+                    foreach (Player pl in Player.players)
                     {
-                        unchecked { pl.SendPos((byte)-1, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0); }
-                        pl.SendMessage("You were summoned by " + p.color + p.name + Server.DefaultColor + ".");
+                        if (pl.level == p.level && pl != p && p.group.Permission > pl.group.Permission)
+                        {
+                            unchecked { pl.SendPos((byte)-1, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0); }
+                            pl.SendMessage("You were summoned by " + p.color + p.name + Server.DefaultColor + ".");
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Server.ErrorLog(e);
+                }
+                Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " summoned everyone!");
                 return;
             }
 

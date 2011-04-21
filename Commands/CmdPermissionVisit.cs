@@ -37,6 +37,10 @@ namespace MCForge
             {
                 LevelPermission Perm = Level.PermissionFromName(message);
                 if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
+                if (p.level.permissionvisit > p.group.Permission) {
+					Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
+					return;
+				}
                 p.level.permissionvisit = Perm;
                 Server.s.Log(p.level.name + " visit permission changed to " + message + ".");
                 Player.GlobalMessageLevel(p.level, "visit permission changed to " + message + ".");

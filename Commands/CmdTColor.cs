@@ -39,6 +39,10 @@ namespace MCForge
                 Player.SendMessage(p, "Could not find player.");
                 return;
             }
+            if (who.group.Permission > p.group.Permission) {
+				Player.SendMessage(p, "You cannot change the title color of someone ranked higher than you");
+				return;
+			}
             if (args.Length == 1)
             {
                 who.titlecolor = "";

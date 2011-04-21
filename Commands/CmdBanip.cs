@@ -41,6 +41,11 @@ namespace MCForge
             {
                 message = message.Remove(0, 1).Trim();
                 Player who = Player.Find(message);
+                if (Server.devs.Contains(message.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                    return;
+                }
                 if (who == null)
                 {
                     DataTable ip;
@@ -95,10 +100,12 @@ namespace MCForge
                 List<string> opNamesWithThatIP = (from pl in Player.players where (pl.ip == message && pl.@group.Permission >= LevelPermission.Operator) select pl.name).ToList();
                 // Next, add names from the database
                 DataTable dbnames = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
+                
                 foreach (DataRow row in dbnames.Rows)
                 {
                     opNamesWithThatIP.Add(row[0].ToString());
                 }
+               
 
                 if (opNamesWithThatIP != null && opNamesWithThatIP.Count > 0)
                 {
@@ -106,7 +113,12 @@ namespace MCForge
                     // Check permissions of everybody who matched that IP
                     foreach (string opname in opNamesWithThatIP)
                     {
-                        // If one of these guys matches a player with a higher rank, don't allow the ipban to proceed!
+                        // If one of these guys matches a player with a higher rank, or is a dev, don't allow the ipban to proceed! 
+                        if (Server.devs.Contains(opname.ToLower()))
+                        {
+                            Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                            return;
+                        }
                         Group grp = Group.findPlayerGroup(opname);
                         if (grp != null)
                         {

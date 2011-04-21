@@ -35,7 +35,11 @@ namespace MCForge
             int pos = message.IndexOf(' ');
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
-
+            if (who.group.Permission > p.group.Permission && p != null)
+            {
+                Player.SendMessage(p, "Cannot change the title of someone of greater rank");
+                return;
+            }
             string query;
             string newTitle = "";
             if (message.Split(' ').Length > 1) newTitle = message.Substring(pos + 1);

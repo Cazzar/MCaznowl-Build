@@ -40,6 +40,11 @@ public override void Use(Player p, string message)
                       if (message == "") { Help(p); return; }
 
                       Player who = Player.Find(message.Split(' ')[0]);
+                      if (Server.devs.Contains(message.ToLower()))
+                      {
+                          Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                          return;
+                      }
                       if (who != null) {
 
                      Command.all.Find("undo").Use(p, message + " all");

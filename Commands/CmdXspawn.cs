@@ -23,7 +23,7 @@ namespace MCForge
 {
 	public class CmdXspawn : Command
 	{
-                public override string name { get { return "xspawn"; } }
+    	public override string name { get { return "xspawn"; } }
 		public override string shortcut { get { return ""; } }
 		public override string type { get { return "other"; } }
 		public override bool museumUsable { get { return false; } }
@@ -39,6 +39,11 @@ namespace MCForge
             if (player == p)
             {
                 Player.SendMessage(p, "Error: Seriously? Just use /spawn!");
+                return;
+            }
+            if (player.group.Permission > p.group.Permission)
+            {
+                Player.SendMessage(p, "Cannot move someone of greater rank");
                 return;
             }
             Command.all.Find("spawn").Use(player, "");

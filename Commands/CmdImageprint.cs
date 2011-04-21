@@ -29,7 +29,7 @@ namespace MCForge
     public class CmdImageprint : Command
     {
         public override string name { get { return "imageprint"; } }
-        public override string shortcut { get { return "i"; } }
+        public override string shortcut { get { return "img"; } }
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }

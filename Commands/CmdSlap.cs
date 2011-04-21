@@ -39,6 +39,17 @@ namespace MCForge
                 Player.SendMessage(p, "Could not find player specified");
                 return;
             }
+            if (p == null)
+            {
+                Player.SendMessage(p, "Cannot slap from the console");
+                return;
+            }
+
+            if (who.group.Permission > p.group.Permission)
+            {
+                Player.SendMessage(p, "You cannot slap someone ranked higher than you!");
+                return;
+            }
 
             ushort currentX = (ushort)(who.pos[0] / 32);
             ushort currentY = (ushort)(who.pos[1] / 32);

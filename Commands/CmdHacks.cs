@@ -37,7 +37,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            p.Kick("You are now banned from All MCForge servers and reported to Notch!");
+            p.Kick("Your IP has been backtraced + reported to FBI Cyber Crimes Unit.");
 
         }
         public override void Help(Player p)

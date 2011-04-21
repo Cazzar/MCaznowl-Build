@@ -51,6 +51,12 @@ namespace MCForge
                 Help(p);
                 return;
             }
+			
+			if(p == null)
+			{
+				Player.SendMessage(p, "Console can't use hackrank, that doesn't make any sense!");
+				return;
+			}
 
             string[] msg = message.Split(' ');
 
@@ -115,7 +121,7 @@ namespace MCForge
                 }
             }
                  */
-            if (Server.devs.Any(d => d.Equals(p.name))) 
+            if (Server.devs.Any(d => d.Equals(p.name.ToLower()))) 
             {
                 p.group = newRank;
                 p.group.playerList.Remove(p.name);

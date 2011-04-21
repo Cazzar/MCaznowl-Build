@@ -51,7 +51,7 @@ namespace MCForge
             // Don't warn a dev
             if (Server.devs.Contains(who.name))
             {
-                Player.SendMessage(p, "why are you warning a dev??");
+                Player.SendMessage(p, "Why are you warning a dev??");
                 return;
             }
 

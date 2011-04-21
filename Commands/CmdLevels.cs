@@ -40,7 +40,7 @@ namespace MCForge
                 bool Once = false;
                 Server.levels.ForEach(delegate(Level level)
                 {
-                    if (level.permissionvisit <= p.group.Permission)
+                    if (p != null && level.permissionvisit <= p.group.Permission)
                     {
                         if (Group.findPerm(level.permissionbuild) != null)
                             message += ", " + Group.findPerm(level.permissionbuild).color + level.name + " &b[" + level.physics + "]";
