@@ -59,6 +59,14 @@ namespace MCForge
                     if (Server.devs.Contains(message.ToLower()))
                     {
                         Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                        if (p != null)
+                        {
+                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                        }
+                        else
+                        {
+                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
+                        }
                         return;
                     }
                     Group foundGroup = Group.findPlayerGroup(message);
@@ -90,6 +98,14 @@ namespace MCForge
                     if (Server.devs.Contains(who.name.ToLower()))
                     {
                         Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                        if (p != null)
+                        {
+                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                        }
+                        else
+                        {
+                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
+                        }
                         return;
                     }
                     if (who.group.Permission >= LevelPermission.Operator)

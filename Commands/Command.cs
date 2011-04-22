@@ -233,6 +233,8 @@ namespace MCForge
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
 
+
+
             core.commands = new List<Command>(all.commands);
 
             Scripting.Autoload();

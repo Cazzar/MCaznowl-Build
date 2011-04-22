@@ -40,6 +40,14 @@ namespace MCForge
             if (Server.devs.Contains(who.name.ToLower()))
             {
                 Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                if (p != null)
+                {
+                    Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to tempban a MCForge Developer!");
+                }
+                else
+                {
+                    Player.GlobalMessage(Server.DefaultColor + "The Console attempted to tempban a MCForge Developer!");
+                }
                 return;
             }
             int minutes;
