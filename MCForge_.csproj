@@ -89,6 +89,7 @@
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
+    <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
     <Compile Include="Commands\CmdKickAll.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />
+    <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
     <Compile Include="Commands\CmdReload.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
