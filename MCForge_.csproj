@@ -99,6 +99,8 @@
     <Compile Include="Commands\CmdMain.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
+    <Compile Include="Commands\CmdNews.cs" />
+    <Compile Include="Commands\CmdOpRules.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />

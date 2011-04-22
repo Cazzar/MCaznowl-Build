@@ -133,8 +133,10 @@ namespace MCForge
             all.Add(new CmdMuseum());
             all.Add(new CmdMute());
             all.Add(new CmdNewLvl());
+			all.Add(new CmdNews());
 			all.Add(new CmdOHide());
             all.Add(new CmdOpChat());
+            all.Add(new CmdOpRules());
             all.Add(new CmdOutline());
             all.Add(new CmdOverseer());
             all.Add(new CmdOZone());
