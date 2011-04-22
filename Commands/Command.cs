@@ -49,6 +49,7 @@ namespace MCForge
             all.Add(new CmdBots());
             all.Add(new CmdBotSet());
             all.Add(new CmdBotSummon());
+            all.Add(new CmdCalculate());
             all.Add(new CmdChangeLog());
             all.Add(new CmdClearBlockChanges());
             all.Add(new CmdClick());
@@ -83,6 +84,7 @@ namespace MCForge
             all.Add(new CmdFollow());
             all.Add(new CmdFreeze());
             all.Add(new CmdGive());
+            all.Add(new CmdGlobalCLS());
             all.Add(new CmdGoto());
             all.Add(new CmdGun());
             all.Add(new CmdHackRank());
@@ -143,6 +145,7 @@ namespace MCForge
             all.Add(new CmdPermissionVisit());
             all.Add(new CmdPhysics());
             all.Add(new CmdPlace());
+            all.Add(new CmdPlayerCLS());
             all.Add(new CmdPlayers());
             all.Add(new CmdPortal());
             all.Add(new CmdPossess());

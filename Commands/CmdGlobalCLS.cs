@@ -19,7 +19,7 @@ using System;
 
 namespace MCForge
 {
-    public class Cmdglobalcls : Command
+    public class CmdGlobalCLS : Command
     {
         public override string name { get { return "globalcls"; } }
         public override string shortcut { get { return "gcls"; } }
