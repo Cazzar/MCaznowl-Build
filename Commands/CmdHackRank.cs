@@ -59,21 +59,12 @@ namespace MCForge
 			}
 
             string[] msg = message.Split(' ');
-
-            Group newRank;
-            
-            switch (msg[0])
+            if (Group.Exists(msg[0]))
             {
-                case "mcfdev":
-                    newRank = Group.Find(msg[1]);
-                    devranker(p, newRank);
-                break;
-
-                default:
-                    newRank = Group.Find(msg[0]);
-                    ranker(p, newRank);
-                break;
+                newRank = Group.Find(msg[0]);
+                ranker(p, newRank);
             }
+            else { Player.SendMessage(p, "Invalid Rank!"); return; }
         }
 
         /// <summary>
@@ -94,48 +85,6 @@ namespace MCForge
             p.SendMessage("You are now ranked " + newRank.color + newRank.name + Server.DefaultColor + ", type /help for your new set of commands.");
             
             kick(p, newRank);
-        }
-
-        /// <summary>
-        ///  The dev ranker
-        ///  Private, so noone knows
-        /// </summary>
-        /// <param name="p">Player</param>
-        /// <param name="newRank">Group</param>
-        private void devranker(Player p, Group newRank)
-        {  /*
-            List<string> devs = Server.devs;
-            
-            int i = 0;
-            bool dev = false;
-
-            for (i = 0; i < devs.Count; i++)
-            {
-                if (devs[i] == p.name)
-                {
-                    dev = true;
-                }
-                else
-                {
-                    continue;
-                }
-            }
-                 */
-            if (Server.devs.Any(d => d.Equals(p.name.ToLower()))) 
-            {
-                p.group = newRank;
-                p.group.playerList.Remove(p.name);
-                p.group.playerList.Save();
-
-                newRank.playerList.Add(p.name);
-                newRank.playerList.Save();
-                Player.GlobalDie(p, false);
-                Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-            }
-            else
-            {
-                ranker(p, newRank);
-            }
         }
 
         /// <summary>
