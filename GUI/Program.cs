@@ -181,7 +181,7 @@ namespace MCForge_.Gui
                 return;
             }
 
-        talk: handleComm("say " + MCForge.Group.findPerm(LevelPermission.Admin).color + "Console: &f" + s);
+        talk: handleComm("say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
             handleComm(Console.ReadLine());
         }
 
