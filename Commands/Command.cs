@@ -60,6 +60,7 @@ namespace MCForge
             all.Add(new CmdCmdSet());
             all.Add(new CmdCmdUnload());
             all.Add(new CmdCompile());
+            all.Add(new CmdCompLoad());
             all.Add(new CmdColor());
             all.Add(new CmdCopy());
             all.Add(new CmdCTF());
@@ -76,6 +77,7 @@ namespace MCForge
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
             all.Add(new CmdEmote());
+            all.Add(new CmdFakeRank());
             all.Add(new CmdFetch());
             all.Add(new CmdFill());
             all.Add(new CmdFixGrass());
