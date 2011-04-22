@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Threading;
 
 namespace MCForge
 {
@@ -55,7 +56,16 @@ namespace MCForge
 
             Player who = Player.Find(message);
             if (who == null || who.hidden) { Player.SendMessage(p, "There is no player \"" + message + "\"!"); return; }
-            if (p.level != who.level) { Player.SendMessage(p, who.name + " is in a different level."); return; }
+            if (p.level != who.level)
+            {
+                Player.SendMessage(p, who.name + " is in a different Level. Forcefetching has started!");
+                Level where = p.level;
+                Command.all.Find("goto").Use(who, where.name);
+                Thread.Sleep(1000);
+                // Sleep for a bit while they load
+                while (who.Loading) { Thread.Sleep(250); }
+            }
+
             unchecked { who.SendPos((byte)-1, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0); }
             who.SendMessage("You were summoned by " + p.color + p.name + Server.DefaultColor + ".");
         }
