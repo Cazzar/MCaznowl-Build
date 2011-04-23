@@ -61,7 +61,7 @@ namespace MCForge
             string[] msg = message.Split(' ');
             if (Group.Exists(msg[0]))
             {
-                newRank = Group.Find(msg[0]);
+                Group newRank = Group.Find(msg[0]);
                 ranker(p, newRank);
             }
             else { Player.SendMessage(p, "Invalid Rank!"); return; }
