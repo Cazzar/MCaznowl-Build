@@ -580,7 +580,7 @@ namespace MCForge
                         BitConverter.ToString(md5.ComputeHash(enc.GetBytes(Server.salt + name)))
                         .Replace("-", "").ToLower().TrimStart('0'))
                     {
-                        if (ip != "127.0.0.1" && ! ip.StartsWith("192.168."))
+                        if (ip != "127.0.0.1" && !ip.StartsWith("192.168.") && !ip.StartsWith("172.16.") && !ip.StartsWith("10."))
                         {
                             Kick("Login failed! Try again."); return;
                         }
