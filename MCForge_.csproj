@@ -139,6 +139,7 @@
     <Compile Include="Commands\CmdUnflood.cs" />
     <Compile Include="Commands\CmdUnlock.cs" />
     <Compile Include="Commands\CmdXban.cs" />
+    <Compile Include="Commands\CmdXmute.cs" />
     <Compile Include="Commands\CmdXspawn.cs" />
     <Compile Include="Commands\CmdXundo.cs" />
     <Compile Include="Commands\CmdZombieSpawn.cs" />

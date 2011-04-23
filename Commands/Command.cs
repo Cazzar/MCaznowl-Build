@@ -224,6 +224,7 @@ namespace MCForge
             all.Add(new CmdXban());
 			all.Add(new CmdXhide());
             all.Add(new CmdXJail());
+			all.Add(new CmdXmute());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
             all.Add(new CmdZone());
