@@ -107,6 +107,7 @@
     <Compile Include="Commands\CmdOverseer.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
+    <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdReload.cs" />
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdSeen.cs" />

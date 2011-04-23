@@ -156,6 +156,7 @@ namespace MCForge
             all.Add(new CmdPlayers());
             all.Add(new CmdPortal());
             all.Add(new CmdPossess());
+			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
