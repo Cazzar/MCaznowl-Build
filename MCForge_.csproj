@@ -89,6 +89,7 @@
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
+    <Compile Include="Commands\CmdFakePay.cs" />
     <Compile Include="Commands\CmdFakerank.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />

@@ -77,6 +77,7 @@ namespace MCForge
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
             all.Add(new CmdEmote());
+			all.Add(new CmdFakePay());
             all.Add(new CmdFakeRank());
             all.Add(new CmdFetch());
             all.Add(new CmdFill());
