@@ -964,7 +964,7 @@ namespace MCForge.Gui
                 ChkPortResult.Text = "Testing Port!";
                 ChkPortResult.BackColor = SystemColors.Control;
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.utorrent.com/testport?plain=1&port=" + nPort);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.mcforge.net/checkport.php?&port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -972,7 +972,7 @@ namespace MCForge.Gui
                     using (Stream stream = response.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(stream);
-                        if (reader.ReadLine().StartsWith("ok"))
+                        if (reader.ReadLine().StartsWith("open"))
                         {
                             ChkPortResult.Text = "Port Open!";
                             ChkPortResult.BackColor = Color.Lime;
@@ -982,7 +982,7 @@ namespace MCForge.Gui
                     }
                 }
 
-                MessageBox.Show("Port " + nPort + " is closed. You will need to set up port forwarding!", "Port check failed");
+                MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
                 ChkPortResult.Text = "Port Not Open";
                 ChkPortResult.BackColor = Color.Red;
 
