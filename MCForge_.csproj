@@ -93,6 +93,7 @@
     <Compile Include="Commands\CmdFakePay.cs" />
     <Compile Include="Commands\CmdFakerank.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
+    <Compile Include="Commands\CmdGifToCin.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdHigh5.cs" />
@@ -105,11 +106,13 @@
     <Compile Include="Commands\CmdNews.cs" />
     <Compile Include="Commands\CmdOpRules.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />
+    <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
     <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdReload.cs" />
     <Compile Include="Commands\CmdReview.cs" />
+    <Compile Include="Commands\CmdScinema.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
     <Compile Include="Commands\CmdSendCmd.cs" />
     <Compile Include="Commands\CmdShutdown.cs" />

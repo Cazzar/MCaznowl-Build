@@ -242,6 +242,10 @@ namespace MCForge
             all.Add(new CmdAward());
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
+            all.Add(new CmdpCinema());
+            all.Add(new CmdpCinema2());
+            all.Add(new CmdSCinema());
+            all.Add(new CmdGifToCin());
 
 
 
