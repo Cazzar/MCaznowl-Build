@@ -120,6 +120,10 @@ namespace MCForge
         public static int voteKickVotesNeeded = 0;
 
 
+
+        public static List<string> muted = new List<string>();
+
+
         //Settings
         #region Server Settings
         public const byte version = 7;
@@ -626,7 +630,7 @@ namespace MCForge
                 }));
 
                 locationChecker.Start();
-
+                MuteLoad();
                 Log("Finished setting up server");
             });
         }
@@ -799,6 +803,24 @@ namespace MCForge
                 Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
             }
             catch { }
+        }
+        public static void MuteSave()
+        {
+            TextWriter TW = new StreamWriter("ranks/muted.txt");
+            foreach (string mute in Server.muted)
+            {
+                TW.WriteLine(mute);
+            }
+            TW.Close();
+        }
+        public static void MuteLoad()
+        {
+            StreamReader SR = new StreamReader("ranks/muted.txt");
+            while (SR.EndOfStream == false)
+            {
+                Server.muted.Add(SR.ReadLine());
+            }
+            SR.Close();
         }
     }
 }
