@@ -5,6 +5,9 @@ This release was a redo of all changes made since 4.3.0.0. Because of this, we'v
 - Fixed an issue where running the software would open up a small CLI window as well as the GUI.
 - Port checker now uses MCForge.net to see if the server port is accessible.
 - Fixed server verifier to work with Class A and Class B networks (reported in forum topic 688)
+- Command thread will no longer be manually aborted, as this can sometimes cause problems closing the socket.
+
+
 - Added new open-source license information to source headers
 - Updated dev list
 - New commands:

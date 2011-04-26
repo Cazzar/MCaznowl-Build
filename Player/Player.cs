@@ -2390,7 +2390,7 @@ namespace MCForge
             UndoBuffer.Clear();
             try
             {
-                this.commThread.Abort();
+                //this.commThread.Abort();
             }
             catch { }
         }
