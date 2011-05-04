@@ -580,7 +580,7 @@ namespace MCForge
                         BitConverter.ToString(md5.ComputeHash(enc.GetBytes(Server.salt + name)))
                         .Replace("-", "").ToLower().TrimStart('0'))
                     {
-                        if (ip != "127.0.0.1" && !ip.StartsWith("192.168.") && !ip.StartsWith("172.16.") && !ip.StartsWith("10."))
+                        if (!IPInPrivateRange(ip))
                         {
                             Kick("Login failed! Try again."); return;
                         }
@@ -2643,5 +2643,29 @@ namespace MCForge
 
 #endregion
 
+        private static bool IPInPrivateRange(string ip)
+        {
+            if (ip == "127.0.0.1" || ip.StartsWith("192.168.") || ip.StartsWith("10."))
+                return true;
+
+            if (ip.StartsWith("172."))
+            {
+                string[] split = ip.Split('.');
+                if (split.Length >= 2)
+                {
+                    try
+                    {
+                        int secondPart = Convert.ToInt32(split[1]);
+                        return (secondPart >= 16 && secondPart <= 31);
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
