@@ -84,6 +84,7 @@ namespace MCForge
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
+        public static PlayerList muted;
         public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "sebbiultimate", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "listings09", "hypereddie10", "shade2010", "uberfox", "erickilla", "lordpsycho"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
@@ -380,6 +381,7 @@ namespace MCForge
             {
                 bannedIP = PlayerList.Load("banned-ip.txt", null);
                 ircControllers = PlayerList.Load("IRC_Controllers.txt", null);
+                muted = PlayerList.Load("muted.txt", null);
 
                 foreach (Group grp in Group.GroupList)
                     grp.playerList = PlayerList.Load(grp.fileName, grp);
@@ -626,7 +628,6 @@ namespace MCForge
                 }));
 
                 locationChecker.Start();
-
                 Log("Finished setting up server");
             });
         }

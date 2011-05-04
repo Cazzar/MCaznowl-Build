@@ -700,6 +700,11 @@ namespace MCForge
                 money = int.Parse(playerDb.Rows[0]["Money"].ToString());
                 totalKicked = int.Parse(playerDb.Rows[0]["totalKicked"].ToString());
                 SendMessage("Welcome back " + color + prefix + name + Server.DefaultColor + "! You've been here " + totalLogins + " times!");
+                if (Server.muted.Contains(name))
+                {
+                    muted = true;
+                    GlobalMessage(name + " is still muted from the last time they went offline.");
+                }
             }
             playerDb.Dispose();
 
