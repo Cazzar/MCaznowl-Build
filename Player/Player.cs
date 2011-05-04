@@ -703,8 +703,7 @@ namespace MCForge
                 if (Server.muted.Contains(name))
                 {
                     muted = true;
-                    SendMessage("You are currently muted because when you last went offline, you were muted.");
-                    GlobalMessage(name + " who has just joined is currently muted as they were muted when they last went offline.");
+                    GlobalMessage(name + " is still muted from the last time they went offline.");
                 }
             }
             playerDb.Dispose();

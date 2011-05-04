@@ -84,6 +84,7 @@ namespace MCForge
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
+        public static PlayerList muted;
         public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "sebbiultimate", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "listings09", "hypereddie10", "shade2010", "uberfox", "erickilla", "lordpsycho"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
@@ -118,10 +119,6 @@ namespace MCForge
         //Global VoteKick In Progress Flag
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
-
-
-
-        public static List<string> muted = new List<string>();
 
 
         //Settings
@@ -384,6 +381,7 @@ namespace MCForge
             {
                 bannedIP = PlayerList.Load("banned-ip.txt", null);
                 ircControllers = PlayerList.Load("IRC_Controllers.txt", null);
+                muted = PlayerList.Load("muted.txt", null);
 
                 foreach (Group grp in Group.GroupList)
                     grp.playerList = PlayerList.Load(grp.fileName, grp);
@@ -630,7 +628,6 @@ namespace MCForge
                 }));
 
                 locationChecker.Start();
-                MuteLoad();
                 Log("Finished setting up server");
             });
         }
@@ -803,24 +800,6 @@ namespace MCForge
                 Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
             }
             catch { }
-        }
-        public static void MuteSave()
-        {
-            TextWriter TW = new StreamWriter("ranks/muted.txt");
-            foreach (string mute in Server.muted)
-            {
-                TW.WriteLine(mute);
-            }
-            TW.Close();
-        }
-        public static void MuteLoad()
-        {
-            StreamReader SR = new StreamReader("ranks/muted.txt");
-            while (SR.EndOfStream == false)
-            {
-                Server.muted.Add(SR.ReadLine());
-            }
-            SR.Close();
         }
     }
 }

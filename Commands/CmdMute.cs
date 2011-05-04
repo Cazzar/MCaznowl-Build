@@ -38,7 +38,7 @@ namespace MCForge
                 {
                     Server.muted.Remove(message);
                     Player.GlobalChat(null, message + Server.DefaultColor + " is not online but they have been &bun-muted", false);
-                    Server.MuteSave();
+                    Server.muted.Save("muted.txt");
                     return;
                 }
                 Player.SendMessage(p, "The player entered is not online.");
@@ -57,7 +57,7 @@ namespace MCForge
                 }
                 who.muted = true;
                 Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " has been &8muted", false);
-                Server.MuteSave();
+                Server.muted.Save("muted.txt");
             }
         }
         public override void Help(Player p)
