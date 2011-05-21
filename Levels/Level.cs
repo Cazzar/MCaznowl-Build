@@ -119,7 +119,7 @@ namespace MCForge
         public bool backedup = false;
 
         // Extra storage for custom commands
-        public Dictionary<string, string> Extras = new Dictionary<string, string>();
+        public ExtrasCollection Extras = new ExtrasCollection();
 
         public Level(string n, ushort x, ushort y, ushort z, string type)
         {

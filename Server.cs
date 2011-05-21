@@ -120,6 +120,8 @@ namespace MCForge
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
 
+        // Extra storage for custom commands
+        public ExtrasCollection Extras = new ExtrasCollection();
 
         //Settings
         #region Server Settings

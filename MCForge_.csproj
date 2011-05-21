@@ -155,6 +155,7 @@
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Commands\CmdBotAdd.cs" />

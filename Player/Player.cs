@@ -200,7 +200,7 @@ namespace MCForge
         public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
 
         // Extra storage for custom commands
-        public Dictionary<string, string> Extras = new Dictionary<string, string>();
+        public ExtrasCollection Extras = new ExtrasCollection();
 
         public bool loggedIn = false;
         public Player(Socket s)
