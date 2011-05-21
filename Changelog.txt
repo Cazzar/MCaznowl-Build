@@ -1,5 +1,6 @@
 Pending Changes
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
+- Updater should no longer crash when updating (Github issue #3)
 
 v4.6.0.1
 - Command thread will no longer be manually aborted, as this can sometimes cause problems closing the socket.

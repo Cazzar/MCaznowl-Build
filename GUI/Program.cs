@@ -39,7 +39,12 @@ namespace MCForge_.Gui
     {
         public static bool usingConsole = false;
 
+        private static string CurrentVersionFile = "http://www.mcforge.net/curversion.txt";
         private static string DLLLocation = "http://www.mcforge.net/MCForge_.dll";
+        private static string ChangelogLocation = "http://www.mcforge.net/changelog.txt";
+        //private static string RevisionList = "http://www.mcforge.net/revs.txt";
+        //private static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
+        private static string ArchivePath = "http://www.mcforge.net/archives/exe/";
 
         [DllImport("kernel32")]
         public static extern IntPtr GetConsoleWindow();
@@ -199,7 +204,7 @@ namespace MCForge_.Gui
                 if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
                 try
                 {
-                    if (Client.DownloadString(ServerSettings.CurrentVersionFile) != Server.Version)
+                    if (Client.DownloadString(Program.CurrentVersionFile) != Server.Version)
                     {
                         if (Server.autoupdate == true || p != null)
                         {
@@ -337,16 +342,16 @@ namespace MCForge_.Gui
                 if (!oldrevision)
                 {
                     WebClient client = new WebClient();
-                    Server.selectedrevision = client.DownloadString(ServerSettings.CurrentVersionFile);
+                    Server.selectedrevision = client.DownloadString(Program.CurrentVersionFile);
                     client.Dispose();
                 }
                 verscheck = Server.selectedrevision.TrimStart('r');
                 int vers = int.Parse(verscheck.Split('.')[0]);
-                if (oldrevision) { filelocation = (ServerSettings.ArchivePath + Server.selectedrevision + ".exe"); }
+                if (oldrevision) { filelocation = (Program.ArchivePath + Server.selectedrevision + ".exe"); }
                 if (!oldrevision) { filelocation = (DLLLocation); }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
-                Client.DownloadFile(ServerSettings.ChangelogLocation, "extra/Changelog.txt");
+                Client.DownloadFile(Program.ChangelogLocation, "extra/Changelog.txt");
                 
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale
