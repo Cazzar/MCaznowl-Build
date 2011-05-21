@@ -98,6 +98,7 @@
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdHigh5.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
+    <Compile Include="Commands\CmdInfection.cs" />
     <Compile Include="Commands\CmdKickAll.cs" />
     <Compile Include="Commands\CmdLockdown.cs" />
     <Compile Include="Commands\CmdMain.cs" />
