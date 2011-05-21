@@ -32,7 +32,7 @@ namespace MCForge
             {
                 if ((!p.staticCommands == true) && (!p.megaBoid == true))
                 {
-                    Command.all.Find("static").Use(p, message);
+                    Command.all.Find("static").Use(p, "");
                     Command.all.Find("cuboid").Use(p, message);
                     Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " to stop this, use /zz again");
                 }
