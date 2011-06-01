@@ -90,12 +90,13 @@ namespace MCForge
                             {
                                 for (int iL = 1; iL < (p.level.depth - y); iL++)
                                 {
-                                    if (Block.LightPass(p.level.blocks[p.level.IntOffset(i, 0, iL, 0)]))
+                                    // Used to change grass to dirt only if all the upper blocks weren't Lightpass.
+                                    if (!Block.LightPass(p.level.blocks[p.level.IntOffset(i, 0, iL, 0)]))
                                     {
                                         skipMe = true; break;
                                     }
                                 }
-                                if (!skipMe)
+                                if (skipMe)
                                 {
                                     p.level.Blockchange(p, x, y, z, Block.dirt);
                                     totalFixed++;
