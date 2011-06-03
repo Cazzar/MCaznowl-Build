@@ -896,7 +896,7 @@ namespace MCForge
             byte oldType = type;
             type = bindings[type];
             //Ignores updating blocks that are the same and send block only to the player
-            if (b == (byte)((painting || action == 1) ? type : 0))
+            if (b == (byte)((painting || action == 1) ? type : (byte)0))
             {
                 if (painting || oldType != type) { SendBlockchange(x, y, z, b); } return;
             }
