@@ -118,6 +118,9 @@ namespace MCForge
         public bool changed = false;
         public bool backedup = false;
 
+        //Countdown
+        public bool countdowninprogress = false;
+
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
 

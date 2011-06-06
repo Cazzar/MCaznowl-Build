@@ -1320,6 +1320,11 @@ namespace MCForge
                         team.SpawnPlayer(this);
                         this.health = 100;
                     }
+                    if (CountdownGame.playersleftlist.Contains(this))
+                    {
+                        CountdownGame.Death(this);
+                        Command.all.Find("spawn").Use(this, "");
+                    }
                     else
                     {
                         Command.all.Find("spawn").Use(this, "");
