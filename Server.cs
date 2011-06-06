@@ -120,7 +120,7 @@ namespace MCForge
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
 
-        public static List<string> customdollars = new List<string>();
+        public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
@@ -266,36 +266,39 @@ namespace MCForge
             }
             catch { }
 
+            if (File.Exists("text/custom$s.txt"))
             {
-                if (File.Exists("text/custom$s.txt"))
+                using (StreamReader r = new StreamReader("text/custom$s.txt"))
                 {
-                    using (StreamReader r = new StreamReader("text/custom$s.txt"))
+                    string line;
+                    while ((line = r.ReadLine()) != null)
                     {
-                        string line;
-                        while ((line = r.ReadLine()) != null)
+                        if (!line.StartsWith("//"))
                         {
-                            if (!line.StartsWith("//"))
+                            var split = line.Split(new char[] { ':' }, 2);
+                            if (split.Length == 2 && !String.IsNullOrEmpty(split[0]))
                             {
-                                customdollars.Add(line);
+                                customdollars.Add(split[0], split[1]);
                             }
                         }
                     }
                 }
-                else
+            }
+            else
+            {
+                Log("custom$s.txt does not exist, creating");
+                using (StreamWriter SW = File.CreateText("text/custom$s.txt"))
                 {
-                    Log("custom$s.txt does not exist, creating");
-                    StreamWriter SW;
-                    SW = File.CreateText("text/custom$s.txt");
-                    SW.WriteLine("//This is used to create custom $s");
-                    SW.WriteLine("//if you start the line with a // it wont be used");
-                    SW.WriteLine("//It should be formatted like this:");
-                    SW.WriteLine("//$website:mcforge.net");
-                    SW.WriteLine("//That would replace '$website' in any message to 'mcforge.net'");
-                    SW.WriteLine("//It must not start with a // and it must not have a space between the 2 sides and the colon (:)");
+                    SW.WriteLine("// This is used to create custom $s");
+                    SW.WriteLine("// If you start the line with a // it wont be used");
+                    SW.WriteLine("// It should be formatted like this:");
+                    SW.WriteLine("// $website:mcforge.net");
+                    SW.WriteLine("// That would replace '$website' in any message to 'mcforge.net'");
+                    SW.WriteLine("// It must not start with a // and it must not have a space between the 2 sides and the colon (:)");
                     SW.Close();
                 }
             }
-
+            
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
 
