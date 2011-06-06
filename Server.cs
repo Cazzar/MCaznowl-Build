@@ -120,6 +120,8 @@ namespace MCForge
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
 
+        public static List<string> customdollars = new List<string>();
+
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
 
@@ -261,7 +263,38 @@ namespace MCForge
                 if (File.Exists("autoload.txt")) File.Move("autoload.txt", "text/autoload.txt");
                 if (File.Exists("IRC_Controllers.txt")) File.Move("IRC_Controllers.txt", "ranks/IRC_Controllers.txt");
                 if (Server.useWhitelist) if (File.Exists("whitelist.txt")) File.Move("whitelist.txt", "ranks/whitelist.txt");
-            } catch { }
+            }
+            catch { }
+
+            {
+                if (File.Exists("text/custom$s.txt"))
+                {
+                    using (StreamReader r = new StreamReader("text/custom$s.txt"))
+                    {
+                        string line;
+                        while ((line = r.ReadLine()) != null)
+                        {
+                            if (!line.StartsWith("//"))
+                            {
+                                customdollars.Add(line);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Log("custom$s.txt does not exist, creating");
+                    StreamWriter SW;
+                    SW = File.CreateText("text/custom$s.txt");
+                    SW.WriteLine("//This is used to create custom $s");
+                    SW.WriteLine("//if you start the line with a // it wont be used");
+                    SW.WriteLine("//It should be formatted like this:");
+                    SW.WriteLine("//$website:mcforge.net");
+                    SW.WriteLine("//That would replace '$website' in any message to 'mcforge.net'");
+                    SW.WriteLine("//It must not start with a // and it must not have a space between the 2 sides and the colon (:)");
+                    SW.Close();
+                }
+            }
 
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
@@ -313,7 +346,7 @@ namespace MCForge
 
             // Check if the title color column exists.
             DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
-            
+
             if (tcolorExists.Rows.Count == 0)
             {
                 MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
@@ -370,13 +403,14 @@ namespace MCForge
                     }
 
                     addLevel(mainLevel);
-                    
+
                     // fenderrock - Make sure the level does have a physics thread
-                    if(mainLevel.physThread == null)
+                    if (mainLevel.physThread == null)
                         mainLevel.physThread = new Thread(new ThreadStart(mainLevel.Physics));
 
                     mainLevel.physThread.Start();
-                } catch (Exception e) { Server.ErrorLog(e); }
+                }
+                catch (Exception e) { Server.ErrorLog(e); }
             });
 
             ml.Queue(delegate
@@ -543,7 +577,7 @@ namespace MCForge
                 {
                     new IRCBot();
                 }
-            
+
 
                 //      string CheckName = "FROSTEDBUTTS";
 
@@ -557,14 +591,14 @@ namespace MCForge
                         Thread.Sleep(blockInterval * 1000);
                         foreach (Level l in levels)
                         {
-							try
-							{
-	                            l.saveChanges();
-							}
-							catch(Exception e)
-							{
-								Server.ErrorLog(e);
-							}
+                            try
+                            {
+                                l.saveChanges();
+                            }
+                            catch (Exception e)
+                            {
+                                Server.ErrorLog(e);
+                            }
                         }
                     }
                 }));
@@ -588,8 +622,8 @@ namespace MCForge
                                 else if (p.following != "")
                                 {
                                     Player who = Player.Find(p.following);
-                                    if (who == null || who.level != p.level) 
-                                    { 
+                                    if (who == null || who.level != p.level)
+                                    {
                                         p.following = "";
                                         if (!p.canBuild)
                                         {
@@ -599,7 +633,7 @@ namespace MCForge
                                         {
                                             who.possess = "";
                                         }
-                                        continue; 
+                                        continue;
                                     }
                                     if (p.canBuild)
                                     {
@@ -609,7 +643,9 @@ namespace MCForge
                                     {
                                         unchecked { p.SendPos((byte)-1, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1]); }
                                     }
-                                } else if (p.possess != "") {
+                                }
+                                else if (p.possess != "")
+                                {
                                     Player who = Player.Find(p.possess);
                                     if (who == null || who.level != p.level)
                                         p.possess = "";
@@ -619,12 +655,13 @@ namespace MCForge
                                 ushort y = (ushort)(p.pos[1] / 32);
                                 ushort z = (ushort)(p.pos[2] / 32);
 
-                                if (p.level.Death) 
+                                if (p.level.Death)
                                     p.RealDeath(x, y, z);
                                 p.CheckBlock(x, y, z);
 
                                 p.oldBlock = (ushort)(x + y + z);
-                            } catch (Exception e) { Server.ErrorLog(e); }
+                            }
+                            catch (Exception e) { Server.ErrorLog(e); }
                         }
                     }
                 }));

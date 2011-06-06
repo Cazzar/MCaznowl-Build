@@ -1822,6 +1822,22 @@ namespace MCForge
 
             message = message.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
 
+            foreach (string customdollarsstring in Server.customdollars)
+            {
+                if (!customdollarsstring.StartsWith("//"))
+                {
+                    string oldmessage = message;
+                    try
+                    {
+                        message = message.Replace(customdollarsstring.Split(':')[0], customdollarsstring.Split(':')[1]);
+                    }
+                    catch
+                    {
+                        message = oldmessage;
+                    }
+                }
+            }
+
             if (Server.parseSmiley && parseSmiley)
             {
                 message = message.Replace(":)", "(darksmile)");
