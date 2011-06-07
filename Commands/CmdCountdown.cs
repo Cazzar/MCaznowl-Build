@@ -25,26 +25,22 @@ namespace MCForge
                 Server.s.Log("'null' or console tried to use /countdown. This command is limited to ingame, sorry!!");
                 return;
             }
-            string par = message.Split(' ')[0].ToLower();
-            string par1;
-            try
-            { par1 = message.Split(' ')[1].ToLower(); }
-            catch
-            { par1 = ""; }
 
-            string par2;
+            string[] command = message.ToLower().Split(' ');
+            string par0 = String.Empty;
+            string par1 = String.Empty;
+            string par2 = String.Empty;
+            string par3 = String.Empty;
             try
-            { par2 = message.Split(' ')[2].ToLower(); }
-            catch
-            { par2 = ""; }
+            {
+                par0 = command[0];
+                par1 = command[1];
+                par2 = command[2];
+                par3 = command[3];
+            }
+            catch { }
 
-            string par3;
-            try
-            { par3 = message.Split(' ')[3].ToLower(); }
-            catch
-            { par3 = ""; }
-
-            if (par == "goto")
+            if (par0 == "goto")
             {
                 try
                 {
@@ -57,14 +53,14 @@ namespace MCForge
                 }
             }
 
-            else if (par == "join")
+            else if (par0 == "join")
             {
-                switch (CountdownGame.gameprogress)
+                switch (CountdownGame.gamestatus)
                 {
-                    case 0:
+                    case CountdownGameStatus.Disabled:
                         Player.SendMessage(p, "Sorry - Countdown isn't enabled yet");
                         return;
-                    case 1:
+                    case CountdownGameStatus.Enabled:
                         if (!CountdownGame.players.Contains(p))
                         {
                             CountdownGame.players.Add(p);
@@ -81,39 +77,39 @@ namespace MCForge
                             return;
                         }
                         break;
-                    case 2:
+                    case CountdownGameStatus.AboutToStart:
                         Player.SendMessage(p, "Sorry - The game is about to start");
                         return; ;
-                    case 3:
+                    case CountdownGameStatus.InProgress:
                         Player.SendMessage(p, "Sorry - The game is already in progress.");
                         return;
-                    case 4:
+                    case CountdownGameStatus.Finished:
                         Player.SendMessage(p, "Sorry - The game has finished. Get an op to reset it.");
                         return;
                 }
             }
 
-            else if (par == "leave")
+            else if (par0 == "leave")
             {
                 if (CountdownGame.players.Contains(p))
                 {
-                    switch (CountdownGame.gameprogress)
+                    switch (CountdownGame.gamestatus)
                     {
-                        case 0:
+                        case CountdownGameStatus.Disabled:
                             Player.SendMessage(p, "Sorry - Countdown isn't enabled yet");
                             return;
-                        case 1:
+                        case CountdownGameStatus.Enabled:
                             CountdownGame.players.Remove(p);
                             CountdownGame.playersleftlist.Remove(p);
                             Player.SendMessage(p, "You've left the game.");
                             break;
-                        case 2:
+                        case CountdownGameStatus.AboutToStart:
                             Player.SendMessage(p, "Sorry - The game is about to start");
                             return; ;
-                        case 3:
+                        case CountdownGameStatus.InProgress:
                             Player.SendMessage(p, "Sorry - you are in a game that is in progress, please wait till its finished or till you've died.");
                             return;
-                        case 4:
+                        case CountdownGameStatus.Finished:
                             CountdownGame.players.Remove(p);
                             CountdownGame.playersleftlist.Remove(p);
                             Player.SendMessage(p, "You've left the game.");
@@ -132,15 +128,15 @@ namespace MCForge
                 }
             }
 
-            else if (par == "players")
+            else if (par0 == "players")
             {
-                switch (CountdownGame.gameprogress)
+                switch (CountdownGame.gamestatus)
                 {
-                    case 0:
+                    case CountdownGameStatus.Disabled:
                         Player.SendMessage(p, "The game has not been enabled yet.");
                         return;
 
-                    case 1:
+                    case CountdownGameStatus.Enabled:
                         Player.SendMessage(p, "Players who have joined:");
                         foreach (Player plya in CountdownGame.players)
                         {
@@ -148,7 +144,7 @@ namespace MCForge
                         }
                         break;
 
-                    case 2:
+                    case CountdownGameStatus.AboutToStart:
                         Player.SendMessage(p, "Players who are about to play:");
                         foreach (Player plya in CountdownGame.players)
                         {
@@ -158,7 +154,7 @@ namespace MCForge
                         }
                         break;
 
-                    case 3:
+                    case CountdownGameStatus.InProgress:
                         Player.SendMessage(p, "Players left playing:");
                         foreach (Player plya in CountdownGame.players)
                         {
@@ -175,7 +171,7 @@ namespace MCForge
                         }
                         break;
 
-                    case 4:
+                    case CountdownGameStatus.Finished:
                         Player.SendMessage(p, "Players who were playing:");
                         foreach (Player plya in CountdownGame.players)
                         {
@@ -185,9 +181,9 @@ namespace MCForge
                 }
             }
 
-            else if (par == "rules")
+            else if (par0 == "rules")
             {
-                if (par1 == null)
+                if (String.IsNullOrEmpty(par1))
                 {
                     Player.SendMessage(p, "The aim of the game is to stay alive the longest.");
                     Player.SendMessage(p, "Don't fall in the lava!!");
@@ -218,7 +214,7 @@ namespace MCForge
                             Player.SendMessage(p, "Countdown rules sent to: " + p.level.name);
                         }
                     }
-                    else if (par2 != null)
+                    else if (!String.IsNullOrEmpty(par2))
                     {
                         Player who = Player.Find(par2);
                         if (who == null)
@@ -256,7 +252,7 @@ namespace MCForge
 
             else if (p.group.Permission >= LevelPermission.Operator)
             {
-                if (par == "download")
+                if (par0 == "download")
                 {
                     WebClient WEB = new WebClient();
                     WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
@@ -277,12 +273,12 @@ namespace MCForge
                     unchecked { p.SendPos((byte)-1, x, y, z, p.rot[0], p.rot[1]); }
                 }
 
-                else if (par == "enable")
+                else if (par0 == "enable")
                 {
-                    if (CountdownGame.gameprogress == 0)
+                    if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
                     {
                         CountdownGame.mapon = Level.Find("countdown");
-                        CountdownGame.gameprogress = 1;
+                        CountdownGame.gamestatus = CountdownGameStatus.Enabled;
                         Player.SendMessage(p, "Countdown has been enabled");
                         Player.GlobalMessage("Countdown has been enabled!!");
                     }
@@ -293,9 +289,9 @@ namespace MCForge
                     }
                 }
 
-                else if (par == "disable")
+                else if (par0 == "disable")
                 {
-                    if (CountdownGame.gameprogress != 1 || CountdownGame.gameprogress != 4)
+                    if (CountdownGame.gamestatus != CountdownGameStatus.Enabled || CountdownGame.gamestatus != CountdownGameStatus.Finished)
                     {
                         Player.SendMessage(p, "Sorry, a game is currently in progress - please wait till its finished!!");
                         return;
@@ -306,7 +302,7 @@ namespace MCForge
                         {
                             Player.SendMessage(pl, "The countdown game was canceled.");
                         }
-                        CountdownGame.gameprogress = 0;
+                        CountdownGame.gamestatus = CountdownGameStatus.Disabled;
                         CountdownGame.playersleft = 0;
                         CountdownGame.playersleftlist.Clear();
                         CountdownGame.players.Clear();
@@ -314,13 +310,13 @@ namespace MCForge
                     }
                 }
 
-                else if (par == "start")
+                else if (par0 == "start")
                 {
                     if (CountdownGame.players.Count >= 2)
                     {
                         CountdownGame.playersleftlist = CountdownGame.players;
                         CountdownGame.playersleft = CountdownGame.players.Count;
-                        switch (par1.ToLower())
+                        switch (par1)
                         {
                             case "slow":
                                 CountdownGame.speed = 1000;
@@ -351,17 +347,17 @@ namespace MCForge
                     }
                 }
 
-                else if (par == "reset")
+                else if (par0 == "reset")
                 {
-                    switch (CountdownGame.gameprogress)
+                    switch (CountdownGame.gamestatus)
                     {
-                        case 0:
-                            Player.SendMessage(p, "Please enable countdown first!!");
+                        case CountdownGameStatus.Disabled:
+                            Player.SendMessage(p, "Please enable countdown first.");
                             return;
-                        case 2:
+                        case CountdownGameStatus.AboutToStart:
                             Player.SendMessage(p, "Sorry - The game is about to start");
                             return;
-                        case 3:
+                        case CountdownGameStatus.InProgress:
                             Player.SendMessage(p, "Sorry - The game is already in progress.");
                             return;
                         default:
@@ -383,7 +379,7 @@ namespace MCForge
                     }
                 }
 
-                else if (par == "tutorial")
+                else if (par0 == "tutorial")
                 {
                     p.SendMessage("First, download the map using /countdown download");
                     p.SendMessage("Next, type /countdown enable to enable the game mode");

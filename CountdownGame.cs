@@ -22,30 +22,30 @@ namespace MCForge
 
         public static string speedtype;
 
-        public static int gameprogress = 0;
+        public static CountdownGameStatus gamestatus = CountdownGameStatus.Disabled;
 
         public static void GameStart(Player p)
         {
-            switch (gameprogress)
+            switch (gamestatus)
             {
-                case 0:
+                case CountdownGameStatus.Disabled:
                     Player.SendMessage(p, "Please enable Countdown first!!");
                     return;
 
-                case 2:
+                case CountdownGameStatus.AboutToStart:
                     Player.SendMessage(p, "Game is about to start");
                     return;
 
-                case 3:
+                case CountdownGameStatus.InProgress:
                     Player.SendMessage(p, "Game is already in progress");
                     return;
 
-                case 4:
+                case CountdownGameStatus.Finished:
                     Player.SendMessage(p, "Game has finished");
                     return;
 
-                case 1:
-                    gameprogress = 2;
+                case CountdownGameStatus.Enabled:
+                    gamestatus = CountdownGameStatus.AboutToStart;
                     Thread.Sleep(2000);
                     break;
             }
@@ -148,22 +148,22 @@ namespace MCForge
 
         public static void Play()
         {
-            List<int> speed = new List<int>();
-            {
-                speed.Add(4000);
-                speed.Add(3000);
-                speed.Add(2000);
-                speed.Add(1500);
-                speed.Add(1000);
-            }
-            while (squaresleft.Count != 0 && playersleft != 0 && (gameprogress == 3 || gameprogress == 4))
+            List<int> speed = new List<int>() {
+                4000,
+                3000,
+                2000,
+                1500,
+                1000
+            };
+            
+            while (squaresleft.Any() && playersleft != 0 && (gamestatus == CountdownGameStatus.InProgress || gamestatus == CountdownGameStatus.Finished))
             {
                 Random number = new Random();
                 int randnum = number.Next(squaresleft.Count);
                 string nextsquare = squaresleft.ElementAt(randnum);
                 squaresleft.Remove(nextsquare);
                 RemoveSquare(nextsquare);
-                if (squaresleft.Count % 10 == 0 && gameprogress != 4)
+                if (squaresleft.Count % 10 == 0 && gamestatus != CountdownGameStatus.Finished)
                 {
                     mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString() + " Players left!!");
                 }
@@ -340,27 +340,27 @@ namespace MCForge
                 }
             }
             mapon.countdowninprogress = true;
-            gameprogress = 3;
+            gamestatus = CountdownGameStatus.InProgress;
         }
 
         public static void Death(Player p)
         {
             playersleft = playersleft - 1;
+            
+            mapon.ChatLevel(p.name + " is out of countdown!!");
+            
             playersleftlist.Remove(p);
             switch (playersleft)
             {
-                case 1:
-                    mapon.ChatLevel(p.name + " is out of countdown!!");
+                case 1:        
                     mapon.ChatLevel(playersleftlist.Last().name + " is the winner!!");
                     End(playersleftlist.Last());
                     break;
                 case 2:
-                    mapon.ChatLevel(p.name + " is out of countdown!!");
                     mapon.ChatLevel("Only 2 Players left:");
                     mapon.ChatLevel(playersleftlist.First().name + " and " + playersleftlist.Last().name);
                     break;
                 case 5:
-                    mapon.ChatLevel(p.name + " is out of countdown!!");
                     mapon.ChatLevel("Only 5 Players left:");
                     foreach (Player pl in playersleftlist)
                     {
@@ -369,7 +369,6 @@ namespace MCForge
                     }
                     break;
                 default:
-                    mapon.ChatLevel(p.name + " is out of countdown!!");
                     mapon.ChatLevel("Now there are " + playersleft.ToString() + " players left!!");
                     break;
             }
@@ -379,19 +378,19 @@ namespace MCForge
         {
             CountdownGame.squaresleft.Clear();
             winner.SendMessage("Congratulations!! You won!!!");
-            gameprogress = 4;
+            gamestatus = CountdownGameStatus.Finished;
             Command.all.Find("spawn").Use(winner, "");
         }
 
         public static void Reset(Player p, bool all)
         {
-            if (gameprogress == 1 || gameprogress == 4)
+            if (gamestatus == CountdownGameStatus.Enabled || gamestatus == CountdownGameStatus.Finished)
             {
                 {
                     if (all == true)
                     {
                         { //clean variables
-                            CountdownGame.gameprogress = 0;
+                            CountdownGame.gamestatus = CountdownGameStatus.Disabled;
                             CountdownGame.playersleft = 0;
                             CountdownGame.playersleftlist.Clear();
                             CountdownGame.players.Clear();
@@ -514,28 +513,28 @@ namespace MCForge
                 if (all == false)
                 {
                     p.SendMessage("The Countdown map has been reset");
-                    if (gameprogress == 4)
+                    if (gamestatus == CountdownGameStatus.Finished)
                     {
                         p.SendMessage("You do not need to re-enable it");
                     }
-                    gameprogress = 1;
+                    gamestatus = CountdownGameStatus.Enabled;
                 }
                 else if (all == true)
                 {
                     p.SendMessage("Countdown has been reset");
-                    if (gameprogress == 4)
+                    if (gamestatus == CountdownGameStatus.Finished)
                     {
                         p.SendMessage("You do not need to re-enable it");
                     }
-                    gameprogress = 1;
+                    gamestatus = CountdownGameStatus.Enabled;
                 }
 
             }
             else
             {
-                switch (gameprogress)
+                switch (gamestatus)
                 {
-                    case 0:
+                    case CountdownGameStatus.Disabled:
                         p.SendMessage("Please enable the game first");
                         return;
 
@@ -545,5 +544,14 @@ namespace MCForge
                 }
             }
         }
+    }
+
+    public enum CountdownGameStatus : int
+    {
+        Disabled = 0,
+        Enabled = 1,
+        AboutToStart = 2,
+        InProgress = 3,
+        Finished = 4
     }
 }
