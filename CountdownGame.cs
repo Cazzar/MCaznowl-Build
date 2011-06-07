@@ -1,0 +1,549 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+
+namespace MCForge
+{
+    class CountdownGame
+    {
+        public static List<Player> players = new List<Player>();
+
+        public static List<Player> playersleftlist = new List<Player>();
+
+        public static List<string> squaresleft = new List<string>();
+
+        public static Level mapon;
+
+        public static int playersleft;
+
+        public static int speed;
+
+        public static string speedtype;
+
+        public static int gameprogress = 0;
+
+        public static void GameStart(Player p)
+        {
+            switch (gameprogress)
+            {
+                case 0:
+                    Player.SendMessage(p, "Please enable Countdown first!!");
+                    return;
+
+                case 2:
+                    Player.SendMessage(p, "Game is about to start");
+                    return;
+
+                case 3:
+                    Player.SendMessage(p, "Game is already in progress");
+                    return;
+
+                case 4:
+                    Player.SendMessage(p, "Game has finished");
+                    return;
+
+                case 1:
+                    gameprogress = 2;
+                    Thread.Sleep(2000);
+                    break;
+            }
+            {
+                {
+                    mapon.Blockchange(15, 27, 16, Block.glass);
+                    mapon.Blockchange(16, 27, 15, Block.glass);
+                    mapon.Blockchange(16, 27, 16, Block.glass);
+                    mapon.Blockchange(15, 27, 15, Block.glass);
+                }
+                {
+                    {
+                        mapon.Blockchange(15, 18, 14, Block.glass);
+                        mapon.Blockchange(16, 18, 14, Block.glass);
+                        mapon.Blockchange(15, 17, 14, Block.glass);
+                        mapon.Blockchange(16, 17, 14, Block.glass);
+                    }
+                    {
+                        mapon.Blockchange(14, 17, 15, Block.glass);
+                        mapon.Blockchange(14, 18, 16, Block.glass);
+                        mapon.Blockchange(14, 17, 16, Block.glass);
+                        mapon.Blockchange(14, 18, 15, Block.glass);
+                    }
+                    {
+                        mapon.Blockchange(15, 17, 17, Block.glass);
+                        mapon.Blockchange(16, 18, 17, Block.glass);
+                        mapon.Blockchange(15, 18, 17, Block.glass);
+                        mapon.Blockchange(16, 17, 17, Block.glass);
+                    }
+                    {
+                        mapon.Blockchange(17, 17, 16, Block.glass);
+                        mapon.Blockchange(17, 18, 15, Block.glass);
+                        mapon.Blockchange(17, 18, 16, Block.glass);
+                        mapon.Blockchange(17, 17, 15, Block.glass);
+                    }
+                }
+                {
+                    mapon.Blockchange(16, 16, 15, Block.glass);
+                    mapon.Blockchange(15, 16, 16, Block.glass);
+                    mapon.Blockchange(15, 16, 15, Block.glass);
+                    mapon.Blockchange(16, 16, 16, Block.glass);
+                }
+            }
+            mapon.ChatLevel("Countdown is about to start!!");
+            mapon.permissionbuild = LevelPermission.Nobody;
+            ushort x1 = (ushort)((15.5) * 32);
+            ushort y1 = (ushort)((30) * 32);
+            ushort z1 = (ushort)((15.5) * 32);
+            foreach (Player player in players)
+            {
+                if (player.level != mapon)
+                {
+                    player.SendMessage("Sending you to the correct map.");
+                    Command.all.Find("goto").Use(player, mapon.name);
+                    Thread.Sleep(1000);
+                    // Sleep for a bit while they load
+                    while (player.Loading) { Thread.Sleep(250); }
+                }
+                unchecked
+                {
+                    player.SendSpawn((byte)-1, player.name, x1, y1, z1, (byte)0, (byte)0);
+                }
+            }
+            {
+                CountdownGame.squaresleft.Clear();
+                PopulateSquaresLeft();
+                mapon.ChatLevel("Countdown starting with difficulty " + speedtype + " in:");
+                Thread.Sleep(2000);
+                mapon.ChatLevel("-----&b5" + Server.DefaultColor + "-----");
+                {
+                    mapon.Blockchange(16, 16, 15, Block.air);
+                    mapon.Blockchange(15, 16, 16, Block.air);
+                    mapon.Blockchange(15, 16, 15, Block.air);
+                    mapon.Blockchange(16, 16, 16, Block.air);
+                }
+                Thread.Sleep(1000);
+                mapon.ChatLevel("-----&b4" + Server.DefaultColor + "-----");
+                Thread.Sleep(1000);
+                mapon.ChatLevel("-----&b3" + Server.DefaultColor + "-----");
+                Thread.Sleep(1000);
+                {
+                    mapon.Blockchange(15, 27, 16, Block.air);
+                    mapon.Blockchange(16, 27, 15, Block.air);
+                    mapon.Blockchange(16, 27, 16, Block.air);
+                    mapon.Blockchange(15, 27, 15, Block.air);
+                }
+                mapon.ChatLevel("-----&b2" + Server.DefaultColor + "-----");
+                Thread.Sleep(1000);
+                mapon.ChatLevel("-----&b1" + Server.DefaultColor + "-----");
+                Thread.Sleep(1000);
+                mapon.ChatLevel("GO!!!!!!!");
+            }
+            {
+                playersleft = players.Count();
+                playersleftlist = players;
+            }
+            AfterStart();
+            Play();
+        }
+
+        public static void Play()
+        {
+            List<int> speed = new List<int>();
+            {
+                speed.Add(4000);
+                speed.Add(3000);
+                speed.Add(2000);
+                speed.Add(1500);
+                speed.Add(1000);
+            }
+            while (squaresleft.Count != 0 && playersleft != 0 && (gameprogress == 3 || gameprogress == 4))
+            {
+                Random number = new Random();
+                int randnum = number.Next(squaresleft.Count);
+                string nextsquare = squaresleft.ElementAt(randnum);
+                squaresleft.Remove(nextsquare);
+                RemoveSquare(nextsquare);
+                if (squaresleft.Count % 10 == 0 && gameprogress != 4)
+                {
+                    mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString() + " Players left!!");
+                }
+
+            }
+        }
+
+        public static void RemoveSquare(string square)
+        {
+            int column = int.Parse(square.Split(':')[0]);
+            int row = int.Parse(square.Split(':')[1]);
+            ushort x1 = (ushort)(27 - (row * 3));
+            ushort x2 = (ushort)(28 - (row * 3));
+            ushort y = 4;
+            ushort z1 = (ushort)(27 - (column * 3));
+            ushort z2 = (ushort)(28 - (column * 3));
+            {
+                { //3
+                    mapon.Blockchange(x1, y, z1, Block.yellow);
+                    mapon.Blockchange(x2, y, z1, Block.yellow);
+                    mapon.Blockchange(x2, y, z2, Block.yellow);
+                    mapon.Blockchange(x1, y, z2, Block.yellow);
+                }
+                Thread.Sleep(speed);
+                { //2
+                    mapon.Blockchange(x1, y, z1, Block.orange);
+                    mapon.Blockchange(x2, y, z1, Block.orange);
+                    mapon.Blockchange(x2, y, z2, Block.orange);
+                    mapon.Blockchange(x1, y, z2, Block.orange);
+                }
+                Thread.Sleep(speed);
+                { //1
+                    mapon.Blockchange(x1, y, z1, Block.red);
+                    mapon.Blockchange(x2, y, z1, Block.red);
+                    mapon.Blockchange(x2, y, z2, Block.red);
+                    mapon.Blockchange(x1, y, z2, Block.red);
+                }
+                Thread.Sleep(speed);
+                { //poof
+                    mapon.Blockchange(x1, y, z1, Block.air);
+                    mapon.Blockchange(x2, y, z1, Block.air);
+                    mapon.Blockchange(x2, y, z2, Block.air);
+                    mapon.Blockchange(x1, y, z2, Block.air);
+                    { //beneath this is checking the glass next to the square
+                        bool up = false;
+                        bool left = false;
+                        bool right = false;
+                        bool down = false;
+                        {//directly next to
+                            if (mapon.GetTile(x1, y, (ushort)(z2 + 2)) == Block.air) //right
+                            {
+                                mapon.Blockchange(x1, y, (ushort)(z2 + 1), Block.air);
+                                mapon.Blockchange(x2, y, (ushort)(z2 + 1), Block.air);
+                                right = true;
+                            }
+                            if (mapon.GetTile(x1, y, (ushort)(z1 - 2)) == Block.air) //left
+                            {
+                                mapon.Blockchange(x1, y, (ushort)(z1 - 1), Block.air);
+                                mapon.Blockchange(x2, y, (ushort)(z1 - 1), Block.air);
+                                left = true;
+                            }
+                            if (mapon.GetTile((ushort)(x2 + 2), y, z1) == Block.air) //up
+                            {
+                                mapon.Blockchange((ushort)(x2 + 1), y, z1, Block.air);
+                                mapon.Blockchange((ushort)(x2 + 1), y, z2, Block.air);
+                                up = true;
+                            }
+                            if (mapon.GetTile((ushort)(x1 - 2), y, z1) == Block.air) //down
+                            {
+                                mapon.Blockchange((ushort)(x1 - 1), y, z1, Block.air);
+                                mapon.Blockchange((ushort)(x1 - 1), y, z2, Block.air);
+                                down = true;
+                            }
+                        }
+                        {//diagonal >:(
+                            if ((mapon.GetTile((ushort)(x1 - 2), y, (ushort)(z1 - 2)) == Block.air) && left == true && down == true) //bottom left
+                            {
+                                mapon.Blockchange((ushort)(x1 - 1), y, (ushort)(z1 - 1), Block.air);
+                            }
+                            if ((mapon.GetTile((ushort)(x1 - 2), y, (ushort)(z2 + 2)) == Block.air) && right == true && down == true) //bottom right
+                            {
+                                mapon.Blockchange((ushort)(x1 - 1), y, (ushort)(z2 + 1), Block.air);
+                            }
+                            if ((mapon.GetTile((ushort)(x2 + 2), y, (ushort)(z1 - 2)) == Block.air) && left == true && up == true) //top left
+                            {
+                                mapon.Blockchange((ushort)(x2 + 1), y, (ushort)(z1 - 1), Block.air);
+                            }
+                            if ((mapon.GetTile((ushort)(x2 + 2), y, (ushort)(z2 + 2)) == Block.air) && right == true && up == true) //top right
+                            {
+                                mapon.Blockchange((ushort)(x2 + 1), y, (ushort)(z2 + 1), Block.air);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void PopulateSquaresLeft()
+        {
+            int column = 1;
+            int row = 1;
+            while (column <= 7)
+            {
+                row = 1;
+                while (row <= 7)
+                {
+                    squaresleft.Add(column.ToString() + ":" + row.ToString());
+                    row = row + 1;
+                }
+                column = column + 1;
+            }
+        }
+
+        public static void AfterStart()
+        {
+            {
+                {
+                    {
+                        mapon.Blockchange(15, 18, 14, Block.air);
+                        mapon.Blockchange(16, 18, 14, Block.air);
+                        mapon.Blockchange(15, 17, 14, Block.air);
+                        mapon.Blockchange(16, 17, 14, Block.air);
+                    }
+                    {
+                        mapon.Blockchange(14, 17, 15, Block.air);
+                        mapon.Blockchange(14, 18, 16, Block.air);
+                        mapon.Blockchange(14, 17, 16, Block.air);
+                        mapon.Blockchange(14, 18, 15, Block.air);
+                    }
+                    {
+                        mapon.Blockchange(15, 17, 17, Block.air);
+                        mapon.Blockchange(16, 18, 17, Block.air);
+                        mapon.Blockchange(15, 18, 17, Block.air);
+                        mapon.Blockchange(16, 17, 17, Block.air);
+                    }
+                    {
+                        mapon.Blockchange(17, 17, 16, Block.air);
+                        mapon.Blockchange(17, 18, 15, Block.air);
+                        mapon.Blockchange(17, 18, 16, Block.air);
+                        mapon.Blockchange(17, 17, 15, Block.air);
+                    }
+                }
+                {
+                    mapon.Blockchange(16, 16, 15, Block.glass);
+                    mapon.Blockchange(15, 16, 16, Block.glass);
+                    mapon.Blockchange(15, 16, 15, Block.glass);
+                    mapon.Blockchange(16, 16, 16, Block.glass);
+                }
+                {
+                    ushort x1 = 27;
+                    while (x1 >= 4)
+                    {
+                        mapon.Blockchange(x1, 4, 4, Block.air);
+                        x1 = (ushort)(x1 - 1);
+                    }
+                    ushort x2 = 4;
+                    while (x2 <= 27)
+                    {
+                        mapon.Blockchange(x2, 4, 27, Block.air);
+                        x2++;
+                    }
+                    ushort z1 = 27;
+                    while (z1 >= 4)
+                    {
+                        mapon.Blockchange(4, 4, z1, Block.air);
+                        z1 = (ushort)(z1 - 1);
+                    }
+                    ushort z2 = 4;
+                    while (z2 <= 27)
+                    {
+                        mapon.Blockchange(27, 4, z2, Block.air);
+                        z2++;
+                    }
+                }
+            }
+            mapon.countdowninprogress = true;
+            gameprogress = 3;
+        }
+
+        public static void Death(Player p)
+        {
+            playersleft = playersleft - 1;
+            playersleftlist.Remove(p);
+            switch (playersleft)
+            {
+                case 1:
+                    mapon.ChatLevel(p.name + " is out of countdown!!");
+                    mapon.ChatLevel(playersleftlist.Last().name + " is the winner!!");
+                    End(playersleftlist.Last());
+                    break;
+                case 2:
+                    mapon.ChatLevel(p.name + " is out of countdown!!");
+                    mapon.ChatLevel("Only 2 Players left:");
+                    mapon.ChatLevel(playersleftlist.First().name + " and " + playersleftlist.Last().name);
+                    break;
+                case 5:
+                    mapon.ChatLevel(p.name + " is out of countdown!!");
+                    mapon.ChatLevel("Only 5 Players left:");
+                    foreach (Player pl in playersleftlist)
+                    {
+                        mapon.ChatLevel(pl.name);
+                        Thread.Sleep(500);
+                    }
+                    break;
+                default:
+                    mapon.ChatLevel(p.name + " is out of countdown!!");
+                    mapon.ChatLevel("Now there are " + playersleft.ToString() + " players left!!");
+                    break;
+            }
+        }
+
+        public static void End(Player winner)
+        {
+            CountdownGame.squaresleft.Clear();
+            winner.SendMessage("Congratulations!! You won!!!");
+            gameprogress = 4;
+            Command.all.Find("spawn").Use(winner, "");
+        }
+
+        public static void Reset(Player p, bool all)
+        {
+            if (gameprogress == 1 || gameprogress == 4)
+            {
+                {
+                    if (all == true)
+                    {
+                        { //clean variables
+                            CountdownGame.gameprogress = 0;
+                            CountdownGame.playersleft = 0;
+                            CountdownGame.playersleftlist.Clear();
+                            CountdownGame.players.Clear();
+                            CountdownGame.squaresleft.Clear();
+                            CountdownGame.speed = 750;
+                        }
+                    }
+                    { //top part of map tube thingy
+                        {
+                            mapon.Blockchange(15, 18, 14, Block.air);
+                            mapon.Blockchange(16, 18, 14, Block.air);
+                            mapon.Blockchange(15, 17, 14, Block.air);
+                            mapon.Blockchange(16, 17, 14, Block.air);
+                        }
+                        {
+                            mapon.Blockchange(14, 17, 15, Block.air);
+                            mapon.Blockchange(14, 18, 16, Block.air);
+                            mapon.Blockchange(14, 17, 16, Block.air);
+                            mapon.Blockchange(14, 18, 15, Block.air);
+                        }
+                        {
+                            mapon.Blockchange(15, 17, 17, Block.air);
+                            mapon.Blockchange(16, 18, 17, Block.air);
+                            mapon.Blockchange(15, 18, 17, Block.air);
+                            mapon.Blockchange(16, 17, 17, Block.air);
+                        }
+                        {
+                            mapon.Blockchange(17, 17, 16, Block.air);
+                            mapon.Blockchange(17, 18, 15, Block.air);
+                            mapon.Blockchange(17, 18, 16, Block.air);
+                            mapon.Blockchange(17, 17, 15, Block.air);
+                        }
+                        {
+                            mapon.Blockchange(16, 16, 15, Block.glass);
+                            mapon.Blockchange(15, 16, 16, Block.glass);
+                            mapon.Blockchange(15, 16, 15, Block.glass);
+                            mapon.Blockchange(16, 16, 16, Block.glass);
+                        }
+                    }
+                    {
+                        { //sides of map
+                            ushort x1 = 27;
+                            while (x1 >= 4)
+                            {
+                                mapon.Blockchange(x1, 4, 4, Block.glass);
+                                x1 = (ushort)(x1 - 1);
+                            }
+                            ushort x2 = 4;
+                            while (x2 <= 27)
+                            {
+                                mapon.Blockchange(x2, 4, 27, Block.glass);
+                                x2++;
+                            }
+                            ushort z1 = 27;
+                            while (z1 >= 4)
+                            {
+                                mapon.Blockchange(4, 4, z1, Block.glass);
+                                z1 = (ushort)(z1 - 1);
+                            }
+                            ushort z2 = 4;
+                            while (z2 <= 27)
+                            {
+                                mapon.Blockchange(27, 4, z2, Block.glass);
+                                z2++;
+                            }
+                        }
+                        { //rest of glass on map
+                            ushort x3 = 5;
+                            while (x3 <= 26)
+                            {
+                                ushort z4 = 26;
+                                while (z4 >= 4)
+                                {
+                                    mapon.Blockchange(x3, 4, z4, Block.glass);
+                                    z4 = (ushort)(z4 - 1);
+                                }
+                                x3 = (ushort)(x3 + 3);
+                            }
+                            ushort z3 = 5;
+                            while (z3 <= 26)
+                            {
+                                ushort x4 = 4;
+                                while (x4 <= 26)
+                                {
+                                    mapon.Blockchange(x4, 4, z3, Block.glass);
+                                    x4++;
+                                }
+                                z3 = (ushort)(z3 + 3);
+                            }
+                        }
+                        { //green on map
+                            PopulateSquaresLeft();
+                            while (squaresleft.Count > 0)
+                            {
+                                Random number = new Random();
+                                int randnum = number.Next(squaresleft.Count);
+                                string nextsquare = squaresleft.ElementAt(randnum);
+                                squaresleft.Remove(nextsquare);
+                                {
+                                    int column = int.Parse(nextsquare.Split(':')[0]);
+                                    int row = int.Parse(nextsquare.Split(':')[1]);
+                                    ushort x1 = (ushort)(27 - (row * 3));
+                                    ushort x2 = (ushort)(28 - (row * 3));
+                                    ushort y = 4;
+                                    ushort z1 = (ushort)(27 - (column * 3));
+                                    ushort z2 = (ushort)(28 - (column * 3));
+                                    {
+                                        {
+                                            mapon.Blockchange(x1, y, z1, Block.green);
+                                            mapon.Blockchange(x2, y, z1, Block.green);
+                                            mapon.Blockchange(x2, y, z2, Block.green);
+                                            mapon.Blockchange(x1, y, z2, Block.green);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (all == false)
+                {
+                    p.SendMessage("The Countdown map has been reset");
+                    if (gameprogress == 4)
+                    {
+                        p.SendMessage("You do not need to re-enable it");
+                    }
+                    gameprogress = 1;
+                }
+                else if (all == true)
+                {
+                    p.SendMessage("Countdown has been reset");
+                    if (gameprogress == 4)
+                    {
+                        p.SendMessage("You do not need to re-enable it");
+                    }
+                    gameprogress = 1;
+                }
+
+            }
+            else
+            {
+                switch (gameprogress)
+                {
+                    case 0:
+                        p.SendMessage("Please enable the game first");
+                        return;
+
+                    default:
+                        p.SendMessage("Please wait till the end of the game");
+                        return;
+                }
+            }
+        }
+    }
+}
