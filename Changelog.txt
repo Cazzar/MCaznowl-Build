@@ -4,6 +4,8 @@ Pending Changes
 - /zz no longer shows an error when using "/zz blockname" (Github issue #7)
 - Player, Level, and Server now use an ExtrasCollection member named "Extras" to help manage extra data needed by custom commands
 - Custom $ replacements are now possible via file text/custom$s.txt
+- Fixed /fixgrass light not converting shaded grass to dirt.
+- Removed unused files from the source code repository
 
 v4.6.0.1
 - Command thread will no longer be manually aborted, as this can sometimes cause problems closing the socket.
