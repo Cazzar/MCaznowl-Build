@@ -47,6 +47,7 @@ namespace MCForge
                             Player.SendMessage(p, "Use &b/help mod" + Server.DefaultColor + " for a list of moderation commands.");
                             Player.SendMessage(p, "Use &b/help information" + Server.DefaultColor + " for a list of information commands.");
                             Player.SendMessage(p, "Use &b/help other" + Server.DefaultColor + " for a list of other commands.");
+                            Player.SendMessage(p, "Use &b/help colors" + Server.DefaultColor + "to view the color codes.");
                             Player.SendMessage(p, "Use &b/help short" + Server.DefaultColor + " for a list of shortcuts.");
                             Player.SendMessage(p, "Use &b/help old" + Server.DefaultColor + " to view the Old help menu.");
                             Player.SendMessage(p, "Use &b/help [command] or /help [block] " + Server.DefaultColor + "to view more info.");
@@ -127,6 +128,27 @@ namespace MCForge
                         Player.SendMessage(p, "Available shortcuts:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
+                    case "colours":
+                    case "colors":
+                            Player.SendMessage(p, "&fTo use a color simply put a '%' sign symbol before you put the color code.");
+                            Player.SendMessage(p, "Colors Available:");
+                            Player.SendMessage(p, "0 - &0Black");
+                            Player.SendMessage(p, "1 - &1Navy");
+                            Player.SendMessage(p, "2 - &2Green");
+                            Player.SendMessage(p, "3 - &3Teal");
+                            Player.SendMessage(p, "4 - &4Maroon");
+                            Player.SendMessage(p, "5 - &5Purple");
+                            Player.SendMessage(p, "6 - &6Gold");
+                            Player.SendMessage(p, "7 - &7Silver");
+                            Player.SendMessage(p, "8 - &8Gray");
+                            Player.SendMessage(p, "9 - &9Blue");
+                            Player.SendMessage(p, "a - &aLime");
+                            Player.SendMessage(p, "b - &bAqua");
+                            Player.SendMessage(p, "c - &cRed");
+                            Player.SendMessage(p, "d - &dPink");
+                            Player.SendMessage(p, "e - &eYellow");
+                            Player.SendMessage(p, "f - &fWhite");
+                            break;
                     case "old":
                         string commandsFound = "";
                         foreach (Command comm in Command.all.commands)
