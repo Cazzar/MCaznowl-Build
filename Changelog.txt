@@ -1,10 +1,13 @@
 Pending Changes
+- Added /splace - Measures a set [distance] and places a stone block at each end
+- Added color information to /help
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Updater should no longer crash when updating (Github issue #3)
 - /zz no longer shows an error when using "/zz blockname" (Github issue #7)
 - Player, Level, and Server now use an ExtrasCollection member named "Extras" to help manage extra data needed by custom commands
 - Custom $ replacements are now possible via file text/custom$s.txt
 - Fixed /fixgrass light not converting shaded grass to dirt.
+- Fixed an issue in CmdLoad.cs where it would constantly get stuck on corrupted levels
 - Removed unused files from the source code repository
 
 v4.6.0.1
