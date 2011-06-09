@@ -1,4 +1,5 @@
 Pending Changes
+- Added new game: Countdown
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Updater should no longer crash when updating (Github issue #3)
 - /zz no longer shows an error when using "/zz blockname" (Github issue #7)
