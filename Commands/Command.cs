@@ -190,6 +190,7 @@ namespace MCForge
             all.Add(new CmdSpawn());
             all.Add(new CmdSpheroid());
             all.Add(new CmdSpin());
+            all.Add(new CmdSPlace());
             all.Add(new CmdStairs());
             all.Add(new CmdStatic());
             all.Add(new CmdStore());
