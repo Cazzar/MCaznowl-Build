@@ -132,14 +132,14 @@ namespace MCForge
                     case "colors":
                             Player.SendMessage(p, "&fTo use a color simply put a '%' sign symbol before you put the color code.");
                             Player.SendMessage(p, "Colors Available:");
-                            Player.SendMessage(p, "0 - &0Black   |  8 - &8Gray");
-                            Player.SendMessage(p, "1 - &1Navy    |  9 - &9Blue");
-                            Player.SendMessage(p, "2 - &2Green   |  a - &aLime");
-                            Player.SendMessage(p, "3 - &3Teal    |  b - &bAqua");
-                            Player.SendMessage(p, "4 - &4Maroon  |  c - &cRed");
-                            Player.SendMessage(p, "5 - &5Purple  |  d - &dPink");
-                            Player.SendMessage(p, "6 - &6Gold    |  e - &eYellow");
-                            Player.SendMessage(p, "7 - &7Silver  |  f - &fWhite");
+                            Player.SendMessage(p, "0 - &0Black     " + Server.DefaultColor + "|  8 - &8Gray");
+                            Player.SendMessage(p, "1 - &1Navy     " + Server.DefaultColor + "|  9 - &9Blue");
+                            Player.SendMessage(p, "2 - &2Green    " + Server.DefaultColor + "|  a - &aLime");
+                            Player.SendMessage(p, "3 - &3Teal      " + Server.DefaultColor + "|  b - &bAqua");
+                            Player.SendMessage(p, "4 - &4Maroon  " + Server.DefaultColor + "|  c - &cRed");
+                            Player.SendMessage(p, "5 - &5Purple   " + Server.DefaultColor + "|  d - &dPink");
+                            Player.SendMessage(p, "6 - &6Gold      " + Server.DefaultColor + "|  e - &eYellow");
+                            Player.SendMessage(p, "7 - &7Silver    " + Server.DefaultColor + "|  f - &fWhite");
                             break;
                     case "old":
                         string commandsFound = "";
