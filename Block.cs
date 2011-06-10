@@ -267,6 +267,23 @@ namespace MCForge
             public LevelPermission lowestRank;
             public List<LevelPermission> disallow = new List<LevelPermission>();
             public List<LevelPermission> allow = new List<LevelPermission>();
+
+            public bool IncludeInBlockProperties()
+            {
+                if (Block.Name(type).ToLower() == "unknown")
+                    return false;
+
+                if(type == Block.flagbase)
+                    return false;
+
+                if (type >= Block.odoor1_air && type <= Block.odoor7_air)
+                    return false;
+
+                if (type >= Block.odoor8_air && type <= Block.odoor12_air)
+                    return false;
+
+                return true;
+            }
         }
 
         public static void SetBlocks()
@@ -576,7 +593,7 @@ namespace MCForge
 
                 foreach (Blocks bs in givenList)
                 {
-                    if (Block.Name(bs.type).ToLower() != "unknown")
+                    if(bs.IncludeInBlockProperties())                    
                     {
                         string line = Block.Name(bs.type) + " : " + (int)bs.lowestRank + " : " + GrpCommands.getInts(bs.disallow) + " : " + GrpCommands.getInts(bs.allow);
                         w.WriteLine(line);
