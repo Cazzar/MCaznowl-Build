@@ -2143,6 +2143,31 @@ namespace MCForge
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
+            {//Check for bad colour codes
+                string checkmessage = message;
+                string[] checkmessagesplit = checkmessage.Split(' ');
+                bool laststartwithcolour = false; ;
+                foreach (string s in checkmessagesplit)
+                {
+                    if (s.StartsWith("%") && s.Count() < 3)
+                    {
+                        if (laststartwithcolour == true)
+                        {
+                            from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
+                            from.SendMessage("Offending Message not sent");
+                            Server.s.Log(from.name + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                            GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                            return;
+                        }
+                        else
+                        {
+                            laststartwithcolour = true;
+                        }
+                    }
+
+                }
+                
+            }
             if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
         }
