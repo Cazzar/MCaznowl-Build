@@ -2164,6 +2164,10 @@ namespace MCForge
                             laststartwithcolour = true;
                         }
                     }
+                    else
+                    {
+                        laststartwithcolour = false;
+                    }
 
                 }
                 
