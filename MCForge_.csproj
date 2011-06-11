@@ -88,6 +88,7 @@
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
+    <Compile Include="Commands\CmdCountdown.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
     <Compile Include="Commands\CmdFakePay.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Commands\CmdSeen.cs" />
     <Compile Include="Commands\CmdSendCmd.cs" />
     <Compile Include="Commands\CmdShutdown.cs" />
+    <Compile Include="Commands\CmdSPlace.cs" />
     <Compile Include="Commands\CmdTColor.cs" />
     <Compile Include="Commands\CmdCmdUnload.cs" />
     <Compile Include="Commands\CmdCmdLoad.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Commands\CmdZz.cs" />
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
+    <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />

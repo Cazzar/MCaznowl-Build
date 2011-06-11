@@ -1320,6 +1320,11 @@ namespace MCForge
                         team.SpawnPlayer(this);
                         this.health = 100;
                     }
+                    if (CountdownGame.playersleftlist.Contains(this))
+                    {
+                        CountdownGame.Death(this);
+                        Command.all.Find("spawn").Use(this, "");
+                    }
                     else
                     {
                         Command.all.Find("spawn").Use(this, "");
@@ -1821,6 +1826,22 @@ namespace MCForge
             message = message.Replace("$banned", Player.GetBannedCount().ToString());
 
             message = message.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
+
+            foreach (var customReplacement in Server.customdollars)
+            {
+                if (!customReplacement.Key.StartsWith("//"))
+                {
+                    string oldmessage = message;
+                    try
+                    {
+                        message = message.Replace(customReplacement.Key, customReplacement.Value);
+                    }
+                    catch
+                    {
+                        message = oldmessage;
+                    }
+                }
+            }
 
             if (Server.parseSmiley && parseSmiley)
             {
