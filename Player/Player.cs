@@ -2159,42 +2159,49 @@ namespace MCForge
         public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
         public static void GlobalChat(Player from, string message, bool showname)
         {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
-            {//Check for bad colour codes
-                string checkmessage = message;
-                string[] checkmessagesplit = checkmessage.Split(' ');
-                bool laststartwithcolour = false; ;
-                foreach (string s in checkmessagesplit)
+            if (MessageHasBadColorCodes(from, message))
+                return;
+
+            if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
+        }
+
+        private static bool MessageHasBadColorCodes(Player from, string message)
+        {
+            string[] checkmessagesplit = message.Split(' ');
+            bool laststartwithcolour = false;
+            foreach (string s in checkmessagesplit)
+            {
+                if (s.StartsWith("%") && s.Count() < 3)
                 {
-                    if (s.StartsWith("%") && s.Count() < 3)
+                    if (laststartwithcolour == true)
                     {
-                        if (laststartwithcolour == true)
-                        {
-                            from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
-                            from.SendMessage("Offending Message not sent");
-                            Server.s.Log(from.name + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
-                            GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
-                            return;
-                        }
-                        else
-                        {
-                            laststartwithcolour = true;
-                        }
+                        from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
+                        from.SendMessage("Message not sent");
+                        Server.s.Log(from.name + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                        GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                        return true;
                     }
                     else
                     {
-                        laststartwithcolour = false;
+                        laststartwithcolour = true;
                     }
-
                 }
-                
+                else
+                {
+                    laststartwithcolour = false;
+                }
+
             }
-            if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
+            return false;
         }
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
