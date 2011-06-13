@@ -83,7 +83,7 @@ namespace MCForge
 
                 MCForgeBeatTimer.Elapsed += delegate
                 {
-                    MCForgeBeatTimer.Interval = 420000;
+                    MCForgeBeatTimer.Interval = 10*60*1000; // 10 minutes
                     try
                     {
                         Pump(new MCForgeBeat());
