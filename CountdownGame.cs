@@ -374,6 +374,37 @@ namespace MCForge
             }
         }
 
+        public static void PlayerLeft(Player p)
+        {
+            playersleft = playersleft - 1;
+
+            mapon.ChatLevel(p.name + " logged out and so is out of countdown!!");
+
+            playersleftlist.Remove(p);
+            switch (playersleft)
+            {
+                case 1:
+                    mapon.ChatLevel(playersleftlist.Last().name + " is the winner!!");
+                    End(playersleftlist.Last());
+                    break;
+                case 2:
+                    mapon.ChatLevel("Only 2 Players left:");
+                    mapon.ChatLevel(playersleftlist.First().name + " and " + playersleftlist.Last().name);
+                    break;
+                case 5:
+                    mapon.ChatLevel("Only 5 Players left:");
+                    foreach (Player pl in playersleftlist)
+                    {
+                        mapon.ChatLevel(pl.name);
+                        Thread.Sleep(500);
+                    }
+                    break;
+                default:
+                    mapon.ChatLevel("Now there are " + playersleft.ToString() + " players left!!");
+                    break;
+            }
+        }
+
         public static void End(Player winner)
         {
             CountdownGame.squaresleft.Clear();

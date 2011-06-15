@@ -2348,6 +2348,15 @@ namespace MCForge
                     {
                         team.RemoveMember(this);
                     }
+                    
+                    if (CountdownGame.players.Contains(this))
+                    {
+                        if (CountdownGame.playersleftlist.Contains(this))
+                        {
+                            CountdownGame.PlayerLeft(this);
+                        }
+                        CountdownGame.players.Remove(this);
+                    }
 
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
