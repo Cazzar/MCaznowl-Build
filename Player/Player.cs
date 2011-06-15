@@ -492,11 +492,6 @@ namespace MCForge
                         Kick("You're still banned (temporary ban)!");
                     }
                 } catch { }
-                // OMNI BAN
-                //these are hackers. Please leave this omni ban for the safety of MCForge users. Thanks!
-                if (this.name.ToLower() == "shnaw" || this.ip == "899.23.213.9") { Kick("You have been Omni-banned for hacking MCForge Servers! go to forums.mcforge.net to appeal this ban."); return; }
-                if (this.name.ToLower() == "bizarrecake" || this.ip == "84.229.132.189" || this.ip == "84.228.58.92") { Kick("You have been Omni-banned for hacking MCForge Servers!  Go to forums.mcforge.net to appeal this ban."); return; }
-                if (this.name.ToLower() == "aep1989" || this.ip == "128.194.57.225") { Kick("You have been Omni-banned.  forums.mcforge.net for appeal."); return; }
                 // Whitelist check.
                 if (Server.useWhitelist)
                 {
