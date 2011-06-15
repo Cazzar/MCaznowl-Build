@@ -4,6 +4,7 @@ v4.7.0.0
 - Added color information to /help
 - Added a "silent" option to /setrank
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
+- Hopefully fixed issue where certain color codes could sometimes crash the client (GitHub issue #21)
 - Updater should no longer crash when updating (Github issue #3)
 - /zz no longer shows an error when using "/zz blockname" (Github issue #7)
 - Player, Level, and Server now use an ExtrasCollection member named "Extras" to help manage extra data needed by custom commands
