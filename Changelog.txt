@@ -2,6 +2,7 @@ v4.7.0.0
 - Added new game: Countdown
 - Added /splace - Measures a set [distance] and places a stone block at each end
 - Added color information to /help
+- Added a "silent" option to /setrank
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Updater should no longer crash when updating (Github issue #3)
 - /zz no longer shows an error when using "/zz blockname" (Github issue #7)
