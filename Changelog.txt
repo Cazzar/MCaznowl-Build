@@ -13,6 +13,7 @@ v4.7.0.0
 - Removed unused files from the source code repository
 - Increased MCForge heartbeat delay to reduce website load
 - Removed buggy block permissions from block.properties (flagbase and odoor_airs)
+- Fixed an issue with /title where you could use a color code to title yourself [Dev].
 
 v4.6.0.1
 - Command thread will no longer be manually aborted, as this can sometimes cause problems closing the socket.
