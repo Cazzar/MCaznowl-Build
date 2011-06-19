@@ -2172,12 +2172,13 @@ namespace MCForge
         private static bool MessageHasBadColorCodes(Player from, string message)
         {
             string[] checkmessagesplit = message.Split(' ');
-            bool laststartwithcolour = false;
+            bool lastendwithcolour = false;
             foreach (string s in checkmessagesplit)
             {
-                if (s.StartsWith("%") && s.Count() < 3)
+                s.Trim();
+                if (s.StartsWith("%"))
                 {
-                    if (laststartwithcolour == true)
+                    if (lastendwithcolour == true)
                     {
                         from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
                         from.SendMessage("Message not sent");
@@ -2185,14 +2186,18 @@ namespace MCForge
                         GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
                         return true;
                     }
-                    else
+                    else if (s.Length == 2)
                     {
-                        laststartwithcolour = true;
+                        lastendwithcolour = true;
                     }
+                }
+                if (s.TrimEnd(Server.ColourCodesNoPercent).EndsWith("%"))
+                {
+                    lastendwithcolour = true;
                 }
                 else
                 {
-                    laststartwithcolour = false;
+                    lastendwithcolour = false;
                 }
 
             }
