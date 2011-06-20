@@ -227,11 +227,11 @@ namespace MCForge.Gui
 
                 // Update the data source and control
                 //dgvPlayers.SuspendLayout();
-
-                pc = new PlayerCollection(new PlayerListView());
+                pc.Clear();
                 Player.players.ForEach(delegate(Player p) { pc.Add(p); });
 
                 //dgvPlayers.Invalidate();
+                dgvPlayers.DataSource = null;
                 dgvPlayers.DataSource = pc;
                 // Reselect player
                 if (selected != null)
@@ -282,11 +282,12 @@ namespace MCForge.Gui
 
                 // Update the data source and control
                 //dgvPlayers.SuspendLayout();
-
-                lc = new LevelCollection(new LevelListView());
+                lc.Clear();
+                //lc = new LevelCollection(new LevelListView());
                 Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
 
                 //dgvPlayers.Invalidate();
+                dgvMaps.DataSource = null;
                 dgvMaps.DataSource = lc;
                 // Reselect map
                 if (selected != null)
