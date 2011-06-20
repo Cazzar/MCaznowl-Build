@@ -1,4 +1,5 @@
 v5.0.0.0
+- Level block changes are now saved via MySQL transactions
 
 v4.7.0.0
 - Added new game: Countdown
