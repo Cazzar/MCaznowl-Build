@@ -1,3 +1,5 @@
+v5.0.0.0
+
 v4.7.0.0
 - Added new game: Countdown
 - Added /splace - Measures a set [distance] and places a stone block at each end
