@@ -158,6 +158,7 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
