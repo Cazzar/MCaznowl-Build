@@ -202,6 +202,10 @@ namespace MCForge
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
 
+        //Chatrooms
+        public string Chatroom;
+        public List<string> spyChatRooms;
+
         public bool loggedIn = false;
         public Player(Socket s)
         {
@@ -2158,7 +2162,7 @@ namespace MCForge
                 return;
 
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
@@ -2166,8 +2170,16 @@ namespace MCForge
                 return;
 
             if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level == from.level && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
+        public static void GlobalChatRoom(Player from, string message, bool showname)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            if (showname) { message = "<GlobalChatRoom>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
+        }
+
 
         private static bool MessageHasBadColorCodes(Player from, string message)
         {
@@ -2206,16 +2218,16 @@ namespace MCForge
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
             if (showname) { message = "<World>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
         public static void GlobalMessage(string message)
         {
             message = message.Replace("%", "&");
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageLevel(Level l, string message)
         {
-            players.ForEach(delegate(Player p) { if (p.level == l) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level == l && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageOps(string message)
         {
