@@ -204,7 +204,9 @@ namespace MCForge
 
         //Chatrooms
         public string Chatroom;
-        public List<string> spyChatRooms;
+        public List<string> spyChatRooms = new List<string>();
+        public DateTime lastchatroomglobal = new DateTime();
+
 
         public bool loggedIn = false;
         public Player(Socket s)
@@ -496,6 +498,7 @@ namespace MCForge
                         Kick("You're still banned (temporary ban)!");
                     }
                 } catch { }
+
                 // Whitelist check.
                 if (Server.useWhitelist)
                 {
@@ -1398,7 +1401,7 @@ namespace MCForge
                     storedMessage += text.Replace(">", "|>|");
                     SendMessage("Message appended!");
                     return;
-                } 
+                }
                 else if (text.EndsWith("<"))
                 {
                     storedMessage += text.Replace("<", "|<|");
@@ -1549,10 +1552,17 @@ namespace MCForge
                             i = rnd.Next(lines.Count);
                             text = lines[i];
                         }
-                        
+
                     }
                     else { File.Create("text/joker.txt"); }
 
+                }
+
+                //chatroom stuff
+                if (this.Chatroom != null)
+                {
+                    ChatRoom(this, text, true, this.Chatroom);
+                    return;
                 }
 
                 if (!level.worldChat)
@@ -2176,8 +2186,19 @@ namespace MCForge
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
-            if (showname) { message = "<GlobalChatRoom>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            if (showname) { message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
+            Server.s.Log(message);
+        }
+        public static void ChatRoom(Player from, string message, bool showname, string chatroom)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            string messageforspy = ("<ChatRoomSPY: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message);
+            if (showname) { message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom == chatroom) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.spyChatRooms.Contains(chatroom)  && p.Chatroom != chatroom) Player.SendMessage(p, Server.DefaultColor + messageforspy); });
+            Server.s.Log(message);
         }
 
 
