@@ -86,6 +86,7 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
+    <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
