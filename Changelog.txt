@@ -1,7 +1,7 @@
 v4.7.0.0
 - Added new game: Countdown
-- Added /splace - Measures a set [distance] and places a stone block at each end
-- Added color information to /help
+- Added /splace - Measures a set [distance] and places a stone block at each end. Made by Woldoc, originally named /set.
+- Added color code information to /help.
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Hopefully fixed issue where certain color codes could sometimes crash the client (GitHub issue #21)
 - Updater should no longer crash when updating (Github issue #3)
