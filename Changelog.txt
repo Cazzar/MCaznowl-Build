@@ -1,6 +1,7 @@
 v4.7.0.0
 - Added new game: Countdown
-- Added /splace - Measures a set [distance] and places a stone block at each end. Made by Woldoc, originally named /set.
+-Added /splace - Measures a set [distance] and places a stone block at each end. Made by Woldoc, originally named /set.
+-Added /chain - Inspired by the StormCom command of the same name, /chain sends a "chain" of brown mushrooms. Upon coming into contact with a block other than air or a level's side wall, it will pull that block back to the start of the chain. 
 - Added color code information to /help.
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Hopefully fixed issue where certain color codes could sometimes crash the client (GitHub issue #21)
