@@ -37,14 +37,14 @@ namespace MCForge
         // Methods
         public override void Help(Player p)
         {
-            p.SendMessage("/chain - Shoots a chain of brown mushrooms and grabs a block and brings it back to the start.");
+            Player.SendMessage(p, "/chain - Shoots a chain of brown mushrooms and grabs a block and brings it back to the start.");
         }
 
         public override void Use(Player p, string message)
         {
             if (p.level.permissionbuild > p.group.Permission)
             {
-                p.SendMessage("You can not cut from this map.");
+                Player.SendMessage(p, "You cannot build on this map!");
             }
             else
             {
