@@ -112,7 +112,6 @@ namespace MCForge
             all.Add(new CmdImageprint());
             all.Add(new CmdInbox());
             all.Add(new CmdInfo());
-            all.Add(new CmdInterval());
             all.Add(new CmdInvincible());
             all.Add(new CmdJail());
             all.Add(new CmdJoker());
