@@ -129,7 +129,6 @@ namespace MCForge
             all.Add(new CmdMain());
             all.Add(new CmdMap());
             all.Add(new CmdMapInfo());
-            all.Add(new CmdMaze());
             all.Add(new CmdMe());
             all.Add(new CmdMeasure());
             all.Add(new CmdMegaboid());
@@ -211,7 +210,6 @@ namespace MCForge
             all.Add(new CmdTimer());
             all.Add(new CmdTitle());
             all.Add(new CmdTnt());
-            all.Add(new CmdTopTen());
             all.Add(new CmdTp());
             all.Add(new CmdTpZone());
             all.Add(new CmdTree());

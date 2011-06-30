@@ -104,7 +104,6 @@
     <Compile Include="Commands\CmdKickAll.cs" />
     <Compile Include="Commands\CmdLockdown.cs" />
     <Compile Include="Commands\CmdMain.cs" />
-    <Compile Include="Commands\CmdMaze.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
     <Compile Include="Commands\CmdNews.cs" />
@@ -136,7 +135,6 @@
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
     <Compile Include="Commands\CmdKill.cs" />
-    <Compile Include="Commands\CmdTopTen.cs" />
     <Compile Include="Commands\CmdTpZone.cs" />
     <Compile Include="Commands\CmdFlipHeads.cs" />
     <Compile Include="Commands\CmdFly.cs" />

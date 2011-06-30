@@ -16,8 +16,6 @@ v4.7.0.0
 - Removed buggy block permissions from block.properties (flagbase and odoor_airs)
 - Fixed an issue with /title where you could use a color code to title yourself [Dev].
 - Removed the omni-bans
-- Added /maze from MCDerp
-- Added /topten from MCDerp
 
 v4.6.0.1
 - Command thread will no longer be manually aborted, as this can sometimes cause problems closing the socket.
