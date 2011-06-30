@@ -113,7 +113,7 @@ namespace MCForge
             all.Add(new CmdImageprint());
             all.Add(new CmdInbox());
             all.Add(new CmdInfo());
-            all.Add(New CmdInterval());
+            all.Add(new CmdInterval());
             all.Add(new CmdInvincible());
             all.Add(new CmdJail());
             all.Add(new CmdJoker());
@@ -171,7 +171,7 @@ namespace MCForge
             all.Add(new CmdReload());
             all.Add(new CmdRenameLvl());
             all.Add(new CmdRepeat());
-            all.Add(new RepeatMsg());
+            all.Add(new CmdRepeatMsg());
             all.Add(new CmdReplace());
             all.Add(new CmdReplaceAll());
             all.Add(new CmdReplaceNot());
