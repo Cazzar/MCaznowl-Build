@@ -98,7 +98,7 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/Interval <Command> <Interval in minutes> - Executes a command every given minutes. The command will be executed if u send this command.");
+            Player.SendMessage(p, "/Interval <Command> <Interval in minutes> - Executes a command every given minutes. The command will be executed if you send this command.");
         }
     }
 }
