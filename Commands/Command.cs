@@ -82,7 +82,6 @@ namespace MCForge
             all.Add(new CmdEconomyBuyTitle());
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
-            all.Add(new CmdEdit());
 			all.Add(new CmdEllipse());
             all.Add(new CmdEmote());
 			all.Add(new CmdFakePay());
@@ -171,7 +170,6 @@ namespace MCForge
             all.Add(new CmdReload());
             all.Add(new CmdRenameLvl());
             all.Add(new CmdRepeat());
-            all.Add(new CmdRepeatMsg());
             all.Add(new CmdReplace());
             all.Add(new CmdReplaceAll());
             all.Add(new CmdReplaceNot());
@@ -201,7 +199,6 @@ namespace MCForge
             all.Add(new CmdSpheroid());
             all.Add(new CmdSpin());
             all.Add(new CmdSPlace());
-            all.Add(new CmdSpleef());
             all.Add(new CmdStairs());
             all.Add(new CmdStatic());
             all.Add(new CmdStore());
