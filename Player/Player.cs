@@ -32,6 +32,7 @@ namespace MCForge
     public sealed class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
+        public Group g = Group.findPerm(LevelPermission.Operator);
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
@@ -203,6 +204,11 @@ namespace MCForge
         public ExtrasCollection Extras = new ExtrasCollection();
 
         public bool loggedIn = false;
+        private Player()
+        {
+            //Only necessary for a "flatcopy".
+
+        }
         public Player(Socket s)
         {
             try
@@ -2679,6 +2685,19 @@ namespace MCForge
         }
 
 #region getters
+        public Player getCopy()
+        {
+            //Copies some player stats without needing to copy all of them. 
+            Player p = new Player();
+            p.level = this.level;
+            p.pos = this.pos;
+            p.g = this.g;
+            p.group = this.group;
+            p.name = this.name;
+            p.rot = this.rot;
+            p.title = this.title;
+            return p;
+        }
         public ushort[] footLocation
         {
             get
