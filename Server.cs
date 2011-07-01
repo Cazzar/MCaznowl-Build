@@ -700,21 +700,27 @@ namespace MCForge
                 // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
                 // -Descention
                 Player p = null;
+                bool begin = false;
                 try
                 {
                     p = new Player(listen.EndAccept(result));
                     listen.BeginAccept(new AsyncCallback(Accept), null);
+                    begin = true;
                 }
                 catch (SocketException e)
                 {
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
                 catch (Exception e)
                 {
                     ErrorLog(e);
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
             }
         }
