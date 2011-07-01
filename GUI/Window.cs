@@ -114,10 +114,10 @@ namespace MCForge.Gui
 
             //if (File.Exists(Logger.ErrorLogPath))
                 //txtErrors.Lines = File.ReadAllLines(Logger.ErrorLogPath);
-            if (File.Exists("extra/Changelog.txt"))
+            if (File.Exists("Changelog.txt"))
             {
                 txtChangelog.Text = "Changelog for " + Server.Version + ":";
-                foreach (string line in File.ReadAllLines(("extra/Changelog.txt")))
+                foreach (string line in File.ReadAllLines(("Changelog.txt")))
                 {
                     txtChangelog.AppendText("\r\n           " + line);
                 }            
