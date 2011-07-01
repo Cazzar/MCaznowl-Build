@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -68,7 +68,6 @@ namespace MCForge.Gui
             this.btnExtra = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
-            this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
             this.mapsStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.physicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,7 +87,6 @@ namespace MCForge.Gui
             this.rPChatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gBChat = new System.Windows.Forms.GroupBox();
-            this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.txtCommands = new System.Windows.Forms.TextBox();
@@ -120,12 +118,12 @@ namespace MCForge.Gui
             this.btnProperties = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.Restart = new System.Windows.Forms.Button();
+            this.promoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.demoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.gBCommands.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.mapsStrip.SuspendLayout();
-            this.gBChat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).BeginInit();
             this.playerStrip.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -199,7 +197,6 @@ namespace MCForge.Gui
             // 
             // gBCommands
             // 
-            this.gBCommands.Controls.Add(this.txtCommandsUsed);
             this.gBCommands.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gBCommands.Location = new System.Drawing.Point(13, 326);
             this.gBCommands.Name = "gBCommands";
@@ -207,19 +204,6 @@ namespace MCForge.Gui
             this.gBCommands.TabIndex = 34;
             this.gBCommands.TabStop = false;
             this.gBCommands.Text = "Commands";
-            // 
-            // txtCommandsUsed
-            // 
-            this.txtCommandsUsed.BackColor = System.Drawing.Color.White;
-            this.txtCommandsUsed.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtCommandsUsed.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCommandsUsed.Location = new System.Drawing.Point(9, 16);
-            this.txtCommandsUsed.Multiline = true;
-            this.txtCommandsUsed.Name = "txtCommandsUsed";
-            this.txtCommandsUsed.ReadOnly = true;
-            this.txtCommandsUsed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCommandsUsed.Size = new System.Drawing.Size(413, 100);
-            this.txtCommandsUsed.TabIndex = 0;
             // 
             // dgvMaps
             // 
@@ -374,7 +358,6 @@ namespace MCForge.Gui
             // 
             // gBChat
             // 
-            this.gBChat.Controls.Add(this.txtLog);
             this.gBChat.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gBChat.Location = new System.Drawing.Point(13, 33);
             this.gBChat.Name = "gBChat";
@@ -382,19 +365,6 @@ namespace MCForge.Gui
             this.gBChat.TabIndex = 32;
             this.gBChat.TabStop = false;
             this.gBChat.Text = "Chat";
-            // 
-            // txtLog
-            // 
-            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLog.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(6, 19);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(413, 262);
-            this.txtLog.TabIndex = 1;
             // 
             // label2
             // 
@@ -461,42 +431,44 @@ namespace MCForge.Gui
             this.kickToolStripMenuItem,
             this.banToolStripMenuItem,
             this.voiceToolStripMenuItem,
-            this.clonesToolStripMenuItem});
+            this.clonesToolStripMenuItem,
+            this.promoteToolStripMenuItem,
+            this.demoteToolStripMenuItem});
             this.playerStrip.Name = "playerStrip";
-            this.playerStrip.Size = new System.Drawing.Size(109, 114);
+            this.playerStrip.Size = new System.Drawing.Size(153, 180);
             // 
             // whoisToolStripMenuItem
             // 
             this.whoisToolStripMenuItem.Name = "whoisToolStripMenuItem";
-            this.whoisToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.whoisToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.whoisToolStripMenuItem.Text = "whois";
             this.whoisToolStripMenuItem.Click += new System.EventHandler(this.whoisToolStripMenuItem_Click);
             // 
             // kickToolStripMenuItem
             // 
             this.kickToolStripMenuItem.Name = "kickToolStripMenuItem";
-            this.kickToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.kickToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.kickToolStripMenuItem.Text = "kick";
             this.kickToolStripMenuItem.Click += new System.EventHandler(this.kickToolStripMenuItem_Click);
             // 
             // banToolStripMenuItem
             // 
             this.banToolStripMenuItem.Name = "banToolStripMenuItem";
-            this.banToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.banToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.banToolStripMenuItem.Text = "ban";
             this.banToolStripMenuItem.Click += new System.EventHandler(this.banToolStripMenuItem_Click);
             // 
             // voiceToolStripMenuItem
             // 
             this.voiceToolStripMenuItem.Name = "voiceToolStripMenuItem";
-            this.voiceToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.voiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.voiceToolStripMenuItem.Text = "voice";
             this.voiceToolStripMenuItem.Click += new System.EventHandler(this.voiceToolStripMenuItem_Click);
             // 
             // clonesToolStripMenuItem
             // 
             this.clonesToolStripMenuItem.Name = "clonesToolStripMenuItem";
-            this.clonesToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.clonesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clonesToolStripMenuItem.Text = "clones";
             this.clonesToolStripMenuItem.Click += new System.EventHandler(this.clonesToolStripMenuItem_Click);
             // 
@@ -700,6 +672,20 @@ namespace MCForge.Gui
             this.Restart.UseVisualStyleBackColor = true;
             this.Restart.Click += new System.EventHandler(this.Restart_Click);
             // 
+            // promoteToolStripMenuItem
+            // 
+            this.promoteToolStripMenuItem.Name = "promoteToolStripMenuItem";
+            this.promoteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.promoteToolStripMenuItem.Text = "promote";
+            this.promoteToolStripMenuItem.Click += new System.EventHandler(this.promoteToolStripMenuItem_Click_1);
+            // 
+            // demoteToolStripMenuItem
+            // 
+            this.demoteToolStripMenuItem.Name = "demoteToolStripMenuItem";
+            this.demoteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.demoteToolStripMenuItem.Text = "demote";
+            this.demoteToolStripMenuItem.Click += new System.EventHandler(this.demoteToolStripMenuItem_Click);
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -718,12 +704,8 @@ namespace MCForge.Gui
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.gBCommands.ResumeLayout(false);
-            this.gBCommands.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).EndInit();
             this.mapsStrip.ResumeLayout(false);
-            this.gBChat.ResumeLayout(false);
-            this.gBChat.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlayers)).EndInit();
             this.playerStrip.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
@@ -798,5 +780,7 @@ namespace MCForge.Gui
         private Label label3;
         private DataGridView dgvPlayers;
         private DataGridView dgvMaps;
+        private ToolStripMenuItem promoteToolStripMenuItem;
+        private ToolStripMenuItem demoteToolStripMenuItem;
     }
 }
