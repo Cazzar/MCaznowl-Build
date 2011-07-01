@@ -103,7 +103,7 @@ namespace MCForge
             p.ClearBlockchange();
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -111,8 +111,9 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
+			return true;
         }
-        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -310,6 +311,7 @@ namespace MCForge
 
                 Player.SendMessage(p, "Finished printing image using " + printType);
             })); printThread.Start();
+			return true;
         }
         public override void Help(Player p)
         {

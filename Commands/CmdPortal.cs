@@ -79,12 +79,12 @@ namespace MCForge
             Player.SendMessage(p, "/portal show - Shows portals, green = in, red = out.");
         }
 
-        public void EntryChange(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool EntryChange(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             portalPos bp = (portalPos)p.blockchangeObject;
 
-            if (bp.Multi && type == Block.red && bp.port.Count > 0) { ExitChange(p, x, y, z, type); return; }
+            if (bp.Multi && type == Block.red && bp.port.Count > 0) { ExitChange(p, x, y, z, type); return true; }
 
             byte b = p.level.GetTile(x, y, z);
             p.level.Blockchange(p, x, y, z, bp.type);
@@ -108,8 +108,9 @@ namespace MCForge
                 p.Blockchange += new Player.BlockchangeEventHandler(EntryChange);
                 Player.SendMessage(p, "&aEntry block placed. &cRed block for exit");
             }
+			return true;
         }
-        public void ExitChange(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool ExitChange(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -137,6 +138,7 @@ namespace MCForge
             Player.SendMessage(p, "&3Exit" + Server.DefaultColor + " block placed");
 
             if (p.staticCommands) { bp.port.Clear(); p.blockchangeObject = bp; p.Blockchange += new Player.BlockchangeEventHandler(EntryChange); }
+			return true;
         }
 
         public struct portalPos { public List<portPos> port; public byte type; public bool Multi; }

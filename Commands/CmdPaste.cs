@@ -47,7 +47,7 @@ namespace MCForge
             Player.SendMessage(p, "&4BEWARE: " + Server.DefaultColor + "The blocks will always be pasted in a set direction");
         }
 
-        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -68,6 +68,7 @@ namespace MCForge
             Player.SendMessage(p, "Pasted " + p.CopyBuffer.Count + " blocks.");
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+			return true;
         }
 
         struct CatchPos { public ushort x, y, z; }

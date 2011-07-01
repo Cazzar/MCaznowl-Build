@@ -199,7 +199,7 @@ namespace MCForge
 
         }
 
-        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             //com(p, "get the type of the changed block");
@@ -244,6 +244,7 @@ namespace MCForge
             lool.Elapsed += new System.Timers.ElapsedEventHandler(nextFrameUpdate);
             lool.Enabled = true;
             running = true;
+			return true;
         }
 
         void nextFrameUpdate(object sender, EventArgs e)

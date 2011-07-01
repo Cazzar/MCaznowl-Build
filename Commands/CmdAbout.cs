@@ -43,11 +43,11 @@ namespace MCForge
             Player.SendMessage(p, "/about - Displays information about a block.");
         }
 
-        public void AboutBlockchange(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool AboutBlockchange(Player p, ushort x, ushort y, ushort z, byte type)
         {
             if (!p.staticCommands) p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
-            if (b == Block.Zero) { Player.SendMessage(p, "Invalid Block(" + x + "," + y + "," + z + ")!"); return; }
+            if (b == Block.Zero) { Player.SendMessage(p, "Invalid Block(" + x + "," + y + "," + z + ")!"); return true; }
             p.SendBlockchange(x, y, z, b);
 
             string message = "Block (" + x + "," + y + "," + z + "): ";
@@ -100,6 +100,7 @@ namespace MCForge
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
+			return true;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace MCForge
             Player.SendMessage(p, "/mb show shows or hides MBs");
         }
 
-        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             CatchPos cpos = (CatchPos)p.blockchangeObject;
@@ -91,6 +91,7 @@ namespace MCForge
             p.SendBlockchange(x, y, z, cpos.type);
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+			return true;
         }
 
         struct CatchPos { public string message; public byte type; }

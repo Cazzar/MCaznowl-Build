@@ -45,7 +45,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/write [message] - Writes [message] in blocks");
         }
-        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -53,8 +53,9 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
+			return true;
         }
-        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             type = p.bindings[type];
 
@@ -66,7 +67,7 @@ namespace MCForge
 
             ushort cur;
 
-            if (x == cpos.x && z == cpos.z) { Player.SendMessage(p, "No direction was selected"); return; }
+            if (x == cpos.x && z == cpos.z) { Player.SendMessage(p, "No direction was selected"); return true; }
 
             if (Math.Abs(cpos.x - x) > Math.Abs(cpos.z - z))
             {
@@ -106,6 +107,7 @@ namespace MCForge
             }
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+			return true;
         }
 
         struct CatchPos
