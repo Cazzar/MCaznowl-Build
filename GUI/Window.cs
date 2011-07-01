@@ -768,6 +768,24 @@ namespace MCForge.Gui
         {
             e.PaintParts &= ~DataGridViewPaintParts.Focus;
         }
+
+        private void promoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Player p = GetSelectedPlayer();
+            if (p != null)
+            {
+                Command.all.Find("promote").Use(null, p.name);
+            }
+        }
+
+        private void demoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Player p = GetSelectedPlayer();
+            if (p != null)
+            {
+                Command.all.Find("demote").Use(null, p.name);
+            }
+        }
         
     }
 }
