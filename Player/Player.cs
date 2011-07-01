@@ -750,7 +750,16 @@ namespace MCForge
             Loading = false;
 
             if (emoteList.Contains(name)) parseSmiley = false;
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
+            if (!Directory.Exists("text/login"))
+            {
+                Directory.CreateDirectory("text/login");
+                return;
+            }
+            if (!File.Exists("text/login/" + this.name + ".txt"))
+            {
+                File.WriteAllText("text/login/" + this.name + ".txt", " joined the server.");
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
@@ -2374,7 +2383,15 @@ namespace MCForge
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
+                        if (!Directory.Exists("text/logout"))
+                        {
+                            Directory.CreateDirectory("text/logout");
+                        }
+                        if (!File.Exists("text/logout/" + name + ".txt"))
+                        {
+                            File.WriteAllText("text/logout/" + name + ".txt", " Disconnected.");
+                        }
+                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
