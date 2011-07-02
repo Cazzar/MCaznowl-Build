@@ -52,6 +52,11 @@ namespace MCForge
             GrpCommands.Save(GrpCommands.allowedCommands);
             GrpCommands.fillRanks();
             Player.GlobalMessage("&d" + foundCmd.name + Server.DefaultColor + "'s permission was changed to " + Level.PermissionToName(newPerm));
+            if (p == null) ;
+            {
+                Player.SendMessage(p, foundCmd.name + "'s permission was changed to " + Level.PermissionToName(newPerm));
+                return;
+            }
         }
         public override void Help(Player p)
         {

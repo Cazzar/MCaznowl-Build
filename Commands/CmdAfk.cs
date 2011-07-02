@@ -32,36 +32,41 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "list")
+            if (p != null)
             {
-                if (p.joker)
+                if (message != "list")
                 {
-                    message = "";
-                }
-                if (!Server.afkset.Contains(p.name))
-                {
-                    Server.afkset.Add(p.name);
-                    if (p.muted)
+                    if (p.joker)
                     {
                         message = "";
                     }
-                    Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is AFK " + message);
-                    IRCBot.Say(p.name + " is AFK " + message);
-                    return;
+                    if (!Server.afkset.Contains(p.name))
+                    {
+                        Server.afkset.Add(p.name);
+                        if (p.muted)
+                        {
+                            message = "";
+                        }
+                        Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is AFK " + message);
+                        IRCBot.Say(p.name + " is AFK " + message);
+                        return;
 
+                    }
+                    else
+                    {
+                        Server.afkset.Remove(p.name);
+                        Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is no longer AFK");
+                        IRCBot.Say(p.name + " is no longer AFK");
+                        return;
+                    }
                 }
                 else
                 {
-                    Server.afkset.Remove(p.name);
-                    Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is no longer AFK");
-                    IRCBot.Say(p.name + " is no longer AFK");
+                    foreach (string s in Server.afkset) Player.SendMessage(p, s);
                     return;
                 }
             }
-            else
-            {
-                foreach (string s in Server.afkset) Player.SendMessage(p, s);
-            }
+            Player.SendMessage(p, "This command can only be used in-game");
         }
         public override void Help(Player p)
         {

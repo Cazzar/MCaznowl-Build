@@ -60,6 +60,10 @@ namespace MCForge
                     MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + who.name + "'");
 
                     Player.GlobalChat(who, who.color + "*" + Name(who.name) + " color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
+                    if (p == null)
+                    {
+                        Player.SendMessage(p, "*" + Name(who.name) + " color was changed to " + c.Name(color) + ".");
+                    }
                     who.color = color;
 
                     Player.GlobalDie(who, false);
