@@ -90,7 +90,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/cuboid [type] <solid/hollow/walls/holes/wire/random> - create a cuboid of blocks.");
         }
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -98,9 +98,8 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
-			return true;
         }
-        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -227,7 +226,7 @@ namespace MCForge
                 if (buffer.Any(pos => pos.y < CheckForBlocksBelowY))
                 {
                     p.SendMessage("You're not allowed to build this far down!");
-                    return true;
+                    return;
                 }
             }
 
@@ -252,14 +251,14 @@ namespace MCForge
                     Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
                 }
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
-                return true;
+                return;
             }
 
             if (buffer.Count > p.group.maxBlocks)
             {
                 Player.SendMessage(p, "You tried to cuboid " + buffer.Count + " blocks.");
                 Player.SendMessage(p, "You cannot cuboid more than " + p.group.maxBlocks + ".");
-                return true;
+                return;
             }
 
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
@@ -270,7 +269,6 @@ namespace MCForge
             });
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
-			return true;
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
         {

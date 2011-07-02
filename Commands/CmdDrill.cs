@@ -51,7 +51,7 @@ namespace MCForge
             Player.SendMessage(p, "/drill [distance] - Drills a hole, destroying all similar blocks in a 3x3 rectangle ahead of you.");
         }
         
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             if (!p.staticCommands) p.ClearBlockchange();
             CatchPos cpos = (CatchPos)p.blockchangeObject;
@@ -100,7 +100,7 @@ namespace MCForge
             {
                 Player.SendMessage(p, "You tried to drill " + buffer.Count + " blocks.");
                 Player.SendMessage(p, "You cannot drill more than " + p.group.maxBlocks + ".");
-                return true;
+                return;
             }
 
             foreach (Pos pos1 in buffer)
@@ -109,7 +109,6 @@ namespace MCForge
                     p.level.Blockchange(p, pos1.x, pos1.y, pos1.z, Block.air);
             }
             Player.SendMessage(p, buffer.Count + " blocks.");
-			return true;
         }
 
         struct CatchPos { public ushort x, y, z; public int distance; }

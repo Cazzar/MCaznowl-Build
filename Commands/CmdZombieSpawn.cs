@@ -165,7 +165,7 @@ namespace MCForge
            
         }
 
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -174,7 +174,6 @@ namespace MCForge
             thex = x; they = y + 2; thez = z; p.blockchangeObject = bp;
             Thread t = new Thread(ZombieMob);
             t.Start(p);
-			return true;
         }
 
         // This one controls what happens when you use /help [commandname].

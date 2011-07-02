@@ -42,7 +42,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/stairs - Creates a spiral staircase the height you want.");
         }
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -50,7 +50,6 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
-			return true;
         }
 
         public void Swap(ref int a, ref int b)
@@ -59,7 +58,7 @@ namespace MCForge
             c = a; a = b; b = c;
         }
 
-        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -69,7 +68,7 @@ namespace MCForge
             if (cpos.y == y)
             {
                 Player.SendMessage(p, "Cannot create a stairway 0 blocks high.");
-                return true;
+                return;
             }
 
             ushort xx, zz; int currentState = 0;
@@ -115,7 +114,6 @@ namespace MCForge
             }
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
-			return true;
         }
         struct CatchPos { public ushort x, y, z; }
 

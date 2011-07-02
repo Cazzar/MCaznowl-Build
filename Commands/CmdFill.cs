@@ -85,7 +85,7 @@ namespace MCForge
             Player.SendMessage(p, "[types] - up, down, layer, vertical_x, vertical_z");
         }
         
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             try
             {
@@ -136,7 +136,6 @@ namespace MCForge
                 mapBlocks = null;
 
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
-				return true;
             }
             catch (Exception e)
             {

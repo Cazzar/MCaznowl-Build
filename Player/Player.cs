@@ -179,7 +179,7 @@ namespace MCForge
 		/// returning true will tell the server to do nothing else afterwards, this is usefull for a cuboid like plugin
 		/// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
 		/// </summary>
-        public delegate bool BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
+        public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
         public event BlockchangeEventHandler Blockchange = null;
 		/// <summary>
 		/// PlayerConnect is called when a player connects to the server.
@@ -873,7 +873,6 @@ namespace MCForge
             lastClick[0] = x;
             lastClick[1] = y;
             lastClick[2] = z;
-			bool test1 = false;
 			bool test2 = false;
             if (Blockchange != null)
             {
@@ -883,12 +882,14 @@ namespace MCForge
                     level.blockCache.Add(bP);
                 }
 
-                test1 = Blockchange(this, x, y, z, type);
+                Blockchange(this, x, y, z, type);
+				return;
             }
 			if (PlayerBlockChange != null)
-				test2 = PlayerBlockChange(this, x, y, z, type);
-			if (test1 || test2)
-				return;
+			{
+				if (PlayerBlockChange(this, x, y, z, type))
+					return;
+			}
 
             if (group.Permission == LevelPermission.Banned) return;
             if (group.Permission == LevelPermission.Guest)

@@ -1,22 +1,25 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Player/Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Commands/CmdGifToCin.cs">
     <Files>
       <File FileName="Commands/CmdCuboid.cs" Line="1" Column="1" />
       <File FileName="Commands/Command.cs" Line="37" Column="1" />
-      <File FileName="Player/Player.cs" Line="886" Column="25" />
+      <File FileName="Player/Player.cs" Line="892" Column="5" />
       <File FileName="IRCBot.cs" Line="147" Column="11" />
       <File FileName="Server.cs" Line="813" Column="5" />
       <File FileName="Commands/CmdGifToCin.cs" Line="20" Column="28" />
       <File FileName="Commands/CmdAbort.cs" Line="1" Column="1" />
+      <File FileName="Commands/CmdCopy.cs" Line="159" Column="10" />
+      <File FileName="Commands/CmdFill.cs" Line="145" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="MCForge_" expanded="True">
-            <Node name="Player" expanded="True">
-              <Node name="Player.cs" selected="True" />
+            <Node name="Commands" expanded="True">
+              <Node name="CmdGifToCin.cs" selected="True" />
             </Node>
+            <Node name="Player" expanded="True" />
           </Node>
         </State>
       </Pad>

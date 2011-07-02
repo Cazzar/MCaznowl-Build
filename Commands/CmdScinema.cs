@@ -72,7 +72,7 @@ namespace MCForge
             }
         }
 
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             //com(p, "get the type of the changed block");
@@ -90,7 +90,6 @@ namespace MCForge
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             //com(p, "wait for next blockchange");
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
-			return true;
         }
 
         void com(Player p, String lol)
@@ -98,7 +97,7 @@ namespace MCForge
             Player.SendMessage(p, lol);
         }
 
-        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             //com(p, "get the type of the changed block");
@@ -173,7 +172,6 @@ namespace MCForge
             cin.Close();
             cin.Dispose();
             com(p, "Saved Blocks to File");
-			return true;
         }
 
         // This one controls what happens when you use /help [commandname].

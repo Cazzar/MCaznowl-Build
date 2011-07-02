@@ -131,7 +131,7 @@ namespace MCForge
             Player.SendMessage(p, "/zone del - Deletes the zone clicked");
         }
 
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -139,10 +139,9 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
-			return true;
         }
 
-        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -166,7 +165,6 @@ namespace MCForge
             //DB
 
             Player.SendMessage(p, "Added zone for &b" + cpos.Owner);
-			return true;
         }
 
         struct CatchPos { public ushort x, y, z; public string Owner; }

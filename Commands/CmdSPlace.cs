@@ -51,7 +51,7 @@ namespace MCForge
             Player.SendMessage(p, "/splace [distance] [interval] - Measures a set [distance] and places a stone block at each end.");
             Player.SendMessage(p, "Optionally place a block at set [interval] between them.");
         }
-        public bool Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
@@ -59,16 +59,15 @@ namespace MCForge
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
-			return true;
         }
-        public bool Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             type = p.bindings[type];
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
             p.SendBlockchange(x, y, z, b);
             CatchPos cpos = (CatchPos)p.blockchangeObject;
-            if (x == cpos.x && z == cpos.z) { Player.SendMessage(p, "No direction was selected"); return true; }
+            if (x == cpos.x && z == cpos.z) { Player.SendMessage(p, "No direction was selected"); return; }
             if (Math.Abs(cpos.x - x) > Math.Abs(cpos.z - z))
             {
                 if (x > cpos.x)
@@ -132,7 +131,6 @@ namespace MCForge
                 Player.SendMessage(p, "Placed stone blocks " + distance + " apart");
             }
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
-			return true;
         }
         struct CatchPos
         {

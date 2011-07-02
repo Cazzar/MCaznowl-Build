@@ -47,7 +47,7 @@ namespace MCForge
                 try
                 {
                     command = message.Split(' ')[1];
-                    command2 = message.Substring(message.IndexOf(' ') + 2);
+                    command2 = message.Split(' ')[2];
                     Command.all.Find(command).Use(player, command2);
                 }
                 catch

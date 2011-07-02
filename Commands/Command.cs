@@ -82,7 +82,6 @@ namespace MCForge
             all.Add(new CmdEconomyBuyTitle());
             all.Add(new CmdEconomySetup());
             all.Add(new CmdEconomyStats());
-            all.Add(new CmdEdit());
 			all.Add(new CmdEllipse());
             all.Add(new CmdEmote());
 			all.Add(new CmdFakePay());
@@ -113,7 +112,6 @@ namespace MCForge
             all.Add(new CmdImageprint());
             all.Add(new CmdInbox());
             all.Add(new CmdInfo());
-            all.Add(new CmdInterval());
             all.Add(new CmdInvincible());
             all.Add(new CmdJail());
             all.Add(new CmdJoker());
@@ -131,7 +129,6 @@ namespace MCForge
             all.Add(new CmdMain());
             all.Add(new CmdMap());
             all.Add(new CmdMapInfo());
-            all.Add(new CmdMaze());
             all.Add(new CmdMe());
             all.Add(new CmdMeasure());
             all.Add(new CmdMegaboid());
@@ -171,7 +168,6 @@ namespace MCForge
             all.Add(new CmdReload());
             all.Add(new CmdRenameLvl());
             all.Add(new CmdRepeat());
-            all.Add(new CmdRepeatMsg());
             all.Add(new CmdReplace());
             all.Add(new CmdReplaceAll());
             all.Add(new CmdReplaceNot());
@@ -201,7 +197,6 @@ namespace MCForge
             all.Add(new CmdSpheroid());
             all.Add(new CmdSpin());
             all.Add(new CmdSPlace());
-            all.Add(new CmdSpleef());
             all.Add(new CmdStairs());
             all.Add(new CmdStatic());
             all.Add(new CmdStore());
@@ -215,7 +210,6 @@ namespace MCForge
             all.Add(new CmdTimer());
             all.Add(new CmdTitle());
             all.Add(new CmdTnt());
-            all.Add(new CmdTopTen());
             all.Add(new CmdTp());
             all.Add(new CmdTpZone());
             all.Add(new CmdTree());
