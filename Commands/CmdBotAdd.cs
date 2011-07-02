@@ -32,10 +32,16 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message == "") { Help(p); return; }
-            if (!PlayerBot.ValidName(message)) { Player.SendMessage(p, "bot name " + message + " not valid!"); return; }
-            PlayerBot.playerbots.Add(new PlayerBot(message, p.level, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0));
-            //who.SendMessage("You were summoned by " + p.color + p.name + "&e.");
+            if (p != null)
+            {
+                if (!PlayerBot.ValidName(message)) { Player.SendMessage(p, "bot name " + message + " not valid!"); return; }
+                PlayerBot.playerbots.Add(new PlayerBot(message, p.level, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0));
+                //who.SendMessage("You were summoned by " + p.color + p.name + "&e.");
+                return;
+            }
+            Player.SendMessage(p, "This command can only be used in-game");
         }
+
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/botadd <name> - Add a  new bot at your position.");
