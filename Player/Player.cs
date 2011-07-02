@@ -180,7 +180,7 @@ namespace MCForge
 		/// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
 		/// </summary>
         public delegate bool BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
-        public event BlockchangeEventHandler OnBlockchange = null;
+        public event BlockchangeEventHandler Blockchange = null;
 		/// <summary>
 		/// PlayerConnect is called when a player connects to the server.
 		/// </summary>
@@ -221,7 +221,7 @@ namespace MCForge
 		public void ClearPlayerCommand() { OnCommand = null; }
 		public void ClearPlayerChat() { OnChat = null; }
 		public void ClearPlayerDeath() { OnDeath = null; }
-        public void ClearBlockchange() { OnBlockchange = null; }
+        public void ClearBlockchange() { Blockchange = null; }
         public bool HasBlockchange() { return (Blockchange == null); }
         public object blockchangeObject = null;
         public ushort[] lastClick = new ushort[3] { 0, 0, 0 };
@@ -875,15 +875,15 @@ namespace MCForge
             lastClick[2] = z;
 			bool test1 = false;
 			bool test2 = false;
-            if (OnBlockchange != null)
+            if (Blockchange != null)
             {
-                if (OnBlockchange.Method.ToString().IndexOf("AboutBlockchange") == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
+                if (Blockchange.Method.ToString().IndexOf("AboutBlockchange") == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
                 {
                     bP.deleted = true;
                     level.blockCache.Add(bP);
                 }
 
-                test1 = OnBlockchange(this, x, y, z, type);
+                test1 = Blockchange(this, x, y, z, type);
             }
 			if (PlayerBlockChange != null)
 				test2 = PlayerBlockChange(this, x, y, z, type);

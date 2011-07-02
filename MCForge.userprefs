@@ -2,7 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Player/Player.cs">
     <Files>
-      <File FileName="Player/Player.cs" Line="393" Column="21" />
+      <File FileName="Commands/CmdCuboid.cs" Line="1" Column="1" />
+      <File FileName="Commands/Command.cs" Line="37" Column="1" />
+      <File FileName="Player/Player.cs" Line="886" Column="25" />
+      <File FileName="IRCBot.cs" Line="147" Column="11" />
+      <File FileName="Server.cs" Line="813" Column="5" />
+      <File FileName="Commands/CmdGifToCin.cs" Line="20" Column="28" />
+      <File FileName="Commands/CmdAbort.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

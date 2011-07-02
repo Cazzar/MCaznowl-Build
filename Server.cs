@@ -40,7 +40,7 @@ namespace MCForge
     {
         public delegate void LogHandler(string message);
 		public delegate void OnServerError(Exception error);
-		public static event OnServerError OnError = null;
+		public static event OnServerError ServerError = null;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
@@ -809,8 +809,8 @@ namespace MCForge
 
         public static void ErrorLog(Exception ex)
         {
-			if (OnError != null)
-				OnError(ex);
+			if (ServerError != null)
+				ServerError(ex);
             Logger.WriteError(ex);
             try
             {

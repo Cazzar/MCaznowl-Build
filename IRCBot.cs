@@ -34,7 +34,7 @@ namespace MCForge
 		/// OnIRCJoin is called when someone joins the IRC Channel, the method OnIRCJoin(username, channel) will be called
 		/// </summary>
 		public delegate void OnIRCJoin(string username, string channel);
-		public static event OnIRCJoin OnJoin = null;
+		public static event OnIRCJoin OnNickJoin = null;
         static IrcClient irc = new IrcClient();
         public static string server = Server.ircServer;
         public static string channel = Server.ircChannel;
@@ -143,8 +143,8 @@ namespace MCForge
         void OnJoin(object sender, JoinEventArgs e)
         {
             Server.s.Log(e.Data.Nick + " has joined channel " + e.Data.Channel);
-			if (OnJoin != null)
-				OnJoin(e.Data.Nick, e.Data.Channel);
+			if (OnNickJoin != null)
+				OnNickJoin(e.Data.Nick, e.Data.Channel);
             if (e.Data.Channel == opchannel)
             {
                 Player.GlobalChat(null, Server.IRCColour + e.Data.Nick + Server.DefaultColor + " has joined the operator channel", false);
