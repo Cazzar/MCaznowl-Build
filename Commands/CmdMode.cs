@@ -49,6 +49,60 @@ namespace MCForge
                 byte b = Block.Byte(message);
                 if (b == Block.Zero) { Player.SendMessage(p, "Could not find block given."); return; }
                 if (b == Block.air) { Player.SendMessage(p, "Cannot use Air Mode."); return; }
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.tnt)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment");
+                        return;
+                    }
+                }
+
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.bigtnt)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment");
+                        return;
+                    }
+                }
+
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.nuketnt)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment");
+                        return;
+                    }
+                }
+
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.fire)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment, fire is a lighter for tnt and is also disabled");
+                        return;
+                    }
+                }
+
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.tntexplosion)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment");
+                        return;
+                    }
+                }
+
+                if (p.allowTnt == false)
+                {
+                    if (b == Block.smalltnt)
+                    {
+                        Player.SendMessage(p, "Tnt usage is not allowed at the moment");
+                        return;
+                    }
+                }
+                        
                 if (!Block.canPlace(p, b)) { Player.SendMessage(p, "Cannot place this block at your rank."); return; }
 
                 if (p.modeType == b)
