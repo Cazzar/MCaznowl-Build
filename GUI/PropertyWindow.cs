@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -148,6 +148,9 @@ namespace MCForge.Gui
             if (listBlocks.SelectedIndex == -1)
                 listBlocks.SelectedIndex = 0;
         }
+        public static bool prevLoaded = false;
+        Form PropertyForm;
+        Form UpdateForm;
         public void SaveBlocks()
         {
             Block.SaveBlocks(storedBlocks);
@@ -1103,6 +1106,18 @@ namespace MCForge.Gui
                 numGuests.Value = numPlayers.Value;
             }
             numGuests.Maximum = numPlayers.Value;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PropertyForm = new GUI.CustomLogin();
+            PropertyForm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            PropertyForm = new GUI.CustomLogout();
+            PropertyForm.Show();
         }
     }
 
