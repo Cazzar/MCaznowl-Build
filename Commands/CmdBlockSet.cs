@@ -48,6 +48,11 @@ namespace MCForge
             Block.SaveBlocks(Block.BlockList);
 
             Player.GlobalMessage("&d" + Block.Name(foundBlock) + Server.DefaultColor + "'s permission was changed to " + Level.PermissionToName(newPerm));
+            if (p == null)
+            {
+                Player.SendMessage(p, Block.Name(foundBlock) + "'s permission was changed to " + Level.PermissionToName(newPerm));
+                return;
+            }
         }
         public override void Help(Player p)
         {

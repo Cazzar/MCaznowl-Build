@@ -80,7 +80,7 @@ namespace MCForge
                 }
             }
 
-            if (!regex.IsMatch(message)) { Player.SendMessage(p, "Not a valid ip!"); return; }
+            if (message.IndexOf('.') == -1) { Player.SendMessage(p, "Not a valid ip!"); return; }
             if (p != null) if (p.ip == message) { Player.SendMessage(p, "You shouldn't be able to use this command..."); return; }
             if (!Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " doesn't seem to be banned..."); return; }
             Player.GlobalMessage(message + " got &8unip-banned" + Server.DefaultColor + "!");

@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2011 MCForge
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -52,6 +52,12 @@ namespace MCForge
                     Player.SendMessage(p, "The answer: %aThe root of " + split[0] + Server.DefaultColor + " = %c" + result);
                     return;
                 }
+                if (split[1] == "cube" && split.Length == 2)
+                {
+                    float result = float.Parse(split[0]) * float.Parse(split[0]) + float.Parse(split[0]);
+                    Player.SendMessage(p, "The answer: %aThe cube of " + split[0] + Server.DefaultColor + " = %c" + result);
+                    return;
+                }
                 if (split[1] == "pi" && split.Length == 2)
                 {
                     double result = int.Parse(split[0]) * Math.PI;
@@ -98,7 +104,7 @@ namespace MCForge
             Player.SendMessage(p, "/calculate <num1> <method> <num2> - Calculates <num1> <method> <num2>");
             Player.SendMessage(p, "methods with 3 fillins: /, x, -, +");
             Player.SendMessage(p, "/calculate <num1> <method> - Calculates <num1> <method>");
-            Player.SendMessage(p, "methods with 2 fillins: square, root, pi");
+            Player.SendMessage(p, "methods with 2 fillins: square, root, pi, cube");
         }
         public static bool ValidChar(string chr)
         {

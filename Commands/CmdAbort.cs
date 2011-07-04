@@ -30,18 +30,24 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            p.ClearBlockchange();
-            p.painting = false;
-            p.BlockAction = 0;
-            p.megaBoid = false;
-            p.cmdTimer = false;
-            p.staticCommands = false; 
-            p.deleteMode = false;
-            p.ZoneCheck = false;
-            p.modeType = 0;
-            p.aiming = false;
-            p.onTrain = false;
-            Player.SendMessage(p, "Every toggle or action was aborted.");
+            if (p != null)
+            {
+                p.ClearBlockchange();
+                p.painting = false;
+                p.BlockAction = 0;
+                p.megaBoid = false;
+                p.cmdTimer = false;
+                p.staticCommands = false;
+                p.deleteMode = false;
+                p.ZoneCheck = false;
+                p.modeType = 0;
+                p.aiming = false;
+                p.onTrain = false;
+                p.isFlying = false;
+                Player.SendMessage(p, "Every toggle or action was aborted.");
+                return;
+            }
+            Player.SendMessage(p, "This command can only be used in-game!");
         }
         public override void Help(Player p)
         {

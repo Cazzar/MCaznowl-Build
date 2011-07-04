@@ -33,6 +33,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null)
+            {
+                Player.SendMessage(p, "This command can only be used in-game");
+                return;
+            }
             Level l = Level.Find(message);
             if (l == null && message != "") { Player.SendMessage(p, "Could not find level."); return; }
             if (l == null) l = p.level;

@@ -31,10 +31,24 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
-            if (p.possess != "")
+            if (message == "check")
             {
-                Player.SendMessage(p, "Stop your current possession first.");
+                if (p.hidden == true)
+                {
+                    Player.SendMessage(p, "You are currently hidden!");
+                    return;
+                }
+                else
+                {
+                    Player.SendMessage(p, "You are not currently hidden!");
+                    return;
+                }
+            }
+            else
+                if (message != "")
+                    if (p.possess != "")
+                    {
+                        Player.SendMessage(p, "Stop your current possession first.");
                 return;
             }
             Command opchat = Command.all.Find("opchat");

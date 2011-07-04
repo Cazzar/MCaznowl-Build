@@ -42,6 +42,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null)
+            {
+                Player.SendMessage(p, "Sorry, you can't run this from console!");
+                return;
+            }
             if (p.level.permissionbuild > p.group.Permission)
             {
                 Player.SendMessage(p, "You cannot build on this map!");
