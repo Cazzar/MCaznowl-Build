@@ -35,14 +35,31 @@ namespace MCForge
 
             if (p.BlockAction == 13 || p.BlockAction == 14)
             {
+                if (p.allowTnt == false) 
+                {
+                    Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
+                    return;
+                }
+
                 p.BlockAction = 0; Player.SendMessage(p, "TNT mode is now &cOFF" + Server.DefaultColor + ".");
             }
             else if (message.ToLower() == "small" || message == "")
             {
-                p.BlockAction = 13; Player.SendMessage(p, "TNT mode is now &aON" + Server.DefaultColor + ".");
+                if (p.allowTnt == true) 
+                {
+                    p.BlockAction = 13; Player.SendMessage(p, "TNT mode is now &aON" + Server.DefaultColor + ".");
+                    return;
+                }
+                Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
+                return;
             }
             else if (message.ToLower() == "big")
             {
+                if (p.allowTnt == false) 
+                {
+                    Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
+                    return;
+                }
                 if (p.group.Permission > LevelPermission.AdvBuilder)
                 {
                     p.BlockAction = 14; Player.SendMessage(p, "TNT (Big) mode is now &aON" + Server.DefaultColor + ".");
@@ -52,8 +69,35 @@ namespace MCForge
                     Player.SendMessage(p, "This mode is reserved for OPs");
                 }
             }
+            else if (message.ToLower() == "allow")
+            {
+                if (p.group.Permission >= LevelPermission.Operator)
+                {
+                    p.allowTnt = true;
+                    Player.SendMessage(p, "&cTnt usage has now been enabled!");
+                    return;
+                }
+                Player.SendMessage(p, "You must be OP+ to use this command.");
+                return;
+            }
+            else if (message.ToLower() == "disallow")
+            {
+                if (p.group.Permission >= LevelPermission.Operator)
+                {
+                    p.allowTnt = false;
+                    Player.SendMessage(p, "&cTnt usage has now been disabled!");
+                    return;
+                }
+                Player.SendMessage(p, "You must be OP+ to use this command.");
+                return;
+            }
             else if (message.ToLower() == "nuke")
             {
+                if (p.allowTnt == false) 
+                {
+                    Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
+                    return;
+                }
                 if (p.group.Permission > LevelPermission.AdvBuilder)
                 {
                     p.BlockAction = 15; Player.SendMessage(p, "TNT (Nuke) mode is now &aON" + Server.DefaultColor + ".");
@@ -74,6 +118,13 @@ namespace MCForge
         {
             Player.SendMessage(p, "/tnt [small/big/nuke] - Creates exploding TNT (with Physics 3).");
             Player.SendMessage(p, "Big and Nuke TNT is reserved for OP+.");
+            if (p.group.Permission >= LevelPermission.Operator)
+            {
+                Player.SendMessage(p, "/tnt allow - Allows the use of tnt server-wide.");
+                Player.SendMessage(p, "/tnt disallow - Disallows the use of tnt server-wide.");
+            }
+
+
         }
     }
 }

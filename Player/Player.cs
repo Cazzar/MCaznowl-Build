@@ -90,6 +90,7 @@ namespace MCForge
 
         public bool trainGrab = false;
         public bool onTrain = false;
+        public bool allowTnt = true;
 
         public bool frozen = false;
         public string following = "";

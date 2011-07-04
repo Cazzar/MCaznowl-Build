@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -103,6 +103,7 @@ namespace MCForge.Gui
             this.txtNick = new System.Windows.Forms.TextBox();
             this.cmbIRCColour = new System.Windows.Forms.ComboBox();
             this.chkIRC = new System.Windows.Forms.CheckBox();
+            this.hackrank_kick = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -129,6 +130,8 @@ namespace MCForge.Gui
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label36 = new System.Windows.Forms.Label();
+            this.hackrank_kick_time = new System.Windows.Forms.TextBox();
             this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
             this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
@@ -152,6 +155,8 @@ namespace MCForge.Gui
             this.label32 = new System.Windows.Forms.Label();
             this.chkRestartTime = new System.Windows.Forms.CheckBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.numPlayers = new System.Windows.Forms.NumericUpDown();
             this.numGuests = new System.Windows.Forms.NumericUpDown();
             this.label35 = new System.Windows.Forms.Label();
@@ -182,9 +187,6 @@ namespace MCForge.Gui
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.hackrank_kick = new System.Windows.Forms.CheckBox();
-            this.hackrank_kick_time = new System.Windows.Forms.TextBox();
-            this.label36 = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -410,7 +412,7 @@ namespace MCForge.Gui
             // 
             this.chkVerify.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkVerify.AutoSize = true;
-            this.chkVerify.Location = new System.Drawing.Point(185, 87);
+            this.chkVerify.Location = new System.Drawing.Point(185, 96);
             this.chkVerify.Name = "chkVerify";
             this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
@@ -422,7 +424,7 @@ namespace MCForge.Gui
             // 
             this.chkWorld.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkWorld.AutoSize = true;
-            this.chkWorld.Location = new System.Drawing.Point(11, 314);
+            this.chkWorld.Location = new System.Drawing.Point(11, 309);
             this.chkWorld.Name = "chkWorld";
             this.chkWorld.Size = new System.Drawing.Size(69, 23);
             this.chkWorld.TabIndex = 4;
@@ -447,7 +449,7 @@ namespace MCForge.Gui
             // 
             this.chkPublic.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkPublic.AutoSize = true;
-            this.chkPublic.Location = new System.Drawing.Point(269, 87);
+            this.chkPublic.Location = new System.Drawing.Point(274, 96);
             this.chkPublic.Name = "chkPublic";
             this.chkPublic.Size = new System.Drawing.Size(46, 23);
             this.chkPublic.TabIndex = 4;
@@ -481,7 +483,7 @@ namespace MCForge.Gui
             // 
             this.cmbOpChat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbOpChat.FormattingEnabled = true;
-            this.cmbOpChat.Location = new System.Drawing.Point(247, 316);
+            this.cmbOpChat.Location = new System.Drawing.Point(247, 309);
             this.cmbOpChat.Name = "cmbOpChat";
             this.cmbOpChat.Size = new System.Drawing.Size(81, 21);
             this.cmbOpChat.TabIndex = 23;
@@ -792,6 +794,17 @@ namespace MCForge.Gui
                     "for communication with the server while outside Minecraft.");
             this.chkIRC.UseVisualStyleBackColor = true;
             // 
+            // hackrank_kick
+            // 
+            this.hackrank_kick.AutoSize = true;
+            this.hackrank_kick.Location = new System.Drawing.Point(13, 226);
+            this.hackrank_kick.Name = "hackrank_kick";
+            this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
+            this.hackrank_kick.TabIndex = 32;
+            this.hackrank_kick.Text = "Kick people who use hackrank after ";
+            this.toolTip.SetToolTip(this.hackrank_kick, "Hackrank kicks people? Or not?");
+            this.hackrank_kick.UseVisualStyleBackColor = true;
+            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
@@ -1086,6 +1099,23 @@ namespace MCForge.Gui
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
             // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(274, 227);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(46, 13);
+            this.label36.TabIndex = 34;
+            this.label36.Text = "Seconds";
+            // 
+            // hackrank_kick_time
+            // 
+            this.hackrank_kick_time.Location = new System.Drawing.Point(212, 224);
+            this.hackrank_kick_time.Name = "hackrank_kick_time";
+            this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
+            this.hackrank_kick_time.TabIndex = 33;
+            this.hackrank_kick_time.Text = "5";
+            // 
             // chkNotifyOnJoinLeave
             // 
             this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
@@ -1287,6 +1317,8 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.button3);
+            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.numPlayers);
             this.tabPage1.Controls.Add(this.numGuests);
             this.tabPage1.Controls.Add(this.label35);
@@ -1330,6 +1362,26 @@ namespace MCForge.Gui
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(183, 280);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(145, 23);
+            this.button3.TabIndex = 31;
+            this.button3.Text = "Custom Logout Messages";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(11, 280);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(145, 23);
+            this.button2.TabIndex = 30;
+            this.button2.Text = "Custom Login Messages";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // numPlayers
             // 
@@ -1399,7 +1451,7 @@ namespace MCForge.Gui
             // lblOpChat
             // 
             this.lblOpChat.AutoSize = true;
-            this.lblOpChat.Location = new System.Drawing.Point(168, 319);
+            this.lblOpChat.Location = new System.Drawing.Point(167, 314);
             this.lblOpChat.Name = "lblOpChat";
             this.lblOpChat.Size = new System.Drawing.Size(70, 13);
             this.lblOpChat.TabIndex = 22;
@@ -1452,7 +1504,7 @@ namespace MCForge.Gui
             // 
             this.chkRestart.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRestart.AutoSize = true;
-            this.chkRestart.Location = new System.Drawing.Point(20, 87);
+            this.chkRestart.Location = new System.Drawing.Point(19, 96);
             this.chkRestart.Name = "chkRestart";
             this.chkRestart.Size = new System.Drawing.Size(153, 23);
             this.chkRestart.TabIndex = 4;
@@ -1639,34 +1691,6 @@ namespace MCForge.Gui
             this.label4.TabIndex = 20;
             this.label4.Text = "Nick:";
             // 
-            // hackrank_kick
-            // 
-            this.hackrank_kick.AutoSize = true;
-            this.hackrank_kick.Location = new System.Drawing.Point(13, 226);
-            this.hackrank_kick.Name = "hackrank_kick";
-            this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
-            this.hackrank_kick.TabIndex = 32;
-            this.hackrank_kick.Text = "Kick people who use hackrank after ";
-            this.toolTip.SetToolTip(this.hackrank_kick, "Hackrank kicks people? Or not?");
-            this.hackrank_kick.UseVisualStyleBackColor = true;
-            // 
-            // hackrank_kick_time
-            // 
-            this.hackrank_kick_time.Location = new System.Drawing.Point(212, 224);
-            this.hackrank_kick_time.Name = "hackrank_kick_time";
-            this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
-            this.hackrank_kick_time.TabIndex = 33;
-            this.hackrank_kick_time.Text = "5";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(274, 227);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(46, 13);
-            this.label36.TabIndex = 34;
-            this.label36.Text = "Seconds";
-            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1846,5 +1870,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.TextBox hackrank_kick_time;
         private System.Windows.Forms.CheckBox hackrank_kick;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
     }
 }
