@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -32,6 +32,7 @@ namespace MCForge
     public sealed class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
+        public Group g = Group.findPerm(LevelPermission.Operator);
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
@@ -89,6 +90,7 @@ namespace MCForge
 
         public bool trainGrab = false;
         public bool onTrain = false;
+        public bool allowTnt = true;
 
         public bool frozen = false;
         public string following = "";
@@ -209,6 +211,11 @@ namespace MCForge
 
 
         public bool loggedIn = false;
+        private Player()
+        {
+            //Only necessary for a "flatcopy".
+
+        }
         public Player(Socket s)
         {
             try
@@ -751,7 +758,16 @@ namespace MCForge
             Loading = false;
 
             if (emoteList.Contains(name)) parseSmiley = false;
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
+            if (!Directory.Exists("text/login"))
+            {
+                Directory.CreateDirectory("text/login");
+                return;
+            }
+            if (!File.Exists("text/login/" + this.name + ".txt"))
+            {
+                File.WriteAllText("text/login/" + this.name + ".txt", " joined the server.");
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
@@ -2401,7 +2417,15 @@ namespace MCForge
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
+                        if (!Directory.Exists("text/logout"))
+                        {
+                            Directory.CreateDirectory("text/logout");
+                        }
+                        if (!File.Exists("text/logout/" + name + ".txt"))
+                        {
+                            File.WriteAllText("text/logout/" + name + ".txt", " Disconnected.");
+                        }
+                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
@@ -2712,6 +2736,19 @@ namespace MCForge
         }
 
 #region getters
+        public Player getCopy()
+        {
+            //Copies some player stats without needing to copy all of them. 
+            Player p = new Player();
+            p.level = this.level;
+            p.pos = this.pos;
+            p.g = this.g;
+            p.group = this.group;
+            p.name = this.name;
+            p.rot = this.rot;
+            p.title = this.title;
+            return p;
+        }
         public ushort[] footLocation
         {
             get

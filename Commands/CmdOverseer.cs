@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -66,7 +66,7 @@ namespace MCForge
                 }
                 else if (par == "2")
                 {
-                    string mapname = p.name + "2";
+                    string mapname = p.name.ToLower() + "2";
                     if (!Server.levels.Any(l => l.name == mapname))
                     {
                         Command.all.Find("load").Use(p, mapname);
@@ -88,9 +88,9 @@ namespace MCForge
             {
                 if (par == "ADD")
                 {
-                    if ((File.Exists(@"levels\" + p.name + ".lvl")) || (File.Exists(@"levels\" + p.name + "00.lvl")))
+                    if ((File.Exists(@"levels\" + p.name.ToLower() + ".lvl")) || (File.Exists(@"levels\" + p.name.ToLower() + "00.lvl")))
                     {
-                        if (!File.Exists(@"levels\" + p.name + "2.lvl"))
+                        if (!File.Exists(@"levels\" + p.name.ToLower() + "2.lvl"))
                         {
                             Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have a map, let me create a second one for you.");
                             string mType;
@@ -105,23 +105,23 @@ namespace MCForge
                                     mType = "flat";
                                 }
                                 Player.SendMessage(p, "Creating your 2nd map, " + p.color + p.name);
-                                Command.all.Find("newlvl").Use(p, p.name + "2 " + mSize(p) + " " + mType);
+                                Command.all.Find("newlvl").Use(p, p.name.ToLower() + "2 " + mSize(p) + " " + mType);
                             }
                             else
                             {
                                 Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean.");
                             }
                         }
-                        else 
+                        else
                         {
                             Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have two maps.");
                             Player.SendMessage(p, "If you would like to delete one type /os map delete <1 or 2>");
                         }
                     }
-                        else
+                    else
                     {
                         string mType;
-                        if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL")
+                        if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL" || par2.ToUpper() == "SPACE")
                         {
                             if (par2 != "")
                             {
@@ -132,14 +132,14 @@ namespace MCForge
                                 mType = "flat";
                             }
                             Player.SendMessage(p, "Creating your map, " + p.color + p.name);
-                            Command.all.Find("newlvl").Use(p, p.name + " " + mSize(p) + " " + mType);
+                            Command.all.Find("newlvl").Use(p, p.name.ToLower() + " " + mSize(p) + " " + mType);
                         }
                         else
                         {
-                            Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean.");
+                            Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean and space.");
                         }
                     }
-                    
+
                 }
                 else if (par == "PHYSICS")
                 {
@@ -149,23 +149,23 @@ namespace MCForge
                         {
                             if (par2 == "0")
                             {
-                                    Command.all.Find("physics").Use(p, p.level.name + " 0");
+                                Command.all.Find("physics").Use(p, p.level.name + " 0");
                             }
                             else if (par2 == "1")
                             {
-                                    Command.all.Find("physics").Use(p, p.level.name + " 1");
+                                Command.all.Find("physics").Use(p, p.level.name + " 1");
                             }
                             else if (par2 == "2")
                             {
-                                    Command.all.Find("physics").Use(p, p.level.name + " 2");
+                                Command.all.Find("physics").Use(p, p.level.name + " 2");
                             }
                             else if (par2 == "3")
                             {
-                                    Command.all.Find("physics").Use(p, p.level.name + " 3");
+                                Command.all.Find("physics").Use(p, p.level.name + " 3");
                             }
                             else if (par2 == "4")
                             {
-                                    Command.all.Find("physics").Use(p, p.level.name + " 4");
+                                Command.all.Find("physics").Use(p, p.level.name + " 4");
                             }
                         }
                         else { Player.SendMessage(p, "You didn't enter a number! Please enter one of these numbers: 0, 1, 2, 3, 4"); }
@@ -175,7 +175,7 @@ namespace MCForge
                 // Delete your map
                 else if (par == "DELETE")
                 {
-                    if (par == "")
+                    if (par2 == "")
                     {
                         Player.SendMessage(p, "To delete one of your maps type /os map delete <1 or 2> 1 is your first map 2 is your second.");
                     }
@@ -183,11 +183,13 @@ namespace MCForge
                     {
                         Command.all.Find("deletelvl").Use(p, properMapName(p, false));
                         Player.SendMessage(p, "Your 1st map has been removed.");
+                        return;
                     }
                     else if (par2 == "2")
                     {
-                        Command.all.Find("deletelvl").Use(p, p.name + "2");
+                        Command.all.Find("deletelvl").Use(p, p.name.ToLower() + "2");
                         Player.SendMessage(p, "Your 2nd map has been removed.");
+                        return;
                     }
 
                 }
@@ -228,7 +230,7 @@ namespace MCForge
                 }
                 else if (par == "DEL")
                 {
-                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
+                    if ((p.level.name.ToLower().Equals(p.name.ToUpper())) || (p.level.name.ToLower().Equals(p.name.ToLower() + "00")) || (p.level.name.ToLower().Equals(p.name.ToLower() + "2")))
                     {
                         // I need to add the ability to delete a single zone, I need help!
                         if ((par2.ToUpper() == "ALL") || (par2.ToUpper() == ""))
@@ -266,7 +268,7 @@ namespace MCForge
                         Player.SendMessage(p, "Your 2nd level is now loaded.");
                     }
                 }
-                else {Player.SendMessage(p, "Type /os load <1 or 2> to load one of your maps");}
+                else { Player.SendMessage(p, "Type /os load <1 or 2> to load one of your maps"); }
             }
             else if (cmd == "KICKALL")
             {
@@ -296,13 +298,13 @@ namespace MCForge
              * I need to figure out how to add a system to do this with the players second map.
              */
             string r = "";
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\levels\\" + p.name + "00.lvl"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\levels\\" + p.name.ToLower() + "00.lvl"))
             {
-                r = p.name + "00";
+                r = p.name.ToLower() + "00";
             }
             else
             {
-                r = p.name;
+                r = p.name.ToLower();
             }
             if (Ext == true) { r = r + ".lvl"; }
             return r;
@@ -311,7 +313,7 @@ namespace MCForge
         public string mSize(Player p)
         {
 
-                return "128 64 128";
+            return "128 64 128";
         }
     }
 }

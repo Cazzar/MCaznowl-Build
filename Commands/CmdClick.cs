@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -30,6 +30,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null)
+            {
+                Player.SendMessage(p, "This command can only be used in-game");
+                return;
+            }
             string[] parameters = message.Split(' ');
             ushort[] click = p.lastClick;
 
