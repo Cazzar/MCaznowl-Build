@@ -179,6 +179,7 @@ namespace MCForge
 		/// returning true will tell the server to do nothing else afterwards, this is usefull for a cuboid like plugin
 		/// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
 		/// </summary>
+        public delegate bool BlockchangeEventHandler2(Player p, ushort x, ushort y, ushort z, byte type);
         public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
         public event BlockchangeEventHandler Blockchange = null;
 		/// <summary>
@@ -214,7 +215,7 @@ namespace MCForge
 		/// </summary>
 		public delegate void OnPlayerDeath(Player p, byte deathblock);
 		public static event OnPlayerDeath PlayerDeath = null;
-		public static event BlockchangeEventHandler PlayerBlockChange = null;
+		public static event BlockchangeEventHandler2 PlayerBlockChange = null;
 		public event OnPlayerChat OnChat = null;
 		public event OnPlayerCommand OnCommand = null;
 		public event OnPlayerDeath OnDeath = null;
@@ -750,11 +751,8 @@ namespace MCForge
                 }
             }
             playerDb.Dispose();
-			if (PlayerConnect != null)
-			{
-				if (PlayerConnect(this))
-					return;
-			}
+            if (PlayerConnect != null)
+                PlayerConnect(this);
             if (Server.devs.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
