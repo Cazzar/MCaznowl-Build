@@ -141,6 +141,10 @@ namespace MCForge
             {
                 playersleft = players.Count();
                 playersleftlist = players;
+                foreach (Player plya in players)
+                {
+                    plya.incountdown = true;
+                }
             }
             AfterStart();
             Play();
@@ -148,13 +152,6 @@ namespace MCForge
 
         public static void Play()
         {
-            List<int> speed = new List<int>() {
-                4000,
-                3000,
-                2000,
-                1500,
-                1000
-            };
             
             while (squaresleft.Any() && playersleft != 0 && (gamestatus == CountdownGameStatus.InProgress || gamestatus == CountdownGameStatus.Finished))
             {
@@ -167,7 +164,6 @@ namespace MCForge
                 {
                     mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString() + " Players left!!");
                 }
-
             }
         }
 
@@ -346,25 +342,25 @@ namespace MCForge
         public static void Death(Player p)
         {
             playersleft = playersleft - 1;
-            
-            mapon.ChatLevel(p.name + " is out of countdown!!");
-            
+
+            mapon.ChatLevel(p.color + p.name + Server.DefaultColor + " is out of countdown!!");
+            p.incountdown = false;
             playersleftlist.Remove(p);
             switch (playersleft)
             {
                 case 1:        
-                    mapon.ChatLevel(playersleftlist.Last().name + " is the winner!!");
+                    mapon.ChatLevel(playersleftlist.Last().color + playersleftlist.Last().name + Server.DefaultColor + " is the winner!!");
                     End(playersleftlist.Last());
                     break;
                 case 2:
                     mapon.ChatLevel("Only 2 Players left:");
-                    mapon.ChatLevel(playersleftlist.First().name + " and " + playersleftlist.Last().name);
+                    mapon.ChatLevel(playersleftlist.First().color + playersleftlist.First().name + Server.DefaultColor + " and " + playersleftlist.Last().color + playersleftlist.Last().name);
                     break;
                 case 5:
                     mapon.ChatLevel("Only 5 Players left:");
                     foreach (Player pl in playersleftlist)
                     {
-                        mapon.ChatLevel(pl.name);
+                        mapon.ChatLevel(pl.color + pl.name);
                         Thread.Sleep(500);
                     }
                     break;
@@ -378,24 +374,25 @@ namespace MCForge
         {
             playersleft = playersleft - 1;
 
-            mapon.ChatLevel(p.name + " logged out and so is out of countdown!!");
-
+            mapon.ChatLevel(p.color + p.name + Server.DefaultColor + " logged out and so is out of countdown!!");
+            players.Remove(p);
+            p.incountdown = false;
             playersleftlist.Remove(p);
             switch (playersleft)
             {
                 case 1:
-                    mapon.ChatLevel(playersleftlist.Last().name + " is the winner!!");
+                    mapon.ChatLevel(playersleftlist.Last().color + playersleftlist.Last().name + Server.DefaultColor + " is the winner!!");
                     End(playersleftlist.Last());
                     break;
                 case 2:
                     mapon.ChatLevel("Only 2 Players left:");
-                    mapon.ChatLevel(playersleftlist.First().name + " and " + playersleftlist.Last().name);
+                    mapon.ChatLevel(playersleftlist.First().color + playersleftlist.First().name + Server.DefaultColor + " and " + playersleftlist.Last().color + playersleftlist.Last().name);
                     break;
                 case 5:
                     mapon.ChatLevel("Only 5 Players left:");
                     foreach (Player pl in playersleftlist)
                     {
-                        mapon.ChatLevel(pl.name);
+                        mapon.ChatLevel(pl.color + pl.name);
                         Thread.Sleep(500);
                     }
                     break;
@@ -411,11 +408,13 @@ namespace MCForge
             winner.SendMessage("Congratulations!! You won!!!");
             gamestatus = CountdownGameStatus.Finished;
             Command.all.Find("spawn").Use(winner, "");
+            CountdownGame.playersleftlist.Clear();
+            winner.incountdown = false;
         }
 
         public static void Reset(Player p, bool all)
         {
-            if (gamestatus == CountdownGameStatus.Enabled || gamestatus == CountdownGameStatus.Finished)
+            if (gamestatus == CountdownGameStatus.Enabled || gamestatus == CountdownGameStatus.Finished || gamestatus == CountdownGameStatus.Disabled)
             {
                 {
                     if (all == true)
@@ -424,7 +423,6 @@ namespace MCForge
                             CountdownGame.gamestatus = CountdownGameStatus.Disabled;
                             CountdownGame.playersleft = 0;
                             CountdownGame.playersleftlist.Clear();
-                            CountdownGame.players.Clear();
                             CountdownGame.squaresleft.Clear();
                             CountdownGame.speed = 750;
                         }
@@ -549,6 +547,23 @@ namespace MCForge
                         p.SendMessage("You do not need to re-enable it");
                     }
                     gamestatus = CountdownGameStatus.Enabled;
+                    foreach (Player pl in Player.players)
+                    {
+                        if (pl.playerofcountdown == true)
+                        {
+                            if (pl.level == mapon)
+                            {
+                                Command.all.Find("countdown").Use(pl, "join");
+                                Player.SendMessage(pl, "You've rejoined countdown!!");
+                            }
+                            else
+                            {
+                                Player.SendMessage(pl, "You've been removed from countdown because you aren't on the map");
+                                pl.playerofcountdown = false;
+                                players.Remove(pl);
+                            }
+                        }
+                    }
                 }
                 else if (all == true)
                 {
@@ -558,8 +573,16 @@ namespace MCForge
                         p.SendMessage("You do not need to re-enable it");
                     }
                     gamestatus = CountdownGameStatus.Enabled;
+                    CountdownGame.playersleft = 0;
+                    CountdownGame.playersleftlist.Clear();
+                    CountdownGame.players.Clear();
+                    foreach (Player pl in Player.players)
+                    {
+                        pl.playerofcountdown = false;
+                        pl.incountdown = false;
+                    }
                 }
-
+                return;
             }
             else
             {
