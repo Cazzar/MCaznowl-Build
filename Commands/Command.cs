@@ -41,6 +41,7 @@ namespace MCForge
         {
             all.Add(new CmdAbort());
             all.Add(new CmdAbout());
+            all.Add(new CmdAdminChat());
             all.Add(new CmdAfk());
             all.Add(new CmdBan());
             all.Add(new CmdBanip());
