@@ -17,6 +17,8 @@ v4.8.0.0
 - Fixed: Changelog now displays in the console.
 - Updated: /reload - Better version that takes you to the map immediately, sends reload message and logs.
 - Added /chatroom and a full chatroom system
+- Fixed some bugs in /countdown
+- Added 2 new game speeds (ultimate and extreme) to /countdown
 
 v4.7.0.0
 - Added new game: Countdown
