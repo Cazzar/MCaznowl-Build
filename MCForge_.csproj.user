@@ -17,6 +17,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <StartAction>Program</StartAction>
-    <StartProgram>D:\User\MCForge\GIT\countdown\bin\Release\MCForge.exe</StartProgram>
+    <StartProgram>C:\Users\Colin\Desktop\MCForge source\bin\Debug\MCForge.exe</StartProgram>
   </PropertyGroup>
 </Project>
