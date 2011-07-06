@@ -113,9 +113,11 @@ namespace MCForge
         {
             Player.SendMessage(p, "/team join [color] - Joins the team specified by the color.");
             Player.SendMessage(p, "/team leave - Leaves the team you are on.");
+            Player.SendMessage(p, "/team chat - Enable/Disable team chat.");
             Player.SendMessage(p, "/team set [name] [color] - Op+ - Sets a player to a specified team.");
             Player.SendMessage(p, "/team set [name] none - Op+ - Removes a player from a team.");
             Player.SendMessage(p, "/team scores - Shows the current scores for all teams.");
+            Player.SendMessage(p, "/drop - Drop the flag if you are carrying it.");
         }
     }
 }

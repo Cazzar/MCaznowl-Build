@@ -35,7 +35,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/home - Sends you to the main level.");
+            Player.SendMessage(p, "/main - Sends you to the main level.");
         }
     }
 }

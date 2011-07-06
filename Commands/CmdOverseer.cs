@@ -94,7 +94,7 @@ namespace MCForge
                         {
                             Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have a map, let me create a second one for you.");
                             string mType;
-                            if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL")
+                            if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL" || par2.ToUpper() == "SPACE")
                             {
                                 if (par2 != "")
                                 {
@@ -109,7 +109,7 @@ namespace MCForge
                             }
                             else
                             {
-                                Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean.");
+                                Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, forest, island, mountians, ocean, pixel and space.");
                             }
                         }
                         else
@@ -136,7 +136,7 @@ namespace MCForge
                         }
                         else
                         {
-                            Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, mountians, forest, island, pixel, ocean and space.");
+                            Player.SendMessage(p, "A wrong map type was specified. Valid map types: Desert, flat, forest, island, mountians, ocean, pixel and space.");
                         }
                     }
 
@@ -199,7 +199,7 @@ namespace MCForge
                     Player.SendMessage(p, "/overseer map add [type - default is flat] -- Creates your map");
                     Player.SendMessage(p, "/overseer map physics -- Sets the physics on your map.");
                     Player.SendMessage(p, "/overseer map delete -- Deletes your map");
-                    Player.SendMessage(p, "  Map Types: desert, flat, forest, island, mountains, ocean, pixel");
+                    Player.SendMessage(p, "  Map Types: Desert, flat, forest, island, mountians, ocean, pixel and space");
                 }
             }
             else if (cmd == "ZONE")
