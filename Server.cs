@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -127,6 +127,9 @@ namespace MCForge
 
         //Color list as a char array
         public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+        //Chatrooms
+        public static List<string> Chatrooms = new List<string>();
 
         //Settings
         #region Server Settings
@@ -700,21 +703,27 @@ namespace MCForge
                 // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
                 // -Descention
                 Player p = null;
+                bool begin = false;
                 try
                 {
                     p = new Player(listen.EndAccept(result));
                     listen.BeginAccept(new AsyncCallback(Accept), null);
+                    begin = true;
                 }
                 catch (SocketException e)
                 {
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
                 catch (Exception e)
                 {
                     ErrorLog(e);
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
             }
         }

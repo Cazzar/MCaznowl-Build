@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -90,6 +90,7 @@ namespace MCForge
 
         public bool trainGrab = false;
         public bool onTrain = false;
+        public bool allowTnt = true;
 
         public bool frozen = false;
         public string following = "";
@@ -206,6 +207,12 @@ namespace MCForge
 
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
+
+        //Chatrooms
+        public string Chatroom;
+        public List<string> spyChatRooms = new List<string>();
+        public DateTime lastchatroomglobal = new DateTime();
+
 
         public bool loggedIn = false;
         private Player()
@@ -502,6 +509,7 @@ namespace MCForge
                         Kick("You're still banned (temporary ban)!");
                     }
                 } catch { }
+
                 // Whitelist check.
                 if (Server.useWhitelist)
                 {
@@ -754,7 +762,16 @@ namespace MCForge
             Loading = false;
 
             if (emoteList.Contains(name)) parseSmiley = false;
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
+            if (!Directory.Exists("text/login"))
+            {
+                Directory.CreateDirectory("text/login");
+                return;
+            }
+            if (!File.Exists("text/login/" + this.name + ".txt"))
+            {
+                File.WriteAllText("text/login/" + this.name + ".txt", " joined the server.");
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
@@ -1404,7 +1421,7 @@ namespace MCForge
                     storedMessage += text.Replace(">", "|>|");
                     SendMessage("Message appended!");
                     return;
-                } 
+                }
                 else if (text.EndsWith("<"))
                 {
                     storedMessage += text.Replace("<", "|<|");
@@ -1555,10 +1572,17 @@ namespace MCForge
                             i = rnd.Next(lines.Count);
                             text = lines[i];
                         }
-                        
+
                     }
                     else { File.Create("text/joker.txt"); }
 
+                }
+
+                //chatroom stuff
+                if (this.Chatroom != null)
+                {
+                    ChatRoom(this, text, true, this.Chatroom);
+                    return;
                 }
 
                 if (!level.worldChat)
@@ -2168,7 +2192,7 @@ namespace MCForge
                 return;
 
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
@@ -2176,8 +2200,27 @@ namespace MCForge
                 return;
 
             if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level == from.level && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
+        public static void GlobalChatRoom(Player from, string message, bool showname)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            if (showname) { message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
+            Server.s.Log(message);
+        }
+        public static void ChatRoom(Player from, string message, bool showname, string chatroom)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            string messageforspy = ("<ChatRoomSPY: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message);
+            if (showname) { message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom == chatroom) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.spyChatRooms.Contains(chatroom)  && p.Chatroom != chatroom) Player.SendMessage(p, Server.DefaultColor + messageforspy); });
+            Server.s.Log(message);
+        }
+
 
         private static bool MessageHasBadColorCodes(Player from, string message)
         {
@@ -2216,16 +2259,16 @@ namespace MCForge
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
             if (showname) { message = "<World>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
         public static void GlobalMessage(string message)
         {
             message = message.Replace("%", "&");
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageLevel(Level l, string message)
         {
-            players.ForEach(delegate(Player p) { if (p.level == l) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level == l && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageOps(string message)
         {
@@ -2378,7 +2421,15 @@ namespace MCForge
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
+                        if (!Directory.Exists("text/logout"))
+                        {
+                            Directory.CreateDirectory("text/logout");
+                        }
+                        if (!File.Exists("text/logout/" + name + ".txt"))
+                        {
+                            File.WriteAllText("text/logout/" + name + ".txt", " Disconnected.");
+                        }
+                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)

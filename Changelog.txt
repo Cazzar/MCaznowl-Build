@@ -1,3 +1,23 @@
+v4.8.0.0
+- Added custom login and logout messages - customizable in the console properties
+- Added /loginmessage [Player] [Message] and /logoutmessage [Player] [Message]
+- Added /explode - For all your exploding needs:
+	-/explode me - Explodes yourself
+	-/explode [Player] - Explodes the specified player
+	-/explode [X] [Y] [Z] - Explodes at the specified co-ordinates
+- Added /pyramid - Builds pyramids, thanks to aaron1tasker:
+	-/pyramid - Builds a solid pyramid
+	-/pyramid hollow - Builds a hollow pyramid
+	-/pyramid reverse - Builds a reverse pyramid
+- Added add-on /hide check - Checks if your hiding
+- Added /tnt allow and /tnt disallow to disable and enable the use of tnt commands
+- Fixed /restart and the console restart button
+- Fixed /overseer - Now accepts players names with upper-case letters, with the creation of maps
+- Fixed /unbanip - It will now unban ips with no more, "Not a valid ip!" messages :)
+- Fixed: Changelog now displays in the console.
+- Updated: /reload - Better version that takes you to the map immediately, sends reload message and logs.
+- Added /chatroom and a full chatroom system
+
 v4.7.0.0
 - Added new game: Countdown
 -Added /splace - Measures a set [distance] and places a stone block at each end. Made by Woldoc, originally named /set.

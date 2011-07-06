@@ -12,7 +12,7 @@ namespace MCForge
     public class CmdCountdown : Command
     {
         public override string name { get { return "countdown"; } }
-        public override string shortcut { get { return ""; } }
+        public override string shortcut { get { return "cd"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
@@ -450,6 +450,7 @@ namespace MCForge
             p.SendMessage("/countdown leave - leave the game");
             p.SendMessage("/countdown goto - goto the countdown map");
             p.SendMessage("/countdown players - view players currently playing");
+            p.SendMessage("/cd - Command shortcut.");
             if (p.group.Permission < LevelPermission.Operator)
             {
                 p.SendMessage("/countdown rules - the rules of countdown");

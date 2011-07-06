@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -256,6 +256,10 @@ namespace MCForge
 
                     by = p.level.GetTile(pos.x, pos.y, pos.z);
 
+                    if (p.allowTnt == false)
+                    {
+                        Player.SendMessage(p, Server.DefaultColor + "Since tnt usage is currently disabled, normal missile enabled!");
+                    }
                     if (total > 3)
                     {
                         if (by != Block.air && !allBlocks.Contains(pos))
@@ -277,7 +281,11 @@ namespace MCForge
                                 {
                                     if (by != Block.glass)
                                     {
-                                        p.level.MakeExplosion(pos.x, pos.y, pos.z, 1);
+                                        if (p.allowTnt == true)
+                                        {
+                                            p.level.MakeExplosion(pos.x, pos.y, pos.z, 1);
+                                            break;
+                                        }
                                         break;
                                     }
                                 }
@@ -318,8 +326,13 @@ namespace MCForge
                         if (pos.x == lookedAt.x && pos.y == lookedAt.y && pos.z == lookedAt.z)
                         {
                             if (p.level.physics >= 3 && bp.ending >= 2)
-                                p.level.MakeExplosion(lookedAt.x, lookedAt.y, lookedAt.z, 2);
-                            break;
+                            {
+                                if (p.allowTnt == true)
+                                {
+                                    p.level.MakeExplosion(lookedAt.x, lookedAt.y, lookedAt.z, 2);
+                                    break;
+                                }
+                            }
                         }
 
                         if (previous.Count > 12)

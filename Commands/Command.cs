@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -56,6 +56,7 @@ namespace MCForge
             all.Add(new CmdCalculate());
 			all.Add(new CmdChain());
             all.Add(new CmdChangeLog());
+            all.Add(new CmdChatRoom());
             all.Add(new CmdClearBlockChanges());
             all.Add(new CmdClick());
             all.Add(new CmdClones());
@@ -84,6 +85,7 @@ namespace MCForge
             all.Add(new CmdEconomyStats());
 			all.Add(new CmdEllipse());
             all.Add(new CmdEmote());
+            all.Add(new CmdExplode());
 			all.Add(new CmdFakePay());
             all.Add(new CmdFakeRank());
             all.Add(new CmdFetch());
@@ -125,6 +127,8 @@ namespace MCForge
             all.Add(new CmdLine());
             all.Add(new CmdLoad());
             all.Add(new CmdLockdown());
+            all.Add(new CmdLoginMessage());
+            all.Add(new CmdLogoutMessage());
             all.Add(new CmdLowlag());
             all.Add(new CmdMain());
             all.Add(new CmdMap());
@@ -162,6 +166,7 @@ namespace MCForge
             all.Add(new CmdPlayers());
             all.Add(new CmdPortal());
             all.Add(new CmdPossess());
+            all.Add(new CmdPyramid());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
             all.Add(new CmdRedo());
@@ -192,6 +197,7 @@ namespace MCForge
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
             all.Add(new CmdShutdown());
+            all.Add(new CmdSilentCuboid());
             all.Add(new CmdSlap());
             all.Add(new CmdSpawn());
             all.Add(new CmdSpheroid());
