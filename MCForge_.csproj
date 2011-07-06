@@ -88,6 +88,7 @@
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
+    <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
@@ -165,11 +166,15 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
-    <Compile Include="GUI\CustomLogin.cs" />
+    <Compile Include="GUI\CustomLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GUI\CustomLogin.Designer.cs">
       <DependentUpon>CustomLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\CustomLogout.cs" />
+    <Compile Include="GUI\CustomLogout.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GUI\CustomLogout.Designer.cs">
       <DependentUpon>CustomLogout.cs</DependentUpon>
     </Compile>
