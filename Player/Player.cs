@@ -139,6 +139,10 @@ namespace MCForge
         public bool teamchat = false;
         public int health = 100;
 
+        //Countdown
+        public bool playerofcountdown = false;
+        public bool incountdown = false;
+
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
