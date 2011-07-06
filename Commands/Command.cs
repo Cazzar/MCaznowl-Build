@@ -220,6 +220,7 @@ namespace MCForge
             all.Add(new CmdTpZone());
             all.Add(new CmdTree());
             all.Add(new CmdTrust());
+            all.Add(new CmdUBan());
             all.Add(new CmdUnban());
             all.Add(new CmdUnbanip());
             all.Add(new CmdUndo());
