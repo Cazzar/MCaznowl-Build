@@ -166,11 +166,15 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
-    <Compile Include="GUI\CustomLogin.cs" />
+    <Compile Include="GUI\CustomLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GUI\CustomLogin.Designer.cs">
       <DependentUpon>CustomLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\CustomLogout.cs" />
+    <Compile Include="GUI\CustomLogout.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GUI\CustomLogout.Designer.cs">
       <DependentUpon>CustomLogout.cs</DependentUpon>
     </Compile>
