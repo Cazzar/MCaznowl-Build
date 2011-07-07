@@ -19,6 +19,7 @@ v4.8.0.0
 - Added /chatroom and a full chatroom system
 - Fixed some bugs in /countdown
 - Added 2 new game speeds (ultimate and extreme) to /countdown
+- Added a new game mode to /countdown: freeze (do '/countdown start [speed] freeze' to start it) 
 - Fixed a bug in /megaboid that lets you build/delete on a map that has a higher perbuild than your rank.
 - Added a feature to /xban that allows you to kick a person with a message.
 - Added the shortcut /h to /main, also fixed the help message for /main and put it in the "other" /help catagory.
