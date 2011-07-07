@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -44,6 +44,7 @@ namespace MCForge
                     pB.hunt = false;
                     pB.AIName = "";
                     Player.SendMessage(p, pB.color + pB.name + Server.DefaultColor + "'s AI was turned off.");
+                    Server.s.Log(pB.name + "'s AI was turned off.");
                     return;
                 }
                 else if (message.Split(' ').Length != 2)
@@ -62,6 +63,7 @@ namespace MCForge
                     catch { }
                     Pb.AIName = "";
                     if (p != null) Player.GlobalChatLevel(p, Pb.color + Pb.name + Server.DefaultColor + "'s hunt instinct: " + Pb.hunt, false);
+                    Server.s.Log(Pb.name + "'s hunt instinct: " + Pb.hunt);
                     return;
                 }
                 else if (foundPath == "kill")
@@ -69,6 +71,7 @@ namespace MCForge
                     if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP may toggle killer instinct."); return; }
                     Pb.kill = !Pb.kill;
                     if (p != null) Player.GlobalChatLevel(p, Pb.color + Pb.name + Server.DefaultColor + "'s kill instinct: " + Pb.kill, false);
+                    Server.s.Log(Pb.name + "'s kill instinct: " + Pb.kill);
                     return;
                 }
 
@@ -123,6 +126,7 @@ namespace MCForge
 
                 Pb.AIName = foundPath;
                 if (p != null) Player.GlobalChatLevel(p, Pb.color + Pb.name + Server.DefaultColor + "'s AI is now set to " + foundPath, false);
+                Server.s.Log(Pb.name + "'s AI was set to " + foundPath);
             }
             catch { Player.SendMessage(p, "Error"); return; }
         }

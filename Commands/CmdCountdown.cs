@@ -12,7 +12,7 @@ namespace MCForge
     public class CmdCountdown : Command
     {
         public override string name { get { return "countdown"; } }
-        public override string shortcut { get { return ""; } }
+        public override string shortcut { get { return "cd"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
@@ -39,6 +39,12 @@ namespace MCForge
                 par3 = command[3];
             }
             catch { }
+
+            if (par0 == "help")
+            {
+                Command.all.Find("help").Use(p, "countdown");
+                return;
+            }
 
             if (par0 == "goto")
             {
@@ -70,6 +76,7 @@ namespace MCForge
                             {
                                 Player.SendMessage(p, "You can type '/countdown goto' to goto the countdown map!!");
                             }
+                            p.playerofcountdown = true;
                         }
                         else
                         {
@@ -102,6 +109,7 @@ namespace MCForge
                             CountdownGame.players.Remove(p);
                             CountdownGame.playersleftlist.Remove(p);
                             Player.SendMessage(p, "You've left the game.");
+                            p.playerofcountdown = false;
                             break;
                         case CountdownGameStatus.AboutToStart:
                             Player.SendMessage(p, "Sorry - The game is about to start");
@@ -111,7 +119,11 @@ namespace MCForge
                             return;
                         case CountdownGameStatus.Finished:
                             CountdownGame.players.Remove(p);
-                            CountdownGame.playersleftlist.Remove(p);
+                            if (CountdownGame.playersleftlist.Contains(p))
+                            {
+                                CountdownGame.playersleftlist.Remove(p);
+                            }
+                            p.playerofcountdown = false;
                             Player.SendMessage(p, "You've left the game.");
                             break;
                     }
@@ -140,7 +152,7 @@ namespace MCForge
                         Player.SendMessage(p, "Players who have joined:");
                         foreach (Player plya in CountdownGame.players)
                         {
-                            Player.SendMessage(p, Server.DefaultColor + plya.name);
+                            Player.SendMessage(p, plya.color + plya.name);
                         }
                         break;
 
@@ -149,7 +161,7 @@ namespace MCForge
                         foreach (Player plya in CountdownGame.players)
                         {
                             {
-                                Player.SendMessage(p, Server.DefaultColor + plya.name);
+                                Player.SendMessage(p, plya.color + plya.name);
                             }
                         }
                         break;
@@ -161,11 +173,11 @@ namespace MCForge
                             {
                                 if (CountdownGame.playersleftlist.Contains(plya))
                                 {
-                                    Player.SendMessage(p, Server.DefaultColor + plya.name + Server.DefaultColor + " who is &aIN");
+                                    Player.SendMessage(p, plya.color + plya.name + Server.DefaultColor + " who is &aIN");
                                 }
                                 else
                                 {
-                                    Player.SendMessage(p, Server.DefaultColor + plya.name + Server.DefaultColor + " who is &cOUT");
+                                    Player.SendMessage(p, plya.color + plya.name + Server.DefaultColor + " who is &cOUT");
                                 }
                             }
                         }
@@ -175,7 +187,7 @@ namespace MCForge
                         Player.SendMessage(p, "Players who were playing:");
                         foreach (Player plya in CountdownGame.players)
                         {
-                            Player.SendMessage(p, Server.DefaultColor + plya.name);
+                            Player.SendMessage(p, plya.color + plya.name);
                         }
                         break;
                 }
@@ -254,9 +266,17 @@ namespace MCForge
             {
                 if (par0 == "download")
                 {
-                    WebClient WEB = new WebClient();
-                    WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
-                    Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
+                        Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
+                    }
+                    catch
+                    {
+                        Player.SendMessage(p, "Sorry, Downloading Failed. PLease try again later");
+                        return;
+                    }
                     Command.all.Find("load").Use(p, "countdown");
                     Command.all.Find("goto").Use(p, "countdown");
                     Thread.Sleep(1000);
@@ -277,72 +297,156 @@ namespace MCForge
                 {
                     if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
                     {
-                        CountdownGame.mapon = Level.Find("countdown");
-                        CountdownGame.gamestatus = CountdownGameStatus.Enabled;
-                        Player.SendMessage(p, "Countdown has been enabled");
-                        Player.GlobalMessage("Countdown has been enabled!!");
+                        try
+                        {
+                            Command.all.Find("load").Use(null, "countdown");
+                            CountdownGame.mapon = Level.Find("countdown");
+                            CountdownGame.gamestatus = CountdownGameStatus.Enabled;
+                            Player.GlobalMessage("Countdown has been enabled!!");
+                        }
+                        catch
+                        {
+                            Player.SendMessage(p, "Failed, have you downloaded the map yet??");
+                        }
                     }
                     else
                     {
-                        Player.SendMessage(p, "A Game is either already enabled or in progress");
+                        Player.SendMessage(p, "A Game is either already enabled or is already progress");
                         return;
                     }
                 }
 
                 else if (par0 == "disable")
                 {
-                    if (CountdownGame.gamestatus != CountdownGameStatus.Enabled || CountdownGame.gamestatus != CountdownGameStatus.Finished)
+
+                    if (CountdownGame.gamestatus == CountdownGameStatus.AboutToStart || CountdownGame.gamestatus == CountdownGameStatus.InProgress)
                     {
-                        Player.SendMessage(p, "Sorry, a game is currently in progress - please wait till its finished!!");
+                        Player.SendMessage(p, "Sorry, a game is currently in progress - please wait till its finished or use '/countdown cancel' to cancel the game");
+                        return;
+                    }
+                    else if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
+                    {
+                        Player.SendMessage(p, "Already disabled!!");
                         return;
                     }
                     else
                     {
                         foreach (Player pl in CountdownGame.players)
                         {
-                            Player.SendMessage(pl, "The countdown game was canceled.");
+                            Player.SendMessage(pl, "The countdown game was disabled.");
                         }
                         CountdownGame.gamestatus = CountdownGameStatus.Disabled;
                         CountdownGame.playersleft = 0;
                         CountdownGame.playersleftlist.Clear();
                         CountdownGame.players.Clear();
                         CountdownGame.squaresleft.Clear();
+                        CountdownGame.Reset(p, true);
+                        Player.SendMessage(p, "Countdown Disabled");
+                        return;
                     }
                 }
 
-                else if (par0 == "start")
+                else if (par0 == "cancel")
                 {
-                    if (CountdownGame.players.Count >= 2)
+                    if (CountdownGame.gamestatus == CountdownGameStatus.AboutToStart || CountdownGame.gamestatus == CountdownGameStatus.InProgress)
                     {
-                        CountdownGame.playersleftlist = CountdownGame.players;
-                        CountdownGame.playersleft = CountdownGame.players.Count;
-                        switch (par1)
-                        {
-                            case "slow":
-                                CountdownGame.speed = 1000;
-                                CountdownGame.speedtype = "slow";
-                                break;
-
-                            case "normal":
-                                CountdownGame.speed = 750;
-                                CountdownGame.speedtype = "normal";
-                                break;
-
-                            case "fast":
-                                CountdownGame.speed = 500;
-                                CountdownGame.speedtype = "fast";
-                                break;
-
-                            default:
-                                p.SendMessage("You didn't specify a speed, resorting to 'normal'");
-                                CountdownGame.speed = 750;
-                                break;
-                        }
-                        CountdownGame.GameStart(p);
+                        CountdownGame.cancel = true;
+                        Thread.Sleep(1500);
+                        Player.SendMessage(p, "Countdown has been canceled");
+                        CountdownGame.gamestatus = CountdownGameStatus.Enabled;
+                        return;
                     }
                     else
                     {
-                        Player.SendMessage(p, "Sorry, there aren't enough players to play.");
+                        if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
+                        {
+                            Player.SendMessage(p, "The game is disabled!!");
+                            return;
+                        }
+                        else
+                        {
+                            foreach (Player pl in CountdownGame.players)
+                            {
+                                Player.SendMessage(pl, "The countdown game was canceled");
+                            }
+                            CountdownGame.gamestatus = CountdownGameStatus.Enabled;
+                            CountdownGame.playersleft = 0;
+                            CountdownGame.playersleftlist.Clear();
+                            CountdownGame.players.Clear();
+                            CountdownGame.squaresleft.Clear();
+                            CountdownGame.Reset(null, true);
+                            return;
+                        }
+                    }
+                }
+
+                else if (par0 == "start" || par0 == "play")
+                {
+                    if (CountdownGame.gamestatus == CountdownGameStatus.Enabled)
+                    {
+                        if (CountdownGame.players.Count >= 2)
+                        {
+                            CountdownGame.playersleftlist = CountdownGame.players;
+                            CountdownGame.playersleft = CountdownGame.players.Count;
+                            switch (par1)
+                            {
+                                case "slow":
+                                    CountdownGame.speed = 800;
+                                    CountdownGame.speedtype = "slow";
+                                    break;
+
+                                case "normal":
+                                    CountdownGame.speed = 650;
+                                    CountdownGame.speedtype = "normal";
+                                    break;
+
+                                case "fast":
+                                    CountdownGame.speed = 500;
+                                    CountdownGame.speedtype = "fast";
+                                    break;
+
+                                case "extreme":
+                                    CountdownGame.speed = 300;
+                                    CountdownGame.speedtype = "extreme";
+                                    break;
+
+                                case "ultimate":
+                                    CountdownGame.speed = 150;
+                                    CountdownGame.speedtype = "ultimate";
+                                    break;
+
+                                default:
+                                    p.SendMessage("You didn't specify a speed, resorting to 'normal'");
+                                    CountdownGame.speed = 750;
+                                    CountdownGame.speedtype = "normal";
+                                    break;
+                            }
+                            if (par2 == null || par2.Trim() == "")
+                            {
+                                CountdownGame.freezemode = false;
+                            }
+                            else
+                            {
+                                if (par2 == "freeze" || par2 == "frozen")
+                                {
+                                    CountdownGame.freezemode = true;
+                                }
+                                else
+                                {
+                                    CountdownGame.freezemode = false;
+                                }
+                            }
+                            CountdownGame.GameStart(p);
+                        }
+                        else
+                        {
+                            Player.SendMessage(p, "Sorry, there aren't enough players to play.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "Either a game is already in progress or it hasn't been enabled");
                         return;
                     }
                 }
@@ -385,9 +489,10 @@ namespace MCForge
                     p.SendMessage("Next, type /countdown enable to enable the game mode");
                     p.SendMessage("Next, type /countdown join to join the game and tell other players to join aswell");
                     p.SendMessage("When some people have joined, type /countdown start [speed] to start it");
-                    p.SendMessage("[speed] can be 'fast', 'normal' or 'slow'");
+                    p.SendMessage("[speed] can be 'ultimate', 'extreme', 'fast', 'normal' or 'slow'");
                     p.SendMessage("When you are done, type /countdown reset [map/all]");
                     p.SendMessage("use map to reset only the map and all to reset everything.");
+                    return;
                 }
             }
             else
@@ -402,6 +507,7 @@ namespace MCForge
             p.SendMessage("/countdown leave - leave the game");
             p.SendMessage("/countdown goto - goto the countdown map");
             p.SendMessage("/countdown players - view players currently playing");
+            p.SendMessage("/cd - Command shortcut.");
             if (p.group.Permission < LevelPermission.Operator)
             {
                 p.SendMessage("/countdown rules - the rules of countdown");
@@ -413,7 +519,8 @@ namespace MCForge
                 p.SendMessage("/countdown download - download the countdown map");
                 p.SendMessage("/countdown enable - enable the game");
                 p.SendMessage("/countdown disable - disable the game");
-                p.SendMessage("/countdown start [speed] - start the game, speeds are 'slow', 'normal' and 'fast'");
+                p.SendMessage("/countdown cancel - cancels a game");
+                p.SendMessage("/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
                 p.SendMessage("/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
                 p.SendMessage("/countdown tutorial - a tutorial on how to setup countdown");
             }
