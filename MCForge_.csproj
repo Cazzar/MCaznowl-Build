@@ -252,6 +252,7 @@
     <Compile Include="Commands\CmdTnt.cs" />
     <Compile Include="Commands\CmdTp.cs" />
     <Compile Include="Commands\CmdTree.cs" />
+    <Compile Include="Commands\CmdUBan.cs" />
     <Compile Include="Commands\CmdUnban.cs" />
     <Compile Include="Commands\CmdUnbanip.cs" />
     <Compile Include="Commands\CmdUndo.cs" />
