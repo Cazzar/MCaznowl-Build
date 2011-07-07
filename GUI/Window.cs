@@ -364,6 +364,14 @@ namespace MCForge.Gui
                     //   WriteLine("(OPs):<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
                 }
+                else if (txtInput.Text[0] == '*')
+                {
+                    newtext = text.Remove(0, 1).Trim();
+                    Player.GlobalMessageAdmins("To Admins &f-" + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]&f- " + newtext);
+                    Server.s.Log("(Admins): Console: " + newtext);
+                    IRCBot.Say("Console: " + newtext, true);
+                    txtInput.Clear();
+                }
                 else
                 {
                     Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + txtInput.Text);
@@ -814,6 +822,11 @@ namespace MCForge.Gui
         private void dgvPlayers_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             e.PaintParts &= ~DataGridViewPaintParts.Focus;
+        }
+
+        private void txtLog_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

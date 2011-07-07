@@ -19,20 +19,20 @@ using System;
 
 namespace MCForge
 {
-   public class CmdXban : Command
+   public class CmdUBan : Command
    {
       
-      public override string name { get { return "xban"; } }
+      public override string name { get { return "uban"; } }
 
       public override string shortcut { get { return ""; } }
 
-      public override string type { get { return "other"; } }
+      public override string type { get { return "mod"; } }
    
       public override bool museumUsable { get { return false; } }
 
       public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
-public CmdXban() { }      
+public CmdUBan() { }      
 public override void Use(Player p, string message)
                
       {
@@ -47,6 +47,7 @@ public override void Use(Player p, string message)
                           if (p != null)
                           {
                               Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                              return;
                           }
                           else
                           {
@@ -57,8 +58,7 @@ public override void Use(Player p, string message)
                       if (who != null) {
 
                      Command.all.Find("undo").Use(p, msg + " all");
-                     Command.all.Find("ban").Use(p, msg); 
-                     Command.all.Find("banip").Use(p, "@"+msg); 
+                     Command.all.Find("ban").Use(p, msg);  
                      Command.all.Find("kick").Use(p,message);
                      Command.all.Find("undo").Use(p,msg+" all");
 
@@ -68,7 +68,6 @@ public override void Use(Player p, string message)
 
                            Command.all.Find("undo").Use(p, msg + " all");
                            Command.all.Find("ban").Use(p,msg);                           
-                           Command.all.Find("banip").Use(p, "@"+msg);
                            
                             }
                      
@@ -81,7 +80,7 @@ public override void Use(Player p, string message)
       
       public override void Help(Player p)
       {
-         Player.SendMessage(p, "/xban [name] [message]- Bans, undoes, and kicks [name] with [message], if specified.");
+         Player.SendMessage(p, "/uban [name] [message]- Bans, undoes, and kicks [name] with [message], if specified.");
       }
    }
 }

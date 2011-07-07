@@ -41,6 +41,7 @@ namespace MCForge
         {
             all.Add(new CmdAbort());
             all.Add(new CmdAbout());
+            all.Add(new CmdAdminChat());
             all.Add(new CmdAfk());
             all.Add(new CmdBan());
             all.Add(new CmdBanip());
@@ -220,6 +221,7 @@ namespace MCForge
             all.Add(new CmdTpZone());
             all.Add(new CmdTree());
             all.Add(new CmdTrust());
+            all.Add(new CmdUBan());
             all.Add(new CmdUnban());
             all.Add(new CmdUnbanip());
             all.Add(new CmdUndo());

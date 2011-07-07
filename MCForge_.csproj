@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Commands\CmdTnt.cs" />
     <Compile Include="Commands\CmdTp.cs" />
     <Compile Include="Commands\CmdTree.cs" />
+    <Compile Include="Commands\CmdUBan.cs" />
     <Compile Include="Commands\CmdUnban.cs" />
     <Compile Include="Commands\CmdUnbanip.cs" />
     <Compile Include="Commands\CmdUndo.cs" />

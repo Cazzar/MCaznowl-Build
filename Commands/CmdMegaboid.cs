@@ -31,8 +31,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "The console may not use megaboid!"); return; }
             if (p.megaBoid == true) { Player.SendMessage(p, "You may only have on Megaboid going at once. Use /abort to cancel it."); return; }
-
+            if (p.level.permissionbuild > p.group.Permission) { Player.SendMessage(p, "You may not megaboid on this level!"); return; }
             int number = message.Split(' ').Length;
             if (number > 2) { Help(p); return; }
             if (number == 2)

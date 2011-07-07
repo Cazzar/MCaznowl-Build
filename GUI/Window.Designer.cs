@@ -395,6 +395,7 @@ namespace MCForge.Gui
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtLog.Size = new System.Drawing.Size(413, 262);
             this.txtLog.TabIndex = 1;
+            this.txtLog.TextChanged += new System.EventHandler(this.txtLog_TextChanged);
             // 
             // label2
             // 
