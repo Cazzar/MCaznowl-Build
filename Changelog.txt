@@ -25,6 +25,7 @@ v4.8.0.0
 - Added the shortcut /fg to /fixgrass. 
 - Added /uban (uban is basically xban without the ipban.)
 - Removed useless code that used up to 90% RAM for no good reason
+- Added valid map sizes to CmdNewlvl help.
 
 v4.7.0.0
 - Added new game: Countdown
