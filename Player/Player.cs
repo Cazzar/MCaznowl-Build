@@ -1777,11 +1777,7 @@ namespace MCForge
             buffer[0] = (byte)id;
 
             Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
-            string TxStr = "";
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                TxStr += buffer[i] + " ";
-            }
+
             int tries = 0;
         retry: try
             {
