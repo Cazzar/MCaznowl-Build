@@ -85,12 +85,16 @@
   <ItemGroup>
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
+    <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
+    <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
+    <Compile Include="Commands\CmdExplode.cs" />
     <Compile Include="Commands\CmdFakePay.cs" />
     <Compile Include="Commands\CmdFakerank.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
@@ -99,8 +103,11 @@
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdHigh5.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
+    <Compile Include="Commands\CmdInterval.cs" />
     <Compile Include="Commands\CmdKickAll.cs" />
     <Compile Include="Commands\CmdLockdown.cs" />
+    <Compile Include="Commands\CmdLoginMessage.cs" />
+    <Compile Include="Commands\CmdLogoutMessage.cs" />
     <Compile Include="Commands\CmdMain.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
@@ -110,6 +117,7 @@
     <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
+    <Compile Include="Commands\CmdPyramid.cs" />
     <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdReload.cs" />
     <Compile Include="Commands\CmdReview.cs" />
@@ -117,6 +125,7 @@
     <Compile Include="Commands\CmdSeen.cs" />
     <Compile Include="Commands\CmdSendCmd.cs" />
     <Compile Include="Commands\CmdShutdown.cs" />
+    <Compile Include="Commands\CmdSilentCuboid.cs" />
     <Compile Include="Commands\CmdSPlace.cs" />
     <Compile Include="Commands\CmdTColor.cs" />
     <Compile Include="Commands\CmdCmdUnload.cs" />
@@ -158,6 +167,18 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="GUI\CustomLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomLogin.Designer.cs">
+      <DependentUpon>CustomLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CustomLogout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomLogout.Designer.cs">
+      <DependentUpon>CustomLogout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
@@ -231,6 +252,7 @@
     <Compile Include="Commands\CmdTnt.cs" />
     <Compile Include="Commands\CmdTp.cs" />
     <Compile Include="Commands\CmdTree.cs" />
+    <Compile Include="Commands\CmdUBan.cs" />
     <Compile Include="Commands\CmdUnban.cs" />
     <Compile Include="Commands\CmdUnbanip.cs" />
     <Compile Include="Commands\CmdUndo.cs" />
@@ -357,6 +379,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <EmbeddedResource Include="GUI\CustomLogin.resx">
+      <DependentUpon>CustomLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomLogout.resx">
+      <DependentUpon>CustomLogout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
       <SubType>Designer</SubType>

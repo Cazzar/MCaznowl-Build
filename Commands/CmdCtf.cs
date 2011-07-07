@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -299,16 +299,18 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/ctf - Turns CTF mode on for the map.  Must be enabled to play!");
-            Player.SendMessage(p, "/ctf start - Starts the game!");
-            Player.SendMessage(p, "/ctf stop - Stops the game.");
-            Player.SendMessage(p, "/ctf ff - Enables or disables friendly fire.  Default is off.");
+            Player.SendMessage(p, "/ctf team add [color] - Initializes team of specified color.");
+            Player.SendMessage(p, "/ctf team remove [color] - Removes team of specified color.");
             Player.SendMessage(p, "/ctf flag [color] - Sets the flag base for specified team.");
             Player.SendMessage(p, "/ctf spawn [color] - Adds a spawn for the team specified from where you are standing.");
             Player.SendMessage(p, "/ctf points [num] - Sets max round points.  Default is 3.");
-            Player.SendMessage(p, "/ctf team add [color] - Initializes team of specified color.");
-            Player.SendMessage(p, "/ctf team remove [color] - Removes team of specified color.");
+            Player.SendMessage(p, "/ctf ff - Enables or disables friendly fire.  Default is off.");
+            Player.SendMessage(p, "/ctf - Turns CTF mode on for the map.  Must be enabled to play!");
+            Player.SendMessage(p, "/ctf start - Starts the game!");
+            Player.SendMessage(p, "/ctf stop - Stops the game.");
             Player.SendMessage(p, "/ctf clear - Removes all CTF data from map.  Use sparingly.");
+            Player.SendMessage(p, "/ctf debug [flags/spawn] - To debug flags or spawn.");
+            Player.SendMessage(p, "/help team - To see info about team joining leaving etc.");
         }
 
         public struct CatchPos { public ushort x, y, z; public string color;}

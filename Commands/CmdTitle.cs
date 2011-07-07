@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -35,7 +35,7 @@ namespace MCForge
             int pos = message.IndexOf(' ');
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
-            if (who.group.Permission > p.group.Permission && p != null)
+            if (p != null && who.group.Permission > p.group.Permission)
             {
                 Player.SendMessage(p, "Cannot change the title of someone of greater rank");
                 return;
@@ -63,7 +63,7 @@ namespace MCForge
             }
 
             if (newTitle.Length > 17) { Player.SendMessage(p, "Title must be under 17 letters."); return; }
-            if (!Server.devs.Contains(p.name))
+            if (p != null && !Server.devs.Contains(p.name))
             {
                 if (Server.devs.Contains(who.name) || newTitle.ToLower() == "dev" || (newTitle.ToLower().Contains("dev") && newTitle.ToLower().Contains("%"))) { Player.SendMessage(p, "Can't let you do that, starfox."); return; }
             }

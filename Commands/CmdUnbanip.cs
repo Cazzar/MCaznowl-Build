@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -80,7 +80,7 @@ namespace MCForge
                 }
             }
 
-            if (!regex.IsMatch(message)) { Player.SendMessage(p, "Not a valid ip!"); return; }
+            if (message.IndexOf('.') == -1) { Player.SendMessage(p, "Not a valid ip!"); return; }
             if (p != null) if (p.ip == message) { Player.SendMessage(p, "You shouldn't be able to use this command..."); return; }
             if (!Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " doesn't seem to be banned..."); return; }
             Player.GlobalMessage(message + " got &8unip-banned" + Server.DefaultColor + "!");

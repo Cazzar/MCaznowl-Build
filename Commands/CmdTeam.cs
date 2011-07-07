@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -113,9 +113,11 @@ namespace MCForge
         {
             Player.SendMessage(p, "/team join [color] - Joins the team specified by the color.");
             Player.SendMessage(p, "/team leave - Leaves the team you are on.");
+            Player.SendMessage(p, "/team chat - Enable/Disable team chat.");
             Player.SendMessage(p, "/team set [name] [color] - Op+ - Sets a player to a specified team.");
             Player.SendMessage(p, "/team set [name] none - Op+ - Removes a player from a team.");
             Player.SendMessage(p, "/team scores - Shows the current scores for all teams.");
+            Player.SendMessage(p, "/drop - Drop the flag if you are carrying it.");
         }
     }
 }

@@ -1,10 +1,37 @@
-v5.0.0.0
-- GUI: Player and map lists should now update quicker and not leak memory
+v4.8.0.0
+- Added custom login and logout messages - customizable in the console properties
+- Added /loginmessage [Player] [Message] and /logoutmessage [Player] [Message]
+- Added /explode - For all your exploding needs:
+	-/explode me - Explodes yourself
+	-/explode [Player] - Explodes the specified player
+	-/explode [X] [Y] [Z] - Explodes at the specified co-ordinates
+- Added /pyramid - Builds pyramids, thanks to aaron1tasker:
+	-/pyramid - Builds a solid pyramid
+	-/pyramid hollow - Builds a hollow pyramid
+	-/pyramid reverse - Builds a reverse pyramid
+- Added add-on /hide check - Checks if your hiding
+- Added /tnt allow and /tnt disallow to disable and enable the use of tnt commands
+- Fixed /restart and the console restart button
+- Fixed /overseer - Now accepts players names with upper-case letters, with the creation of maps
+- Fixed /unbanip - It will now unban ips with no more, "Not a valid ip!" messages :)
+- Fixed: Changelog now displays in the console.
+- Updated: /reload - Better version that takes you to the map immediately, sends reload message and logs.
+- Added /chatroom and a full chatroom system
+- Fixed some bugs in /countdown
+- Added 2 new game speeds (ultimate and extreme) to /countdown
+- Added a new game mode to /countdown: freeze (do '/countdown start [speed] freeze' to start it) 
+- Fixed a bug in /megaboid that lets you build/delete on a map that has a higher perbuild than your rank.
+- Added a feature to /xban that allows you to kick a person with a message.
+- Added the shortcut /h to /main, also fixed the help message for /main and put it in the "other" /help catagory.
+- Added the shortcut /fg to /fixgrass. 
+- Added /uban (uban is basically xban without the ipban.)
+- Removed useless code that used up to 90% RAM for no good reason
 
 v4.7.0.0
 - Added new game: Countdown
-- Added /splace - Measures a set [distance] and places a stone block at each end
-- Added color information to /help
+-Added /splace - Measures a set [distance] and places a stone block at each end. Made by Woldoc, originally named /set.
+-Added /chain - Inspired by the StormCom command of the same name, /chain sends a "chain" of brown mushrooms. Upon coming into contact with a block other than air or a level's side wall, it will pull that block back to the start of the chain. 
+- Added color code information to /help.
 - Fixed issue where Player.cs doesn't check for all private network IPs starting with 172 (GitHub issue #2)
 - Hopefully fixed issue where certain color codes could sometimes crash the client (GitHub issue #21)
 - Updater should no longer crash when updating (Github issue #3)
