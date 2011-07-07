@@ -19,7 +19,7 @@ using System;
 
 namespace MCForge
 {
-   public class CmdXban : Command
+   public class CmdUBan : Command
    {
       
       public override string name { get { return "uban"; } }
@@ -32,7 +32,7 @@ namespace MCForge
 
       public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
-public CmdXban() { }      
+public CmdUBan() { }      
 public override void Use(Player p, string message)
                
       {
@@ -47,6 +47,7 @@ public override void Use(Player p, string message)
                           if (p != null)
                           {
                               Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                              return;
                           }
                           else
                           {
