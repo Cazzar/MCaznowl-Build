@@ -266,17 +266,18 @@ namespace MCForge
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();
-            string queryString;
-            queryString = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ";
 
-            foreach (BlockPos bP in tempCache)
+            string template = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
+
+            using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
             {
-                queryString += "('" + bP.name + "', '" + bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss") + "', " + (int)bP.x + ", " + (int)bP.y + ", " + (int)bP.z + ", " + bP.type + ", " + bP.deleted + "), ";
+                foreach (BlockPos bP in tempCache)
+                {
+                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                }
+                transaction.Commit();
             }
 
-            queryString = queryString.Remove(queryString.Length - 2);
-
-            MySQL.executeQuery(queryString);
             tempCache.Clear();
         }
 

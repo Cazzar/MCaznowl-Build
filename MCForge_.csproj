@@ -167,6 +167,7 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="GUI\CustomLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -437,6 +438,12 @@
     </Content>
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
+    <Content Include="Restarter.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Restarter.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
