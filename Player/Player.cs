@@ -142,6 +142,9 @@ namespace MCForge
         //Countdown
         public bool playerofcountdown = false;
         public bool incountdown = false;
+        public ushort countdowntempx;
+        public ushort countdowntempz;
+        public bool countdownsettemps = false;
 
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
@@ -1164,13 +1167,38 @@ namespace MCForge
             byte[] message = (byte[])m;
             byte thisid = message[0];
 
-            ushort x = NTHO(message, 1);
-            ushort y = NTHO(message, 3);
-            ushort z = NTHO(message, 5);
-            byte rotx = message[7];
-            byte roty = message[8];
-            pos = new ushort[3] { x, y, z };
-            rot = new byte[2] { rotx, roty };
+            if (this.incountdown == true && CountdownGame.gamestatus == CountdownGameStatus.InProgress && CountdownGame.freezemode == true)
+            {
+                if (this.countdownsettemps == true)
+                {
+                    countdowntempx = NTHO(message, 1);
+                    Thread.Sleep(100);
+                    countdowntempz = NTHO(message, 5);
+                    Thread.Sleep(100);
+                    countdownsettemps = false;
+                }
+                ushort x = countdowntempx;
+                ushort y = NTHO(message, 3);
+                ushort z = countdowntempz;
+                byte rotx = message[7];
+                byte roty = message[8];
+                pos = new ushort[3] { x, y, z };
+                rot = new byte[2] { rotx, roty };
+                if (countdowntempx != NTHO(message, 1) || countdowntempz != NTHO(message, 5))
+                {
+                    unchecked { this.SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
+                }
+            }
+            else
+            {
+                ushort x = NTHO(message, 1);
+                ushort y = NTHO(message, 3);
+                ushort z = NTHO(message, 5);
+                byte rotx = message[7];
+                byte roty = message[8];
+                pos = new ushort[3] { x, y, z };
+                rot = new byte[2] { rotx, roty };
+            }
         }
 
         public void RealDeath(ushort x, ushort y, ushort z)

@@ -316,12 +316,12 @@ namespace MCForge
                     }
                 }
 
-                else if (par0 == "disable" || par0 == "cancel")
+                else if (par0 == "disable")
                 {
 
                     if (CountdownGame.gamestatus == CountdownGameStatus.AboutToStart || CountdownGame.gamestatus == CountdownGameStatus.InProgress)
                     {
-                        Player.SendMessage(p, "Sorry, a game is currently in progress - please wait till its finished!!");
+                        Player.SendMessage(p, "Sorry, a game is currently in progress - please wait till its finished or use '/countdown cancel' to cancel the game");
                         return;
                     }
                     else if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
@@ -346,50 +346,107 @@ namespace MCForge
                     }
                 }
 
-                else if (par0 == "start" || par0 == "play")
+                else if (par0 == "cancel")
                 {
-                    if (CountdownGame.players.Count >= 2)
+                    if (CountdownGame.gamestatus == CountdownGameStatus.AboutToStart || CountdownGame.gamestatus == CountdownGameStatus.InProgress)
                     {
-                        CountdownGame.playersleftlist = CountdownGame.players;
-                        CountdownGame.playersleft = CountdownGame.players.Count;
-                        switch (par1)
-                        {
-                            case "slow":
-                                CountdownGame.speed = 800;
-                                CountdownGame.speedtype = "slow";
-                                break;
-
-                            case "normal":
-                                CountdownGame.speed = 650;
-                                CountdownGame.speedtype = "normal";
-                                break;
-
-                            case "fast":
-                                CountdownGame.speed = 500;
-                                CountdownGame.speedtype = "fast";
-                                break;
-
-                            case "extreme":
-                                CountdownGame.speed = 300;
-                                CountdownGame.speedtype = "extreme";
-                                break;
-
-                            case "ultimate":
-                                CountdownGame.speed = 150;
-                                CountdownGame.speedtype = "ultimate";
-                                break;
-
-                            default:
-                                p.SendMessage("You didn't specify a speed, resorting to 'normal'");
-                                CountdownGame.speed = 750;
-                                CountdownGame.speedtype = "normal";
-                                break;
-                        }
-                        CountdownGame.GameStart(p);
+                        CountdownGame.cancel = true;
+                        Thread.Sleep(1500);
+                        Player.SendMessage(p, "Countdown has been canceled");
+                        CountdownGame.gamestatus = CountdownGameStatus.Enabled;
+                        return;
                     }
                     else
                     {
-                        Player.SendMessage(p, "Sorry, there aren't enough players to play.");
+                        if (CountdownGame.gamestatus == CountdownGameStatus.Disabled)
+                        {
+                            Player.SendMessage(p, "The game is disabled!!");
+                            return;
+                        }
+                        else
+                        {
+                            foreach (Player pl in CountdownGame.players)
+                            {
+                                Player.SendMessage(pl, "The countdown game was canceled");
+                            }
+                            CountdownGame.gamestatus = CountdownGameStatus.Enabled;
+                            CountdownGame.playersleft = 0;
+                            CountdownGame.playersleftlist.Clear();
+                            CountdownGame.players.Clear();
+                            CountdownGame.squaresleft.Clear();
+                            CountdownGame.Reset(null, true);
+                            return;
+                        }
+                    }
+                }
+
+                else if (par0 == "start" || par0 == "play")
+                {
+                    if (CountdownGame.gamestatus == CountdownGameStatus.Enabled)
+                    {
+                        if (CountdownGame.players.Count >= 2)
+                        {
+                            CountdownGame.playersleftlist = CountdownGame.players;
+                            CountdownGame.playersleft = CountdownGame.players.Count;
+                            switch (par1)
+                            {
+                                case "slow":
+                                    CountdownGame.speed = 800;
+                                    CountdownGame.speedtype = "slow";
+                                    break;
+
+                                case "normal":
+                                    CountdownGame.speed = 650;
+                                    CountdownGame.speedtype = "normal";
+                                    break;
+
+                                case "fast":
+                                    CountdownGame.speed = 500;
+                                    CountdownGame.speedtype = "fast";
+                                    break;
+
+                                case "extreme":
+                                    CountdownGame.speed = 300;
+                                    CountdownGame.speedtype = "extreme";
+                                    break;
+
+                                case "ultimate":
+                                    CountdownGame.speed = 150;
+                                    CountdownGame.speedtype = "ultimate";
+                                    break;
+
+                                default:
+                                    p.SendMessage("You didn't specify a speed, resorting to 'normal'");
+                                    CountdownGame.speed = 750;
+                                    CountdownGame.speedtype = "normal";
+                                    break;
+                            }
+                            if (par2 == null || par2.Trim() == "")
+                            {
+                                CountdownGame.freezemode = false;
+                            }
+                            else
+                            {
+                                if (par2 == "freeze" || par2 == "frozen")
+                                {
+                                    CountdownGame.freezemode = true;
+                                }
+                                else
+                                {
+                                    CountdownGame.freezemode = false;
+                                }
+                            }
+                            CountdownGame.GameStart(p);
+                        }
+                        else
+                        {
+                            Player.SendMessage(p, "Sorry, there aren't enough players to play.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "Either a game is already in progress or it hasn't been enabled");
                         return;
                     }
                 }
@@ -462,7 +519,8 @@ namespace MCForge
                 p.SendMessage("/countdown download - download the countdown map");
                 p.SendMessage("/countdown enable - enable the game");
                 p.SendMessage("/countdown disable - disable the game");
-                p.SendMessage("/countdown start [speed] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate'");
+                p.SendMessage("/countdown cancel - cancels a game");
+                p.SendMessage("/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
                 p.SendMessage("/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
                 p.SendMessage("/countdown tutorial - a tutorial on how to setup countdown");
             }
