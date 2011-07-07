@@ -24,6 +24,7 @@ v4.8.0.0
 - Added the shortcut /h to /main, also fixed the help message for /main and put it in the "other" /help catagory.
 - Added the shortcut /fg to /fixgrass. 
 - Added /uban (uban is basically xban without the ipban.)
+- Removed useless code that used up to 90% RAM for no good reason
 
 v4.7.0.0
 - Added new game: Countdown
