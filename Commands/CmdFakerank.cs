@@ -53,11 +53,11 @@ namespace MCForge
              
              if (grp.name == "banned")
              {
-                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "@");
+                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
              }
              else
              {
-                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + "'s rank was set to " + grp.color + grp.name + Server.DefaultColor + ".4");
+                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + "'s rank was set to " + grp.color + grp.name + Server.DefaultColor + ".");
                  Player.GlobalMessage("&6Congratulations!");
              }
          }
