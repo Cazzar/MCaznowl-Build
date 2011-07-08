@@ -769,13 +769,28 @@ namespace MCForge
             if (!Directory.Exists("text/login"))
             {
                 Directory.CreateDirectory("text/login");
-                return;
             }
             if (!File.Exists("text/login/" + this.name + ".txt"))
             {
                 File.WriteAllText("text/login/" + this.name + ".txt", "joined the server.");
             }
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+            if (Server.agreetorulesonentry == true)
+            {
+                if (!File.Exists("ranks/agreed.txt"))
+                {
+                    File.WriteAllText("ranks/agreed.txt", "");
+                }
+                var agreed = File.ReadAllText("ranks/agreed.txt");
+                if (this.group.Permission == LevelPermission.Guest)
+                {
+                    if (!agreed.Contains(this.name.ToLower()))
+                    {
+                        SendMessage("&9You must read the &c/rules&9 and &c/agree&9 to them before you can build and use commands!");
+                        jailed = true;
+                    }
+                }
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
