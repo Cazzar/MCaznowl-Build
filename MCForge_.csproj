@@ -86,6 +86,7 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
+    <Compile Include="Commands\CmdAgree.cs" />
     <Compile Include="Commands\CmdAllowGuns.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChain.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
+    <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
     <Compile Include="Commands\CmdExplode.cs" />

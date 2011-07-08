@@ -44,6 +44,7 @@ namespace MCForge
             all.Add(new CmdAdminChat());
             all.Add(new CmdAllowGuns());
             all.Add(new CmdAfk());
+            all.Add(new CmdAgree());
             all.Add(new CmdBan());
             all.Add(new CmdBanip());
             all.Add(new CmdBind());
@@ -77,6 +78,7 @@ namespace MCForge
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
             all.Add(new CmdDevs());
+            all.Add(new CmdDisagree());
             all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
             all.Add(new CmdEconomyBuyColor());
