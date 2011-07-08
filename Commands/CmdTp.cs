@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.opensource.org/licenses/ecl2.php
+	http://www.osedu.org/licenses/ECL-2.0
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -16,6 +16,26 @@
 	permissions and limitations under the Licenses.
 */
 
+using System;
+using System.IO;
+
+namespace MCForge
+{
+    public class CmdTp : Command
+    {
+        public override string name { get { return "tp"; } }
+        public override string shortcut { get { return ""; } }
+        public override string type { get { return "other"; } }
+        public override bool museumUsable { get { return true; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
+        public CmdTp() { }
+
+        public override void Use(Player p, string message)
+        {
+            if (message == "")
+            {
+                Command.all.Find("spawn");
+                return;
             }
             Player who = Player.Find(message);
             if (who == null || (who.hidden && p.group.Permission < LevelPermission.Admin)) { Player.SendMessage(p, "There is no player \"" + message + "\"!"); return; }
