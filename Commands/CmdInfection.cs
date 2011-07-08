@@ -262,15 +262,16 @@ namespace MCForge
             timer.Enabled = false;
             Infect.Enabled = false;
             Theybecreepen = false;
-            infect.ForEach(delegate(Player p) { PlayerReset(p); });
+            infect.ForEach(delegate(Player p) { PlayerReset(p, true); });
             infect.Clear();
-            People.ForEach(delegate(Player p) { PlayerReset(p); });
+            People.ForEach(delegate(Player p) { PlayerReset(p, false); });
             People.Clear();
         }
         #endregion
-        private static void PlayerReset(Player player1)
+        private static void PlayerReset(Player player1, bool resetname)
         {
-            player1.name = player1.Extras.GetString(_oldname, player1.name);
+            if (resetname)
+                player1.name = player1.Extras.GetString(_oldname, player1.name);
             player1.title = player1.Extras.GetString(_oldtitle, player1.title);
             player1.Extras.PutBoolean(_creeper, false);
             player1.Extras.PutInt(_lives, 10);
