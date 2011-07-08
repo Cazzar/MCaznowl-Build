@@ -92,6 +92,7 @@ namespace MCForge
         public bool GrassGrow = true;
         public bool worldChat = true;
         public bool fishstill = false;
+        public bool guns = true;
 
         public int speedPhysics = 250;
         public int overload = 1500;
