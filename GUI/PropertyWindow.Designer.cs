@@ -50,30 +50,6 @@ namespace MCForge.Gui
             this.btnDiscard = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.txtBackup = new System.Windows.Forms.TextBox();
-            this.txtafk = new System.Windows.Forms.TextBox();
-            this.txtAFKKick = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.chkHelp = new System.Windows.Forms.CheckBox();
-            this.chkPhysicsRest = new System.Windows.Forms.CheckBox();
-            this.chkDeath = new System.Windows.Forms.CheckBox();
-            this.chkCheap = new System.Windows.Forms.CheckBox();
-            this.chkrankSuper = new System.Windows.Forms.CheckBox();
-            this.chkForceCuboid = new System.Windows.Forms.CheckBox();
-            this.ChkTunnels = new System.Windows.Forms.CheckBox();
-            this.txtName = new System.Windows.Forms.TextBox();
-            this.txtMOTD = new System.Windows.Forms.TextBox();
-            this.txtPort = new System.Windows.Forms.TextBox();
-            this.txtMaps = new System.Windows.Forms.TextBox();
-            this.txtDepth = new System.Windows.Forms.TextBox();
-            this.chkVerify = new System.Windows.Forms.CheckBox();
-            this.chkWorld = new System.Windows.Forms.CheckBox();
-            this.chkAutoload = new System.Windows.Forms.CheckBox();
-            this.chkPublic = new System.Windows.Forms.CheckBox();
-            this.cmbDefaultColour = new System.Windows.Forms.ComboBox();
-            this.cmbDefaultRank = new System.Windows.Forms.ComboBox();
-            this.cmbOpChat = new System.Windows.Forms.ComboBox();
-            this.chkLogBeat = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -97,13 +73,39 @@ namespace MCForge.Gui
             this.label33 = new System.Windows.Forms.Label();
             this.CrtCustCmd = new System.Windows.Forms.Button();
             this.CustCmdtxtBox = new System.Windows.Forms.TextBox();
-            this.txtOpChannel = new System.Windows.Forms.TextBox();
-            this.txtChannel = new System.Windows.Forms.TextBox();
-            this.txtIRCServer = new System.Windows.Forms.TextBox();
-            this.txtNick = new System.Windows.Forms.TextBox();
-            this.cmbIRCColour = new System.Windows.Forms.ComboBox();
-            this.chkIRC = new System.Windows.Forms.CheckBox();
+            this.chkTpToHigherRanks = new System.Windows.Forms.CheckBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.chkHelp = new System.Windows.Forms.CheckBox();
+            this.chkPhysicsRest = new System.Windows.Forms.CheckBox();
+            this.chkDeath = new System.Windows.Forms.CheckBox();
+            this.chkCheap = new System.Windows.Forms.CheckBox();
+            this.chkrankSuper = new System.Windows.Forms.CheckBox();
+            this.txtBackup = new System.Windows.Forms.TextBox();
+            this.txtafk = new System.Windows.Forms.TextBox();
+            this.txtAFKKick = new System.Windows.Forms.TextBox();
+            this.chkForceCuboid = new System.Windows.Forms.CheckBox();
             this.hackrank_kick = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkIRC = new System.Windows.Forms.CheckBox();
+            this.cmbIRCColour = new System.Windows.Forms.ComboBox();
+            this.txtNick = new System.Windows.Forms.TextBox();
+            this.txtIRCServer = new System.Windows.Forms.TextBox();
+            this.txtChannel = new System.Windows.Forms.TextBox();
+            this.txtOpChannel = new System.Windows.Forms.TextBox();
+            this.ChkTunnels = new System.Windows.Forms.CheckBox();
+            this.chkVerify = new System.Windows.Forms.CheckBox();
+            this.chkWorld = new System.Windows.Forms.CheckBox();
+            this.chkAutoload = new System.Windows.Forms.CheckBox();
+            this.chkPublic = new System.Windows.Forms.CheckBox();
+            this.cmbDefaultColour = new System.Windows.Forms.ComboBox();
+            this.txtName = new System.Windows.Forms.TextBox();
+            this.txtMOTD = new System.Windows.Forms.TextBox();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.txtMaps = new System.Windows.Forms.TextBox();
+            this.txtDepth = new System.Windows.Forms.TextBox();
+            this.cmbDefaultRank = new System.Windows.Forms.ComboBox();
+            this.cmbOpChat = new System.Windows.Forms.ComboBox();
+            this.chkLogBeat = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -132,9 +134,6 @@ namespace MCForge.Gui
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label36 = new System.Windows.Forms.Label();
             this.hackrank_kick_time = new System.Windows.Forms.TextBox();
-            this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
-            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
-            this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
             this.txtShutdown = new System.Windows.Forms.TextBox();
             this.txtBanMessage = new System.Windows.Forms.TextBox();
             this.txtNormRp = new System.Windows.Forms.TextBox();
@@ -143,6 +142,9 @@ namespace MCForge.Gui
             this.txtMoneys = new System.Windows.Forms.TextBox();
             this.txtCheap = new System.Windows.Forms.TextBox();
             this.txtRestartTime = new System.Windows.Forms.TextBox();
+            this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
+            this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
+            this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
             this.chkShutdown = new System.Windows.Forms.CheckBox();
             this.chkBanMessage = new System.Windows.Forms.CheckBox();
             this.chk17Dollar = new System.Windows.Forms.CheckBox();
@@ -154,18 +156,26 @@ namespace MCForge.Gui
             this.label9 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.chkRestartTime = new System.Windows.Forms.CheckBox();
+            this.tabIRC = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
+            this.lblIRC = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkAgreeToRules = new System.Windows.Forms.CheckBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.numPlayers = new System.Windows.Forms.NumericUpDown();
             this.numGuests = new System.Windows.Forms.NumericUpDown();
             this.label35 = new System.Windows.Forms.Label();
             this.ChkPortResult = new System.Windows.Forms.TextBox();
+            this.txtMain = new System.Windows.Forms.TextBox();
+            this.txtHost = new System.Windows.Forms.TextBox();
             this.ChkPort = new System.Windows.Forms.Button();
             this.lblOpChat = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
-            this.txtMain = new System.Windows.Forms.TextBox();
-            this.txtHost = new System.Windows.Forms.TextBox();
             this.lblDefault = new System.Windows.Forms.Label();
             this.chkMono = new System.Windows.Forms.CheckBox();
             this.chkRestart = new System.Windows.Forms.CheckBox();
@@ -180,13 +190,6 @@ namespace MCForge.Gui
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabIRC = new System.Windows.Forms.TabPage();
-            this.label31 = new System.Windows.Forms.Label();
-            this.lblIRC = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -194,11 +197,11 @@ namespace MCForge.Gui
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabIRC.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGuests)).BeginInit();
             this.tabControl.SuspendLayout();
-            this.tabIRC.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -243,264 +246,6 @@ namespace MCForge.Gui
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Information";
             this.toolTip.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip_Popup);
-            // 
-            // txtBackup
-            // 
-            this.txtBackup.Location = new System.Drawing.Point(83, 37);
-            this.txtBackup.Name = "txtBackup";
-            this.txtBackup.Size = new System.Drawing.Size(41, 21);
-            this.txtBackup.TabIndex = 5;
-            this.toolTip.SetToolTip(this.txtBackup, "How often should backups be taken, in seconds.\nDefault = 300");
-            // 
-            // txtafk
-            // 
-            this.txtafk.Location = new System.Drawing.Point(83, 64);
-            this.txtafk.Name = "txtafk";
-            this.txtafk.Size = new System.Drawing.Size(41, 21);
-            this.txtafk.TabIndex = 10;
-            this.toolTip.SetToolTip(this.txtafk, "How long the server should wait before declaring someone ask afk. (0 = No timer a" +
-                    "t all)");
-            // 
-            // txtAFKKick
-            // 
-            this.txtAFKKick.Location = new System.Drawing.Point(83, 91);
-            this.txtAFKKick.Name = "txtAFKKick";
-            this.txtAFKKick.Size = new System.Drawing.Size(41, 21);
-            this.txtAFKKick.TabIndex = 9;
-            this.toolTip.SetToolTip(this.txtAFKKick, "Kick the user after they have been afk for this many minutes (0 = No kick)");
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(224, 42);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(48, 13);
-            this.label24.TabIndex = 15;
-            this.label24.Text = "/rp limit:";
-            this.toolTip.SetToolTip(this.label24, "Limit for custom physics set by /rp");
-            // 
-            // chkHelp
-            // 
-            this.chkHelp.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkHelp.AutoSize = true;
-            this.chkHelp.Location = new System.Drawing.Point(13, 369);
-            this.chkHelp.Name = "chkHelp";
-            this.chkHelp.Size = new System.Drawing.Size(56, 23);
-            this.chkHelp.TabIndex = 20;
-            this.chkHelp.Text = "Old help";
-            this.toolTip.SetToolTip(this.chkHelp, "Should the old, cluttered help menu be used?");
-            this.chkHelp.UseVisualStyleBackColor = true;
-            // 
-            // chkPhysicsRest
-            // 
-            this.chkPhysicsRest.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkPhysicsRest.AutoSize = true;
-            this.chkPhysicsRest.Location = new System.Drawing.Point(13, 311);
-            this.chkPhysicsRest.Name = "chkPhysicsRest";
-            this.chkPhysicsRest.Size = new System.Drawing.Size(89, 23);
-            this.chkPhysicsRest.TabIndex = 22;
-            this.chkPhysicsRest.Text = "Restart physics";
-            this.toolTip.SetToolTip(this.chkPhysicsRest, "Restart physics on shutdown, clearing all physics blocks.");
-            this.chkPhysicsRest.UseVisualStyleBackColor = true;
-            // 
-            // chkDeath
-            // 
-            this.chkDeath.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkDeath.AutoSize = true;
-            this.chkDeath.Location = new System.Drawing.Point(13, 340);
-            this.chkDeath.Name = "chkDeath";
-            this.chkDeath.Size = new System.Drawing.Size(75, 23);
-            this.chkDeath.TabIndex = 21;
-            this.chkDeath.Text = "Death count";
-            this.toolTip.SetToolTip(this.chkDeath, "\"Bob has died 10 times.\"");
-            this.chkDeath.UseVisualStyleBackColor = true;
-            // 
-            // chkCheap
-            // 
-            this.chkCheap.AutoSize = true;
-            this.chkCheap.Location = new System.Drawing.Point(13, 149);
-            this.chkCheap.Name = "chkCheap";
-            this.chkCheap.Size = new System.Drawing.Size(103, 17);
-            this.chkCheap.TabIndex = 23;
-            this.chkCheap.Text = "Cheap message:";
-            this.toolTip.SetToolTip(this.chkCheap, "Is immortality cheap and unfair?");
-            this.chkCheap.UseVisualStyleBackColor = true;
-            // 
-            // chkrankSuper
-            // 
-            this.chkrankSuper.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkrankSuper.AutoSize = true;
-            this.chkrankSuper.Location = new System.Drawing.Point(127, 369);
-            this.chkrankSuper.Name = "chkrankSuper";
-            this.chkrankSuper.Size = new System.Drawing.Size(195, 23);
-            this.chkrankSuper.TabIndex = 24;
-            this.chkrankSuper.Text = "SuperOPs can appoint other SuperOPs";
-            this.toolTip.SetToolTip(this.chkrankSuper, "Does what it says on the tin");
-            this.chkrankSuper.UseVisualStyleBackColor = true;
-            // 
-            // chkForceCuboid
-            // 
-            this.chkForceCuboid.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkForceCuboid.AutoSize = true;
-            this.chkForceCuboid.Location = new System.Drawing.Point(13, 283);
-            this.chkForceCuboid.Name = "chkForceCuboid";
-            this.chkForceCuboid.Size = new System.Drawing.Size(78, 23);
-            this.chkForceCuboid.TabIndex = 29;
-            this.chkForceCuboid.Text = "Force Cuboid";
-            this.toolTip.SetToolTip(this.chkForceCuboid, "When true, runs an attempted cuboid despite cuboid limits, until it hits the grou" +
-                    "p limit for that user.");
-            this.chkForceCuboid.UseVisualStyleBackColor = true;
-            // 
-            // ChkTunnels
-            // 
-            this.ChkTunnels.Appearance = System.Windows.Forms.Appearance.Button;
-            this.ChkTunnels.AutoSize = true;
-            this.ChkTunnels.Location = new System.Drawing.Point(233, 216);
-            this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(82, 23);
-            this.ChkTunnels.TabIndex = 4;
-            this.ChkTunnels.Text = "Anti tunneling";
-            this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
-            this.ChkTunnels.UseVisualStyleBackColor = true;
-            // 
-            // txtName
-            // 
-            this.txtName.Location = new System.Drawing.Point(52, 6);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(277, 21);
-            this.txtName.TabIndex = 0;
-            this.toolTip.SetToolTip(this.txtName, "The name of the server.\nPick something good!");
-            // 
-            // txtMOTD
-            // 
-            this.txtMOTD.Location = new System.Drawing.Point(52, 33);
-            this.txtMOTD.Name = "txtMOTD";
-            this.txtMOTD.Size = new System.Drawing.Size(277, 21);
-            this.txtMOTD.TabIndex = 0;
-            this.toolTip.SetToolTip(this.txtMOTD, "The MOTD of the server.\nUse \"+hax\" to allow any WoM hack, \"-hax\" to disallow any " +
-                    "hacks at all and use \"-fly\" and whatnot to disallow other things.");
-            // 
-            // txtPort
-            // 
-            this.txtPort.Location = new System.Drawing.Point(52, 60);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(46, 21);
-            this.txtPort.TabIndex = 2;
-            this.toolTip.SetToolTip(this.txtPort, "The port that the server will output on.\nDefault = 25565\n\nChanging will reset you" +
-                    "r ExternalURL.");
-            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
-            // 
-            // txtMaps
-            // 
-            this.txtMaps.Location = new System.Drawing.Point(255, 137);
-            this.txtMaps.Name = "txtMaps";
-            this.txtMaps.Size = new System.Drawing.Size(60, 21);
-            this.txtMaps.TabIndex = 2;
-            this.toolTip.SetToolTip(this.txtMaps, "The total number of maps which can be loaded at once.\nDefault = 5");
-            this.txtMaps.TextChanged += new System.EventHandler(this.txtMaps_TextChanged);
-            // 
-            // txtDepth
-            // 
-            this.txtDepth.Location = new System.Drawing.Point(274, 245);
-            this.txtDepth.Name = "txtDepth";
-            this.txtDepth.Size = new System.Drawing.Size(41, 21);
-            this.txtDepth.TabIndex = 2;
-            this.toolTip.SetToolTip(this.txtDepth, "Depth which guests can dig.\nDefault = 4");
-            this.txtDepth.TextChanged += new System.EventHandler(this.txtDepth_TextChanged);
-            // 
-            // chkVerify
-            // 
-            this.chkVerify.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkVerify.AutoSize = true;
-            this.chkVerify.Location = new System.Drawing.Point(185, 96);
-            this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(78, 23);
-            this.chkVerify.TabIndex = 4;
-            this.chkVerify.Text = "Verify Names";
-            this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
-            this.chkVerify.UseVisualStyleBackColor = true;
-            // 
-            // chkWorld
-            // 
-            this.chkWorld.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkWorld.AutoSize = true;
-            this.chkWorld.Location = new System.Drawing.Point(11, 309);
-            this.chkWorld.Name = "chkWorld";
-            this.chkWorld.Size = new System.Drawing.Size(69, 23);
-            this.chkWorld.TabIndex = 4;
-            this.chkWorld.Text = "World chat";
-            this.toolTip.SetToolTip(this.chkWorld, "If disabled, every map has isolated chat.\nIf enabled, every map is able to commun" +
-                    "icate without special letters.");
-            this.chkWorld.UseVisualStyleBackColor = true;
-            // 
-            // chkAutoload
-            // 
-            this.chkAutoload.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoload.AutoSize = true;
-            this.chkAutoload.Location = new System.Drawing.Point(247, 370);
-            this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
-            this.chkAutoload.TabIndex = 4;
-            this.chkAutoload.Text = "Load on /goto";
-            this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
-            this.chkAutoload.UseVisualStyleBackColor = true;
-            // 
-            // chkPublic
-            // 
-            this.chkPublic.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkPublic.AutoSize = true;
-            this.chkPublic.Location = new System.Drawing.Point(274, 96);
-            this.chkPublic.Name = "chkPublic";
-            this.chkPublic.Size = new System.Drawing.Size(46, 23);
-            this.chkPublic.TabIndex = 4;
-            this.chkPublic.Text = "Public";
-            this.toolTip.SetToolTip(this.chkPublic, "Whether or not the server will appear on the server list.");
-            this.chkPublic.UseVisualStyleBackColor = true;
-            // 
-            // cmbDefaultColour
-            // 
-            this.cmbDefaultColour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDefaultColour.FormattingEnabled = true;
-            this.cmbDefaultColour.Location = new System.Drawing.Point(104, 245);
-            this.cmbDefaultColour.Name = "cmbDefaultColour";
-            this.cmbDefaultColour.Size = new System.Drawing.Size(57, 21);
-            this.cmbDefaultColour.TabIndex = 9;
-            this.toolTip.SetToolTip(this.cmbDefaultColour, "The colour of the default chat used in the server.\nFor example, when you are aske" +
-                    "d to select two corners in a cuboid.");
-            this.cmbDefaultColour.SelectedIndexChanged += new System.EventHandler(this.cmbDefaultColour_SelectedIndexChanged);
-            // 
-            // cmbDefaultRank
-            // 
-            this.cmbDefaultRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDefaultRank.FormattingEnabled = true;
-            this.cmbDefaultRank.Location = new System.Drawing.Point(247, 343);
-            this.cmbDefaultRank.Name = "cmbDefaultRank";
-            this.cmbDefaultRank.Size = new System.Drawing.Size(81, 21);
-            this.cmbDefaultRank.TabIndex = 21;
-            this.toolTip.SetToolTip(this.cmbDefaultRank, "Default rank assigned to new visitors to the server.");
-            // 
-            // cmbOpChat
-            // 
-            this.cmbOpChat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbOpChat.FormattingEnabled = true;
-            this.cmbOpChat.Location = new System.Drawing.Point(247, 309);
-            this.cmbOpChat.Name = "cmbOpChat";
-            this.cmbOpChat.Size = new System.Drawing.Size(81, 21);
-            this.cmbOpChat.TabIndex = 23;
-            this.toolTip.SetToolTip(this.cmbOpChat, "Default rank required to read op chat.");
-            // 
-            // chkLogBeat
-            // 
-            this.chkLogBeat.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkLogBeat.AutoSize = true;
-            this.chkLogBeat.Location = new System.Drawing.Point(136, 370);
-            this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
-            this.chkLogBeat.TabIndex = 24;
-            this.chkLogBeat.Text = "Log Heartbeat?";
-            this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
-                    " server gets a URL slowly or not at all.");
-            this.chkLogBeat.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -737,38 +482,160 @@ namespace MCForge.Gui
             this.CustCmdtxtBox.TabIndex = 0;
             this.toolTip.SetToolTip(this.CustCmdtxtBox, "Write the command name here (dont write the cmd before it or the .cs after it!!)");
             // 
-            // txtOpChannel
+            // chkTpToHigherRanks
             // 
-            this.txtOpChannel.Location = new System.Drawing.Point(80, 127);
-            this.txtOpChannel.Name = "txtOpChannel";
-            this.txtOpChannel.Size = new System.Drawing.Size(106, 21);
-            this.txtOpChannel.TabIndex = 26;
-            this.toolTip.SetToolTip(this.txtOpChannel, "The IRC channel to be used.");
+            this.chkTpToHigherRanks.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkTpToHigherRanks.AutoSize = true;
+            this.chkTpToHigherRanks.Location = new System.Drawing.Point(24, 229);
+            this.chkTpToHigherRanks.Name = "chkTpToHigherRanks";
+            this.chkTpToHigherRanks.Size = new System.Drawing.Size(127, 23);
+            this.chkTpToHigherRanks.TabIndex = 37;
+            this.chkTpToHigherRanks.Text = "Allow tp to higher ranks";
+            this.toolTip.SetToolTip(this.chkTpToHigherRanks, "Allows the use of /tp to players of higher rank");
+            this.chkTpToHigherRanks.UseVisualStyleBackColor = true;
             // 
-            // txtChannel
+            // label24
             // 
-            this.txtChannel.Location = new System.Drawing.Point(80, 100);
-            this.txtChannel.Name = "txtChannel";
-            this.txtChannel.Size = new System.Drawing.Size(106, 21);
-            this.txtChannel.TabIndex = 17;
-            this.toolTip.SetToolTip(this.txtChannel, "The IRC channel to be used.");
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(224, 42);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(48, 13);
+            this.label24.TabIndex = 15;
+            this.label24.Text = "/rp limit:";
+            this.toolTip.SetToolTip(this.label24, "Limit for custom physics set by /rp");
             // 
-            // txtIRCServer
+            // chkHelp
             // 
-            this.txtIRCServer.Location = new System.Drawing.Point(80, 46);
-            this.txtIRCServer.Name = "txtIRCServer";
-            this.txtIRCServer.Size = new System.Drawing.Size(211, 21);
-            this.txtIRCServer.TabIndex = 15;
-            this.toolTip.SetToolTip(this.txtIRCServer, "The IRC server to be used.\nDefault = irc.esper.net\nBetter choice = irc.foonetic.n" +
-                    "et");
+            this.chkHelp.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkHelp.AutoSize = true;
+            this.chkHelp.Location = new System.Drawing.Point(13, 369);
+            this.chkHelp.Name = "chkHelp";
+            this.chkHelp.Size = new System.Drawing.Size(56, 23);
+            this.chkHelp.TabIndex = 20;
+            this.chkHelp.Text = "Old help";
+            this.toolTip.SetToolTip(this.chkHelp, "Should the old, cluttered help menu be used?");
+            this.chkHelp.UseVisualStyleBackColor = true;
             // 
-            // txtNick
+            // chkPhysicsRest
             // 
-            this.txtNick.Location = new System.Drawing.Point(80, 73);
-            this.txtNick.Name = "txtNick";
-            this.txtNick.Size = new System.Drawing.Size(106, 21);
-            this.txtNick.TabIndex = 16;
-            this.toolTip.SetToolTip(this.txtNick, "The Nick that the IRC bot will try and use.");
+            this.chkPhysicsRest.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkPhysicsRest.AutoSize = true;
+            this.chkPhysicsRest.Location = new System.Drawing.Point(13, 311);
+            this.chkPhysicsRest.Name = "chkPhysicsRest";
+            this.chkPhysicsRest.Size = new System.Drawing.Size(89, 23);
+            this.chkPhysicsRest.TabIndex = 22;
+            this.chkPhysicsRest.Text = "Restart physics";
+            this.toolTip.SetToolTip(this.chkPhysicsRest, "Restart physics on shutdown, clearing all physics blocks.");
+            this.chkPhysicsRest.UseVisualStyleBackColor = true;
+            // 
+            // chkDeath
+            // 
+            this.chkDeath.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkDeath.AutoSize = true;
+            this.chkDeath.Location = new System.Drawing.Point(13, 340);
+            this.chkDeath.Name = "chkDeath";
+            this.chkDeath.Size = new System.Drawing.Size(75, 23);
+            this.chkDeath.TabIndex = 21;
+            this.chkDeath.Text = "Death count";
+            this.toolTip.SetToolTip(this.chkDeath, "\"Bob has died 10 times.\"");
+            this.chkDeath.UseVisualStyleBackColor = true;
+            // 
+            // chkCheap
+            // 
+            this.chkCheap.AutoSize = true;
+            this.chkCheap.Location = new System.Drawing.Point(13, 149);
+            this.chkCheap.Name = "chkCheap";
+            this.chkCheap.Size = new System.Drawing.Size(103, 17);
+            this.chkCheap.TabIndex = 23;
+            this.chkCheap.Text = "Cheap message:";
+            this.toolTip.SetToolTip(this.chkCheap, "Is immortality cheap and unfair?");
+            this.chkCheap.UseVisualStyleBackColor = true;
+            // 
+            // chkrankSuper
+            // 
+            this.chkrankSuper.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkrankSuper.AutoSize = true;
+            this.chkrankSuper.Location = new System.Drawing.Point(127, 369);
+            this.chkrankSuper.Name = "chkrankSuper";
+            this.chkrankSuper.Size = new System.Drawing.Size(195, 23);
+            this.chkrankSuper.TabIndex = 24;
+            this.chkrankSuper.Text = "SuperOPs can appoint other SuperOPs";
+            this.toolTip.SetToolTip(this.chkrankSuper, "Does what it says on the tin");
+            this.chkrankSuper.UseVisualStyleBackColor = true;
+            // 
+            // txtBackup
+            // 
+            this.txtBackup.Location = new System.Drawing.Point(83, 37);
+            this.txtBackup.Name = "txtBackup";
+            this.txtBackup.Size = new System.Drawing.Size(41, 21);
+            this.txtBackup.TabIndex = 5;
+            this.toolTip.SetToolTip(this.txtBackup, "How often should backups be taken, in seconds.\nDefault = 300");
+            // 
+            // txtafk
+            // 
+            this.txtafk.Location = new System.Drawing.Point(83, 64);
+            this.txtafk.Name = "txtafk";
+            this.txtafk.Size = new System.Drawing.Size(41, 21);
+            this.txtafk.TabIndex = 10;
+            this.toolTip.SetToolTip(this.txtafk, "How long the server should wait before declaring someone ask afk. (0 = No timer a" +
+                    "t all)");
+            // 
+            // txtAFKKick
+            // 
+            this.txtAFKKick.Location = new System.Drawing.Point(83, 91);
+            this.txtAFKKick.Name = "txtAFKKick";
+            this.txtAFKKick.Size = new System.Drawing.Size(41, 21);
+            this.txtAFKKick.TabIndex = 9;
+            this.toolTip.SetToolTip(this.txtAFKKick, "Kick the user after they have been afk for this many minutes (0 = No kick)");
+            // 
+            // chkForceCuboid
+            // 
+            this.chkForceCuboid.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkForceCuboid.AutoSize = true;
+            this.chkForceCuboid.Location = new System.Drawing.Point(13, 283);
+            this.chkForceCuboid.Name = "chkForceCuboid";
+            this.chkForceCuboid.Size = new System.Drawing.Size(78, 23);
+            this.chkForceCuboid.TabIndex = 29;
+            this.chkForceCuboid.Text = "Force Cuboid";
+            this.toolTip.SetToolTip(this.chkForceCuboid, "When true, runs an attempted cuboid despite cuboid limits, until it hits the grou" +
+                    "p limit for that user.");
+            this.chkForceCuboid.UseVisualStyleBackColor = true;
+            // 
+            // hackrank_kick
+            // 
+            this.hackrank_kick.AutoSize = true;
+            this.hackrank_kick.Location = new System.Drawing.Point(13, 226);
+            this.hackrank_kick.Name = "hackrank_kick";
+            this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
+            this.hackrank_kick.TabIndex = 32;
+            this.hackrank_kick.Text = "Kick people who use hackrank after ";
+            this.toolTip.SetToolTip(this.hackrank_kick, "Hackrank kicks people? Or not?");
+            this.hackrank_kick.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(13, 256);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(75, 23);
+            this.checkBox1.TabIndex = 35;
+            this.checkBox1.Text = "Death count";
+            this.toolTip.SetToolTip(this.checkBox1, "\"Bob has died 10 times.\"");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // chkIRC
+            // 
+            this.chkIRC.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkIRC.AutoSize = true;
+            this.chkIRC.Location = new System.Drawing.Point(22, 14);
+            this.chkIRC.Name = "chkIRC";
+            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.TabIndex = 22;
+            this.chkIRC.Text = "Use IRC";
+            this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
+                    "for communication with the server while outside Minecraft.");
+            this.chkIRC.UseVisualStyleBackColor = true;
             // 
             // cmbIRCColour
             // 
@@ -781,29 +648,189 @@ namespace MCForge.Gui
             this.toolTip.SetToolTip(this.cmbIRCColour, "The colour of the IRC nicks used in the IRC.");
             this.cmbIRCColour.SelectedIndexChanged += new System.EventHandler(this.cmbIRCColour_SelectedIndexChanged);
             // 
-            // chkIRC
+            // txtNick
             // 
-            this.chkIRC.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkIRC.AutoSize = true;
-            this.chkIRC.Location = new System.Drawing.Point(22, 14);
-            this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
-            this.chkIRC.TabIndex = 22;
-            this.chkIRC.Text = "Use IRC";
-            this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
-                    "for communication with the server while outside Minecraft.");
-            this.chkIRC.UseVisualStyleBackColor = true;
+            this.txtNick.Location = new System.Drawing.Point(80, 73);
+            this.txtNick.Name = "txtNick";
+            this.txtNick.Size = new System.Drawing.Size(106, 21);
+            this.txtNick.TabIndex = 16;
+            this.toolTip.SetToolTip(this.txtNick, "The Nick that the IRC bot will try and use.");
             // 
-            // hackrank_kick
+            // txtIRCServer
             // 
-            this.hackrank_kick.AutoSize = true;
-            this.hackrank_kick.Location = new System.Drawing.Point(13, 226);
-            this.hackrank_kick.Name = "hackrank_kick";
-            this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
-            this.hackrank_kick.TabIndex = 32;
-            this.hackrank_kick.Text = "Kick people who use hackrank after ";
-            this.toolTip.SetToolTip(this.hackrank_kick, "Hackrank kicks people? Or not?");
-            this.hackrank_kick.UseVisualStyleBackColor = true;
+            this.txtIRCServer.Location = new System.Drawing.Point(80, 46);
+            this.txtIRCServer.Name = "txtIRCServer";
+            this.txtIRCServer.Size = new System.Drawing.Size(211, 21);
+            this.txtIRCServer.TabIndex = 15;
+            this.toolTip.SetToolTip(this.txtIRCServer, "The IRC server to be used.\nDefault = irc.esper.net\nBetter choice = irc.foonetic.n" +
+                    "et");
+            // 
+            // txtChannel
+            // 
+            this.txtChannel.Location = new System.Drawing.Point(80, 100);
+            this.txtChannel.Name = "txtChannel";
+            this.txtChannel.Size = new System.Drawing.Size(106, 21);
+            this.txtChannel.TabIndex = 17;
+            this.toolTip.SetToolTip(this.txtChannel, "The IRC channel to be used.");
+            // 
+            // txtOpChannel
+            // 
+            this.txtOpChannel.Location = new System.Drawing.Point(80, 127);
+            this.txtOpChannel.Name = "txtOpChannel";
+            this.txtOpChannel.Size = new System.Drawing.Size(106, 21);
+            this.txtOpChannel.TabIndex = 26;
+            this.toolTip.SetToolTip(this.txtOpChannel, "The IRC channel to be used.");
+            // 
+            // ChkTunnels
+            // 
+            this.ChkTunnels.Appearance = System.Windows.Forms.Appearance.Button;
+            this.ChkTunnels.AutoSize = true;
+            this.ChkTunnels.Location = new System.Drawing.Point(233, 216);
+            this.ChkTunnels.Name = "ChkTunnels";
+            this.ChkTunnels.Size = new System.Drawing.Size(82, 23);
+            this.ChkTunnels.TabIndex = 4;
+            this.ChkTunnels.Text = "Anti tunneling";
+            this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
+            this.ChkTunnels.UseVisualStyleBackColor = true;
+            // 
+            // chkVerify
+            // 
+            this.chkVerify.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkVerify.AutoSize = true;
+            this.chkVerify.Location = new System.Drawing.Point(185, 96);
+            this.chkVerify.Name = "chkVerify";
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
+            this.chkVerify.TabIndex = 4;
+            this.chkVerify.Text = "Verify Names";
+            this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
+            this.chkVerify.UseVisualStyleBackColor = true;
+            // 
+            // chkWorld
+            // 
+            this.chkWorld.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkWorld.AutoSize = true;
+            this.chkWorld.Location = new System.Drawing.Point(11, 309);
+            this.chkWorld.Name = "chkWorld";
+            this.chkWorld.Size = new System.Drawing.Size(69, 23);
+            this.chkWorld.TabIndex = 4;
+            this.chkWorld.Text = "World chat";
+            this.toolTip.SetToolTip(this.chkWorld, "If disabled, every map has isolated chat.\nIf enabled, every map is able to commun" +
+                    "icate without special letters.");
+            this.chkWorld.UseVisualStyleBackColor = true;
+            // 
+            // chkAutoload
+            // 
+            this.chkAutoload.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoload.AutoSize = true;
+            this.chkAutoload.Location = new System.Drawing.Point(247, 370);
+            this.chkAutoload.Name = "chkAutoload";
+            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
+            this.chkAutoload.TabIndex = 4;
+            this.chkAutoload.Text = "Load on /goto";
+            this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
+            this.chkAutoload.UseVisualStyleBackColor = true;
+            // 
+            // chkPublic
+            // 
+            this.chkPublic.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkPublic.AutoSize = true;
+            this.chkPublic.Location = new System.Drawing.Point(274, 96);
+            this.chkPublic.Name = "chkPublic";
+            this.chkPublic.Size = new System.Drawing.Size(46, 23);
+            this.chkPublic.TabIndex = 4;
+            this.chkPublic.Text = "Public";
+            this.toolTip.SetToolTip(this.chkPublic, "Whether or not the server will appear on the server list.");
+            this.chkPublic.UseVisualStyleBackColor = true;
+            // 
+            // cmbDefaultColour
+            // 
+            this.cmbDefaultColour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDefaultColour.FormattingEnabled = true;
+            this.cmbDefaultColour.Location = new System.Drawing.Point(86, 250);
+            this.cmbDefaultColour.Name = "cmbDefaultColour";
+            this.cmbDefaultColour.Size = new System.Drawing.Size(57, 21);
+            this.cmbDefaultColour.TabIndex = 9;
+            this.toolTip.SetToolTip(this.cmbDefaultColour, "The colour of the default chat used in the server.\nFor example, when you are aske" +
+                    "d to select two corners in a cuboid.");
+            this.cmbDefaultColour.SelectedIndexChanged += new System.EventHandler(this.cmbDefaultColour_SelectedIndexChanged);
+            // 
+            // txtName
+            // 
+            this.txtName.Location = new System.Drawing.Point(52, 6);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(277, 21);
+            this.txtName.TabIndex = 0;
+            this.toolTip.SetToolTip(this.txtName, "The name of the server.\nPick something good!");
+            // 
+            // txtMOTD
+            // 
+            this.txtMOTD.Location = new System.Drawing.Point(52, 33);
+            this.txtMOTD.Name = "txtMOTD";
+            this.txtMOTD.Size = new System.Drawing.Size(277, 21);
+            this.txtMOTD.TabIndex = 0;
+            this.toolTip.SetToolTip(this.txtMOTD, "The MOTD of the server.\nUse \"+hax\" to allow any WoM hack, \"-hax\" to disallow any " +
+                    "hacks at all and use \"-fly\" and whatnot to disallow other things.");
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(52, 60);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(46, 21);
+            this.txtPort.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtPort, "The port that the server will output on.\nDefault = 25565\n\nChanging will reset you" +
+                    "r ExternalURL.");
+            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
+            // 
+            // txtMaps
+            // 
+            this.txtMaps.Location = new System.Drawing.Point(255, 137);
+            this.txtMaps.Name = "txtMaps";
+            this.txtMaps.Size = new System.Drawing.Size(60, 21);
+            this.txtMaps.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtMaps, "The total number of maps which can be loaded at once.\nDefault = 5");
+            this.txtMaps.TextChanged += new System.EventHandler(this.txtMaps_TextChanged);
+            // 
+            // txtDepth
+            // 
+            this.txtDepth.Location = new System.Drawing.Point(275, 250);
+            this.txtDepth.Name = "txtDepth";
+            this.txtDepth.Size = new System.Drawing.Size(41, 21);
+            this.txtDepth.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtDepth, "Depth which guests can dig.\nDefault = 4");
+            this.txtDepth.TextChanged += new System.EventHandler(this.txtDepth_TextChanged);
+            // 
+            // cmbDefaultRank
+            // 
+            this.cmbDefaultRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDefaultRank.FormattingEnabled = true;
+            this.cmbDefaultRank.Location = new System.Drawing.Point(247, 343);
+            this.cmbDefaultRank.Name = "cmbDefaultRank";
+            this.cmbDefaultRank.Size = new System.Drawing.Size(81, 21);
+            this.cmbDefaultRank.TabIndex = 21;
+            this.toolTip.SetToolTip(this.cmbDefaultRank, "Default rank assigned to new visitors to the server.");
+            // 
+            // cmbOpChat
+            // 
+            this.cmbOpChat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOpChat.FormattingEnabled = true;
+            this.cmbOpChat.Location = new System.Drawing.Point(247, 309);
+            this.cmbOpChat.Name = "cmbOpChat";
+            this.cmbOpChat.Size = new System.Drawing.Size(81, 21);
+            this.cmbOpChat.TabIndex = 23;
+            this.toolTip.SetToolTip(this.cmbOpChat, "Default rank required to read op chat.");
+            // 
+            // chkLogBeat
+            // 
+            this.chkLogBeat.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkLogBeat.AutoSize = true;
+            this.chkLogBeat.Location = new System.Drawing.Point(136, 370);
+            this.chkLogBeat.Name = "chkLogBeat";
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
+            this.chkLogBeat.TabIndex = 24;
+            this.chkLogBeat.Text = "Log Heartbeat?";
+            this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
+                    " server gets a URL slowly or not at all.");
+            this.chkLogBeat.UseVisualStyleBackColor = true;
             // 
             // tabPage5
             // 
@@ -906,6 +933,7 @@ namespace MCForge.Gui
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage2.Controls.Add(this.chkTpToHigherRanks);
             this.tabPage2.Controls.Add(this.lblColor);
             this.tabPage2.Controls.Add(this.cmbColor);
             this.tabPage2.Controls.Add(this.label16);
@@ -1057,13 +1085,9 @@ namespace MCForge.Gui
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.checkBox1);
             this.tabPage4.Controls.Add(this.label36);
             this.tabPage4.Controls.Add(this.hackrank_kick_time);
-            this.tabPage4.Controls.Add(this.hackrank_kick);
-            this.tabPage4.Controls.Add(this.chkNotifyOnJoinLeave);
-            this.tabPage4.Controls.Add(this.chkProfanityFilter);
-            this.tabPage4.Controls.Add(this.chkRepeatMessages);
-            this.tabPage4.Controls.Add(this.chkForceCuboid);
             this.tabPage4.Controls.Add(this.txtShutdown);
             this.tabPage4.Controls.Add(this.txtBanMessage);
             this.tabPage4.Controls.Add(this.txtNormRp);
@@ -1075,6 +1099,11 @@ namespace MCForge.Gui
             this.tabPage4.Controls.Add(this.txtMoneys);
             this.tabPage4.Controls.Add(this.txtCheap);
             this.tabPage4.Controls.Add(this.txtRestartTime);
+            this.tabPage4.Controls.Add(this.hackrank_kick);
+            this.tabPage4.Controls.Add(this.chkNotifyOnJoinLeave);
+            this.tabPage4.Controls.Add(this.chkProfanityFilter);
+            this.tabPage4.Controls.Add(this.chkRepeatMessages);
+            this.tabPage4.Controls.Add(this.chkForceCuboid);
             this.tabPage4.Controls.Add(this.chkShutdown);
             this.tabPage4.Controls.Add(this.chkBanMessage);
             this.tabPage4.Controls.Add(this.chkrankSuper);
@@ -1115,39 +1144,6 @@ namespace MCForge.Gui
             this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
             this.hackrank_kick_time.TabIndex = 33;
             this.hackrank_kick_time.Text = "5";
-            // 
-            // chkNotifyOnJoinLeave
-            // 
-            this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNotifyOnJoinLeave.AutoSize = true;
-            this.chkNotifyOnJoinLeave.Location = new System.Drawing.Point(181, 312);
-            this.chkNotifyOnJoinLeave.Name = "chkNotifyOnJoinLeave";
-            this.chkNotifyOnJoinLeave.Size = new System.Drawing.Size(140, 23);
-            this.chkNotifyOnJoinLeave.TabIndex = 31;
-            this.chkNotifyOnJoinLeave.Text = "Notify popup on join/leave";
-            this.chkNotifyOnJoinLeave.UseVisualStyleBackColor = true;
-            // 
-            // chkProfanityFilter
-            // 
-            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkProfanityFilter.AutoSize = true;
-            this.chkProfanityFilter.Location = new System.Drawing.Point(234, 341);
-            this.chkProfanityFilter.Name = "chkProfanityFilter";
-            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
-            this.chkProfanityFilter.TabIndex = 30;
-            this.chkProfanityFilter.Text = "Profanity Filter";
-            this.chkProfanityFilter.UseVisualStyleBackColor = true;
-            // 
-            // chkRepeatMessages
-            // 
-            this.chkRepeatMessages.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkRepeatMessages.AutoSize = true;
-            this.chkRepeatMessages.Location = new System.Drawing.Point(195, 89);
-            this.chkRepeatMessages.Name = "chkRepeatMessages";
-            this.chkRepeatMessages.Size = new System.Drawing.Size(127, 23);
-            this.chkRepeatMessages.TabIndex = 29;
-            this.chkRepeatMessages.Text = "Repeat message blocks";
-            this.chkRepeatMessages.UseVisualStyleBackColor = true;
             // 
             // txtShutdown
             // 
@@ -1207,6 +1203,39 @@ namespace MCForge.Gui
             this.txtRestartTime.Size = new System.Drawing.Size(172, 21);
             this.txtRestartTime.TabIndex = 1;
             this.txtRestartTime.Text = "HH: mm: ss";
+            // 
+            // chkNotifyOnJoinLeave
+            // 
+            this.chkNotifyOnJoinLeave.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotifyOnJoinLeave.AutoSize = true;
+            this.chkNotifyOnJoinLeave.Location = new System.Drawing.Point(181, 312);
+            this.chkNotifyOnJoinLeave.Name = "chkNotifyOnJoinLeave";
+            this.chkNotifyOnJoinLeave.Size = new System.Drawing.Size(140, 23);
+            this.chkNotifyOnJoinLeave.TabIndex = 31;
+            this.chkNotifyOnJoinLeave.Text = "Notify popup on join/leave";
+            this.chkNotifyOnJoinLeave.UseVisualStyleBackColor = true;
+            // 
+            // chkProfanityFilter
+            // 
+            this.chkProfanityFilter.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkProfanityFilter.AutoSize = true;
+            this.chkProfanityFilter.Location = new System.Drawing.Point(234, 341);
+            this.chkProfanityFilter.Name = "chkProfanityFilter";
+            this.chkProfanityFilter.Size = new System.Drawing.Size(87, 23);
+            this.chkProfanityFilter.TabIndex = 30;
+            this.chkProfanityFilter.Text = "Profanity Filter";
+            this.chkProfanityFilter.UseVisualStyleBackColor = true;
+            // 
+            // chkRepeatMessages
+            // 
+            this.chkRepeatMessages.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRepeatMessages.AutoSize = true;
+            this.chkRepeatMessages.Location = new System.Drawing.Point(195, 89);
+            this.chkRepeatMessages.Name = "chkRepeatMessages";
+            this.chkRepeatMessages.Size = new System.Drawing.Size(127, 23);
+            this.chkRepeatMessages.TabIndex = 29;
+            this.chkRepeatMessages.Text = "Repeat message blocks";
+            this.chkRepeatMessages.UseVisualStyleBackColor = true;
             // 
             // chkShutdown
             // 
@@ -1314,21 +1343,89 @@ namespace MCForge.Gui
             this.chkRestartTime.Text = "Restart server at time:";
             this.chkRestartTime.UseVisualStyleBackColor = true;
             // 
+            // tabIRC
+            // 
+            this.tabIRC.Controls.Add(this.txtOpChannel);
+            this.tabIRC.Controls.Add(this.txtChannel);
+            this.tabIRC.Controls.Add(this.txtIRCServer);
+            this.tabIRC.Controls.Add(this.txtNick);
+            this.tabIRC.Controls.Add(this.label31);
+            this.tabIRC.Controls.Add(this.lblIRC);
+            this.tabIRC.Controls.Add(this.cmbIRCColour);
+            this.tabIRC.Controls.Add(this.chkIRC);
+            this.tabIRC.Controls.Add(this.label23);
+            this.tabIRC.Controls.Add(this.label5);
+            this.tabIRC.Controls.Add(this.label6);
+            this.tabIRC.Controls.Add(this.label4);
+            this.tabIRC.Location = new System.Drawing.Point(4, 22);
+            this.tabIRC.Name = "tabIRC";
+            this.tabIRC.Size = new System.Drawing.Size(337, 404);
+            this.tabIRC.TabIndex = 6;
+            this.tabIRC.Text = "IRC";
+            this.tabIRC.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(10, 130);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(64, 13);
+            this.label31.TabIndex = 25;
+            this.label31.Text = "Op Channel:";
+            // 
+            // lblIRC
+            // 
+            this.lblIRC.Location = new System.Drawing.Point(160, 151);
+            this.lblIRC.Name = "lblIRC";
+            this.lblIRC.Size = new System.Drawing.Size(26, 23);
+            this.lblIRC.TabIndex = 24;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(23, 157);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(51, 13);
+            this.label23.TabIndex = 21;
+            this.label23.Text = "IRC color:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(25, 103);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Channel:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(34, 49);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Server:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(44, 76);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(30, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Nick:";
+            // 
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.chkAgreeToRules);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.numPlayers);
             this.tabPage1.Controls.Add(this.numGuests);
             this.tabPage1.Controls.Add(this.label35);
             this.tabPage1.Controls.Add(this.ChkPortResult);
-            this.tabPage1.Controls.Add(this.ChkPort);
-            this.tabPage1.Controls.Add(this.chkLogBeat);
-            this.tabPage1.Controls.Add(this.cmbOpChat);
-            this.tabPage1.Controls.Add(this.lblOpChat);
-            this.tabPage1.Controls.Add(this.cmbDefaultRank);
-            this.tabPage1.Controls.Add(this.label29);
             this.tabPage1.Controls.Add(this.txtDepth);
             this.tabPage1.Controls.Add(this.txtMain);
             this.tabPage1.Controls.Add(this.txtMaps);
@@ -1336,6 +1433,12 @@ namespace MCForge.Gui
             this.tabPage1.Controls.Add(this.txtPort);
             this.tabPage1.Controls.Add(this.txtMOTD);
             this.tabPage1.Controls.Add(this.txtName);
+            this.tabPage1.Controls.Add(this.ChkPort);
+            this.tabPage1.Controls.Add(this.chkLogBeat);
+            this.tabPage1.Controls.Add(this.cmbOpChat);
+            this.tabPage1.Controls.Add(this.lblOpChat);
+            this.tabPage1.Controls.Add(this.cmbDefaultRank);
+            this.tabPage1.Controls.Add(this.label29);
             this.tabPage1.Controls.Add(this.lblDefault);
             this.tabPage1.Controls.Add(this.cmbDefaultColour);
             this.tabPage1.Controls.Add(this.chkMono);
@@ -1362,6 +1465,17 @@ namespace MCForge.Gui
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // chkAgreeToRules
+            // 
+            this.chkAgreeToRules.AutoSize = true;
+            this.chkAgreeToRules.Location = new System.Drawing.Point(11, 191);
+            this.chkAgreeToRules.Name = "chkAgreeToRules";
+            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
+            this.chkAgreeToRules.TabIndex = 32;
+            this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
+            this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
+            this.chkAgreeToRules.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -1438,6 +1552,22 @@ namespace MCForge.Gui
             this.ChkPortResult.Text = "Port Check Not Started!";
             this.ChkPortResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // txtMain
+            // 
+            this.txtMain.Location = new System.Drawing.Point(255, 164);
+            this.txtMain.Name = "txtMain";
+            this.txtMain.Size = new System.Drawing.Size(60, 21);
+            this.txtMain.TabIndex = 2;
+            this.txtMain.TextChanged += new System.EventHandler(this.txtMaps_TextChanged);
+            // 
+            // txtHost
+            // 
+            this.txtHost.Location = new System.Drawing.Point(110, 219);
+            this.txtHost.Name = "txtHost";
+            this.txtHost.Size = new System.Drawing.Size(89, 21);
+            this.txtHost.TabIndex = 2;
+            this.txtHost.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
+            // 
             // ChkPort
             // 
             this.ChkPort.Location = new System.Drawing.Point(104, 58);
@@ -1466,25 +1596,9 @@ namespace MCForge.Gui
             this.label29.TabIndex = 20;
             this.label29.Text = "Default rank:";
             // 
-            // txtMain
-            // 
-            this.txtMain.Location = new System.Drawing.Point(255, 164);
-            this.txtMain.Name = "txtMain";
-            this.txtMain.Size = new System.Drawing.Size(60, 21);
-            this.txtMain.TabIndex = 2;
-            this.txtMain.TextChanged += new System.EventHandler(this.txtMaps_TextChanged);
-            // 
-            // txtHost
-            // 
-            this.txtHost.Location = new System.Drawing.Point(104, 218);
-            this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(89, 21);
-            this.txtHost.TabIndex = 2;
-            this.txtHost.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
-            // 
             // lblDefault
             // 
-            this.lblDefault.Location = new System.Drawing.Point(167, 243);
+            this.lblDefault.Location = new System.Drawing.Point(149, 250);
             this.lblDefault.Name = "lblDefault";
             this.lblDefault.Size = new System.Drawing.Size(26, 23);
             this.lblDefault.TabIndex = 10;
@@ -1525,7 +1639,7 @@ namespace MCForge.Gui
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(27, 248);
+            this.label10.Location = new System.Drawing.Point(9, 253);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 3;
@@ -1561,7 +1675,7 @@ namespace MCForge.Gui
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(3, 221);
+            this.label30.Location = new System.Drawing.Point(9, 221);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(95, 13);
             this.label30.TabIndex = 3;
@@ -1597,7 +1711,7 @@ namespace MCForge.Gui
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(230, 248);
+            this.label7.Location = new System.Drawing.Point(230, 253);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(39, 13);
             this.label7.TabIndex = 3;
@@ -1617,79 +1731,6 @@ namespace MCForge.Gui
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
-            // 
-            // tabIRC
-            // 
-            this.tabIRC.Controls.Add(this.txtOpChannel);
-            this.tabIRC.Controls.Add(this.txtChannel);
-            this.tabIRC.Controls.Add(this.txtIRCServer);
-            this.tabIRC.Controls.Add(this.txtNick);
-            this.tabIRC.Controls.Add(this.label31);
-            this.tabIRC.Controls.Add(this.lblIRC);
-            this.tabIRC.Controls.Add(this.cmbIRCColour);
-            this.tabIRC.Controls.Add(this.chkIRC);
-            this.tabIRC.Controls.Add(this.label23);
-            this.tabIRC.Controls.Add(this.label5);
-            this.tabIRC.Controls.Add(this.label6);
-            this.tabIRC.Controls.Add(this.label4);
-            this.tabIRC.Location = new System.Drawing.Point(4, 22);
-            this.tabIRC.Name = "tabIRC";
-            this.tabIRC.Size = new System.Drawing.Size(337, 404);
-            this.tabIRC.TabIndex = 6;
-            this.tabIRC.Text = "IRC";
-            this.tabIRC.UseVisualStyleBackColor = true;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(10, 130);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(64, 13);
-            this.label31.TabIndex = 25;
-            this.label31.Text = "Op Channel:";
-            // 
-            // lblIRC
-            // 
-            this.lblIRC.Location = new System.Drawing.Point(160, 151);
-            this.lblIRC.Name = "lblIRC";
-            this.lblIRC.Size = new System.Drawing.Size(26, 23);
-            this.lblIRC.TabIndex = 24;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(23, 157);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(51, 13);
-            this.label23.TabIndex = 21;
-            this.label23.Text = "IRC color:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 103);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Channel:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(34, 49);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(40, 13);
-            this.label6.TabIndex = 19;
-            this.label6.Text = "Server:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(44, 76);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(30, 13);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "Nick:";
             // 
             // PropertyWindow
             // 
@@ -1718,13 +1759,13 @@ namespace MCForge.Gui
             this.tabPage2.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tabIRC.ResumeLayout(false);
+            this.tabIRC.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPlayers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGuests)).EndInit();
             this.tabControl.ResumeLayout(false);
-            this.tabIRC.ResumeLayout(false);
-            this.tabIRC.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1745,7 +1786,31 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.ListBox listBlocks;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.Button btnCmdHelp;
+        private System.Windows.Forms.TextBox txtCmdRanks;
+        private System.Windows.Forms.TextBox txtCmdAllow;
+        private System.Windows.Forms.TextBox txtCmdLowest;
+        private System.Windows.Forms.TextBox txtCmdDisallow;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ListBox listCommands;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.Button CancelCustCmdTxtBox;
+        private System.Windows.Forms.Button ClrCustCmdTxtBox;
+        private System.Windows.Forms.Button SaveCustCmd;
+        private System.Windows.Forms.Button LoadIntoTxtBox;
+        private System.Windows.Forms.RichTextBox CustCmdTxtBox2;
+        private System.Windows.Forms.Button LoadCustCmd;
+        private System.Windows.Forms.Button CompileCustCmd;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Button CrtCustCmd;
+        private System.Windows.Forms.TextBox CustCmdtxtBox;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.CheckBox chkTpToHigherRanks;
         private System.Windows.Forms.Label lblColor;
         private System.Windows.Forms.ComboBox cmbColor;
         private System.Windows.Forms.Label label16;
@@ -1761,8 +1826,9 @@ namespace MCForge.Gui
         private System.Windows.Forms.Button btnAddRank;
         private System.Windows.Forms.ListBox listRanks;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.CheckBox chkRepeatMessages;
-        private System.Windows.Forms.CheckBox chkForceCuboid;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.TextBox hackrank_kick_time;
         private System.Windows.Forms.TextBox txtShutdown;
         private System.Windows.Forms.TextBox txtBanMessage;
         private System.Windows.Forms.TextBox txtNormRp;
@@ -1774,6 +1840,11 @@ namespace MCForge.Gui
         private System.Windows.Forms.TextBox txtMoneys;
         private System.Windows.Forms.TextBox txtCheap;
         private System.Windows.Forms.TextBox txtRestartTime;
+        private System.Windows.Forms.CheckBox hackrank_kick;
+        private System.Windows.Forms.CheckBox chkNotifyOnJoinLeave;
+        private System.Windows.Forms.CheckBox chkProfanityFilter;
+        private System.Windows.Forms.CheckBox chkRepeatMessages;
+        private System.Windows.Forms.CheckBox chkForceCuboid;
         private System.Windows.Forms.CheckBox chkShutdown;
         private System.Windows.Forms.CheckBox chkBanMessage;
         private System.Windows.Forms.CheckBox chkrankSuper;
@@ -1791,12 +1862,26 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.CheckBox chkRestartTime;
+        private System.Windows.Forms.TabPage tabIRC;
+        private System.Windows.Forms.TextBox txtOpChannel;
+        private System.Windows.Forms.TextBox txtChannel;
+        private System.Windows.Forms.TextBox txtIRCServer;
+        private System.Windows.Forms.TextBox txtNick;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label lblIRC;
+        private System.Windows.Forms.ComboBox cmbIRCColour;
+        private System.Windows.Forms.CheckBox chkIRC;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.CheckBox chkLogBeat;
-        private System.Windows.Forms.ComboBox cmbOpChat;
-        private System.Windows.Forms.Label lblOpChat;
-        private System.Windows.Forms.ComboBox cmbDefaultRank;
-        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.NumericUpDown numPlayers;
+        private System.Windows.Forms.NumericUpDown numGuests;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.TextBox ChkPortResult;
         private System.Windows.Forms.TextBox txtDepth;
         private System.Windows.Forms.TextBox txtMain;
         private System.Windows.Forms.TextBox txtMaps;
@@ -1804,6 +1889,12 @@ namespace MCForge.Gui
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtMOTD;
         private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Button ChkPort;
+        private System.Windows.Forms.CheckBox chkLogBeat;
+        private System.Windows.Forms.ComboBox cmbOpChat;
+        private System.Windows.Forms.Label lblOpChat;
+        private System.Windows.Forms.ComboBox cmbDefaultRank;
+        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label lblDefault;
         private System.Windows.Forms.ComboBox cmbDefaultColour;
         private System.Windows.Forms.CheckBox chkMono;
@@ -1824,53 +1915,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox ChkTunnels;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.Button ChkPort;
-        private System.Windows.Forms.TextBox ChkPortResult;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.Button btnCmdHelp;
-        private System.Windows.Forms.TextBox txtCmdRanks;
-        private System.Windows.Forms.TextBox txtCmdAllow;
-        private System.Windows.Forms.TextBox txtCmdLowest;
-        private System.Windows.Forms.TextBox txtCmdDisallow;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ListBox listCommands;
-        private System.Windows.Forms.TabPage tabPage7;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Button CrtCustCmd;
-        private System.Windows.Forms.TextBox CustCmdtxtBox;
-        private System.Windows.Forms.Button CompileCustCmd;
-        private System.Windows.Forms.Button LoadCustCmd;
-        private System.Windows.Forms.Button CancelCustCmdTxtBox;
-        private System.Windows.Forms.Button ClrCustCmdTxtBox;
-        private System.Windows.Forms.Button SaveCustCmd;
-        private System.Windows.Forms.Button LoadIntoTxtBox;
-        private System.Windows.Forms.RichTextBox CustCmdTxtBox2;
-        private System.Windows.Forms.CheckBox chkProfanityFilter;
-        private System.Windows.Forms.CheckBox chkNotifyOnJoinLeave;
-        private System.Windows.Forms.NumericUpDown numGuests;
-        private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.TabPage tabIRC;
-        private System.Windows.Forms.TextBox txtOpChannel;
-        private System.Windows.Forms.TextBox txtChannel;
-        private System.Windows.Forms.TextBox txtIRCServer;
-        private System.Windows.Forms.TextBox txtNick;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label lblIRC;
-        private System.Windows.Forms.ComboBox cmbIRCColour;
-        private System.Windows.Forms.CheckBox chkIRC;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown numPlayers;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.TextBox hackrank_kick_time;
-        private System.Windows.Forms.CheckBox hackrank_kick;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox chkAgreeToRules;
     }
 }
