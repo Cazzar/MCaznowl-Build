@@ -60,17 +60,25 @@ namespace MCForge.Gui
             cmbColor.Items.AddRange(colors);
 
             string opchatperm = "";
+            string adminchatperm = "";
             foreach (Group grp in Group.GroupList)
             {
                 cmbDefaultRank.Items.Add(grp.name);
                 cmbOpChat.Items.Add(grp.name);
+                cmbAdminChat.Items.Add(grp.name);
                 if (grp.Permission == Server.opchatperm)
                 {
                     opchatperm = grp.name;
                 }
+                if (grp.Permission == Server.adminchatperm)
+                {
+                    adminchatperm = grp.name;
+                }
+
             }
             cmbDefaultRank.SelectedIndex = 1;
             cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
+            cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
 
             //Load server stuff
             LoadProp("properties/server.properties");
@@ -399,6 +407,15 @@ namespace MCForge.Gui
                             case "parse-emotes":
                                 chkSmile.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "allow-tp-to-higher-ranks":
+                                chkTpToHigherRanks.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "agree-to-rules-on-entry":
+                                chkAgreeToRules.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "admins-join-silent":
+                                chkAdminsJoinSilent.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                             case "main-name":
                                 txtMain.Text = value;
                                 break;
@@ -479,6 +496,11 @@ namespace MCForge.Gui
                     w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
                     w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
                     w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
+                    w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
+                    w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
+                    w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
+                    w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+                    w.WriteLine("#   admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -531,12 +553,15 @@ namespace MCForge.Gui
                     w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
                     w.WriteLine("money-name = " + txtMoneys.Text);
                     w.WriteLine("opchat-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbOpChat.Items[cmbOpChat.SelectedIndex].ToString()).Permission).ToString());
+                    w.WriteLine("adminchat-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbAdminChat.Items[cmbAdminChat.SelectedIndex].ToString()).Permission).ToString());
+                    w.WriteLine("admins-join-silent = " + chkAdminsJoinSilent.Checked.ToString().ToLower());
                     w.WriteLine("log-heartbeat = " + chkLogBeat.Checked.ToString().ToLower());
                     w.WriteLine("force-cuboid = " + chkForceCuboid.Checked.ToString().ToLower());
                     w.WriteLine("profanity-filter = " + chkProfanityFilter.Checked.ToString().ToLower());
                     w.WriteLine("notify-on-join-leave = " + chkNotifyOnJoinLeave.Checked.ToString().ToLower());
                     w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
                     w.WriteLine("host-state = " + txtHost.Text.ToString());
+                    w.WriteLine("agree-to-rules-on-entry = " + chkAgreeToRules.Checked.ToString().ToLower());
                     w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
                     w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
                     w.WriteLine();
@@ -568,6 +593,7 @@ namespace MCForge.Gui
                     w.WriteLine("custom-ban-message = " + txtBanMessage.Text);
                     w.WriteLine("custom-shutdown = " + chkShutdown.Checked.ToString().ToLower());
                     w.WriteLine("custom-shutdown-message = " + txtShutdown.Text);
+                    w.WriteLine("allow-tp-to-higher-ranks = " + chkTpToHigherRanks.Checked.ToString().ToLower());
                     w.WriteLine();
                     w.WriteLine("cheapmessage = " + chkCheap.Checked.ToString().ToLower());
                     w.WriteLine("cheap-message-given = " + txtCheap.Text);
@@ -1122,12 +1148,3 @@ namespace MCForge.Gui
     }
 
 }
-
-
-
-
-
-
-
-    
-
