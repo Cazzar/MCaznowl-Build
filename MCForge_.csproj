@@ -117,6 +117,7 @@
     <Compile Include="Commands\CmdNews.cs" />
     <Compile Include="Commands\CmdOpRules.cs" />
     <Compile Include="Commands\CmdOverseer.cs" />
+    <Compile Include="Commands\CmdP2P.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
