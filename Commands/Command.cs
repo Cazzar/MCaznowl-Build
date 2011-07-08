@@ -157,6 +157,7 @@ namespace MCForge
             all.Add(new CmdOutline());
             all.Add(new CmdOverseer());
             all.Add(new CmdOZone());
+            all.Add(new CmdP2P());
             all.Add(new CmdPaint());
             all.Add(new CmdPaste());
             all.Add(new CmdPause());

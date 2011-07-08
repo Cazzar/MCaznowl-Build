@@ -36,9 +36,26 @@ namespace MCForge
 
             if (who == null)
             {
-                Player.SendMessage(p, "Could not find player specified");
-                return;
+                Level which = Level.Find(message);
+
+                if (which == null)
+                {
+                    Player.SendMessage(p, "Could not find player or map specified");
+                    return;
+                }
+                else
+                {
+                    foreach (Player pl in Player.players)
+                    {
+                        if (pl.level == which && who.group.Permission < p.group.Permission)
+                        {
+                               Command.all.Find("slap").Use(p, p.name);
+                        }
+                    }
+                    return;
+                }
             }
+
             if (p == null)
             {
                 Player.SendMessage(p, "Cannot slap from the console");
@@ -77,6 +94,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/slap <name> - Slaps <name>, knocking them into the air");
+            Player.SendMessage(p, "/slap <level> - Slaps all players on <level> that are a lower rank than you, knocking them into the air");
         }
     }
 }
