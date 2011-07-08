@@ -189,6 +189,8 @@ namespace MCForge
         public static bool oldHelp = false;
         public static bool parseSmiley = true;
         public static bool useWhitelist = false;
+        public static bool higherranktp = true;
+        public static bool agreetorulesonentry = false;
         public static bool forceCuboid = false;
         public static bool profanityFilter = false;
         public static bool notifyOnJoinLeave = false;
