@@ -33,6 +33,13 @@ namespace MCForge
         public CmdMissile() { }
         public override void Use(Player p, string message)
         {
+            Level foundLevel;
+            foundLevel = p.level;
+            if (foundLevel.guns == false)
+            {
+                Player.SendMessage(p, "Guns and missiles cannot be used on this map!");
+                return;
+            }
             Pos cpos;
 
             if (p.aiming)
@@ -47,8 +54,17 @@ namespace MCForge
 
             cpos.ending = 0;
             if (message.ToLower() == "destroy") cpos.ending = 1;
+            if (p.allowTnt == false)
+            {
+                if (message.ToLower() == "explode")
+                {
+                    Player.SendMessage(p, "Since tnt usage is currently disabled, normal missile enabled"); cpos.ending = 1;
+                }
+                else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
+                else if (message != "") { Help(p); return; }
+            }
             else if (message.ToLower() == "explode") cpos.ending = 2;
-            else if (message.ToLower() == "teleport") cpos.ending = -1;
+            else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
             else if (message != "") { Help(p); return; }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
@@ -255,11 +271,6 @@ namespace MCForge
                     findNext(lookedAt, ref pos);
 
                     by = p.level.GetTile(pos.x, pos.y, pos.z);
-
-                    if (p.allowTnt == false)
-                    {
-                        Player.SendMessage(p, Server.DefaultColor + "Since tnt usage is currently disabled, normal missile enabled!");
-                    }
                     if (total > 3)
                     {
                         if (by != Block.air && !allBlocks.Contains(pos))
