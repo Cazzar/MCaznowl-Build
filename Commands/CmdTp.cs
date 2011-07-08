@@ -47,11 +47,28 @@ namespace MCForge
                 }
                 else
                 {
+                    if (Server.higherranktp == false)
+                    {
+                        if (p.group.Permission < who.group.Permission)
+                        {
+                            Player.SendMessage(p, "You cannot teleport to a player of higher rank!");
+                            return;
+                        }
+                    }
                     Command.all.Find("goto").Use(p, who.level.name);
                 }
             }
             if (p.level == who.level)
             {
+                if (Server.higherranktp == false)
+                {
+                    if (p.group.Permission < who.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot teleport to a player of higher rank!");
+                        return;
+                    }
+                }
+            
                 if (who.Loading)
                 {
                     Player.SendMessage(p, "Waiting for " + who.color + who.name + Server.DefaultColor + " to spawn...");
