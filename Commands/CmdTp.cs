@@ -15,26 +15,7 @@
 	or implied. See the Licenses for the specific language governing
 	permissions and limitations under the Licenses.
 */
-using System;
-using System.IO;
 
-namespace MCForge
-{
-    public class CmdTp : Command
-    {
-        public override string name { get { return "tp"; } }
-        public override string shortcut { get { return ""; } }
-        public override string type { get { return "other"; } }
-        public override bool museumUsable { get { return true; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
-        public CmdTp() { }
-
-        public override void Use(Player p, string message)
-        {
-            if (message == "")
-            {
-                Command.all.Find("spawn");
-                return;
             }
             Player who = Player.Find(message);
             if (who == null || (who.hidden && p.group.Permission < LevelPermission.Admin)) { Player.SendMessage(p, "There is no player \"" + message + "\"!"); return; }
@@ -47,11 +28,28 @@ namespace MCForge
                 }
                 else
                 {
+                    if (Server.higherranktp == false)
+                    {
+                        if (p.group.Permission < who.group.Permission)
+                        {
+                            Player.SendMessage(p, "You cannot teleport to a player of higher rank!");
+                            return;
+                        }
+                    }
                     Command.all.Find("goto").Use(p, who.level.name);
                 }
             }
             if (p.level == who.level)
             {
+                if (Server.higherranktp == false)
+                {
+                    if (p.group.Permission < who.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot teleport to a player of higher rank!");
+                        return;
+                    }
+                }
+            
                 if (who.Loading)
                 {
                     Player.SendMessage(p, "Waiting for " + who.color + who.name + Server.DefaultColor + " to spawn...");
