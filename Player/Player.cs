@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -32,6 +32,7 @@ namespace MCForge
     public sealed class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
+        public Group g = Group.findPerm(LevelPermission.Operator);
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
@@ -81,6 +82,7 @@ namespace MCForge
         public bool parseSmiley = true;
         public bool smileySaved = true;
         public bool opchat = false;
+        public bool adminchat = false;
         public bool onWhitelist = false;
         public bool whisper = false;
         public string whisperTo = "";
@@ -89,6 +91,7 @@ namespace MCForge
 
         public bool trainGrab = false;
         public bool onTrain = false;
+        public bool allowTnt = true;
 
         public bool frozen = false;
         public string following = "";
@@ -136,6 +139,13 @@ namespace MCForge
         public bool spawning = false;
         public bool teamchat = false;
         public int health = 100;
+
+        //Countdown
+        public bool playerofcountdown = false;
+        public bool incountdown = false;
+        public ushort countdowntempx;
+        public ushort countdowntempz;
+        public bool countdownsettemps = false;
 
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
@@ -202,7 +212,18 @@ namespace MCForge
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
 
+        //Chatrooms
+        public string Chatroom;
+        public List<string> spyChatRooms = new List<string>();
+        public DateTime lastchatroomglobal = new DateTime();
+
+
         public bool loggedIn = false;
+        private Player()
+        {
+            //Only necessary for a "flatcopy".
+
+        }
         public Player(Socket s)
         {
             try
@@ -492,6 +513,7 @@ namespace MCForge
                         Kick("You're still banned (temporary ban)!");
                     }
                 } catch { }
+
                 // Whitelist check.
                 if (Server.useWhitelist)
                 {
@@ -744,7 +766,31 @@ namespace MCForge
             Loading = false;
 
             if (emoteList.Contains(name)) parseSmiley = false;
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " has joined the game.", false);
+            if (!Directory.Exists("text/login"))
+            {
+                Directory.CreateDirectory("text/login");
+            }
+            if (!File.Exists("text/login/" + this.name + ".txt"))
+            {
+                File.WriteAllText("text/login/" + this.name + ".txt", "joined the server.");
+            }
+            if (Server.agreetorulesonentry == true)
+            {
+                if (!File.Exists("ranks/agreed.txt"))
+                {
+                    File.WriteAllText("ranks/agreed.txt", "");
+                }
+                var agreed = File.ReadAllText("ranks/agreed.txt");
+                if (this.group.Permission == LevelPermission.Guest)
+                {
+                    if (!agreed.Contains(this.name.ToLower()))
+                    {
+                        SendMessage("&9You must read the &c/rules&9 and &c/agree&9 to them before you can build and use commands!");
+                        jailed = true;
+                    }
+                }
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
@@ -1137,13 +1183,38 @@ namespace MCForge
             byte[] message = (byte[])m;
             byte thisid = message[0];
 
-            ushort x = NTHO(message, 1);
-            ushort y = NTHO(message, 3);
-            ushort z = NTHO(message, 5);
-            byte rotx = message[7];
-            byte roty = message[8];
-            pos = new ushort[3] { x, y, z };
-            rot = new byte[2] { rotx, roty };
+            if (this.incountdown == true && CountdownGame.gamestatus == CountdownGameStatus.InProgress && CountdownGame.freezemode == true)
+            {
+                if (this.countdownsettemps == true)
+                {
+                    countdowntempx = NTHO(message, 1);
+                    Thread.Sleep(100);
+                    countdowntempz = NTHO(message, 5);
+                    Thread.Sleep(100);
+                    countdownsettemps = false;
+                }
+                ushort x = countdowntempx;
+                ushort y = NTHO(message, 3);
+                ushort z = countdowntempz;
+                byte rotx = message[7];
+                byte roty = message[8];
+                pos = new ushort[3] { x, y, z };
+                rot = new byte[2] { rotx, roty };
+                if (countdowntempx != NTHO(message, 1) || countdowntempz != NTHO(message, 5))
+                {
+                    unchecked { this.SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
+                }
+            }
+            else
+            {
+                ushort x = NTHO(message, 1);
+                ushort y = NTHO(message, 3);
+                ushort z = NTHO(message, 5);
+                byte rotx = message[7];
+                byte roty = message[8];
+                pos = new ushort[3] { x, y, z };
+                rot = new byte[2] { rotx, roty };
+            }
         }
 
         public void RealDeath(ushort x, ushort y, ushort z)
@@ -1394,7 +1465,7 @@ namespace MCForge
                     storedMessage += text.Replace(">", "|>|");
                     SendMessage("Message appended!");
                     return;
-                } 
+                }
                 else if (text.EndsWith("<"))
                 {
                     storedMessage += text.Replace("<", "|<|");
@@ -1508,6 +1579,18 @@ namespace MCForge
                     IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
+                if (text[0] == '*' || adminchat)
+                {
+                    string newtext = text;
+                    if (text[0] == '*') newtext = text.Remove(0, 1).Trim();
+
+                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
+                    if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
+                        SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(Admins): " + name + ": " + newtext);
+                    IRCBot.Say(name + ": " + newtext, true);
+                    return;
+                }
 
                 if (this.teamchat)
                 {
@@ -1545,10 +1628,17 @@ namespace MCForge
                             i = rnd.Next(lines.Count);
                             text = lines[i];
                         }
-                        
+
                     }
                     else { File.Create("text/joker.txt"); }
 
+                }
+
+                //chatroom stuff
+                if (this.Chatroom != null)
+                {
+                    ChatRoom(this, text, true, this.Chatroom);
+                    return;
                 }
 
                 if (!level.worldChat)
@@ -1593,8 +1683,45 @@ namespace MCForge
         {
             try
             {
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (cmd == "agree")
+                    {
+                        Command.all.Find("agree").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /agree");
+                        return;
+                    }
+                    if (cmd == "rules")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /rules");
+                        return;
+                    }
+                    if (cmd == "disagree")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /disagree");
+                        return;
+                    }
+                }
+             
                 if (cmd == "") { SendMessage("No command entered."); return; }
-                if (jailed) { SendMessage("You cannot use any commands while jailed."); return; }
+                if (Server.agreetorulesonentry == false)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You cannot use any commands while jailed.");
+                        return;
+                    }
+                }
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You must read /rules then agree to them with /agree!");
+                        return;
+                    }
+                }
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
@@ -1730,11 +1857,7 @@ namespace MCForge
             buffer[0] = (byte)id;
 
             Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
-            string TxStr = "";
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                TxStr += buffer[i] + " ";
-            }
+
             int tries = 0;
         retry: try
             {
@@ -2158,7 +2281,7 @@ namespace MCForge
                 return;
 
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
@@ -2166,8 +2289,27 @@ namespace MCForge
                 return;
 
             if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level == from.level && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
+        public static void GlobalChatRoom(Player from, string message, bool showname)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            if (showname) { message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
+            Server.s.Log(message);
+        }
+        public static void ChatRoom(Player from, string message, bool showname, string chatroom)
+        {
+            if (MessageHasBadColorCodes(from, message))
+                return;
+            string messageforspy = ("<ChatRoomSPY: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message);
+            if (showname) { message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
+            players.ForEach(delegate(Player p) { if (p.Chatroom == chatroom) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.spyChatRooms.Contains(chatroom)  && p.Chatroom != chatroom) Player.SendMessage(p, Server.DefaultColor + messageforspy); });
+            Server.s.Log(message);
+        }
+
 
         private static bool MessageHasBadColorCodes(Player from, string message)
         {
@@ -2206,16 +2348,16 @@ namespace MCForge
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
             if (showname) { message = "<World>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, Server.DefaultColor + message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
         }
         public static void GlobalMessage(string message)
         {
             message = message.Replace("%", "&");
-            players.ForEach(delegate(Player p) { if (p.level.worldChat) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageLevel(Level l, string message)
         {
-            players.ForEach(delegate(Player p) { if (p.level == l) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) { if (p.level == l && p.Chatroom == null) Player.SendMessage(p, message); });
         }
         public static void GlobalMessageOps(string message)
         {
@@ -2230,6 +2372,20 @@ namespace MCForge
                 });
             }
             catch { Server.s.Log("Error occured with Op Chat"); }
+        }
+        public static void GlobalMessageAdmins(string message)
+        {
+            try
+            {
+                players.ForEach(delegate(Player p)
+                {
+                    if (p.group.Permission >= Server.adminchatperm || Server.devs.Contains(p.name.ToLower()))
+                    {
+                        Player.SendMessage(p, message);
+                    }
+                });
+            }
+            catch { Server.s.Log("Error occured with Admin Chat"); }
         }
         public static void GlobalSpawn(Player from, ushort x, ushort y, ushort z, byte rotx, byte roty, bool self, string possession = "")
         {
@@ -2368,7 +2524,15 @@ namespace MCForge
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " disconnected.", false); }
+                        if (!Directory.Exists("text/logout"))
+                        {
+                            Directory.CreateDirectory("text/logout");
+                        }
+                        if (!File.Exists("text/logout/" + name + ".txt"))
+                        {
+                            File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
+                        }
+                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
@@ -2679,6 +2843,19 @@ namespace MCForge
         }
 
 #region getters
+        public Player getCopy()
+        {
+            //Copies some player stats without needing to copy all of them. 
+            Player p = new Player();
+            p.level = this.level;
+            p.pos = this.pos;
+            p.g = this.g;
+            p.group = this.group;
+            p.name = this.name;
+            p.rot = this.rot;
+            p.title = this.title;
+            return p;
+        }
         public ushort[] footLocation
         {
             get

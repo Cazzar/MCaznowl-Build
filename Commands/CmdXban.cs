@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -40,6 +40,7 @@ public override void Use(Player p, string message)
                       if (message == "") { Help(p); return; }
 
                       Player who = Player.Find(message.Split(' ')[0]);
+                      string msg = message.Split(' ')[0];
                       if (Server.devs.Contains(message.ToLower()))
                       {
                           Player.SendMessage(p, "You can't ban a MCForge Developer!");
@@ -55,19 +56,19 @@ public override void Use(Player p, string message)
                       }
                       if (who != null) {
 
-                     Command.all.Find("undo").Use(p, message + " all");
-                     Command.all.Find("ban").Use(p, message); 
-                     Command.all.Find("banip").Use(p, "@"+message);
+                     Command.all.Find("undo").Use(p, msg + " all");
+                     Command.all.Find("ban").Use(p, msg); 
+                     Command.all.Find("banip").Use(p, "@"+msg); 
                      Command.all.Find("kick").Use(p,message);
-                     Command.all.Find("undo").Use(p,message+" all");
+                     Command.all.Find("undo").Use(p,msg+" all");
 
                                        }
 
                       else {
 
-                           Command.all.Find("undo").Use(p, message + " all");
-                           Command.all.Find("ban").Use(p,message);                           
-                           Command.all.Find("banip").Use(p, "@"+message);
+                           Command.all.Find("undo").Use(p, msg + " all");
+                           Command.all.Find("ban").Use(p,msg);                           
+                           Command.all.Find("banip").Use(p, "@"+msg);
                            
                             }
                      
@@ -80,7 +81,7 @@ public override void Use(Player p, string message)
       
       public override void Help(Player p)
       {
-         Player.SendMessage(p, "/xban [name] - Bans, kicks, and undoes [name]");
+         Player.SendMessage(p, "/xban [name] [message]- Bans, undoes, and kicks [name] with [message], if specified.");
       }
    }
 }

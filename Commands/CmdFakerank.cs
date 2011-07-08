@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -53,14 +53,15 @@ namespace MCForge
              
              if (grp.name == "banned")
              {
-                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + ".");
+                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
              }
              else
              {
-                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + " is now " + grp.color + grp.name + Server.DefaultColor + ".");
+                 Player.GlobalMessage(plr.color + plr.name + Server.DefaultColor + "'s rank was set to " + grp.color + grp.name + Server.DefaultColor + ".");
                  Player.GlobalMessage("&6Congratulations!");
              }
          }
+   
          else
          {
              Player.SendMessage(p, Server.DefaultColor + "Invalid Rank Entered!");

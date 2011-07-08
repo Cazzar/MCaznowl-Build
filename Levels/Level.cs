@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -92,6 +92,7 @@ namespace MCForge
         public bool GrassGrow = true;
         public bool worldChat = true;
         public bool fishstill = false;
+        public bool guns = true;
 
         public int speedPhysics = 250;
         public int overload = 1500;
@@ -266,17 +267,18 @@ namespace MCForge
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();
-            string queryString;
-            queryString = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ";
 
-            foreach (BlockPos bP in tempCache)
+            string template = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
+
+            using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
             {
-                queryString += "('" + bP.name + "', '" + bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss") + "', " + (int)bP.x + ", " + (int)bP.y + ", " + (int)bP.z + ", " + bP.type + ", " + bP.deleted + "), ";
+                foreach (BlockPos bP in tempCache)
+                {
+                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                }
+                transaction.Commit();
             }
 
-            queryString = queryString.Remove(queryString.Length - 2);
-
-            MySQL.executeQuery(queryString);
             tempCache.Clear();
         }
 

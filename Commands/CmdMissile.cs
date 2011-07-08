@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -33,6 +33,13 @@ namespace MCForge
         public CmdMissile() { }
         public override void Use(Player p, string message)
         {
+            Level foundLevel;
+            foundLevel = p.level;
+            if (foundLevel.guns == false)
+            {
+                Player.SendMessage(p, "Guns and missiles cannot be used on this map!");
+                return;
+            }
             Pos cpos;
 
             if (p.aiming)
@@ -47,8 +54,17 @@ namespace MCForge
 
             cpos.ending = 0;
             if (message.ToLower() == "destroy") cpos.ending = 1;
+            if (p.allowTnt == false)
+            {
+                if (message.ToLower() == "explode")
+                {
+                    Player.SendMessage(p, "Since tnt usage is currently disabled, normal missile enabled"); cpos.ending = 1;
+                }
+                else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
+                else if (message != "") { Help(p); return; }
+            }
             else if (message.ToLower() == "explode") cpos.ending = 2;
-            else if (message.ToLower() == "teleport") cpos.ending = -1;
+            else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
             else if (message != "") { Help(p); return; }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
@@ -255,7 +271,6 @@ namespace MCForge
                     findNext(lookedAt, ref pos);
 
                     by = p.level.GetTile(pos.x, pos.y, pos.z);
-
                     if (total > 3)
                     {
                         if (by != Block.air && !allBlocks.Contains(pos))
@@ -277,7 +292,11 @@ namespace MCForge
                                 {
                                     if (by != Block.glass)
                                     {
-                                        p.level.MakeExplosion(pos.x, pos.y, pos.z, 1);
+                                        if (p.allowTnt == true)
+                                        {
+                                            p.level.MakeExplosion(pos.x, pos.y, pos.z, 1);
+                                            break;
+                                        }
                                         break;
                                     }
                                 }
@@ -318,8 +337,13 @@ namespace MCForge
                         if (pos.x == lookedAt.x && pos.y == lookedAt.y && pos.z == lookedAt.z)
                         {
                             if (p.level.physics >= 3 && bp.ending >= 2)
-                                p.level.MakeExplosion(lookedAt.x, lookedAt.y, lookedAt.z, 2);
-                            break;
+                            {
+                                if (p.allowTnt == true)
+                                {
+                                    p.level.MakeExplosion(lookedAt.x, lookedAt.y, lookedAt.z, 2);
+                                    break;
+                                }
+                            }
                         }
 
                         if (previous.Count > 12)

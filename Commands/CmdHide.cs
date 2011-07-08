@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -31,10 +31,24 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
-            if (p.possess != "")
+            if (message == "check")
             {
-                Player.SendMessage(p, "Stop your current possession first.");
+                if (p.hidden == true)
+                {
+                    Player.SendMessage(p, "You are currently hidden!");
+                    return;
+                }
+                else
+                {
+                    Player.SendMessage(p, "You are not currently hidden!");
+                    return;
+                }
+            }
+            else
+                if (message != "")
+                    if (p.possess != "")
+                    {
+                        Player.SendMessage(p, "Stop your current possession first.");
                 return;
             }
             Command opchat = Command.all.Find("opchat");

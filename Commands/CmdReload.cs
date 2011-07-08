@@ -16,26 +16,71 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace MCForge
 {
-   public class CmdReload : Command
-   {
-      public override string name { get { return "reload"; } }
-      public override string shortcut { get { return "re"; } }
-      public override string type { get { return "map"; } }
-      public override bool museumUsable { get { return false; } }
-      public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-      public override void Use(Player p, string message)
-      {
-         Command.all.Find("unload").Use(p, message);
-         Command.all.Find("load").Use(p, message);
-      }
+    public class CmdReload : Command
+    {
+        public override string name { get { return "reload"; } }
+        public override string shortcut { get { return "rd"; } }
+        public override string type { get { return "build"; } }
+        public override bool museumUsable { get { return false; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public CmdReload() { }
+        public override void Help(Player p)
+        {
+            Player.SendMessage(p, "/reload <map> - Reloads the specified map. Uses the current map if no message is given.");
+        }
 
-      // This one controls what happens when you use /help [commandname].
-      public override void Help(Player p)
-      {
-         Player.SendMessage(p, "/reload [map name] - Reloads the map.");
-      }
-   }
+        public override void Use(Player p, string message)
+        {
+            if (message == "") { Help(p); return; }
+            {
+                if (!File.Exists("levels/" + message + ".lvl"))
+                {
+                    Player.SendMessage(p, "The specified level does not exist!");
+                    return;
+                }
+                if (Server.mainLevel.name != message) 
+                {
+                    foreach (Player pl in Player.players)
+                    {
+                        if (p == null)
+                        {
+                            if (pl.level.name.ToLower() == message.ToLower())
+                            {
+                                Command.all.Find("unload").Use(p, message);
+                                Command.all.Find("load").Use(p, message);
+                                Command.all.Find("goto").Use(pl, message);
+                                Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                                IRCBot.Say("The map, " + message + " has been reloaded.");
+                                Server.s.Log("The map, " + message + " was reloaded by the console");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (pl.level.name.ToLower() == message.ToLower())
+                            {
+                                p.ignorePermission = true;
+                                Command.all.Find("unload").Use(p, message);
+                                Command.all.Find("load").Use(p, message);
+                                Command.all.Find("goto").Use(pl, message);
+                                Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                                IRCBot.Say("The map, " + message + " has been reloaded.");
+                                Server.s.Log("The map, " + message + " was reloaded by " + p.name);
+                                p.ignorePermission = false;
+                                return;
+                            }
+                        }
+                    }
+                }
+                Player.SendMessage(p, "You cannot reload the main level!");
+                return;
+            }
+        }
+    }
 }

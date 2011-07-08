@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -148,6 +148,9 @@ namespace MCForge.Gui
             if (listBlocks.SelectedIndex == -1)
                 listBlocks.SelectedIndex = 0;
         }
+        public static bool prevLoaded = false;
+        Form PropertyForm;
+        Form UpdateForm;
         public void SaveBlocks()
         {
             Block.SaveBlocks(storedBlocks);
@@ -396,6 +399,12 @@ namespace MCForge.Gui
                             case "parse-emotes":
                                 chkSmile.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "allow-tp-to-higher-ranks":
+                                chkTpToHigherRanks.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "agree-to-rules-on-entry":
+                                chkAgreeToRules.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                             case "main-name":
                                 txtMain.Text = value;
                                 break;
@@ -476,6 +485,9 @@ namespace MCForge.Gui
                     w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
                     w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
                     w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
+                    w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
+                    w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
+                    w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -534,6 +546,7 @@ namespace MCForge.Gui
                     w.WriteLine("notify-on-join-leave = " + chkNotifyOnJoinLeave.Checked.ToString().ToLower());
                     w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
                     w.WriteLine("host-state = " + txtHost.Text.ToString());
+                    w.WriteLine("agree-to-rules-on-entry = " + chkAgreeToRules.Checked.ToString().ToLower());
                     w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
                     w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
                     w.WriteLine();
@@ -565,6 +578,7 @@ namespace MCForge.Gui
                     w.WriteLine("custom-ban-message = " + txtBanMessage.Text);
                     w.WriteLine("custom-shutdown = " + chkShutdown.Checked.ToString().ToLower());
                     w.WriteLine("custom-shutdown-message = " + txtShutdown.Text);
+                    w.WriteLine("allow-tp-to-higher-ranks = " + chkTpToHigherRanks.Checked.ToString().ToLower());
                     w.WriteLine();
                     w.WriteLine("cheapmessage = " + chkCheap.Checked.ToString().ToLower());
                     w.WriteLine("cheap-message-given = " + txtCheap.Text);
@@ -1104,15 +1118,18 @@ namespace MCForge.Gui
             }
             numGuests.Maximum = numPlayers.Value;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PropertyForm = new GUI.CustomLogin();
+            PropertyForm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            PropertyForm = new GUI.CustomLogout();
+            PropertyForm.Show();
+        }
     }
 
 }
-
-
-
-
-
-
-
-    
-
