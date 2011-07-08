@@ -59,7 +59,8 @@ namespace MCForge
         #region command
         public override void Use(Player p, string message)
         {
-            if (message.ToLower() == "STOP") { Player.SendMessage(p, "Stopping infection..."); Infect.Enabled = false; timer.Enabled = false; END(); }
+            if (message.ToLower() == "stop") { Player.SendMessage(p, "Stopping infection..."); Infect.Enabled = false; timer.Enabled = false; END(); }
+            if (message.ToLower() == "time") { Player.SendMessage(p, "There is " + time11 + " left in this round!"); return; }
             Player.SendMessage(p, "Starting Infection...");
             //Picks a random game
             if (random.Next(5) == 3)
@@ -74,6 +75,7 @@ namespace MCForge
             }
             minute = random.Next(5, 11);
             seconds = 60;
+            //Start the timer
             timer.Elapsed += new ElapsedEventHandler(TIMERCORE);
             timer.Enabled = true;
             INFECTEDLEVEL = p.level;
