@@ -769,13 +769,28 @@ namespace MCForge
             if (!Directory.Exists("text/login"))
             {
                 Directory.CreateDirectory("text/login");
-                return;
             }
             if (!File.Exists("text/login/" + this.name + ".txt"))
             {
                 File.WriteAllText("text/login/" + this.name + ".txt", "joined the server.");
             }
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+            if (Server.agreetorulesonentry == true)
+            {
+                if (!File.Exists("ranks/agreed.txt"))
+                {
+                    File.WriteAllText("ranks/agreed.txt", "");
+                }
+                var agreed = File.ReadAllText("ranks/agreed.txt");
+                if (this.group.Permission == LevelPermission.Guest)
+                {
+                    if (!agreed.Contains(this.name.ToLower()))
+                    {
+                        SendMessage("&9You must read the &c/rules&9 and &c/agree&9 to them before you can build and use commands!");
+                        jailed = true;
+                    }
+                }
+            }
+            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {
@@ -1668,8 +1683,45 @@ namespace MCForge
         {
             try
             {
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (cmd == "agree")
+                    {
+                        Command.all.Find("agree").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /agree");
+                        return;
+                    }
+                    if (cmd == "rules")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /rules");
+                        return;
+                    }
+                    if (cmd == "disagree")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /disagree");
+                        return;
+                    }
+                }
+             
                 if (cmd == "") { SendMessage("No command entered."); return; }
-                if (jailed) { SendMessage("You cannot use any commands while jailed."); return; }
+                if (Server.agreetorulesonentry == false)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You cannot use any commands while jailed.");
+                        return;
+                    }
+                }
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You must read /rules then agree to them with /agree!");
+                        return;
+                    }
+                }
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
