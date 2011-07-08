@@ -1683,8 +1683,45 @@ namespace MCForge
         {
             try
             {
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (cmd == "agree")
+                    {
+                        Command.all.Find("agree").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /agree");
+                        return;
+                    }
+                    if (cmd == "rules")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /rules");
+                        return;
+                    }
+                    if (cmd == "disagree")
+                    {
+                        Command.all.Find("rules").Use(this, "");
+                        Server.s.Log(this.name.ToLower() + " used /disagree");
+                        return;
+                    }
+                }
+             
                 if (cmd == "") { SendMessage("No command entered."); return; }
-                if (jailed) { SendMessage("You cannot use any commands while jailed."); return; }
+                if (Server.agreetorulesonentry == false)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You cannot use any commands while jailed.");
+                        return;
+                    }
+                }
+                if (Server.agreetorulesonentry == true)
+                {
+                    if (jailed)
+                    {
+                        SendMessage("You must read /rules then agree to them with /agree!");
+                        return;
+                    }
+                }
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
