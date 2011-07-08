@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.opensource.org/licenses/ecl2.php
+	http://www.osedu.org/licenses/ECL-2.0
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -44,26 +44,42 @@ namespace MCForge
                     Player.SendMessage(p, "The specified level does not exist!");
                     return;
                 }
-                if (Server.mainLevel.name != message) ;
+                if (Server.mainLevel.name != message) 
                 {
-                    Command.all.Find("unload").Use(p, message);
-                    Command.all.Find("load").Use(p, message);
-                    Command.all.Find("goto").Use(p, message);
                     foreach (Player pl in Player.players)
                     {
-                        if (pl.level == p.level && pl != p)
+                        if (p == null)
                         {
-                            unchecked { pl.SendPos((byte)-1, p.pos[0], p.pos[1], p.pos[2], p.rot[0], 0); }
-                            Command.all.Find("goto").Use(pl, message);
+                            if (pl.level.name.ToLower() == message.ToLower())
+                            {
+                                Command.all.Find("unload").Use(p, message);
+                                Command.all.Find("load").Use(p, message);
+                                Command.all.Find("goto").Use(pl, message);
+                                Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                                IRCBot.Say("The map, " + message + " has been reloaded.");
+                                Server.s.Log("The map, " + message + " was reloaded by the console");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (pl.level.name.ToLower() == message.ToLower())
+                            {
+                                p.ignorePermission = true;
+                                Command.all.Find("unload").Use(p, message);
+                                Command.all.Find("load").Use(p, message);
+                                Command.all.Find("goto").Use(pl, message);
+                                Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                                IRCBot.Say("The map, " + message + " has been reloaded.");
+                                Server.s.Log("The map, " + message + " was reloaded by " + p.name);
+                                p.ignorePermission = false;
+                                return;
+                            }
                         }
                     }
-                    Player.SendMessage(p, "&cThe map, " + message + " has been reloaded!");
-                    IRCBot.Say("The map, " + message + " has been reloaded.");
-                    Server.s.Log("The map, " + message + " was reloaded by " + p.name);
-                    return;
                 }
                 Player.SendMessage(p, "You cannot reload the main level!");
-
+                return;
             }
         }
     }

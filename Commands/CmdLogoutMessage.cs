@@ -8,7 +8,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.opensource.org/licenses/ecl2.php
+	http://www.osedu.org/licenses/ECL-2.0
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -51,11 +51,11 @@ namespace MCForge
                     return;
                 }
                 else
-                    File.WriteAllText("text/logout/" + t + ".txt", " " + s);
+                    File.WriteAllText("text/logout/" + t + ".txt", s);
                 Player.SendMessage(p, "The logout message of " + t + " has been changed to:");
                 Player.SendMessage(p, s);
                 Server.s.Log(p.name + " changed " + t + "'s login message to:");
-                Server.s.Log(t);
+                Server.s.Log(s);
             }
             if (number == 1)
             {
@@ -68,7 +68,7 @@ namespace MCForge
                     return;
                 }
                 else
-                    File.WriteAllText("text/logout/" + p.name + ".txt", " " + message);
+                    File.WriteAllText("text/logout/" + p.name + ".txt", message);
                 Player.SendMessage(p, "Your logout message has now been changed to:");
                 Player.SendMessage(p, message);
                 Server.s.Log(p.name + " changed their logout message to:");

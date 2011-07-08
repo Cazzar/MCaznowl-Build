@@ -773,7 +773,7 @@ namespace MCForge
             }
             if (!File.Exists("text/login/" + this.name + ".txt"))
             {
-                File.WriteAllText("text/login/" + this.name + ".txt", " joined the server.");
+                File.WriteAllText("text/login/" + this.name + ".txt", "joined the server.");
             }
             GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + File.ReadAllText("text/login/" + this.name + ".txt"), false);
             Server.s.Log(name + " [" + ip + "] has joined the server.");
@@ -2478,7 +2478,7 @@ namespace MCForge
                         }
                         if (!File.Exists("text/logout/" + name + ".txt"))
                         {
-                            File.WriteAllText("text/logout/" + name + ".txt", " Disconnected.");
+                            File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
                         if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");

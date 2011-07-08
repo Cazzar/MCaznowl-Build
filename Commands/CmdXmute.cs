@@ -35,7 +35,13 @@ namespace MCForge
 						Help(p);
 						return;
 					}
-					
+
+                    if (p == null)
+                    {
+                        Player.SendMessage(p, "This command can only be used in-game. Use /mute [Player] instead.");
+                        return;
+                    }
+
 					var split = message.Split(' ');
             		Player muter = Player.Find(split[0]);
 		            if (muter == null)
