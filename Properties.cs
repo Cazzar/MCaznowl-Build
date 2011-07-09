@@ -42,7 +42,9 @@ namespace MCForge
                     {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
-                        string value = line.Split('=')[1].Trim();
+                        string value = "";
+                        if (line.IndexOf('=') >= 0)
+                            value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
                         string color = "";
 
                         switch (key.ToLower())
@@ -55,7 +57,7 @@ namespace MCForge
                                 else { Server.s.Log("server-name invalid! setting to default."); }
                                 break;
                             case "motd":
-                                if (ValidString(value, "![]&:.,{}~-+()?_/\\ "))
+                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\ ")) // allow = in the motd
                                 {
                                     Server.motd = value;
                                 }

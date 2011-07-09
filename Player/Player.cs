@@ -1451,6 +1451,15 @@ namespace MCForge
 
                 //byte[] message = (byte[])m;
                 string text = enc.GetString(message, 1, 64).Trim();
+                // removing nulls (matters for the /womid messages)
+                text = text.Trim('\0');
+
+                // handles the /womid client message, which displays the WoM version
+                if (text.Truncate(6) == "/womid")
+                {
+                    Server.s.Log(name + " is using " + text.Substring(7));
+                    return;
+                }
 
                 if (storedMessage != "")
                 {
