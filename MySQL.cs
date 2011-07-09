@@ -23,18 +23,49 @@ using System.Text;
 using System.IO;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
+using System.Data.SQLite;
 
 namespace MCForge
 {
     static class MySQL
     {
+		
         private static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.MySQLPooling;
-
         public static void executeQuery(string queryString, bool createDB = false)
         {
-            if (!Server.useMySQL) return;
-
-            int totalCount = 0;
+			int totalCount = 0;
+            if (!Server.useMySQL) 
+			{
+	     retry1:try
+				{
+					using (var conn = new SQLiteConnection("Data Source=extras/database.db3"))
+					{
+						conn.Open();
+						if (createDB)
+							SQLiteConnection.CreateFile("extras/database.db3");
+						SQLiteCommand cmd = new SQLiteCommand(queryString, conn);
+						cmd.ExecuteNonQuery();
+						conn.Close();
+					}
+				}
+				catch (Exception e)
+				{
+					if (!createDB)
+					{
+						totalCount++;
+						if (totalCont > 10)
+						{
+							File.WriteAllText("SQLite_error.log", DateTime.Now + " " + queryString);
+							Server.ErrorLog(e);
+						}
+						else
+							goto retry1;
+					}
+					else
+						throw e;
+				}
+				return;
+			}
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))
@@ -73,10 +104,36 @@ namespace MCForge
 
         public static DataTable fillData(string queryString, bool skipError = false)
         {
+			int totalCount = 0;
             DataTable toReturn = new DataTable("toReturn");
-            if (!Server.useMySQL) return toReturn;
-
-            int totalCount = 0;
+            if (!Server.useMySQL) 
+			{
+			retry1: try
+				{
+					using (var conn = new SQLiteConnection("Data Source=extras/database.db3"))
+					{
+						conn.Open();
+						using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn))
+							da.Fill(toReturn);
+						conn.Close();
+					}
+				}
+				catch (Exception e)
+				{
+					totalCount++;
+					if (totalCount > 10)
+					{
+						if (!skipError)
+						{
+							File.WriteAllText("SQLite_error.log", DateTime.Now + " " + queryString);
+							Server.ErrorLog(e);
+						}
+					}
+					else
+						goto retry1;
+				}
+				return toReturn;
+			}			
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))

@@ -1,6 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Commands/CmdGifToCin.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Levels/Level.cs">
     <Files>
       <File FileName="Commands/CmdCuboid.cs" Line="1" Column="1" />
       <File FileName="Commands/Command.cs" Line="37" Column="1" />
@@ -11,15 +11,16 @@
       <File FileName="Commands/CmdAbort.cs" Line="1" Column="1" />
       <File FileName="Commands/CmdCopy.cs" Line="159" Column="10" />
       <File FileName="Commands/CmdFill.cs" Line="145" Column="1" />
+      <File FileName="Commands/CmdSetspawn.cs" Line="1" Column="1" />
+      <File FileName="Levels/Level.cs" Line="352" Column="35" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="MCForge_" expanded="True">
-            <Node name="Commands" expanded="True">
-              <Node name="CmdGifToCin.cs" selected="True" />
+            <Node name="Levels" expanded="True">
+              <Node name="Level.cs" selected="True" />
             </Node>
-            <Node name="Player" expanded="True" />
           </Node>
         </State>
       </Pad>
