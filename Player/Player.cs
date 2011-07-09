@@ -44,6 +44,7 @@ namespace MCForge
         public static string storedHelp = "";
 
         Socket socket;
+		System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
         System.Timers.Timer extraTimer = new System.Timers.Timer(22000);
@@ -57,7 +58,7 @@ namespace MCForge
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
         public bool disconnected = false;
-
+		public string time;
         public string name;
         public int warn = 0;
         public string realName;
@@ -263,7 +264,36 @@ namespace MCForge
                 for (byte i = 0; i < 128; ++i) bindings[i] = i;
 
                 socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
-
+				timespent.Elapsed += delegate {
+					if (!Loading)
+					{
+						try
+						{
+							int Days = Convert.ToInt32(time.Split(' ')[0]);
+							int Hours = Convert.ToInt32(time.Split(' ')[1]);
+							int Minutes = Convert.ToInt32(time.Split(' ')[2]);
+							int Seconds = Convert.ToInt32(time.Split(' ')[3]);
+							Seconds++;
+							if (Seconds >= 60)
+							{
+								Minutes++;
+								Seconds = 0;
+							}
+							if (Minutes >= 60)
+							{
+								Hours++;
+								Minutes = 0;
+							}
+							if (Hours >= 24)
+							{
+								Days++;
+								Hours = 0;
+							}
+							time = "" + Days + " " + Hours + " " + Minutes + " " + Seconds;
+						}
+						catch { time = "0 0 0 1"; }
+				};
+				timespent.Start();
                 loginTimer.Elapsed += delegate
                 {
                     if (!Loading)
@@ -299,7 +329,7 @@ namespace MCForge
 
                 pingTimer.Elapsed += delegate { SendPing(); };
                 pingTimer.Start();
-
+				
                 extraTimer.Elapsed += delegate
                 {
                     extraTimer.Stop();
