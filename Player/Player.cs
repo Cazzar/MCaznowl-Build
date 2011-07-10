@@ -2539,7 +2539,7 @@ namespace MCForge
                         {
                             File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + File.ReadAllText("text/logout/" + name + ".txt"), false); }
+                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor +  " " + File.ReadAllText("text/logout/" + name + ".txt"), false); }
                         IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
