@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Gui;
+using System.Diagnostics;
 
 namespace MCForge
 {
@@ -35,8 +36,12 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            MCForge_.Gui.Program.restartMe();
-            //MCLawl_.Gui.Program.ExitProgram(true);
+            Process Restarter = new Process();
+
+            Restarter.StartInfo.FileName = "Restarter.exe";
+            Restarter.StartInfo.Arguments = "Program.cs";
+
+            Restarter.Start();
         }
         public override void Help(Player p)
         {
