@@ -226,6 +226,7 @@ namespace MCForge
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
         public static bool logbeat = false;
+        public static bool adminsjoinsilent = false;
 
         public static bool mono = false;
 

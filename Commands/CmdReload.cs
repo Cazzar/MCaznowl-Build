@@ -44,24 +44,33 @@ namespace MCForge
                     Player.SendMessage(p, "The specified level does not exist!");
                     return;
                 }
-                if (Server.mainLevel.name != message) 
+                if (Server.mainLevel.name == message)
                 {
-                    foreach (Player pl in Player.players)
+                    Player.SendMessage(p, "You cannot reload the main level!");
+                    return;
+                }
+                if (p == null)
+                {
                     {
-                        if (p == null)
+                        foreach (Player pl in Player.players)
                         {
                             if (pl.level.name.ToLower() == message.ToLower())
                             {
                                 Command.all.Find("unload").Use(p, message);
                                 Command.all.Find("load").Use(p, message);
                                 Command.all.Find("goto").Use(pl, message);
-                                Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
-                                IRCBot.Say("The map, " + message + " has been reloaded.");
-                                Server.s.Log("The map, " + message + " was reloaded by the console");
-                                return;
                             }
                         }
-                        else
+                        Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
+                        IRCBot.Say("The map, " + message + " has been reloaded.");
+                        Server.s.Log("The map, " + message + " was reloaded by the console");
+                        return;
+                    }
+                }
+                if (p != null)
+                {
+                    {
+                        foreach (Player pl in Player.players)
                         {
                             if (pl.level.name.ToLower() == message.ToLower())
                             {
@@ -69,6 +78,8 @@ namespace MCForge
                                 Command.all.Find("unload").Use(p, message);
                                 Command.all.Find("load").Use(p, message);
                                 Command.all.Find("goto").Use(pl, message);
+                            }
+                        }
                                 Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
                                 IRCBot.Say("The map, " + message + " has been reloaded.");
                                 Server.s.Log("The map, " + message + " was reloaded by " + p.name);
@@ -78,9 +89,5 @@ namespace MCForge
                         }
                     }
                 }
-                Player.SendMessage(p, "You cannot reload the main level!");
-                return;
             }
         }
-    }
-}
