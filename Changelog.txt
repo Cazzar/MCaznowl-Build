@@ -36,6 +36,7 @@ v4.8.0.0
 - Added adminchat - chat with admins (customisable rank via properties), use '~' pre-message to send it to adminchat
 - Changed /Newlvl - Shows valid mapsizes on the help
 - Admins can join silently
+- Fixed /perbuild and /pervistit
 
 v4.7.0.0
 - Added new game: Countdown
