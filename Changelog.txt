@@ -33,10 +33,11 @@ v4.8.0.0
 - Added option in the properties to allow or disallow players to teleport to people with higher ranks
 - Added /slap <map> - slaps everyone of a lower rank than you in a map
 - Added /p2p - teleports a player to another player
-- Added adminchat - chat with admins (customisable rank via properties), use '~' pre-message to send it to adminchat
+- Added adminchat - chat with admins (customisable rank via properties), use ';' pre-message to send it to adminchat
 - Changed /Newlvl - Shows valid mapsizes on the help
 - Admins can join silently
 - Fixed /perbuild and /pervistit
+- Added an auto checker and downloader for Restarter.exe and Restarter.pdb
 
 v4.7.0.0
 - Added new game: Countdown

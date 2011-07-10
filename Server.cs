@@ -253,6 +253,42 @@ namespace MCForge
             shuttingDown = false;
             Log("Starting Server");
 
+            {//dl restarter stuff
+                if (!File.Exists("Restarter.exe"))
+                {
+                    Log("Restarter.exe doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                        if (File.Exists("Restarter.exe"))
+                        {
+                            Log("Restarter.exe download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.exe failed, please try again later");
+                    }
+                }
+                if (!File.Exists("Restarter.pdb"))
+                {
+                    Log("Restarter.pdb doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                        if (File.Exists("Restarter.pdb"))
+                        {
+                            Log("Restarter.pdb download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.pdb failed, please try again later");
+                    }
+                }
+            }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
@@ -308,7 +344,7 @@ namespace MCForge
                     SW.Close();
                 }
             }
-            
+
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
 
