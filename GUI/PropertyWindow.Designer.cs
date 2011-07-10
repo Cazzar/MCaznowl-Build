@@ -190,6 +190,12 @@ namespace MCForge.Gui
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
+<<<<<<< HEAD
+=======
+            this.label37 = new System.Windows.Forms.Label();
+            this.cmbAdminChat = new System.Windows.Forms.ComboBox();
+            this.chkAdminsJoinSilent = new System.Windows.Forms.CheckBox();
+>>>>>>> remotes/jack/patch-4
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -630,7 +636,11 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
+<<<<<<< HEAD
             this.chkIRC.Size = new System.Drawing.Size(57, 23);
+=======
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+>>>>>>> remotes/jack/patch-4
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -685,7 +695,11 @@ namespace MCForge.Gui
             // 
             this.ChkTunnels.Appearance = System.Windows.Forms.Appearance.Button;
             this.ChkTunnels.AutoSize = true;
+<<<<<<< HEAD
             this.ChkTunnels.Location = new System.Drawing.Point(233, 216);
+=======
+            this.ChkTunnels.Location = new System.Drawing.Point(233, 187);
+>>>>>>> remotes/jack/patch-4
             this.ChkTunnels.Name = "ChkTunnels";
             this.ChkTunnels.Size = new System.Drawing.Size(82, 23);
             this.ChkTunnels.TabIndex = 4;
@@ -709,7 +723,11 @@ namespace MCForge.Gui
             // 
             this.chkWorld.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkWorld.AutoSize = true;
+<<<<<<< HEAD
             this.chkWorld.Location = new System.Drawing.Point(11, 309);
+=======
+            this.chkWorld.Location = new System.Drawing.Point(4, 309);
+>>>>>>> remotes/jack/patch-4
             this.chkWorld.Name = "chkWorld";
             this.chkWorld.Size = new System.Drawing.Size(69, 23);
             this.chkWorld.TabIndex = 4;
@@ -746,7 +764,11 @@ namespace MCForge.Gui
             // 
             this.cmbDefaultColour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDefaultColour.FormattingEnabled = true;
+<<<<<<< HEAD
             this.cmbDefaultColour.Location = new System.Drawing.Point(86, 250);
+=======
+            this.cmbDefaultColour.Location = new System.Drawing.Point(81, 278);
+>>>>>>> remotes/jack/patch-4
             this.cmbDefaultColour.Name = "cmbDefaultColour";
             this.cmbDefaultColour.Size = new System.Drawing.Size(57, 21);
             this.cmbDefaultColour.TabIndex = 9;
@@ -755,6 +777,7 @@ namespace MCForge.Gui
             this.cmbDefaultColour.SelectedIndexChanged += new System.EventHandler(this.cmbDefaultColour_SelectedIndexChanged);
             // 
             // txtName
+<<<<<<< HEAD
             // 
             this.txtName.Location = new System.Drawing.Point(52, 6);
             this.txtName.Name = "txtName";
@@ -821,6 +844,74 @@ namespace MCForge.Gui
             // 
             // chkLogBeat
             // 
+=======
+            // 
+            this.txtName.Location = new System.Drawing.Point(52, 6);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(277, 21);
+            this.txtName.TabIndex = 0;
+            this.toolTip.SetToolTip(this.txtName, "The name of the server.\nPick something good!");
+            // 
+            // txtMOTD
+            // 
+            this.txtMOTD.Location = new System.Drawing.Point(52, 33);
+            this.txtMOTD.Name = "txtMOTD";
+            this.txtMOTD.Size = new System.Drawing.Size(277, 21);
+            this.txtMOTD.TabIndex = 0;
+            this.toolTip.SetToolTip(this.txtMOTD, "The MOTD of the server.\nUse \"+hax\" to allow any WoM hack, \"-hax\" to disallow any " +
+                    "hacks at all and use \"-fly\" and whatnot to disallow other things.");
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(52, 60);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(46, 21);
+            this.txtPort.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtPort, "The port that the server will output on.\nDefault = 25565\n\nChanging will reset you" +
+                    "r ExternalURL.");
+            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
+            // 
+            // txtMaps
+            // 
+            this.txtMaps.Location = new System.Drawing.Point(255, 137);
+            this.txtMaps.Name = "txtMaps";
+            this.txtMaps.Size = new System.Drawing.Size(60, 21);
+            this.txtMaps.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtMaps, "The total number of maps which can be loaded at once.\nDefault = 5");
+            this.txtMaps.TextChanged += new System.EventHandler(this.txtMaps_TextChanged);
+            // 
+            // txtDepth
+            // 
+            this.txtDepth.Location = new System.Drawing.Point(274, 216);
+            this.txtDepth.Name = "txtDepth";
+            this.txtDepth.Size = new System.Drawing.Size(41, 21);
+            this.txtDepth.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtDepth, "Depth which guests can dig.\nDefault = 4");
+            this.txtDepth.TextChanged += new System.EventHandler(this.txtDepth_TextChanged);
+            // 
+            // cmbDefaultRank
+            // 
+            this.cmbDefaultRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDefaultRank.FormattingEnabled = true;
+            this.cmbDefaultRank.Location = new System.Drawing.Point(247, 343);
+            this.cmbDefaultRank.Name = "cmbDefaultRank";
+            this.cmbDefaultRank.Size = new System.Drawing.Size(81, 21);
+            this.cmbDefaultRank.TabIndex = 21;
+            this.toolTip.SetToolTip(this.cmbDefaultRank, "Default rank assigned to new visitors to the server.");
+            // 
+            // cmbOpChat
+            // 
+            this.cmbOpChat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOpChat.FormattingEnabled = true;
+            this.cmbOpChat.Location = new System.Drawing.Point(247, 278);
+            this.cmbOpChat.Name = "cmbOpChat";
+            this.cmbOpChat.Size = new System.Drawing.Size(81, 21);
+            this.cmbOpChat.TabIndex = 23;
+            this.toolTip.SetToolTip(this.cmbOpChat, "Default rank required to read op chat.");
+            // 
+            // chkLogBeat
+            // 
+>>>>>>> remotes/jack/patch-4
             this.chkLogBeat.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(136, 370);
@@ -933,6 +1024,10 @@ namespace MCForge.Gui
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
+<<<<<<< HEAD
+=======
+            this.tabPage2.Controls.Add(this.chkAdminsJoinSilent);
+>>>>>>> remotes/jack/patch-4
             this.tabPage2.Controls.Add(this.chkTpToHigherRanks);
             this.tabPage2.Controls.Add(this.lblColor);
             this.tabPage2.Controls.Add(this.cmbColor);
@@ -1407,8 +1502,87 @@ namespace MCForge.Gui
             this.label6.TabIndex = 19;
             this.label6.Text = "Server:";
             // 
+<<<<<<< HEAD
+            // chkRestartTime
+            // 
+            this.chkRestartTime.AutoSize = true;
+            this.chkRestartTime.Location = new System.Drawing.Point(13, 118);
+            this.chkRestartTime.Name = "chkRestartTime";
+            this.chkRestartTime.Size = new System.Drawing.Size(131, 17);
+            this.chkRestartTime.TabIndex = 0;
+            this.chkRestartTime.Text = "Restart server at time:";
+            this.chkRestartTime.UseVisualStyleBackColor = true;
+            // 
+            // tabIRC
+            // 
+            this.tabIRC.Controls.Add(this.txtOpChannel);
+            this.tabIRC.Controls.Add(this.txtChannel);
+            this.tabIRC.Controls.Add(this.txtIRCServer);
+            this.tabIRC.Controls.Add(this.txtNick);
+            this.tabIRC.Controls.Add(this.label31);
+            this.tabIRC.Controls.Add(this.lblIRC);
+            this.tabIRC.Controls.Add(this.cmbIRCColour);
+            this.tabIRC.Controls.Add(this.chkIRC);
+            this.tabIRC.Controls.Add(this.label23);
+            this.tabIRC.Controls.Add(this.label5);
+            this.tabIRC.Controls.Add(this.label6);
+            this.tabIRC.Controls.Add(this.label4);
+            this.tabIRC.Location = new System.Drawing.Point(4, 22);
+            this.tabIRC.Name = "tabIRC";
+            this.tabIRC.Size = new System.Drawing.Size(337, 404);
+            this.tabIRC.TabIndex = 6;
+            this.tabIRC.Text = "IRC";
+            this.tabIRC.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(10, 130);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(64, 13);
+            this.label31.TabIndex = 25;
+            this.label31.Text = "Op Channel:";
+            // 
+            // lblIRC
+            // 
+            this.lblIRC.Location = new System.Drawing.Point(160, 151);
+            this.lblIRC.Name = "lblIRC";
+            this.lblIRC.Size = new System.Drawing.Size(26, 23);
+            this.lblIRC.TabIndex = 24;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(23, 157);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(51, 13);
+            this.label23.TabIndex = 21;
+            this.label23.Text = "IRC color:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(25, 103);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Channel:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(34, 49);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(40, 13);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Server:";
+            // 
             // label4
             // 
+=======
+            // label4
+            // 
+>>>>>>> remotes/jack/patch-4
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(44, 76);
             this.label4.Name = "label4";
@@ -1419,6 +1593,11 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+<<<<<<< HEAD
+=======
+            this.tabPage1.Controls.Add(this.cmbAdminChat);
+            this.tabPage1.Controls.Add(this.label37);
+>>>>>>> remotes/jack/patch-4
             this.tabPage1.Controls.Add(this.chkAgreeToRules);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
@@ -1479,7 +1658,7 @@ namespace MCForge.Gui
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(183, 280);
+            this.button3.Location = new System.Drawing.Point(183, 246);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(145, 23);
             this.button3.TabIndex = 31;
@@ -1489,7 +1668,7 @@ namespace MCForge.Gui
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(11, 280);
+            this.button2.Location = new System.Drawing.Point(11, 246);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(145, 23);
             this.button2.TabIndex = 30;
@@ -1581,7 +1760,7 @@ namespace MCForge.Gui
             // lblOpChat
             // 
             this.lblOpChat.AutoSize = true;
-            this.lblOpChat.Location = new System.Drawing.Point(167, 314);
+            this.lblOpChat.Location = new System.Drawing.Point(171, 283);
             this.lblOpChat.Name = "lblOpChat";
             this.lblOpChat.Size = new System.Drawing.Size(70, 13);
             this.lblOpChat.TabIndex = 22;
@@ -1598,16 +1777,20 @@ namespace MCForge.Gui
             // 
             // lblDefault
             // 
+<<<<<<< HEAD
             this.lblDefault.Location = new System.Drawing.Point(149, 250);
+=======
+            this.lblDefault.Location = new System.Drawing.Point(144, 278);
+>>>>>>> remotes/jack/patch-4
             this.lblDefault.Name = "lblDefault";
-            this.lblDefault.Size = new System.Drawing.Size(26, 23);
+            this.lblDefault.Size = new System.Drawing.Size(21, 21);
             this.lblDefault.TabIndex = 10;
             // 
             // chkMono
             // 
             this.chkMono.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkMono.AutoSize = true;
-            this.chkMono.Location = new System.Drawing.Point(11, 341);
+            this.chkMono.Location = new System.Drawing.Point(4, 341);
             this.chkMono.Name = "chkMono";
             this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
@@ -1629,7 +1812,7 @@ namespace MCForge.Gui
             // 
             this.chkUpdates.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkUpdates.AutoSize = true;
-            this.chkUpdates.Location = new System.Drawing.Point(11, 370);
+            this.chkUpdates.Location = new System.Drawing.Point(4, 370);
             this.chkUpdates.Name = "chkUpdates";
             this.chkUpdates.Size = new System.Drawing.Size(101, 23);
             this.chkUpdates.TabIndex = 4;
@@ -1639,7 +1822,11 @@ namespace MCForge.Gui
             // label10
             // 
             this.label10.AutoSize = true;
+<<<<<<< HEAD
             this.label10.Location = new System.Drawing.Point(9, 253);
+=======
+            this.label10.Location = new System.Drawing.Point(4, 283);
+>>>>>>> remotes/jack/patch-4
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 3;
@@ -1711,7 +1898,11 @@ namespace MCForge.Gui
             // label7
             // 
             this.label7.AutoSize = true;
+<<<<<<< HEAD
             this.label7.Location = new System.Drawing.Point(230, 253);
+=======
+            this.label7.Location = new System.Drawing.Point(230, 219);
+>>>>>>> remotes/jack/patch-4
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(39, 13);
             this.label7.TabIndex = 3;
@@ -1732,6 +1923,39 @@ namespace MCForge.Gui
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
             // 
+<<<<<<< HEAD
+=======
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(154, 314);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(87, 13);
+            this.label37.TabIndex = 33;
+            this.label37.Text = "Admin Chat rank:";
+            // 
+            // cmbAdminChat
+            // 
+            this.cmbAdminChat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAdminChat.FormattingEnabled = true;
+            this.cmbAdminChat.Location = new System.Drawing.Point(247, 309);
+            this.cmbAdminChat.Name = "cmbAdminChat";
+            this.cmbAdminChat.Size = new System.Drawing.Size(81, 21);
+            this.cmbAdminChat.TabIndex = 34;
+            this.toolTip.SetToolTip(this.cmbAdminChat, "Default rank required to read op chat.");
+            // 
+            // chkAdminsJoinSilent
+            // 
+            this.chkAdminsJoinSilent.AutoSize = true;
+            this.chkAdminsJoinSilent.Location = new System.Drawing.Point(24, 272);
+            this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
+            this.chkAdminsJoinSilent.TabIndex = 38;
+            this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
+            this.chkAdminsJoinSilent.Text = "Admins join silently";
+            this.chkAdminsJoinSilent.UseVisualStyleBackColor = true;
+            // 
+>>>>>>> remotes/jack/patch-4
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1916,5 +2140,11 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.CheckBox chkAgreeToRules;
+<<<<<<< HEAD
+=======
+        private System.Windows.Forms.ComboBox cmbAdminChat;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.CheckBox chkAdminsJoinSilent;
+>>>>>>> remotes/jack/patch-4
     }
 }
