@@ -62,19 +62,7 @@ namespace MCForge
                 if (newTitle[newTitle.Length - 1].ToString() != " ") newTitle = newTitle + " "; */
             }
 
-            if (!newTitle.Contains("%"))
-            {
-                if (newTitle.Length > 17)
-                {
-                    Player.SendMessage(p, "Title must be under 17 letters.");
-                    return;
-                }
-            }
-            if (newTitle.Length > 30)
-            {
-                Player.SendMessage(p, "Titles with colors must be under 30 letters.");
-                return;
-            }
+            if (newTitle.Length > 17) { Player.SendMessage(p, "Title must be under 17 letters."); return; }
             if (p != null && !Server.devs.Contains(p.name))
             {
                 if (Server.devs.Contains(who.name) || newTitle.ToLower() == "dev" || (newTitle.ToLower().Contains("dev") && newTitle.ToLower().Contains("%"))) { Player.SendMessage(p, "Can't let you do that, starfox."); return; }
