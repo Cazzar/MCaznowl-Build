@@ -29,7 +29,6 @@ v4.8.0.0
 - Updated some GUI code so Player and map lists update quicker and they now don't leak memory
 - Updated some of the MySQL code to prevent memory loss and make transactions to the databse quicker
 - Added /allowguns - allows guns on certain maps
-- Titles with colours are allowed more than 30 letters
 - Added /agree - new guests have to agree to the rules
 - Added option in the properties to allow or disallow players to teleport to people with higher ranks
 - Added /slap <map> - slaps everyone of a lower rank than you in a map
