@@ -47,9 +47,9 @@ namespace MCForge
                 {
                     foreach (Player pl in Player.players)
                     {
-                        if (pl.level == which && who.group.Permission < p.group.Permission)
+                        if (pl.level == which && pl.group.Permission < p.group.Permission)
                         {
-                               Command.all.Find("slap").Use(p, p.name);
+                               Command.all.Find("slap").Use(p, pl.name);
                         }
                     }
                     return;
