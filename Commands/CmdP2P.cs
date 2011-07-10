@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿/*
-=======
 /*
->>>>>>> remotes/jack/patch-2
  * Written by Jack1312
  * 
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
@@ -64,45 +60,22 @@ namespace MCForge
                     Player.SendMessage(p, "Player 1 is not online or does not exist!");
                     return;
                 }
-<<<<<<< HEAD
-                if (who == p)
-                {
-                    Player.SendMessage(p, "Why not, just use /tp " + who2 + "!");
-=======
-                if (Server.higherranktp == false)
-                {
-                    if (p.group.Permission < who2.group.Permission)
-                    {
-                        if (who.group.Permission < who2.group.Permission)
-                        {
-                            Player.SendMessage(p, "You cannot teleport player 1 to player 2, if player2 is of higher rank");
-                            Player.SendMessage(p, "than you and or if higher rank teleportation is disabled!");
-                        }
-                        Player.SendMessage(p, "You cannot teleport player 1 to player 2, if player2 is of higher rank");
-                        Player.SendMessage(p, "than you and if higher rank teleportation is disabled!");
-                    }
-                }
                 if (who == p)
                 {
                     if (who2 == p)
                     {
-                        Player.SendMessage(p, "Are you really that stupid to try and teleport yourself to yourself? =S");
+                        Player.SendMessage(p, "Why are you trying to teleport yourself to yourself? =S");
                         return;
                     }
                 }
                 if (who == p)
                 {
                     Player.SendMessage(p, "Why not, just use /tp " + who2.name + "!");
->>>>>>> remotes/jack/patch-2
                     return;
                 }
                 if (who2 == p)
                 {
-<<<<<<< HEAD
-                    Player.SendMessage(p, "Why not, just use /summon " + who + "!");
-=======
                     Player.SendMessage(p, "Why not, just use /summon " + who.name + "!");
->>>>>>> remotes/jack/patch-2
                     return;
                 }
                 if (who2 == null)
@@ -110,9 +83,9 @@ namespace MCForge
                     Player.SendMessage(p, "Player 2 is not online or does not exist!");
                     return;
                 }
-                if (p.group.Permission =< who.group.Permission)
+                if (p.group.Permission < who.group.Permission)
                 {
-                    Player.SendMessage(p, "You cannot force a player of a higher rank or the same rank as you to tp to another player!");
+                    Player.SendMessage(p, "You cannot force a player of higher rank to tp to another player!");
                     return;
                 }
                 if (s == "")
