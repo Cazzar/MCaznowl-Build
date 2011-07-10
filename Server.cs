@@ -85,7 +85,7 @@ namespace MCForge
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
         public static PlayerList muted;
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14", "jack1312"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -189,6 +189,8 @@ namespace MCForge
         public static bool oldHelp = false;
         public static bool parseSmiley = true;
         public static bool useWhitelist = false;
+        public static bool higherranktp = true;
+        public static bool agreetorulesonentry = false;
         public static bool forceCuboid = false;
         public static bool profanityFilter = false;
         public static bool notifyOnJoinLeave = false;
