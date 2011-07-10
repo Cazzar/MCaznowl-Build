@@ -26,7 +26,6 @@ v4.8.0.0
 - Added the shortcut /fg to /fixgrass. 
 - Added /uban (uban is basically xban without the ipban.)
 - Removed useless code that used up to 90% RAM for no good reason
-<<<<<<< HEAD
 - Updated some GUI code so Player and map lists update quicker and they now don't leak memory
 - Updated some of the MySQL code to prevent memory loss and make transactions to the databse quicker
 - Added /allowguns - allows guns on certain maps
@@ -37,6 +36,7 @@ v4.8.0.0
 - Added /p2p - teleports a player to another player
 - Added adminchat - chat with admins (customisable rank via properties), use '~' pre-message to send it to adminchat
 - Changed /Newlvl - Shows valid mapsizes on the help
+- Admins can join silently
 
 v4.7.0.0
 - Added new game: Countdown
