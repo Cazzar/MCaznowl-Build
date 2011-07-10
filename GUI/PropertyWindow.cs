@@ -1,19 +1,16 @@
 /*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
-	
-	Dual-licensed under the	Educational Community License, Version 2.0 and
-	the GNU General Public License, Version 3 (the "Licenses"); you may
-	not use this file except in compliance with the Licenses. You may
-	obtain a copy of the Licenses at
-	
-	http://www.opensource.org/licenses/ecl2.php
-	http://www.gnu.org/licenses/gpl-3.0.html
-	
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the Licenses are distributed on an "AS IS"
-	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-	or implied. See the Licenses for the specific language governing
-	permissions and limitations under the Licenses.
+Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
@@ -112,7 +109,7 @@ namespace MCForge.Gui
             foreach (Group grp in storedRanks)
             {
                 txtCmdRanks.Text += "\t" + grp.name + " (" + (int)grp.Permission + ")\r\n";
-                listRanks.Items.Add(grp.trueName + "  =  " + (int)grp.Permission);
+                listRanks.Items.Add(grp.trueName + " = " + (int)grp.Permission);
             }
             txtBlRanks.Text = txtCmdRanks.Text;
             listRanks.SelectedIndex = 0;
@@ -413,12 +410,9 @@ namespace MCForge.Gui
                             case "agree-to-rules-on-entry":
                                 chkAgreeToRules.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
-<<<<<<< HEAD
-=======
                             case "admins-join-silent":
                                 chkAdminsJoinSilent.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
->>>>>>> remotes/jack/patch-5
                             case "main-name":
                                 txtMain.Text = value;
                                 break;
@@ -473,48 +467,45 @@ namespace MCForge.Gui
                 if (givenPath.IndexOf("server") != -1)
                 {
                     w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
-                    w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
-                    w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
-                    w.WriteLine("#   port\t=\tThe port to operate from");
-                    w.WriteLine("#   console-only\t=\tRun without a GUI (useful for Linux servers with mono)");
-                    w.WriteLine("#   verify-names\t=\tVerify the validity of names");
-                    w.WriteLine("#   public\t=\tSet to true to appear in the public server list");
-                    w.WriteLine("#   max-players\t=\tThe maximum number of connections");
-                    w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
-                    w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
-                    w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
-                    w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
-                    w.WriteLine("#   irc\t=\tSet to true to enable the IRC bot");
-                    w.WriteLine("#   irc-nick\t=\tThe name of the IRC bot");
-                    w.WriteLine("#   irc-server\t=\tThe server to connect to");
-                    w.WriteLine("#   irc-channel\t=\tThe channel to join");
-                    w.WriteLine("#   irc-opchannel\t=\tThe channel to join (posts OpChat)");
-                    w.WriteLine("#   irc-port\t=\tThe port to use to connect");
-                    w.WriteLine("#   irc-identify\t=(true/false)\tDo you want the IRC bot to Identify itself with nickserv. Note: You will need to register it's name with nickserv manually.");
-                    w.WriteLine("#   irc-password\t=\tThe password you want to use if you're identifying with nickserv");
-                    w.WriteLine("#   anti-tunnels\t=\tStops people digging below max-depth");
-                    w.WriteLine("#   max-depth\t=\tThe maximum allowed depth to dig down");
-                    w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
-                    w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
-                    w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
-                    w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
-                    w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
-                    w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
-                    w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
-                    w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
-<<<<<<< HEAD
-=======
-                    w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
-                    w.WriteLine("#   admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
->>>>>>> remotes/jack/patch-5
+                    w.WriteLine("# server-name\t=\tThe name which displays on minecraft.net");
+                    w.WriteLine("# motd\t=\tThe message which displays when a player connects");
+                    w.WriteLine("# port\t=\tThe port to operate from");
+                    w.WriteLine("# console-only\t=\tRun without a GUI (useful for Linux servers with mono)");
+                    w.WriteLine("# verify-names\t=\tVerify the validity of names");
+                    w.WriteLine("# public\t=\tSet to true to appear in the public server list");
+                    w.WriteLine("# max-players\t=\tThe maximum number of connections");
+                    w.WriteLine("# max-guests\t=\tThe maximum number of guests allowed");
+                    w.WriteLine("# max-maps\t=\tThe maximum number of maps loaded at once");
+                    w.WriteLine("# world-chat\t=\tSet to true to enable world chat");
+                    w.WriteLine("# guest-goto\t=\tSet to true to give guests goto and levels commands");
+                    w.WriteLine("# irc\t=\tSet to true to enable the IRC bot");
+                    w.WriteLine("# irc-nick\t=\tThe name of the IRC bot");
+                    w.WriteLine("# irc-server\t=\tThe server to connect to");
+                    w.WriteLine("# irc-channel\t=\tThe channel to join");
+                    w.WriteLine("# irc-opchannel\t=\tThe channel to join (posts OpChat)");
+                    w.WriteLine("# irc-port\t=\tThe port to use to connect");
+                    w.WriteLine("# irc-identify\t=(true/false)\tDo you want the IRC bot to Identify itself with nickserv. Note: You will need to register it's name with nickserv manually.");
+                    w.WriteLine("# irc-password\t=\tThe password you want to use if you're identifying with nickserv");
+                    w.WriteLine("# anti-tunnels\t=\tStops people digging below max-depth");
+                    w.WriteLine("# max-depth\t=\tThe maximum allowed depth to dig down");
+                    w.WriteLine("# backup-time\t=\tThe number of seconds between automatic backups");
+                    w.WriteLine("# overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
+                    w.WriteLine("# use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players. Default false.");
+                    w.WriteLine("# force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation. Default false.");
+                    w.WriteLine("# profanity-filter\t=\tReplace certain bad words in the chat. Default false.");
+                    w.WriteLine("# notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server. Default false.");
+                    w.WriteLine("# allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
+                    w.WriteLine("# agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
+                    w.WriteLine("# adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+                    w.WriteLine("# admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
                     w.WriteLine();
-                    w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
-                    w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
-                    w.WriteLine("#   Username\t=\tThe username you used to create the database (usually root)");
-                    w.WriteLine("#   Password\t=\tThe password set while making the database");
-                    w.WriteLine("#   DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
+                    w.WriteLine("# Host\t=\tThe host name for the database (usually 127.0.0.1)");
+                    w.WriteLine("# SQLPort\t=\tPort number to be used for MySQL. Unless you manually changed the port, leave this alone. Default 3306.");
+                    w.WriteLine("# Username\t=\tThe username you used to create the database (usually root)");
+                    w.WriteLine("# Password\t=\tThe password set while making the database");
+                    w.WriteLine("# DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
                     w.WriteLine();
-                    w.WriteLine("#   defaultColor\t=\tThe color code of the default messages (Default = &e)");
+                    w.WriteLine("# defaultColor\t=\tThe color code of the default messages (Default = &e)");
                     w.WriteLine();
                     w.WriteLine();
                     w.WriteLine("# Server options");
@@ -704,10 +695,10 @@ namespace MCForge.Gui
         private void btnBackup_Click(object sender, EventArgs e)
         {
             /*FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            folderDialog.Description = "Select Folder";
-            if (folderDialog.ShowDialog() == DialogResult.OK) {
-                txtBackupLocation.Text = folderDialog.SelectedPath;
-            }*/
+folderDialog.Description = "Select Folder";
+if (folderDialog.ShowDialog() == DialogResult.OK) {
+txtBackupLocation.Text = folderDialog.SelectedPath;
+}*/
             MessageBox.Show("Currently glitchy! Just type in the location by hand.");
         }
 
@@ -738,7 +729,7 @@ namespace MCForge.Gui
             {
                 storedRanks[listRanks.SelectedIndex].trueName = txtRankName.Text;
                 skip = true;
-                listRanks.Items[listRanks.SelectedIndex] = txtRankName.Text + "  =  " + (int)storedRanks[listRanks.SelectedIndex].Permission;
+                listRanks.Items[listRanks.SelectedIndex] = txtRankName.Text + " = " + (int)storedRanks[listRanks.SelectedIndex].Permission;
                 skip = false;
             }
         }
@@ -764,7 +755,7 @@ namespace MCForge.Gui
 
                 storedRanks[listRanks.SelectedIndex].Permission = (LevelPermission)foundPerm;
                 skip = true;
-                listRanks.Items[listRanks.SelectedIndex] = storedRanks[listRanks.SelectedIndex].trueName + "  =  " + foundPerm;
+                listRanks.Items[listRanks.SelectedIndex] = storedRanks[listRanks.SelectedIndex].trueName + " = " + foundPerm;
                 skip = false;
             }
         }
@@ -803,7 +794,7 @@ namespace MCForge.Gui
             Random rand = new Random();
             Group newGroup = new Group((LevelPermission)5, 600, "CHANGEME", '1', "CHANGEME.txt");
             storedRanks.Add(newGroup);
-            listRanks.Items.Add(newGroup.trueName + "  =  " + (int)newGroup.Permission);
+            listRanks.Items.Add(newGroup.trueName + " = " + (int)newGroup.Permission);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -984,7 +975,7 @@ namespace MCForge.Gui
             TcpListener listener = null;
             try
             {
-                // Try to open the port.  If it fails, the port is probably open already.
+                // Try to open the port. If it fails, the port is probably open already.
                 try
                 {
                     listener = new TcpListener(IPAddress.Any, (int)nPort);
@@ -1041,28 +1032,28 @@ namespace MCForge.Gui
 
         private void CrtCustCmd_Click(object sender, EventArgs e)
         {
-			if (CustCmdtxtBox.Text != null)
-			{
-            	if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
-            	{
-                	MessageBox.Show("Sorry, That command already exists!!");
-            	}
-            	else
-            	{
-            		Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
-					MessageBox.Show("Command Created!!");
-            	}
-			}
-			else
-			{
-				MessageBox.Show("You didnt specify a name for the command!!");
-			}
+if (CustCmdtxtBox.Text != null)
+{
+             if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
+             {
+                 MessageBox.Show("Sorry, That command already exists!!");
+             }
+             else
+             {
+             Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
+MessageBox.Show("Command Created!!");
+             }
+}
+else
+{
+MessageBox.Show("You didnt specify a name for the command!!");
+}
         }
 
         private void CompileCustCmd_Click(object sender, EventArgs e)
         {
-			if (CustCmdtxtBox.Text != null)
-			{
+if (CustCmdtxtBox.Text != null)
+{
                 if (File.Exists("extra/commands/dll/Cmd" + CustCmdtxtBox.Text + ".dll"))
                 {
                     MessageBox.Show("Sorry, That command already exists!!");
@@ -1070,13 +1061,13 @@ namespace MCForge.Gui
                 else
                 {
                     Command.all.Find("compile").Use(null, CustCmdtxtBox.Text);
-				    MessageBox.Show("Command Compiled!!");
+MessageBox.Show("Command Compiled!!");
                 }
-			}
-			else
-			{
-				MessageBox.Show("You didnt specify a name for the command!!");
-			}
+}
+else
+{
+MessageBox.Show("You didnt specify a name for the command!!");
+}
         }
 
         private void LoadCustCmd_Click(object sender, EventArgs e)
@@ -1086,8 +1077,8 @@ namespace MCForge.Gui
 
         private void LoadIntoTxtBox_Click(object sender, EventArgs e)
         {
-			if (CustCmdtxtBox.Text != null)
-			{
+if (CustCmdtxtBox.Text != null)
+{
                 if (!File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
                 {
                     MessageBox.Show("Sorry, That command doesn't exist yet - click Create Custom Command Above to create it.");
@@ -1096,33 +1087,33 @@ namespace MCForge.Gui
                 {
                     CustCmdTxtBox2.Text = null;
                     CustCmdTxtBox2.Text = File.ReadAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs");
-			    }  
+}
             }
-			else
-			{
-				MessageBox.Show("You didnt specify a name for the command to be loaded!!");
-			}
+else
+{
+MessageBox.Show("You didnt specify a name for the command to be loaded!!");
+}
         }
 
         private void SaveCustCmd_Click(object sender, EventArgs e)
         {
-			if (CustCmdtxtBox.Text != null)
-			{
+if (CustCmdtxtBox.Text != null)
+{
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", null);
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", CustCmdTxtBox2.Text);
                 CustCmdTxtBox2.Text = null;
                 MessageBox.Show("Saved Succesfully!!");
-			}
-			else
-			{
-				MessageBox.Show("You didnt specify a name for the command to be saved as!!");
-			}
+}
+else
+{
+MessageBox.Show("You didnt specify a name for the command to be saved as!!");
+}
         }
 
         private void ClrCustCmdTxtBox_Click(object sender, EventArgs e)
         {
             CustCmdTxtBox2.Text = null;
-			MessageBox.Show("Text Box Cleared!!");
+MessageBox.Show("Text Box Cleared!!");
         }
 
         private void CancelCustCmdTxtBox_Click(object sender, EventArgs e)

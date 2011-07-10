@@ -265,6 +265,18 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
                                 break;
+                            case "adminchat-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.adminchatperm = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
+                                break;
                             case "log-heartbeat":
                                 try { Server.logbeat = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
@@ -354,6 +366,10 @@ namespace MCForge
                                 try { Server.agreetorulesonentry = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "admins-join-silent":
+                                try { Server.adminsjoinsilent = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;                                
                             case "main-name":
                                 if (Player.ValidName(value)) Server.level = value;
                                 else Server.s.Log("Invalid main name");
@@ -446,6 +462,7 @@ namespace MCForge
                     w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
                     w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
                     w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
+                    w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -462,6 +479,7 @@ namespace MCForge
 					w.WriteLine();
 					w.WriteLine("#   kick-on-hackrank\t=\tSet to true if hackrank should kick players");
 					w.WriteLine("#   hackrank-kick-time\t=\tNumber of seconds until player is kicked");
+                    w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
                     w.WriteLine();
                     w.WriteLine();
                     w.WriteLine("# Server options");
@@ -506,6 +524,7 @@ namespace MCForge
                     w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
                     w.WriteLine("money-name = " + Server.moneys);
                     w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
+                    w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString());
                     w.WriteLine("log-heartbeat = " + Server.logbeat.ToString());
                     w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString());
                     w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString());
@@ -513,6 +532,7 @@ namespace MCForge
                     w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString());
                     w.WriteLine("host-state = " + Server.ZallState.ToString());
                     w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
+                    w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
                     w.WriteLine();
                     w.WriteLine("# backup options");
                     w.WriteLine("backup-time = " + Server.backupInterval.ToString());
