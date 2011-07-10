@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -790,7 +790,19 @@ namespace MCForge
                     }
                 }
             }
+<<<<<<< HEAD
             GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+=======
+            if (this.group.Permission < Server.adminchatperm && Server.adminsjoinsilent == false)
+            {
+                GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+            }
+            if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
+            {
+                this.hidden = true;
+                this.adminchat = true;
+            }
+>>>>>>> remotes/jack/patch-6
             Server.s.Log(name + " [" + ip + "] has joined the server.");
             if (Server.notifyOnJoinLeave)
             {

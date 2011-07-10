@@ -35,6 +35,8 @@ v4.8.0.0
 - Added /slap <map> - slaps everyone of a lower rank than you in a map
 - Added /p2p - teleports a player to another player
 - Added adminchat - chat with admins (customisable rank via properties), use '~' pre-message to send it to adminchat
+- Changed /Newlvl - Shows valid mapsizes on the help
+- Admins can join silently
 
 v4.7.0.0
 - Added new game: Countdown

@@ -105,6 +105,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/newlvl - creates a new level.");
             Player.SendMessage(p, "/newlvl mapname 128 64 128 type");
+            Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024");
             Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
         }
 
