@@ -110,9 +110,9 @@ namespace MCForge
                     Player.SendMessage(p, "Player 2 is not online or does not exist!");
                     return;
                 }
-                if (p.group.Permission < who.group.Permission)
+                if (p.group.Permission =< who.group.Permission)
                 {
-                    Player.SendMessage(p, "You cannot force a player of higher rank to tp to another player!");
+                    Player.SendMessage(p, "You cannot force a player of a higher rank or the same rank as you to tp to another player!");
                     return;
                 }
                 if (s == "")
