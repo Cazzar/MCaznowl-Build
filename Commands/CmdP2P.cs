@@ -67,7 +67,7 @@ namespace MCForge
                         Player.SendMessage(p, "Why are you trying to teleport yourself to yourself? =S");
                         return;
                     }
-                }
+                    }
                 if (who == p)
                 {
                     Player.SendMessage(p, "Why not, just use /tp " + who2.name + "!");

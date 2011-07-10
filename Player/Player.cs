@@ -790,8 +790,15 @@ namespace MCForge
                     }
                 }
             }
-            GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
-            Server.s.Log(name + " [" + ip + "] has joined the server.");
+            if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
+            {
+                GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+            }
+            if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
+            {
+                this.hidden = true;
+               this.adminchat = true;
+            }
             if (Server.notifyOnJoinLeave)
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
