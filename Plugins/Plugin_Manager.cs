@@ -4,6 +4,7 @@ using System.IO;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Threading;
 
 namespace MCForge
 {
@@ -15,14 +16,16 @@ namespace MCForge
         public abstract string name { get; }
         public abstract int build { get; }
         public abstract string welcome { get; }
+		public abstract string creater { get; }
+		public abstract bool LoadAtStartup { get; }
         public abstract void Help(Player p);
-        public static Plugins Find(string name)
+        public static Plugin Find(string name)
         {
-            List<Plugins> tempList = new List<Plugins>();
+            List<Plugin> tempList = new List<Plugin>();
             tempList.AddRange(all);
-            Plugins tempPlayer = null; bool returnNull = false;
+            Plugin tempPlayer = null; bool returnNull = false;
 
-            foreach (Plugins p in tempList)
+            foreach (Plugin p in tempList)
             {
                 if (p.name.ToLower() == name.ToLower()) return p;
                 if (p.name.ToLower().IndexOf(name.ToLower()) != -1)
@@ -39,15 +42,22 @@ namespace MCForge
         }
         public static void Load(string pluginname, bool startup)
         {
+			String creator = "";
             try
             {
                 Assembly asm = Assembly.LoadFrom("plugins/" + pluginname + ".dll");
                 Type type = asm.GetTypes()[0];
                 object instance = Activator.CreateInstance(type);
-                Plugins.all.Add((Plugins)instance);
-                ((Plugins)instance).Load(startup);
-                Server.s.Log("Plugin: " + ((Plugins)instance).name + " loaded...build: " + ((Plugins)instance).build);
-                Server.s.Log(((Plugins)instance).welcome);
+                Plugins.all.Add((Plugin)instance);
+				creator = ((Plugin)instance).creator;
+				if (((Plugin)instance).LoadAtStartup)
+				{
+                	((Plugin)instance).Load(startup);
+                	Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugins)instance).build);
+				}
+				else
+					Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
+                Server.s.Log(((Plugin)instance).welcome);
             }
             catch (FileNotFoundException e)
             {
@@ -67,6 +77,10 @@ namespace MCForge
             catch (Exception e)
             {
                 Server.ErrorLog(e);
+				Server.s.Log("The plugin " + pluginname + " failed to load!");
+				if (creator != "")
+					Server.s.Log("You can go bug " + creator + " about it");
+				Thread.Sleep(1000);
             }
         }
         public static void Unload(Plugins p, bool shutdown)

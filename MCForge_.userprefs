@@ -1,6 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Commands/CmdWhois.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Player/Player.cs">
     <Files>
       <File FileName="Player/Player.cs" Line="296" Column="5" />
       <File FileName="Util/Extensions.cs" Line="1" Column="1" />
@@ -10,14 +10,14 @@
       <File FileName="MySQL.cs" Line="67" Column="12" />
       <File FileName="Player/PlayerBot.cs" Line="1" Column="1" />
       <File FileName="Commands/CmdWhois.cs" Line="49" Column="199" />
+      <File FileName="Levels/Level.cs" Line="125" Column="65" />
+      <File FileName="Commands/CmdNewLvl.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="MCForge_" expanded="True">
-            <Node name="Commands" expanded="True">
-              <Node name="CmdWhois.cs" selected="True" />
-            </Node>
+            <Node name="Commands" selected="True" />
           </Node>
         </State>
       </Pad>
