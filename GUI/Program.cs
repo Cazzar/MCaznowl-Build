@@ -435,8 +435,12 @@ namespace MCForge_.Gui
                 if (Server.listen != null) Server.listen.Close();
                 if (!Server.mono || fullRestart)
                 {
-                    Application.Restart();
-                    Server.process.Kill();
+                    Process Restarter = new Process();
+
+                    Restarter.StartInfo.FileName = "Restarter.exe";
+                    Restarter.StartInfo.Arguments = "Program.cs";
+
+                    Restarter.Start();
                 }
                 else
                 {
