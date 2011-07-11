@@ -273,7 +273,7 @@ namespace MCForge
                             Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
                             click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
                             click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
-
+                            
                             if (x1parse > x2parse) //checks if one is greater than the other. This way it knows which one to add one two and which one to minus one from so that it reaches the middle.
                             {
                                 x1parse--;
@@ -300,7 +300,7 @@ namespace MCForge
                             {
                                 y1parse++;
                                 File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(y1parse));
-                                y2parse++;
+                                y2parse--;
                                 File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(y2parse));
                             }
                             z2parse++;
