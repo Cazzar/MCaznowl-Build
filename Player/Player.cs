@@ -217,6 +217,8 @@ namespace MCForge
         public List<string> spyChatRooms = new List<string>();
         public DateTime lastchatroomglobal = new DateTime();
 
+        //Waypoints
+        public List<string> Waypoints = new List<string>();
 
         public bool loggedIn = false;
         private Player()
