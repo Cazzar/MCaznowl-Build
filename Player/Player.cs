@@ -409,6 +409,7 @@ namespace MCForge
                 ", Money=" + money +
                 ", totalBlocks=" + overallBlocks + " + " + loginBlocks +
                 ", totalKicked=" + totalKicked +
+			    ", TimeSpent=" + time + 
                 " WHERE Name='" + name + "'";
 
             MySQL.executeQuery(commandString);
@@ -725,6 +726,7 @@ namespace MCForge
             if (playerDb.Rows.Count == 0)
             {
                 this.prefix = "";
+			    this.time = "0 0 0 1";
                 this.titlecolor = "";
                 this.color = group.color;
                 this.money = 0;
@@ -736,14 +738,15 @@ namespace MCForge
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
-                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked)" +
+                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
-                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ")");
+                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", " + time + ")");
 
             }
             else
             {
                 totalLogins = int.Parse(playerDb.Rows[0]["totalLogin"].ToString()) + 1;
+				time = playerDb.Rows[0]["TimeSpent"];
                 userID = int.Parse(playerDb.Rows[0]["ID"].ToString());
                 firstLogin = DateTime.Parse(playerDb.Rows[0]["firstLogin"].ToString());
                 timeLogged = DateTime.Now;
