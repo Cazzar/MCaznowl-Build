@@ -638,7 +638,9 @@ namespace MCForge
                     while (true)
                     {
                         Thread.Sleep(blockInterval * 1000);
-                        foreach (Level l in levels)
+                        //foreach (Level l in levels)
+                        //{
+                        levels.ForEach(delegate(Level l)
                         {
                             try
                             {
@@ -648,7 +650,7 @@ namespace MCForge
                             {
                                 Server.ErrorLog(e);
                             }
-                        }
+                        });
                     }
                 }));
                 blockThread.Start();
