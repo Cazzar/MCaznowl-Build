@@ -1,3 +1,8 @@
+v4.8.0.1
+- Fixed a bug in /pyramid
+- Fixed Restart-on-error
+- Fixed an issue where sometimes saving levels would randomly crash the server
+
 v4.8.0.0
 - Added custom login and logout messages - customizable in the console properties
 - Added /loginmessage [Player] [Message] and /logoutmessage [Player] [Message]
