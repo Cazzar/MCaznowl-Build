@@ -310,12 +310,15 @@ namespace MCForge_.Gui
                         {
                             if (!msgOpen && !usingConsole)
                             {
-                                msgOpen = true;
-                                if (MessageBox.Show("New version found. Would you like to update?", "Update?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                if (Server.checkUpdates == true)
                                 {
-                                    PerformUpdate(false);
+                                    msgOpen = true;
+                                    if (MessageBox.Show("New version found. Would you like to update?", "Update?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                    {
+                                        PerformUpdate(false);
+                                    }
+                                    msgOpen = false;
                                 }
-                                msgOpen = false;
                             }
                             else
                             {

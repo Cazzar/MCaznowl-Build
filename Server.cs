@@ -288,6 +288,23 @@ namespace MCForge
                         Log("Downloading Restarter.pdb failed, please try again later");
                     }
                 }
+                if (!File.Exists("Meebey.SmartIRC4Net.dll"))
+                {
+                    Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+                        if (File.Exists("Meebey.SmartIRC4Net.dll"))
+                        {
+                            Log("Meebey.SmartIRC4Net.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Meebey.SmartIRC4Net.dll failed, please try again later");
+                    }
+                }
             }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
