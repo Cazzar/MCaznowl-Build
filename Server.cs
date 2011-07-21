@@ -305,6 +305,7 @@ namespace MCForge
                         Log("Downloading Meebey.SmartIRC4Net.dll failed, please try again later");
                     }
                 }
+            }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
