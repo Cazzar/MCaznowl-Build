@@ -1588,10 +1588,10 @@ namespace MCForge
                     IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
-                if (text[0] == ';' || adminchat)
+                if (text[0] == '+' || adminchat)
                 {
                     string newtext = text;
-                    if (text[0] == ';') newtext = text.Remove(0, 1).Trim();
+                    if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
