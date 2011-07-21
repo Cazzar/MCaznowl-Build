@@ -1,7 +1,10 @@
-v4.8.0.1
+v4.9.0.0
 - Fixed a bug in /pyramid
 - Fixed Restart-on-error
 - Fixed an issue where sometimes saving levels would randomly crash the server
+- Added a feature that checks if the Meeby.SmartIrc4Net.dll file exists. If it does not, the server will download it.
+- Modified the CLI Interface. It is now smoother and now you must put a "/" infront of commands in the CLI. 
+- Adminchat Symbol is now "+". 
 
 v4.8.0.0
 - Added custom login and logout messages - customizable in the console properties
