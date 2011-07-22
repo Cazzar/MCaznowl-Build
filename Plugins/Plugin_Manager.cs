@@ -10,7 +10,7 @@ namespace MCForge
 {
     public abstract class Plugin
     {
-        public static List<Plugins> all = new List<Plugins>();
+        public static List<Plugin> all = new List<Plugin>();
         public abstract void Load(bool startup);
         public abstract void Unload(bool shutdown);
         public abstract string name { get; }
@@ -48,12 +48,12 @@ namespace MCForge
                 Assembly asm = Assembly.LoadFrom("plugins/" + pluginname + ".dll");
                 Type type = asm.GetTypes()[0];
                 object instance = Activator.CreateInstance(type);
-                Plugins.all.Add((Plugin)instance);
+                Plugin.all.Add((Plugin)instance);
 				creator = ((Plugin)instance).creator;
 				if (((Plugin)instance).LoadAtStartup)
 				{
                 	((Plugin)instance).Load(startup);
-                	Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugins)instance).build);
+                	Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugin)instance).build);
 				}
 				else
 					Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
@@ -83,7 +83,7 @@ namespace MCForge
 				Thread.Sleep(1000);
             }
         }
-        public static void Unload(Plugins p, bool shutdown)
+        public static void Unload(Plugin p, bool shutdown)
         {
             p.Unload(shutdown);
             all.Remove(p);
