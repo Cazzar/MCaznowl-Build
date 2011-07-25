@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -23,7 +23,7 @@ using System.Text;
 using System.IO;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
-using System.Data.SQLite;
+//using System.Data.SQLite;
 
 namespace MCForge
 {
@@ -34,38 +34,8 @@ namespace MCForge
         public static void executeQuery(string queryString, bool createDB = false)
         {
 			int totalCount = 0;
-            if (!Server.useMySQL) 
-			{
-	     retry1:try
-				{
-					using (var conn = new SQLiteConnection("Data Source=extras/database.db3"))
-					{
-						conn.Open();
-						if (createDB)
-							SQLiteConnection.CreateFile("extras/database.db3");
-						SQLiteCommand cmd = new SQLiteCommand(queryString, conn);
-						cmd.ExecuteNonQuery();
-						conn.Close();
-					}
-				}
-				catch (Exception e)
-				{
-					if (!createDB)
-					{
-						totalCount++;
-						if (totalCont > 10)
-						{
-							File.WriteAllText("SQLite_error.log", DateTime.Now + " " + queryString);
-							Server.ErrorLog(e);
-						}
-						else
-							goto retry1;
-					}
-					else
-						throw e;
-				}
-				return;
-			}
+            if (!Server.useMySQL)
+                return;
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))
@@ -106,34 +76,8 @@ namespace MCForge
         {
 			int totalCount = 0;
             DataTable toReturn = new DataTable("toReturn");
-            if (!Server.useMySQL) 
-			{
-			retry1: try
-				{
-					using (var conn = new SQLiteConnection("Data Source=extras/database.db3"))
-					{
-						conn.Open();
-						using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn))
-							da.Fill(toReturn);
-						conn.Close();
-					}
-				}
-				catch (Exception e)
-				{
-					totalCount++;
-					if (totalCount > 10)
-					{
-						if (!skipError)
-						{
-							File.WriteAllText("SQLite_error.log", DateTime.Now + " " + queryString);
-							Server.ErrorLog(e);
-						}
-					}
-					else
-						goto retry1;
-				}
-				return toReturn;
-			}			
+            if (!Server.useMySQL)
+                return null;		
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))
@@ -166,3 +110,4 @@ namespace MCForge
         }
     }
 }
+
