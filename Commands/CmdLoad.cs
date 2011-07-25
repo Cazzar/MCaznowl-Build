@@ -130,6 +130,14 @@ namespace MCForge
                 Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
                 try
                 {
+                    Gui.Window.thisWindow.UpdatePlayerMapCombo();
+                    Gui.Window.thisWindow.UnloadedlistUpdate();
+                    Gui.Window.thisWindow.UpdateMapList("'");
+                    
+                }
+                catch { }
+                try
+                {
                     int temp = int.Parse(phys);
                     if (temp >= 1 && temp <= 4)
                     {

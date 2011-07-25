@@ -161,7 +161,6 @@
     <Compile Include="Commands\CmdAwardMod.cs" />
     <Compile Include="Commands\CmdUnflood.cs" />
     <Compile Include="Commands\CmdUnlock.cs" />
-    <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
     <Compile Include="Commands\CmdXspawn.cs" />

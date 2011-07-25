@@ -35,7 +35,7 @@ namespace MCForge
             Player who = Player.Find(message);
             if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
             else if (who == p) { Player.SendMessage(p, "Cannot freeze yourself."); return; }
-            else if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot freeze someone of equal or greater rank."); return; }
+            else if (p != null) { if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot freeze someone of equal or greater rank."); return; } }
 
             if (!who.frozen)
             {

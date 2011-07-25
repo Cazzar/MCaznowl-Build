@@ -19,6 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace MCForge
 {
@@ -106,6 +109,145 @@ namespace MCForge
             PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
             props.CopyTo(propArray);
             return new PropertyDescriptorCollection(propArray);
+        }
+    }
+
+    public class LevelListViewForTab : ILevelViewBuilder
+    {
+        public PropertyDescriptorCollection GetView()
+        {
+            List<PropertyDescriptor> props = new List<PropertyDescriptor>();
+            LevelMethodDelegate del = delegate(Level l)
+            {
+                return l.name;
+            };
+            props.Add(new LevelMethodDescriptor("Name", del, typeof(string)));
+
+            del = delegate(Level l)
+            {
+                return l.players.Count;
+            };
+            props.Add(new LevelMethodDescriptor("Players", del, typeof(int)));
+
+            del = delegate(Level l)
+            {
+                return l.physics;
+            };
+            props.Add(new LevelMethodDescriptor("Physics", del, typeof(int)));
+
+            del = delegate(Level l)
+            {
+                return l.motd;
+            };
+            props.Add(new LevelMethodDescriptor("MOTD", del, typeof(string)));
+
+            del = delegate(Level l)
+            {
+                return l.GrassGrow;
+            };
+            props.Add(new LevelMethodDescriptor("Grass", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.Killer;
+            };
+            props.Add(new LevelMethodDescriptor("Killer-Blocks", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.worldChat;
+            };
+            props.Add(new LevelMethodDescriptor("World-Chat", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.Death;
+            };
+            props.Add(new LevelMethodDescriptor("Death", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.finite;
+            };
+            props.Add(new LevelMethodDescriptor("Finite", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.edgeWater;
+            };
+            props.Add(new LevelMethodDescriptor("Edge-Water", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                if (l.ai == true)
+                {
+                    return "Hunt";
+                }
+                else
+                {
+                    return "Flee";
+                }
+            };
+            props.Add(new LevelMethodDescriptor("AI", del, typeof(string)));
+
+            del = delegate(Level l)
+            {
+                return l.guns;
+            };
+            props.Add(new LevelMethodDescriptor("Guns", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.drown;
+            };
+            props.Add(new LevelMethodDescriptor("Drown", del, typeof(int)));
+
+            del = delegate(Level l)
+            {
+                return l.fall;
+            };
+            props.Add(new LevelMethodDescriptor("Fall", del, typeof(int)));
+
+            del = delegate(Level l)
+            {
+                if (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            };
+            props.Add(new LevelMethodDescriptor("Autoload", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                //return l.permissionvisit.ToString();
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionvisit);
+                if (grp == null)
+                    return l.permissionvisit.ToString();
+                else
+                    return grp.name;
+            };
+            props.Add(new LevelMethodDescriptor("PerVisit", del, typeof(string)));
+
+            del = delegate(Level l)
+            {
+                //return l.permissionbuild.ToString();
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionbuild);
+                if (grp == null)
+                    return l.permissionbuild.ToString();
+                else
+                    return grp.name;
+            };
+            props.Add(new LevelMethodDescriptor("PerBuild", del, typeof(string)));
+
+            PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
+            props.CopyTo(propArray);
+            return new PropertyDescriptorCollection(propArray);
+
+
         }
     }
 

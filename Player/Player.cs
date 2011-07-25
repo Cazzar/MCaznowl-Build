@@ -217,15 +217,22 @@ namespace MCForge
         public List<string> spyChatRooms = new List<string>();
         public DateTime lastchatroomglobal = new DateTime();
 
-        //Waypoints
-        public List<string> Waypoints = new List<string>();
-
         public bool loggedIn = false;
         private Player()
         {
             //Only necessary for a "flatcopy".
 
         }
+
+        public static string CheckPlayerStatus(Player p)
+        {
+            if (p.hidden)
+                return "hidden";
+            if (Server.afkset.Contains(p.name))
+                return "afk";
+            return "active";
+        }
+
         public Player(Socket s)
         {
             try
@@ -305,7 +312,8 @@ namespace MCForge
                         if (!Group.Find("Nobody").commands.Contains("award") && !Group.Find("Nobody").commands.Contains("awards") && !Group.Find("Nobody").commands.Contains("awardmod")) SendMessage("You have " + Awards.awardAmount(name) + " awards.");
                     }
                     catch { }
-
+                    try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
+                    catch { }
                     extraTimer.Dispose();
                 };
 
@@ -2293,6 +2301,7 @@ namespace MCForge
 
             if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
+            
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
@@ -2306,19 +2315,21 @@ namespace MCForge
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
+            string oldmessage = message;
             if (showname) { message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
-            Server.s.Log(message);
+            Server.s.Log(oldmessage + "<GlobalChatRoom>" + from.prefix + from.name + message);
         }
         public static void ChatRoom(Player from, string message, bool showname, string chatroom)
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
+            string oldmessage = message;
             string messageforspy = ("<ChatRoomSPY: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message);
             if (showname) { message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
             players.ForEach(delegate(Player p) { if (p.Chatroom == chatroom) Player.SendMessage(p, Server.DefaultColor + message); });
             players.ForEach(delegate(Player p) { if (p.spyChatRooms.Contains(chatroom)  && p.Chatroom != chatroom) Player.SendMessage(p, Server.DefaultColor + messageforspy); });
-            Server.s.Log(message);
+            Server.s.Log(oldmessage + "<ChatRoom" + chatroom + ">" + from.prefix + from.name + message);
         }
 
 
@@ -2381,6 +2392,7 @@ namespace MCForge
                         Player.SendMessage(p, message);
                     }
                 });
+                
             }
             catch { Server.s.Log("Error occured with Op Chat"); }
         }
@@ -2395,6 +2407,7 @@ namespace MCForge
                         Player.SendMessage(p, message);
                     }
                 });
+                
             }
             catch { Server.s.Log("Error occured with Admin Chat"); }
         }
@@ -2567,6 +2580,8 @@ namespace MCForge
                     players.Remove(this);
                     Server.s.PlayerListUpdate();
                     left.Add(this.name.ToLower(), this.ip);
+                    try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
+                    catch { }
 
                     /*if (Server.AutoLoad && level.unload)
                     {

@@ -59,6 +59,13 @@ namespace MCForge
             if (level != null)
             {
                 if (!level.Unload()) Player.SendMessage(p, "You cannot unload the main level.");
+                try
+                {
+                    Gui.Window.thisWindow.UpdatePlayerMapCombo();
+                    Gui.Window.thisWindow.UnloadedlistUpdate();
+                    Gui.Window.thisWindow.UpdateMapList("'");
+                }
+                catch { }
                 return;
             }
 

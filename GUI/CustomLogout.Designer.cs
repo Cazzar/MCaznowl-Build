@@ -89,6 +89,7 @@
             this.Controls.Add(this.txtPlayer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtLoginMessage);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "CustomLogout";
             this.Text = "Custom Logout";
             this.ResumeLayout(false);

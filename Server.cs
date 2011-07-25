@@ -506,6 +506,12 @@ namespace MCForge
                                 {
                                     Command.all.Find("load").Use(null, key + " " + value);
                                     Level l = Level.FindExact(key);
+                                    try
+                                    {
+                                        Gui.Window.thisWindow.UpdateMapList("'");
+                                        Gui.Window.thisWindow.UnloadedlistUpdate();
+                                    }
+                                    catch { }
                                 }
                                 else
                                 {
@@ -716,6 +722,14 @@ namespace MCForge
                 }));
 
                 locationChecker.Start();
+                
+                try
+                {
+                    Gui.Window.thisWindow.UpdateMapList("'");
+                    Thread.Sleep(100);
+                    Gui.Window.thisWindow.UnloadedlistUpdate();
+                }
+                catch { }
                 Log("Finished setting up server");
             });
         }

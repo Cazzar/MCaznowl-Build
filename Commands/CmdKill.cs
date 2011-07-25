@@ -37,7 +37,14 @@ namespace MCForge
             if (message.IndexOf(' ') == -1)
             {
                 who = Player.Find(message);
-                killMsg = " was killed by " + p.color + p.name;
+                if (p != null)
+                {
+                    killMsg = " was killed by " + p.color + p.name;
+                }
+                else
+                {
+                    killMsg = " was killed by " + "<CONSOLE>";
+                }
             }
             else
             {
@@ -75,11 +82,14 @@ namespace MCForge
                 return;
             }
 
-            if (who.group.Permission > p.group.Permission)
+            if (p != null)
             {
-                p.HandleDeath(Block.rock, " was killed by " + who.color + who.name);
-                Player.SendMessage(p, "Cannot kill someone of higher rank");
-                return;
+                if (who.group.Permission > p.group.Permission)
+                {
+                    p.HandleDeath(Block.rock, " was killed by " + who.color + who.name);
+                    Player.SendMessage(p, "Cannot kill someone of higher rank");
+                    return;
+                }
             }
 
             if (killMethod == 1)
