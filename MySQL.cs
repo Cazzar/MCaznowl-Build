@@ -27,7 +27,7 @@ using MySql.Data.Types;
 
 namespace MCForge
 {
-    static class MySQL
+    public static class MySQL
     {
 		
         private static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.MySQLPooling;
