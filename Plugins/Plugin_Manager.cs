@@ -16,8 +16,8 @@ namespace MCForge
         public abstract string name { get; }
         public abstract int build { get; }
         public abstract string welcome { get; }
-		public abstract string creater { get; }
-		public abstract bool LoadAtStartup { get; }
+	public abstract string creater { get; }
+	public abstract bool LoadAtStartup { get; }
         public abstract void Help(Player p);
         public static Plugin Find(string name)
         {
@@ -91,10 +91,10 @@ namespace MCForge
         }
 		public static void Unload()
 		{
-			foreach (Plugin p in all)
+			all.ForEach(delegate(Plugin p)
 			{
 				Unload(p, true);
-			}
+			});
 		}
         public static void Load()
         {
