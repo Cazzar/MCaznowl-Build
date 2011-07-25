@@ -79,7 +79,11 @@ namespace MCForge
         //public static DateTime physResume = DateTime.Now;
         //public static System.Timers.Timer physTimer = new System.Timers.Timer(1000);
         // static Thread botsThread;
-
+        //Chatrooms
+        public static List<string> Chatrooms = new List<string>();
+        //Other
+        public static bool higherranktp = true;
+        public static bool agreetorulesonentry = false;
         //CTF STUFF
         public static List<CTFGame> CTFGames = new List<CTFGame>();
 
@@ -87,7 +91,7 @@ namespace MCForge
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
         public static PlayerList muted;
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "sebbiultimate", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "listings09", "hypereddie10", "shade2010", "uberfox", "erickilla", "lordpsycho"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14", "jack1312"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -221,8 +225,9 @@ namespace MCForge
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
+        public static LevelPermission adminchatperm = LevelPermission.Admin;
         public static bool logbeat = false;
-
+        public static bool adminsjoinsilent = false;
         public static bool mono = false;
 
         public static bool flipHead = false;
@@ -247,7 +252,59 @@ namespace MCForge
         {
             shuttingDown = false;
             Log("Starting Server");
-
+            {//dl restarter stuff
+                if (!File.Exists("Restarter.exe"))
+                {
+                    Log("Restarter.exe doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                        if (File.Exists("Restarter.exe"))
+                        {
+                            Log("Restarter.exe download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.exe failed, please try again later");
+                    }
+                }
+                if (!File.Exists("Restarter.pdb"))
+                {
+                    Log("Restarter.pdb doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                        if (File.Exists("Restarter.pdb"))
+                        {
+                            Log("Restarter.pdb download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.pdb failed, please try again later");
+                    }
+                }
+                if (!File.Exists("Meebey.SmartIRC4Net.dll"))
+                {
+                    Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+                        if (File.Exists("Meebey.SmartIRC4Net.dll"))
+                        {
+                            Log("Meebey.SmartIRC4Net.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Meebey.SmartIRC4Net.dll failed, please try again later");
+                    }
+                }
+            }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
@@ -306,7 +363,6 @@ namespace MCForge
             
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
-            Plugin.Load();
             Group.InitAll();
             Command.InitAll();
             GrpCommands.fillRanks();
@@ -328,10 +384,8 @@ namespace MCForge
             ProfanityFilter.Init();
 
             timeOnline = DateTime.Now;
-            if (useMySQL || !File.Exists("extra/database.db3"))
+            try
             {
-                try
-                {
                     MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
                 }
                 catch (Exception e)
@@ -341,14 +395,8 @@ namespace MCForge
                     //process.Kill();
                     return;
                 }
-            }
-            if (useMySQL)
                 MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            else
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
             // Check if the color column exists.
-            if (useMySQL)
-            {
                 DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
                 if (colorExists.Rows.Count == 0)
@@ -370,7 +418,6 @@ namespace MCForge
                 if (timespent.Rows.Count == 0)
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
-            }
             if (levels != null)
                 foreach (Level l in levels) { l.Unload(); }
             ml.Queue(delegate
@@ -613,7 +660,7 @@ namespace MCForge
                     while (true)
                     {
                         Thread.Sleep(blockInterval * 1000);
-                        foreach (Level l in levels)
+                        level.ForEach(delegate(Level l)
                         {
                             try
                             {
@@ -623,7 +670,7 @@ namespace MCForge
                             {
                                 Server.ErrorLog(e);
                             }
-                        }
+                        });
                     }
                 }));
                 blockThread.Start();
@@ -726,21 +773,27 @@ namespace MCForge
                 // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
                 // -Descention
                 Player p = null;
+                bool begin = false;
                 try
                 {
                     p = new Player(listen.EndAccept(result));
                     listen.BeginAccept(new AsyncCallback(Accept), null);
+                    begin = true;
                 }
                 catch (SocketException e)
                 {
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
                 catch (Exception e)
                 {
                     ErrorLog(e);
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
             }
         }
@@ -775,7 +828,6 @@ namespace MCForge
                 }
             }
             );
-            Plugin.Unload();
             shuttingDown = true;
             if (listen != null)
             {
