@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.opensource.org/licenses/ecl2.php
+	http://www.osedu.org/licenses/ECL-2.0
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -172,7 +172,20 @@ namespace MCForge
                             Player.SendMessage(p, "Rank needed: " + foundRank);
                             return;
                         }
-                        Player.SendMessage(p, "Could not find command or block specified.");
+                        Plugin plugin = null;
+                        foreach (Plugin p1 in Plugin.all)
+                        {
+                            if (p1.name.ToLower() == message.ToLower())
+                            {
+                                plugin = p1;
+                                break;
+                            }
+                        }
+                        if (plugin != null)
+                        {
+                            plugin.Help(p);
+                        }
+                        Player.SendMessage(p, "Could not find command, plugin or block specified.");
                         break;
                 }
             }
