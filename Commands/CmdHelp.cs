@@ -172,20 +172,7 @@ namespace MCForge
                             Player.SendMessage(p, "Rank needed: " + foundRank);
                             return;
                         }
-                        Plugin plugin = null;
-                        foreach (Plugin p1 in Plugin.all)
-                        {
-                            if (p1.name.ToLower() == message.ToLower())
-                            {
-                                plugin = p1;
-                                break;
-                            }
-                        }
-                        if (plugin != null)
-                        {
-                            plugin.Help(p);
-                        }
-                        Player.SendMessage(p, "Could not find command, plugin or block specified.");
+                        Player.SendMessage(p, "Could not find command or block specified.");
                         break;
                 }
             }
