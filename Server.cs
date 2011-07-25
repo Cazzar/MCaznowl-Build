@@ -6,7 +6,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -39,8 +39,6 @@ namespace MCForge
     public class Server
     {
         public delegate void LogHandler(string message);
-		public delegate void OnServerError(Exception error);
-		public static event OnServerError ServerError = null;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
