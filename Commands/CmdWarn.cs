@@ -80,7 +80,7 @@ namespace MCForge
                 reason = message.Substring(message.IndexOf(' ') + 1).Trim();
             }
 
-            warnedby = (p == null) ? "console" : p.color + p.name;
+            warnedby = (p == null) ? "<CONSOLE>" : p.color + p.name;
             Player.GlobalMessage(warnedby + " %ewarned " + who.color + who.name + " %ebecause:");
             Player.GlobalMessage("&c" + reason);
 

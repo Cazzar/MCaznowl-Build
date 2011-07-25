@@ -1,3 +1,7 @@
+v5.0.0.0
+- Added a Maps tab to the GUI
+- Added a Players tab to the GUI
+
 v4.9.0.0
 - Fixed a bug in /pyramid
 - Fixed Restart-on-error

@@ -46,7 +46,8 @@ namespace MCForge
                     {
                         if (p != null) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot jail someone of equal or greater rank."); return; }
                         Player.GlobalDie(who, false);
-                        Player.GlobalSpawn(who, p.level.jailx, p.level.jaily, p.level.jailz, p.level.jailrotx, p.level.jailroty, true);
+                        if (p != null) { Player.GlobalSpawn(who, p.level.jailx, p.level.jaily, p.level.jailz, p.level.jailrotx, p.level.jailroty, true); }
+                        else { Player.GlobalSpawn(who, who.level.jailx, who.level.jaily, who.level.jailz, who.level.jailrotx, who.level.jailroty, true); }
                         who.jailed = true;
                         if (p == null)
                         {
