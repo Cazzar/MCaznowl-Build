@@ -52,6 +52,7 @@ namespace MCForge
                 return;
             }
             Command opchat = Command.all.Find("opchat");
+            Command adminchat = Command.all.Find("adminchat");
             p.hidden = !p.hidden;
             if (p.hidden)
             {
@@ -62,7 +63,6 @@ namespace MCForge
                 {
                     opchat.Use(p, message);
                 }
-                else { }
                 //Player.SendMessage(p, "You're now &finvisible&e.");
             }
             else
@@ -74,7 +74,10 @@ namespace MCForge
                 {
                     opchat.Use(p, message);
                 }
-                else { }
+                if (p.adminchat == true)
+                {
+                    adminchat.Use(p, message);
+                }
                 //Player.SendMessage(p, "You're now &8visible&e.");
             }
         }

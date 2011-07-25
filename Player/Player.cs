@@ -1405,7 +1405,7 @@ namespace MCForge
                         team.SpawnPlayer(this);
                         this.health = 100;
                     }
-                    if (CountdownGame.playersleftlist.Contains(this))
+                    else if (CountdownGame.playersleftlist.Contains(this))
                     {
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
@@ -1598,10 +1598,10 @@ namespace MCForge
                     IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
-                if (text[0] == ';' || adminchat)
+                if (text[0] == '+' || adminchat)
                 {
                     string newtext = text;
-                    if (text[0] == ';') newtext = text.Remove(0, 1).Trim();
+                    if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))

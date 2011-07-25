@@ -49,10 +49,18 @@ namespace MCForge
                         if (p != null) { Player.GlobalSpawn(who, p.level.jailx, p.level.jaily, p.level.jailz, p.level.jailrotx, p.level.jailroty, true); }
                         else { Player.GlobalSpawn(who, who.level.jailx, who.level.jaily, who.level.jailz, who.level.jailrotx, who.level.jailroty, true); }
                         who.jailed = true;
+                        if (p == null)
+                        {
+                            Player.SendMessage(p, who.name + " was jailed.");
+                        }
                         Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " was &8jailed", false);
                     }
                     else
                     {
+                        if (p == null)
+                        {
+                            Player.SendMessage(p, who.name + " was freed from jail.");
+                        }
                         who.jailed = false;
                         Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " was &afreed" + Server.DefaultColor + " from jail", false);
                     }
@@ -63,6 +71,7 @@ namespace MCForge
                 }
             }
         }
+
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/jail [user] - Places [user] in jail unable to use commands.");
