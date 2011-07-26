@@ -16,7 +16,7 @@ namespace MCForge
         public abstract string name { get; }
         public abstract int build { get; }
         public abstract string welcome { get; }
-	public abstract string creater { get; }
+	public abstract string creator { get; }
 	public abstract bool LoadAtStartup { get; }
         public abstract void Help(Player p);
         public static Plugin Find(string name)
@@ -89,13 +89,13 @@ namespace MCForge
             all.Remove(p);
             Server.s.Log(p.name + " was unloaded...how ever you cant re-load it until you restart!");
         }
-		public static void Unload()
+	public static void Unload()
+	{
+		all.ForEach(delegate(Plugin p)
 		{
-			all.ForEach(delegate(Plugin p)
-			{
-				Unload(p, true);
-			});
-		}
+			Unload(p, true);
+		});
+	}
         public static void Load()
         {
             if (Directory.Exists("plugins"))
