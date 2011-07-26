@@ -175,7 +175,9 @@ namespace MCForge.Gui
                     {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
-                        string value = line.Split('=')[1].Trim();
+                        string value = "";
+                        if (line.IndexOf('=') >= 0)
+                            value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
                         string color = "";
 
                         switch (key.ToLower())
@@ -185,7 +187,7 @@ namespace MCForge.Gui
                                 else txtName.Text = "[MCForge] Minecraft server";
                                 break;
                             case "motd":
-                                if (ValidString(value, "![]&:.,{}~-+()?_/\\ ")) txtMOTD.Text = value;
+                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\ ")) txtMOTD.Text = value; // allow = in the motd
                                 else txtMOTD.Text = "Welcome to my server!";
                                 break;
                             case "port":
