@@ -644,7 +644,10 @@ namespace MCForge
 
                 Server.s.PlayerListUpdate();
 
-                IRCBot.Say(name + " joined the game.");
+                if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
+                {
+                    IRCBot.Say(name + " joined the game.");
+                }
 
                 //Test code to show when people come back with different accounts on the same IP
                 string temp = "Lately known as:";
@@ -661,9 +664,13 @@ namespace MCForge
                     }
                     if (found)
                     {
-                        GlobalMessageOps(temp);
+                        if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
+                        {
+                            GlobalMessageOps(temp);
+                            IRCBot.Say(temp, true);       //Tells people in op channel on IRC
+                        }
+            
                         Server.s.Log(temp);
-                        IRCBot.Say(temp, true);       //Tells people in op channel on IRC
                     }
                 }
             }
