@@ -77,7 +77,7 @@ namespace MCForge
 			int totalCount = 0;
             DataTable toReturn = new DataTable("toReturn");
             if (!Server.useMySQL)
-                return null;		
+                return toReturn;	
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))

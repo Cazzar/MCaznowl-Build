@@ -751,22 +751,21 @@ namespace MCForge
 
                     level.backedup = true;
 
-                    DataTable ZoneDB = MySQL.fillData("SELECT * FROM `Zone" + givenName + "`");
+                        DataTable ZoneDB = MySQL.fillData("SELECT * FROM `Zone" + givenName + "`");
 
-                    Zone Zn;
-                    for (int i = 0; i < ZoneDB.Rows.Count; ++i)
-                    {
-                        Zn.smallX = (ushort)ZoneDB.Rows[i]["SmallX"];
-                        Zn.smallY = (ushort)ZoneDB.Rows[i]["SmallY"];
-                        Zn.smallZ = (ushort)ZoneDB.Rows[i]["SmallZ"];
-                        Zn.bigX = (ushort)ZoneDB.Rows[i]["BigX"];
-                        Zn.bigY = (ushort)ZoneDB.Rows[i]["BigY"];
-                        Zn.bigZ = (ushort)ZoneDB.Rows[i]["BigZ"];
-                        Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
-                        level.ZoneList.Add(Zn);
-                    }
-
-                    ZoneDB.Dispose();
+                        Zone Zn;
+                        for (int i = 0; i < ZoneDB.Rows.Count; ++i)
+                        {
+                            Zn.smallX = (ushort)ZoneDB.Rows[i]["SmallX"];
+                            Zn.smallY = (ushort)ZoneDB.Rows[i]["SmallY"];
+                            Zn.smallZ = (ushort)ZoneDB.Rows[i]["SmallZ"];
+                            Zn.bigX = (ushort)ZoneDB.Rows[i]["BigX"];
+                            Zn.bigY = (ushort)ZoneDB.Rows[i]["BigY"];
+                            Zn.bigZ = (ushort)ZoneDB.Rows[i]["BigZ"];
+                            Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
+                            level.ZoneList.Add(Zn);
+                        }
+                        ZoneDB.Dispose();
 
                     level.jailx = (ushort)(level.spawnx * 32); level.jaily = (ushort)(level.spawny * 32); level.jailz = (ushort)(level.spawnz * 32);
                     level.jailrotx = level.rotx; level.jailroty = level.roty;

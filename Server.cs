@@ -362,13 +362,10 @@ public static byte maxGuests = 10;
                     SW.Close();
                 }
             }
-            
+
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
-<<<<<<< HEAD
-=======
             Plugin.Load();
->>>>>>> remotes/origin/PluginAPI
             Group.InitAll();
             Command.InitAll();
             GrpCommands.fillRanks();
@@ -390,15 +387,9 @@ public static byte maxGuests = 10;
             ProfanityFilter.Init();
 
             timeOnline = DateTime.Now;
-<<<<<<< HEAD
-            try
-            {
-=======
-            if (useMySQL || !File.Exists("extra/database.db3"))
-            {
+            {//MYSQL stuff
                 try
                 {
->>>>>>> remotes/origin/PluginAPI
                     MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
                 }
                 catch (Exception e)
@@ -408,9 +399,8 @@ public static byte maxGuests = 10;
                     //process.Kill();
                     return;
                 }
-<<<<<<< HEAD
                 MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            // Check if the color column exists.
+                // Check if the color column exists.
                 DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
                 if (colorExists.Rows.Count == 0)
@@ -427,42 +417,12 @@ public static byte maxGuests = 10;
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
                 }
                 tcolorExists.Dispose();
-
-=======
-            }
-            if (useMySQL)
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            else
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            // Check if the color column exists.
-            if (useMySQL)
-            {
-                DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
-
-                if (colorExists.Rows.Count == 0)
-                {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
-                }
-                colorExists.Dispose();
-
-                // Check if the title color column exists.
-                DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
-
-                if (tcolorExists.Rows.Count == 0)
-                {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
-                }
-                tcolorExists.Dispose();
-
->>>>>>> remotes/origin/PluginAPI
                 DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
                 if (timespent.Rows.Count == 0)
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
-<<<<<<< HEAD
-=======
             }
->>>>>>> remotes/origin/PluginAPI
+
             if (levels != null)
                 foreach (Level l in levels) { l.Unload(); }
             ml.Queue(delegate
@@ -705,7 +665,7 @@ processThread.Start();
                     while (true)
                     {
                         Thread.Sleep(blockInterval * 1000);
-                        level.ForEach(delegate(Level l)
+                        levels.ForEach(delegate(Level l)
                         {
                             try
                             {
@@ -783,7 +743,7 @@ processThread.Start();
                 }));
 
                 locationChecker.Start();
-                
+
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");
@@ -932,13 +892,8 @@ processThread.Start();
 
         public static void ErrorLog(Exception ex)
         {
-<<<<<<< HEAD
 			if (ServerError != null)
 				ServerError(ex);
-=======
-if (ServerError != null)
-ServerError(ex);
->>>>>>> remotes/origin/PluginAPI
             Logger.WriteError(ex);
             try
             {

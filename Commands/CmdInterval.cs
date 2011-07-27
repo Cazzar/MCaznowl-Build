@@ -44,7 +44,7 @@ namespace MCForge
                     //command exists
                     nowCmd.isIntervalized = true;
                     nowCmd.intervalInMinutes = int.Parse(incoming[1]);
-                    nowCmd.intervalUsingPlayer = p.getCopy();
+                    nowCmd.intervalUsingPlayer = p;
                     try
                     {
                         nowCmd.Use(nowCmd.intervalUsingPlayer, "");

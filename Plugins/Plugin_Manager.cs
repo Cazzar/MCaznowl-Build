@@ -45,7 +45,7 @@ namespace MCForge
 			String creator = "";
             try
             {
-                Assembly asm = Assembly.LoadFrom("plugins/" + pluginname + ".dll");
+                Assembly asm = Assembly.LoadFrom(pluginname);
                 Type type = asm.GetTypes()[0];
                 object instance = Activator.CreateInstance(type);
                 Plugin.all.Add((Plugin)instance);
