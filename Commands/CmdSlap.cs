@@ -98,7 +98,7 @@ namespace MCForge
                 }
                 else
                 {
-                    who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped sky high by " + "<CONSOLE");
+                    who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped sky high by " + "<CONSOLE>");
                 }
                 foundHeight = 1000;
             }

@@ -166,6 +166,7 @@ namespace MCForge.Gui
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.EditTxtsBt = new System.Windows.Forms.Button();
             this.label37 = new System.Windows.Forms.Label();
             this.chkAgreeToRules = new System.Windows.Forms.CheckBox();
             this.numPlayers = new System.Windows.Forms.NumericUpDown();
@@ -191,7 +192,6 @@ namespace MCForge.Gui
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.EditTxtsBt = new System.Windows.Forms.Button();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -632,7 +632,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+            this.chkIRC.Size = new System.Drawing.Size(57, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -973,7 +973,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(24, 272);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
             this.chkAdminsJoinSilent.TabIndex = 38;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -1490,6 +1490,16 @@ namespace MCForge.Gui
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // EditTxtsBt
+            // 
+            this.EditTxtsBt.Location = new System.Drawing.Point(7, 247);
+            this.EditTxtsBt.Name = "EditTxtsBt";
+            this.EditTxtsBt.Size = new System.Drawing.Size(131, 23);
+            this.EditTxtsBt.TabIndex = 35;
+            this.EditTxtsBt.Text = "Edit Texts";
+            this.EditTxtsBt.UseVisualStyleBackColor = true;
+            this.EditTxtsBt.Click += new System.EventHandler(this.EditTxtsBt_Click);
+            // 
             // label37
             // 
             this.label37.AutoSize = true;
@@ -1744,15 +1754,6 @@ namespace MCForge.Gui
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(345, 430);
             this.tabControl.TabIndex = 0;
-            // 
-            // EditTxtsBt
-            // 
-            this.EditTxtsBt.Location = new System.Drawing.Point(7, 247);
-            this.EditTxtsBt.Name = "EditTxtsBt";
-            this.EditTxtsBt.Size = new System.Drawing.Size(131, 23);
-            this.EditTxtsBt.TabIndex = 35;
-            this.EditTxtsBt.Text = "Edit Texts";
-            this.EditTxtsBt.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 

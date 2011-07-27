@@ -156,6 +156,8 @@ namespace MCForge.Gui
         public static bool prevLoaded = false;
         Form PropertyForm;
         Form UpdateForm;
+        Form EditTxtForm;
+
         public void SaveBlocks()
         {
             Block.SaveBlocks(storedBlocks);
@@ -175,7 +177,9 @@ namespace MCForge.Gui
                     {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
-                        string value = line.Split('=')[1].Trim();
+                        string value = "";
+                        if (line.IndexOf('=') >= 0)
+                            value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
                         string color = "";
 
                         switch (key.ToLower())
@@ -185,7 +189,7 @@ namespace MCForge.Gui
                                 else txtName.Text = "[MCForge] Minecraft server";
                                 break;
                             case "motd":
-                                if (ValidString(value, "![]&:.,{}~-+()?_/\\ ")) txtMOTD.Text = value;
+                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\ ")) txtMOTD.Text = value; // allow = in the motd
                                 else txtMOTD.Text = "Welcome to my server!";
                                 break;
                             case "port":
@@ -1131,16 +1135,10 @@ MessageBox.Show("Text Box Cleared!!");
             numGuests.Maximum = numPlayers.Value;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void EditTxtsBt_Click(object sender, EventArgs e)
         {
-            PropertyForm = new GUI.CustomLogin();
-            PropertyForm.Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            PropertyForm = new GUI.CustomLogout();
-            PropertyForm.Show();
+            EditTxtForm = new EditText();
+            EditTxtForm.Show();
         }
     }
 

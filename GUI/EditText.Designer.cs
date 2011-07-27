@@ -1,4 +1,4 @@
-﻿namespace MCForge.GUI
+﻿namespace MCForge.Gui
 {
     partial class EditText
     {
@@ -30,7 +30,7 @@
         {
             this.EdittxtCombo = new System.Windows.Forms.ComboBox();
             this.LoadTxt = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.EditTextTxtBox = new System.Windows.Forms.TextBox();
             this.SaveEditTxtBt = new System.Windows.Forms.Button();
             this.DiscardEdittxtBt = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -38,6 +38,18 @@
             // EdittxtCombo
             // 
             this.EdittxtCombo.FormattingEnabled = true;
+            this.EdittxtCombo.Items.AddRange(new object[] {
+            "Autoload",
+            "AwardsList",
+            "Badwords",
+            "CmdAutoload",
+            "Custom$s",
+            "Emotelist",
+            "Joker",
+            "Messages",
+            "PlayerAwards",
+            "Rules",
+            "Welcome"});
             this.EdittxtCombo.Location = new System.Drawing.Point(94, 13);
             this.EdittxtCombo.Name = "EdittxtCombo";
             this.EdittxtCombo.Size = new System.Drawing.Size(178, 21);
@@ -51,14 +63,15 @@
             this.LoadTxt.TabIndex = 1;
             this.LoadTxt.Text = "Load:";
             this.LoadTxt.UseVisualStyleBackColor = true;
+            this.LoadTxt.Click += new System.EventHandler(this.LoadTxt_Click);
             // 
-            // textBox1
+            // EditTextTxtBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 43);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(259, 244);
-            this.textBox1.TabIndex = 2;
+            this.EditTextTxtBox.Location = new System.Drawing.Point(13, 43);
+            this.EditTextTxtBox.Multiline = true;
+            this.EditTextTxtBox.Name = "EditTextTxtBox";
+            this.EditTextTxtBox.Size = new System.Drawing.Size(259, 244);
+            this.EditTextTxtBox.TabIndex = 2;
             // 
             // SaveEditTxtBt
             // 
@@ -68,6 +81,7 @@
             this.SaveEditTxtBt.TabIndex = 3;
             this.SaveEditTxtBt.Text = "Save";
             this.SaveEditTxtBt.UseVisualStyleBackColor = true;
+            this.SaveEditTxtBt.Click += new System.EventHandler(this.SaveEditTxtBt_Click);
             // 
             // DiscardEdittxtBt
             // 
@@ -77,6 +91,7 @@
             this.DiscardEdittxtBt.TabIndex = 4;
             this.DiscardEdittxtBt.Text = "Discard";
             this.DiscardEdittxtBt.UseVisualStyleBackColor = true;
+            this.DiscardEdittxtBt.Click += new System.EventHandler(this.DiscardEdittxtBt_Click);
             // 
             // EditText
             // 
@@ -85,13 +100,14 @@
             this.ClientSize = new System.Drawing.Size(284, 328);
             this.Controls.Add(this.DiscardEdittxtBt);
             this.Controls.Add(this.SaveEditTxtBt);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.EditTextTxtBox);
             this.Controls.Add(this.LoadTxt);
             this.Controls.Add(this.EdittxtCombo);
             this.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EditText";
-            this.Text = "EditText";
+            this.Text = "Edit Text";
+            this.Disposed += new System.EventHandler(this.EditTxt_Unload);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,7 +117,7 @@
 
         private System.Windows.Forms.ComboBox EdittxtCombo;
         private System.Windows.Forms.Button LoadTxt;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox EditTextTxtBox;
         private System.Windows.Forms.Button SaveEditTxtBt;
         private System.Windows.Forms.Button DiscardEdittxtBt;
     }

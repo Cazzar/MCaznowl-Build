@@ -32,7 +32,6 @@ namespace MCForge
     public sealed class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
-        public Group g = Group.findPerm(LevelPermission.Operator);
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
@@ -45,6 +44,7 @@ namespace MCForge
         public static string storedHelp = "";
 
         Socket socket;
+		System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
         System.Timers.Timer extraTimer = new System.Timers.Timer(22000);
@@ -58,7 +58,7 @@ namespace MCForge
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
         public bool disconnected = false;
-
+		public string time;
         public string name;
         public int warn = 0;
         public string realName;
@@ -183,9 +183,55 @@ namespace MCForge
 
         public Level level = Server.mainLevel;
         public bool Loading = true;     //True if player is loading a map.
-
+		
+		/// <summary>
+		/// OnBlockchange is called when a player places/deletes a block. You must return a bool for this method
+		/// returning true will tell the server to do nothing else afterwards, this is usefull for a cuboid like plugin
+		/// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
+		/// </summary>
+        public delegate bool BlockchangeEventHandler2(Player p, ushort x, ushort y, ushort z, byte type);
         public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
         public event BlockchangeEventHandler Blockchange = null;
+		/// <summary>
+		/// PlayerConnect is called when a player connects to the server.
+		/// </summary>
+		public delegate void OnPlayerConnect(Player p);
+		public static event OnPlayerConnect PlayerConnect = null;
+		/// <summary>
+		/// PlayerDisconnect is called when a player dissconnects
+		/// </summary>
+		public delegate void OnPlayerDisconnect(Player p, string reason);
+		public static event OnPlayerDisconnect PlayerDisconnect = null;
+		/// <summary>
+		/// PlayerCommand is called when a player does ANY command on the server
+		/// You must return a bool for this method
+		/// returning true will tell the server not to look for anymore blocks/commands, this is usefull if you dont want the server to say Command bla does not exist
+		/// returning false will tell the server to continue to look for another block/command, this is usefull if you didnt find the cmd you were looking for...
+		/// </summary>
+		public delegate bool OnPlayerCommand(string cmd, Player p, string message);
+		public static event OnPlayerCommand PlayerCommand = null;
+		/// <summary>
+		/// PlayerChat is called when a player says something in chat
+		/// You must return a bool for this method
+		/// returning true will tell the server not to send the message, this is usefull for clanchats or teamchat plugins
+		/// returning false will tell the server to send the message normally, this is usefull if you didnt need it
+		/// You should return false if you dont need to do anything with it
+		/// </summary>
+		public delegate bool OnPlayerChat(Player p, string message);
+		public static event OnPlayerChat PlayerChat = null;
+		/// <summary>
+		/// PlayerDeath is VERY usefull for game modes of all sorts
+		/// It is called when a player dies...simple
+		/// </summary>
+		public delegate void OnPlayerDeath(Player p, byte deathblock);
+		public static event OnPlayerDeath PlayerDeath = null;
+		public static event BlockchangeEventHandler2 PlayerBlockChange = null;
+		public event OnPlayerChat OnChat = null;
+		public event OnPlayerCommand OnCommand = null;
+		public event OnPlayerDeath OnDeath = null;
+		public void ClearPlayerCommand() { OnCommand = null; }
+		public void ClearPlayerChat() { OnChat = null; }
+		public void ClearPlayerDeath() { OnDeath = null; }
         public void ClearBlockchange() { Blockchange = null; }
         public bool HasBlockchange() { return (Blockchange == null); }
         public object blockchangeObject = null;
@@ -218,6 +264,7 @@ namespace MCForge
         public DateTime lastchatroomglobal = new DateTime();
 
         public bool loggedIn = false;
+
         private Player()
         {
             //Only necessary for a "flatcopy".
@@ -233,6 +280,10 @@ namespace MCForge
             return "active";
         }
 
+		//This is so that plugin devs can declare a player without needing a socket..
+		//They would still have to do p.Dispose()..
+		public Player(string playername) { name = playername; }
+		
         public Player(Socket s)
         {
             try
@@ -244,109 +295,140 @@ namespace MCForge
                 for (byte i = 0; i < 128; ++i) bindings[i] = i;
 
                 socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
-
-                loginTimer.Elapsed += delegate
+                timespent.Elapsed += delegate
                 {
                     if (!Loading)
                     {
-                        loginTimer.Stop();
-
-                        if (File.Exists("text/welcome.txt"))
+                        try
                         {
-                            try
+                            int Days = Convert.ToInt32(time.Split(' ')[0]);
+                            int Hours = Convert.ToInt32(time.Split(' ')[1]);
+                            int Minutes = Convert.ToInt32(time.Split(' ')[2]);
+                            int Seconds = Convert.ToInt32(time.Split(' ')[3]);
+                            Seconds++;
+                            if (Seconds >= 60)
                             {
-                                List<string> welcome = new List<string>();
-                                StreamReader wm = File.OpenText("text/welcome.txt");
-                                while (!wm.EndOfStream)
-                                    welcome.Add(wm.ReadLine());
-
-                                wm.Close();
-                                wm.Dispose();
-
-                                foreach (string w in welcome)
-                                    SendMessage(w);
+                                Minutes++;
+                                Seconds = 0;
                             }
-                            catch { }
+                            if (Minutes >= 60)
+                            {
+                                Hours++;
+                                Minutes = 0;
+                            }
+                            if (Hours >= 24)
+                            {
+                                Days++;
+                                Hours = 0;
+                            }
+                            time = "" + Days + " " + Hours + " " + Minutes + " " + Seconds;
+                        }
+                        catch { time = "0 0 0 1"; }
+                    };
+                    timespent.Start();
+                    loginTimer.Elapsed += delegate
+                    {
+                        if (!Loading)
+                        {
+                            loginTimer.Stop();
+
+                            if (File.Exists("text/welcome.txt"))
+                            {
+                                try
+                                {
+                                    List<string> welcome = new List<string>();
+                                    StreamReader wm = File.OpenText("text/welcome.txt");
+                                    while (!wm.EndOfStream)
+                                        welcome.Add(wm.ReadLine());
+
+                                    wm.Close();
+                                    wm.Dispose();
+
+                                    foreach (string w in welcome)
+                                        SendMessage(w);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                Server.s.Log("Could not find Welcome.txt. Using default.");
+                                File.WriteAllText("text/welcome.txt", "Welcome to my server!");
+                            }
+                            extraTimer.Start();
+                            loginTimer.Dispose();
+                        }
+                    }; loginTimer.Start();
+
+                    pingTimer.Elapsed += delegate { SendPing(); };
+                    pingTimer.Start();
+
+                    extraTimer.Elapsed += delegate
+                    {
+                        extraTimer.Stop();
+
+                        try
+                        {
+                            if (!Group.Find("Nobody").commands.Contains("inbox") && !Group.Find("Nobody").commands.Contains("send"))
+                            {
+                                DataTable Inbox = MySQL.fillData("SELECT * FROM `Inbox" + name + "`", true);
+
+                                SendMessage("&cYou have &f" + Inbox.Rows.Count + Server.DefaultColor + " &cmessages in /inbox");
+                                Inbox.Dispose();
+                            }
+                        }
+                        catch { }
+                        if (Server.updateTimer.Interval > 1000) SendMessage("Lowlag mode is currently &aON.");
+                        try
+                        {
+                            if (!Group.Find("Nobody").commands.Contains("pay") && !Group.Find("Nobody").commands.Contains("give") && !Group.Find("Nobody").commands.Contains("take")) SendMessage("You currently have &a" + money + Server.DefaultColor + " " + Server.moneys);
+                        }
+                        catch { }
+                        SendMessage("You have modified &a" + overallBlocks + Server.DefaultColor + " blocks!");
+                        if (players.Count == 1)
+                            SendMessage("There is currently &a" + players.Count + " player online.");
+                        else
+                            SendMessage("There are currently &a" + players.Count + " players online.");
+                        try
+                        {
+                            if (!Group.Find("Nobody").commands.Contains("award") && !Group.Find("Nobody").commands.Contains("awards") && !Group.Find("Nobody").commands.Contains("awardmod")) SendMessage("You have " + Awards.awardAmount(name) + " awards.");
+                        }
+                        catch { }
+                        try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
+                        catch { }
+                        extraTimer.Dispose();
+                    };
+
+                    afkTimer.Elapsed += delegate
+                    {
+                        if (name == "") return;
+
+                        if (Server.afkset.Contains(name))
+                        {
+                            afkCount = 0;
+                            /*if (Server.afkkick > 0 && group.Permission < LevelPermission.Operator)
+                                if (afkStart.AddMinutes(Server.afkkick) < DateTime.Now)
+                                    Kick("Auto-kick, AFK for " + Server.afkkick + " minutes");*/
+                            if ((oldpos[0] != pos[0] || oldpos[1] != pos[1] || oldpos[2] != pos[2]) && (oldrot[0] != rot[0] || oldrot[1] != rot[1]))
+                                Command.all.Find("afk").Use(this, "");
                         }
                         else
                         {
-                            Server.s.Log("Could not find Welcome.txt. Using default.");
-                            File.WriteAllText("text/welcome.txt", "Welcome to my server!");
+                            if (oldpos[0] == pos[0] && oldpos[1] == pos[1] && oldpos[2] == pos[2] && oldrot[0] == rot[0] && oldrot[1] == rot[1])
+                                afkCount++;
+                            else
+                                afkCount = 0;
+
+                            if (afkCount > Server.afkminutes * 30)
+                            {
+                                Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
+                                afkCount = 0;
+                            }
                         }
-                        extraTimer.Start();
-                        loginTimer.Dispose();
-                    }
-                }; loginTimer.Start();
+                    };
+                    if (Server.afkminutes > 0) afkTimer.Start();
 
-                pingTimer.Elapsed += delegate { SendPing(); };
-                pingTimer.Start();
-
-                extraTimer.Elapsed += delegate
-                {
-                    extraTimer.Stop();
-
-                    try
-                    {
-                        if (!Group.Find("Nobody").commands.Contains("inbox") && !Group.Find("Nobody").commands.Contains("send"))
-                        {
-                            DataTable Inbox = MySQL.fillData("SELECT * FROM `Inbox" + name + "`", true);
-
-                            SendMessage("&cYou have &f" + Inbox.Rows.Count + Server.DefaultColor + " &cmessages in /inbox");
-                            Inbox.Dispose();
-                        }
-                    }
-                    catch { }
-                    if (Server.updateTimer.Interval > 1000) SendMessage("Lowlag mode is currently &aON.");
-                    try
-                    {
-                        if (!Group.Find("Nobody").commands.Contains("pay") && !Group.Find("Nobody").commands.Contains("give") && !Group.Find("Nobody").commands.Contains("take")) SendMessage("You currently have &a" + money + Server.DefaultColor + " " + Server.moneys);
-                    }
-                    catch { }
-                    SendMessage("You have modified &a" + overallBlocks + Server.DefaultColor + " blocks!");
-                    if (players.Count == 1)
-                        SendMessage("There is currently &a" + players.Count + " player online.");
-                    else
-                        SendMessage("There are currently &a" + players.Count + " players online.");
-                    try
-                    {
-                        if (!Group.Find("Nobody").commands.Contains("award") && !Group.Find("Nobody").commands.Contains("awards") && !Group.Find("Nobody").commands.Contains("awardmod")) SendMessage("You have " + Awards.awardAmount(name) + " awards.");
-                    }
-                    catch { }
-                    try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
-                    catch { }
-                    extraTimer.Dispose();
+                    connections.Add(this);
                 };
-
-                afkTimer.Elapsed += delegate
-                {
-                    if (name == "") return;
-
-                    if (Server.afkset.Contains(name))
-                    {
-                        afkCount = 0;
-                        /*if (Server.afkkick > 0 && group.Permission < LevelPermission.Operator)
-                            if (afkStart.AddMinutes(Server.afkkick) < DateTime.Now)
-                                Kick("Auto-kick, AFK for " + Server.afkkick + " minutes");*/
-                        if ((oldpos[0] != pos[0] || oldpos[1] != pos[1] || oldpos[2] != pos[2]) && (oldrot[0] != rot[0] || oldrot[1] != rot[1]))
-                            Command.all.Find("afk").Use(this, "");
-                    }
-                    else
-                    {
-                        if (oldpos[0] == pos[0] && oldpos[1] == pos[1] && oldpos[2] == pos[2] && oldrot[0] == rot[0] && oldrot[1] == rot[1])
-                            afkCount++;
-                        else
-                            afkCount = 0;
-
-                        if (afkCount > Server.afkminutes * 30)
-                        {
-                            Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
-                            afkCount = 0;
-                        }
-                    }
-                };
-                if (Server.afkminutes > 0) afkTimer.Start();
-
-                connections.Add(this);
             }
             catch (Exception e) { Kick("Login failed!"); Server.ErrorLog(e); }
         }
@@ -361,6 +443,7 @@ namespace MCForge
                 ", Money=" + money +
                 ", totalBlocks=" + overallBlocks + " + " + loginBlocks +
                 ", totalKicked=" + totalKicked +
+			    ", TimeSpent=" + time + 
                 " WHERE Name='" + name + "'";
 
             MySQL.executeQuery(commandString);
@@ -644,7 +727,10 @@ namespace MCForge
 
                 Server.s.PlayerListUpdate();
 
-                IRCBot.Say(name + " joined the game.");
+                if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
+                {
+                    IRCBot.Say(name + " joined the game.");
+                }
 
                 //Test code to show when people come back with different accounts on the same IP
                 string temp = "Lately known as:";
@@ -661,9 +747,13 @@ namespace MCForge
                     }
                     if (found)
                     {
-                        GlobalMessageOps(temp);
+                        if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
+                        {
+                            GlobalMessageOps(temp);
+                            IRCBot.Say(temp, true);       //Tells people in op channel on IRC
+                        }
+            
                         Server.s.Log(temp);
-                        IRCBot.Say(temp, true);       //Tells people in op channel on IRC
                     }
                 }
             }
@@ -678,6 +768,7 @@ namespace MCForge
             if (playerDb.Rows.Count == 0)
             {
                 this.prefix = "";
+			    this.time = "0 0 0 1";
                 this.titlecolor = "";
                 this.color = group.color;
                 this.money = 0;
@@ -689,14 +780,15 @@ namespace MCForge
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
-                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked)" +
+                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
-                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ")");
+                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", " + time + ")");
 
             }
             else
             {
                 totalLogins = int.Parse(playerDb.Rows[0]["totalLogin"].ToString()) + 1;
+				time = playerDb.Rows[0]["TimeSpent"].ToString();
                 userID = int.Parse(playerDb.Rows[0]["ID"].ToString());
                 firstLogin = DateTime.Parse(playerDb.Rows[0]["firstLogin"].ToString());
                 timeLogged = DateTime.Now;
@@ -734,7 +826,8 @@ namespace MCForge
                 }
             }
             playerDb.Dispose();
-
+            if (PlayerConnect != null)
+                PlayerConnect(this);
             if (Server.devs.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
@@ -886,7 +979,7 @@ namespace MCForge
             lastClick[0] = x;
             lastClick[1] = y;
             lastClick[2] = z;
-
+			bool test2 = false;
             if (Blockchange != null)
             {
                 if (Blockchange.Method.ToString().IndexOf("AboutBlockchange") == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
@@ -896,8 +989,13 @@ namespace MCForge
                 }
 
                 Blockchange(this, x, y, z, type);
-                return;
+				return;
             }
+			if (PlayerBlockChange != null)
+			{
+				if (PlayerBlockChange(this, x, y, z, type))
+					return;
+			}
 
             if (group.Permission == LevelPermission.Banned) return;
             if (group.Permission == LevelPermission.Guest)
@@ -1240,7 +1338,6 @@ namespace MCForge
         {
             byte b = level.GetTile(x, (ushort)(y - 2), z);
             byte b1 = level.GetTile(x, y, z);
-
             if (oldBlock != (ushort)(x + y + z))
             {
                 if (Block.Convert(b) == Block.air)
@@ -1289,7 +1386,6 @@ namespace MCForge
 
             byte b = this.level.GetTile(x, y, z);
             byte b1 = this.level.GetTile(x, (ushort)((int)y - 1), z);
-
 
             if (Block.Mover(b) || Block.Mover(b1))
             {
@@ -1359,7 +1455,10 @@ namespace MCForge
             ushort x = (ushort)(pos[0] / 32);
             ushort y = (ushort)(pos[1] / 32);
             ushort z = (ushort)(pos[2] / 32);
-
+			if (OnDeath != null)
+				OnDeath(this, b);
+			if (PlayerDeath != null)
+				PlayerDeath(this, b);
             if (lastDeath.AddSeconds(2) < DateTime.Now)
             {
 
@@ -1415,7 +1514,7 @@ namespace MCForge
                         Command.all.Find("spawn").Use(this, "");
                         overallDeath++;
                     }
-
+					
                     if (Server.deathcount)
                         if (overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
                 }
@@ -1470,6 +1569,15 @@ namespace MCForge
 
                 //byte[] message = (byte[])m;
                 string text = enc.GetString(message, 1, 64).Trim();
+                // removing nulls (matters for the /womid messages)
+                text = text.Trim('\0');
+
+                // handles the /womid client message, which displays the WoM version
+                if (text.Truncate(6) == "/womid")
+                {
+                    Server.s.Log(name + " is using " + text.Substring(7));
+                    return;
+                }
 
                 if (storedMessage != "")
                 {
@@ -1684,7 +1792,14 @@ namespace MCForge
                     return;
                 }
                 Server.s.Log("<" + name + "> " + text);
-
+				bool test1 = false;
+				bool test2 = false;
+				if (OnChat != null)
+					test1 = OnChat(this, text);
+				if (PlayerChat != null)
+					test2 = PlayerChat(this, text);
+				if (test1 || test2)
+					return;
                 if (Server.worldChat)
                 {
                     GlobalChat(this, text);
@@ -1746,7 +1861,15 @@ namespace MCForge
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
                 string foundShortcut = Command.all.FindShort(cmd);
                 if (foundShortcut != "") cmd = foundShortcut;
-
+				
+				bool test1 = false;
+				bool test2 = false;
+				if (OnCommand != null)
+					test1 = OnCommand(cmd, this, message);
+				if (PlayerCommand != null)
+					test2 = PlayerCommand(cmd, this, message);
+				if (test1 || test2)
+					return;
                 try
                 {
                     int foundCb = int.Parse(cmd);
@@ -2624,9 +2747,11 @@ namespace MCForge
                         }
                         w.Flush();
                         w.Close();
-                    }
+						if (PlayerDisconnect != null)
+							PlayerDisconnect(this, kickString);
+					}
                     catch (Exception e) { Server.ErrorLog(e); }
-
+					
                     this.Dispose();
                 }
                 else
@@ -2869,19 +2994,6 @@ namespace MCForge
         }
 
 #region getters
-        public Player getCopy()
-        {
-            //Copies some player stats without needing to copy all of them. 
-            Player p = new Player();
-            p.level = this.level;
-            p.pos = this.pos;
-            p.g = this.g;
-            p.group = this.group;
-            p.name = this.name;
-            p.rot = this.rot;
-            p.title = this.title;
-            return p;
-        }
         public ushort[] footLocation
         {
             get

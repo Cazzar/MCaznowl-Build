@@ -27,10 +27,10 @@ using MySql.Data.Types;
 
 namespace MCForge
 {
-    static class MySQL
+    public static class MySQL
     {
 		
-        private static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.MySQLPooling;
+        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.MySQLPooling;
         public static void executeQuery(string queryString, bool createDB = false)
         {
 			int totalCount = 0;
@@ -77,7 +77,7 @@ namespace MCForge
 			int totalCount = 0;
             DataTable toReturn = new DataTable("toReturn");
             if (!Server.useMySQL)
-                return null;		
+                return toReturn;	
     retry:  try
             {
                 using (var conn = new MySqlConnection(connString))
@@ -110,3 +110,4 @@ namespace MCForge
         }
     }
 }
+

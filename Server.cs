@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -6,7 +7,7 @@
 	not use this file except in compliance with the Licenses. You may
 	obtain a copy of the Licenses at
 	
-	http://www.osedu.org/licenses/ECL-2.0
+	http://www.opensource.org/licenses/ecl2.php
 	http://www.gnu.org/licenses/gpl-3.0.html
 	
 	Unless required by applicable law or agreed to in writing,
@@ -39,8 +40,8 @@ namespace MCForge
     public class Server
     {
         public delegate void LogHandler(string message);
-		public delegate void OnServerError(Exception error);
-		public static event OnServerError ServerError = null;
+public delegate void OnServerError(Exception error);
+public static event OnServerError ServerError = null;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
@@ -70,8 +71,8 @@ namespace MCForge
         public static Socket listen;
         public static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
-        //static System.Timers.Timer heartbeatTimer = new System.Timers.Timer(60000);     //Every 45 seconds
-        static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5);   //Every 5 mins
+        //static System.Timers.Timer heartbeatTimer = new System.Timers.Timer(60000); //Every 45 seconds
+        static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5); //Every 5 mins
         public static System.Timers.Timer cloneTimer = new System.Timers.Timer(5000);
 
         //public static Thread physThread;
@@ -79,7 +80,11 @@ namespace MCForge
         //public static DateTime physResume = DateTime.Now;
         //public static System.Timers.Timer physTimer = new System.Timers.Timer(1000);
         // static Thread botsThread;
-
+        //Chatrooms
+        public static List<string> Chatrooms = new List<string>();
+        //Other
+        public static bool higherranktp = true;
+        public static bool agreetorulesonentry = false;
         //CTF STUFF
         public static List<CTFGame> CTFGames = new List<CTFGame>();
 
@@ -87,7 +92,8 @@ namespace MCForge
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
         public static PlayerList muted;
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "sebbiultimate", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "listings09", "hypereddie10", "shade2010", "uberfox", "erickilla", "lordpsycho"});
+
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14", "jack1312"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -138,9 +144,9 @@ namespace MCForge
         public static string name = "[MCForge] Default";
         public static string motd = "Welcome!";
         public static byte players = 12;
-		//for the limiting no. of guests:
-		public static byte maxGuests = 10;
-		
+//for the limiting no. of guests:
+public static byte maxGuests = 10;
+
         public static byte maps = 5;
         public static int port = 25565;
         public static bool pub = true;
@@ -221,8 +227,9 @@ namespace MCForge
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
+        public static LevelPermission adminchatperm = LevelPermission.Admin;
         public static bool logbeat = false;
-
+        public static bool adminsjoinsilent = false;
         public static bool mono = false;
 
         public static bool flipHead = false;
@@ -247,7 +254,59 @@ namespace MCForge
         {
             shuttingDown = false;
             Log("Starting Server");
-
+            {//dl restarter stuff
+                if (!File.Exists("Restarter.exe"))
+                {
+                    Log("Restarter.exe doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                        if (File.Exists("Restarter.exe"))
+                        {
+                            Log("Restarter.exe download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.exe failed, please try again later");
+                    }
+                }
+                if (!File.Exists("Restarter.pdb"))
+                {
+                    Log("Restarter.pdb doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                        if (File.Exists("Restarter.pdb"))
+                        {
+                            Log("Restarter.pdb download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Restarter.pdb failed, please try again later");
+                    }
+                }
+                if (!File.Exists("Meebey.SmartIRC4Net.dll"))
+                {
+                    Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
+                    try
+                    {
+                        WebClient WEB = new WebClient();
+                        WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+                        if (File.Exists("Meebey.SmartIRC4Net.dll"))
+                        {
+                            Log("Meebey.SmartIRC4Net.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading Meebey.SmartIRC4Net.dll failed, please try again later");
+                    }
+                }
+            }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
@@ -303,7 +362,7 @@ namespace MCForge
                     SW.Close();
                 }
             }
-            
+
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Plugin.Load();
@@ -328,8 +387,7 @@ namespace MCForge
             ProfanityFilter.Init();
 
             timeOnline = DateTime.Now;
-            if (useMySQL || !File.Exists("extra/database.db3"))
-            {
+            {//MYSQL stuff
                 try
                 {
                     MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
@@ -341,14 +399,8 @@ namespace MCForge
                     //process.Kill();
                     return;
                 }
-            }
-            if (useMySQL)
                 MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            else
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-            // Check if the color column exists.
-            if (useMySQL)
-            {
+                // Check if the color column exists.
                 DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
                 if (colorExists.Rows.Count == 0)
@@ -365,12 +417,12 @@ namespace MCForge
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
                 }
                 tcolorExists.Dispose();
-
                 DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
                 if (timespent.Rows.Count == 0)
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
             }
+
             if (levels != null)
                 foreach (Level l in levels) { l.Unload(); }
             ml.Queue(delegate
@@ -528,7 +580,7 @@ namespace MCForge
                 }
                 else
                 {
-                    s.Log("Could not create socket connection.  Shutting down.");
+                    s.Log("Could not create socket connection. Shutting down.");
                     return;
                 }
             });
@@ -562,21 +614,21 @@ namespace MCForge
             // END Heartbeat code
 
             /*
-            Thread processThread = new Thread(new ThreadStart(delegate
-            {
-                try
-                {
-                    PCCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    ProcessCounter = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName);
-                    PCCounter.BeginInit();
-                    ProcessCounter.BeginInit();
-                    PCCounter.NextValue();
-                    ProcessCounter.NextValue();
-                }
-                catch { }
-            }));
-            processThread.Start();
-            */
+Thread processThread = new Thread(new ThreadStart(delegate
+{
+try
+{
+PCCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+ProcessCounter = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName);
+PCCounter.BeginInit();
+ProcessCounter.BeginInit();
+PCCounter.NextValue();
+ProcessCounter.NextValue();
+}
+catch { }
+}));
+processThread.Start();
+*/
 
             ml.Queue(delegate
             {
@@ -603,17 +655,17 @@ namespace MCForge
                 }
 
 
-                //      string CheckName = "FROSTEDBUTTS";
+                // string CheckName = "FROSTEDBUTTS";
 
-                //       if (Server.name.IndexOf(CheckName.ToLower())!= -1){ Server.s.Log("FROSTEDBUTTS DETECTED");}
-                new AutoSaver(Server.backupInterval);     //2 and a half mins
+                // if (Server.name.IndexOf(CheckName.ToLower())!= -1){ Server.s.Log("FROSTEDBUTTS DETECTED");}
+                new AutoSaver(Server.backupInterval); //2 and a half mins
 
                 blockThread = new Thread(new ThreadStart(delegate
                 {
                     while (true)
                     {
                         Thread.Sleep(blockInterval * 1000);
-                        foreach (Level l in levels)
+                        levels.ForEach(delegate(Level l)
                         {
                             try
                             {
@@ -623,7 +675,7 @@ namespace MCForge
                             {
                                 Server.ErrorLog(e);
                             }
-                        }
+                        });
                     }
                 }));
                 blockThread.Start();
@@ -691,7 +743,7 @@ namespace MCForge
                 }));
 
                 locationChecker.Start();
-                
+
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");
@@ -726,21 +778,27 @@ namespace MCForge
                 // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
                 // -Descention
                 Player p = null;
+                bool begin = false;
                 try
                 {
                     p = new Player(listen.EndAccept(result));
                     listen.BeginAccept(new AsyncCallback(Accept), null);
+                    begin = true;
                 }
                 catch (SocketException e)
                 {
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
                 catch (Exception e)
                 {
                     ErrorLog(e);
                     if (p != null)
                         p.Disconnect();
+                    if (!begin)
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
             }
         }

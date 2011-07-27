@@ -25,12 +25,22 @@ namespace MCForge
 {
     class IRCBot
     {
+		/// <summary>
+		/// OnIRCChat is called when someone on the irc channel says something, the method OnChat(message, username, channel) will be called
+		/// </summary>
+		public delegate void OnIRCChat(string message, string username, string channel);
+		public static event OnIRCChat OnChat = null;
+		/// <summary>
+		/// OnIRCJoin is called when someone joins the IRC Channel, the method OnIRCJoin(username, channel) will be called
+		/// </summary>
+		public delegate void OnIRCJoin(string username, string channel);
+		public static event OnIRCJoin OnNickJoin = null;
         static IrcClient irc = new IrcClient();
-        static string server = Server.ircServer;
-        static string channel = Server.ircChannel;
-        static string opchannel = Server.ircOpChannel;
-        static string nick = Server.ircNick;
-        static Thread ircThread;
+        public static string server = Server.ircServer;
+        public static string channel = Server.ircChannel;
+        public static string opchannel = Server.ircOpChannel;
+        public static string nick = Server.ircNick;
+        public static Thread ircThread;
 
         static string[] names;
 
@@ -106,7 +116,9 @@ namespace MCForge
             {
                 if (allowedchars.IndexOf(ch) == -1)
                     temp = temp.Replace(ch.ToString(), "*");
-            }
+			}
+			if (OnChat != null)
+				OnChat(temp, e.Data.Nick, e.Data.Channel);
 
             if (e.Data.Channel == opchannel)
             {
@@ -131,6 +143,8 @@ namespace MCForge
         void OnJoin(object sender, JoinEventArgs e)
         {
             Server.s.Log(e.Data.Nick + " has joined channel " + e.Data.Channel);
+			if (OnNickJoin != null)
+				OnNickJoin(e.Data.Nick, e.Data.Channel);
             if (e.Data.Channel == opchannel)
             {
                 Player.GlobalChat(null, Server.IRCColour + e.Data.Nick + Server.DefaultColor + " has joined the operator channel", false);
