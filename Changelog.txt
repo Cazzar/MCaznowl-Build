@@ -1,6 +1,8 @@
 v5.0.0.0
 - Added a Maps tab to the GUI
 - Added a Players tab to the GUI
+- Added a Edit Text window to the GUI
+- Removed the Custom Login and Logout windows (Now editable from the Players tab)
 - Added Plugin API
 - Now Supports WOM texturing
 

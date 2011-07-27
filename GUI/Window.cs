@@ -807,7 +807,7 @@ namespace MCForge.Gui
             {
                 if (LogsTxtBox.Text == "")
                 {
-                    DatePicker1_ValueChanged(sender, e);
+                    dateTimePicker1.Value = DateTime.Now;
                 }
             }
             catch { }

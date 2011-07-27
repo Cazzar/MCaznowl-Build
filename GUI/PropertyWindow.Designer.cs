@@ -166,10 +166,9 @@ namespace MCForge.Gui
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.EditTxtsBt = new System.Windows.Forms.Button();
             this.label37 = new System.Windows.Forms.Label();
             this.chkAgreeToRules = new System.Windows.Forms.CheckBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.numPlayers = new System.Windows.Forms.NumericUpDown();
             this.numGuests = new System.Windows.Forms.NumericUpDown();
             this.label35 = new System.Windows.Forms.Label();
@@ -633,7 +632,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+            this.chkIRC.Size = new System.Drawing.Size(57, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -974,7 +973,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(24, 272);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
             this.chkAdminsJoinSilent.TabIndex = 38;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -1443,11 +1442,10 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.EditTxtsBt);
             this.tabPage1.Controls.Add(this.cmbAdminChat);
             this.tabPage1.Controls.Add(this.label37);
             this.tabPage1.Controls.Add(this.chkAgreeToRules);
-            this.tabPage1.Controls.Add(this.button3);
-            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.numPlayers);
             this.tabPage1.Controls.Add(this.numGuests);
             this.tabPage1.Controls.Add(this.label35);
@@ -1492,6 +1490,16 @@ namespace MCForge.Gui
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // EditTxtsBt
+            // 
+            this.EditTxtsBt.Location = new System.Drawing.Point(7, 247);
+            this.EditTxtsBt.Name = "EditTxtsBt";
+            this.EditTxtsBt.Size = new System.Drawing.Size(131, 23);
+            this.EditTxtsBt.TabIndex = 35;
+            this.EditTxtsBt.Text = "Edit Texts";
+            this.EditTxtsBt.UseVisualStyleBackColor = true;
+            this.EditTxtsBt.Click += new System.EventHandler(this.EditTxtsBt_Click);
+            // 
             // label37
             // 
             this.label37.AutoSize = true;
@@ -1511,26 +1519,6 @@ namespace MCForge.Gui
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
             this.chkAgreeToRules.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(183, 246);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(145, 23);
-            this.button3.TabIndex = 31;
-            this.button3.Text = "Custom Logout Messages";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(11, 246);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(145, 23);
-            this.button2.TabIndex = 30;
-            this.button2.Text = "Custom Login Messages";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // numPlayers
             // 
@@ -1911,8 +1899,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.NumericUpDown numPlayers;
         private System.Windows.Forms.NumericUpDown numGuests;
         private System.Windows.Forms.Label label35;
@@ -1954,5 +1940,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.ComboBox cmbAdminChat;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.CheckBox chkAdminsJoinSilent;
+        private System.Windows.Forms.Button EditTxtsBt;
     }
 }

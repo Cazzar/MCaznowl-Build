@@ -171,19 +171,13 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="GUI\EditText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EditText.Designer.cs">
+      <DependentUpon>EditText.cs</DependentUpon>
+    </Compile>
     <Compile Include="MySQLTransactionHelper.cs" />
-    <Compile Include="GUI\CustomLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\CustomLogin.Designer.cs">
-      <DependentUpon>CustomLogin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\CustomLogout.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\CustomLogout.Designer.cs">
-      <DependentUpon>CustomLogout.cs</DependentUpon>
-    </Compile>
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
@@ -385,11 +379,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
-    <EmbeddedResource Include="GUI\CustomLogin.resx">
-      <DependentUpon>CustomLogin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\CustomLogout.resx">
-      <DependentUpon>CustomLogout.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\EditText.resx">
+      <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>

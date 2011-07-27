@@ -156,6 +156,8 @@ namespace MCForge.Gui
         public static bool prevLoaded = false;
         Form PropertyForm;
         Form UpdateForm;
+        Form EditTxtForm;
+
         public void SaveBlocks()
         {
             Block.SaveBlocks(storedBlocks);
@@ -1133,16 +1135,10 @@ MessageBox.Show("Text Box Cleared!!");
             numGuests.Maximum = numPlayers.Value;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void EditTxtsBt_Click(object sender, EventArgs e)
         {
-            PropertyForm = new GUI.CustomLogin();
-            PropertyForm.Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            PropertyForm = new GUI.CustomLogout();
-            PropertyForm.Show();
+            EditTxtForm = new EditText();
+            EditTxtForm.Show();
         }
     }
 
