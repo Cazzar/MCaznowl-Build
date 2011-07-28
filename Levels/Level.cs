@@ -65,7 +65,7 @@ namespace MCForge
         public ushort spawnz;
         public byte rotx;
         public byte roty;
-        public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo);
+        public delegate bool OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo);
         public event OnPhysicsUpdate PhysicsUpdate = null;
         public delegate void OnLevelUnload(Level l);
         public event OnLevelUnload LevelUnload = null;
@@ -994,8 +994,10 @@ namespace MCForge
                             Player foundPlayer = null; int foundNum = 75, currentNum, newNum, oldNum;
                             string foundInfo = C.extraInfo;
                             if (PhysicsUpdate != null)
-                                PhysicsUpdate(x, y, z, C.time, C.extraInfo);
-
+                            {
+                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo))
+                                    continue;
+                            } 
                         newPhysic: if (foundInfo != "")
                             {
                                 int currentLoop = 0;
