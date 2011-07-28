@@ -993,7 +993,7 @@ namespace MCForge
                             int storedRand = 0;
                             Player foundPlayer = null; int foundNum = 75, currentNum, newNum, oldNum;
                             string foundInfo = C.extraInfo;
-                            if (PhysicUpdate != null)
+                            if (PhysicsUpdate != null)
                                 PhysicsUpdate(x, y, z, C.time, C.extraInfo);
 
                         newPhysic: if (foundInfo != "")
