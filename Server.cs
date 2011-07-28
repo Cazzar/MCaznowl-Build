@@ -218,7 +218,7 @@ public static byte maxGuests = 10;
         public static string defaultRank = "guest";
 
         public static bool dollardollardollar = true;
-
+        public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
         public static string cheapMessageGiven = " is now being cheap and being immortal";
         public static bool customBan = false;
