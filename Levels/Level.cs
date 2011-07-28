@@ -65,7 +65,7 @@ namespace MCForge
         public ushort spawnz;
         public byte rotx;
         public byte roty;
-        public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, int b, byte time, string extraInfo);
+        public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo);
         public event OnPhysicsUpdate PhysicsUpdate = null;
         public delegate void OnLevelUnload(Level l);
         public event OnLevelUnload LevelUnload = null;
@@ -247,7 +247,8 @@ namespace MCForge
         {
             if (Server.mainLevel == this) return false;
             if (this.name.Contains("&cMuseum ")) return false;
-
+            if (LevelUnload != null)
+                LevelUnload(this);
             Player.players.ForEach(delegate(Player pl)
             {
                 if (pl.level == this) Command.all.Find("goto").Use(pl, Server.mainLevel.name);
@@ -568,7 +569,8 @@ namespace MCForge
         public void Save(Boolean Override = false)
         {
             string path = "levels/" + name + ".lvl";
-
+            if (LevelSave != null)
+                LevelSave(this);
             try
             {
                 if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
@@ -991,6 +993,8 @@ namespace MCForge
                             int storedRand = 0;
                             Player foundPlayer = null; int foundNum = 75, currentNum, newNum, oldNum;
                             string foundInfo = C.extraInfo;
+                            if (PhysicUpdate != null)
+                                PhysicsUpdate(x, y, z, C.time, C.extraInfo);
 
                         newPhysic: if (foundInfo != "")
                             {
