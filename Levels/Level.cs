@@ -65,7 +65,14 @@ namespace MCForge
         public ushort spawnz;
         public byte rotx;
         public byte roty;
-
+        public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, int b, byte time, string extraInfo);
+        public event OnPhysicsUpdate PhysicsUpdate = null;
+        public delegate void OnLevelUnload(Level l);
+        public event OnLevelUnload LevelUnload = null;
+        public delegate void OnLevelSave(Level l);
+        public event OnLevelSave LevelSave = null;
+        public delegate void OnLevelLoad(Level l);
+        public static event OnLevelLoad LevelLoad = null;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
 
