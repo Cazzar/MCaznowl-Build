@@ -324,43 +324,43 @@ namespace MCForge
                             time = "" + Days + " " + Hours + " " + Minutes + " " + Seconds;
                         }
                         catch { time = "0 0 0 1"; }
-                    };
-                    timespent.Start();
-                    loginTimer.Elapsed += delegate
+                    }
+                }; 
+                timespent.Start();
+                loginTimer.Elapsed += delegate
+                {
+                    if (!Loading)
                     {
-                        if (!Loading)
+                        loginTimer.Stop();
+                        if (File.Exists("text/welcome.txt"))
                         {
-                            loginTimer.Stop();
+                           try
+                           {
+                                List<string> welcome = new List<string>();
+                                StreamReader wm = File.OpenText("text/welcome.txt");
+                                while (!wm.EndOfStream)
+                                    welcome.Add(wm.ReadLine());
 
-                            if (File.Exists("text/welcome.txt"))
-                            {
-                                try
-                                {
-                                    List<string> welcome = new List<string>();
-                                    StreamReader wm = File.OpenText("text/welcome.txt");
-                                    while (!wm.EndOfStream)
-                                        welcome.Add(wm.ReadLine());
+                                wm.Close();
+                                wm.Dispose();
 
-                                    wm.Close();
-                                    wm.Dispose();
-
-                                    foreach (string w in welcome)
-                                        SendMessage(w);
-                                }
-                                catch { }
+                                foreach (string w in welcome)
+                                    SendMessage(w);
                             }
-                            else
-                            {
-                                Server.s.Log("Could not find Welcome.txt. Using default.");
-                                File.WriteAllText("text/welcome.txt", "Welcome to my server!");
-                            }
-                            extraTimer.Start();
-                            loginTimer.Dispose();
+                            catch { }
                         }
-                    }; loginTimer.Start();
+                        else
+                        {
+                            Server.s.Log("Could not find Welcome.txt. Using default.");
+                            File.WriteAllText("text/welcome.txt", "Welcome to my server!");
+                        }
+                        extraTimer.Start();
+                        loginTimer.Dispose();
+                    }
+                }; loginTimer.Start();
 
-                    pingTimer.Elapsed += delegate { SendPing(); };
-                    pingTimer.Start();
+                pingTimer.Elapsed += delegate { SendPing(); };
+                pingTimer.Start();
 
                     extraTimer.Elapsed += delegate
                     {
@@ -428,7 +428,6 @@ namespace MCForge
                     if (Server.afkminutes > 0) afkTimer.Start();
 
                     connections.Add(this);
-                };
             }
             catch (Exception e) { Kick("Login failed!"); Server.ErrorLog(e); }
         }
