@@ -14,6 +14,8 @@ namespace MCForge
         public abstract void Load(bool startup);
         public abstract void Unload(bool shutdown);
         public abstract string name { get; }
+        public abstract string website { get; }
+        public abstract string MCForge_Version { get; }
         public abstract int build { get; }
         public abstract string welcome { get; }
 	public abstract string creator { get; }
@@ -42,21 +44,32 @@ namespace MCForge
         }
         public static void Load(string pluginname, bool startup)
         {
-			String creator = "";
+	    String creator = "";
             try
             {
-                Assembly asm = Assembly.LoadFrom(pluginname);
-                Type type = asm.GetTypes()[0];
-                object instance = Activator.CreateInstance(type);
+                object instance = Activator.CreateInstance(Assembly.LoadFrom(pluginname).GetTypes()[0]);
+                if (((Plugin)instance).MCForge_Version != Server.Version && ((Plugin)instance).MCForge_Version != "")
+                {
+                    Server.s.Log("This plugin (" + ((Plugin)instance).name + ") isnt compatible with this version of MCForge!");
+                    Thread.Sleep(1000);
+                    if (Server.unsafe_plugin)
+                    {
+                        Server.s.Log("Will attempt to load!");
+                        goto here;
+                    }
+                    else
+                        return;
+                }
+                here:
                 Plugin.all.Add((Plugin)instance);
-				creator = ((Plugin)instance).creator;
-				if (((Plugin)instance).LoadAtStartup)
-				{
-                	((Plugin)instance).Load(startup);
-                	Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugin)instance).build);
-				}
-				else
-					Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
+		creator = ((Plugin)instance).creator;
+	        if (((Plugin)instance).LoadAtStartup)
+		{
+                    ((Plugin)instance).Load(startup);
+                    Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugin)instance).build);
+		}
+		else
+		    Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
                 Server.s.Log(((Plugin)instance).welcome);
             }
             catch (FileNotFoundException e)
