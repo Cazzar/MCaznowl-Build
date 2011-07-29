@@ -263,6 +263,9 @@ namespace MCForge
         public List<string> spyChatRooms = new List<string>();
         public DateTime lastchatroomglobal = new DateTime();
 
+        //Waypoints
+        public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+
         public bool loggedIn = false;
 
         private Player()
@@ -3051,6 +3054,101 @@ namespace MCForge
             }
 
             return false;
+        }
+
+        public class Waypoint
+        {
+            public class WP
+            {
+                public ushort x;
+                public ushort y;
+                public ushort z;
+                public byte rotx;
+                public byte roty;
+                public string name;
+                public Level level;
+            }
+            public static WP Find(string name, Player p)
+            {
+                WP wpfound = null;
+                bool found = false;
+                foreach (WP wp in p.Waypoints)
+                {
+                    if (wp.name.ToLower() == name.ToLower())
+                    {
+                        wpfound = wp;
+                        found = true;
+                    }
+                }
+                if (found) { return wpfound; }
+                else { return null; }
+            }
+            public static void Goto(string waypoint, Player p)
+            {
+                if (Exists(waypoint, p))
+                {
+                    WP wp = Find(waypoint, p);
+                    if (wp != null)
+                    {
+                        if (p.level != wp.level)
+                        {
+                            Command.all.Find("goto").Use(p, wp.level.name);
+                            while (p.Loading) { Thread.Sleep(250); }
+                        }
+                        unchecked { p.SendPos((byte)-1, wp.x, wp.y, wp.z, wp.rotx, wp.roty); }
+                    }
+                }
+            }
+
+            public static void Create(string waypoint, Player p)
+            {
+                Player.Waypoint.WP wp = new Player.Waypoint.WP();
+                {
+                    wp.x = p.pos[0];
+                    wp.y = p.pos[1];
+                    wp.z = p.pos[2];
+                    wp.rotx = p.rot[0];
+                    wp.roty = p.rot[1];
+                    wp.name = waypoint;
+                    wp.level = p.level;
+                }
+                p.Waypoints.Add(wp);
+            }
+
+            public static void Update(string waypoint, Player p)
+            {
+                WP wp = Find(waypoint, p);
+                p.Waypoints.Remove(wp);
+                {
+                    wp.x = p.pos[0];
+                    wp.y = p.pos[1];
+                    wp.z = p.pos[2];
+                    wp.rotx = p.rot[0];
+                    wp.roty = p.rot[1];
+                    wp.name = waypoint;
+                    wp.level = p.level;
+                }
+                p.Waypoints.Add(wp);
+            }
+
+            public static void Remove(string waypoint, Player p)
+            {
+                WP wp = Find(waypoint, p);
+                p.Waypoints.Remove(wp);
+            }
+
+            public static bool Exists(string waypoint, Player p)
+            {
+                bool exists = false;
+                foreach (WP wp in p.Waypoints)
+                {
+                    if (wp.name.ToLower() == waypoint.ToLower())
+                    {
+                        exists = true;
+                    }
+                }
+                return exists;
+            }
         }
     }
 }

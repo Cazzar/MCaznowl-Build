@@ -5,6 +5,7 @@ v5.0.0.0
 - Removed the Custom Login and Logout windows (Now editable from the Players tab)
 - Added Plugin API
 - Now Supports WOM texturing
+- Added /Waypoint
 
 v4.9.0.0
 - Fixed a bug in /pyramid

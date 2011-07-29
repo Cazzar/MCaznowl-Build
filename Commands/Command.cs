@@ -239,6 +239,7 @@ namespace MCForge
             all.Add(new CmdVoice());
             all.Add(new CmdVoteKick());
             all.Add(new CmdWarn());
+            all.Add(new CmdWaypoint());
             all.Add(new CmdWhisper());
             if (Server.useWhitelist) { all.Add(new CmdWhitelist()); }
             all.Add(new CmdWhoip());

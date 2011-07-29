@@ -995,8 +995,8 @@ namespace MCForge
                             string foundInfo = C.extraInfo;
                             if (PhysicsUpdate != null)
                             {
-                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo))
-                                    continue;
+                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo)) { }
+                                    //continue;
                             } 
                         newPhysic: if (foundInfo != "")
                             {
