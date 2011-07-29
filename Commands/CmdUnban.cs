@@ -56,8 +56,11 @@ namespace MCForge
                     Player.SendMessage(p, "Player is not banned.");
                     return;
                 }
-                Player.GlobalMessage(message + " &8(banned)" + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!");
-                Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
+                if (Group.findPlayerGroup(message) == Group.findPerm(LevelPermission.Banned))
+                {
+                    Player.GlobalMessage(message + " &8(banned)" + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!");
+                    Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
+                }
             }
             else
             {
@@ -75,10 +78,13 @@ namespace MCForge
                     Player.SendMessage(p, "Player is not banned.");
                     return;
                 }
-                Player.GlobalChat(who, who.color + who.prefix + who.name + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!", false);
-                who.group = Group.standard; who.color = who.group.color; Player.GlobalDie(who, false);
-                Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
-                Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
+                if (Group.findPlayerGroup(message) == Group.findPerm(LevelPermission.Banned))
+                {
+                    Player.GlobalChat(who, who.color + who.prefix + who.name + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!", false);
+                    who.group = Group.standard; who.color = who.group.color; Player.GlobalDie(who, false);
+                    Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
+                    Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
+                }
             }
 
             Group.findPerm(LevelPermission.Banned).playerList.Save(); 

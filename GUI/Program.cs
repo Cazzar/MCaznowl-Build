@@ -148,7 +148,7 @@ namespace MCForge_.Gui
             }
             catch (Exception e) { Server.ErrorLog(e); return; }
         }
-        /*
+        
         public static void handleComm(string s)
         {
             string sentCmd = "", sentMsg = "";
@@ -189,11 +189,15 @@ namespace MCForge_.Gui
 
         talk: handleComm("say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
             handleComm(Console.ReadLine());
-        }*/
+        }
+       
+        /*
         public static void handleComm(string s)
         {
+           
             string sentCmd = "", sentMsg = "";
-
+            List<string> cmdtest = new List<string>();
+            cmdtest = Command.all.commandNames();
             //blank lines are considered accidental
             if (s == "") 
             {
@@ -202,31 +206,35 @@ namespace MCForge_.Gui
             }
 
             //commands all start with a slash
-            if (s.IndexOf('/') == 0)
-            {
-                //remove the preceding slash
-                s = s.Remove(0, 1);
-
-                //continue parsing
-                if (s.IndexOf(' ') != -1)
+           
+                if (s.IndexOf('/') == 0)
                 {
-                    sentCmd = s.Split(' ')[0];
-                    sentMsg = s.Substring(s.IndexOf(' ') + 1);
-                }
-                else if (s != "")
-                {
-                    sentCmd = s;
-                }
-            }
-            //anything else is treated as chat
-            else
-            {
-                sentCmd = "say";
-                sentMsg = Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s;
-            }
+                    //remove the preceding slash
+                    s = s.Remove(0, 1);
 
+                    //continue parsing
+                    if (s.IndexOf(' ') != -1)
+                    {
+                        sentCmd = s.Split(' ')[0];
+                        sentMsg = s.Substring(s.IndexOf(' ') + 1);
+                    }
+                    else if (s != "")
+                    {
+                        sentCmd = s;
+                    }
+                }
+                //anything else is treated as chat
+                else
+                {
+                    sentCmd = "say";
+                    sentMsg = Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s;
+                }
+           
+               
+               
             try
             {
+                
                 Command cmd = Command.all.Find(sentCmd);
                 if (cmd != null)
                 {
@@ -235,6 +243,8 @@ namespace MCForge_.Gui
                     handleComm(Console.ReadLine());
                     return;
                 }
+            
+
             }
             catch (Exception e)
             {
@@ -243,8 +253,11 @@ namespace MCForge_.Gui
                 handleComm(Console.ReadLine());
                 return;
             }
-        } 
-
+            //handleComm(Console.ReadLine());
+        
+      
+        } */
+        
 
         public static bool CurrentUpdate = false;
         static bool msgOpen = false;
