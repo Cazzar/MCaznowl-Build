@@ -28,7 +28,9 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.Net.Mail;
 using MCForge;
+using System.Net;
 
 namespace MCForge.Gui
 {
@@ -42,6 +44,7 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
+        public static bool fileexists = false;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -102,6 +105,8 @@ namespace MCForge.Gui
             s.OnCommand += newCommand;
             s.OnError += newError;
             s.OnSystem += newSystem;
+            s.OnAdmin += WriteAdmin;
+            s.OnOp += WriteOp;
 
             foreach (TabPage tP in tabControl1.TabPages)
                 tabControl1.SelectTab(tP);
@@ -219,6 +224,36 @@ namespace MCForge.Gui
             {
                 //txtLog.AppendText(Environment.NewLine + s);
                 txtLog.AppendTextAndScroll(s);
+            }
+        }
+
+        public void WriteOp(string s)
+        {
+            if (Server.shuttingDown) return;
+            if (this.InvokeRequired)
+            {
+                LogDelegate d = new LogDelegate(WriteOp);
+                this.Invoke(d, new object[] { s });
+            }
+            else
+            {
+                //txtLog.AppendText(Environment.NewLine + s);
+                txtOpLog.AppendTextAndScroll(s);
+            }
+        }
+
+        public void WriteAdmin(string s)
+        {
+            if (Server.shuttingDown) return;
+            if (this.InvokeRequired)
+            {
+                LogDelegate d = new LogDelegate(WriteAdmin);
+                this.Invoke(d, new object[] { s });
+            }
+            else
+            {
+                //txtLog.AppendText(Environment.NewLine + s);
+                txtAdminLog.AppendTextAndScroll(s);
             }
         }
 
@@ -398,7 +433,7 @@ namespace MCForge.Gui
                 {
                     newtext = text.Remove(0, 1).Trim();
                     Player.GlobalMessageOps(newtext);
-                    Server.s.Log("(OPs): Console: " + newtext);
+                    Server.s.OpLog("(OPs): Console: " + newtext);
                     IRCBot.Say("Console: " + newtext, true);
                     //   WriteLine("(OPs):<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
@@ -407,7 +442,7 @@ namespace MCForge.Gui
                 {
                     newtext = text.Remove(0, 1).Trim();
                     Player.GlobalMessageAdmins(newtext);
-                    Server.s.Log("(Admins): Console: " + newtext);
+                    Server.s.AdminLog("(Admins): Console: " + newtext);
                     IRCBot.Say("Console: " + newtext, true);
                     txtInput.Clear();
                 }
@@ -459,6 +494,12 @@ namespace MCForge.Gui
                 }
                 catch (Exception ex)
                 {
+                    if (!Command.all.Contains(sentCmd))
+                    {
+                        Server.s.Log("No such command!");
+                        Server.s.Log("CONSOLE: Failed command.");
+                        return;
+                    }
                     Server.ErrorLog(ex);
                     newCommand("CONSOLE: Failed command.");
                 }
@@ -803,7 +844,7 @@ namespace MCForge.Gui
             catch { }
             try { UpdatePlyersListBox(); }
             catch { }
-            try 
+            try
             {
                 if (LogsTxtBox.Text == "")
                 {
@@ -1064,7 +1105,7 @@ namespace MCForge.Gui
             {
                 Command.all.Find("load").Use(null, UnloadedList.SelectedItem.ToString());
             }
-            catch{ }
+            catch { }
         }
 
         private void dgvMapsTab_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1384,7 +1425,7 @@ namespace MCForge.Gui
                 catch
                 {
                     PlayersTextBox.AppendTextAndScroll("Something went wrong!!");
-                    return; 
+                    return;
                 }
             }
         }
@@ -1849,6 +1890,44 @@ namespace MCForge.Gui
             }
         }
         #endregion
+
+        private void txtOpInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
         #endregion
+
+        private void txtOpInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtOpInput.Text == null || txtOpInput.Text.Trim() == "") { return; }
+                string optext = txtOpInput.Text.Trim();
+                string opnewtext = optext;
+                Player.GlobalMessageOps("To Ops &f-" + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]&f- " + opnewtext);
+                Server.s.OpLog("(OPs): Console: " + opnewtext);
+                txtOpInput.Clear();
+            }
+
+        }
+
+        private void txtAdminInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtAdminInput.Text == null || txtAdminInput.Text.Trim() == "") { return; }
+                string admintext = txtAdminInput.Text.Trim();
+                string adminnewtext = admintext;
+                Player.GlobalMessageAdmins("To Admins &f-" + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]&f- " + adminnewtext);
+                Server.s.AdminLog("(Admins): Console: " + adminnewtext);
+                txtAdminInput.Clear();
+            }
+        }
+
+
+
+
+
+
     }
 }
