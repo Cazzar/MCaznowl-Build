@@ -300,7 +300,7 @@ namespace MCForge
                 socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
                 timespent.Elapsed += delegate
                 {
-                    if (!Loading || !Server.afkset.Contains(name))
+                    if (!Loading && !Server.afkset.Contains(name))
                     {
                         try
                         {
