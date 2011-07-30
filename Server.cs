@@ -51,6 +51,8 @@ public static event OnServerError ServerError = null;
         public event LogHandler OnSystem;
         public event LogHandler OnCommand;
         public event LogHandler OnError;
+        public event LogHandler OnOp;
+        public event LogHandler OnAdmin;
         public event HeartBeatHandler HeartBeatFail;
         public event MessageEventHandler OnURLChange;
         public event PlayerListHandler OnPlayerListChange;
@@ -868,6 +870,40 @@ processThread.Start();
                 if (!systemMsg)
                 {
                     OnLog(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                }
+                else
+                {
+                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                }
+            }
+
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+        }
+
+        public void OpLog(string message, bool systemMsg = false)
+        {
+            if (OnOp != null)
+            {
+                if (!systemMsg)
+                {
+                    OnOp(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                }
+                else
+                {
+                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                }
+            }
+
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+        }
+
+        public void AdminLog(string message, bool systemMsg = false)
+        {
+            if (OnAdmin != null)
+            {
+                if (!systemMsg)
+                {
+                    OnAdmin(DateTime.Now.ToString("(HH:mm:ss) ") + message);
                 }
                 else
                 {
