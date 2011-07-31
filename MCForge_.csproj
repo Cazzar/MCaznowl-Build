@@ -95,6 +95,7 @@
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
+    <Compile Include="Commands\CmdDraw.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
     <Compile Include="Commands\CmdExplode.cs" />
@@ -380,6 +381,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\SCOGenerator.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
