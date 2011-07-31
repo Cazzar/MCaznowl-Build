@@ -94,6 +94,7 @@ public static event OnServerError ServerError = null;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
         public static PlayerList muted;
+        public static PlayerList ignored;
 
         public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14", "jack1312"});
 
@@ -167,6 +168,7 @@ public static byte maxGuests = 10;
         public static bool reportBack = true;
 
         public static bool irc = false;
+        public static bool safemode = false;
         public static int ircPort = 6667;
         public static string ircNick = "MCZall_Minecraft_Bot";
         public static string ircServer = "irc.esper.net";
@@ -200,6 +202,7 @@ public static byte maxGuests = 10;
         public static bool profanityFilter = false;
         public static bool notifyOnJoinLeave = false;
         public static bool repeatMessage = false;
+        public static bool globalignoreops = false;
 
         public static bool checkUpdates = true;
 
@@ -233,6 +236,7 @@ public static byte maxGuests = 10;
         public static bool logbeat = false;
         public static bool adminsjoinsilent = false;
         public static bool mono = false;
+        public static string server_owner = "Notch";
 
         public static bool flipHead = false;
 
