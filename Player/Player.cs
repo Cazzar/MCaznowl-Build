@@ -163,8 +163,10 @@ namespace MCForge
         public bool showPortals = false;
         public bool showMBs = false;
 
-        public string prevMsg = "";
+		public string prevMsg = "";
 
+		//Block Change variable holding
+		public int[] BcVar;
 
         //Movement
         public ushort oldBlock = 0;

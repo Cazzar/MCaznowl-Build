@@ -267,7 +267,8 @@ namespace MCForge
             all.Add(new CmdSCinema());
             all.Add(new CmdGifToCin());
 
-
+			//Ported from StormCom
+			all.Add(new CmdDraw());
 
             core.commands = new List<Command>(all.commands);
 
