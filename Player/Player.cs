@@ -35,6 +35,9 @@ namespace MCForge
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
         public static List<string> emoteList = new List<string>();
+        public List<string> listignored = new List<string>();
+        public List<string> mapgroups = new List<string>();
+        public static List<string> globalignores = new List<string>();
         public static int totalMySQLFailed = 0;
         public static byte number { get { return (byte)players.Count; } }
         static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
@@ -86,6 +89,7 @@ namespace MCForge
         public bool onWhitelist = false;
         public bool whisper = false;
         public string whisperTo = "";
+        public bool ignoreglobal = false;
 
         public string storedMessage = "";
 
@@ -163,10 +167,11 @@ namespace MCForge
         public bool showPortals = false;
         public bool showMBs = false;
 
-		public string prevMsg = "";
+            public string prevMsg = "";
 
-		//Block Change variable holding
-		public int[] BcVar;
+            //Block Change variable holding
+            public int[] BcVar;
+
 
         //Movement
         public ushort oldBlock = 0;
@@ -302,7 +307,7 @@ namespace MCForge
                 socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
                 timespent.Elapsed += delegate
                 {
-                    if (!Loading && !Server.afkset.Contains(name))
+                    if (!Loading)
                     {
                         try
                         {
@@ -637,6 +642,46 @@ namespace MCForge
                     }
                 }
 
+                if (File.Exists("ranks/ignore/" + this.name + ".txt"))
+                {
+                    try
+                    {
+                        string[] checklines = File.ReadAllLines("ranks/ignore/" + this.name + ".txt");
+                        foreach (string checkline in checklines)
+                        {
+                            this.listignored.Add(checkline);
+                        }
+                        File.Delete("ranks/ignore/" + this.name + ".txt");
+                    }
+                    catch
+                    {
+                        Server.s.Log("Failed to load ignore list for: " + this.name);
+                    }
+                }
+
+                if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
+                {
+                    try
+                    {
+                        string[] searchxmls = File.ReadAllLines("ranks/ignore/GlobalIgnore.xml");
+                        foreach (string searchxml in searchxmls)
+                        {
+                            globalignores.Add(searchxml);
+                        }
+                        foreach (string ignorer in globalignores)
+                        {
+                            Player foundignore = Player.Find(ignorer);
+                            foundignore.ignoreglobal = true;
+                        }
+                        File.Delete("ranks/ignore/GlobalIgnore.xml");  
+                    }
+                    catch
+                    {
+                        Server.s.Log("Failed to load global ignore list!");
+                    }
+                }
+
+
                 if (Server.bannedIP.Contains(ip))
                 {
                     if (Server.useWhitelist)
@@ -844,6 +889,18 @@ namespace MCForge
                 }
                 SetPrefix();
             }
+            if (Server.server_owner.ToLower().Contains(this.name.ToLower()))
+            {
+                if (color == Group.standard.color)
+                {
+                    color = "&c";
+                }
+                if (prefix == "")
+                {
+                    title = "(sun)wner";
+                }
+                SetPrefix();
+            }
 
             try
             {
@@ -899,7 +956,7 @@ namespace MCForge
             }
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
-                GlobalChat(null, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 IRCBot.Say(this.name + " has joined the server.");
             }
             if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
@@ -1706,7 +1763,7 @@ namespace MCForge
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
-                    Server.s.Log("(OPs): " + name + ": " + newtext);
+                    Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
@@ -1718,7 +1775,7 @@ namespace MCForge
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
-                    Server.s.Log("(Admins): " + name + ": " + newtext);
+                    Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
@@ -1980,6 +2037,35 @@ namespace MCForge
         {
             Player p = Find(to);
             if (p == this) { SendMessage("Trying to talk to yourself, huh?"); return; }
+            if (p.hidden) { if (this.hidden == false) { Player.SendMessage(p, "Could not find player."); } }
+            if (p.ignoreglobal == true)
+            {
+                if (Server.globalignoreops == false)
+                {
+                    if (this.group.Permission >= Server.opchatperm)
+                    {
+                        if (p.group.Permission < this.group.Permission)
+                        {
+                            Server.s.Log(name + " @" + p.name + ": " + message);
+                            SendChat(this, Server.DefaultColor + "[<] " + p.color + p.prefix + p.name + ": &f" + message);
+                            SendChat(p, "&9[>] " + this.color + this.prefix + this.name + ": &f" + message);
+                            return;
+                        }
+                    }
+                }
+                Server.s.Log(name + " @" + p.name + ": " + message);
+                SendChat(this, Server.DefaultColor + "[<] " + p.color + p.prefix + p.name + ": &f" + message);
+                return;
+            }
+            foreach (string ignored2 in p.listignored)
+            {
+                if (ignored2 == this.name)
+                {
+                    Server.s.Log(name + " @" + p.name + ": " + message);
+                    SendChat(this, Server.DefaultColor + "[<] " + p.color + p.prefix + p.name + ": &f" + message);
+                    return;
+                }
+            }
             if (p != null && !p.hidden)
             {
                 Server.s.Log(name + " @" + p.name + ": " + message);
@@ -2426,25 +2512,144 @@ namespace MCForge
             if (MessageHasBadColorCodes(from, message))
                 return;
 
-            if (showname) { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
-            
+            if (showname) 
+            { message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; 
+            }
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.level.worldChat && p.Chatroom == null)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, message);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, message);
+                            return;
+                        }
+                    }
+                }
+            });
+
         }
         public static void GlobalChatLevel(Player from, string message, bool showname)
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
 
-            if (showname) { message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level == from.level && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
+            if (showname) 
+            { 
+                message = "<Level>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; 
+            }
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.level == from.level && p.Chatroom == null)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, Server.DefaultColor + message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, Server.DefaultColor + message);
+                            return;
+                        }
+                    }
+                }
+            });
         }
         public static void GlobalChatRoom(Player from, string message, bool showname)
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
             string oldmessage = message;
-            if (showname) { message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.Chatroom != null) Player.SendMessage(p, Server.DefaultColor + message); });
+            if (showname) 
+            { 
+                message = "<GlobalChatRoom> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; 
+            }
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.Chatroom != null)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, Server.DefaultColor + message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, Server.DefaultColor + message);
+                            return;
+                        }
+                    }
+                }
+            });
             Server.s.Log(oldmessage + "<GlobalChatRoom>" + from.prefix + from.name + message);
         }
         public static void ChatRoom(Player from, string message, bool showname, string chatroom)
@@ -2453,9 +2658,86 @@ namespace MCForge
                 return;
             string oldmessage = message;
             string messageforspy = ("<ChatRoomSPY: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message);
-            if (showname) { message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.Chatroom == chatroom) Player.SendMessage(p, Server.DefaultColor + message); });
-            players.ForEach(delegate(Player p) { if (p.spyChatRooms.Contains(chatroom)  && p.Chatroom != chatroom) Player.SendMessage(p, Server.DefaultColor + messageforspy); });
+            if (showname) 
+            { 
+                message = "<ChatRoom: " + chatroom + "> " + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; 
+            }
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.Chatroom == chatroom)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, Server.DefaultColor + message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, Server.DefaultColor + message);
+                            return;
+                        }
+                    }
+                }
+            });
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.spyChatRooms.Contains(chatroom) && p.Chatroom != chatroom)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, Server.DefaultColor + message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + messageforspy);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, Server.DefaultColor + messageforspy);
+                            return;
+                        }
+                    }
+                }
+            });
             Server.s.Log(oldmessage + "<ChatRoom" + chatroom + ">" + from.prefix + from.name + message);
         }
 
@@ -2496,13 +2778,59 @@ namespace MCForge
         }
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
-            if (showname) { message = "<World>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; }
-            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, Server.DefaultColor + message); });
+            if (showname) 
+            { 
+                message = "<World>" + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message; 
+            }
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.level.worldChat && p.Chatroom == null)
+                {
+                    if (p.ignoreglobal == false)
+                    {
+                        if (from != null)
+                        {
+                            if (!p.listignored.Contains(from.name))
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                                return;
+                            }
+                            return;
+                        }
+                        Player.SendMessage(p, Server.DefaultColor + message);
+                        return;
+                    }
+                    if (Server.globalignoreops == false)
+                    {
+                        if (from.group.Permission >= Server.opchatperm)
+                        {
+                            if (p.group.Permission < from.group.Permission)
+                            {
+                                Player.SendMessage(p, Server.DefaultColor + message);
+                            }
+                        }
+                    }
+                    if (from != null)
+                    {
+                        if (from == p)
+                        {
+                            Player.SendMessage(from, Server.DefaultColor + message);
+                            return;
+                        }
+                    }
+                }
+            });
         }
         public static void GlobalMessage(string message)
         {
             message = message.Replace("%", "&");
-            players.ForEach(delegate(Player p) { if (p.level.worldChat && p.Chatroom == null) Player.SendMessage(p, message); });
+            players.ForEach(delegate(Player p) 
+            {
+                if (p.level.worldChat && p.Chatroom == null)
+                {
+                    Player.SendMessage(p, message);
+                }
+            });
         }
         public static void GlobalMessageLevel(Level l, string message)
         {
@@ -2516,10 +2844,11 @@ namespace MCForge
                 {
                     if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
-                        Player.SendMessage(p, message);
+                            Player.SendMessage(p, message);
+                        
                     }
                 });
-                
+
             }
             catch { Server.s.Log("Error occured with Op Chat"); }
         }
@@ -2642,6 +2971,28 @@ namespace MCForge
                 disconnected = true;
                 pingTimer.Stop();
                 pingTimer.Dispose();
+                if (File.Exists("ranks/ignore/" + this.name + ".txt"))
+                {
+                    try
+                    {
+                        File.WriteAllLines("ranks/ignore/" + this.name + ".txt", this.listignored.ToArray());
+                    }
+                    catch
+                    {
+                        Server.s.Log("Failed to save ignored list for player: " + this.name);
+                    }
+                }
+                if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
+                {
+                    try
+                    {
+                        File.WriteAllLines("ranks/ignore/GlobalIgnore.xml", globalignores.ToArray());
+                    }
+                    catch
+                    {
+                        Server.s.Log("failed to save global ignore list!");
+                    }
+                }
                 afkTimer.Stop();
                 afkTimer.Dispose();
                 afkCount = 0;
