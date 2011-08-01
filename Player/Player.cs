@@ -452,8 +452,8 @@ namespace MCForge
                 ", Money=" + money +
                 ", totalBlocks=" + overallBlocks + " + " + loginBlocks +
                 ", totalKicked=" + totalKicked +
-			    ", TimeSpent=" + time + 
-                " WHERE Name='" + name + "'";
+			    ", TimeSpent='" + time + 
+                "' WHERE Name='" + name + "'";
 
             MySQL.executeQuery(commandString);
 
