@@ -40,14 +40,22 @@ namespace MCForge
             {
                 Player who = Player.Find(message);
                 if (who == null) { p.whisperTo = ""; p.whisper = false; Player.SendMessage(p, "Could not find player."); return; }
+                if (who.hidden)
+                {
+                    if (p.hidden == false)
+                    {
+                        Player.SendMessage(p, "Could not find player.");
+                        return;
+                    }
+                }
 
                 p.whisper = true;
                 p.whisperTo = who.name;
                 Player.SendMessage(p, "Auto-whisper enabled.  All messages will now be sent to " + who.name + ".");
             }
 
-
         }
+
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/whisper <name> - Makes all messages act like whispers");
