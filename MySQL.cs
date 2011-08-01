@@ -57,7 +57,7 @@ namespace MCForge
                     totalCount++;
                     if (totalCount > 10)
                     {
-                        File.WriteAllText("MySQL_error.log", DateTime.Now + " " + queryString);
+                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
                         Server.ErrorLog(e);
                     }
                     else
@@ -98,7 +98,7 @@ namespace MCForge
                 {
                     if (!skipError)
                     {
-                        File.WriteAllText("MySQL_error.log", DateTime.Now + " " + queryString);
+                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
                         Server.ErrorLog(e);
                     }
                 }
