@@ -1920,6 +1920,7 @@ namespace MCForge
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
+              
                 string foundShortcut = Command.all.FindShort(cmd);
                 if (foundShortcut != "") cmd = foundShortcut;
 				
@@ -2023,6 +2024,7 @@ namespace MCForge
                         case "mapload": cmd = "load"; break;
                         case "colour": cmd = "color"; break;
                         case "materials": cmd = "blocks"; break;
+                        case "explode": cmd = "kill explode"; break;
 
                         default: retry = false; break;  //Unknown command, then
                     }
