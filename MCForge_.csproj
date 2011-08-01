@@ -106,6 +106,7 @@
     <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdHigh5.cs" />
+    <Compile Include="Commands\CmdIgnore.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
     <Compile Include="Commands\CmdInterval.cs" />
     <Compile Include="Commands\CmdKickAll.cs" />
@@ -137,7 +138,6 @@
     <Compile Include="Commands\CmdCmdLoad.cs" />
     <Compile Include="Commands\CmdCompile.cs" />
     <Compile Include="Commands\CmdCmdCreate.cs" />
-    <Compile Include="Commands\CmdCmdIgnore.cs" />
     <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdDrop.cs" />
     <Compile Include="Commands\CmdGun.cs" />
