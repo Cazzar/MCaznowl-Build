@@ -113,6 +113,7 @@ namespace MCForge
             all.Add(new CmdHighlight());
             all.Add(new CmdHollow());
             all.Add(new CmdHost());
+            all.Add(new CmdIgnore());
             all.Add(new CmdImpersonate());
             all.Add(new CmdImport());
             all.Add(new CmdImageprint());
