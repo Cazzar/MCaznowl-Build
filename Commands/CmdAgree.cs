@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Written By Jack1312
 
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
@@ -53,11 +53,14 @@ namespace MCForge
                 return;
             }
             var agreed = File.ReadAllText("ranks/agreed.txt");
-            var checklogs = File.ReadAllText("logs/" + DateTime.Now.ToString("yyyy") + "-" + DateTime.Now.ToString("MM") + "-" + DateTime.Now.ToString("dd") + ".txt");
-            if (!checklogs.Contains(p.name.ToLower() + " used /rules"))
+            if (File.Exists("logs/" + DateTime.Now.ToString("yyyy") + "-" + DateTime.Now.ToString("MM") + "-" + DateTime.Now.ToString("dd") + ".txt"))
             {
-                Player.SendMessage(p, "&9You must read /rules before agreeing!");
-                return;
+                var checklogs = File.ReadAllText("logs/" + DateTime.Now.ToString("yyyy") + "-" + DateTime.Now.ToString("MM") + "-" + DateTime.Now.ToString("dd") + ".txt");
+                if (!checklogs.Contains(p.name.ToLower() + " used /rules"))
+                {
+                    Player.SendMessage(p, "&9You must read /rules before agreeing!");
+                    return;
+                }
             }
             if (agreed.Contains(p.name.ToLower()))
             {
