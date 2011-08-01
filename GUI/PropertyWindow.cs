@@ -55,6 +55,14 @@ namespace MCForge.Gui
             cmbDefaultColour.Items.AddRange(colors);
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
+            if (Server.irc == false)
+            {
+                grpIRC.BackColor = Color.LightGray;
+            }
+            if (Server.irc == true)
+            {
+                grpIRC.BackColor = Color.White;
+            }
 
             string opchatperm = "";
             string adminchatperm = "";
@@ -90,6 +98,8 @@ namespace MCForge.Gui
                 Server.s.Log("Failed to load commands and blocks!");
             }
         }
+
+        public static bool EditTextOpen = false;
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
@@ -444,6 +454,14 @@ namespace MCForge.Gui
                             case "hackrank-kick-time":
                                 hackrank_kick_time.Text = value;
                                 break;
+                            case "server-owner":
+                                txtServerOwner.Text = value;
+                                break;
+                            case "global-ignore-ops":
+                                chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                                
+
                         }
                     }
                 }
@@ -502,6 +520,7 @@ namespace MCForge.Gui
                     w.WriteLine("# agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
                     w.WriteLine("# adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
                     w.WriteLine("# admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
+                    w.WriteLine("# server-owner\t=\tThe minecraft name, of the owner of the server.");
                     w.WriteLine();
                     w.WriteLine("# Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("# SQLPort\t=\tPort number to be used for MySQL. Unless you manually changed the port, leave this alone. Default 3306.");
@@ -510,6 +529,7 @@ namespace MCForge.Gui
                     w.WriteLine("# DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
                     w.WriteLine();
                     w.WriteLine("# defaultColor\t=\tThe color code of the default messages (Default = &e)");
+                    w.WriteLine("# ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
                     w.WriteLine();
                     w.WriteLine();
                     w.WriteLine("# Server options");
@@ -565,6 +585,7 @@ namespace MCForge.Gui
                     w.WriteLine("agree-to-rules-on-entry = " + chkAgreeToRules.Checked.ToString().ToLower());
                     w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
                     w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
+                    w.WriteLine("ignore-ops = " + chkIgnoreGlobal.Checked.ToString().ToLower());
                     w.WriteLine();
                     w.WriteLine("# backup options");
                     w.WriteLine("backup-time = " + txtBackup.Text);
@@ -595,6 +616,7 @@ namespace MCForge.Gui
                     w.WriteLine("custom-shutdown = " + chkShutdown.Checked.ToString().ToLower());
                     w.WriteLine("custom-shutdown-message = " + txtShutdown.Text);
                     w.WriteLine("allow-tp-to-higher-ranks = " + chkTpToHigherRanks.Checked.ToString().ToLower());
+                    w.WriteLine("server-owner = " + txtServerOwner.Text);
                     w.WriteLine();
                     w.WriteLine("cheapmessage = " + chkCheap.Checked.ToString().ToLower());
                     w.WriteLine("cheap-message-given = " + txtCheap.Text);
@@ -694,6 +716,17 @@ namespace MCForge.Gui
         private void chkGC_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+        private void chkIRC_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkIRC.Checked.ToString().ToLower() == "false")
+            {
+                grpIRC.BackColor = Color.LightGray;
+            }
+            if (chkIRC.Checked.ToString().ToLower() == "true")
+            {
+                grpIRC.BackColor = Color.White;
+            }
         }
 
         private void btnBackup_Click(object sender, EventArgs e)
@@ -1135,11 +1168,19 @@ MessageBox.Show("Text Box Cleared!!");
             numGuests.Maximum = numPlayers.Value;
         }
 
-        private void EditTxtsBt_Click(object sender, EventArgs e)
+        private void editTxtsBt_Click_1(object sender, EventArgs e)
         {
-            EditTxtForm = new EditText();
-            EditTxtForm.Show();
+            if (EditTextOpen == true)
+            {
+                return;
+            }
+            PropertyForm = new EditText();
+            PropertyForm.Show();
         }
+
+
+       
+
     }
 
 }
