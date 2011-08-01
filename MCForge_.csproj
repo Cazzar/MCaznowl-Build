@@ -137,6 +137,7 @@
     <Compile Include="Commands\CmdCmdLoad.cs" />
     <Compile Include="Commands\CmdCompile.cs" />
     <Compile Include="Commands\CmdCmdCreate.cs" />
+    <Compile Include="Commands\CmdCmdIgnore.cs" />
     <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdDrop.cs" />
     <Compile Include="Commands\CmdGun.cs" />
