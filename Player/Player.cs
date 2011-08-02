@@ -2025,8 +2025,7 @@ namespace MCForge
                         case "mapload": cmd = "load"; break;
                         case "colour": cmd = "color"; break;
                         case "materials": cmd = "blocks"; break;
-                        case "explode": cmd = "kill explode"; break;
-
+                       
                         default: retry = false; break;  //Unknown command, then
                     }
 
