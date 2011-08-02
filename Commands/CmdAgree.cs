@@ -73,9 +73,9 @@ namespace MCForge
             if (File.Exists(playerspath))
             {
                 File.AppendAllText(playerspath, p.name.ToLower());
-
-
             }
+        
+
         }
 
         public override void Help(Player p)
