@@ -1920,8 +1920,8 @@ namespace MCForge
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
-                if (cmd.ToLower() == "pony") { GlobalChat(this, this.color + this.name + Server.DefaultColor + " just so happens to be a proud brony! Everyone give " + this.name + Server.DefaultColor + " a brohoof!"); return; }
-                if (cmd.ToLower() == "rainbowdashiscoolerthanyou") { GlobalChat(this, "&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30&4% &5C&6O&7O&8L&9L&aE&bR&c!"); return; }
+                if (cmd.ToLower() == "pony") { GlobalMessage(this.color + this.name + Server.DefaultColor + " just so happens to be a proud brony! Everyone give " + this.name + Server.DefaultColor + " a brohoof!"); return; }
+                if (cmd.ToLower() == "rainbowdashiscoolerthanyou") { GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30&4% &5C&6O&7O&8L&9L&aE&bR&c!"); return; }
                 string foundShortcut = Command.all.FindShort(cmd);
                 if (foundShortcut != "") cmd = foundShortcut;
 				
