@@ -96,7 +96,7 @@ public static event OnServerError ServerError = null;
         public static PlayerList muted;
         public static PlayerList ignored;
 
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "herocane", "wouto1997", "crusaderv", "fredlllll", "jakenator14", "jack1312", "soccer101nic" , "headdetect" , "merlin33069"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "uberfox", "erickilla", "the_legacy", "crusaderv", "fredlllll", "jakenator14", "jack1312", "soccer101nic" , "headdetect" , "merlin33069"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
