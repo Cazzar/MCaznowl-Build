@@ -2090,27 +2090,38 @@ namespace MCForge
                 return;
             byte[] buffer = new byte[send.Length + 1];
             buffer[0] = (byte)id;
-
-            Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
+            for (int i = 0; i < send.Length; i++)
+            {
+                buffer[i + 1] = send[i];
+            }
+            //Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
 
             int tries = 0;
         retry: try
             {
             
-                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
-          /*      if (buffer[0] != 1)
+                //socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                socket.Send(buffer);
+                buffer = null;
+            /*      if (buffer[0] != 1)
                 {
                     Server.s.Log("Buffer ID: " + buffer[0]);
                     Server.s.Log("BUFFER LENGTH: " + buffer.Length);
                     Server.s.Log(TxStr);
                 }*/
             }
+            /*
             catch (SocketException)
             {
                 tries++;
                 if (tries > 2)
                     Disconnect();
                 else goto retry;
+            }*/
+            catch (SocketException)
+            {
+                buffer = null;
+                Disconnect();
             }
         }
 
