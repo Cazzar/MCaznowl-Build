@@ -123,64 +123,67 @@ namespace MCForge
                 if (!File.Exists("bots/" + foundPath))
                 {
                     Player.SendMessage(p, "Created new bot AI: &b" + foundPath);
-                    SW = new StreamWriter(File.Create("bots/" + foundPath));
-                    SW.WriteLine("#Version 2");
+					using (SW = File.CreateText("bots/" + foundPath))
+					{
+						SW.WriteLine("#Version 2");
+					}
                 }
                 else if (allLines[0] != "#Version 2")
                 {
                     Player.SendMessage(p, "File found is out-of-date. Overwriting");
-                    SW = new StreamWriter(File.Create("bots/" + foundPath));
-                    SW.WriteLine("#Version 2");
+					File.Delete("bots/" + foundPath);
+					using (SW = File.CreateText("bots/" + foundPath))
+					{
+						SW.WriteLine("#Version 2");
+					}
                 }
                 else
                 {
                     Player.SendMessage(p, "Appended to bot AI: &b" + foundPath);
-                    SW = new StreamWriter("bots/" + foundPath, true);
                 }
             }
             catch { Player.SendMessage(p, "An error occurred when accessing the files. You may need to delete it."); return; }
 
-            try
-            {
-                switch (additional.ToLower())
-                {
-                    case "":
-                    case "walk":
-                        SW.WriteLine("walk " + p.pos[0] + " " + p.pos[1] + " " + p.pos[2] + " " + p.rot[0] + " " + p.rot[1]);
-                        break;
-                    case "teleport":
-                    case "tp":
-                        SW.WriteLine("teleport " + p.pos[0] + " " + p.pos[1] + " " + p.pos[2] + " " + p.rot[0] + " " + p.rot[1]);
-                        break;
-                    case "wait":
-                        SW.WriteLine("wait " + int.Parse(extra)); break;
-                    case "nod":
-                        SW.WriteLine("nod " + int.Parse(extra) + " " + int.Parse(more)); break;
-                    case "speed":
-                        SW.WriteLine("speed " + int.Parse(extra)); break;
-                    case "remove":
-                        SW.WriteLine("remove"); break;
-                    case "reset":
-                        SW.WriteLine("reset"); break;
-                    case "spin":
-                        SW.WriteLine("spin " + int.Parse(extra) + " " + int.Parse(more)); break;
-                    case "reverse":
-                        for (int i = allLines.Length - 1; i > 0; i--) if (allLines[i][0] != '#' && allLines[i] != "") SW.WriteLine(allLines[i]);
-                        break;
-                    case "linkscript":
-                        if (extra != "10") SW.WriteLine("linkscript " + extra); else Player.SendMessage(p, "Linkscript requires a script as a parameter");
-                        break;
-                    case "jump":
-                        SW.WriteLine("jump"); break;
-                    default:
-                        Player.SendMessage(p, "Could not find \"" + additional + "\""); break;
-                }
-
-                SW.Flush();
-                SW.Close();
-                SW.Dispose();
-            }
-            catch { Player.SendMessage(p, "Invalid parameter"); SW.Close(); }
+			try
+			{
+				using (SW = File.CreateText("bots/" + foundPath))
+				{
+					switch (additional.ToLower())
+					{
+						case "":
+						case "walk":
+							SW.WriteLine("walk " + p.pos[0] + " " + p.pos[1] + " " + p.pos[2] + " " + p.rot[0] + " " + p.rot[1]);
+							break;
+						case "teleport":
+						case "tp":
+							SW.WriteLine("teleport " + p.pos[0] + " " + p.pos[1] + " " + p.pos[2] + " " + p.rot[0] + " " + p.rot[1]);
+							break;
+						case "wait":
+							SW.WriteLine("wait " + int.Parse(extra)); break;
+						case "nod":
+							SW.WriteLine("nod " + int.Parse(extra) + " " + int.Parse(more)); break;
+						case "speed":
+							SW.WriteLine("speed " + int.Parse(extra)); break;
+						case "remove":
+							SW.WriteLine("remove"); break;
+						case "reset":
+							SW.WriteLine("reset"); break;
+						case "spin":
+							SW.WriteLine("spin " + int.Parse(extra) + " " + int.Parse(more)); break;
+						case "reverse":
+							for (int i = allLines.Length - 1; i > 0; i--) if (allLines[i][0] != '#' && allLines[i] != "") SW.WriteLine(allLines[i]);
+							break;
+						case "linkscript":
+							if (extra != "10") SW.WriteLine("linkscript " + extra); else Player.SendMessage(p, "Linkscript requires a script as a parameter");
+							break;
+						case "jump":
+							SW.WriteLine("jump"); break;
+						default:
+							Player.SendMessage(p, "Could not find \"" + additional + "\""); break;
+					}
+				}
+			}
+			catch { Player.SendMessage(p, "Invalid parameter"); }
         }
     }
 }

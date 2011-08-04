@@ -580,28 +580,27 @@ namespace MCForge
         {
             try
             {
-                StreamWriter w = new StreamWriter(File.Create("properties/block.properties"));
-                w.WriteLine("#Version 2");
-                w.WriteLine("#   This file dictates what levels may use what blocks");
-                w.WriteLine("#   If someone has royally screwed up the ranks, just delete this file and let the server restart");
-                w.WriteLine("#   Allowed ranks: " + Group.concatList(false, false, true));
-                w.WriteLine("#   Disallow and allow can be left empty, just make sure there's 2 spaces between the colons");
-                w.WriteLine("#   This works entirely on permission values, not names. Do not enter a rank name. Use it's permission value");
-                w.WriteLine("#   BlockName : LowestRank : Disallow : Allow");
-                w.WriteLine("#   lava : 60 : 80,67 : 40,41,55");
-                w.WriteLine("");
+				using (StreamWriter w = File.CreateText("properties/block.properties"))
+				{
+					w.WriteLine("#Version 2");
+					w.WriteLine("#   This file dictates what levels may use what blocks");
+					w.WriteLine("#   If someone has royally screwed up the ranks, just delete this file and let the server restart");
+					w.WriteLine("#   Allowed ranks: " + Group.concatList(false, false, true));
+					w.WriteLine("#   Disallow and allow can be left empty, just make sure there's 2 spaces between the colons");
+					w.WriteLine("#   This works entirely on permission values, not names. Do not enter a rank name. Use it's permission value");
+					w.WriteLine("#   BlockName : LowestRank : Disallow : Allow");
+					w.WriteLine("#   lava : 60 : 80,67 : 40,41,55");
+					w.WriteLine("");
 
-                foreach (Blocks bs in givenList)
-                {
-                    if(bs.IncludeInBlockProperties())                    
-                    {
-                        string line = Block.Name(bs.type) + " : " + (int)bs.lowestRank + " : " + GrpCommands.getInts(bs.disallow) + " : " + GrpCommands.getInts(bs.allow);
-                        w.WriteLine(line);
-                    }
-                }
-                w.Flush();
-                w.Close();
-                w.Dispose();
+					foreach (Blocks bs in givenList)
+					{
+						if (bs.IncludeInBlockProperties())
+						{
+							string line = Block.Name(bs.type) + " : " + (int)bs.lowestRank + " : " + GrpCommands.getInts(bs.disallow) + " : " + GrpCommands.getInts(bs.allow);
+							w.WriteLine(line);
+						}
+					}
+				}
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
