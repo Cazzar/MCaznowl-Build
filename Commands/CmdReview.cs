@@ -34,9 +34,30 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            Player.SendMessage(p, "You requested that operators see your building. They should be coming soon.");
-            Player.GlobalMessageOps(p.color + p.name + "-" + Server.DefaultColor + " requests a review of their building");
-
+            bool isopson = false;
+            try
+            {
+                foreach (Player pl in Player.players)
+                {
+                    if (pl.group.Permission >= Server.opchatperm)
+                    {
+                        isopson = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                isopson = true;
+            }
+            if (isopson == true)
+            {
+                Player.SendMessage(p, "You requested that operators see your building. They should be coming soon.");
+                Player.GlobalMessageOps(p.color + p.name + "-" + Server.DefaultColor + " requests a review of their building");
+            }
+            else
+            {
+                Player.SendMessage(p, "There are no operators on to review your build. Please wait for one to come on or come back later.");
+            }
         }
         public override void Help(Player p)
         {
