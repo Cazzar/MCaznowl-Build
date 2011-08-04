@@ -39,16 +39,16 @@ namespace MCForge
         {
             if (!File.Exists("text/awardsList.txt"))
             {
-                StreamWriter SW = new StreamWriter(File.Create("text/awardsList.txt"));
-                SW.WriteLine("#This is a full list of awards. The server will load these and they can be awarded as you please");
-                SW.WriteLine("#Format is:");
-                SW.WriteLine("# awardName : Description of award goes after the colon");
-                SW.WriteLine();
-                SW.WriteLine("Gotta start somewhere : Built your first house");
-                SW.WriteLine("Climbing the ladder : Earned a rank advancement");
-                SW.WriteLine("Do you live here? : Joined the server a huge bunch of times");
-                SW.Flush();
-                SW.Close();
+				using (StreamWriter SW = File.CreateText("text/awardsList.txt"))
+				{
+					SW.WriteLine("#This is a full list of awards. The server will load these and they can be awarded as you please");
+					SW.WriteLine("#Format is:");
+					SW.WriteLine("# awardName : Description of award goes after the colon");
+					SW.WriteLine();
+					SW.WriteLine("Gotta start somewhere : Built your first house");
+					SW.WriteLine("Climbing the ladder : Earned a rank advancement");
+					SW.WriteLine("Do you live here? : Joined the server a huge bunch of times");
+				}
             }
 
             allAwards = new List<awardData>();
@@ -92,21 +92,20 @@ namespace MCForge
 
         public static void Save()
         {
-            StreamWriter SW = new StreamWriter(File.Create("text/awardsList.txt"));
-            SW.WriteLine("#This is a full list of awards. The server will load these and they can be awarded as you please");
-            SW.WriteLine("#Format is:");
-            SW.WriteLine("# awardName : Description of award goes after the colon");
-            SW.WriteLine();
-            foreach (awardData aD in allAwards)
-                SW.WriteLine(camelCase(aD.awardName) + " : " + aD.description);
-            SW.Flush();
-            SW.Close();
-
-            SW = new StreamWriter(File.Create("text/playerAwards.txt"));
+			using (StreamWriter SW = File.CreateText("text/awardsList.txt"))
+			{
+				SW.WriteLine("#This is a full list of awards. The server will load these and they can be awarded as you please");
+				SW.WriteLine("#Format is:");
+				SW.WriteLine("# awardName : Description of award goes after the colon");
+				SW.WriteLine();
+				foreach (awardData aD in allAwards)
+					SW.WriteLine(camelCase(aD.awardName) + " : " + aD.description);
+			}
+            using (StreamWriter SW = File.CreateText("text/playerAwards.txt"))
+			{
             foreach (playerAwards pA in playersAwards)
                 SW.WriteLine(pA.playerName.ToLower() + " : " + string.Join(",", pA.awards.ToArray()));
-            SW.Flush();
-            SW.Close();
+			}
         }
 
         public static bool giveAward(string playerName, string awardName)
