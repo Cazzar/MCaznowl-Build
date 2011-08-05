@@ -268,9 +268,11 @@ namespace MCForge
                 {
                     try
                     {
-                        WebClient WEB = new WebClient();
-                        WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
-                        Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
+						using (WebClient WEB = new WebClient())
+						{
+							WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
+							Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
+						}
                     }
                     catch
                     {

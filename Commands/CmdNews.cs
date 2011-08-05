@@ -31,9 +31,10 @@ namespace MCForge
             string newsFile = "text/news.txt";
             if (!File.Exists(newsFile) || (File.Exists(newsFile) && File.ReadAllLines(newsFile).Length == -1))
             {
-                StreamWriter SW = new StreamWriter(newsFile);
-                SW.WriteLine("News have not been created. Put News in '" + newsFile + "'.");
-                SW.Close();
+				using (StreamWriter SW = new StreamWriter(newsFile))
+				{
+					SW.WriteLine("News have not been created. Put News in '" + newsFile + "'.");
+				}
                 return;
             }
             string[] strArray = File.ReadAllLines(newsFile);
