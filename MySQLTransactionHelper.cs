@@ -36,8 +36,10 @@ namespace MCForge
 
         public void Execute(string query)
         {
-            MySqlCommand cmd = new MySqlCommand(query, connection, transaction);
-            cmd.ExecuteNonQuery();
+			using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
+			{
+				cmd.ExecuteNonQuery();
+			}
         }
 
         public void Commit()

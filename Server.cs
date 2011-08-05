@@ -266,8 +266,10 @@ public static byte maxGuests = 10;
                     Log("Restarter.exe doesn't exist, Downloading");
                     try
                     {
-                        WebClient WEB = new WebClient();
-                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+						using (WebClient WEB = new WebClient())
+						{
+							WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+						}
                         if (File.Exists("Restarter.exe"))
                         {
                             Log("Restarter.exe download succesful!");
@@ -283,8 +285,10 @@ public static byte maxGuests = 10;
                     Log("Restarter.pdb doesn't exist, Downloading");
                     try
                     {
-                        WebClient WEB = new WebClient();
-                        WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+						using (WebClient WEB = new WebClient())
+						{
+							WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+						}
                         if (File.Exists("Restarter.pdb"))
                         {
                             Log("Restarter.pdb download succesful!");
@@ -300,8 +304,10 @@ public static byte maxGuests = 10;
                     Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
                     try
                     {
-                        WebClient WEB = new WebClient();
-                        WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+						using (WebClient WEB = new WebClient())
+						{
+							WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+						}
                         if (File.Exists("Meebey.SmartIRC4Net.dll"))
                         {
                             Log("Meebey.SmartIRC4Net.dll download succesful!");
@@ -387,7 +393,7 @@ public static byte maxGuests = 10;
             }
             else
             {
-                File.Create("text/emotelist.txt");
+                File.Create("text/emotelist.txt").Dispose();
             }
 
             ProfanityFilter.Init();
@@ -648,10 +654,11 @@ processThread.Start();
 
                 if (File.Exists("text/messages.txt"))
                 {
-                    StreamReader r = File.OpenText("text/messages.txt");
-                    while (!r.EndOfStream)
-                        messages.Add(r.ReadLine());
-                    r.Dispose();
+					using (StreamReader r = File.OpenText("text/messages.txt"))
+					{
+						while (!r.EndOfStream)
+							messages.Add(r.ReadLine());
+					}
                 }
                 else File.Create("text/messages.txt").Close();
 
@@ -787,8 +794,10 @@ processThread.Start();
                 bool begin = false;
                 try
                 {
-                    p = new Player(listen.EndAccept(result));
-                    listen.BeginAccept(new AsyncCallback(Accept), null);
+					using (p = new Player(listen.EndAccept(result)))
+					{
+						listen.BeginAccept(new AsyncCallback(Accept), null);
+					}
                     begin = true;
                 }
                 catch (SocketException e)

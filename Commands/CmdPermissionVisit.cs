@@ -42,28 +42,28 @@ namespace MCForge
 					Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
 					return;
 				}
-                File.Delete("levels/level properties/" + p.level.name + ".properties");
-                StreamWriter SW = new StreamWriter(File.Create("levels/level properties/" + p.level.name + ".properties"));
-                SW.WriteLine("#Level properties for " + p.level.name);
-                SW.WriteLine("Theme = " + p.level.theme);
-                SW.WriteLine("Physics = " + p.level.physics.ToString());
-                SW.WriteLine("Physics speed = " + p.level.speedPhysics.ToString());
-                SW.WriteLine("Physics overload = " + p.level.overload.ToString());
-                SW.WriteLine("Finite mode = " + p.level.finite.ToString());
-                SW.WriteLine("Animal AI = " + p.level.ai.ToString());
-                SW.WriteLine("Edge water = " + p.level.edgeWater.ToString());
-                SW.WriteLine("Survival death = " + p.level.Death.ToString());
-                SW.WriteLine("Fall = " + p.level.fall.ToString());
-                SW.WriteLine("Drown = " + p.level.drown.ToString());
-                SW.WriteLine("MOTD = " + p.level.motd);
-                SW.WriteLine("JailX = " + p.level.jailx.ToString());
-                SW.WriteLine("JailY = " + p.level.jaily.ToString());
-                SW.WriteLine("JailZ = " + p.level.jailz.ToString());
-                SW.WriteLine("Unload = " + p.level.unload);
-                SW.WriteLine("PerBuild = " + Group.findPerm(p.level.permissionbuild).trueName.ToLower());
-                SW.WriteLine("PerVisit = " + message.ToLower());
-                SW.Flush();
-                SW.Close();
+                File.Create("levels/level properties/" + p.level.name + ".properties").Dispose();
+				using (StreamWriter SW = File.CreateText("levels/level properties/" + p.level.name + ".properties"))
+				{
+					SW.WriteLine("#Level properties for " + p.level.name);
+					SW.WriteLine("Theme = " + p.level.theme);
+					SW.WriteLine("Physics = " + p.level.physics.ToString());
+					SW.WriteLine("Physics speed = " + p.level.speedPhysics.ToString());
+					SW.WriteLine("Physics overload = " + p.level.overload.ToString());
+					SW.WriteLine("Finite mode = " + p.level.finite.ToString());
+					SW.WriteLine("Animal AI = " + p.level.ai.ToString());
+					SW.WriteLine("Edge water = " + p.level.edgeWater.ToString());
+					SW.WriteLine("Survival death = " + p.level.Death.ToString());
+					SW.WriteLine("Fall = " + p.level.fall.ToString());
+					SW.WriteLine("Drown = " + p.level.drown.ToString());
+					SW.WriteLine("MOTD = " + p.level.motd);
+					SW.WriteLine("JailX = " + p.level.jailx.ToString());
+					SW.WriteLine("JailY = " + p.level.jaily.ToString());
+					SW.WriteLine("JailZ = " + p.level.jailz.ToString());
+					SW.WriteLine("Unload = " + p.level.unload);
+					SW.WriteLine("PerBuild = " + Group.findPerm(p.level.permissionbuild).trueName.ToLower());
+					SW.WriteLine("PerVisit = " + message.ToLower());
+				}
                 p.level.permissionvisit = Perm;
                 Server.s.Log(p.level.name + " visit permission changed to " + message + ".");
                 Player.GlobalMessageLevel(p.level, "visit permission changed to " + message + ".");
@@ -84,28 +84,28 @@ namespace MCForge
                 }
                 if (level != null)
                 {
-                    File.Delete("levels/level properties/" + level.name + ".properties");
-                    StreamWriter SW = new StreamWriter(File.Create("levels/level properties/" + level.name + ".properties"));
-                    SW.WriteLine("#Level properties for " + level.name);
-                    SW.WriteLine("Theme = " + level.theme);
-                    SW.WriteLine("Physics = " + level.physics.ToString());
-                    SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
-                    SW.WriteLine("Physics overload = " + level.overload.ToString());
-                    SW.WriteLine("Finite mode = " + level.finite.ToString());
-                    SW.WriteLine("Animal AI = " + level.ai.ToString());
-                    SW.WriteLine("Edge water = " + level.edgeWater.ToString());
-                    SW.WriteLine("Survival death = " + level.Death.ToString());
-                    SW.WriteLine("Fall = " + level.fall.ToString());
-                    SW.WriteLine("Drown = " + level.drown.ToString());
-                    SW.WriteLine("MOTD = " + level.motd);
-                    SW.WriteLine("JailX = " + level.jailx.ToString());
-                    SW.WriteLine("JailY = " + level.jaily.ToString());
-                    SW.WriteLine("JailZ = " + level.jailz.ToString());
-                    SW.WriteLine("Unload = " + level.unload);
-                    SW.WriteLine("PerBuild = " + s.ToLower());
-                    SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
-                    SW.Flush();
-                    SW.Close();
+                    File.Create("levels/level properties/" + level.name + ".properties").Dispose();
+					using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+					{
+						SW.WriteLine("#Level properties for " + level.name);
+						SW.WriteLine("Theme = " + level.theme);
+						SW.WriteLine("Physics = " + level.physics.ToString());
+						SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
+						SW.WriteLine("Physics overload = " + level.overload.ToString());
+						SW.WriteLine("Finite mode = " + level.finite.ToString());
+						SW.WriteLine("Animal AI = " + level.ai.ToString());
+						SW.WriteLine("Edge water = " + level.edgeWater.ToString());
+						SW.WriteLine("Survival death = " + level.Death.ToString());
+						SW.WriteLine("Fall = " + level.fall.ToString());
+						SW.WriteLine("Drown = " + level.drown.ToString());
+						SW.WriteLine("MOTD = " + level.motd);
+						SW.WriteLine("JailX = " + level.jailx.ToString());
+						SW.WriteLine("JailY = " + level.jaily.ToString());
+						SW.WriteLine("JailZ = " + level.jailz.ToString());
+						SW.WriteLine("Unload = " + level.unload);
+						SW.WriteLine("PerBuild = " + s.ToLower());
+						SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
+					}
                     level.permissionvisit = Perm;
                     Server.s.Log(level.name + " visit permission changed to " + s + ".");
                     Player.GlobalMessageLevel(level, "visit permission changed to " + s + ".");
