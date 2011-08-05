@@ -92,6 +92,7 @@ namespace MCForge
             all.Add(new CmdExplode());
 			all.Add(new CmdFakePay());
             all.Add(new CmdFakeRank());
+            all.Add(new CmdFaq());
             all.Add(new CmdFetch());
             all.Add(new CmdFill());
             all.Add(new CmdFixGrass());
@@ -138,6 +139,7 @@ namespace MCForge
             all.Add(new CmdMain());
             all.Add(new CmdMap());
             all.Add(new CmdMapInfo());
+            all.Add(new CmdMaze());
             all.Add(new CmdMe());
             all.Add(new CmdMeasure());
             all.Add(new CmdMegaboid());
@@ -197,7 +199,6 @@ namespace MCForge
             all.Add(new CmdSeen());
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
-			all.Add(new CmdServerinfo());
             all.Add(new CmdServerReport());
             all.Add(new CmdSetOwnMapSpawn());
             all.Add(new CmdSetRank());
@@ -222,6 +223,7 @@ namespace MCForge
             all.Add(new CmdTimer());
             all.Add(new CmdTitle());
             all.Add(new CmdTnt());
+            all.Add(new CmdTopTen());
             all.Add(new CmdTp());
             all.Add(new CmdTpZone());
             all.Add(new CmdTree());

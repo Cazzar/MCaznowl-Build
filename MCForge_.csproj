@@ -97,6 +97,7 @@
     <Compile Include="Commands\CmdExplode.cs" />
     <Compile Include="Commands\CmdFakePay.cs" />
     <Compile Include="Commands\CmdFakerank.cs" />
+    <Compile Include="Commands\CmdFaq.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
     <Compile Include="Commands\CmdGifToCin.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />
@@ -104,12 +105,12 @@
     <Compile Include="Commands\CmdHigh5.cs" />
     <Compile Include="Commands\CmdIgnore.cs" />
     <Compile Include="Commands\CmdImpersonate.cs" />
-    <Compile Include="Commands\CmdInterval.cs" />
     <Compile Include="Commands\CmdKickAll.cs" />
     <Compile Include="Commands\CmdLockdown.cs" />
     <Compile Include="Commands\CmdLoginMessage.cs" />
     <Compile Include="Commands\CmdLogoutMessage.cs" />
     <Compile Include="Commands\CmdMain.cs" />
+    <Compile Include="Commands\CmdMaze.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
     <Compile Include="Commands\CmdNews.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
     <Compile Include="Commands\CmdKill.cs" />
+    <Compile Include="Commands\CmdTopTen.cs" />
     <Compile Include="Commands\CmdTpZone.cs" />
     <Compile Include="Commands\CmdFlipHeads.cs" />
     <Compile Include="Commands\CmdFly.cs" />
@@ -238,7 +240,6 @@
     <Compile Include="Commands\CmdRules.cs" />
     <Compile Include="Commands\CmdSave.cs" />
     <Compile Include="Commands\CmdSay.cs" />
-    <Compile Include="Commands\CmdServerInfo.cs" />
     <Compile Include="Commands\CmdServerReport.cs" />
     <Compile Include="Commands\CmdSetRank.cs" />
     <Compile Include="Commands\CmdSetspawn.cs" />

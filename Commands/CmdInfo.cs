@@ -30,9 +30,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "") 
-            { 
-                Help(p); 
+            if (message != "")
+            {
+                Help(p);
             }
             else
             {
@@ -40,9 +40,10 @@ namespace MCForge
                 Player.SendMessage(p, "There are currently " + Player.number + " players on this server");
                 Player.SendMessage(p, "This server currently has $banned people that are &8banned" + Server.DefaultColor + ".");
                 Player.SendMessage(p, "This server currently has " + Server.levels.Count + " levels loaded.");
+                Player.SendMessage(p, "This server's currency is: " + Server.moneys);
                 Player.SendMessage(p, "This server runs on &bMCForge" + Server.DefaultColor + ", which is based on &bMCLawl" + Server.DefaultColor + ".");
                 Player.SendMessage(p, "This server's version: &a" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
+                Command.all.Find("devs").Use(p, "");
                 TimeSpan up = DateTime.Now - Server.timeOnline;
                 string upTime = "Time online: &b";
                 if (up.Days == 1) upTime += up.Days + " day, ";
@@ -54,8 +55,7 @@ namespace MCForge
                 if (up.Seconds == 1) upTime += up.Seconds + " second";
                 else upTime += up.Seconds + " seconds";
                 Player.SendMessage(p, upTime);
-
-                if (Server.updateTimer.Interval > 1000) Player.SendMessage(p, "Server is currently in &5Low Lag" + Server.DefaultColor + " mode.");
+                if (Server.updateTimer.Interval > 1000) Player.SendMessage(p, "This server is currently in &5Low Lag" + Server.DefaultColor + " mode.");
             }
         }
         public override void Help(Player p)
