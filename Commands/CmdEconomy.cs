@@ -210,13 +210,15 @@ namespace MCForge
                 if (!File.Exists("text/Economy/Buy/buyranks.properties"))
                 {
                     p.SendMessage("%4The 'buyranks.properties' file could not be located, generating default file!");
-                    StreamWriter SW;
-                    SW = File.CreateText("text/Economy/Buy/buyranks.properties");
-                    SW.WriteLine("!Skipable-ranks!False!");
-                    SW.WriteLine("!guest!0!");
-                    SW.WriteLine("!builder!10!");
-                    SW.WriteLine("!advbuilder!100!");
-                    SW.Close();
+
+					using (StreamWriter SW = File.CreateText("text/Economy/Buy/buyranks.properties"))
+					{
+						SW.WriteLine("!Skipable-ranks!False!");
+						SW.WriteLine("!guest!0!");
+						SW.WriteLine("!builder!10!");
+						SW.WriteLine("!advbuilder!100!");
+					}
+
                     p.SendMessage("%2Adding the 'buyranks.properties' file within ");
                     p.SendMessage("%2'text/Economy/Buy'");
                     p.SendMessage("%2'buyranks.properties' file successfully created!");
@@ -224,86 +226,85 @@ namespace MCForge
                 if (!File.Exists("text/Economy/Buy/buymap.properties"))
 				{
                     p.SendMessage("%4The 'buymap.properties' file could not be located, generating default file!");
-                    StreamWriter SW;
-                    SW = File.CreateText("text/Economy/Buy/buymap.properties");
-                    SW.WriteLine("DO NOT EDIT FORMAT - ONLY EDIT THE NAMES/SIZES/PRICE");
-                    #region
-                    SW.WriteLine("THE MAXIMUM NUMBER OF DIFFERENT MAPS THAT YOU CAN BUY AT THE MOMENT IS 4!! ");
-                    SW.WriteLine("Max #. of levels per person:");
-                    SW.WriteLine("10");
-                    SW.WriteLine(" ");
-                    SW.WriteLine("sizename:");
-                    SW.WriteLine("small");
-                    SW.WriteLine("length:");
-                    SW.WriteLine("64");
-                    SW.WriteLine("height:");
-                    SW.WriteLine("32");
-                    SW.WriteLine("width:");
-                    SW.WriteLine("64");
-                    SW.WriteLine("price:");
-                    SW.WriteLine("2500");
-                    SW.WriteLine(" ");
-                    SW.WriteLine("sizename:");
-                    SW.WriteLine("medium");
-                    SW.WriteLine("length:");
-                    SW.WriteLine("128");
-                    SW.WriteLine("height:");
-                    SW.WriteLine("64");
-                    SW.WriteLine("width:");
-                    SW.WriteLine("128");
-                    SW.WriteLine("price:");
-                    SW.WriteLine("5000");
-                    SW.WriteLine(" ");
-                    SW.WriteLine("sizename:");
-                    SW.WriteLine("large");
-                    SW.WriteLine("length:");
-                    SW.WriteLine("256");
-                    SW.WriteLine("height:");
-                    SW.WriteLine("128");
-                    SW.WriteLine("width:");
-                    SW.WriteLine("256");
-                    SW.WriteLine("price:");
-                    SW.WriteLine("7500");
-                    SW.WriteLine(" ");
-                    SW.WriteLine("sizename:");
-                    SW.WriteLine("massive");
-                    SW.WriteLine("length:");
-                    SW.WriteLine("512");
-                    SW.WriteLine("height:");
-                    SW.WriteLine("256");
-                    SW.WriteLine("width:");
-                    SW.WriteLine("512");
-                    SW.WriteLine("price:");
-                    SW.WriteLine("10000");
-                    SW.WriteLine(" ");
-                    SW.Close();
-                    #endregion
-                    p.SendMessage("%2Adding the 'buymap.properties' file within ");
-                    p.SendMessage("%2'text/Economy/Buy'");
-                    p.SendMessage("%2'buymap.properties' file successfully created!");
-                
+					using (StreamWriter SW = File.CreateText("text/Economy/Buy/buymap.properties"))
+					{
+						SW.WriteLine("DO NOT EDIT FORMAT - ONLY EDIT THE NAMES/SIZES/PRICE");
+						#region
+						SW.WriteLine("THE MAXIMUM NUMBER OF DIFFERENT MAPS THAT YOU CAN BUY AT THE MOMENT IS 4!! ");
+						SW.WriteLine("Max #. of levels per person:");
+						SW.WriteLine("10");
+						SW.WriteLine(" ");
+						SW.WriteLine("sizename:");
+						SW.WriteLine("small");
+						SW.WriteLine("length:");
+						SW.WriteLine("64");
+						SW.WriteLine("height:");
+						SW.WriteLine("32");
+						SW.WriteLine("width:");
+						SW.WriteLine("64");
+						SW.WriteLine("price:");
+						SW.WriteLine("2500");
+						SW.WriteLine(" ");
+						SW.WriteLine("sizename:");
+						SW.WriteLine("medium");
+						SW.WriteLine("length:");
+						SW.WriteLine("128");
+						SW.WriteLine("height:");
+						SW.WriteLine("64");
+						SW.WriteLine("width:");
+						SW.WriteLine("128");
+						SW.WriteLine("price:");
+						SW.WriteLine("5000");
+						SW.WriteLine(" ");
+						SW.WriteLine("sizename:");
+						SW.WriteLine("large");
+						SW.WriteLine("length:");
+						SW.WriteLine("256");
+						SW.WriteLine("height:");
+						SW.WriteLine("128");
+						SW.WriteLine("width:");
+						SW.WriteLine("256");
+						SW.WriteLine("price:");
+						SW.WriteLine("7500");
+						SW.WriteLine(" ");
+						SW.WriteLine("sizename:");
+						SW.WriteLine("massive");
+						SW.WriteLine("length:");
+						SW.WriteLine("512");
+						SW.WriteLine("height:");
+						SW.WriteLine("256");
+						SW.WriteLine("width:");
+						SW.WriteLine("512");
+						SW.WriteLine("price:");
+						SW.WriteLine("10000");
+						SW.WriteLine(" ");
+						#endregion
+						p.SendMessage("%2Adding the 'buymap.properties' file within ");
+						p.SendMessage("%2'text/Economy/Buy'");
+						p.SendMessage("%2'buymap.properties' file successfully created!");
+					}
 				}
                 if (!File.Exists("text/Economy/Buy/buytitle.properties"))
                 {
                     p.SendMessage("%4The 'buytitle.properties' file could not be located, generating default file!");
-                    StreamWriter SW2;
-                    SW2 = File.CreateText("text/Economy/Buy/buytitle.properties");
-                    SW2.WriteLine("DO NOT EDIT FORMAT - ONLY EDIT PRICES/TRUE/FALSE!!! (also the true/false should be exactly true/false, NO CAPITALS!!)");
-                    SW2.WriteLine("/EconomyBuyTitle Properties File");
-                    SW2.WriteLine(" ");
-                    SW2.WriteLine("perletter");
-                    SW2.WriteLine("true");
-                    SW2.WriteLine(" ");
-                    SW2.WriteLine("startingprice");
-                    SW2.WriteLine("100");
-                    SW2.WriteLine(" ");
-                    SW2.WriteLine("perletter");
-                    SW2.WriteLine("25");
-                    SW2.WriteLine(" ");
-                    SW2.WriteLine("nonperletterprice");
-                    SW2.WriteLine("300");
-                    SW2.WriteLine(" ");
-                    SW2.Close();
+					using (StreamWriter SW2 = File.CreateText("text/Economy/Buy/buytitle.properties"))
+					{
+						SW2.WriteLine("DO NOT EDIT FORMAT - ONLY EDIT PRICES/TRUE/FALSE!!! (also the true/false should be exactly true/false, NO CAPITALS!!)");
+						SW2.WriteLine("/EconomyBuyTitle Properties File");
+						SW2.WriteLine(" ");
+						SW2.WriteLine("perletter");
+						SW2.WriteLine("true");
+						SW2.WriteLine(" ");
+						SW2.WriteLine("startingprice");
+						SW2.WriteLine("100");
+						SW2.WriteLine(" ");
+						SW2.WriteLine("perletter");
+						SW2.WriteLine("25");
+						SW2.WriteLine(" ");
+						SW2.WriteLine("nonperletterprice");
+						SW2.WriteLine("300");
+						SW2.WriteLine(" ");
+					}
                     p.SendMessage("%2Adding the 'buytitle.properties' file within ");
                     p.SendMessage("%2'text/Economy/Buy'");
                     p.SendMessage("%2'buytitle.properties' file successfully created!");
@@ -311,12 +312,12 @@ namespace MCForge
                 if (!File.Exists("text/Economy/Buy/buycolor.properties"))
                 {
                     p.SendMessage("%4The 'buycolor.properties' file could not be located, generating default file!");
-                    StreamWriter SW;
-                    SW = File.CreateText("text/Economy/Buy/buycolor.properties");
-                    SW.WriteLine("DO NOT CHANGE FORMATTING!! ONLY CHANGE THE PRICE!!");
-                    SW.WriteLine("color price:");
-                    SW.WriteLine("150");
-                    SW.Close();
+					using (StreamWriter SW = File.CreateText("text/Economy/Buy/buycolor.properties"))
+					{
+						SW.WriteLine("DO NOT CHANGE FORMATTING!! ONLY CHANGE THE PRICE!!");
+						SW.WriteLine("color price:");
+						SW.WriteLine("150");
+					}
                     p.SendMessage("%2Adding the 'buycolor.properties' file within ");
                     p.SendMessage("%2'text/Economy/Buy'");
                     p.SendMessage("%2'buycolor.properties' file successfully created!");
@@ -332,259 +333,234 @@ namespace MCForge
         }
     }
 
-    public class CmdEconomyBuyColor : Command
-    {
-        public override string name { get { return "economybuycolor"; } }
-        public override string shortcut { get { return "ecobuycolor"; } }
-        public override string type { get { return "other"; } }
-        public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
-        public override void Use(Player p, string message)
-        {
-            {
-                #region - testing directories and files (.properties)...
+	public class CmdEconomyBuyColor : Command
+	{
+		public override string name { get { return "economybuycolor"; } }
+		public override string shortcut { get { return "ecobuycolor"; } }
+		public override string type { get { return "other"; } }
+		public override bool museumUsable { get { return false; } }
+		public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
+		public override void Use(Player p, string message)
+		{
+			{
+				#region - testing directories and files (.properties)...
 
-                if (!Directory.Exists("text/Economy"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!Directory.Exists("text/Economy/Buy"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buyranks.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buymap.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buytitle.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buycolor.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                # endregion
-            }
+				if (!Directory.Exists("text/Economy"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				if (!Directory.Exists("text/Economy/Buy"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				if (!File.Exists("text/Economy/Buy/buyranks.properties"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				if (!File.Exists("text/Economy/Buy/buymap.properties"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				if (!File.Exists("text/Economy/Buy/buytitle.properties"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				if (!File.Exists("text/Economy/Buy/buycolor.properties"))
+				{
+					Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+					return;
+				}
+				# endregion
+			}
 
-            if (message == "") { Help(p); return; }
-            else
-            {
-                //Load our text file
+			if (message == "") { Help(p); return; }
+			else
+			{
+				int NumberOfLines = 5; //How many lines should be loaded?
+				string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-                TextReader tr = new StreamReader("text/Economy/Buy/buycolor.properties");
+				using (TextReader tr = new StreamReader("text/Economy/Buy/buycolor.properties")) //Load our text file
+				{
+					for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+					{
+						ListLines[i] = tr.ReadLine();
+					}
+				}
 
-                //How many lines should be loaded?
+				string input = ListLines[3];
+				int listlines3asint = 0;
+				listlines3asint = Convert.ToInt32(input);
 
-                int NumberOfLines = 5;
+				if (p.money >= listlines3asint)
+				{
+					if (message.ToLower() == "BLACK" || message.ToLower() == "black")
+					{
+						p.color = "%0";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "NAVY" || message.ToLower() == "navy")
+					{
+						p.color = "%1";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "GREEN" || message.ToLower() == "green")
+					{
+						p.color = "%2";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "TEAL" || message.ToLower() == "teal")
+					{
+						p.color = "%3";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "MAROON" || message.ToLower() == "maroon")
+					{
+						p.color = "%4";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "PURPLE" || message.ToLower() == "purple")
+					{
+						p.color = "%5";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "GOLD" || message.ToLower() == "gold")
+					{
+						p.color = "%6";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "SILVER" || message.ToLower() == "silver")
+					{
+						p.color = "%7";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "GRAY" || message.ToLower() == "gray")
+					{
+						p.color = "%8";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "BLUE" || message.ToLower() == "blue")
+					{
+						p.color = "%9";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "LIME" || message.ToLower() == "lime")
+					{
+						p.color = "%a";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "AQUA" || message.ToLower() == "aqua")
+					{
+						p.color = "%b";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "RED" || message.ToLower() == "red")
+					{
+						p.color = "%c";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "PINK" || message.ToLower() == "pink")
+					{
+						p.color = "%d";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "YELLOW" || message.ToLower() == "yellow")
+					{
+						p.color = "%e";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					if (message.ToLower() == "WHITE" || message.ToLower() == "white")
+					{
+						p.color = "%f";
+						p.money = p.money - listlines3asint;
+						Player.SendMessage(p, "You have changed your color!");
+						Player.SendMessage(p, "You now have " + p.money + " left.");
+						return;
+					}
+					else
+					{
+						Player.SendMessage(p, "That is an invalid color please select from the following list.");
+						Player.SendMessage(p, "%0black %1navy %2green %3teal %4maroon %5purple %6gold %7silver %8gray %9blue %aline %baqua %cred %dpink %eyellow %fwhite");
+						return;
+					}
+				}
+				else
+				{
+					Player.SendMessage(p, "You do not have the " + listlines3asint + Server.moneys + " to use this command.");
+					return;
+				}
+			}
+		}
+		public override void Help(Player p)
+		{
+			int NumberOfLines = 3; //How many lines should be loaded?
+			string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-                //Make our array for each line
+			using (TextReader tr = new StreamReader("text/Economy/Buy/buycolor.properties")) //Load our text file
+			{
+				for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+				{
+					ListLines[i] = tr.ReadLine();
+				}
+			}
+			string input = ListLines[3];
+			int listlines3asint = 0;
+			listlines3asint = Convert.ToInt32(input);
 
-                string[] ListLines = new string[NumberOfLines];
+			Player.SendMessage(p, "/economybuycolor - purchases a color for " + listlines3asint + " " + Server.moneys + ".");
+			Player.SendMessage(p, "%0black %1navy %2green %3teal %4maroon %5purple %6gold %7silver %8gray %9blue %aline %baqua %cred %dpink %eyellow %fwhite");
+		}
 
-                //Read the number of lines and put them in the array
-
-                for (int i = 1; i < NumberOfLines; i++)
-                {
-                    ListLines[i] = tr.ReadLine();
-                }
-                string input = ListLines[3];
-                int listlines3asint = 0;
-                listlines3asint = Convert.ToInt32(input);
-                tr.Close();
-                {
-                    if (p.money >= listlines3asint)
-                    {
-                        if (message.ToLower() == "BLACK" || message.ToLower() == "black")
-                        {
-                            p.color = "%0";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "NAVY" || message.ToLower() == "navy")
-                        {
-                            p.color = "%1";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "GREEN" || message.ToLower() == "green")
-                        {
-                            p.color = "%2";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "TEAL" || message.ToLower() == "teal")
-                        {
-                            p.color = "%3";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "MAROON" || message.ToLower() == "maroon")
-                        {
-                            p.color = "%4";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "PURPLE" || message.ToLower() == "purple")
-                        {
-                            p.color = "%5";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "GOLD" || message.ToLower() == "gold")
-                        {
-                            p.color = "%6";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "SILVER" || message.ToLower() == "silver")
-                        {
-                            p.color = "%7";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "GRAY" || message.ToLower() == "gray")
-                        {
-                            p.color = "%8";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "BLUE" || message.ToLower() == "blue")
-                        {
-                            p.color = "%9";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "LIME" || message.ToLower() == "lime")
-                        {
-                            p.color = "%a";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "AQUA" || message.ToLower() == "aqua")
-                        {
-                            p.color = "%b";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "RED" || message.ToLower() == "red")
-                        {
-                            p.color = "%c";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "PINK" || message.ToLower() == "pink")
-                        {
-                            p.color = "%d";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "YELLOW" || message.ToLower() == "yellow")
-                        {
-                            p.color = "%e";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        if (message.ToLower() == "WHITE" || message.ToLower() == "white")
-                        {
-                            p.color = "%f";
-                            p.money = p.money - listlines3asint;
-                            Player.SendMessage(p, "You have changed your color!");
-                            Player.SendMessage(p, "You now have " + p.money + " left.");
-                            return;
-                        }
-                        else
-                        {
-                            Player.SendMessage(p, "That is an invalid color please select from the following list.");
-                            Player.SendMessage(p, "%0black %1navy %2green %3teal %4maroon %5purple %6gold %7silver %8gray %9blue %aline %baqua %cred %dpink %eyellow %fwhite");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        Player.SendMessage(p, "You do not have the " + listlines3asint + Server.moneys + " to use this command.");
-                        return;
-                    }
-
-                }
-
-            }
-        }
-        public override void Help(Player p)
-        {
-
-            {
-                //Load our text file
-
-                TextReader tr = new StreamReader("text/Economy/Buy/buycolor.properties");
-
-                //How many lines should be loaded?
-
-                int NumberOfLines = 3;
-
-                //Make our array for each line
-
-                string[] ListLines = new string[NumberOfLines];
-
-                //Read the number of lines and put them in the array
-
-                for (int i = 1; i < NumberOfLines; i++)
-                {
-                    ListLines[i] = tr.ReadLine();
-                }
-                string input = ListLines[3];
-                int listlines3asint = 0;
-                listlines3asint = Convert.ToInt32(input);
-
-                {
-                    Player.SendMessage(p, "/economybuycolor - purchases a color for " + listlines3asint + " " + Server.moneys + ".");
-                    Player.SendMessage(p, "%0black %1navy %2green %3teal %4maroon %5purple %6gold %7silver %8gray %9blue %aline %baqua %cred %dpink %eyellow %fwhite");
-                }
-
-                tr.Close();
-            }
-        }
-    }
+	}
 
     public class CmdEconomyBuyTitle : Command
     {
@@ -633,25 +609,17 @@ namespace MCForge
             if (message == "") { Help(p); return; }
             else
             {
-                //Load our text file
+				int NumberOfLines = 20; //How many lines should be loaded?
+				string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-                TextReader tr = new StreamReader("text/Economy/Buy/buytitle.properties");
+				using (TextReader tr = new StreamReader("text/Economy/Buy/buytitle.properties")) //Load our text file
+				{
+					for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+					{
+						ListLines[i] = tr.ReadLine();
+					}
+				}
 
-                //How many lines should be loaded?
-
-                int NumberOfLines = 20;
-
-                //Make our array for each line
-
-                string[] ListLines = new string[NumberOfLines];
-
-                //Read the number of lines and put them in the array
-
-                for (int i = 1; i < NumberOfLines; i++)
-                {
-                    ListLines[i] = tr.ReadLine();
-                }
-				
 				string input14 = ListLines[14];
 				int listlines14asint = 0;
 				listlines14asint = Convert.ToInt32(input14);
@@ -734,31 +702,21 @@ namespace MCForge
                     }
 
                 }
-
-                tr.Close();
             }
         }
         public override void Help(Player p)
         {
-            //Load our text file
+			int NumberOfLines = 20; //How many lines should be loaded?
+			string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-            TextReader tr = new StreamReader("text/Economy/Buy/buytitle.properties");
+			using (TextReader tr = new StreamReader("text/Economy/Buy/buytitle.properties")) //Load our text file
+			{
+				for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+				{
+					ListLines[i] = tr.ReadLine();
+				}
+			}
 
-            //How many lines should be loaded?
-
-            int NumberOfLines = 20;
-
-            //Make our array for each line
-
-            string[] ListLines = new string[NumberOfLines];
-
-            //Read the number of lines and put them in the array
-
-            for (int i = 1; i < NumberOfLines; i++)
-            {
-                ListLines[i] = tr.ReadLine();
-            }
-			
 			string input8 = ListLines[8];
 			int listlines8asint = 0;
 			listlines8asint = Convert.ToInt32(input8);
@@ -780,13 +738,11 @@ namespace MCForge
             {
                 Player.SendMessage(p, "/economybuytitle - buy a title for " + listlines14asint + " " + Server.moneys  + ".");
             }
-
             else
             {
                 Player.SendMessage(p, "text/Economy/Buy/buytitle.properties is corrupt, please contact the server owner to ask to restore the file");
                 Player.SendMessage(p, "but usually this command would be used to buy a title!");
             }
-
         }
     }
 
@@ -797,285 +753,267 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
-        public override void Use(Player p, string message)
-        {
-            {
-                #region - testing directories and files (.properties)...
+		public override void Use(Player p, string message)
+		{
 
-                if (!Directory.Exists("text/Economy"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!Directory.Exists("text/Economy/Buy"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buyranks.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buymap.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buytitle.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                if (!File.Exists("text/Economy/Buy/buycolor.properties"))
-                {
-                    Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
-                    return;
-                }
-                # endregion
-            }
+			#region - testing directories and files (.properties)...
 
-            if (message == "") { Help(p); return; }
-            else
+			if (!Directory.Exists("text/Economy"))
 			{
-            {
-                //Load our text file
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			if (!Directory.Exists("text/Economy/Buy"))
+			{
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			if (!File.Exists("text/Economy/Buy/buyranks.properties"))
+			{
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			if (!File.Exists("text/Economy/Buy/buymap.properties"))
+			{
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			if (!File.Exists("text/Economy/Buy/buytitle.properties"))
+			{
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			if (!File.Exists("text/Economy/Buy/buycolor.properties"))
+			{
+				Player.SendMessage(p, "The Correct Files do not exist, please ask a Server op to run /economysetup to setup all the files and directories for all the /economy commands!");
+				return;
+			}
+			# endregion
 
-                TextReader tr = new StreamReader("text/Economy/Buy/buymap.properties");
 
-                //How many lines should be loaded?
+			if (message == "") { Help(p); return; }
+			else
+			{
+				int NumberOfLines = 60; //How many lines should be loaded?
+				string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-                int NumberOfLines = 60;
+				using (TextReader tr = new StreamReader("text/Economy/Buy/buymap.properties")) //Load our text file
+				{
+					for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+					{
+						ListLines[i] = tr.ReadLine();
+					}
+				}
 
-                //Make our array for each line
-
-                string[] ListLines = new string[NumberOfLines];
-
-                //Read the number of lines and put them in the array
-
-                for (int i = 1; i < NumberOfLines; i++)
-                {
-                    ListLines[i] = tr.ReadLine();
-                }
-                {
-						string input4 = ListLines[4];
+				string input4 = ListLines[4];
 				int listlines4asint = 0;
 				listlines4asint = Convert.ToInt32(input4);
-						
-						string input15 = ListLines[15];
+
+				string input15 = ListLines[15];
 				int listlines15asint = 0;
 				listlines15asint = Convert.ToInt32(input15);
-						
-						string input26 = ListLines[26];
+
+				string input26 = ListLines[26];
 				int listlines26asint = 0;
 				listlines26asint = Convert.ToInt32(input26);
-						
-						string input37 = ListLines[37];
+
+				string input37 = ListLines[37];
 				int listlines37asint = 0;
 				listlines37asint = Convert.ToInt32(input37);
-						
-						string input48 = ListLines[48];
+
+				string input48 = ListLines[48];
 				int listlines48asint = 0;
 				listlines48asint = Convert.ToInt32(input48);
-						
 
-						
-                    {
-                        int levelno = 1;
-                        int cont = 0;
+				int levelno = 1;
+				int cont = 0;
 
-                        while (cont == 0)
-                        {
-
-                            if (levelno < listlines4asint)
-                            {
-
-                                
-                                if (!File.Exists("levels/" + p.name + "s" + "lvl" + levelno + ".lvl"))
-                                {
-                                    cont = 1;
-                                }
-                                if (File.Exists("levels/" + p.name + "s" + "lvl" + levelno + ".lvl"))
-                                {
-                                    Player.SendMessage(p, p.name + "s" + "lvl" + levelno + " " + "Already exists, moving onto next number (" + (levelno + 1) + ").");
-                                    levelno = levelno + 1;
-                                }
-                            }
-                            else
-                            {
-                                Player.SendMessage(p, "You have reached the maximum number of levels, speak to an Op for more levels");
-                                return;
-                            }
-
-                        }
-                        #region 
-                        {
-                            if (message == (ListLines[7]))
-                            {
-
-                                if (p.money >= listlines15asint)
-                                {
-                                    {
-                                        Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[9]) + " " + (ListLines[11]) + " " + (ListLines[13]) + " " + "flat");
-                                        p.money = p.money - listlines15asint;
-                                        Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                        {
-                                            
-                                                //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                                Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                                
-												
-												
-												if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") ==(bool)true)
-                                                {
-                                                    //Command.all.Find("unload").Use(p, p.name);
-                                                    Player.SendMessage(p, "Zoning Succesful!!" );
-                                                }
-                                                else { Player.SendMessage(p, "Unable to zone your map."); }
-
-                                            
-                                        }
-                                        Player.SendMessage(p, "You now have your own map!");
-                                        Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    Player.SendMessage(p, "You do not have " + (ListLines[15]) + " " + Server.moneys + " to buy this map.");
-                                    return;
-                                }
-                            }
-                            if (message == (ListLines[18]))
-                            {
-
-                                if (p.money >= listlines26asint)
-                                {
-                                    {
-                                        Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[20]) + " " + (ListLines[22]) + " " + (ListLines[24]) + " " + "flat");
-                                        p.money = p.money - listlines26asint;
-                                        Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
-                                        Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                        {
-
-                                            //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
-                                            {
-                                                //Command.all.Find("unload").Use(p, p.name);
-                                                Player.SendMessage(p, "Zoning Succesful!!");
-                                            }
-                                            else { Player.SendMessage(p, "Unable to zone your map."); }
+				while (cont == 0)
+				{
+					if (levelno < listlines4asint)
+					{
 
 
-                                        }
+						if (!File.Exists("levels/" + p.name + "s" + "lvl" + levelno + ".lvl"))
+						{
+							cont = 1;
+						}
+						if (File.Exists("levels/" + p.name + "s" + "lvl" + levelno + ".lvl"))
+						{
+							Player.SendMessage(p, p.name + "s" + "lvl" + levelno + " " + "Already exists, moving onto next number (" + (levelno + 1) + ").");
+							levelno = levelno + 1;
+						}
+					}
+					else
+					{
+						Player.SendMessage(p, "You have reached the maximum number of levels, speak to an Op for more levels");
+						return;
+					}
+				}
+				#region
+				{
+					if (message == (ListLines[7]))
+					{
 
-                                        Player.SendMessage(p, "You now have your own map!");
-                                        Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    Player.SendMessage(p, "You do not have " + listlines26asint + " " + Server.moneys + " to buy this map.");
-                                    return;
-                                }
-                            }
-                            if (message == (ListLines[29]))
-                            {
+						if (p.money >= listlines15asint)
+						{
+							{
+								Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[9]) + " " + (ListLines[11]) + " " + (ListLines[13]) + " " + "flat");
+								p.money = p.money - listlines15asint;
+								Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
 
-                                if (p.money >= listlines37asint)
-                                {
-                                    {
-                                        Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[31]) + " " + (ListLines[33]) + " " + (ListLines[35]) + " " + "flat");
-                                        p.money = p.money - listlines37asint;
-                                        Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
-                                        Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
+								{
 
-                                        {
-
-                                            //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
-                                            {
-                                                //Command.all.Find("unload").Use(p, p.name);
-                                                Player.SendMessage(p, "Zoning Succesful!!");
-                                            }
-                                            else { Player.SendMessage(p, "Unable to zone your map."); }
+									//if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
+									Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
 
 
-                                        }
-
-                                        Player.SendMessage(p, "You now have your own map!");
-                                        Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    Player.SendMessage(p, "You do not have " + (ListLines[26]) + " " + Server.moneys + " to buy this map.");
-                                }
-                            }
-                            if (message == (ListLines[40]))
-                            {
-
-                                if (p.money >= listlines48asint)
-                                {
-                                    {
-                                        Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[42]) + " " + (ListLines[44]) + " " + (ListLines[46]) + " " + "flat");
-                                        p.money = p.money - listlines48asint;
-                                        Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
-                                        Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                        {
-
-                                            //if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
-                                            Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
-
-                                            if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
-                                            {
-                                                //Command.all.Find("unload").Use(p, p.name);
-                                                Player.SendMessage(p, "Zoning Succesful!!");
-                                            }
-                                            else { Player.SendMessage(p, "Unable to zone your map."); }
 
 
-                                        }
-                                        Player.SendMessage(p, "You now have your own map!");
-                                        Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
-                                        return;
-                                    }
-                                }
-                                else
-                                {
-                                    Player.SendMessage(p, "You do not have " + listlines48asint + " " + Server.moneys + " to buy this map.");
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                Player.SendMessage(p, "'" + message + "' is not a valid map size!");
-                                Help(p);
-                                return;
+									if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == (bool)true)
+									{
+										//Command.all.Find("unload").Use(p, p.name);
+										Player.SendMessage(p, "Zoning Succesful!!");
+									}
+									else { Player.SendMessage(p, "Unable to zone your map."); }
 
-                            }
+
+								}
+								Player.SendMessage(p, "You now have your own map!");
+								Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
+								return;
+							}
+						}
+						else
+						{
+							Player.SendMessage(p, "You do not have " + (ListLines[15]) + " " + Server.moneys + " to buy this map.");
+							return;
+						}
+					}
+					if (message == (ListLines[18]))
+					{
+
+						if (p.money >= listlines26asint)
+						{
+							{
+								Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[20]) + " " + (ListLines[22]) + " " + (ListLines[24]) + " " + "flat");
+								p.money = p.money - listlines26asint;
+								Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
+								Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
+
+								{
+
+									//if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
+									Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
+
+									if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
+									{
+										//Command.all.Find("unload").Use(p, p.name);
+										Player.SendMessage(p, "Zoning Succesful!!");
+									}
+									else { Player.SendMessage(p, "Unable to zone your map."); }
+
+
+								}
+
+								Player.SendMessage(p, "You now have your own map!");
+								Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
+								return;
+							}
+						}
+						else
+						{
+							Player.SendMessage(p, "You do not have " + listlines26asint + " " + Server.moneys + " to buy this map.");
+							return;
+						}
+					}
+					if (message == (ListLines[29]))
+					{
+
+						if (p.money >= listlines37asint)
+						{
+							{
+								Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[31]) + " " + (ListLines[33]) + " " + (ListLines[35]) + " " + "flat");
+								p.money = p.money - listlines37asint;
+								Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
+								Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
+
+								{
+
+									//if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
+									Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
+
+									if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
+									{
+										//Command.all.Find("unload").Use(p, p.name);
+										Player.SendMessage(p, "Zoning Succesful!!");
+									}
+									else { Player.SendMessage(p, "Unable to zone your map."); }
+
+
+								}
+
+								Player.SendMessage(p, "You now have your own map!");
+								Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
+								return;
+							}
+						}
+						else
+						{
+							Player.SendMessage(p, "You do not have " + (ListLines[26]) + " " + Server.moneys + " to buy this map.");
+						}
+					}
+					if (message == (ListLines[40]))
+					{
+
+						if (p.money >= listlines48asint)
+						{
+							{
+								Command.all.Find("newlvl").Use(p, p.name + "s" + "lvl" + levelno + " " + (ListLines[42]) + " " + (ListLines[44]) + " " + (ListLines[46]) + " " + "flat");
+								p.money = p.money - listlines48asint;
+								Command.all.Find("load").Use(p, p.name + "s" + "lvl" + levelno);
+								Command.all.Find("goto").Use(p, p.name + "s" + "lvl" + levelno);
+
+								{
+
+									//if (p.name.ToUpper() == p.level.name.ToUpper()) { Command.all.Find("home").Use(p, ""); }
+									Command.all.Find("unload").Use(p, p.name + "s" + "lvl" + levelno);
+
+									if (runSQL(p, "INSERT INTO zone" + p.name + "s" + "lvl" + levelno + " (SmallX, SmallY, SmallZ, BigX, BigY, BigZ, Owner) VALUES (0,0,0," + (p.level.width - 1) + "," + (p.level.depth - 1) + "," + (p.level.height - 1) + ",'" + p.name + "');") == true)
+									{
+										//Command.all.Find("unload").Use(p, p.name);
+										Player.SendMessage(p, "Zoning Succesful!!");
+									}
+									else { Player.SendMessage(p, "Unable to zone your map."); }
+
+
+								}
+								Player.SendMessage(p, "You now have your own map!");
+								Player.SendMessage(p, "You now have " + p.money + " " + Server.moneys + " left.");
+								return;
+							}
+						}
+						else
+						{
+							Player.SendMessage(p, "You do not have " + listlines48asint + " " + Server.moneys + " to buy this map.");
+							return;
+						}
+					}
+					else
+					{
+						Player.SendMessage(p, "'" + message + "' is not a valid map size!");
+						Help(p);
+						return;
+
+					}
 
 
 
 
 
-                        }
-                        #endregion
-
-                    }
+				}
+				#endregion
 			}
-		}
-		}
 		}
 	
 	
@@ -1084,33 +1022,23 @@ namespace MCForge
 
         public override void Help(Player p)
 		{
-		                //Load our text file
+			int NumberOfLines = 60; //How many lines should be loaded?
+			string[] ListLines = new string[NumberOfLines]; //Make our array for each line
 
-                TextReader tr = new StreamReader("text/Economy/Buy/buymap.properties");
-
-                //How many lines should be loaded?
-
-                int NumberOfLines = 60;
-
-                //Make our array for each line
-
-                string[] ListLines = new string[NumberOfLines];
-
-                //Read the number of lines and put them in the array
-
-                for (int i = 1; i < NumberOfLines; i++)
-                {
-                    ListLines[i] = tr.ReadLine();
-                }	
-		
+			using (TextReader tr = new StreamReader("text/Economy/Buy/buymap.properties")) //Load our text file
 			{
+				for (int i = 1; i < NumberOfLines; i++) //Read the number of lines and put them in the array
+				{
+					ListLines[i] = tr.ReadLine();
+				}
+			}
+
 			Player.SendMessage(p, "/economybuymap - Use this command to buy a map!");
 			Player.SendMessage(p, "Sizes: ");
 			Player.SendMessage(p, (ListLines[7]) + " - " + (ListLines[9]) + " * " + (ListLines[11]) + " * " + (ListLines[13]) + " for: " + (ListLines[15]) + Server.moneys);
 			Player.SendMessage(p, (ListLines[18]) + " - " + (ListLines[20]) + " * " + (ListLines[22]) + " * " + (ListLines[24]) + " for: " + (ListLines[26]) + Server.moneys);
 			Player.SendMessage(p, (ListLines[29]) + " - " + (ListLines[31]) + " * " + (ListLines[33]) + " * " + (ListLines[35]) + " for: " + (ListLines[37]) + Server.moneys);
 			Player.SendMessage(p, (ListLines[40]) + " - " + (ListLines[42]) + " * " + (ListLines[44]) + " * " + (ListLines[46]) + " for: " + (ListLines[48]) + Server.moneys);				
-			}
 		}
 
         public bool runSQL(Player p, string strQuery)
@@ -1125,19 +1053,23 @@ namespace MCForge
 
             try
             {
-                MySqlConnection myConn = new MySqlConnection("user id=" + MCForge.Server.MySQLUsername + "; password=" + MCForge.Server.MySQLPassword + "; database=" + MCForge.Server.MySQLDatabaseName + "; server=" + MCForge.Server.MySQLHost);
-                myConn.Open();
-                try
-                {
-                    MySqlCommand myCommand = new MySqlCommand(strQuery, myConn);
-                    myCommand.ExecuteNonQuery();
-                    res = true;
-                }
-                catch (Exception excp)
-                {
-                    Player.SendMessage(p, "Unable to run SQL Query: " + excp.Message);
-                }
-                myConn.Close();
+				using (MySqlConnection myConn = new MySqlConnection("user id=" + MCForge.Server.MySQLUsername + "; password=" + MCForge.Server.MySQLPassword + "; database=" + MCForge.Server.MySQLDatabaseName + "; server=" + MCForge.Server.MySQLHost))
+				{
+					myConn.Open();
+					try
+					{
+						using (MySqlCommand myCommand = new MySqlCommand(strQuery, myConn))
+						{
+							myCommand.ExecuteNonQuery();
+						}
+						res = true;
+					}
+					catch (Exception excp)
+					{
+						Player.SendMessage(p, "Unable to run SQL Query: " + excp.Message);
+					}
+					myConn.Close();
+				}
             }
             catch (Exception excp)
             {

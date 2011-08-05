@@ -113,41 +113,46 @@ namespace MCForge
 
             String cinName = "";
             cinName = msg;
-            Stream imageStreamSource = new FileStream("extra/images/" + msg + ".gif", FileMode.Open, FileAccess.Read, FileShare.Read);
-            GifBitmapDecoder decoder = new GifBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            for (int i = 0; i < decoder.Frames.Count; i++)
-            {
-                //saving all frames as pngs.
-                BitmapSource bitmapSource = decoder.Frames[i];
-                FileStream fs = new FileStream("extra/images/" + i.ToString() + ".bmp", FileMode.Create);
-                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                encoder.Save(fs);
-                fs.Close();
-            }
-            System.Drawing.Bitmap tbmp = new System.Drawing.Bitmap("extra/images/0.bmp");
-            picHeight = tbmp.Height;
-            picWidth = tbmp.Width;
-            //create the new map... 
-            Command.all.Find("newlvl").Use(p, "gtctempmap " + picWidth.ToString() + " " + picHeight.ToString() + " " + picWidth.ToString() + " space");
-            Command.all.Find("load").Use(p, "gtctempmap");
-            //moving the player to this map
-            Command.all.Find("move").Use(p, p.name + " gtctempmap");
-            System.Threading.Thread.Sleep(2000);
-            for (int i = 0; i < decoder.Frames.Count; i++)
-            {
-                p.SendMessage("Start processing Frame " + i);
-                workFrame(i, p, cinName,direction);
-                p.SendMessage("Done");
-            }
-            p.SendMessage("YAY! everything should be done");
-            Command.all.Find("move").Use(p, p.name + " " + pllvl);
-            unchecked { p.SendPos((byte)-1, ppos.x, ppos.y, ppos.z, 0, 0); }
-            Command.all.Find("deletelvl").Use(p, "gtctempmap");//deleting templvl
-            for (int i = 0; i < decoder.Frames.Count; i++)
-            {
-                File.Delete("extra/images/" + i.ToString() + ".bmp");
-            }
+			using (Stream imageStreamSource = new FileStream("extra/images/" + msg + ".gif", FileMode.Open, FileAccess.Read, FileShare.Read))
+			{
+				GifBitmapDecoder decoder = new GifBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+				for (int i = 0; i < decoder.Frames.Count; i++)
+				{
+					//saving all frames as pngs.
+					BitmapSource bitmapSource = decoder.Frames[i];
+					using (FileStream fs = new FileStream("extra/images/" + i.ToString() + ".bmp", FileMode.Create))
+					{
+						BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+						encoder.Save(fs);
+					}
+				}
+				using (System.Drawing.Bitmap tbmp = new System.Drawing.Bitmap("extra/images/0.bmp"))
+				{
+					picHeight = tbmp.Height;
+					picWidth = tbmp.Width;
+					//create the new map... 
+					Command.all.Find("newlvl").Use(p, "gtctempmap " + picWidth.ToString() + " " + picHeight.ToString() + " " + picWidth.ToString() + " space");
+					Command.all.Find("load").Use(p, "gtctempmap");
+					//moving the player to this map
+					Command.all.Find("move").Use(p, p.name + " gtctempmap");
+					System.Threading.Thread.Sleep(2000);
+					for (int i = 0; i < decoder.Frames.Count; i++)
+					{
+						p.SendMessage("Start processing Frame " + i);
+						workFrame(i, p, cinName, direction);
+						p.SendMessage("Done");
+					}
+					p.SendMessage("YAY! everything should be done");
+					Command.all.Find("move").Use(p, p.name + " " + pllvl);
+					unchecked { p.SendPos((byte)-1, ppos.x, ppos.y, ppos.z, 0, 0); }
+					Command.all.Find("deletelvl").Use(p, "gtctempmap");//deleting templvl
+					for (int i = 0; i < decoder.Frames.Count; i++)
+					{
+						File.Delete("extra/images/" + i.ToString() + ".bmp");
+					}
+				}
+			}
         }
 
         public struct block

@@ -99,24 +99,23 @@ namespace MCForge
         {
             p.showMBs = !p.showMBs;
 
-            DataTable Messages = new DataTable("Messages");
-            Messages = MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "`");
+			using (DataTable Messages = MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "`"))
+			{
+				int i;
 
-            int i;
-
-            if (p.showMBs)
-            {
-                for (i = 0; i < Messages.Rows.Count; i++)
-                    p.SendBlockchange((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"], Block.MsgWhite);
-                Player.SendMessage(p, "Now showing &a" + i.ToString() + Server.DefaultColor + " MBs.");
-            }
-            else
-            {
-                for (i = 0; i < Messages.Rows.Count; i++)
-                    p.SendBlockchange((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"], p.level.GetTile((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"]));
-                Player.SendMessage(p, "Now hiding MBs.");
-            }
-            Messages.Dispose();
+				if (p.showMBs)
+				{
+					for (i = 0; i < Messages.Rows.Count; i++)
+						p.SendBlockchange((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"], Block.MsgWhite);
+					Player.SendMessage(p, "Now showing &a" + i.ToString() + Server.DefaultColor + " MBs.");
+				}
+				else
+				{
+					for (i = 0; i < Messages.Rows.Count; i++)
+						p.SendBlockchange((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"], p.level.GetTile((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"]));
+					Player.SendMessage(p, "Now hiding MBs.");
+				}
+			}
         }
     }
 }

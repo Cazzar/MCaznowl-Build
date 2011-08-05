@@ -40,12 +40,12 @@ namespace MCForge
             {
                 File.WriteAllText("text/faq.txt", "Example: What does this server run on? This server runs on &bMCForge");
             }
-            StreamReader r = File.OpenText("text/faq.txt");
-            while (!r.EndOfStream)
-                faq.Add(r.ReadLine());
+			using (StreamReader r = File.OpenText("text/faq.txt"))
+			{
+				while (!r.EndOfStream)
+					faq.Add(r.ReadLine());
 
-            r.Close();
-            r.Dispose();
+			}
 
             Player who = null;
             if (message != "")
