@@ -457,7 +457,7 @@ namespace MCForge.Gui
                             case "server-owner":
                                 txtServerOwner.Text = value;
                                 break;
-                            case "global-ignore-ops":
+                            case "ignore-ops":
                                 chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                                 
