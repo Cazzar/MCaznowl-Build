@@ -32,7 +32,7 @@ namespace MCForge
         public CmdLoginMessage() { }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/loginmessage [Player] [Message] - Customize your login message");
+            Player.SendMessage(p, "/loginmessage [Player] [Message] - Customize your login message. Please note the player name is case sensitive.");
         }
 
         public override void Use(Player p, string message)
