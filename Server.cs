@@ -219,9 +219,8 @@ public static byte maxGuests = 10;
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
-
+		public static int RemotePort = 1337;
         public static string defaultRank = "guest";
-
         public static bool dollardollardollar = true;
         public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
