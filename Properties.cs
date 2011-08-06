@@ -407,6 +407,14 @@ namespace MCForge
                                 try { Server.hackrank_kick_time = int.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "server-owner":
+                                if (value != "")
+                                    Server.server_owner = value;
+                                break;
+                            case "ignore-ops":
+                                try { Server.globalignoreops = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                         }
                     }
                 }
@@ -465,6 +473,7 @@ namespace MCForge
                     w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
                     w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
                     w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+                    w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
                     w.WriteLine();
                     w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -482,6 +491,7 @@ namespace MCForge
 					w.WriteLine("#   kick-on-hackrank\t=\tSet to true if hackrank should kick players");
 					w.WriteLine("#   hackrank-kick-time\t=\tNumber of seconds until player is kicked");
                     w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
+                    w.WriteLine("#   ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
                     w.WriteLine();
                     w.WriteLine();
                     w.WriteLine("# Server options");
@@ -535,6 +545,7 @@ namespace MCForge
                     w.WriteLine("host-state = " + Server.ZallState.ToString());
                     w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
                     w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
+                    w.WriteLine("server-owner = " + Server.server_owner.ToString());
                     w.WriteLine();
                     w.WriteLine("# backup options");
                     w.WriteLine("backup-time = " + Server.backupInterval.ToString());
@@ -565,6 +576,7 @@ namespace MCForge
                     w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString().ToLower());
                     w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
                     w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
+                    w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
                     w.WriteLine();
                     w.WriteLine("cheapmessage = " + Server.cheapMessage.ToString().ToLower());
                     w.WriteLine("cheap-message-given = " + Server.cheapMessageGiven);
