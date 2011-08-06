@@ -230,46 +230,46 @@ namespace MCForge
         }
         public static void saveGroups(List<Group> givenList)
         {
-            StreamWriter SW = new StreamWriter(File.Create("properties/ranks.properties"));
-            SW.WriteLine("#RankName = string");
-            SW.WriteLine("#     The name of the rank, use capitalization.");
-            SW.WriteLine("#");
-            SW.WriteLine("#Permission = num");
-            SW.WriteLine("#     The \"permission\" of the rank. It's a number.");
-            SW.WriteLine("#		There are pre-defined permissions already set. (for the old ranks)");
-            SW.WriteLine("#		Banned = -20, Guest = 0, Builder = 30, AdvBuilder = 50, Operator = 80");
-            SW.WriteLine("#		SuperOP = 100, Nobody = 120");
-            SW.WriteLine("#		Must be greater than -50 and less than 120");
-            SW.WriteLine("#		The higher the number, the more commands do (such as undo allowing more seconds)");
-            SW.WriteLine("#Limit = num");
-            SW.WriteLine("#     The command limit for the rank (can be changed in-game with /limit)");
-            SW.WriteLine("#		Must be greater than 0 and less than 10000000");
-            SW.WriteLine("#Color = char");
-            SW.WriteLine("#     A single letter or number denoting the color of the rank");
-            SW.WriteLine("#	    Possibilities:");
-            SW.WriteLine("#		    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f");
-            SW.WriteLine("#FileName = string.txt");
-            SW.WriteLine("#     The file which players of this rank will be stored in");
-            SW.WriteLine("#		It doesn't need to be a .txt file, but you may as well");
-            SW.WriteLine("#		Generally a good idea to just use the same file name as the rank name");
-            SW.WriteLine();
-            SW.WriteLine();
+			File.Create("properties/ranks.properties").Dispose();
+			using (StreamWriter SW = File.CreateText("properties/ranks.properties"))
+			{
+				SW.WriteLine("#RankName = string");
+				SW.WriteLine("#     The name of the rank, use capitalization.");
+				SW.WriteLine("#");
+				SW.WriteLine("#Permission = num");
+				SW.WriteLine("#     The \"permission\" of the rank. It's a number.");
+				SW.WriteLine("#		There are pre-defined permissions already set. (for the old ranks)");
+				SW.WriteLine("#		Banned = -20, Guest = 0, Builder = 30, AdvBuilder = 50, Operator = 80");
+				SW.WriteLine("#		SuperOP = 100, Nobody = 120");
+				SW.WriteLine("#		Must be greater than -50 and less than 120");
+				SW.WriteLine("#		The higher the number, the more commands do (such as undo allowing more seconds)");
+				SW.WriteLine("#Limit = num");
+				SW.WriteLine("#     The command limit for the rank (can be changed in-game with /limit)");
+				SW.WriteLine("#		Must be greater than 0 and less than 10000000");
+				SW.WriteLine("#Color = char");
+				SW.WriteLine("#     A single letter or number denoting the color of the rank");
+				SW.WriteLine("#	    Possibilities:");
+				SW.WriteLine("#		    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f");
+				SW.WriteLine("#FileName = string.txt");
+				SW.WriteLine("#     The file which players of this rank will be stored in");
+				SW.WriteLine("#		It doesn't need to be a .txt file, but you may as well");
+				SW.WriteLine("#		Generally a good idea to just use the same file name as the rank name");
+				SW.WriteLine();
+				SW.WriteLine();
 
-            foreach (Group grp in givenList)
-            {
-                if (grp.name != "nobody")
-                {
-                    SW.WriteLine("RankName = " + grp.trueName);
-                    SW.WriteLine("Permission = " + (int)grp.Permission);
-                    SW.WriteLine("Limit = " + grp.maxBlocks);
-                    SW.WriteLine("Color = " + grp.color[1]);
-                    SW.WriteLine("FileName = " + grp.fileName);
-                    SW.WriteLine();
-                }
-            }
-
-            SW.Flush();
-            SW.Close();
+				foreach (Group grp in givenList)
+				{
+					if (grp.name != "nobody")
+					{
+						SW.WriteLine("RankName = " + grp.trueName);
+						SW.WriteLine("Permission = " + (int)grp.Permission);
+						SW.WriteLine("Limit = " + grp.maxBlocks);
+						SW.WriteLine("Color = " + grp.color[1]);
+						SW.WriteLine("FileName = " + grp.fileName);
+						SW.WriteLine();
+					}
+				}
+			}
         }
 
         public static bool Exists(string name)
@@ -480,22 +480,23 @@ namespace MCForge
         {
             try
             {
-                StreamWriter w = new StreamWriter(File.Create("properties/command.properties"));
-                w.WriteLine("#Version 2");
-                w.WriteLine("#   This file contains a reference to every command found in the server software");
-                w.WriteLine("#   Use this file to specify which ranks get which commands");
-                w.WriteLine("#   Current ranks: " + Group.concatList(false, false, true));
-                w.WriteLine("#   Disallow and allow can be left empty, just make sure there's 2 spaces between the colons");
-                w.WriteLine("#   This works entirely on permission values, not names. Do not enter a rank name. Use it's permission value");
-                w.WriteLine("#   CommandName : LowestRank : Disallow : Allow");
-                w.WriteLine("#   gun : 60 : 80,67 : 40,41,55");
-                w.WriteLine("");
-                foreach (rankAllowance aV in givenList)
-                {
-                    w.WriteLine(aV.commandName + " : " + (int)aV.lowestRank + " : " + getInts(aV.disallow) + " : " + getInts(aV.allow));
-                }
-                w.Flush();
-                w.Close();
+				File.Create("properties/command.properties").Dispose();
+				using (StreamWriter w = File.CreateText("properties/command.properties"))
+				{
+					w.WriteLine("#Version 2");
+					w.WriteLine("#   This file contains a reference to every command found in the server software");
+					w.WriteLine("#   Use this file to specify which ranks get which commands");
+					w.WriteLine("#   Current ranks: " + Group.concatList(false, false, true));
+					w.WriteLine("#   Disallow and allow can be left empty, just make sure there's 2 spaces between the colons");
+					w.WriteLine("#   This works entirely on permission values, not names. Do not enter a rank name. Use it's permission value");
+					w.WriteLine("#   CommandName : LowestRank : Disallow : Allow");
+					w.WriteLine("#   gun : 60 : 80,67 : 40,41,55");
+					w.WriteLine("");
+					foreach (rankAllowance aV in givenList)
+					{
+						w.WriteLine(aV.commandName + " : " + (int)aV.lowestRank + " : " + getInts(aV.disallow) + " : " + getInts(aV.allow));
+					}
+				}
             }
             catch
             {

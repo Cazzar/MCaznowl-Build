@@ -36,12 +36,13 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            Process Restarter = new Process();
+			using (Process Restarter = new Process())
+			{
+				Restarter.StartInfo.FileName = "Restarter.exe";
+				Restarter.StartInfo.Arguments = "Program.cs";
 
-            Restarter.StartInfo.FileName = "Restarter.exe";
-            Restarter.StartInfo.Arguments = "Program.cs";
-
-            Restarter.Start();
+				Restarter.Start();
+			}
         }
         public override void Help(Player p)
         {

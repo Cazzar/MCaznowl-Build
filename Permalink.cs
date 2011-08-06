@@ -51,19 +51,21 @@ namespace MCForge
             macs += Server.port.ToString();
 
             // generate hash
-            var md5 = new MD5CryptoServiceProvider();
-            byte[] originalBytes = Encoding.ASCII.GetBytes(macs);
-            byte[] hash = md5.ComputeHash(originalBytes);
+			using (var md5 = new MD5CryptoServiceProvider())
+			{
+				byte[] originalBytes = Encoding.ASCII.GetBytes(macs);
+				byte[] hash = md5.ComputeHash(originalBytes);
 
-            // convert hash to hex string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
+				// convert hash to hex string
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < hash.Length; i++)
+				{
+					sb.Append(hash[i].ToString("X2"));
+				}
 
-            // the the final hash as a string
-            return sb.ToString();
+				// the the final hash as a string
+				return sb.ToString();
+			}
         }
     }
 }
