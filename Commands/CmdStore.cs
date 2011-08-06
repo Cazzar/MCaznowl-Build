@@ -49,19 +49,19 @@ namespace MCForge
                     else
                     {
                         Player.SendMessage(p, "Storing: " + message);
-                        StreamWriter sW = new StreamWriter(File.Create("extra/copy/" + message + ".copy"));
-                        sW.WriteLine("Saved by: " + p.name + " at " + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss "));
-                        for (int k = 0; k < p.CopyBuffer.Count; k++)
-                        {
-                            sW.WriteLine(p.CopyBuffer[k].x + " " + p.CopyBuffer[k].y + " " + p.CopyBuffer[k].z + " " + p.CopyBuffer[k].type);
-                        }
-                        sW.Flush();
-                        sW.Close();
-
-                        sW = File.AppendText("extra/copy/index.copydb");
-                        sW.WriteLine(message + " " + p.name);
-                        sW.Flush();
-                        sW.Close();
+						File.Create("extra/copy/" + message + ".copy").Dispose();
+						using (StreamWriter sW = File.CreateText("extra/copy/" + message + ".copy"))
+						{
+							sW.WriteLine("Saved by: " + p.name + " at " + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss "));
+							for (int k = 0; k < p.CopyBuffer.Count; k++)
+							{
+								sW.WriteLine(p.CopyBuffer[k].x + " " + p.CopyBuffer[k].y + " " + p.CopyBuffer[k].z + " " + p.CopyBuffer[k].type);
+							}
+						}
+						using (StreamWriter sW = File.AppendText("extra/copy/index.copydb"))
+						{
+							sW.WriteLine(message + " " + p.name);
+						}
                     }
                 }
                 else
@@ -95,14 +95,14 @@ namespace MCForge
                                 catch { }
                                 Player.SendMessage(p, "File &f" + message + Server.DefaultColor + " has been deleted.");
                                 list.Remove(result);
-                                File.Delete("extra/copy/index.copydb");
-                                StreamWriter sW = new StreamWriter(File.Create("extra/copy/index.copydb"));
-                                foreach (CopyOwner cO in list)
-                                {
-                                    sW.WriteLine(cO.file + " " + cO.name);
-                                }
-                                sW.Flush();
-                                sW.Close();
+                                File.Create("extra/copy/index.copydb").Dispose();
+								using (StreamWriter sW = File.CreateText("extra/copy/index.copydb"))
+								{
+									foreach (CopyOwner cO in list)
+									{
+										sW.WriteLine(cO.file + " " + cO.name);
+									}
+								}
                             }
                             else
                             {

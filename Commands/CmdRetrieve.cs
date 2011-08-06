@@ -46,11 +46,11 @@ namespace MCForge
                         message = message.Split(' ')[1];
                         if (File.Exists("extra/copy/" + message + ".copy"))
                         {
-                            StreamReader sR = new StreamReader(File.OpenRead("extra/copy/" + message + ".copy"));
-                            string infoline = sR.ReadLine();
-                            sR.Close();
-                            sR.Dispose();
-                            Player.SendMessage(p, infoline);
+							using (StreamReader sR = new StreamReader("extra/copy/" + message + ".copy"))
+							{
+								string infoline = sR.ReadLine();
+								Player.SendMessage(p, infoline);
+							}
                             return;
                         }
                     }
