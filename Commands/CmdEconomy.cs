@@ -43,7 +43,7 @@ namespace MCForge.Commands
             switch (par0)
             {
                 case "setup":
-                    if (p.group.Permission >= LevelPermission.Operator)
+                    if (p.group.Permission <= LevelPermission.Operator)
                     {
                         switch (par1)
                         {
@@ -332,8 +332,8 @@ namespace MCForge.Commands
                                             Command.all.Find("load").Use(null, p.name + "_" + par3);
                                             Thread.Sleep(250);
                                             Level level = Level.Find(p.name + "_" + par3);
-                                            if (level.permissionbuild > p.group.Permission) { level.permissionbuild = p.group.Permission; }
-                                            if (level.permissionvisit > p.group.Permission) { level.permissionvisit = p.group.Permission; }
+                                            if (level.permissionbuild < p.group.Permission) { level.permissionbuild = p.group.Permission; }
+                                            if (level.permissionvisit < p.group.Permission) { level.permissionvisit = p.group.Permission; }
                                             Command.all.Find("goto").Use(p, p.name + "_" + par3);
                                             while (p.Loading) { Thread.Sleep(250); }
                                             try
@@ -424,7 +424,7 @@ namespace MCForge.Commands
 
                         case "ranks":
                         case "rank":
-                            if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission >= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
+                            if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission <= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
                             if (p.EnoughMoney(Economy.Settings.RankPrice) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy the next rank"); return; }
                             else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.Settings.RankPrice; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
 
@@ -501,6 +501,53 @@ namespace MCForge.Commands
                        }
                    }
                    else { Player.SendMessage(p, "The economy system is currently disabled"); return; }
+
+                case "help":
+                   switch (par1)
+                   {
+                       case "":
+                           Help(p);
+                           return;
+
+                       case "buy":
+                           Player.SendMessage(p, "Use '/eco buy' to buy things");
+                           Player.SendMessage(p, "To buy a map do '/eco buy map [presetname] [custommapname]'");
+                           Player.SendMessage(p, "You can view presets with /eco info maps, [custommapname] is the name for your map");
+                           Player.SendMessage(p, "To buy a rank just type '/eco buy rank'");
+                           Player.SendMessage(p, "To buy a color or title just type '/eco buy [color/title] <color/title>'");
+                           return;
+
+                       case "stats":
+                       case "balance":
+                       case "amount":
+                           Player.SendMessage(p, "To find out your own balance of " + Server.moneys + " just do '/eco stats'");
+                           Player.SendMessage(p, "To find out someone else's balance of " + Server.moneys + " just do '/eco stats [playername]'");
+                           return;
+
+                       case "info":
+                       case "about":
+                           Player.SendMessage(p, "To find out info about buying anything just do '/eco info [map/title/color/rank]'");
+                           return;
+
+                       case "setup":
+                           if (p.group.Permission >= LevelPermission.Operator)
+                           {
+                               Player.SendMessage(p, "Use '/eco setup' to setup the economy system");
+                               Player.SendMessage(p, "Use '/eco setup [title/color/rank] [price]' to setup the prices");
+                               Player.SendMessage(p, "Use '/eco setup [title/color/rank/map] [enable/disable]' to enable/disable that feature");
+                               Player.SendMessage(p, "Use '/eco setup [map] [new] [name] [x] [y] [z] [type] [price]' to setup a map preset");
+                               Player.SendMessage(p, "Use '/eco setup [map] [delete] [name]' to delete a map");
+                               Player.SendMessage(p, "Use '/eco setup [map] [edit] [name] [name/x/y/z/type/price] [value]' to edit a map preset");
+                               return;
+                           }
+                           else { Player.SendMessage(p, "You aren't a high enough rank for that"); return; }
+
+                       default:
+                           Player.SendMessage(p, "That wasn't a valid command addition, Sending you to help");
+                           Help(p);
+                           return;
+                   }
+
                 default:
                     Player.SendMessage(p, "That wasn't a valid command addition, Sending you to help");
                     Help(p);
@@ -509,7 +556,16 @@ namespace MCForge.Commands
         }
         public override void Help(Player p)
         {
-
+            
+            Player.SendMessage(p, "/eco buy <title/color/rank/map> [title/color/mappreset] [custommapname] - to buy");
+            Player.SendMessage(p, "/eco stats [player] - view stats about yourself or [player]");
+            Player.SendMessage(p, "/eco info <title/color/rank/map> - view information about buying");
+            if (p.group.Permission >= LevelPermission.Operator)
+            {
+                Player.SendMessage(p, "/eco setup - to setup economy");
+                Player.SendMessage(p, "/eco help [buy/stats/info/setup] - get more specific help");
+            }
+            else { Player.SendMessage(p, "/eco help [buy/stats/info] - get more specific help"); }
         }
 
         public bool isGood(string value)
