@@ -38,12 +38,11 @@ namespace MCForge
             {
                 File.WriteAllText("text/rules.txt", "No rules entered yet!");
             }
-            StreamReader r = File.OpenText("text/rules.txt");
-            while (!r.EndOfStream)
-                rules.Add(r.ReadLine());
-
-            r.Close();
-            r.Dispose();
+			using (StreamReader r = File.OpenText("text/rules.txt"))
+			{
+				while (!r.EndOfStream)
+					rules.Add(r.ReadLine());
+			}
 
             Player who = null;
             if (message != "")

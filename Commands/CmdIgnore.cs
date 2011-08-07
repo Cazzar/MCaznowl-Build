@@ -88,7 +88,7 @@ namespace MCForge
             }
             if (!File.Exists("ranks/ignore/" + p.name + ".txt"))
             {
-                File.Create("ranks/ignore/" + p.name + ".txt");
+                File.Create("ranks/ignore/" + p.name + ".txt").Dispose();
             }
             string chosenpath = "ranks/ignore/" + p.name + ".txt";
             if (!File.Exists(chosenpath))

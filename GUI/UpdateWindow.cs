@@ -39,8 +39,10 @@ namespace MCForge.Gui
         private void UpdateWindow_Load(object sender, EventArgs e)
         {
             UpdLoadProp("properties/update.properties");
-            WebClient client = new WebClient();
-            client.DownloadFile(ServerSettings.RevisionList, "text/revs.txt");
+			using (WebClient client = new WebClient())
+			{
+				client.DownloadFile(ServerSettings.RevisionList, "text/revs.txt");
+			}
             listRevisions.Items.Clear();
             FileInfo file = new FileInfo("text/revs.txt");
             StreamReader stRead = file.OpenText();
@@ -54,24 +56,23 @@ namespace MCForge.Gui
             stRead.Close();
             stRead.Dispose();
             file.Delete();
-            client.Dispose();
         }
 
 
         public void UpdSave(string givenPath)
         {
-            StreamWriter SW = new StreamWriter(File.Create(givenPath));
-            SW.WriteLine("#This file manages the update process");
-            SW.WriteLine("#Toggle AutoUpdate to true for the server to automatically update");
-            SW.WriteLine("#Notify notifies players in-game of impending restart");
-            SW.WriteLine("#Restart Countdown is how long in seconds the server will count before restarting and updating");
-            SW.WriteLine();
-            SW.WriteLine("autoupdate= " + chkAutoUpdate.Checked.ToString());
-            SW.WriteLine("notify = " + chkNotify.Checked.ToString());
-            SW.WriteLine("restartcountdown = " + txtCountdown.Text);
-            SW.Flush();
-            SW.Close();
-            SW.Dispose();
+			File.Create(givenPath).Dispose();
+			using (StreamWriter SW = File.CreateText(givenPath))
+			{
+				SW.WriteLine("#This file manages the update process");
+				SW.WriteLine("#Toggle AutoUpdate to true for the server to automatically update");
+				SW.WriteLine("#Notify notifies players in-game of impending restart");
+				SW.WriteLine("#Restart Countdown is how long in seconds the server will count before restarting and updating");
+				SW.WriteLine();
+				SW.WriteLine("autoupdate= " + chkAutoUpdate.Checked.ToString());
+				SW.WriteLine("notify = " + chkNotify.Checked.ToString());
+				SW.WriteLine("restartcountdown = " + txtCountdown.Text);
+			}
             this.Close();
         }
 

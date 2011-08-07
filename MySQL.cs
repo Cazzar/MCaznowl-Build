@@ -45,9 +45,11 @@ namespace MCForge
                     {
                         conn.ChangeDatabase(Server.MySQLDatabaseName);
                     }
-                    MySqlCommand cmd = new MySqlCommand(queryString, conn);
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
+					using (MySqlCommand cmd = new MySqlCommand(queryString, conn))
+					{
+						cmd.ExecuteNonQuery();
+						conn.Close();
+					}
                 }
             }
             catch (Exception e)
@@ -75,38 +77,40 @@ namespace MCForge
         public static DataTable fillData(string queryString, bool skipError = false)
         {
 			int totalCount = 0;
-            DataTable toReturn = new DataTable("toReturn");
-            if (!Server.useMySQL)
-                return toReturn;	
-    retry:  try
-            {
-                using (var conn = new MySqlConnection(connString))
-                {
-                    conn.Open();
-                    conn.ChangeDatabase(Server.MySQLDatabaseName);
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn))
-                    {
-                        da.Fill(toReturn);
-                    }
-                    conn.Close();
-                }
-            }
-            catch (Exception e)
-            {
-                totalCount++;
-                if (totalCount > 10)
-                {
-                    if (!skipError)
-                    {
-                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                        Server.ErrorLog(e);
-                    }
-                }
-                else
-                    goto retry;
-            }
+			using (DataTable toReturn = new DataTable("toReturn"))
+			{
+				if (!Server.useMySQL)
+					return toReturn;
+			retry: try
+				{
+					using (var conn = new MySqlConnection(connString))
+					{
+						conn.Open();
+						conn.ChangeDatabase(Server.MySQLDatabaseName);
+						using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn))
+						{
+							da.Fill(toReturn);
+						}
+						conn.Close();
+					}
+				}
+				catch (Exception e)
+				{
+					totalCount++;
+					if (totalCount > 10)
+					{
+						if (!skipError)
+						{
+							File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
+							Server.ErrorLog(e);
+						}
+					}
+					else
+						goto retry;
+				}
 
-            return toReturn;
+				return toReturn;
+			}
         }
     }
 }

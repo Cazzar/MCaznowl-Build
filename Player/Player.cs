@@ -346,16 +346,15 @@ namespace MCForge
                         {
                            try
                            {
-                                List<string> welcome = new List<string>();
-                                StreamReader wm = File.OpenText("text/welcome.txt");
-                                while (!wm.EndOfStream)
-                                    welcome.Add(wm.ReadLine());
+								using (StreamReader wm = File.OpenText("text/welcome.txt"))
+								{
+									List<string> welcome = new List<string>();
+									while (!wm.EndOfStream)
+										welcome.Add(wm.ReadLine());
 
-                                wm.Close();
-                                wm.Dispose();
-
-                                foreach (string w in welcome)
-                                    SendMessage(w);
+									foreach (string w in welcome)
+										SendMessage(w);
+								}
                             }
                             catch { }
                         }
@@ -1818,7 +1817,7 @@ namespace MCForge
                         }
 
                     }
-                    else { File.Create("text/joker.txt"); }
+                    else { File.Create("text/joker.txt").Dispose(); }
 
                 }
 
@@ -3104,19 +3103,19 @@ namespace MCForge
 
                         if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
                         di = new DirectoryInfo("extra/undo/" + name);
-                        StreamWriter w = new StreamWriter(File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"));
-
-                        foreach (UndoPos uP in UndoBuffer)
-                        {
-                            w.Write(uP.mapName + " " +
-                                    uP.x + " " + uP.y + " " + uP.z + " " +
-                                    uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                    uP.type + " " + uP.newtype + " ");
-                        }
-                        w.Flush();
-                        w.Close();
-						if (PlayerDisconnect != null)
-							PlayerDisconnect(this, kickString);
+						File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+						using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+						{
+							foreach (UndoPos uP in UndoBuffer)
+							{
+								w.Write(uP.mapName + " " +
+										uP.x + " " + uP.y + " " + uP.z + " " +
+										uP.timePlaced.ToString().Replace(' ', '&') + " " +
+										uP.type + " " + uP.newtype + " ");
+							}
+							if (PlayerDisconnect != null)
+								PlayerDisconnect(this, kickString);
+						}
 					}
                     catch (Exception e) { Server.ErrorLog(e); }
 					

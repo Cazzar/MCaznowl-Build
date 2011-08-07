@@ -72,7 +72,7 @@ namespace MCForge
 
                     if (!mapIsLockedDown)
                     {
-                        File.Create(filepath);
+                        File.Create(filepath).Dispose();
                         Player.GlobalMessage("The map " + param[1] + " has been locked");
                         Player.GlobalMessageOps("Locked by: " + ((p == null) ? "Console" : p.name));
                     }

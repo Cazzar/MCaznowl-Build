@@ -18,8 +18,8 @@ namespace MCForge
         public abstract string MCForge_Version { get; }
         public abstract int build { get; }
         public abstract string welcome { get; }
-	public abstract string creator { get; }
-	public abstract bool LoadAtStartup { get; }
+	    public abstract string creator { get; }
+	    public abstract bool LoadAtStartup { get; }
         public abstract void Help(Player p);
         public static Plugin Find(string name)
         {
@@ -62,7 +62,7 @@ namespace MCForge
                 }
                 here:
                 Plugin.all.Add((Plugin)instance);
-		creator = ((Plugin)instance).creator;
+		        creator = ((Plugin)instance).creator;
 	        if (((Plugin)instance).LoadAtStartup)
 		{
                     ((Plugin)instance).Load(startup);

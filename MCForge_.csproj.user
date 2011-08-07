@@ -12,7 +12,7 @@
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartAction>Program</StartAction>
+    <StartAction>Project</StartAction>
     <StartProgram>D:\User\MCForge\GIT\WP\bin\Debug\MCForge.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">

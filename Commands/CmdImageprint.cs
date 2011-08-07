@@ -62,10 +62,11 @@ namespace MCForge
             {
                 try
                 {
-                    WebClient web = new WebClient();
-                    Player.SendMessage(p, "Downloading IMGUR file from: &fhttp://www.imgur.com/" + message);
-                    web.DownloadFile("http://www.imgur.com/" + message, "extra/images/tempImage_" + p.name + ".bmp");
-                    web.Dispose();
+					using (WebClient web = new WebClient())
+					{
+						Player.SendMessage(p, "Downloading IMGUR file from: &fhttp://www.imgur.com/" + message);
+						web.DownloadFile("http://www.imgur.com/" + message, "extra/images/tempImage_" + p.name + ".bmp");
+					}
                     Player.SendMessage(p, "Download complete.");
                     bitmaplocation = "tempImage_" + p.name;
                     message = bitmaplocation;   
@@ -76,14 +77,15 @@ namespace MCForge
             {
                 try
                 {
-                    WebClient web = new WebClient();
-                    if (message.Substring(0, 4) != "http")
-                    {
-                        message = "http://" + message;
-                    }
-                    Player.SendMessage(p, "Downloading file from: &f" + message + Server.DefaultColor + ", please wait.");
-                    web.DownloadFile(message, "extra/images/tempImage_" + p.name + ".bmp");
-                    web.Dispose();
+					using (WebClient web = new WebClient())
+					{
+						if (message.Substring(0, 4) != "http")
+						{
+							message = "http://" + message;
+						}
+						Player.SendMessage(p, "Downloading file from: &f" + message + Server.DefaultColor + ", please wait.");
+						web.DownloadFile(message, "extra/images/tempImage_" + p.name + ".bmp");
+					}
                     Player.SendMessage(p, "Download complete.");
                     bitmaplocation = "tempImage_" + p.name;
                 }

@@ -66,7 +66,7 @@ namespace MCForge.Gui
                     loadedfile = "rules";
                     if (!File.Exists("text/rules.txt"))
                     {
-                        File.Create("text/rules.txt");
+                        File.Create("text/rules.txt").Dispose();
                         Server.s.Log("Created rules.txt");
                     }
                     break;

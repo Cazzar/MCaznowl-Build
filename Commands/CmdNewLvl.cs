@@ -88,8 +88,8 @@ namespace MCForge
                 // create a new level...
                 try
                 {
-                    Level lvl = new Level(name, x, y, z, parameters[4]);
-                    lvl.Save(true); //... and save it.
+                    using(Level lvl = new Level(name, x, y, z, parameters[4]))
+						lvl.Save(true); //... and save it.
                 }
                 finally
                 {

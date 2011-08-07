@@ -43,18 +43,19 @@ namespace MCForge
                 Player.SendMessage(p, "Could not find .dat file");
                 return;
             }
-            
-            FileStream fs = File.OpenRead(fileName);
-            if (ConvertDat.Load(fs, message) != null)
-            {
-                Player.SendMessage(p, "Converted map!");
-            }
-            else
-            {
-                Player.SendMessage(p, "The map conversion failed.");
-                return;
-            }
-            fs.Close();
+
+			using (FileStream fs = File.OpenRead(fileName))
+			{
+				if (ConvertDat.Load(fs, message) != null)
+				{
+					Player.SendMessage(p, "Converted map!");
+				}
+				else
+				{
+					Player.SendMessage(p, "The map conversion failed.");
+					return;
+				}
+			}
 
             Command.all.Find("load").Use(p, message);
         }

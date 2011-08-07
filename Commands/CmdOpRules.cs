@@ -39,12 +39,12 @@ namespace MCForge
             {
                 File.WriteAllText("text/oprules.txt", "No oprules entered yet!");
             }
-            StreamReader r = File.OpenText("text/oprules.txt");
-            while (!r.EndOfStream)
-                oprules.Add(r.ReadLine());
 
-            r.Close();
-            r.Dispose();
+			using (StreamReader r = File.OpenText("text/oprules.txt"))
+			{
+				while (!r.EndOfStream)
+					oprules.Add(r.ReadLine());
+			}
 
             Player who = null;
             if (message != "")
