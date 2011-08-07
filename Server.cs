@@ -371,6 +371,7 @@ public static byte maxGuests = 10;
 
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
+            Economy.Load();
             Plugin.Load();
             Group.InitAll();
             Command.InitAll();

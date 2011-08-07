@@ -172,6 +172,7 @@
     <Compile Include="Commands\CmdXJail.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
+    <Compile Include="Economy.cs" />
     <Compile Include="GUI\EditText.cs">
       <SubType>Form</SubType>
     </Compile>

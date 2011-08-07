@@ -638,7 +638,7 @@ namespace MCForge.Gui
             if (this.dgvPlayers.SelectedRows == null)
                 return null;
 
-            if (this.dgvPlayers.SelectedRows.Count == 0)
+            if (this.dgvPlayers.SelectedRows.Count <= 0)
                 return null;
 
             return (Player)(this.dgvPlayers.SelectedRows[0].DataBoundItem);
