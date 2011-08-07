@@ -1039,7 +1039,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     using (Stream stream = response.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(stream);
-                        if (reader.ReadLine().StartsWith("open"))
+                        if (reader.ReadLine().ToLower().StartsWith("open"))
                         {
                             ChkPortResult.Text = "Port Open!";
                             ChkPortResult.BackColor = Color.Lime;

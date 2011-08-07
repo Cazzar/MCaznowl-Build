@@ -3515,5 +3515,17 @@ namespace MCForge
                 return exists;
             }
         }
+
+        public bool EnoughMoney(int amount)
+        {
+            if (this.money >= amount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
