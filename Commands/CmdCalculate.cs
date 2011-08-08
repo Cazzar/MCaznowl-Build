@@ -37,66 +37,97 @@ namespace MCForge
             }
 
             var split = message.Split(' ');
+			if(split.Length < 2)
+			{
+				Help(p);
+				return;
+			}
+			
+			if(!ValidChar(split[0]))
+			{
+				Player.SendMessage(p, "Invalid number given");
+				return;
+			}
 
-            if (ValidChar(split[0]) && ValidChar(split[2]))
-            {
-                if (split[1] == "square" && split.Length == 2)
-                {
-                    float result = float.Parse(split[0]) * float.Parse(split[0]);
-                    Player.SendMessage(p, "The answer: %aThe square of " + split[0] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "root" && split.Length == 2)
-                {
-                    double result = Math.Sqrt(double.Parse(split[0]));
-                    Player.SendMessage(p, "The answer: %aThe root of " + split[0] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "cube" && split.Length == 2)
-                {
-                    float result = float.Parse(split[0]) * float.Parse(split[0]) + float.Parse(split[0]);
-                    Player.SendMessage(p, "The answer: %aThe cube of " + split[0] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "pi" && split.Length == 2)
-                {
-                    double result = int.Parse(split[0]) * Math.PI;
-                    Player.SendMessage(p, "The answer: %a" + split[0] + " x PI" + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if ((split[1] == "x" || split[1] == "*") && split.Length == 3)
-                {
-                    float result = float.Parse(split[0]) * float.Parse(split[2]);
-                    Player.SendMessage(p, "The answer: %a" + split[0] + " x " + split[2] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "+" && split.Length == 3)
-                {
-                    float result = float.Parse(split[0]) + float.Parse(split[2]);
-                    Player.SendMessage(p, "The answer: %a" + split[0] + " + " + split[2] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "-" && split.Length == 3)
-                {
-                    float result = float.Parse(split[0]) - float.Parse(split[2]);
-                    Player.SendMessage(p, "The answer: %a" + split[0] + " - " + split[2] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                if (split[1] == "/" && split.Length == 3)
-                {
-                    float result = float.Parse(split[0]) / float.Parse(split[2]);
-                    Player.SendMessage(p, "The answer: %a" + split[0] + " / " + split[2] + Server.DefaultColor + " = %c" + result);
-                    return;
-                }
-                else
-                {
-                    Player.SendMessage(p, "There is no such method");
-                }
-            }
-            else
-            {
-                Player.SendMessage(p, "You can't calculate letters");
-            }
+            double result = 0;
+			float num1 = float.Parse(split[0]);
+			String operation = split[1];
+			
+			// All 2-parameter operations go here
+            
+			if(split.Length == 2)
+			{
+				switch(operation)
+				{
+					case "square":
+						result = num1 * num1;
+						Player.SendMessage(p, "The answer: %aThe square of " + split[0] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "root":
+						result = Math.Sqrt(num1);
+						Player.SendMessage(p, "The answer: %aThe root of " + split[0] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "cube":
+						result = num1 * num1 * num1;
+						Player.SendMessage(p, "The answer: %aThe cube of " + split[0] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "pi":
+						result = num1 * Math.PI;
+						Player.SendMessage(p, "The answer: %a" + split[0] + " x PI" + Server.DefaultColor + " = %c" + result);
+						return;
+					default:
+						Player.SendMessage(p, "There is no such method");
+						return;
+				}
+			}
+			
+			// Now we try 3-parameter methods
+			
+			if(split.Length == 3)
+			{
+				if(!ValidChar(split[2]))
+				{
+					Player.SendMessage(p, "Invalid number given");
+					return;
+				}
+				
+				float num2 = float.Parse(split[2]);
+				
+				switch(operation)
+				{
+					case "x":
+					case "*":
+						result = num1 * num2;
+						Player.SendMessage(p, "The answer: %a" + split[0] + " x " + split[2] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "+":
+						result = num1 + num2;
+						Player.SendMessage(p, "The answer: %a" + split[0] + " + " + split[2] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "-":
+						result = num1 - num2;
+						Player.SendMessage(p, "The answer: %a" + split[0] + " - " + split[2] + Server.DefaultColor + " = %c" + result);
+						return;
+					case "/":
+						if(num2 == 0)
+						{
+							Player.SendMessage(p, "Cannot divide by 0");
+							return;
+						}
+						
+						result = num1 / num2;
+						Player.SendMessage(p, "The answer: %a" + split[0] + " / " + split[2] + Server.DefaultColor + " = %c" + result);
+						return;
+					default:
+						Player.SendMessage(p, "There is no such method");
+						return;
+				}
+			}
+
+            // If we get here, the player did something wrong
+
+			Help(p);
+
         }
         public override void Help(Player p)
         {
