@@ -81,12 +81,6 @@ namespace MCForge
             all.Add(new CmdDisagree());
             all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
-            all.Add(new CmdEconomyBuyColor());
-            all.Add(new CmdEconomyBuyMap());
-            all.Add(new CmdEconomyBuyRank());
-            all.Add(new CmdEconomyBuyTitle());
-            all.Add(new CmdEconomySetup());
-            all.Add(new CmdEconomyStats());
 			all.Add(new CmdEllipse());
             all.Add(new CmdEmote());
             all.Add(new CmdExplode());
@@ -200,7 +194,6 @@ namespace MCForge
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
             all.Add(new CmdServerReport());
-            all.Add(new CmdSetOwnMapSpawn());
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
             all.Add(new CmdShutdown());

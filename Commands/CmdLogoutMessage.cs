@@ -32,7 +32,7 @@ namespace MCForge
         public CmdLogoutMessage() { }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/logoutmessage [Player] [Message] - Customize your logout message");
+            Player.SendMessage(p, "/logoutmessage [Player] [Message] - Customize your logout message. Please note the player name is case sensitive.");
         }
 
         public override void Use(Player p, string message)

@@ -145,13 +145,14 @@ namespace MCForge.Gui
             dgvMapsTab.DataSource = new LevelCollection(new LevelListViewForTab());
             dgvMapsTab.Font = new Font("Calibri", 8.25f);
 
-            System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000);
-            UpdateListTimer.Elapsed += delegate
-            {
-                UpdateClientList(Player.players);
-                UpdateMapList("'");
-            }; UpdateListTimer.Start();
-
+			using (System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000))
+			{
+				UpdateListTimer.Elapsed += delegate
+				{
+					UpdateClientList(Player.players);
+					UpdateMapList("'");
+				}; UpdateListTimer.Start();
+			}
         }
 
         void SettingsUpdate()
@@ -602,12 +603,13 @@ namespace MCForge.Gui
                     Server.s.Log("The server will now begin auto restart procedures.");
 
                     RemoveNotifyIcon();
-                    Process Restarter = new Process();
+					using (Process Restarter = new Process())
+					{
+						Restarter.StartInfo.FileName = "Restarter.exe";
+						Restarter.StartInfo.Arguments = "Program.cs";
 
-                    Restarter.StartInfo.FileName = "Restarter.exe";
-                    Restarter.StartInfo.Arguments = "Program.cs";
-
-                    Restarter.Start();
+						Restarter.Start();
+					}
                 }
             }
         }
@@ -638,7 +640,7 @@ namespace MCForge.Gui
             if (this.dgvPlayers.SelectedRows == null)
                 return null;
 
-            if (this.dgvPlayers.SelectedRows.Count == 0)
+            if (this.dgvPlayers.SelectedRows.Count <= 0)
                 return null;
 
             return (Player)(this.dgvPlayers.SelectedRows[0].DataBoundItem);
@@ -871,12 +873,13 @@ namespace MCForge.Gui
             if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
-                Process Restarter = new Process();
+				using (Process Restarter = new Process())
+				{
+					Restarter.StartInfo.FileName = "Restarter.exe";
+					Restarter.StartInfo.Arguments = "Program.cs";
 
-                Restarter.StartInfo.FileName = "Restarter.exe";
-                Restarter.StartInfo.Arguments = "Program.cs";
-
-                Restarter.Start();
+					Restarter.Start();
+				}
             }
 
         }
@@ -1065,15 +1068,16 @@ namespace MCForge.Gui
                     }
                 }
                 File.Delete("text/autoload.txt");
-                StreamWriter SW = new StreamWriter("text/autoload.txt");
-                foreach (string line in oldlines)
-                {
-                    if (line.Trim() != "")
-                    {
-                        SW.WriteLine(line);
-                    }
-                }
-                SW.Close();
+				using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
+				{
+					foreach (string line in oldlines)
+					{
+						if (line.Trim() != "")
+						{
+							SW.WriteLine(line);
+						}
+					}
+				}
             }
             UpdateMapList("'");
             return;
@@ -1780,9 +1784,11 @@ namespace MCForge.Gui
             {
                 File.WriteAllText("text/rules.txt", "No rules entered yet!");
             }
-            StreamReader r = File.OpenText("text/rules.txt");
-            while (!r.EndOfStream)
-                rules.Add(r.ReadLine());
+			using (StreamReader r = File.OpenText("text/rules.txt"))
+			{
+				while (!r.EndOfStream)
+					rules.Add(r.ReadLine());
+			}
             Player who = prpertiesofplyer;
             who.SendMessage("Server Rules:");
             foreach (string s in rules)

@@ -80,8 +80,12 @@ namespace MCForge.Gui
                     return;
             }
             loaded = true;
-            if (File.Exists("text/" + loadedfile + ".txt")) { oldtxt = File.ReadAllText("text/" + loadedfile + ".txt"); }
-            else { MessageBox.Show("File doesn't exist!!"); loaded = false; loadedfile = null; return; }
+            try
+            {
+                if (File.Exists("text/" + loadedfile + ".txt")) { oldtxt = File.ReadAllText("text/" + loadedfile + ".txt"); }
+                else { MessageBox.Show("File doesn't exist!!"); loaded = false; loadedfile = null; return; }
+            }
+            catch { MessageBox.Show("Something went wrong!!"); loaded = false; loadedfile = null; return; }
             EditTextTxtBox.Text = oldtxt;
         }
 
