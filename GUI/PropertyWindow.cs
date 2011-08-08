@@ -1168,7 +1168,7 @@ MessageBox.Show("Text Box Cleared!!");
             numGuests.Maximum = numPlayers.Value;
         }
 
-        private void editTxtsBt_Click(object sender, EventArgs e)
+        private void editTxtsBt_Click_1(object sender, EventArgs e)
         {
             if (EditTextOpen == true)
             {
