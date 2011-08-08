@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
+    <Compile Include="ScriptingVB.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />

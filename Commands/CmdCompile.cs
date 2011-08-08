@@ -31,31 +31,63 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if(message == "" || message.IndexOf(' ') != -1) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             bool success = false;
-            try
+            string[] param = message.Split(' ');
+            string name = param[0];
+
+            if (param.Length == 1)
             {
-                 success = Scripting.Compile(message);
-            }
-            catch (Exception e)
-            {
-                Server.ErrorLog(e);
-                Player.SendMessage(p, "An exception was thrown during compilation.");
+                try
+                {
+                    success = Scripting.Compile(message);
+                }
+                catch (Exception e)
+                {
+                    Server.ErrorLog(e);
+                    Player.SendMessage(p, "An exception was thrown during compilation.");
+                    return;
+                }
+                if (success)
+                {
+                    Player.SendMessage(p, "Compiled successfully.");
+                }
+                else
+                {
+                    Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                }
                 return;
             }
-            if (success)
+            if (param[1] == "vb")
             {
-                Player.SendMessage(p, "Compiled successfully.");
+                try
+                {
+                    success = ScriptingVB.Compile(name);
+                }
+                catch (Exception e)
+                {
+                    Server.ErrorLog(e);
+                    Player.SendMessage(p, "An exception was thrown during compilation.");
+                    return;
+                }
+                if (success)
+                {
+                    Player.SendMessage(p, "Compiled successfully.");
+                }
+                else
+                {
+                    Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                }
+                return;
             }
-            else
-            {
-                Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
-            }
+
         }
 
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/compile <class name> - Compiles a command class file into a DLL.");
+            Player.SendMessage(p, "/compile <class name> vb - Compiles a command class (that was written in visual basic) file into a DLL.");
+
         }
     }
 }
