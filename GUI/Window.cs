@@ -1926,7 +1926,7 @@ namespace MCForge.Gui
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("hi:");
+            MessageBox.Show("hi");
         }
 
 
