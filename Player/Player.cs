@@ -1937,7 +1937,7 @@ namespace MCForge
                 {
                     if (rdcount < 5)
                     {
-                        GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30&4% &5C&6O&7O&8L&9E&aR&b!");
+                        GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30 &4P&CE&7R&DC&EE&9N&1T &5C&6O&7O&8L&9E&aR&b!");
                         rdcount++;
                     }
                     else
