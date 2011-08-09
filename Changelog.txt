@@ -11,7 +11,13 @@ v5.0.0.0
 - Added /maze.
 - Added /draw. 
 - Reverted to old CLI Interface due to an issue where the server would lock up when the console used an invalid command. 
-- Remade the Economy system. Now consolidated into 1 command '/economy' and 1 properties file
+- Remade the Economy system. Now consolidated into 1 command '/economy' and 1 properties file.
+- /kill now works in the console.
+- /slap now works in the console.
+- /tcolor now works in the console.
+- /color now works in the console. 
+- Made it so that players can no longer change the color of people ranked higher than them. 
+
 
 v4.9.0.0
 - Fixed a bug in /pyramid

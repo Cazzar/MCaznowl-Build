@@ -81,7 +81,6 @@ namespace MCForge
             all.Add(new CmdDisagree());
             all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
-			all.Add(new CmdEllipse());
             all.Add(new CmdEmote());
             all.Add(new CmdExplode());
 			all.Add(new CmdFakePay());

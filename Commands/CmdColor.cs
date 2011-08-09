@@ -74,31 +74,34 @@ namespace MCForge
             }
             else
             {
-                if (message == "del")
+                if (p != null)
                 {
-                    MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + p.name + "'");
+                    if (message == "del")
+                    {
+                        MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + p.name + "'");
 
-                    Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color reverted to " + p.group.color + "their group's default" + Server.DefaultColor + ".", false);
-                    p.color = p.group.color;
+                        Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color reverted to " + p.group.color + "their group's default" + Server.DefaultColor + ".", false);
+                        p.color = p.group.color;
 
-                    Player.GlobalDie(p, false);
-                    Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                    p.SetPrefix();
-                    return;
-                }
-                string color = c.Parse(message);
-                if (color == "") { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
-                else if (color == p.color) { Player.SendMessage(p, "You already have that color."); }
-                else
-                {
-                    MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + p.name + "'");
+                        Player.GlobalDie(p, false);
+                        Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
+                        p.SetPrefix();
+                        return;
+                    }
+                    string color = c.Parse(message);
+                    if (color == "") { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
+                    else if (color == p.color) { Player.SendMessage(p, "You already have that color."); }
+                    else
+                    {
+                        MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + p.name + "'");
 
-                    Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
-                    p.color = color;
+                        Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
+                        p.color = color;
 
-                    Player.GlobalDie(p, false);
-                    Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                    p.SetPrefix();
+                        Player.GlobalDie(p, false);
+                        Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
+                        p.SetPrefix();
+                    }
                 }
             }
         }

@@ -32,7 +32,11 @@ namespace MCForge
         public CmdLogoutMessage() { }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/logoutmessage [Player] [Message] - Customize your logout message. Please note the player name is case sensitive.");
+            Player.SendMessage(p, "/logoutmessage [Player] [Message] - Customize your logout message.");
+            if(Server.mono == true)
+            {
+                Player.SendMessage(p, "Please note that if the player is offline, the name is case sensitive.");
+            }
         }
 
         public override void Use(Player p, string message)
@@ -43,25 +47,62 @@ namespace MCForge
             if (number >= 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
-                if (!File.Exists("text/logout/" + t + ".txt"))
-                {
-                    Player.SendMessage(p, "The player you specified does not exist!");
-                    return;
-                }
-                else
-                    File.WriteAllText("text/logout/" + t + ".txt", s);
-                Player.SendMessage(p, "The logout message of " + t + " has been changed to:");
-                Player.SendMessage(p, s);
-                Server.s.Log(p.name + " changed " + t + "'s login message to:");
-                Server.s.Log(s);
+                string t = message.Substring(0, pos);
+                string s = message.Substring(pos + 1);
+                 Player target = Player.Find(t);
+                 if (target != null)
+                 {
+                     if (!File.Exists("text/logout/" + target.name + ".txt"))
+                     {
+                         Player.SendMessage(p, "The player you specified does not exist!");
+                         return;
+                     }
+                     else
+                     {
+                         File.WriteAllText("text/logout/" + target.name + ".txt", s);
+                     }
+                     Player.SendMessage(p, "The logout message of " + target.name + " has been changed to:");
+                     Player.SendMessage(p, s);
+                     if (p != null)
+                     {
+                         Server.s.Log(p.name + " changed " + target.name + "'s logout message to:");
+                     }
+                     else
+                     {
+                         Server.s.Log("The Console changed " + target.name + "'s logout message to:");
+                     }
+                     Server.s.Log(s);
+                 }
+                 else
+                 {
+                     if (!File.Exists("text/logout/" + t + ".txt"))
+                     {
+                         Player.SendMessage(p, "The player you specified does not exist!");
+                         return;
+                     }
+                     else
+                     {
+                         File.WriteAllText("text/logout/" + t + ".txt", s);
+                     }
+                     Player.SendMessage(p, "The logout message of " + t + " has been changed to:");
+                     Player.SendMessage(p, s);
+                     if (p != null)
+                     {
+                         Server.s.Log(p.name + " changed " + t + "'s logout message to:");
+                     }
+                     else
+                     {
+                         Server.s.Log("The Console changed " + t + "'s logout message to:");
+                     }
+                     Server.s.Log(s);
+                 }
             }
+            /*
             if (number == 1)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
+                string t = message.Substring(0, pos);
+                string s = message.Substring(pos + 1);
                 if (!File.Exists("text/logout/" + p.name + ".txt"))
                 {
                     Player.SendMessage(p, "You do not exist!");
@@ -77,7 +118,7 @@ namespace MCForge
 
 
 
-            }
+            }*/
         }
     }
 }

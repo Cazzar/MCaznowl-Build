@@ -85,7 +85,7 @@ namespace MCForge
                     if (!Block.Walkthrough(who.level.GetTile(currentX, yy, currentZ)) && who.level.GetTile(currentX, yy, currentZ) != Block.Zero)
                     {
                         foundHeight = (ushort)(yy - 1);
-                        who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped into the roof by " + "<CONSOLE>");
+                        who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped into the roof by " + "the Console.");
                         break;
                     }
                 }
@@ -98,7 +98,7 @@ namespace MCForge
                 }
                 else
                 {
-                    who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped sky high by " + "<CONSOLE>");
+                    who.level.ChatLevel(who.color + who.name + Server.DefaultColor + " was slapped sky high by " + "the Console.");
                 }
                 foundHeight = 1000;
             }
