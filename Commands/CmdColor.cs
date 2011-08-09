@@ -37,6 +37,7 @@ namespace MCForge
             if (pos != -1)
             {
                 Player who = Player.Find(message.Substring(0, pos));
+                if (p != null && who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "You cannot change the color of someone ranked equal or higher than you!"); return; }
                 if (who == null) { Player.SendMessage(p, "There is no player \"" + message.Substring(0, pos) + "\"!"); return; }
                 if (message.Substring(pos + 1) == "del")
                 {
