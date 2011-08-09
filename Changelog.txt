@@ -20,7 +20,8 @@ v5.0.0.0
 - /kill now works in the console.
 - /slap now works in the console.
 - /tcolor now works in the console.
-- /color now works in the console. 
+- /color now works in the console.
+- Updated /calculate so it can use operations like "cube".  
 - Made it so that players can no longer change the color of people ranked higher than them. 
 - Fixed a massive number of possible memory leaks and stability issues.
 - Removed /ellipse after a request for its removal by MCDzienny and it's development team.
