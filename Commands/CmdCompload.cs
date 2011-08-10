@@ -1,5 +1,5 @@
 ﻿/*
-	Copyright 2011 MCForge
+	Copyright 2011 MCForge modified by headdetect
 
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -30,13 +30,24 @@ namespace MCForge
         public override void Help(Player p) { Player.SendMessage(p, "/compload <command> - Compiles AND loads <command> for use (shortcut = /cml)"); }
         public override void Use(Player p, string message)
         {
+            string[] param = message.Split(' ');
             if (message == "") { Help(p); return; }
-            else
+
+            if (param.Length == 1)
             {
                 Command.all.Find("compile").Use(p, message);
                 Command.all.Find("cmdload").Use(p, message);
                 Command.all.Find("help").Use(p, message);
+                return;
             }
+            else if (param[1] == "vb")
+            {
+                Command.all.Find("compile").Use(p, message + "vb");
+                Command.all.Find("cmdload").Use(p, message + "vb");
+                Command.all.Find("help").Use(p, message);
+                return;
+            }
+            else { Help(p); return; }
         }
     }
 }

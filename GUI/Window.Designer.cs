@@ -107,6 +107,7 @@ namespace MCForge.Gui
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtSystem = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
             this.btnExtra = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
@@ -640,6 +641,7 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.btnExtra);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.gBCommands);
@@ -658,6 +660,17 @@ namespace MCForge.Gui
             this.tabPage1.Size = new System.Drawing.Size(698, 488);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
+            // 
+            // button2
+            // 
+            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(358, 455);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(80, 23);
+            this.button2.TabIndex = 37;
+            this.button2.Text = "TEST";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // btnExtra
             // 
@@ -2243,5 +2256,6 @@ namespace MCForge.Gui
         private Label label33;
         private TextBox txtOpInput;
         private AutoScrollTextBox txtOpLog;
+        private Button button2;
     }
 }
