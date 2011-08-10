@@ -1,9 +1,4 @@
 
 /bin
 /obj
-*.DS_Store
-MCForge_.pidb
-
-MCForge_.userprefs
-
-MCForge_.userprefs
+.metadata/*
