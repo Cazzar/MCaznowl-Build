@@ -651,7 +651,7 @@ namespace MCForge.Gui
             if (this.dgvMaps.SelectedRows == null)
                 return null;
 
-            if (this.dgvMaps.SelectedRows.Count == 0)
+            if (this.dgvMaps.SelectedRows.Count <= 0)
                 return null;
 
             return (Level)(this.dgvMaps.SelectedRows[0].DataBoundItem);
