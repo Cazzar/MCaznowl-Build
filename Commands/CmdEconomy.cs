@@ -43,7 +43,7 @@ namespace MCForge.Commands
             switch (par0)
             {
                 case "setup":
-                    if (p.group.Permission <= LevelPermission.Operator)
+                    if (p.group.Permission >= LevelPermission.Operator)
                     {
                         switch (par1)
                         {
@@ -332,8 +332,8 @@ namespace MCForge.Commands
                                             Command.all.Find("load").Use(null, p.name + "_" + par3);
                                             Thread.Sleep(250);
                                             Level level = Level.Find(p.name + "_" + par3);
-                                            if (level.permissionbuild < p.group.Permission) { level.permissionbuild = p.group.Permission; }
-                                            if (level.permissionvisit < p.group.Permission) { level.permissionvisit = p.group.Permission; }
+                                            if (level.permissionbuild > p.group.Permission) { level.permissionbuild = p.group.Permission; }
+                                            if (level.permissionvisit > p.group.Permission) { level.permissionvisit = p.group.Permission; }
                                             Command.all.Find("goto").Use(p, p.name + "_" + par3);
                                             while (p.Loading) { Thread.Sleep(250); }
                                             try
@@ -424,7 +424,7 @@ namespace MCForge.Commands
 
                         case "ranks":
                         case "rank":
-                            if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission <= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
+                            if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission >= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
                             if (p.EnoughMoney(Economy.Settings.RankPrice) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy the next rank"); return; }
                             else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.Settings.RankPrice; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
 
