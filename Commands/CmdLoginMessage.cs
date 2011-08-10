@@ -32,7 +32,11 @@ namespace MCForge
         public CmdLoginMessage() { }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/loginmessage [Player] [Message] - Customize your login message. Please note the player name is case sensitive.");
+            Player.SendMessage(p, "/loginmessage [Player] [Message] - Customize your login message.");
+            if(Server.mono == true)
+            {
+                Player.SendMessage(p, "Please note that if the player is offline, the name is case sensitive.");
+            }
         }
 
         public override void Use(Player p, string message)
@@ -43,25 +47,62 @@ namespace MCForge
             if (number >= 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
-                if (!File.Exists("text/login/" + t + ".txt"))
+                string t = message.Substring(0, pos);
+                string s = message.Substring(pos + 1);
+                Player target = Player.Find(t);
+                if (target != null)
                 {
-                    Player.SendMessage(p, "The player you specified does not exist!");
-                    return;
+                    if (!File.Exists("text/login/" + target.name + ".txt"))
+                    {
+                        Player.SendMessage(p, "The player you specified does not exist!");
+                        return;
+                    }
+                    else
+                    {
+                        File.WriteAllText("text/login/" + target.name + ".txt", s);
+                    }
+                    Player.SendMessage(p, "The login message of " + target.name + " has been changed to:");
+                    Player.SendMessage(p, s);
+                    if (p != null)
+                    {
+                        Server.s.Log(p.name + " changed " + target.name + "'s login message to:");
+                    }
+                    else
+                    {
+                        Server.s.Log("The Console changed " + target.name + "'s login message to:");
+                    }
+                    Server.s.Log(s);
                 }
                 else
-                    File.WriteAllText("text/login/" + t + ".txt", s);
-                Player.SendMessage(p, "The login message of " + t + " has been changed to:");
-                Player.SendMessage(p, s);
-                Server.s.Log(p.name + " changed " + t + "'s login message to:");
-                Server.s.Log(s);
+                {
+                    if (!File.Exists("text/login/" + t + ".txt"))
+                    {
+                        Player.SendMessage(p, "The player you specified does not exist!");
+                        return;
+                    }
+                    else
+                    {
+                        File.WriteAllText("text/login/" + t + ".txt", s);
+                    }
+                    Player.SendMessage(p, "The login message of " + t + " has been changed to:");
+                    Player.SendMessage(p, s);
+                    if (p != null)
+                    {
+                        Server.s.Log(p.name + " changed " + t + "'s login message to:");
+                    }
+                    else
+                    {
+                        Server.s.Log("The Console changed " + t + "'s login message to:");
+                    }
+                    Server.s.Log(s);
+                }
             }
+            /*
             if (number == 1)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
+                string t = message.Substring(0, pos);
+                string s = message.Substring(pos + 1);
                 if (!File.Exists("text/login/" + p.name + ".txt"))
                 {
                     Player.SendMessage(p, "You do not exist!");
@@ -77,7 +118,7 @@ namespace MCForge
 
 
 
-            }
+            }*/
         }
     }
 }

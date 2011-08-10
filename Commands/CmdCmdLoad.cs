@@ -33,26 +33,49 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if(message == "") { Help(p); return; }
+
             if (Command.all.Contains(message.Split(' ')[0]))
             {
                 Player.SendMessage(p, "That command is already loaded!");
                 return;
             }
-            message = "Cmd" + message.Split(' ')[0]; ;
-            string error = Scripting.Load(message);
-            if (error != null)
+
+            string[] param = message.Split(' ');
+            string name = "Cmd" + param[0];
+
+
+            if (param.Length == 1)
             {
-                Player.SendMessage(p, error);
+                string error = Scripting.Load(name);
+                if (error != null)
+                {
+                    Player.SendMessage(p, error);
+                    return;
+                }
+                GrpCommands.fillRanks();
+                Player.SendMessage(p, "Command was successfully loaded.");
                 return;
             }
-            GrpCommands.fillRanks();
-            Player.SendMessage(p, "Command was successfully loaded.");
+            if (param[1] == "vb")
+            {
+
+                string error = ScriptingVB.Load(name);
+                if (error != null)
+                {
+                    Player.SendMessage(p, error);
+                    return;
+                }
+                GrpCommands.fillRanks();
+                Player.SendMessage(p, "Command was successfully loaded.");
+                return;
+            }
         }
+
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/cmdload <command name> - Loads a command into the server for use.");
+            Player.SendMessage(p, "/cmdload <command name> - Loads a C# command into the server for use.");
+            Player.SendMessage(p, "/cmdload <command name> vb - Loads a Visual basic command into the server for use.");
         }
     }
 }

@@ -28,15 +28,19 @@ namespace MCForge
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
         public CmdCmdCreate() { }
-        
+
         public override void Use(Player p, string message)
         {
-            if (message == "" || message.IndexOf(' ') != -1)
+
+            if (message == "")
             {
                 Help(p);
                 return;
             }
-            else
+            string[] name = message.Split(' ');
+
+
+            if (name.Length == 1)
             {
                 if (File.Exists("extra/commands/source/Cmd" + message + ".cs")) { p.SendMessage("File Cmd" + message + ".cs already exists.  Choose another name."); return; }
                 try
@@ -50,12 +54,33 @@ namespace MCForge
                     return;
                 }
                 Player.SendMessage(p, "Successfully created a new command class.");
+                return;
             }
+
+            if (name[1] == "vb")
+            {
+                if (File.Exists("extra/commands/source/Cmd" + name[0] + ".vb")) { p.SendMessage("File Cmd" + name[0] + ".vb already exists.  Choose another name."); return; }
+                try
+                {
+                    ScriptingVB.CreateNew(name[0]);
+                }
+                catch (Exception e)
+                {
+                    Server.ErrorLog(e);
+                    Player.SendMessage(p, "An error occurred creating the class file.");
+                    return;
+                }
+                Player.SendMessage(p, "Successfully created a new vb command class.");
+                return;
+            }
+            // else if (name.Length > 2) { Help(p); return; }
+
         }
 
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/cmdcreate <message> - Creates a dummy command class named Cmd<Message> from which you can make a new command.");
+            Player.SendMessage(p, "Or use \"/cmdcreate <name of command> vb\" to create a dummy class in visual basic");
         }
     }
 }

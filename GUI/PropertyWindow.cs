@@ -1182,7 +1182,315 @@ MessageBox.Show("Text Box Cleared!!");
             PropertyForm.Show();
         }
 
+        private void btnSavecmd_Click(object sender, EventArgs e)
+        {
+            if (CustCmdTxtBox2.Text != null)
+            {
+                if (radioButton1.Checked)
+                {
+                    try
+                    {
 
+                        File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb", null);
+                        File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb", CustCmdTxtBox2.Text);
+
+                        CustCmdTxtBox2.Text = null;
+                        MessageBox.Show("Saved Successfully, as a VB file");
+                    }
+                    catch (Exception y)
+                    {
+                        MessageBox.Show(y.Message);
+
+                    }
+                }
+                else
+                {
+                    try
+                    {
+
+                        File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", null);
+                        File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", CustCmdTxtBox2.Text);
+                        CustCmdTxtBox2.Text = null;
+                        MessageBox.Show("Saved Successfully, as a C# File");
+                    }
+                    catch (Exception y)
+                    {
+                        MessageBox.Show(y.Message);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command to be saved as!!");
+            }
+
+        }
+
+        private void btnDiscardcmd_Click_1(object sender, EventArgs e)
+        {
+            switch(MessageBox.Show("Are you sure you want to discard this whole file?", "Discard?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    if (radioButton1.Checked)
+                    {
+
+                        if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb"))
+                        {
+                            File.Delete("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb");
+                        }
+                        else{MessageBox.Show("File: " + CustCmdtxtBox.Text + ".vb Doesnt Exist.");}
+                    }
+                    else
+                    { 
+                        if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
+                        {
+                            File.Delete("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs");
+                        }
+                        else{MessageBox.Show("File: " + CustCmdtxtBox.Text + ".cs Doesnt Exist.");}
+                    }
+                    break;
+
+            }
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked){
+                if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb") || File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
+                {
+                    MessageBox.Show("Command already exists", "", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text.ToLower() + " vb");
+                    MessageBox.Show("New Command Created: " + CustCmdtxtBox.Text.ToLower() + " Created.");
+                }
+            }
+            else
+            {
+
+
+
+                if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs") || File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb"))
+                {
+                    MessageBox.Show("Command already exists", "", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text.ToLower());
+                    MessageBox.Show("New Command Created: " + CustCmdtxtBox.Text.ToLower() + " Created.");
+                }
+            }
+        }
+
+        private void btnIntextbox_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                string filepath;
+
+                if (CustCmdtxtBox.Text == null)
+                {
+                    filepath = null;
+                    MessageBox.Show("No Command entered");
+                }
+                else
+                {
+                    if (!radioButton1.Checked)
+                    {
+
+                        filepath = "extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs";
+                        StreamReader reader = new StreamReader(filepath);
+                        if (File.Exists(filepath))
+                        {
+                            try
+                            {
+                                CustCmdTxtBox2.Text = "";
+
+                                string line;
+                                while ((line = reader.ReadLine()) != null)
+                                {
+                                    CustCmdTxtBox2.Text = CustCmdTxtBox2.Text + line + Environment.NewLine;
+                                }
+
+                            }
+
+                            catch (Exception y)
+                            {
+                                MessageBox.Show(y.Message);
+                            }
+                            finally
+                            {
+                                if (reader != null)
+                                    reader.Close();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("command doesnt exist");
+                        }
+                    }
+                    else
+                    {
+
+                        filepath = "extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".vb";
+                        StreamReader reader = new StreamReader(filepath);
+                        if (File.Exists(filepath))
+                        {
+                            try
+                            {
+                                CustCmdTxtBox2.Text = "";
+
+                                string line;
+                                while ((line = reader.ReadLine()) != null)
+                                {
+                                    CustCmdTxtBox2.Text = CustCmdTxtBox2.Text + line + Environment.NewLine;
+                                }
+
+                            }
+
+                            catch (Exception y)
+                            {
+                                MessageBox.Show(y.Message);
+                            }
+                            finally
+                            {
+                                if (reader != null)
+                                    reader.Close();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("command doesnt exist");
+                        }
+                    }
+
+                }
+            }
+
+            catch (Exception y)
+            {
+                MessageBox.Show(y.Message);
+            }
+
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            if (CustCmdtxtBox.Text == "") { MessageBox.Show("Please Put a Command in Textbox", "no text"); }
+            if (Command.all.Contains(CustCmdtxtBox.Text))
+            {
+                MessageBox.Show("Command is already loaded", "");
+                return;
+            }
+            if (radioButton1.Checked)
+            {
+                string message;
+
+                message = "Cmd" + CustCmdtxtBox.Text;
+                string error = ScriptingVB.Load(message);
+                if (error != null)
+                {
+                    MessageBox.Show(error, "error");
+                    return;
+                }
+                GrpCommands.fillRanks();
+                MessageBox.Show("Command was successfully loaded.", "");
+            }
+            else
+            {
+                string message;
+
+                message = "Cmd" + CustCmdtxtBox.Text; ;
+                string error = Scripting.Load(message);
+                if (error != null)
+                {
+                    MessageBox.Show(error, "error");
+                    return;
+                }
+                GrpCommands.fillRanks();
+                MessageBox.Show("Command was successfully loaded.", "");
+            }
+
+        }
+
+        private void btnUnload_Click(object sender, EventArgs e)
+        {
+            if (CustCmdtxtBox.Text == "") { MessageBox.Show("Please Put a Command in Textbox", "no text"); }
+            if (Command.core.Contains(CustCmdtxtBox.Text))
+            {
+                MessageBox.Show(CustCmdtxtBox.Text + " is a core command, you cannot unload it!", "Error");
+                return;
+            }
+            Command foundCmd = Command.all.Find(CustCmdtxtBox.Text);
+            if (foundCmd == null)
+            {
+                MessageBox.Show(CustCmdtxtBox.Text + " is not a valid or loaded command.", "");
+                return;
+            }
+            Command.all.Remove(foundCmd);
+            GrpCommands.fillRanks();
+            MessageBox.Show("Command was successfully unloaded.", "");
+        }
+
+        private void btnCompile_Click(object sender, EventArgs e)
+        {
+            if (CustCmdtxtBox.Text == "" || CustCmdtxtBox.Text.IndexOf(' ') != -1) { MessageBox.Show("Please Put a Command in Textbox", "no text"); }
+            bool success = false;
+            if (radioButton1.Checked)
+            {
+                try
+                {
+                    success = ScriptingVB.Compile(CustCmdtxtBox.Text);
+                }
+                catch (Exception y)
+                {
+                    Server.ErrorLog(y);
+                    MessageBox.Show("An exception was thrown during compilation.", "");
+                    return;
+                }
+                if (success)
+                {
+                    MessageBox.Show("Compiled successfully.", "");
+                }
+                else
+                {
+                    MessageBox.Show("Compilation error.  Please check compile.log for more information.", "Error");
+                }
+            }
+            else
+            {
+                try
+                {
+                    success = Scripting.Compile(CustCmdtxtBox.Text);
+                }
+                catch (Exception y)
+                {
+                    Server.ErrorLog(y);
+                    MessageBox.Show("An exception was thrown during compilation.", "");
+                    return;
+                }
+                if (success)
+                {
+                    MessageBox.Show("Compiled successfully.", "");
+                }
+                else
+                {
+                    MessageBox.Show("Compilation error.  Please check compile.log for more information.", "Error");
+                }
+            }
+
+        }
+
+        
+        
+
+       
+        
+        
+
+       
        
 
     }

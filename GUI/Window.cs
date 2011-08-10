@@ -449,7 +449,7 @@ namespace MCForge.Gui
                 }
                 else
                 {
-                    Player.GlobalMessage(txtInput.Text);
+                    Player.GlobalMessage("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     WriteLine("<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
@@ -651,7 +651,7 @@ namespace MCForge.Gui
             if (this.dgvMaps.SelectedRows == null)
                 return null;
 
-            if (this.dgvMaps.SelectedRows.Count == 0)
+            if (this.dgvMaps.SelectedRows.Count <= 0)
                 return null;
 
             return (Level)(this.dgvMaps.SelectedRows[0].DataBoundItem);
@@ -1929,6 +1929,8 @@ namespace MCForge.Gui
                 txtAdminInput.Clear();
             }
         }
+
+
 
 
 

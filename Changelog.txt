@@ -2,16 +2,32 @@ v5.0.0.0
 - Added a Maps tab to the GUI.
 - Added a Players tab to the GUI.
 - Added a Edit Text window to the GUI.
+- Added a Chat Tab to the GUI. 
 - Removed the Custom Login and Logout windows (Now editable from the Players tab).
 - Added Plugin API.
+- Added VisualBasic Scripting (Custom Commands)
 - Now Supports WOM texturing.
-- Added /waypoint.
-- Added /topten.
-- Added /faq.
-- Added /maze.
-- Added /draw. 
-- Reverted to old CLI Interface due to an issue where the server would lock up when the console used an invalid command. 
-- Remade the Economy system. Now consolidated into 1 command '/economy' and 1 properties file
+- Added /waypoint - creates waypoints on a map that you can move from, useful for building.
+- Added /topten - Lists top ten players in several catagories. Requires MySQL.
+- Added /faq -  Creates a file called faq.txt. You may put frequently asked questions in here and their answers.
+- Added /maze -  Creates a maze.
+- Added /ignore -  Ignore a player.
+- Added /p2p -  sends a specified player to another specified player.
+- Added /draw -  can create cones, spheres, and pyramids, hollow spheres, and hollow pyramids. 
+- Added /allowgun -  Allows or disallows gun usage on a specified level.
+- Added a part to /whois that shows the total time a player has spent on a server.
+- Reverted to old CLI Interface due to an issue where the server would lock up when the console used an invalid command. You no longer need to put a "/" infront of commands, for now.
+- Remade the Economy system. Now consolidated into 1 command '/economy' and 1 properties file.
+- /kill now works in the console.
+- /slap now works in the console.
+- /tcolor now works in the console.
+- /color now works in the console.
+- Updated /calculate so it can use operations like "cube".  
+- Made it so that players can no longer change the color of people ranked higher than them. 
+- Fixed a massive number of possible memory leaks and stability issues.
+- Removed /ellipse after a request for its removal by MCDzienny and it's development team.
+- /review now checks if an op is online. If one is not, it will inform the player that there are no ops online.
+
 
 v4.9.0.0
 - Fixed a bug in /pyramid

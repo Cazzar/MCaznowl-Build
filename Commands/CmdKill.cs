@@ -43,7 +43,7 @@ namespace MCForge
                 }
                 else
                 {
-                    killMsg = " was killed by " + "<CONSOLE>";
+                    killMsg = " was killed by " + "the Console.";
                 }
             }
             else
@@ -55,7 +55,14 @@ namespace MCForge
                 {
                     if (message.ToLower() == "explode")
                     {
-                        killMsg = " was exploded by " + p.color + p.name;
+                        if (p != null)
+                        {
+                            killMsg = " was exploded by " + p.color + p.name;
+                        }
+                        else
+                        {
+                            killMsg = " was exploded by the Console.";
+                        }
                         killMethod = 1;
                     }
                     else
@@ -77,7 +84,10 @@ namespace MCForge
 
             if (who == null)
             {
-                p.HandleDeath(Block.rock, " killed itself in its confusion");
+                if (p != null)
+                {
+                    p.HandleDeath(Block.rock, " killed itself in its confusion");
+                }
                 Player.SendMessage(p, "Could not find player");
                 return;
             }
