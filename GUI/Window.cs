@@ -449,7 +449,7 @@ namespace MCForge.Gui
                 }
                 else
                 {
-                    Player.GlobalMessage(txtInput.Text);
+                    Player.GlobalMessage("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     WriteLine("<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
