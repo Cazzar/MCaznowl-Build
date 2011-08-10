@@ -124,7 +124,7 @@ namespace MCForge
         public static string selectedrevision = "";
         public static bool autorestart;
         public static DateTime restarttime;
-
+        public static bool AllowTNT = false;
         public static bool chatmod = false;
 
         //Global VoteKick In Progress Flag
