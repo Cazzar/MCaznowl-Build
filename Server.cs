@@ -40,8 +40,8 @@ namespace MCForge
     public class Server
     {
         public delegate void LogHandler(string message);
-		public delegate void OnServerError(Exception error);
-		public static event OnServerError ServerError = null;
+public delegate void OnServerError(Exception error);
+public static event OnServerError ServerError = null;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
@@ -176,6 +176,8 @@ public static byte maxGuests = 10;
         public static string ircOpChannel = "#changethistoo";
         public static bool ircIdentify = false;
         public static string ircPassword = "";
+        public static bool verifyadmins = true;
+        public static LevelPermission verifyadminsrank = LevelPermission.Operator;
 
         public static bool restartOnError = true;
 
@@ -219,8 +221,10 @@ public static byte maxGuests = 10;
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
-		public static int RemotePort = 1337;
+        public static int RemotePort = 1337;
+
         public static string defaultRank = "guest";
+
         public static bool dollardollardollar = true;
         public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
@@ -265,10 +269,10 @@ public static byte maxGuests = 10;
                     Log("Restarter.exe doesn't exist, Downloading");
                     try
                     {
-						using (WebClient WEB = new WebClient())
-						{
-							WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
-						}
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                        }
                         if (File.Exists("Restarter.exe"))
                         {
                             Log("Restarter.exe download succesful!");
@@ -284,10 +288,10 @@ public static byte maxGuests = 10;
                     Log("Restarter.pdb doesn't exist, Downloading");
                     try
                     {
-						using (WebClient WEB = new WebClient())
-						{
-							WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
-						}
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                        }
                         if (File.Exists("Restarter.pdb"))
                         {
                             Log("Restarter.pdb download succesful!");
@@ -303,10 +307,10 @@ public static byte maxGuests = 10;
                     Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
                     try
                     {
-						using (WebClient WEB = new WebClient())
-						{
-							WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
-						}
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+                        }
                         if (File.Exists("Meebey.SmartIRC4Net.dll"))
                         {
                             Log("Meebey.SmartIRC4Net.dll download succesful!");
@@ -654,11 +658,11 @@ processThread.Start();
 
                 if (File.Exists("text/messages.txt"))
                 {
-					using (StreamReader r = File.OpenText("text/messages.txt"))
-					{
-						while (!r.EndOfStream)
-							messages.Add(r.ReadLine());
-					}
+                    using (StreamReader r = File.OpenText("text/messages.txt"))
+                    {
+                        while (!r.EndOfStream)
+                            messages.Add(r.ReadLine());
+                    }
                 }
                 else File.Create("text/messages.txt").Close();
 
@@ -794,10 +798,10 @@ processThread.Start();
                 bool begin = false;
                 try
                 {
-					using (p = new Player(listen.EndAccept(result)))
-					{
-						listen.BeginAccept(new AsyncCallback(Accept), null);
-					}
+                    using (p = new Player(listen.EndAccept(result)))
+                    {
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                    }
                     begin = true;
                 }
                 catch (SocketException e)
@@ -828,6 +832,7 @@ processThread.Start();
                 {
                     Player.Find(p).Kick("Server shutdown. Rejoin in 10 seconds.");
                 }
+
                 else
                 {
                     Player.Find(p).Kick(Server.customShutdownMessage);
