@@ -531,7 +531,7 @@ namespace MCForge_.Gui
                 foreach (Player p in kickList) { p.Kick("Server restarted! Rejoin!"); }
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
-
+            
             try
             {
                 string level = null;
@@ -542,9 +542,10 @@ namespace MCForge_.Gui
                     l.saveChanges();
                 }
 
-                File.WriteAllText("text/autoload.txt", level);
+                //File.WriteAllText("text/autoload.txt", level);
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
+            
         }
     }
 }

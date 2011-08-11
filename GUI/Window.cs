@@ -1085,7 +1085,15 @@ namespace MCForge.Gui
 
         private void CreateNewMap_Click(object sender, EventArgs e)
         {
-            Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower());
+            try
+            {
+                Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower());
+            }
+            catch 
+            {
+                MessageBox.Show("Level Creation Failed. Are  you sure you didn't leave a box empty?");
+            }
+
             if (File.Exists("levels/" + nametxtbox.Text + ".lvl"))
             {
                 MessageBox.Show("Created Level");
@@ -1928,6 +1936,11 @@ namespace MCForge.Gui
                 Server.s.AdminLog("(Admins): Console: " + adminnewtext);
                 txtAdminInput.Clear();
             }
+        }
+
+        private void txtLog_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
 
