@@ -371,7 +371,7 @@ namespace MCForge
                             case "admins-join-silent":
                                 try { Server.adminsjoinsilent = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;                                
+                                break;
                             case "main-name":
                                 if (Player.ValidName(value)) Server.level = value;
                                 else Server.s.Log("Invalid main name");
@@ -415,6 +415,22 @@ namespace MCForge
                                 try { Server.globalignoreops = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "admin-verification":
+                                try { Server.verifyadmins = bool.Parse(value); }
+                                catch { Server.s.Log("invalid " + key + ". Using default"); }
+                                break;
+                            case "verify-admin-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.verifyadminsrank = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
+                                break;
                         }
                     }
                 }
@@ -439,166 +455,171 @@ namespace MCForge
         {
             try
             {
-				File.Create(givenPath).Dispose();
-				using (StreamWriter w = File.CreateText(givenPath))
-				{
-					if (givenPath.IndexOf("server") != -1)
-					{
-						SaveProps(w);
-					}
-				}
-			}
+                File.Create(givenPath).Dispose();
+                using (StreamWriter w = File.CreateText(givenPath))
+                {
+                    if (givenPath.IndexOf("server") != -1)
+                    {
+                        SaveProps(w);
+                    }
+                }
+            }
             catch
             {
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
         }
-		static void SaveProps(StreamWriter w)
-		{
-			w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
-			w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
-			w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
-			w.WriteLine("#   port\t=\tThe port to operate from");
-			w.WriteLine("#   console-only\t=\tRun without a GUI (useful for Linux servers with mono)");
-			w.WriteLine("#   verify-names\t=\tVerify the validity of names");
-			w.WriteLine("#   public\t=\tSet to true to appear in the public server list");
-			w.WriteLine("#   max-players\t=\tThe maximum number of connections");
-			w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
-			w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
-			w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
-			w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
-			w.WriteLine("#   irc\t=\tSet to true to enable the IRC bot");
-			w.WriteLine("#   irc-nick\t=\tThe name of the IRC bot");
-			w.WriteLine("#   irc-server\t=\tThe server to connect to");
-			w.WriteLine("#   irc-channel\t=\tThe channel to join");
-			w.WriteLine("#   irc-opchannel\t=\tThe channel to join (posts OpChat)");
-			w.WriteLine("#   irc-port\t=\tThe port to use to connect");
-			w.WriteLine("#   irc-identify\t=(true/false)\tDo you want the IRC bot to Identify itself with nickserv. Note: You will need to register it's name with nickserv manually.");
-			w.WriteLine("#   irc-password\t=\tThe password you want to use if you're identifying with nickserv");
-			w.WriteLine("#   anti-tunnels\t=\tStops people digging below max-depth");
-			w.WriteLine("#   max-depth\t=\tThe maximum allowed depth to dig down");
-			w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
-			w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
-			w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
-			w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
-			w.WriteLine("#   profanity-filter\t=\tFilter bad words from the chat.  Default false.");
-			w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
-			w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
-			w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
-			w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
-			w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
-			w.WriteLine();
-			w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
-			w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
-			w.WriteLine("#   Username\t=\tThe username you used to create the database (usually root)");
-			w.WriteLine("#   Password\t=\tThe password set while making the database");
-			w.WriteLine("#   DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
-			w.WriteLine();
-			w.WriteLine("#   defaultColor\t=\tThe color code of the default messages (Default = &e)");
-			w.WriteLine();
-			w.WriteLine("#   Super-limit\t=\tThe limit for building commands for SuperOPs");
-			w.WriteLine("#   Op-limit\t=\tThe limit for building commands for Operators");
-			w.WriteLine("#   Adv-limit\t=\tThe limit for building commands for AdvBuilders");
-			w.WriteLine("#   Builder-limit\t=\tThe limit for building commands for Builders");
-			w.WriteLine();
-			w.WriteLine("#   kick-on-hackrank\t=\tSet to true if hackrank should kick players");
-			w.WriteLine("#   hackrank-kick-time\t=\tNumber of seconds until player is kicked");
-			w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
-			w.WriteLine("#   ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
-			w.WriteLine();
-			w.WriteLine();
-			w.WriteLine("# Server options");
-			w.WriteLine("server-name = " + Server.name);
-			w.WriteLine("motd = " + Server.motd);
-			w.WriteLine("port = " + Server.port.ToString());
-			w.WriteLine("verify-names = " + Server.verify.ToString().ToLower());
-			w.WriteLine("public = " + Server.pub.ToString().ToLower());
-			w.WriteLine("max-players = " + Server.players.ToString());
-			w.WriteLine("max-guests = " + Server.maxGuests.ToString());
-			w.WriteLine("max-maps = " + Server.maps.ToString());
-			w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
-			w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
-			w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
-			w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
-			w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
-			w.WriteLine("restart-on-error = " + Server.restartOnError);
-			w.WriteLine("main-name = " + Server.level);
-			w.WriteLine();
-			w.WriteLine("# irc bot options");
-			w.WriteLine("irc = " + Server.irc.ToString().ToLower());
-			w.WriteLine("irc-nick = " + Server.ircNick);
-			w.WriteLine("irc-server = " + Server.ircServer);
-			w.WriteLine("irc-channel = " + Server.ircChannel);
-			w.WriteLine("irc-opchannel = " + Server.ircOpChannel);
-			w.WriteLine("irc-port = " + Server.ircPort.ToString());
-			w.WriteLine("irc-identify = " + Server.ircIdentify.ToString());
-			w.WriteLine("irc-password = " + Server.ircPassword);
-			w.WriteLine();
-			w.WriteLine("# other options");
-			w.WriteLine("anti-tunnels = " + Server.antiTunnel.ToString().ToLower());
-			w.WriteLine("max-depth = " + Server.maxDepth.ToString().ToLower());
-			w.WriteLine("rplimit = " + Server.rpLimit.ToString().ToLower());
-			w.WriteLine("rplimit-norm = " + Server.rpNormLimit.ToString().ToLower());
-			w.WriteLine("physicsrestart = " + Server.physicsRestart.ToString().ToLower());
-			w.WriteLine("old-help = " + Server.oldHelp.ToString().ToLower());
-			w.WriteLine("deathcount = " + Server.deathcount.ToString().ToLower());
-			w.WriteLine("afk-minutes = " + Server.afkminutes.ToString());
-			w.WriteLine("afk-kick = " + Server.afkkick.ToString());
-			w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString().ToLower());
-			w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString().ToLower());
-			w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
-			w.WriteLine("money-name = " + Server.moneys);
-			w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
-			w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString());
-			w.WriteLine("log-heartbeat = " + Server.logbeat.ToString());
-			w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString());
-			w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString());
-			w.WriteLine("notify-on-join-leave = " + Server.notifyOnJoinLeave.ToString());
-			w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString());
-			w.WriteLine("host-state = " + Server.ZallState.ToString());
-			w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
-			w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
-			w.WriteLine("server-owner = " + Server.server_owner.ToString());
-			w.WriteLine();
-			w.WriteLine("# backup options");
-			w.WriteLine("backup-time = " + Server.backupInterval.ToString());
-			w.WriteLine("backup-location = " + Server.backupLocation);
-			w.WriteLine();
-			w.WriteLine("#Error logging");
-			w.WriteLine("report-back = " + Server.reportBack.ToString().ToLower());
-			w.WriteLine();
-			w.WriteLine("#MySQL information");
-			w.WriteLine("UseMySQL = " + Server.useMySQL);
-			w.WriteLine("Host = " + Server.MySQLHost);
-			w.WriteLine("SQLPort = " + Server.MySQLPort);
-			w.WriteLine("Username = " + Server.MySQLUsername);
-			w.WriteLine("Password = " + Server.MySQLPassword);
-			w.WriteLine("DatabaseName = " + Server.MySQLDatabaseName);
-			w.WriteLine("Pooling = " + Server.MySQLPooling);
-			w.WriteLine();
-			w.WriteLine("#Colors");
-			w.WriteLine("defaultColor = " + Server.DefaultColor);
-			w.WriteLine("irc-color = " + Server.IRCColour);
-			w.WriteLine();
-			w.WriteLine("#Running on mono?");
-			w.WriteLine("mono = " + Server.mono);
-			w.WriteLine();
-			w.WriteLine("#Custom Messages");
-			w.WriteLine("custom-ban = " + Server.customBan.ToString().ToLower());
-			w.WriteLine("custom-ban-message = " + Server.customBanMessage);
-			w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString().ToLower());
-			w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
-			w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
-			w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
-			w.WriteLine();
-			w.WriteLine("cheapmessage = " + Server.cheapMessage.ToString().ToLower());
-			w.WriteLine("cheap-message-given = " + Server.cheapMessageGiven);
-			w.WriteLine("rank-super = " + Server.rankSuper.ToString().ToLower());
-			try { w.WriteLine("default-rank = " + Server.defaultRank); }
-			catch { w.WriteLine("default-rank = guest"); }
-			w.WriteLine();
-			w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString().ToLower());
-			w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString());
-		}
+        static void SaveProps(StreamWriter w)
+        {
+            w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
+            w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
+            w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
+            w.WriteLine("#   port\t=\tThe port to operate from");
+            w.WriteLine("#   console-only\t=\tRun without a GUI (useful for Linux servers with mono)");
+            w.WriteLine("#   verify-names\t=\tVerify the validity of names");
+            w.WriteLine("#   public\t=\tSet to true to appear in the public server list");
+            w.WriteLine("#   max-players\t=\tThe maximum number of connections");
+            w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
+            w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
+            w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
+            w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
+            w.WriteLine("#   irc\t=\tSet to true to enable the IRC bot");
+            w.WriteLine("#   irc-nick\t=\tThe name of the IRC bot");
+            w.WriteLine("#   irc-server\t=\tThe server to connect to");
+            w.WriteLine("#   irc-channel\t=\tThe channel to join");
+            w.WriteLine("#   irc-opchannel\t=\tThe channel to join (posts OpChat)");
+            w.WriteLine("#   irc-port\t=\tThe port to use to connect");
+            w.WriteLine("#   irc-identify\t=(true/false)\tDo you want the IRC bot to Identify itself with nickserv. Note: You will need to register it's name with nickserv manually.");
+            w.WriteLine("#   irc-password\t=\tThe password you want to use if you're identifying with nickserv");
+            w.WriteLine("#   anti-tunnels\t=\tStops people digging below max-depth");
+            w.WriteLine("#   max-depth\t=\tThe maximum allowed depth to dig down");
+            w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
+            w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
+            w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
+            w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
+            w.WriteLine("#   profanity-filter\t=\tFilter bad words from the chat.  Default false.");
+            w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
+            w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
+            w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
+            w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+            w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
+            w.WriteLine();
+            w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
+            w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
+            w.WriteLine("#   Username\t=\tThe username you used to create the database (usually root)");
+            w.WriteLine("#   Password\t=\tThe password set while making the database");
+            w.WriteLine("#   DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
+            w.WriteLine();
+            w.WriteLine("#   defaultColor\t=\tThe color code of the default messages (Default = &e)");
+            w.WriteLine();
+            w.WriteLine("#   Super-limit\t=\tThe limit for building commands for SuperOPs");
+            w.WriteLine("#   Op-limit\t=\tThe limit for building commands for Operators");
+            w.WriteLine("#   Adv-limit\t=\tThe limit for building commands for AdvBuilders");
+            w.WriteLine("#   Builder-limit\t=\tThe limit for building commands for Builders");
+            w.WriteLine();
+            w.WriteLine("#   kick-on-hackrank\t=\tSet to true if hackrank should kick players");
+            w.WriteLine("#   hackrank-kick-time\t=\tNumber of seconds until player is kicked");
+            w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
+            w.WriteLine("#   ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
+            w.WriteLine();
+            w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
+            w.WriteLine("#   verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
+            w.WriteLine();
+            w.WriteLine("# Server options");
+            w.WriteLine("server-name = " + Server.name);
+            w.WriteLine("motd = " + Server.motd);
+            w.WriteLine("port = " + Server.port.ToString());
+            w.WriteLine("verify-names = " + Server.verify.ToString().ToLower());
+            w.WriteLine("public = " + Server.pub.ToString().ToLower());
+            w.WriteLine("max-players = " + Server.players.ToString());
+            w.WriteLine("max-guests = " + Server.maxGuests.ToString());
+            w.WriteLine("max-maps = " + Server.maps.ToString());
+            w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
+            w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
+            w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
+            w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
+            w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
+            w.WriteLine("restart-on-error = " + Server.restartOnError);
+            w.WriteLine("main-name = " + Server.level);
+            w.WriteLine();
+            w.WriteLine("# irc bot options");
+            w.WriteLine("irc = " + Server.irc.ToString().ToLower());
+            w.WriteLine("irc-nick = " + Server.ircNick);
+            w.WriteLine("irc-server = " + Server.ircServer);
+            w.WriteLine("irc-channel = " + Server.ircChannel);
+            w.WriteLine("irc-opchannel = " + Server.ircOpChannel);
+            w.WriteLine("irc-port = " + Server.ircPort.ToString());
+            w.WriteLine("irc-identify = " + Server.ircIdentify.ToString());
+            w.WriteLine("irc-password = " + Server.ircPassword);
+            w.WriteLine();
+            w.WriteLine("# other options");
+            w.WriteLine("anti-tunnels = " + Server.antiTunnel.ToString().ToLower());
+            w.WriteLine("max-depth = " + Server.maxDepth.ToString().ToLower());
+            w.WriteLine("rplimit = " + Server.rpLimit.ToString().ToLower());
+            w.WriteLine("rplimit-norm = " + Server.rpNormLimit.ToString().ToLower());
+            w.WriteLine("physicsrestart = " + Server.physicsRestart.ToString().ToLower());
+            w.WriteLine("old-help = " + Server.oldHelp.ToString().ToLower());
+            w.WriteLine("deathcount = " + Server.deathcount.ToString().ToLower());
+            w.WriteLine("afk-minutes = " + Server.afkminutes.ToString());
+            w.WriteLine("afk-kick = " + Server.afkkick.ToString());
+            w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString().ToLower());
+            w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString().ToLower());
+            w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
+            w.WriteLine("money-name = " + Server.moneys);
+            w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
+            w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString());
+            w.WriteLine("log-heartbeat = " + Server.logbeat.ToString());
+            w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString());
+            w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString());
+            w.WriteLine("notify-on-join-leave = " + Server.notifyOnJoinLeave.ToString());
+            w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString());
+            w.WriteLine("host-state = " + Server.ZallState.ToString());
+            w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
+            w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
+            w.WriteLine("server-owner = " + Server.server_owner.ToString());
+            w.WriteLine();
+            w.WriteLine("# backup options");
+            w.WriteLine("backup-time = " + Server.backupInterval.ToString());
+            w.WriteLine("backup-location = " + Server.backupLocation);
+            w.WriteLine();
+            w.WriteLine("#Error logging");
+            w.WriteLine("report-back = " + Server.reportBack.ToString().ToLower());
+            w.WriteLine();
+            w.WriteLine("#MySQL information");
+            w.WriteLine("UseMySQL = " + Server.useMySQL);
+            w.WriteLine("Host = " + Server.MySQLHost);
+            w.WriteLine("SQLPort = " + Server.MySQLPort);
+            w.WriteLine("Username = " + Server.MySQLUsername);
+            w.WriteLine("Password = " + Server.MySQLPassword);
+            w.WriteLine("DatabaseName = " + Server.MySQLDatabaseName);
+            w.WriteLine("Pooling = " + Server.MySQLPooling);
+            w.WriteLine();
+            w.WriteLine("#Colors");
+            w.WriteLine("defaultColor = " + Server.DefaultColor);
+            w.WriteLine("irc-color = " + Server.IRCColour);
+            w.WriteLine();
+            w.WriteLine("#Running on mono?");
+            w.WriteLine("mono = " + Server.mono);
+            w.WriteLine();
+            w.WriteLine("#Custom Messages");
+            w.WriteLine("custom-ban = " + Server.customBan.ToString().ToLower());
+            w.WriteLine("custom-ban-message = " + Server.customBanMessage);
+            w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString().ToLower());
+            w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
+            w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
+            w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
+            w.WriteLine();
+            w.WriteLine("cheapmessage = " + Server.cheapMessage.ToString().ToLower());
+            w.WriteLine("cheap-message-given = " + Server.cheapMessageGiven);
+            w.WriteLine("rank-super = " + Server.rankSuper.ToString().ToLower());
+            try { w.WriteLine("default-rank = " + Server.defaultRank); }
+            catch { w.WriteLine("default-rank = guest"); }
+            w.WriteLine();
+            w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString().ToLower());
+            w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString());
+            w.WriteLine("#Admin Verification");
+            w.WriteLine("admin-verification = " + Server.verifyadmins.ToString().ToLower());
+            w.WriteLine("verify-admin-perm = " + ((sbyte)Server.verifyadminsrank).ToString());
+        }
     }
 }
