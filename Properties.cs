@@ -17,6 +17,8 @@
 */
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MCForge
 {
@@ -24,12 +26,29 @@ namespace MCForge
     {
         public static void Load(string givenPath, bool skipsalt = false)
         {
+            /*
             if (!skipsalt)
             {
                 Server.salt = "";
                 string rndchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 Random rnd = new Random();
                 for (int i = 0; i < 16; ++i) { Server.salt += rndchars[rnd.Next(rndchars.Length)]; }
+            }*/
+            if (!skipsalt)
+            {
+                RandomNumberGenerator prng = RandomNumberGenerator.Create();
+                StringBuilder sb = new StringBuilder();
+                byte[] oneChar = new byte[1];
+                while (sb.Length < 16)
+                {
+                    prng.GetBytes(oneChar);
+                    if (Char.IsLetterOrDigit((char)oneChar[0]))
+                    {
+                        sb.Append((char)oneChar[0]);
+                    }
+                }
+
+                Server.salt = sb.ToString();
             }
 
             if (File.Exists(givenPath))
