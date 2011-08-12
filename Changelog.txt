@@ -27,7 +27,9 @@ v5.0.0.0
 - Fixed a massive number of possible memory leaks and stability issues.
 - Removed /ellipse after a request for its removal by MCDzienny and it's development team.
 - /review now checks if an op is online. If one is not, it will inform the player that there are no ops online.
-
+- Added a Admin Verification System:
+- /setpass: Sets your password.
+- /pass: Use this with your password to verify yourself.
 
 v4.9.0.0
 - Fixed a bug in /pyramid
