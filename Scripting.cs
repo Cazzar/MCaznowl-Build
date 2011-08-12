@@ -207,7 +207,7 @@ namespace MCForge
                 Server.s.Log("AUTOLOAD: Loaded " + cmd.ToLower() + ".dll");
 
             }
-            ScriptingVB.Autoload();
+            //ScriptingVB.Autoload();
         }
 
         /// <summary>
