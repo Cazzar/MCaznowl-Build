@@ -239,7 +239,7 @@ public static byte maxGuests = 10;
         public static bool logbeat = false;
         public static bool adminsjoinsilent = false;
         public static bool mono = false;
-        public static string server_owner = "Notch";
+        public static string server_owner = "";
 
         public static bool flipHead = false;
 

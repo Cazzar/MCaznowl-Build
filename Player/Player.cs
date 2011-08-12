@@ -889,7 +889,7 @@ namespace MCForge
                 }
                 SetPrefix();
             }
-            if (Server.server_owner.ToLower().Contains(this.name.ToLower()))
+            if (Server.server_owner != "" && Server.server_owner.ToLower().Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
                 {
@@ -897,7 +897,7 @@ namespace MCForge
                 }
                 if (prefix == "")
                 {
-                    title = "(sun)wner";
+                    title = "Owner";
                 }
                 SetPrefix();
             }

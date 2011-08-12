@@ -45,6 +45,9 @@ namespace MCForge
             all.Add(new CmdAllowGuns());
             all.Add(new CmdAfk());
             all.Add(new CmdAgree());
+            all.Add(new CmdAward());
+            all.Add(new CmdAwards());
+            all.Add(new CmdAwardMod());
             all.Add(new CmdBan());
             all.Add(new CmdBanip());
             all.Add(new CmdBind());
@@ -73,12 +76,16 @@ namespace MCForge
             all.Add(new CmdColor());
             all.Add(new CmdCopy());
 			all.Add(new CmdCountdown());
+            all.Add(new CmdCrashServer());
             all.Add(new CmdCTF());
             all.Add(new CmdCuboid());
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
+            all.Add(new CmdDemote());
             all.Add(new CmdDevs());
             all.Add(new CmdDisagree());
+            all.Add(new CmdDraw());
+            all.Add(new CmdDrill());
             all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
             all.Add(new CmdEmote());
@@ -93,6 +100,7 @@ namespace MCForge
             all.Add(new CmdFly());
             all.Add(new CmdFollow());
             all.Add(new CmdFreeze());
+            all.Add(new CmdGifToCin());
             all.Add(new CmdGive());
             all.Add(new CmdGlobalCLS());
             all.Add(new CmdGoto());
@@ -155,9 +163,12 @@ namespace MCForge
             all.Add(new CmdOZone());
             all.Add(new CmdP2P());
             all.Add(new CmdPaint());
+            all.Add(new CmdPass());
             all.Add(new CmdPaste());
             all.Add(new CmdPause());
             all.Add(new CmdPay());
+            all.Add(new CmdpCinema());
+            all.Add(new CmdpCinema2());
             all.Add(new CmdPCount());
             all.Add(new CmdPermissionBuild());
             all.Add(new CmdPermissionVisit());
@@ -167,6 +178,7 @@ namespace MCForge
             all.Add(new CmdPlayers());
             all.Add(new CmdPortal());
             all.Add(new CmdPossess());
+            all.Add(new CmdPromote());
             all.Add(new CmdPyramid());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
@@ -189,6 +201,7 @@ namespace MCForge
             all.Add(new CmdRules());
             all.Add(new CmdSave());
             all.Add(new CmdSay());
+            all.Add(new CmdSCinema());
             all.Add(new CmdSeen());
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
@@ -250,21 +263,6 @@ namespace MCForge
             all.Add(new CmdZone());
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZz());
-            all.Add(new CmdCrashServer());
-            all.Add(new CmdPromote());
-            all.Add(new CmdDemote());
-            all.Add(new CmdDrill());
-            all.Add(new CmdAward());
-            all.Add(new CmdAwards());
-            all.Add(new CmdAwardMod());
-            all.Add(new CmdpCinema());
-            all.Add(new CmdpCinema2());
-            all.Add(new CmdSCinema());
-            all.Add(new CmdGifToCin());
-
-			//Ported from StormCom
-			all.Add(new CmdDraw());
-
             core.commands = new List<Command>(all.commands);
 
             Scripting.Autoload();
