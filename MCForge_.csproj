@@ -119,6 +119,7 @@
     <Compile Include="Commands\CmdP2P.cs" />
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
+    <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
     <Compile Include="Commands\CmdPyramid.cs" />
