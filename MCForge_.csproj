@@ -157,6 +157,7 @@
     <Compile Include="Commands\CmdImport.cs" />
     <Compile Include="Commands\CmdCrashServer.cs" />
     <Compile Include="Commands\CmdPromote.cs" />
+    <Compile Include="Commands\CmdCopyLVL.cs" />
     <Compile Include="Commands\CmdDemote.cs" />
     <Compile Include="Commands\CmdDrill.cs" />
     <Compile Include="Awards.cs" />
