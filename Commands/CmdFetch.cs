@@ -44,6 +44,12 @@ namespace MCForge
                 return;
             }
 
+            if (p.group.Permission <= who.group.Permission)
+            {
+                Player.SendMessage(p, "You cannot fetch a player of equal or greater rank!");
+                return;
+            }
+
             if (p.level != who.level)
             {
                 Player.SendMessage(p, who.name + " is in a different Level. Forcefetching has started!");
