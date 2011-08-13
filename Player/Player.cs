@@ -83,6 +83,7 @@ namespace MCForge
         public int passtries = 0;
         public int ponycount = 0;
         public int rdcount = 0;
+        public bool hasreadrules = false;
 
         public bool deleteMode = false;
         public bool ignorePermission = false;
@@ -1978,8 +1979,32 @@ namespace MCForge
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
-                if (cmd.ToLower() == "pony") { GlobalMessage(this.color + this.name + Server.DefaultColor + " just so happens to be a proud brony! Everyone give " + this.name + Server.DefaultColor + " a brohoof!"); return; }
-                if (cmd.ToLower() == "rainbowdashiscoolerthanyou") { GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30&4% &5C&6O&7O&8L&9L&aE&bR&c!"); return; }
+                if (cmd.ToLower() == "pony")
+                {
+                    if (ponycount < 2)
+                    {
+                        GlobalMessage(this.color + this.name + Server.DefaultColor + " just so happens to be a proud brony! Everyone give " + this.color + this.name + Server.DefaultColor + " a brohoof!");
+                        ponycount++;
+                    }
+                    else
+                    {
+                        SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
+                    }
+                    return;
+                }
+                if (cmd.ToLower() == "rainbowdashiscoolerthanyou")
+                {
+                    if (rdcount < 2)
+                    {
+                        GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30 &4P&CE&7R&DC&EE&9N&1T &5C&6O&7O&8L&9E&aR&b!");
+                        rdcount++;
+                    }
+                    else
+                    {
+                        SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
+                    }
+                    return;
+                }
                 if (CommandHasBadColourCodes(this, message))
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);

@@ -53,6 +53,7 @@ namespace MCForge
                 return;
             }
             var agreed = File.ReadAllText("ranks/agreed.txt");
+            /*
             if (File.Exists("logs/" + DateTime.Now.ToString("yyyy") + "-" + DateTime.Now.ToString("MM") + "-" + DateTime.Now.ToString("dd") + ".txt"))
             {
                 var checklogs = File.ReadAllText("logs/" + DateTime.Now.ToString("yyyy") + "-" + DateTime.Now.ToString("MM") + "-" + DateTime.Now.ToString("dd") + ".txt");
@@ -61,6 +62,11 @@ namespace MCForge
                     Player.SendMessage(p, "&9You must read /rules before agreeing!");
                     return;
                 }
+            }*/
+            if (p.hasreadrules == false)
+            {
+                Player.SendMessage(p, "&9You must read /rules before agreeing!");
+                return;
             }
             if (agreed.Contains(p.name.ToLower()))
             {

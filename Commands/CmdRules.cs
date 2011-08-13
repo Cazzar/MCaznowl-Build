@@ -47,7 +47,7 @@ namespace MCForge
             Player who = null;
             if (message != "")
             {
-                if (p == null || p.group.Permission <= LevelPermission.Guest)
+                if (p != null || p.group.Permission <= LevelPermission.Guest)
                 {
                     Player.SendMessage(p, "You cant send /rules to another player!");
                     return;
@@ -58,13 +58,15 @@ namespace MCForge
             {
                 who = p;
             }
-
+            
             if (who != null)
             {
+                who.hasreadrules = true;
                 if (who.level == Server.mainLevel && Server.mainLevel.permissionbuild == LevelPermission.Guest) { who.SendMessage("You are currently on the guest map where anyone can build"); }
                 who.SendMessage("Server Rules:");
                 foreach (string s in rules)
                     who.SendMessage(s);
+                
             }
             else if (p == null && String.IsNullOrEmpty(message))
             {
