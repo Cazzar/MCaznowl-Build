@@ -1,4 +1,7 @@
-﻿/*
+/*
+ 
+    Written By Jack1312
+ 
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -85,16 +88,6 @@ namespace MCForge
                 Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
                 return;
             }
-            if (foundone < 0)
-            {
-                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
-                return;
-            }
-            if (foundone > 1)
-            {
-                Player.SendMessage(p, "&cAn error has occurred!");
-                return;
-            }
             DirectoryInfo di = new DirectoryInfo("extra/passwords/");
             FileInfo[] fi = di.GetFiles("*.xml");
             Thread.Sleep(10);
@@ -111,6 +104,21 @@ namespace MCForge
             catch
             {
                 Player.SendMessage(p, "An Error Occurred! Try again soon!");
+                return;
+            }
+            if (foundone < 0)
+            {
+                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
+                return;
+            }
+            if (foundone > 1)
+            {
+                Player.SendMessage(p, "&cAn error has occurred!");
+                return;
+            }
+            if (!File.Exists("extra/passwords/" + p.name + ".xml"))
+            {
+                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
                 return;
             }
             Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name + ".xml"), "MCForgeEncryption", p, message);
