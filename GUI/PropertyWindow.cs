@@ -1,9 +1,6 @@
 /*
 Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 Dual-licensed under the Educational Community License, Version 2.0 and
-/*
-Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
-Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
 obtain a copy of the Licenses at
@@ -498,16 +495,7 @@ namespace MCForge.Gui
                                 if (value != "") txtSQLUsername.Text = value;
                                 break;
                             case "password":
-                                foreach (char ch in value)
-                                {
-                                    count++;
-                                }
-                                int i = 0;
-                                for (i = 0; i < count; i++)
-                                {
-                                    txtSQLPassword.AppendText("*");
-                                }
-                                count = 0;
+                                if (value != "") txtSQLPassword.Text = value;
                                 break;
                             case "databasename":
                                 if (value != "") txtSQLDatabase.Text = value;
