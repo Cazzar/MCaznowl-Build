@@ -190,6 +190,7 @@ namespace MCForge
             all.Add(new CmdReplaceAll());
             all.Add(new CmdReplaceNot());
             all.Add(new CmdResetBot());
+            all.Add(new CmdResetPass());
             all.Add(new CmdRestart());
             all.Add(new CmdRestartPhysics());
             all.Add(new CmdRestore());
