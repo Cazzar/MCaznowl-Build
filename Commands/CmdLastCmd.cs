@@ -36,6 +36,10 @@ namespace MCForge
             {
                 foreach (Player pl in Player.players)
                 {
+                    if (pl.lastCMD.Contains("setpass") || pl.lastCMD.Contains("pass"))
+                    {
+                        pl.lastCMD = "";
+                    }
                     Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " last used \"" + pl.lastCMD + "\"");
                 }
             }
@@ -43,6 +47,10 @@ namespace MCForge
             {
                 Player who = Player.Find(message);
                 if (who == null) { Player.SendMessage(p, "Could not find player entered"); return; }
+                if (who.lastCMD.Contains("setpass") || who.lastCMD.Contains("pass"))
+                {
+                    who.lastCMD = "";
+                }
                 Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " last used \"" + who.lastCMD + "\"");
             }
         }
