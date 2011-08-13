@@ -75,6 +75,7 @@ namespace MCForge
             all.Add(new CmdCompLoad());
             all.Add(new CmdColor());
             all.Add(new CmdCopy());
+            all.Add(new CmdCopyLVL());
 			all.Add(new CmdCountdown());
             all.Add(new CmdCrashServer());
             all.Add(new CmdCTF());
