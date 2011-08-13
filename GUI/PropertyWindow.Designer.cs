@@ -62,7 +62,7 @@ namespace MCForge.Gui
             this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.listCommands = new System.Windows.Forms.ListBox();
-            this.tabCreate = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -110,6 +110,9 @@ namespace MCForge.Gui
             this.chkLogBeat = new System.Windows.Forms.CheckBox();
             this.cmbAdminChat = new System.Windows.Forms.ComboBox();
             this.chkTpToHigherRanks = new System.Windows.Forms.CheckBox();
+            this.cmbVerificationRank = new System.Windows.Forms.ComboBox();
+            this.chkEnableVerification = new System.Windows.Forms.CheckBox();
+            this.chkUseSQL = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -168,6 +171,16 @@ namespace MCForge.Gui
             this.label9 = new System.Windows.Forms.Label();
             this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.tabIRC = new System.Windows.Forms.TabPage();
+            this.grpSQL = new System.Windows.Forms.GroupBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.txtSQLHost = new System.Windows.Forms.TextBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.txtSQLDatabase = new System.Windows.Forms.TextBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.txtSQLPassword = new System.Windows.Forms.TextBox();
+            this.txtSQLUsername = new System.Windows.Forms.TextBox();
             this.grpIRC = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.lblIRC = new System.Windows.Forms.Label();
@@ -213,11 +226,17 @@ namespace MCForge.Gui
             this.ChkPort = new System.Windows.Forms.Button();
             this.ChkPortResult = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.listPasswords = new System.Windows.Forms.ListBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.tabCreate.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -229,6 +248,7 @@ namespace MCForge.Gui
             this.groupBox10.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.tabIRC.SuspendLayout();
+            this.grpSQL.SuspendLayout();
             this.grpIRC.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -243,6 +263,8 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabControl.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.groupBox14.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -302,7 +324,7 @@ namespace MCForge.Gui
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tabCreate);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Location = new System.Drawing.Point(9, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -407,39 +429,37 @@ namespace MCForge.Gui
             this.listCommands.TabIndex = 26;
             this.listCommands.SelectedIndexChanged += new System.EventHandler(this.listCommands_SelectedIndexChanged);
             // 
-            // tabCreate
+            // tabPage7
             // 
-            this.tabCreate.Controls.Add(this.panel1);
-            this.tabCreate.Controls.Add(this.CustCmdTxtBox2);
-            this.tabCreate.Controls.Add(this.btnDiscardcmd);
-            this.tabCreate.Controls.Add(this.btnSavecmd);
-            this.tabCreate.Controls.Add(this.btnIntextbox);
-            this.tabCreate.Controls.Add(this.btnUnload);
-            this.tabCreate.Controls.Add(this.btnLoad);
-            this.tabCreate.Controls.Add(this.btnCompile);
-            this.tabCreate.Controls.Add(this.btnCreate);
-            this.tabCreate.Controls.Add(this.label33);
-            this.tabCreate.Controls.Add(this.CustCmdtxtBox);
-            this.tabCreate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabCreate.Location = new System.Drawing.Point(4, 22);
-            this.tabCreate.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabCreate.Name = "tabCreate";
-            this.tabCreate.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabCreate.Size = new System.Drawing.Size(468, 476);
-            this.tabCreate.TabIndex = 4;
-            this.tabCreate.Text = "Custom Commands";
-            this.tabCreate.UseVisualStyleBackColor = true;
+            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage7.Controls.Add(this.panel1);
+            this.tabPage7.Controls.Add(this.CustCmdTxtBox2);
+            this.tabPage7.Controls.Add(this.btnDiscardcmd);
+            this.tabPage7.Controls.Add(this.btnSavecmd);
+            this.tabPage7.Controls.Add(this.btnIntextbox);
+            this.tabPage7.Controls.Add(this.btnUnload);
+            this.tabPage7.Controls.Add(this.btnLoad);
+            this.tabPage7.Controls.Add(this.btnCompile);
+            this.tabPage7.Controls.Add(this.btnCreate);
+            this.tabPage7.Controls.Add(this.label33);
+            this.tabPage7.Controls.Add(this.CustCmdtxtBox);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(468, 476);
+            this.tabPage7.TabIndex = 1;
+            this.tabPage7.Text = "Custom Commands";
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.radioButton1);
             this.panel1.Controls.Add(this.radioButton2);
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(6, 24);
+            this.panel1.Location = new System.Drawing.Point(7, 26);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(84, 29);
-            this.panel1.TabIndex = 26;
+            this.panel1.TabIndex = 37;
             // 
             // radioButton1
             // 
@@ -470,35 +490,35 @@ namespace MCForge.Gui
             // CustCmdTxtBox2
             // 
             this.CustCmdTxtBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CustCmdTxtBox2.Location = new System.Drawing.Point(6, 59);
+            this.CustCmdTxtBox2.Location = new System.Drawing.Point(7, 61);
             this.CustCmdTxtBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.CustCmdTxtBox2.Name = "CustCmdTxtBox2";
             this.CustCmdTxtBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.CustCmdTxtBox2.Size = new System.Drawing.Size(458, 382);
-            this.CustCmdTxtBox2.TabIndex = 25;
+            this.CustCmdTxtBox2.TabIndex = 36;
             this.CustCmdTxtBox2.Text = "";
             this.CustCmdTxtBox2.WordWrap = false;
             // 
             // btnDiscardcmd
             // 
             this.btnDiscardcmd.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDiscardcmd.Location = new System.Drawing.Point(366, 447);
+            this.btnDiscardcmd.Location = new System.Drawing.Point(367, 449);
             this.btnDiscardcmd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDiscardcmd.Name = "btnDiscardcmd";
             this.btnDiscardcmd.Size = new System.Drawing.Size(98, 23);
-            this.btnDiscardcmd.TabIndex = 9;
+            this.btnDiscardcmd.TabIndex = 35;
             this.btnDiscardcmd.Text = "Discard";
             this.btnDiscardcmd.UseVisualStyleBackColor = true;
-            this.btnDiscardcmd.Click += new System.EventHandler(this.btnDiscardcmd_Click_1);
+            this.btnDiscardcmd.Click += new System.EventHandler(this.btnDiscardcmd_Click);
             // 
             // btnSavecmd
             // 
             this.btnSavecmd.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSavecmd.Location = new System.Drawing.Point(8, 447);
+            this.btnSavecmd.Location = new System.Drawing.Point(9, 449);
             this.btnSavecmd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnSavecmd.Name = "btnSavecmd";
             this.btnSavecmd.Size = new System.Drawing.Size(103, 23);
-            this.btnSavecmd.TabIndex = 8;
+            this.btnSavecmd.TabIndex = 34;
             this.btnSavecmd.Text = "Save Command";
             this.btnSavecmd.UseVisualStyleBackColor = true;
             this.btnSavecmd.Click += new System.EventHandler(this.btnSavecmd_Click);
@@ -506,11 +526,11 @@ namespace MCForge.Gui
             // btnIntextbox
             // 
             this.btnIntextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIntextbox.Location = new System.Drawing.Point(206, 30);
+            this.btnIntextbox.Location = new System.Drawing.Point(207, 32);
             this.btnIntextbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnIntextbox.Name = "btnIntextbox";
             this.btnIntextbox.Size = new System.Drawing.Size(105, 23);
-            this.btnIntextbox.TabIndex = 6;
+            this.btnIntextbox.TabIndex = 33;
             this.btnIntextbox.Text = "Load into Textbox";
             this.btnIntextbox.UseVisualStyleBackColor = true;
             this.btnIntextbox.Click += new System.EventHandler(this.btnIntextbox_Click);
@@ -518,11 +538,11 @@ namespace MCForge.Gui
             // btnUnload
             // 
             this.btnUnload.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUnload.Location = new System.Drawing.Point(381, 30);
+            this.btnUnload.Location = new System.Drawing.Point(382, 32);
             this.btnUnload.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnUnload.Name = "btnUnload";
             this.btnUnload.Size = new System.Drawing.Size(83, 23);
-            this.btnUnload.TabIndex = 5;
+            this.btnUnload.TabIndex = 32;
             this.btnUnload.Text = "Unload";
             this.btnUnload.UseVisualStyleBackColor = true;
             this.btnUnload.Click += new System.EventHandler(this.btnUnload_Click);
@@ -530,11 +550,11 @@ namespace MCForge.Gui
             // btnLoad
             // 
             this.btnLoad.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLoad.Location = new System.Drawing.Point(315, 30);
+            this.btnLoad.Location = new System.Drawing.Point(316, 32);
             this.btnLoad.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(62, 23);
-            this.btnLoad.TabIndex = 4;
+            this.btnLoad.TabIndex = 31;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
@@ -542,11 +562,11 @@ namespace MCForge.Gui
             // btnCompile
             // 
             this.btnCompile.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCompile.Location = new System.Drawing.Point(94, 30);
+            this.btnCompile.Location = new System.Drawing.Point(95, 32);
             this.btnCompile.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnCompile.Name = "btnCompile";
             this.btnCompile.Size = new System.Drawing.Size(105, 23);
-            this.btnCompile.TabIndex = 3;
+            this.btnCompile.TabIndex = 30;
             this.btnCompile.Text = "Compile";
             this.btnCompile.UseVisualStyleBackColor = true;
             this.btnCompile.Click += new System.EventHandler(this.btnCompile_Click);
@@ -554,11 +574,11 @@ namespace MCForge.Gui
             // btnCreate
             // 
             this.btnCreate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreate.Location = new System.Drawing.Point(315, 3);
+            this.btnCreate.Location = new System.Drawing.Point(316, 5);
             this.btnCreate.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(149, 23);
-            this.btnCreate.TabIndex = 2;
+            this.btnCreate.TabIndex = 29;
             this.btnCreate.Text = "Create Command";
             this.btnCreate.UseVisualStyleBackColor = true;
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
@@ -567,21 +587,21 @@ namespace MCForge.Gui
             // 
             this.label33.AutoSize = true;
             this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label33.Location = new System.Drawing.Point(2, 9);
+            this.label33.Location = new System.Drawing.Point(3, 11);
             this.label33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(78, 12);
-            this.label33.TabIndex = 1;
+            this.label33.TabIndex = 28;
             this.label33.Text = "Command Name:";
             // 
             // CustCmdtxtBox
             // 
             this.CustCmdtxtBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CustCmdtxtBox.Location = new System.Drawing.Point(94, 6);
+            this.CustCmdtxtBox.Location = new System.Drawing.Point(95, 8);
             this.CustCmdtxtBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.CustCmdtxtBox.Name = "CustCmdtxtBox";
             this.CustCmdtxtBox.Size = new System.Drawing.Size(217, 18);
-            this.CustCmdtxtBox.TabIndex = 0;
+            this.CustCmdtxtBox.TabIndex = 27;
             // 
             // label24
             // 
@@ -719,7 +739,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -944,6 +964,46 @@ namespace MCForge.Gui
             this.toolTip.SetToolTip(this.chkTpToHigherRanks, "Allows the use of /tp to players of higher rank");
             this.chkTpToHigherRanks.UseVisualStyleBackColor = true;
             // 
+            // cmbVerificationRank
+            // 
+            this.cmbVerificationRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVerificationRank.FormattingEnabled = true;
+            this.cmbVerificationRank.Location = new System.Drawing.Point(60, 64);
+            this.cmbVerificationRank.Name = "cmbVerificationRank";
+            this.cmbVerificationRank.Size = new System.Drawing.Size(103, 21);
+            this.cmbVerificationRank.TabIndex = 22;
+            this.toolTip.SetToolTip(this.cmbVerificationRank, "The rank that verification is required for admins to gain access to commands.");
+            // 
+            // chkEnableVerification
+            // 
+            this.chkEnableVerification.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkEnableVerification.AutoSize = true;
+            this.chkEnableVerification.Location = new System.Drawing.Point(24, 20);
+            this.chkEnableVerification.Name = "chkEnableVerification";
+            this.chkEnableVerification.Size = new System.Drawing.Size(49, 23);
+            this.chkEnableVerification.TabIndex = 23;
+            this.chkEnableVerification.Text = "Enable";
+            this.toolTip.SetToolTip(this.chkEnableVerification, "Whether or not the server will ask for verification from admins before they can u" +
+                    "se commands.");
+            this.chkEnableVerification.UseVisualStyleBackColor = true;
+            // 
+            // chkUseSQL
+            // 
+            this.chkUseSQL.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkUseSQL.AutoSize = true;
+            this.chkUseSQL.Location = new System.Drawing.Point(22, 275);
+            this.chkUseSQL.Name = "chkUseSQL";
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
+            this.chkUseSQL.TabIndex = 28;
+            this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
+                "r this to work. MySQL includes features such as block tracking, colors, titles a" +
+                "nd player info.";
+            this.chkUseSQL.Text = "Use MySQL";
+            this.toolTip.SetToolTip(this.chkUseSQL, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
+                    "for communication with the server while outside Minecraft.");
+            this.chkUseSQL.UseVisualStyleBackColor = true;
+            this.chkUseSQL.CheckedChanged += new System.EventHandler(this.chkUseSQL_CheckedChanged);
+            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
@@ -1068,7 +1128,7 @@ namespace MCForge.Gui
             // 
             // lblColor
             // 
-            this.lblColor.Location = new System.Drawing.Point(216, 141);
+            this.lblColor.Location = new System.Drawing.Point(179, 119);
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(26, 23);
             this.lblColor.TabIndex = 13;
@@ -1077,7 +1137,7 @@ namespace MCForge.Gui
             // 
             this.cmbColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbColor.FormattingEnabled = true;
-            this.cmbColor.Location = new System.Drawing.Point(118, 146);
+            this.cmbColor.Location = new System.Drawing.Point(81, 124);
             this.cmbColor.Name = "cmbColor";
             this.cmbColor.Size = new System.Drawing.Size(92, 21);
             this.cmbColor.TabIndex = 12;
@@ -1086,7 +1146,7 @@ namespace MCForge.Gui
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(77, 151);
+            this.label16.Location = new System.Drawing.Point(40, 129);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(35, 13);
             this.label16.TabIndex = 11;
@@ -1094,7 +1154,7 @@ namespace MCForge.Gui
             // 
             // txtFileName
             // 
-            this.txtFileName.Location = new System.Drawing.Point(118, 204);
+            this.txtFileName.Location = new System.Drawing.Point(81, 182);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(100, 21);
             this.txtFileName.TabIndex = 4;
@@ -1102,7 +1162,7 @@ namespace MCForge.Gui
             // 
             // txtLimit
             // 
-            this.txtLimit.Location = new System.Drawing.Point(118, 117);
+            this.txtLimit.Location = new System.Drawing.Point(81, 95);
             this.txtLimit.Name = "txtLimit";
             this.txtLimit.Size = new System.Drawing.Size(100, 21);
             this.txtLimit.TabIndex = 4;
@@ -1110,7 +1170,7 @@ namespace MCForge.Gui
             // 
             // txtPermission
             // 
-            this.txtPermission.Location = new System.Drawing.Point(118, 90);
+            this.txtPermission.Location = new System.Drawing.Point(81, 68);
             this.txtPermission.Name = "txtPermission";
             this.txtPermission.Size = new System.Drawing.Size(100, 21);
             this.txtPermission.TabIndex = 4;
@@ -1118,7 +1178,7 @@ namespace MCForge.Gui
             // 
             // txtRankName
             // 
-            this.txtRankName.Location = new System.Drawing.Point(118, 63);
+            this.txtRankName.Location = new System.Drawing.Point(81, 41);
             this.txtRankName.Name = "txtRankName";
             this.txtRankName.Size = new System.Drawing.Size(100, 21);
             this.txtRankName.TabIndex = 4;
@@ -1127,7 +1187,7 @@ namespace MCForge.Gui
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(58, 207);
+            this.label14.Location = new System.Drawing.Point(21, 185);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 13);
             this.label14.TabIndex = 3;
@@ -1137,7 +1197,7 @@ namespace MCForge.Gui
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(78, 120);
+            this.label13.Location = new System.Drawing.Point(41, 98);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(34, 13);
             this.label13.TabIndex = 3;
@@ -1147,7 +1207,7 @@ namespace MCForge.Gui
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(49, 93);
+            this.label12.Location = new System.Drawing.Point(12, 71);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(63, 13);
             this.label12.TabIndex = 3;
@@ -1157,7 +1217,7 @@ namespace MCForge.Gui
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(74, 66);
+            this.label11.Location = new System.Drawing.Point(37, 44);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(38, 13);
             this.label11.TabIndex = 3;
@@ -1166,9 +1226,9 @@ namespace MCForge.Gui
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(413, 12);
+            this.button1.Location = new System.Drawing.Point(315, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(63, 23);
+            this.button1.Size = new System.Drawing.Size(57, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "Del";
             this.button1.UseVisualStyleBackColor = true;
@@ -1176,9 +1236,9 @@ namespace MCForge.Gui
             // 
             // btnAddRank
             // 
-            this.btnAddRank.Location = new System.Drawing.Point(315, 12);
+            this.btnAddRank.Location = new System.Drawing.Point(243, 6);
             this.btnAddRank.Name = "btnAddRank";
-            this.btnAddRank.Size = new System.Drawing.Size(68, 23);
+            this.btnAddRank.Size = new System.Drawing.Size(57, 23);
             this.btnAddRank.TabIndex = 1;
             this.btnAddRank.Text = "Add";
             this.btnAddRank.UseVisualStyleBackColor = true;
@@ -1187,9 +1247,9 @@ namespace MCForge.Gui
             // listRanks
             // 
             this.listRanks.FormattingEnabled = true;
-            this.listRanks.Location = new System.Drawing.Point(315, 41);
+            this.listRanks.Location = new System.Drawing.Point(230, 35);
             this.listRanks.Name = "listRanks";
-            this.listRanks.Size = new System.Drawing.Size(161, 459);
+            this.listRanks.Size = new System.Drawing.Size(161, 381);
             this.listRanks.TabIndex = 0;
             this.listRanks.SelectedIndexChanged += new System.EventHandler(this.listRanks_SelectedIndexChanged);
             // 
@@ -1528,13 +1588,114 @@ namespace MCForge.Gui
             // 
             // tabIRC
             // 
+            this.tabIRC.Controls.Add(this.grpSQL);
+            this.tabIRC.Controls.Add(this.chkUseSQL);
             this.tabIRC.Controls.Add(this.grpIRC);
             this.tabIRC.Controls.Add(this.chkIRC);
             this.tabIRC.Location = new System.Drawing.Point(4, 22);
             this.tabIRC.Name = "tabIRC";
             this.tabIRC.Size = new System.Drawing.Size(488, 509);
             this.tabIRC.TabIndex = 6;
-            this.tabIRC.Text = "IRC";
+            this.tabIRC.Text = "IRC/SQL";
+            // 
+            // grpSQL
+            // 
+            this.grpSQL.Controls.Add(this.linkLabel1);
+            this.grpSQL.Controls.Add(this.txtSQLHost);
+            this.grpSQL.Controls.Add(this.label43);
+            this.grpSQL.Controls.Add(this.txtSQLDatabase);
+            this.grpSQL.Controls.Add(this.label42);
+            this.grpSQL.Controls.Add(this.label40);
+            this.grpSQL.Controls.Add(this.label41);
+            this.grpSQL.Controls.Add(this.txtSQLPassword);
+            this.grpSQL.Controls.Add(this.txtSQLUsername);
+            this.grpSQL.Location = new System.Drawing.Point(22, 304);
+            this.grpSQL.Name = "grpSQL";
+            this.grpSQL.Size = new System.Drawing.Size(284, 192);
+            this.grpSQL.TabIndex = 29;
+            this.grpSQL.TabStop = false;
+            this.grpSQL.Text = "MySQL";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(12, 169);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(113, 13);
+            this.linkLabel1.TabIndex = 30;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Tag = "Click here to go to the download page for MySQL.";
+            this.linkLabel1.Text = "MySQL Download Page";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // txtSQLHost
+            // 
+            this.txtSQLHost.Location = new System.Drawing.Point(50, 128);
+            this.txtSQLHost.Name = "txtSQLHost";
+            this.txtSQLHost.Size = new System.Drawing.Size(100, 21);
+            this.txtSQLHost.TabIndex = 8;
+            this.txtSQLHost.Tag = "The host name for the database. Leave this unless problems occur.";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(12, 131);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(32, 13);
+            this.label43.TabIndex = 7;
+            this.label43.Text = "Host:";
+            // 
+            // txtSQLDatabase
+            // 
+            this.txtSQLDatabase.Location = new System.Drawing.Point(104, 94);
+            this.txtSQLDatabase.Name = "txtSQLDatabase";
+            this.txtSQLDatabase.Size = new System.Drawing.Size(100, 21);
+            this.txtSQLDatabase.TabIndex = 6;
+            this.txtSQLDatabase.Tag = "The name of the database stored (Default = MCZall)";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(12, 97);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(86, 13);
+            this.label42.TabIndex = 5;
+            this.label42.Text = "Database Name:";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(12, 63);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(56, 13);
+            this.label40.TabIndex = 4;
+            this.label40.Text = "Password:";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(12, 28);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(59, 13);
+            this.label41.TabIndex = 3;
+            this.label41.Text = "Username:";
+            // 
+            // txtSQLPassword
+            // 
+            this.txtSQLPassword.Location = new System.Drawing.Point(74, 60);
+            this.txtSQLPassword.Name = "txtSQLPassword";
+            this.txtSQLPassword.PasswordChar = '*';
+            this.txtSQLPassword.Size = new System.Drawing.Size(100, 21);
+            this.txtSQLPassword.TabIndex = 2;
+            this.txtSQLPassword.Tag = "The password set while installing MySQL";
+            // 
+            // txtSQLUsername
+            // 
+            this.txtSQLUsername.Location = new System.Drawing.Point(74, 25);
+            this.txtSQLUsername.Name = "txtSQLUsername";
+            this.txtSQLUsername.Size = new System.Drawing.Size(100, 21);
+            this.txtSQLUsername.TabIndex = 1;
+            this.txtSQLUsername.Tag = "The username set while installing MySQL";
             // 
             // grpIRC
             // 
@@ -1667,6 +1828,7 @@ namespace MCForge.Gui
             this.editTxtsBt.TabIndex = 35;
             this.editTxtsBt.Text = "Edit Text Files";
             this.editTxtsBt.UseVisualStyleBackColor = true;
+            this.editTxtsBt.Click += new System.EventHandler(this.editTxtsBt_Click_1);
             // 
             // label30
             // 
@@ -1831,7 +1993,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -2029,12 +2191,75 @@ namespace MCForge.Gui
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Controls.Add(this.tabPage5);
+            this.tabControl.Controls.Add(this.tabPage8);
             this.tabControl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.Location = new System.Drawing.Point(0, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(496, 535);
             this.tabControl.TabIndex = 0;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage8.Controls.Add(this.groupBox14);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(488, 509);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Extra";
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.btnReset);
+            this.groupBox14.Controls.Add(this.listPasswords);
+            this.groupBox14.Controls.Add(this.label39);
+            this.groupBox14.Controls.Add(this.chkEnableVerification);
+            this.groupBox14.Controls.Add(this.cmbVerificationRank);
+            this.groupBox14.Controls.Add(this.label38);
+            this.groupBox14.Location = new System.Drawing.Point(19, 18);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(191, 322);
+            this.groupBox14.TabIndex = 0;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Admin Verification";
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(45, 276);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(91, 27);
+            this.btnReset.TabIndex = 25;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // listPasswords
+            // 
+            this.listPasswords.FormattingEnabled = true;
+            this.listPasswords.Location = new System.Drawing.Point(24, 132);
+            this.listPasswords.Name = "listPasswords";
+            this.listPasswords.Size = new System.Drawing.Size(139, 134);
+            this.listPasswords.TabIndex = 1;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(21, 106);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(98, 13);
+            this.label39.TabIndex = 24;
+            this.label39.Text = "Remove Passwords";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(21, 67);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(33, 39);
+            this.label38.TabIndex = 1;
+            this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
             // PropertyWindow
             // 
@@ -2055,8 +2280,8 @@ namespace MCForge.Gui
             this.tabControl1.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.tabCreate.ResumeLayout(false);
-            this.tabCreate.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabPage5.ResumeLayout(false);
@@ -2078,6 +2303,8 @@ namespace MCForge.Gui
             this.groupBox9.PerformLayout();
             this.tabIRC.ResumeLayout(false);
             this.tabIRC.PerformLayout();
+            this.grpSQL.ResumeLayout(false);
+            this.grpSQL.PerformLayout();
             this.grpIRC.ResumeLayout(false);
             this.grpIRC.PerformLayout();
             this.tabPage1.ResumeLayout(false);
@@ -2101,6 +2328,9 @@ namespace MCForge.Gui
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2133,6 +2363,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ListBox listCommands;
+        private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label lblColor;
         private System.Windows.Forms.ComboBox cmbColor;
@@ -2261,7 +2492,13 @@ namespace MCForge.Gui
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.CheckBox chkIgnoreGlobal;
-        public System.Windows.Forms.TabPage tabCreate;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.ListBox listPasswords;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.CheckBox chkEnableVerification;
+        private System.Windows.Forms.ComboBox cmbVerificationRank;
+        private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
@@ -2275,5 +2512,17 @@ namespace MCForge.Gui
         public System.Windows.Forms.Button btnCreate;
         public System.Windows.Forms.Label label33;
         public System.Windows.Forms.TextBox CustCmdtxtBox;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.GroupBox grpSQL;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.TextBox txtSQLHost;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.TextBox txtSQLDatabase;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.TextBox txtSQLPassword;
+        private System.Windows.Forms.TextBox txtSQLUsername;
+        private System.Windows.Forms.CheckBox chkUseSQL;
     }
 }
