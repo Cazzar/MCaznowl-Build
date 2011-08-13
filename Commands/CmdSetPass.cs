@@ -1,4 +1,7 @@
-﻿/*
+/*
+ 
+    Written By Jack1312
+ 
 	Copyright 2011 MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
