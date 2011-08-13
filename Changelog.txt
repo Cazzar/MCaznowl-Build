@@ -11,10 +11,13 @@ v5.0.0.0
 - Added /topten - Lists top ten players in several catagories. Requires MySQL.
 - Added /faq -  Creates a file called faq.txt. You may put frequently asked questions in here and their answers.
 - Added /maze -  Creates a maze.
-- Added /ignore -  Ignore a player.
-- Added /p2p -  sends a specified player to another specified player.
-- Added /draw -  can create cones, spheres, and pyramids, hollow spheres, and hollow pyramids. 
-- Added /allowgun -  Allows or disallows gun usage on a specified level.
+- Added an ignore system:
+    - Console option to allow ignoring of operators.
+    - /ignore [Player] - Ignores the specified player.
+    - /ignore global - Ignores global chat, does not ignore operators if not allowed.
+- Added /p2p [Player 1] [Player 2] -  sends a specified player to another specified player.
+- Added /draw [Shape] [Height] [Radius] -  can create cones, spheres, and pyramids, hollow spheres, and hollow pyramids. 
+- Added /allowguns [Map] -  Allows or disallows gun usage on a specified level.
 - Added a part to /whois that shows the total time a player has spent on a server.
 - Reverted to old CLI Interface due to an issue where the server would lock up when the console used an invalid command. You no longer need to put a "/" infront of commands, for now.
 - Remade the Economy system. Now consolidated into 1 command '/economy' and 1 properties file.
@@ -28,8 +31,16 @@ v5.0.0.0
 - Removed /ellipse after a request for its removal by MCDzienny and it's development team.
 - /review now checks if an op is online. If one is not, it will inform the player that there are no ops online.
 - Added a Admin Verification System:
-- /setpass: Sets your password.
-- /pass: Use this with your password to verify yourself.
+    - Option to enable or disable for specific ranks
+    - /setpass [Password] - Sets your password, can only be used on first login or after leaving admin pen.
+    - /pass [Password] - Use this to verify yourself when logging in.
+    - /resetpass [Player] - Can only be used by the server owner and resets the specified player's password.
+    - Note: Passwords are encrypted, but still do not set this as your minecraft password!
+- Made it so player's of lower rank cannot /fetch those of higher rank.
+- MySQL Details can now be edited in the properties.
+- Text files such as autoload, awardslist, badwords, cmdautoload, custom$s, emotelist, joker, messages, player awards, rules and welcome can now be editing in the GUI Properties.
+- Added Box in console to set the server owner, this is used in some commands.
+- Visual Basic Support for Scripting and Add-on in the Console Properties
 
 v4.9.0.0
 - Fixed a bug in /pyramid
