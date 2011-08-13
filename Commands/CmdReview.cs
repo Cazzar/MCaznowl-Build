@@ -41,7 +41,10 @@ namespace MCForge
                 {
                     if (pl.group.Permission >= Server.opchatperm)
                     {
-                        isopson = true;
+                        if (pl.hidden == false)
+                        {
+                            isopson = true;
+                        }
                     }
                 }
             }
