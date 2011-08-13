@@ -41,6 +41,7 @@ v5.0.0.0
 - Text files such as autoload, awardslist, badwords, cmdautoload, custom$s, emotelist, joker, messages, player awards, rules and welcome can now be editing in the GUI Properties.
 - Added Box in console to set the server owner, this is used in some commands.
 - Visual Basic Support for Scripting and Add-on in the Console Properties
+- Added /rankmsg [Rank] [Message] - Sends the message to the specified rank, if no rank is given, player's rank is taken.
 
 v4.9.0.0
 - Fixed a bug in /pyramid
