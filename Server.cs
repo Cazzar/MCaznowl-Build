@@ -157,6 +157,11 @@ public static byte maxGuests = 10;
         public static bool worldChat = true;
         public static bool guestGoto = false;
 
+        //Spam Prevention
+        public static bool checkspam = false;
+        public static int spamcounter = 8;
+        public static int mutespamtime = 60;
+
         public static string ZallState = "Alive";
 
         //public static string[] userMOTD;
@@ -239,7 +244,7 @@ public static byte maxGuests = 10;
         public static bool logbeat = false;
         public static bool adminsjoinsilent = false;
         public static bool mono = false;
-        public static string server_owner = "";
+        public static string server_owner = "Notch";
 
         public static bool flipHead = false;
 
