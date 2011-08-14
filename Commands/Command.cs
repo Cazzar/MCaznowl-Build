@@ -163,6 +163,9 @@ namespace MCForge
             all.Add(new CmdOverseer());
             all.Add(new CmdOZone());
             all.Add(new CmdP2P());
+            all.Add(new pload());
+            all.Add(new pcreate());
+            all.Add(new punload());
             all.Add(new CmdPaint());
             all.Add(new CmdPass());
             all.Add(new CmdPaste());
