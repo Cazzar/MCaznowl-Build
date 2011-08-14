@@ -96,19 +96,10 @@ namespace MCForge.Gui
                     verifyadminsperm = grp.name;
                 }
             }
-            listPasswords.Items.Clear();
-            DirectoryInfo di = new DirectoryInfo("extra/passwords/");
-            FileInfo[] fi = di.GetFiles("*.xml");
-            Thread.Sleep(10);
-            foreach (FileInfo file in fi)
-            {
-                listPasswords.Items.Add(file.Name.Replace(".xml", ""));
-            }
             cmbDefaultRank.SelectedIndex = 1;
             cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
             cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
-            cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
-
+            cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbAdminChat.Items.IndexOf(verifyadminsperm) : 1;
             //Load server stuff
             LoadProp("properties/server.properties");
             LoadRanks();
@@ -1533,31 +1524,7 @@ MessageBox.Show("Text Box Cleared!!");
             }
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            if (listPasswords.Text == "")
-            {
-                MessageBox.Show("You have not selected a user's password to reset!");
-                return;
-            }
-            try
-            {
-                File.Delete("extra/passwords/" + listPasswords.Text + ".xml");
-                listPasswords.Items.Clear();
-                DirectoryInfo di = new DirectoryInfo("extra/passwords/");
-                FileInfo[] fi = di.GetFiles("*.xml");
-                Thread.Sleep(10);
-                foreach (FileInfo file in fi)
-                {
-                    listPasswords.Items.Add(file.Name.Replace(".xml", ""));
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Failed to reset password!");
-            }
-
-        }
+       
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
