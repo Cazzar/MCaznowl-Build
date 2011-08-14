@@ -450,6 +450,19 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
                                 break;
+                            case "mute-on-spam":
+                                try { Server.checkspam = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "spam-messages":
+                                try { Server.spamcounter = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "spam-mute-time":
+                                try { Server.mutespamtime = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+
                         }
                     }
                 }
@@ -544,6 +557,11 @@ namespace MCForge
             w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
             w.WriteLine("#   verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
             w.WriteLine();
+            w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
+            w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
+            w.WriteLine("#   spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
+            w.WriteLine();
+            w.WriteLine();
             w.WriteLine("# Server options");
             w.WriteLine("server-name = " + Server.name);
             w.WriteLine("motd = " + Server.motd);
@@ -636,9 +654,15 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString().ToLower());
             w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString());
+            w.WriteLine();
             w.WriteLine("#Admin Verification");
             w.WriteLine("admin-verification = " + Server.verifyadmins.ToString().ToLower());
             w.WriteLine("verify-admin-perm = " + ((sbyte)Server.verifyadminsrank).ToString());
+            w.WriteLine();
+            w.WriteLine("#Spam Control");
+            w.WriteLine("mute-on-spam = " + Server.checkspam.ToString().ToLower());
+            w.WriteLine("spam-messages = " + Server.spamcounter.ToString());
+            w.WriteLine("spam-mute-time = " + Server.mutespamtime.ToString());
         }
     }
 }
