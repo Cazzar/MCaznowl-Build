@@ -96,10 +96,22 @@ namespace MCForge.Gui
                     verifyadminsperm = grp.name;
                 }
             }
+            listPasswords.Items.Clear();
+            if (Directory.Exists("extra/passwords"))
+            {
+                DirectoryInfo di = new DirectoryInfo("extra/passwords/");
+                FileInfo[] fi = di.GetFiles("*.xml");
+                Thread.Sleep(10);
+                foreach (FileInfo file in fi)
+                {
+                    listPasswords.Items.Add(file.Name.Replace(".xml", ""));
+                }
+            }
             cmbDefaultRank.SelectedIndex = 1;
             cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
             cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
-            cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbAdminChat.Items.IndexOf(verifyadminsperm) : 1;
+            cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
+
             //Load server stuff
             LoadProp("properties/server.properties");
             LoadRanks();
@@ -502,6 +514,30 @@ namespace MCForge.Gui
                                     txtSQLHost.Text = "127.0.0.1";
                                 }
                                 break;
+                            case "mute-on-spam":
+                                chkSpamControl.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "spam-messages":
+                                try
+                                {
+                                    numSpamMessages.Value = Convert.ToInt16(value);
+                                }
+                                catch
+                                {
+                                    numSpamMessages.Value = 8;
+                                }
+                                break;
+                            case "spam-mute-time":
+                                try
+                                {
+                                    numSpamMute.Value = Convert.ToInt16(value);
+                                }
+                                catch
+                                {
+                                    numSpamMute.Value = 60;
+                                }
+                                break;
+
                                 
 
                         }
@@ -575,6 +611,10 @@ namespace MCForge.Gui
                     w.WriteLine();
                     w.WriteLine("# admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
                     w.WriteLine("# verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
+                    w.WriteLine();
+                    w.WriteLine("# mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
+                    w.WriteLine("# spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
+                    w.WriteLine("# spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
                     w.WriteLine();
                     w.WriteLine("# Server options");
                     w.WriteLine("server-name = " + txtName.Text);
@@ -666,9 +706,15 @@ namespace MCForge.Gui
                     w.WriteLine("cheap-message-given = " + txtCheap.Text);
                     w.WriteLine("rank-super = " + chkrankSuper.Checked.ToString().ToLower());
                     w.WriteLine("default-rank = " + cmbDefaultRank.Items[cmbDefaultRank.SelectedIndex].ToString());
+                    w.WriteLine();
                     w.WriteLine("#Admin Verification");
                     w.WriteLine("admin-verification = " + chkEnableVerification.Checked.ToString().ToLower());
                     w.WriteLine("verify-admin-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbVerificationRank.Items[cmbVerificationRank.SelectedIndex].ToString()).Permission).ToString());
+                    w.WriteLine();
+                    w.WriteLine("#Spam Control");
+                    w.WriteLine("mute-on-spam = " + chkSpamControl.Checked.ToString().ToLower());
+                    w.WriteLine("spam-messages = " + numSpamMessages.Value.ToString());
+                    w.WriteLine("spam-mute-time = " + numSpamMute.Value.ToString());
                 }
                 w.Flush();
                 w.Close();
@@ -1524,7 +1570,31 @@ MessageBox.Show("Text Box Cleared!!");
             }
         }
 
-       
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (listPasswords.Text == "")
+            {
+                MessageBox.Show("You have not selected a user's password to reset!");
+                return;
+            }
+            try
+            {
+                File.Delete("extra/passwords/" + listPasswords.Text + ".xml");
+                listPasswords.Items.Clear();
+                DirectoryInfo di = new DirectoryInfo("extra/passwords/");
+                FileInfo[] fi = di.GetFiles("*.xml");
+                Thread.Sleep(10);
+                foreach (FileInfo file in fi)
+                {
+                    listPasswords.Items.Add(file.Name.Replace(".xml", ""));
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to reset password!");
+            }
+
+        }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
