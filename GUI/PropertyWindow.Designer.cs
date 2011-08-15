@@ -110,7 +110,6 @@ namespace MCForge.Gui
             this.chkLogBeat = new System.Windows.Forms.CheckBox();
             this.cmbAdminChat = new System.Windows.Forms.ComboBox();
             this.chkTpToHigherRanks = new System.Windows.Forms.CheckBox();
-            this.chkEnableVerification = new System.Windows.Forms.CheckBox();
             this.chkUseSQL = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
@@ -225,11 +224,21 @@ namespace MCForge.Gui
             this.ChkPort = new System.Windows.Forms.Button();
             this.ChkPortResult = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.label38 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.cmbVerificationRank = new System.Windows.Forms.ComboBox();
+            this.chkEnableVerification = new System.Windows.Forms.CheckBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.listPasswords = new System.Windows.Forms.ListBox();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.chkSpamControl = new System.Windows.Forms.CheckBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.numSpamMessages = new System.Windows.Forms.NumericUpDown();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.label45 = new System.Windows.Forms.Label();
+            this.numSpamMute = new System.Windows.Forms.NumericUpDown();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -260,8 +269,11 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabControl.SuspendLayout();
-            this.tabPage8.SuspendLayout();
             this.groupBox14.SuspendLayout();
+            this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).BeginInit();
+            this.tabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSave
@@ -736,7 +748,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -794,7 +806,7 @@ namespace MCForge.Gui
             this.ChkTunnels.AutoSize = true;
             this.ChkTunnels.Location = new System.Drawing.Point(18, 20);
             this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(85, 23);
+            this.ChkTunnels.Size = new System.Drawing.Size(83, 23);
             this.ChkTunnels.TabIndex = 4;
             this.ChkTunnels.Text = "Anti-Tunneling";
             this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
@@ -806,7 +818,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(79, 23);
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -831,7 +843,7 @@ namespace MCForge.Gui
             this.chkAutoload.AutoSize = true;
             this.chkAutoload.Location = new System.Drawing.Point(16, 80);
             this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(85, 23);
+            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
             this.chkAutoload.TabIndex = 4;
             this.chkAutoload.Text = "Load on /goto";
             this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
@@ -932,7 +944,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -961,26 +973,13 @@ namespace MCForge.Gui
             this.toolTip.SetToolTip(this.chkTpToHigherRanks, "Allows the use of /tp to players of higher rank");
             this.chkTpToHigherRanks.UseVisualStyleBackColor = true;
             // 
-            // chkEnableVerification
-            // 
-            this.chkEnableVerification.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkEnableVerification.AutoSize = true;
-            this.chkEnableVerification.Location = new System.Drawing.Point(24, 20);
-            this.chkEnableVerification.Name = "chkEnableVerification";
-            this.chkEnableVerification.Size = new System.Drawing.Size(49, 23);
-            this.chkEnableVerification.TabIndex = 23;
-            this.chkEnableVerification.Text = "Enable";
-            this.toolTip.SetToolTip(this.chkEnableVerification, "Whether or not the server will ask for verification from admins before they can u" +
-                    "se commands.");
-            this.chkEnableVerification.UseVisualStyleBackColor = true;
-            // 
             // chkUseSQL
             // 
             this.chkUseSQL.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 275);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1883,7 +1882,7 @@ namespace MCForge.Gui
             this.chkAgreeToRules.AutoSize = true;
             this.chkAgreeToRules.Location = new System.Drawing.Point(15, 77);
             this.chkAgreeToRules.Name = "chkAgreeToRules";
-            this.chkAgreeToRules.Size = new System.Drawing.Size(189, 17);
+            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
             this.chkAgreeToRules.TabIndex = 32;
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
@@ -1980,7 +1979,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -2048,7 +2047,7 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(154, 23);
+            this.chkRestart.Size = new System.Drawing.Size(153, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart when an error occurs";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -2059,7 +2058,7 @@ namespace MCForge.Gui
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(16, 80);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(110, 23);
+            this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -2070,7 +2069,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(152, 22);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -2186,25 +2185,17 @@ namespace MCForge.Gui
             this.tabControl.Size = new System.Drawing.Size(496, 535);
             this.tabControl.TabIndex = 0;
             // 
-            // tabPage8
-            // 
-            this.tabPage8.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage8.Controls.Add(this.groupBox14);
-            this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(488, 509);
-            this.tabPage8.TabIndex = 7;
-            this.tabPage8.Text = "Extra";
-            // 
             // groupBox14
             // 
-            this.groupBox14.Controls.Add(this.cmbVerificationRank);
+            this.groupBox14.Controls.Add(this.btnReset);
+            this.groupBox14.Controls.Add(this.listPasswords);
+            this.groupBox14.Controls.Add(this.label39);
             this.groupBox14.Controls.Add(this.chkEnableVerification);
+            this.groupBox14.Controls.Add(this.cmbVerificationRank);
             this.groupBox14.Controls.Add(this.label38);
             this.groupBox14.Location = new System.Drawing.Point(19, 18);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(169, 138);
+            this.groupBox14.Size = new System.Drawing.Size(191, 322);
             this.groupBox14.TabIndex = 0;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Admin Verification";
@@ -2224,9 +2215,141 @@ namespace MCForge.Gui
             this.cmbVerificationRank.FormattingEnabled = true;
             this.cmbVerificationRank.Location = new System.Drawing.Point(60, 64);
             this.cmbVerificationRank.Name = "cmbVerificationRank";
-            this.cmbVerificationRank.Size = new System.Drawing.Size(81, 21);
-            this.cmbVerificationRank.TabIndex = 35;
-            this.toolTip.SetToolTip(this.cmbVerificationRank, "Default rank required to verify themselves.");
+            this.cmbVerificationRank.Size = new System.Drawing.Size(103, 21);
+            this.cmbVerificationRank.TabIndex = 22;
+            this.toolTip.SetToolTip(this.cmbVerificationRank, "The rank that verification is required for admins to gain access to commands.");
+            // 
+            // chkEnableVerification
+            // 
+            this.chkEnableVerification.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkEnableVerification.AutoSize = true;
+            this.chkEnableVerification.Location = new System.Drawing.Point(24, 20);
+            this.chkEnableVerification.Name = "chkEnableVerification";
+            this.chkEnableVerification.Size = new System.Drawing.Size(49, 23);
+            this.chkEnableVerification.TabIndex = 23;
+            this.chkEnableVerification.Text = "Enable";
+            this.toolTip.SetToolTip(this.chkEnableVerification, "Whether or not the server will ask for verification from admins before they can u" +
+                    "se commands.");
+            this.chkEnableVerification.UseVisualStyleBackColor = true;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(21, 106);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(98, 13);
+            this.label39.TabIndex = 24;
+            this.label39.Text = "Remove Passwords";
+            // 
+            // listPasswords
+            // 
+            this.listPasswords.FormattingEnabled = true;
+            this.listPasswords.Location = new System.Drawing.Point(24, 132);
+            this.listPasswords.Name = "listPasswords";
+            this.listPasswords.Size = new System.Drawing.Size(139, 134);
+            this.listPasswords.TabIndex = 1;
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(45, 276);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(91, 27);
+            this.btnReset.TabIndex = 25;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.numSpamMute);
+            this.groupBox15.Controls.Add(this.label45);
+            this.groupBox15.Controls.Add(this.numSpamMessages);
+            this.groupBox15.Controls.Add(this.label44);
+            this.groupBox15.Controls.Add(this.chkSpamControl);
+            this.groupBox15.Location = new System.Drawing.Point(225, 18);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(248, 146);
+            this.groupBox15.TabIndex = 1;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Spam Control";
+            // 
+            // chkSpamControl
+            // 
+            this.chkSpamControl.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSpamControl.AutoSize = true;
+            this.chkSpamControl.Location = new System.Drawing.Point(15, 20);
+            this.chkSpamControl.Name = "chkSpamControl";
+            this.chkSpamControl.Size = new System.Drawing.Size(49, 23);
+            this.chkSpamControl.TabIndex = 24;
+            this.chkSpamControl.Text = "Enable";
+            this.toolTip.SetToolTip(this.chkSpamControl, "If enabled it mutes a player for spamming. Default false.\r\n");
+            this.chkSpamControl.UseVisualStyleBackColor = true;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(15, 71);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(85, 13);
+            this.label44.TabIndex = 25;
+            this.label44.Text = "Spam Messages:";
+            // 
+            // numSpamMessages
+            // 
+            this.numSpamMessages.Location = new System.Drawing.Point(106, 67);
+            this.numSpamMessages.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numSpamMessages.Name = "numSpamMessages";
+            this.numSpamMessages.Size = new System.Drawing.Size(60, 21);
+            this.numSpamMessages.TabIndex = 30;
+            this.numSpamMessages.Tag = "The amount of messages that have to be sent before a player is muted.";
+            this.numSpamMessages.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage8.Controls.Add(this.groupBox15);
+            this.tabPage8.Controls.Add(this.groupBox14);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(488, 509);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Extra";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(15, 106);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(137, 13);
+            this.label45.TabIndex = 31;
+            this.label45.Text = "Spam Mute Time (seconds) :";
+            // 
+            // numSpamMute
+            // 
+            this.numSpamMute.Location = new System.Drawing.Point(158, 104);
+            this.numSpamMute.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numSpamMute.Name = "numSpamMute";
+            this.numSpamMute.Size = new System.Drawing.Size(60, 21);
+            this.numSpamMute.TabIndex = 32;
+            this.numSpamMute.Tag = "The number of seconds a player is muted for, for spamming.";
+            this.numSpamMute.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
             // 
             // PropertyWindow
             // 
@@ -2295,9 +2418,13 @@ namespace MCForge.Gui
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl.ResumeLayout(false);
-            this.tabPage8.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).EndInit();
+            this.tabPage8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2459,10 +2586,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.CheckBox chkIgnoreGlobal;
-        private System.Windows.Forms.TabPage tabPage8;
-        private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.CheckBox chkEnableVerification;
-        private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
@@ -2487,6 +2610,19 @@ namespace MCForge.Gui
         private System.Windows.Forms.TextBox txtSQLPassword;
         private System.Windows.Forms.TextBox txtSQLUsername;
         private System.Windows.Forms.CheckBox chkUseSQL;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.NumericUpDown numSpamMute;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.NumericUpDown numSpamMessages;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.CheckBox chkSpamControl;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.ListBox listPasswords;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.CheckBox chkEnableVerification;
         private System.Windows.Forms.ComboBox cmbVerificationRank;
+        private System.Windows.Forms.Label label38;
     }
 }
