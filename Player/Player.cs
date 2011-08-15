@@ -140,6 +140,7 @@ namespace MCForge
 
         public bool voice = false;
         public string voicestring = "";
+        public int consecutivemessages = 0;
 
         //CTF
         public Team team;
