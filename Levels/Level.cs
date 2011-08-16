@@ -150,71 +150,36 @@ namespace MCForge
             blocks = new byte[width * depth * height];
             ZoneList = new List<Zone>();
 
+            ushort half = (ushort)(depth / 2);
             switch (type)
             {
                 case "flat":
-                case "pixel":
-                    ushort half = (ushort)(depth / 2);
                     for (x = 0; x < width; ++x)
-                    {
                         for (z = 0; z < height; ++z)
-                        {
+                            for (y = 0; y < half + 1; ++y)
+                                SetTile(x, y, z, y < half ? Block.dirt : Block.grass);
+                                //SetTile(x, y, z, (byte)(y != half ? (y >= half) ? 0 : 3 : 2));
+                    break;
+                case "pixel":
+                    for (x = 0; x < width; ++x)
+                        for (z = 0; z < height; ++z)
                             for (y = 0; y < depth; ++y)
-                            {
-                                //Block b = new Block();
-                                switch (type)
-                                {
-                                    case "flat":
-                                        if (y != half)
-                                        {
-                                            SetTile(x, y, z, (byte)((y >= half) ? Block.air : Block.dirt));
-                                        }
-                                        else
-                                        {
-                                            SetTile(x, y, z, Block.grass);
-                                        }
-                                        break;
-
-                                    case "pixel":
                                         if (y == 0)
-                                            SetTile(x, y, z, Block.blackrock);
-                                        else
-                                            if (x == 0 || x == width - 1 || z == 0 || z == height - 1)
-                                                SetTile(x, y, z, Block.white);
-                                        break;
-                                }
-                                //blocks[x + width * z + width * height * y] = b;
-                            }
-                        }
-                    }
+                                            SetTile(x, y, z, 7);
+                                        else if (x == 0 || x == width - 1 || z == 0 || z == height - 1)
+                                                SetTile(x, y, z, 36);
                     break;
 
                 case "space":
                     Random rand = new Random();
 
                     for (x = 0; x < width; ++x)
-                    {
                         for (z = 0; z < height; ++z)
-                        {
                             for (y = 0; y < depth; ++y)
-                            {
                                 if (y == 0)
-								{
-                                    SetTile(x, y, z, Block.blackrock);
-								}
-                                else
-								{
-                                    if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
-                                    {
-                                        if (rand.Next(100) == 0)
-                                            SetTile(x, y, z, Block.iron);
-                                        else
-                                            SetTile(x, y, z, Block.obsidian);
-                                    }
-								}
-                            }
-                        }
-                    }
+                                    SetTile(x, y, z, 7);
+                                else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
+                                    SetTile(x, y, z, rand.Next(100) == 0 ? Block.iron : Block.obsidian);
                 	break;
 
                 case "island":
