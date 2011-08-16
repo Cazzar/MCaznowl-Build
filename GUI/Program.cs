@@ -80,9 +80,13 @@ namespace MCForge_.Gui
             {
                 foreach (Process pr in Process.GetProcessesByName("MCForge"))
                 {
-                    if (pr.MainModule.BaseAddress == Process.GetCurrentProcess().MainModule.BaseAddress)
-                        if (pr.Id != Process.GetCurrentProcess().Id)
-                            pr.Kill();
+                    try
+                    {
+                        if (pr.MainModule.BaseAddress == Process.GetCurrentProcess().MainModule.BaseAddress)
+                            if (pr.Id != Process.GetCurrentProcess().Id)
+                                pr.Kill();
+                    }
+                    catch { }
                 }
             }
 

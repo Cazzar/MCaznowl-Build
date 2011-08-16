@@ -45,6 +45,7 @@ namespace MCForge.Gui
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
         public static bool fileexists = false;
+        bool mapgen = false;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -64,7 +65,7 @@ namespace MCForge.Gui
             InitializeComponent();
         }
 
-        private void Window_Minimize(object sender, EventArgs e)
+        /*private void Window_Minimize(object sender, EventArgs e)
         {
             /*     if (!Minimized)
                   {
@@ -85,7 +86,7 @@ namespace MCForge.Gui
                       ntf.Visible = true;
                       this.ShowInTaskbar = false;
                   } */
-        }
+        /*}*/
 
         public static Window thisWindow;
 
@@ -119,7 +120,6 @@ namespace MCForge.Gui
             s.OnSettingsUpdate += SettingsUpdate;
             s.Start();
             btnProperties.Enabled = true;
-            }).Start();
             notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
 
             this.notifyIcon1.ContextMenuStrip = this.iconContext;
@@ -156,6 +156,7 @@ namespace MCForge.Gui
 					UpdateMapList("'");
 				}; UpdateListTimer.Start();
 			}
+            }).Start();
         }
 
         void SettingsUpdate()
@@ -533,11 +534,11 @@ namespace MCForge.Gui
             }
         }
 
-        void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
+        //void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
 
         private void txtHost_TextChanged(object sender, EventArgs e)
         {
-            if (txtHost.Text != "") ChangeCheck(txtHost.Text);
+            if (txtHost.Text != "") Server.ZallState = txtHost.Text;
         }
 
         private void btnProperties_Click_1(object sender, EventArgs e)
@@ -563,10 +564,10 @@ namespace MCForge.Gui
         Form PropertyForm;
         Form UpdateForm;
 
-        private void gBChat_Enter(object sender, EventArgs e)
+        /*private void gBChat_Enter(object sender, EventArgs e)
         {
 
-        }
+        }*/
 
         private void btnExtra_Click_1(object sender, EventArgs e)
         {
@@ -673,174 +674,216 @@ namespace MCForge.Gui
 
         private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("clones").Use(null, p.name);
-            }
+            }*/
+            playerselect("clones");
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("voice").Use(null, p.name);
-            }
+            }*/
+            playerselect("voice");
         }
 
         private void whoisToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("whois").Use(null, p.name);
-            }
+            }*/
+            playerselect("whois");
         }
 
         private void kickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
-            }
+            }*/
+            playerselect("ban", " You have been kicked by the console.");
         }
 
 
         private void banToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("ban").Use(null, p.name);
-            }
+            }*/
+            playerselect("ban");
+        }
+
+        private void playerselect(string com)
+        {
+            if (GetSelectedPlayer() != null)
+                Command.all.Find("ban").Use(null, GetSelectedPlayer().name);
+        }
+        private void playerselect(string com, string args)
+        {
+            if (GetSelectedPlayer() != null)
+                Command.all.Find("ban").Use(null, GetSelectedPlayer().name + args);
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("physics").Use(null, l.name + " 0");
-            }
+            }*/
+            levelcommand("physics", " 0");
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("physics").Use(null, l.name + " 1");
-            }
+            }*/
+            levelcommand("physics", " 1");
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("physics").Use(null, l.name + " 2");
-            }
+            }*/
+            levelcommand("physics", " 2");
         }
 
         private void toolStripMenuItem5_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("physics").Use(null, l.name + " 3");
-            }
+            }*/
+            levelcommand("physics", " 3");
         }
 
         private void toolStripMenuItem6_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("physics").Use(null, l.name + " 4");
-            }
+            }*/
+            levelcommand("physics", " 4");
         }
 
         private void unloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("unload").Use(null, l.name);
-            }
+            }*/
+            levelcommand("unload");
         }
 
         private void finiteModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " finite");
-            }
+            }*/
+            levelcommand("map", " finite");
         }
 
         private void animalAIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " ai");
-            }
+            }*/
+            levelcommand("map", " ai");
         }
 
         private void edgeWaterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " edge");
-            }
+            }*/
+            levelcommand("map", " edge");
         }
 
         private void growingGrassToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " grass");
-            }
+            }*/
+            levelcommand("map", " grass");
         }
 
         private void survivalDeathToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " death");
-            }
+            }*/
+            levelcommand("map", " death");
         }
 
         private void killerBlocksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " killer");
-            }
+            }*/
+            levelcommand("map", " killer");
         }
 
         private void rPChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("map").Use(null, l.name + " chat");
-            }
+            }*/
+            levelcommand("map", " chat");
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevel();
+            /*Level l = GetSelectedLevel();
             if (l != null)
             {
                 Command.all.Find("save").Use(null, l.name);
-            }
+            }*/
+            levelcommand("save");
+        }
+
+        private void levelcommand(string com)
+        {
+            if (GetSelectedLevel() != null)
+                Command.all.Find(com).Use(null, GetSelectedLevel().name);
+        }
+
+        private void levelcommand(string com, string args)
+        {
+            if (GetSelectedLevel() != null)
+                Command.all.Find(com).Use(null, GetSelectedLevel().name + args);
         }
 
         private void tabControl1_Click(object sender, EventArgs e)
@@ -941,37 +984,37 @@ namespace MCForge.Gui
 
         private void promoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("promote").Use(null, p.name);
-            }
+            }*/
+            playerselect("promote");
         }
 
         private void demoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Player p = GetSelectedPlayer();
+            /*Player p = GetSelectedPlayer();
             if (p != null)
             {
                 Command.all.Find("demote").Use(null, p.name);
-            }
+            }*/
+            playerselect("demote");
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevelTab();
-            if (l != null)
+            if (GetSelectedLevelTab() != null)
             {
-                Command.all.Find("unload").Use(null, l.name);
+                Command.all.Find("unload").Use(null, GetSelectedLevelTab().name);
             }
         }
 
         private void toolStripMenuItem21_Click(object sender, EventArgs e)
         {
-            Level l = GetSelectedLevelTab();
-            if (l != null)
+            if (GetSelectedLevelTab() != null)
             {
-                Command.all.Find("save").Use(null, l.name);
+                Command.all.Find("save").Use(null, GetSelectedLevelTab().name);
             }
         }
 
@@ -1068,7 +1111,7 @@ namespace MCForge.Gui
                     }
                     if (AutoLoadChk.Checked == true && done == false)
                     {
-                        oldlines.Add(l.name + "=" + l.physics.ToString());
+                        oldlines.Add(l.name + "=" + l.physics);
                     }
                 }
                 File.Delete("text/autoload.txt");
@@ -1089,30 +1132,42 @@ namespace MCForge.Gui
 
         private void CreateNewMap_Click(object sender, EventArgs e)
         {
-            try
+            if (mapgen) { MessageBox.Show("Map generator already in use."); return; }
+            new Thread(() =>
             {
-                Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower());
-            }
-            catch 
-            {
-                MessageBox.Show("Level Creation Failed. Are  you sure you didn't leave a box empty?");
-            }
-
-            if (File.Exists("levels/" + nametxtbox.Text + ".lvl"))
-            {
-                MessageBox.Show("Created Level");
+                mapgen = true;
                 try
                 {
-                    UnloadedlistUpdate();
-                    UpdateMapList("'");
+                    Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower());
                 }
-                catch { }
-            }
-            else
-            {
-                MessageBox.Show("Level Not Created, Something went wrong");
-            }
-            return;
+                catch
+                {
+                    MessageBox.Show("Level Creation Failed. Are  you sure you didn't leave a box empty?");
+                }
+
+                if (File.Exists("levels/" + nametxtbox.Text + ".lvl"))
+                {
+                    MessageBox.Show("Created Level");
+                    try
+                    {
+                        UnloadedlistUpdate();
+                        UpdateMapList("'");
+                    }
+                    catch { }
+                }
+                else
+                {
+                    MessageBox.Show("Level may not have been created.");
+                    try
+                    {
+                        UnloadedlistUpdate();
+                        UpdateMapList("'");
+                    }
+                    catch { }
+                }
+                mapgen = false;
+                return;
+            }).Start(); ;
         }
 
         private void ldmapbt_Click(object sender, EventArgs e)
@@ -1287,10 +1342,9 @@ namespace MCForge.Gui
                             catch { }
                             foreach (Object obj in MapCombo.Items)
                             {
-                                Level lvl = Level.Find(obj.ToString());
-                                if (lvl != null)
+                                if (Level.Find(obj.ToString()) != null)
                                 {
-                                    if (p.level == lvl)
+                                    if (p.level == Level.Find(obj.ToString()))
                                     {
                                         MapCombo.SelectedItem = obj;
                                     }
@@ -1909,10 +1963,10 @@ namespace MCForge.Gui
         }
         #endregion
 
-        private void txtOpInput_TextChanged(object sender, EventArgs e)
+        /*private void txtOpInput_TextChanged(object sender, EventArgs e)
         {
 
-        }
+        }*/
         #endregion
 
         private void txtOpInput_KeyDown(object sender, KeyEventArgs e)
@@ -1942,10 +1996,10 @@ namespace MCForge.Gui
             }
         }
 
-        private void txtLog_TextChanged(object sender, EventArgs e)
+        /*private void txtLog_TextChanged(object sender, EventArgs e)
         {
 
-        }
+        }*/
 
 
 
