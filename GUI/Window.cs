@@ -91,6 +91,7 @@ namespace MCForge.Gui
 
         private void Window_Load(object sender, EventArgs e)
         {
+            btnProperties.Enabled = false;
             thisWindow = this;
             MaximizeBox = false;
             this.Text = "<server name here>";
@@ -99,7 +100,7 @@ namespace MCForge.Gui
             this.Show();
             this.BringToFront();
             WindowState = FormWindowState.Normal;
-
+            new Thread(() => { 
             s = new Server();
             s.OnLog += WriteLine;
             s.OnCommand += newCommand;
@@ -108,15 +109,17 @@ namespace MCForge.Gui
             s.OnAdmin += WriteAdmin;
             s.OnOp += WriteOp;
 
-            foreach (TabPage tP in tabControl1.TabPages)
+            /*foreach (TabPage tP in tabControl1.TabPages)
                 tabControl1.SelectTab(tP);
-            tabControl1.SelectTab(tabControl1.TabPages[0]);
+            tabControl1.SelectTab(tabControl1.TabPages[0]);*/
 
             s.HeartBeatFail += HeartBeatFail;
             s.OnURLChange += UpdateUrl;
             s.OnPlayerListChange += UpdateClientList;
             s.OnSettingsUpdate += SettingsUpdate;
             s.Start();
+            btnProperties.Enabled = true;
+            }).Start();
             notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
 
             this.notifyIcon1.ContextMenuStrip = this.iconContext;
@@ -880,6 +883,7 @@ namespace MCForge.Gui
 
 					Restarter.Start();
 				}
+                Dispose();
             }
 
         }
