@@ -119,7 +119,17 @@ namespace MCForge.Gui
             s.OnPlayerListChange += UpdateClientList;
             s.OnSettingsUpdate += SettingsUpdate;
             s.Start();
-            btnProperties.Enabled = true;
+            //btnProperties.Enabled = true;
+            if (btnProperties.InvokeRequired)
+            {
+                VoidDelegate d = btnPropertiesenable;
+                Invoke(d);
+            }
+            else
+            {
+                btnProperties.Enabled = true;
+            }
+            }).Start();
             notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
 
             this.notifyIcon1.ContextMenuStrip = this.iconContext;
@@ -132,10 +142,10 @@ namespace MCForge.Gui
             if (File.Exists("Changelog.txt"))
             {
                 txtChangelog.Text = "Changelog for " + Server.Version + ":";
-                foreach (string line in File.ReadAllLines(("Changelog.txt")))
+                /*foreach (string line in File.ReadAllLines(("Changelog.txt")))
                 {
                     txtChangelog.AppendText("\r\n           " + line);
-                }
+                }*/
             }
 
             // Bind player list
@@ -156,8 +166,9 @@ namespace MCForge.Gui
 					UpdateMapList("'");
 				}; UpdateListTimer.Start();
 			}
-            }).Start();
         }
+
+        void btnPropertiesenable() { btnProperties.Enabled = true; }
 
         void SettingsUpdate()
         {

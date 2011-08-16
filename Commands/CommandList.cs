@@ -54,7 +54,7 @@ namespace MCForge
         {
             name = name.ToLower(); foreach (Command cmd in commands)
             {
-                if (cmd.name == name.ToLower() || cmd.shortcut == name.ToLower()) { return cmd; }
+                if (cmd.name == name || cmd.shortcut == name) { return cmd; }
             } return null;
         }
 
