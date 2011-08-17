@@ -1411,6 +1411,7 @@ namespace MCForge.Gui
                 PlayersTextBox.AppendTextAndScroll("No Player Selected");
                 return;
             }
+            if (TitleTxt.Text.Length > 17) { PlayersTextBox.AppendTextAndScroll("Title must be under 17 letters."); return; }
             prpertiesofplyer.prefix = "[" + TitleTxt.Text + "]";
             PlayersTextBox.AppendTextAndScroll("The title has been saved");
         }
