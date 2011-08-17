@@ -43,6 +43,7 @@ namespace MCForge
         static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
         static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
         public static List<Player> totalplayers = new List<Player>();
+        public static string lastMSG = "";
 
         public static bool storeHelp = false;
         public static string storedHelp = "";
@@ -64,8 +65,8 @@ namespace MCForge
         public bool disconnected = false;
         public string time;
         public string name;
-        public int warn = 0;
         public string realName;
+        public int warn = 0;
         public byte id;
         public int userID = -1;
         public string ip;
@@ -1206,6 +1207,7 @@ namespace MCForge
             catch { Player.SendMessage(p, "Portal had no exit."); return; }
         }
 
+
         public void HandleMsgBlock(Player p, ushort x, ushort y, ushort z, byte b)
         {
             try
@@ -1762,6 +1764,47 @@ namespace MCForge
                 {
                     text = ProfanityFilter.Parse(text);
                 }
+
+                if (Server.checkspam == true)
+                {
+                    if (consecutivemessages == 0)
+                    {
+                        consecutivemessages++;
+                    }
+                    if (Player.lastMSG == this.name)
+                    {
+                        consecutivemessages++;
+                    }
+                    else
+                    {
+                        consecutivemessages--;
+                    }
+                    
+                    if (this.consecutivemessages >= Server.spamcounter)
+                    {
+                        int total = Server.mutespamtime;
+                        System.Timers.Timer muteTimer = new System.Timers.Timer(1000);
+                        Command.all.Find("mute").Use(null, this.name);
+                        Player.GlobalMessage(this.name + " has been &0muted &efor spamming!");
+                        muteTimer.Elapsed += delegate
+                        {
+                            total--;
+                            if (total <= 0)
+                            {
+                                muteTimer.Stop();
+                                if (this.muted == true)
+                                {
+                                    Command.all.Find("mute").Use(null, this.name);
+                                }
+                                this.consecutivemessages = 0;
+                                Player.SendMessage(this, "Remember, no &cspamming &e" + "next time!");
+                            }
+                        };
+                        muteTimer.Start();
+                       return;
+                    }
+                }
+                Player.lastMSG = this.name;
 
                 if (text[0] == '@' || whisper)
                 {
