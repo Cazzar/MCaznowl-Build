@@ -500,8 +500,8 @@ namespace MCForge
             {
                 string[] lines = File.ReadAllLines("properties/block.properties");
 
-                if (lines.Length == 0);
-                else if (lines[0] == "#Version 2")
+                //if (lines.Length == 0) ; // this is useless?
+                /*else */if (lines[0] == "#Version 2")
                 {
                     string[] colon = new string[] { " : " };
                     foreach (string line in lines)

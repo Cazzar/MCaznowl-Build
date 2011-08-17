@@ -51,7 +51,7 @@ namespace MCForge.Gui
         LevelCollection lc = new LevelCollection(new LevelListView());
         LevelCollection lcTAB = new LevelCollection(new LevelListViewForTab());
 
-        public static event EventHandler Minimize;
+        //public static event EventHandler Minimize;
         public NotifyIcon notifyIcon1 = new NotifyIcon();
         //  public static bool Minimized = false;
 

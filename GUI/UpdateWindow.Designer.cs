@@ -38,6 +38,7 @@
             this.txtCountdown = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkNotify = new System.Windows.Forms.CheckBox();
+            this.revisions_downloading = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -107,6 +108,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.revisions_downloading);
             this.panel2.Controls.Add(this.txtCountdown);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.chkNotify);
@@ -144,6 +146,17 @@
             this.chkNotify.Text = "Notify in-game of restart";
             this.chkNotify.UseVisualStyleBackColor = true;
             // 
+            // revisions_downloading
+            // 
+            this.revisions_downloading.AutoSize = true;
+            this.revisions_downloading.BackColor = System.Drawing.Color.Transparent;
+            this.revisions_downloading.ForeColor = System.Drawing.Color.Red;
+            this.revisions_downloading.Location = new System.Drawing.Point(-3, 68);
+            this.revisions_downloading.Name = "revisions_downloading";
+            this.revisions_downloading.Size = new System.Drawing.Size(216, 13);
+            this.revisions_downloading.TabIndex = 5;
+            this.revisions_downloading.Text = "Please Wait while downloading revisions list.";
+            // 
             // UpdateWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -175,5 +188,6 @@
         private System.Windows.Forms.CheckBox chkNotify;
         private System.Windows.Forms.TextBox txtCountdown;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label revisions_downloading;
     }
 }

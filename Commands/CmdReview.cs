@@ -48,7 +48,7 @@ namespace MCForge
                     }
                 }
             }
-            catch (Exception e)
+            catch/* (Exception e)*/
             {
                 isopson = true;
             }
