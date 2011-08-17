@@ -138,29 +138,29 @@ namespace MCForge
         public static void Save()
         {
             if (!File.Exists("properties/economy.properties")) { Server.s.Log("Economy properties don't exist, creating"); }
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
             File.Delete("properties/economy.properties");
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
             using (StreamWriter w = File.CreateText("properties/economy.properties"))
             {
                 //enabled
-                w.WriteLine("enabled:" + Settings.Enabled.ToString());
+                w.WriteLine("enabled:" + Settings.Enabled);
                 //title
                 w.WriteLine();
-                w.WriteLine("title:enabled:" + Settings.Titles.ToString());
-                w.WriteLine("title:price:" + Settings.TitlePrice.ToString());
+                w.WriteLine("title:enabled:" + Settings.Titles);
+                w.WriteLine("title:price:" + Settings.TitlePrice);
                 //color
                 w.WriteLine();
-                w.WriteLine("color:enabled:" + Settings.Colors.ToString());
-                w.WriteLine("color:price:" + Settings.ColorPrice.ToString());
+                w.WriteLine("color:enabled:" + Settings.Colors);
+                w.WriteLine("color:price:" + Settings.ColorPrice);
                 //rank
                 w.WriteLine();
-                w.WriteLine("rank:enabled:" + Settings.Ranks.ToString());
-                w.WriteLine("rank:price:" + Settings.RankPrice.ToString());
-                w.WriteLine("rank:maxrank:" + Settings.MaxRank.ToString());
+                w.WriteLine("rank:enabled:" + Settings.Ranks);
+                w.WriteLine("rank:price:" + Settings.RankPrice);
+                w.WriteLine("rank:maxrank:" + Settings.MaxRank);
                 //maps
                 w.WriteLine();
-                w.WriteLine("level:enabled:" + Settings.Levels.ToString());
+                w.WriteLine("level:enabled:" + Settings.Levels);
                 foreach (Settings.Level lvl in Settings.LevelsList)
                 {
                     w.WriteLine();
