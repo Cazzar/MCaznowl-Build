@@ -63,7 +63,7 @@ namespace MCForge
 					{
                     	time = Convert.ToInt32(message.Split(' ')[1]);
 					}
-					catch (Exception ex)
+					catch/* (Exception ex)*/
 					{
 						Player.SendMessage(p, "Invalid time given.");
 						Help(p);

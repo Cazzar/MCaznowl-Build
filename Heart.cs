@@ -35,11 +35,11 @@ namespace MCForge
 
         private static int max_retries = 3;
 
-        static string hash;
+        static string hash = null;
         public static string serverURL;
         static string DefaultParameters;
-        static string players = "";
-        static string worlds = "";
+        //static string players = "";
+        //static string worlds = "";
 
         //static BackgroundWorker worker;
         static Random MCForgeBeatSeed = new Random(Process.GetCurrentProcess().Id);

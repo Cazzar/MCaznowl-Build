@@ -47,7 +47,7 @@ namespace MCForge
 			{
 	            amount = int.Parse(split[1]);
 			}
-			catch (Exception ex)
+			catch/* (Exception ex)*/
 			{
 				Player.SendMessage(p, "How much do you want to fakepay them?");
 				return;

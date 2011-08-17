@@ -1075,7 +1075,7 @@ namespace MCForge
             lastClick[0] = x;
             lastClick[1] = y;
             lastClick[2] = z;
-            bool test2 = false;
+            //bool test2 = false;
             if (Blockchange != null)
             {
                 if (Blockchange.Method.ToString().IndexOf("AboutBlockchange") == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
@@ -2227,8 +2227,8 @@ namespace MCForge
             }
             //Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
 
-            int tries = 0;
-        retry: try
+            /*int tries = 0;
+        retry:*/ try
             {
 
                 //socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
@@ -3491,7 +3491,7 @@ namespace MCForge
             {
                 return File.ReadAllLines("ranks/banned.txt").Length;
             }
-            catch (Exception ex)
+            catch/* (Exception ex)*/
             {
                 return 0;
             }
@@ -3583,7 +3583,7 @@ namespace MCForge
                         int secondPart = Convert.ToInt32(split[1]);
                         return (secondPart >= 16 && secondPart <= 31);
                     }
-                    catch (Exception ex)
+                    catch/* (Exception ex)*/
                     {
                         return false;
                     }

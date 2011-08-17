@@ -18,14 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Net;
 
 namespace MCForge.Gui
@@ -41,24 +36,32 @@ namespace MCForge.Gui
             UpdLoadProp("properties/update.properties");
 			using (WebClient client = new WebClient())
 			{
-				client.DownloadFile(ServerSettings.RevisionList, "text/revs.txt");
+				//client.DownloadFile(ServerSettings.RevisionList, "text/revs.txt");
+                //client.DownloadFileAsync(ServerSettings.RevisionList, "text/revs.txt");
+                Uri uri = new Uri(ServerSettings.RevisionList);
+                client.DownloadFileCompleted += Downloaded;
+                client.DownloadFileAsync(uri, "serverdata.txt");
 			}
-            listRevisions.Items.Clear();
-            FileInfo file = new FileInfo("text/revs.txt");
-            StreamReader stRead = file.OpenText();
-            if (File.Exists("text/revs.txt"))
-            {
-                while (!stRead.EndOfStream)
-                {
-                    listRevisions.Items.Add(stRead.ReadLine());
-                }
-            }
-            stRead.Close();
-            stRead.Dispose();
-            file.Delete();
         }
 
 
+        private void Downloaded(object sender, AsyncCompletedEventArgs e)
+        {
+            revisions_downloading.Visible = false;
+            if (File.Exists("text/revs.txt"))
+            {
+                listRevisions.Items.Clear();
+                FileInfo file = new FileInfo("text/revs.txt");
+                StreamReader stRead = file.OpenText();
+                if (File.Exists("text/revs.txt"))
+                    while (!stRead.EndOfStream)
+                        listRevisions.Items.Add(stRead.ReadLine());
+                stRead.Close();
+                stRead.Dispose();
+                file.Delete();
+            }
+            else MessageBox.Show("Error downloading revisions list");
+        }
         public void UpdSave(string givenPath)
         {
 			File.Create(givenPath).Dispose();
@@ -69,11 +72,11 @@ namespace MCForge.Gui
 				SW.WriteLine("#Notify notifies players in-game of impending restart");
 				SW.WriteLine("#Restart Countdown is how long in seconds the server will count before restarting and updating");
 				SW.WriteLine();
-				SW.WriteLine("autoupdate= " + chkAutoUpdate.Checked.ToString());
-				SW.WriteLine("notify = " + chkNotify.Checked.ToString());
+				SW.WriteLine("autoupdate= " + chkAutoUpdate.Checked);
+				SW.WriteLine("notify = " + chkNotify.Checked);
 				SW.WriteLine("restartcountdown = " + txtCountdown.Text);
 			}
-            this.Close();
+            Close();
         }
 
 
@@ -129,7 +132,7 @@ namespace MCForge.Gui
         private void cmdDiscard_Click(object sender, EventArgs e)
         {
             UpdLoadProp("properties/update.properties");
-            this.Close();
+            Close();
         }
 
         private void cmdUpdate_Click(object sender, EventArgs e)

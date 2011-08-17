@@ -42,7 +42,7 @@ namespace MCForge
 
         public static void Load()
         {
-            if (!File.Exists("properties/economy.properties")) { Server.s.Log("Economy properties don't exist, creating"); File.Create("properties/economy.properties"); Save(); }
+            if (!File.Exists("properties/economy.properties")) { Server.s.Log("Economy properties don't exist, creating"); File.Create("properties/economy.properties").Close(); Save(); }
             using (StreamReader r = File.OpenText("properties/economy.properties"))
             {
                 string line;

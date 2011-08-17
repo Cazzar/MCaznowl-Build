@@ -192,8 +192,8 @@ namespace MCForge.Gui
         }
         public static bool prevLoaded = false;
         Form PropertyForm;
-        Form UpdateForm;
-        Form EditTxtForm;
+        //Form UpdateForm; // doesnt seem to be used, uncomment as needed.
+        //Form EditTxtForm;
 
         public void SaveBlocks()
         {
@@ -204,7 +204,7 @@ namespace MCForge.Gui
 
         public void LoadProp(string givenPath)
         {
-            int count = 0;
+            //int count = 0;
             if (File.Exists(givenPath))
             {
                 string[] lines = File.ReadAllLines(givenPath);
@@ -1143,7 +1143,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 ChkPortResult.BackColor = Color.Red;
 
             }
-            catch (Exception ex)
+            catch/* (Exception ex)*/
             {
                 ChkPortResult.Text = "Testing Port Failed!";
                 ChkPortResult.BackColor = Color.Red;
