@@ -3240,7 +3240,14 @@ namespace MCForge
 
                     players.Remove(this);
                     Server.s.PlayerListUpdate();
-                    left.Add(this.name.ToLower(), this.ip);
+                    try
+                    {
+                        left.Add(this.name.ToLower(), this.ip);
+                    }
+                    catch (Exception e)
+                    {
+                        Server.ErrorLog(e);
+                    }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
                     catch { }
 

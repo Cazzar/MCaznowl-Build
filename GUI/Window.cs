@@ -502,6 +502,7 @@ namespace MCForge.Gui
                     return;
                 }
 
+                new Thread(() =>{
                 try
                 {
                     Command.all.Find(sentCmd).Use(null, sentMsg);
@@ -518,6 +519,7 @@ namespace MCForge.Gui
                     Server.ErrorLog(ex);
                     newCommand("CONSOLE: Failed command.");
                 }
+                }).Start();
 
                 txtCommands.Clear();
             }
