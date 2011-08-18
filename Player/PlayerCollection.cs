@@ -63,32 +63,24 @@ namespace MCForge
         public PropertyDescriptorCollection GetView()
         {
             List<PropertyDescriptor> props = new List<PropertyDescriptor>();
-            PlayerMethodDelegate del = delegate(Player p)
+            /*PlayerMethodDelegate del = delegate(Player p)
             {
                 return p.name;
-            };
-            props.Add(new PlayerMethodDescriptor("Name", del, typeof(string)));
+            };*/
+            props.Add(new PlayerMethodDescriptor("Name", p => p.name, typeof(string)));
 
-            del = delegate(Player p) {
-                return p.level.name;
-            };
-            props.Add(new PlayerMethodDescriptor("Map", del, typeof(string)));
+            props.Add(new PlayerMethodDescriptor("Map", p => p.level.name, typeof(string)));
 
-            del = delegate(Player p)
-            {
-                return p.group.name;
-            };
-            props.Add(new PlayerMethodDescriptor("Rank", del, typeof(string)));
+            props.Add(new PlayerMethodDescriptor("Rank", p => p.group.name, typeof(string)));
 
-            del = delegate(Player p)
-            {
-                if (p.hidden)
-                    return "hidden";
-                if (Server.afkset.Contains(p.name))
-                    return "afk";
-                return "active";
-            };
-            props.Add(new PlayerMethodDescriptor("Status", del, typeof(string)));
+            props.Add(new PlayerMethodDescriptor("Status", p =>
+                      {
+                          if (p.hidden)
+                              return "hidden";
+                          if (Server.afkset.Contains(p.name))
+                              return "afk";
+                          return "active";
+                      }, typeof(string)));
 
             PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
             props.CopyTo(propArray);
@@ -114,8 +106,7 @@ namespace MCForge
 
         public override object GetValue(object component)
         {
-            Player p = (Player)component;
-            return _method(p);
+            return _method((Player)component);
         }
 
         public override Type ComponentType
