@@ -40,7 +40,7 @@ namespace MCForge.Gui
                 //client.DownloadFileAsync(ServerSettings.RevisionList, "text/revs.txt");
                 Uri uri = new Uri(ServerSettings.RevisionList);
                 client.DownloadFileCompleted += Downloaded;
-                client.DownloadFileAsync(uri, "serverdata.txt");
+                client.DownloadFileAsync(uri, "text/revs.txt");
 			}
         }
 

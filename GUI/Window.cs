@@ -280,10 +280,10 @@ namespace MCForge.Gui
         public void UpdateClientList(List<Player> players)
         {
 
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                PlayerListCallback d = new PlayerListCallback(UpdateClientList);
-                this.Invoke(d, new object[] { players });
+                PlayerListCallback d = UpdateClientList;
+                Invoke(d, new object[] { players });
             }
             else
             {
@@ -300,26 +300,25 @@ namespace MCForge.Gui
 
                 // Update the data source and control
                 //dgvPlayers.SuspendLayout();
-                pc.Clear();
-                Player.players.ForEach(delegate(Player p) { pc.Add(p); });
+
+                pc = new PlayerCollection(new PlayerListView());
+                Player.players.ForEach(p => pc.Add(p));
 
                 //dgvPlayers.Invalidate();
-                dgvPlayers.DataSource = null;
                 dgvPlayers.DataSource = pc;
                 // Reselect player
                 if (selected != null)
                 {
-                    foreach (Player p in Player.players)
-                        foreach (DataGridViewRow row in dgvPlayers.Rows)
-                            if (String.Equals(row.Cells[0].Value, selected))
-                                row.Selected = true;
+                    for (int i = 0; i < Player.players.Count; i++)
+                        for (int j = 0; j < dgvPlayers.Rows.Count; j++)
+                            if (String.Equals(dgvPlayers.Rows[j].Cells[0].Value, selected))
+                                dgvPlayers.Rows[j].Selected = true;
                 }
 
                 dgvPlayers.Refresh();
-                try { UpdatePlyersListBox(); }
-                catch { }
                 //dgvPlayers.ResumeLayout();
             }
+
         }
 
         public void UpdateMapList(string blah)
@@ -720,7 +719,7 @@ namespace MCForge.Gui
             {
                 Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
             }*/
-            playerselect("ban", " You have been kicked by the console.");
+            playerselect("kick", " You have been kicked by the console.");
         }
 
 
@@ -737,12 +736,12 @@ namespace MCForge.Gui
         private void playerselect(string com)
         {
             if (GetSelectedPlayer() != null)
-                Command.all.Find("ban").Use(null, GetSelectedPlayer().name);
+                Command.all.Find(com).Use(null, GetSelectedPlayer().name);
         }
         private void playerselect(string com, string args)
         {
             if (GetSelectedPlayer() != null)
-                Command.all.Find("ban").Use(null, GetSelectedPlayer().name + args);
+                Command.all.Find(com).Use(null, GetSelectedPlayer().name + args);
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
