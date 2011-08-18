@@ -187,19 +187,19 @@ namespace MCForge.Util
 			}
 		}
 
-		public static void Cone(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void Cone(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+				if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -224,10 +224,10 @@ namespace MCForge.Util
 
 							if (pointradius <= currentradius)
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                                byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                    p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 								}
 							}
 						}
@@ -235,24 +235,24 @@ namespace MCForge.Util
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y + height), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y + height), z, block);
 		}
-		public static void HCone(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void HCone(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -277,10 +277,10 @@ namespace MCForge.Util
 
 							if (pointradius <= currentradius && pointradius >= (currentradius - 1))
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                                byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                    p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 								}
 							}
 						}
@@ -288,24 +288,24 @@ namespace MCForge.Util
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y + height), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y + height), z, block);
 		}
-		public static void ICone(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void ICone(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -330,10 +330,10 @@ namespace MCForge.Util
 
 							if (pointradius <= currentradius)
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                                byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                    p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 								}
 							}
 						}
@@ -341,23 +341,23 @@ namespace MCForge.Util
 					}
 				}
 			}
-			l.Blockchange(x, y, z, block);
+            p.level.Blockchange(p, x, y, z, block);
 		}
-		public static void HICone(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void HICone(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -382,10 +382,10 @@ namespace MCForge.Util
 
 							if (pointradius <= currentradius && pointradius >= (currentradius - 1))
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                                byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                    p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 								}
 							}
 						}
@@ -393,23 +393,23 @@ namespace MCForge.Util
 					}
 				}
 			}
-			l.Blockchange(x, y, z, block);
+            p.level.Blockchange(p, x, y, z, block);
 		}
 
 		//For the pyramid commands, Radius still refers to the distance from the center point, but is axis independant, rather then a referance to both axes
-		public static void Pyramid(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void Pyramid(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -433,32 +433,32 @@ namespace MCForge.Util
 							if (absx > currentradius) continue;
 							if (absz > currentradius) continue;
 
-							byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                            byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 							if (ctile == 0)
 							{
-								l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 							}
 						}
 
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y + height), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y + height), z, block);
 		}
-		public static void HPyramid(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void HPyramid(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -482,32 +482,32 @@ namespace MCForge.Util
 							if (absx > currentradius || absz > currentradius) continue;
 							if (absx < (currentradius - 1) && absz < (currentradius - 1)) continue;
 
-							byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                            byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 							if (ctile == 0)
 							{
-								l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 							}
 						}
 
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y), z, block);
 		}
-		public static void IPyramid(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void IPyramid(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -531,32 +531,32 @@ namespace MCForge.Util
 							if (absx > currentradius) continue;
 							if (absz > currentradius) continue;
 
-							byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                            byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 							if (ctile == 0)
 							{
-								l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 							}
 						}
 
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y + height), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y + height), z, block);
 		}
-		public static void HIPyramid(Level l, ushort x, ushort y, ushort z, int height, int radius, byte block)
+		public static void HIPyramid(Player p, ushort x, ushort y, ushort z, int height, int radius, byte block)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+                if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+                    if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -580,31 +580,31 @@ namespace MCForge.Util
 							if (absx > currentradius || absz > currentradius) continue;
 							if (absx < (currentradius - 1) && absz < (currentradius - 1)) continue;
 
-							byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+                            byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 							if (ctile == 0)
 							{
-								l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, block);
+                                p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, block);
 							}
 						}
 
 					}
 				}
 			}
-			if ((y + height) <= l.depth)
-				l.Blockchange(x, (ushort)(y), z, block);
+            if ((y + height) <= p.level.depth)
+                p.level.Blockchange(p, x, (ushort)(y), z, block);
 		}
 
-		public static void Sphere(Level l, ushort x, ushort y, ushort z, int radius, byte type)
+		public static void Sphere(Player p, ushort x, ushort y, ushort z, int radius, byte type)
 		{
 			for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 			{
-				if ((x + j) < 0 || (x + j) > l.width) continue;
+                if ((x + j) < 0 || (x + j) > p.level.width) continue;
 				for (short k = Convert.ToInt16(-radius); k <= radius; k = (short)(k + 1))
 				{
-					if ((y + k) < 0 || (y + k) > l.depth) continue;
+                    if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 						short maxValue = (short)Math.Sqrt((double)(((j * j) + (k * k)) + (m * m)));
 						if ((maxValue < (radius + 1)))
 						{
@@ -613,12 +613,12 @@ namespace MCForge.Util
 								ushort x2 = (ushort)(x + j);
 								ushort y2 = (ushort)(y + k);
 								ushort z2 = (ushort)(z + m);
-								if (x2 <= l.width && y2 <= l.depth && z2 <= l.length)
+                                if (x2 <= p.level.width && y2 <= p.level.depth && z2 <= p.level.length)
 								{
-									byte that = l.GetTile((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m));
+                                    byte that = p.level.GetTile((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m));
 									if (that != 7)
 									{
-										l.Blockchange((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m), type);
+                                        p.level.Blockchange(p, (ushort)(x + j), (ushort)((y + k)), (ushort)(z + m), type);
 									}
 								}
 							}
@@ -628,17 +628,17 @@ namespace MCForge.Util
 				}
 			}
 		}
-		public static void HSphere(Level l, ushort x, ushort y, ushort z, int radius, byte type)
+		public static void HSphere(Player p, ushort x, ushort y, ushort z, int radius, byte type)
 		{
 			for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 			{
-				if ((x + j) < 0 || (x + j) > l.width) continue;
+                if ((x + j) < 0 || (x + j) > p.level.width) continue;
 				for (short k = Convert.ToInt16(-radius); k <= radius; k = (short)(k + 1))
 				{
-					if ((y + k) < 0 || (y + k) > l.depth) continue;
+                    if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+                        if ((z + m) < 0 || (z + m) > p.level.length) continue;
 						short maxValue = (short)Math.Sqrt((double)(((j * j) + (k * k)) + (m * m)));
 						if (maxValue < (radius + 1) && maxValue >= (radius - 1))
 						{
@@ -647,12 +647,12 @@ namespace MCForge.Util
 								ushort x2 = (ushort)(x + j);
 								ushort y2 = (ushort)(y + k);
 								ushort z2 = (ushort)(z + m);
-								if (x2 <= l.width && y2 <= l.depth && z2 <= l.length)
+                                if (x2 <= p.level.width && y2 <= p.level.depth && z2 <= p.level.length)
 								{
-									byte that = l.GetTile((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m));
+                                    byte that = p.level.GetTile((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m));
 									if (that != 7)
 									{
-										l.Blockchange((ushort)(x + j), (ushort)((y + k)), (ushort)(z + m), type);
+                                        p.level.Blockchange(p, (ushort)(x + j), (ushort)((y + k)), (ushort)(z + m), type);
 									}
 								}
 							}
@@ -663,21 +663,21 @@ namespace MCForge.Util
 			}
 		}
 
-		public static void Valcano(Level l, ushort x, ushort y, ushort z, int height, int radius)
+		public static void Valcano(Player p, ushort x, ushort y, ushort z, int height, int radius)
 		{
-			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
+			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
 
 			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
-				if ((y + k) < 0 || (y + k) > l.depth) continue;
+				if ((y + k) < 0 || (y + k) > p.level.depth) continue;
 				for (short j = Convert.ToInt16(-radius); j <= radius; j = (short)(j + 1))
 				{
-					if ((x + j) < 0 || (x + j) > l.width) continue;
+					if ((x + j) < 0 || (x + j) > p.level.width) continue;
 					for (short m = Convert.ToInt16(-radius); m <= radius; m = (short)(m + 1))
 					{
-						if ((z + m) < 0 || (z + m) > l.length) continue;
+						if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
 						int ox = x;
 						int oy = y;
@@ -702,18 +702,18 @@ namespace MCForge.Util
 
 							if (pointradius <= currentradius && pointradius >= (currentradius - 1))
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+								byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, Block.grass);
+									p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, Block.grass);
 								}
 							}
 							else if (pointradius <= currentradius)
 							{
-								byte ctile = l.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
+								byte ctile = p.level.GetTile((ushort)cx, (ushort)cy, (ushort)cz);
 								if (ctile == 0)
 								{
-									l.Blockchange((ushort)cx, (ushort)cy, (ushort)cz, Block.lava);
+									p.level.Blockchange(p, (ushort)cx, (ushort)cy, (ushort)cz, Block.lava);
 								}
 							}
 						}

@@ -313,7 +313,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.Cone(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.Cone(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeHCone(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -323,7 +323,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.HCone(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.HCone(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeICone(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -333,7 +333,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.ICone(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.ICone(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeHICone(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -343,7 +343,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.HICone(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.HICone(p, x, y, z, height, radius, type);
 		}
 		#endregion
 		#region Pyramid Blockchanges
@@ -355,7 +355,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.Pyramid(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.Pyramid(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeHPyramid(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -365,7 +365,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.HPyramid(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.HPyramid(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeIPyramid(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -375,7 +375,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.IPyramid(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.IPyramid(p, x, y, z, height, radius, type);
 		}
 		public void BlockchangeHIPyramid(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -385,7 +385,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.HIPyramid(p.level, x, y, z, height, radius, type);
+			Util.SCOGenerator.HIPyramid(p, x, y, z, height, radius, type);
 		}
 		#endregion
 		#region Sphere Blockchanges
@@ -397,7 +397,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.Sphere(p.level, x, y, z, radius, type);
+			Util.SCOGenerator.Sphere(p, x, y, z, radius, type);
 		}
 		public void BlockchangeHSphere(Player p, ushort x, ushort y, ushort z, byte type)
 		{
@@ -407,7 +407,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.HSphere(p.level, x, y, z, radius, type);
+			Util.SCOGenerator.HSphere(p, x, y, z, radius, type);
 		}
 		#endregion
 		#region Special Blockchanges
@@ -419,7 +419,7 @@ namespace MCForge
 			byte b = p.level.GetTile(x, y, z);
 			p.SendBlockchange(x, y, z, b);
 			p.ClearBlockchange();
-			Util.SCOGenerator.Valcano(p.level, x, y, z, height, radius);
+			Util.SCOGenerator.Valcano(p, x, y, z, height, radius);
 		}
 		#endregion
 	}
