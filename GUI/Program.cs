@@ -80,13 +80,9 @@ namespace MCForge_.Gui
             {
                 foreach (Process pr in Process.GetProcessesByName("MCForge"))
                 {
-                    try
-                    {
-                        if (pr.MainModule.BaseAddress == Process.GetCurrentProcess().MainModule.BaseAddress)
-                            if (pr.Id != Process.GetCurrentProcess().Id)
-                                pr.Kill();
-                    }
-                    catch { }
+                    if (pr.MainModule.BaseAddress == Process.GetCurrentProcess().MainModule.BaseAddress)
+                        if (pr.Id != Process.GetCurrentProcess().Id)
+                            pr.Kill();
                 }
             }
 
@@ -99,16 +95,16 @@ namespace MCForge_.Gui
             {
                 if (!File.Exists("Viewmode.cfg") || skip)
                 {
-					File.Create("Viewmode.cfg").Dispose();
-					using (StreamWriter SW = File.CreateText("Viewmode.cfg"))
-					{
-						SW.WriteLine("#This file controls how the console window is shown to the server host");
-						SW.WriteLine("#cli:             True or False (Determines whether a CLI interface is used) (Set True if on Mono)");
-						SW.WriteLine("#high-quality:    True or false (Determines whether the GUI interface uses higher quality objects)");
-						SW.WriteLine();
-						SW.WriteLine("cli = false");
-						SW.WriteLine("high-quality = true");
-					}
+                    StreamWriter SW = new StreamWriter(File.Create("Viewmode.cfg"));
+                    SW.WriteLine("#This file controls how the console window is shown to the server host");
+                    SW.WriteLine("#cli: True or False (Determines whether a CLI interface is used) (Set True if on Mono)");
+                    SW.WriteLine("#high-quality: True or false (Determines whether the GUI interface uses higher quality objects)");
+                    SW.WriteLine();
+                    SW.WriteLine("cli = false");
+                    SW.WriteLine("high-quality = true");
+                    SW.Flush();
+                    SW.Close();
+                    SW.Dispose();
                 }
 
                 if (File.ReadAllText("Viewmode.cfg") == "") { skip = true; goto remake; }
@@ -152,7 +148,7 @@ namespace MCForge_.Gui
             }
             catch (Exception e) { Server.ErrorLog(e); return; }
         }
-        
+
         public static void handleComm(string s)
         {
             string sentCmd = "", sentMsg = "";
@@ -189,56 +185,54 @@ namespace MCForge_.Gui
                 handleComm(Console.ReadLine());
                 return;
             }
-        
 
         talk: handleComm("say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
             handleComm(Console.ReadLine());
         }
-       
         /*
         public static void handleComm(string s)
         {
-           
+
             string sentCmd = "", sentMsg = "";
             List<string> cmdtest = new List<string>();
             cmdtest = Command.all.commandNames();
             //blank lines are considered accidental
-            if (s == "") 
+            if (s == "")
             {
                 handleComm(Console.ReadLine());
                 return;
             }
 
             //commands all start with a slash
-           
-                if (s.IndexOf('/') == 0)
-                {
-                    //remove the preceding slash
-                    s = s.Remove(0, 1);
 
-                    //continue parsing
-                    if (s.IndexOf(' ') != -1)
-                    {
-                        sentCmd = s.Split(' ')[0];
-                        sentMsg = s.Substring(s.IndexOf(' ') + 1);
-                    }
-                    else if (s != "")
-                    {
-                        sentCmd = s;
-                    }
-                }
-                //anything else is treated as chat
-                else
+            if (s.IndexOf('/') == 0)
+            {
+                //remove the preceding slash
+                s = s.Remove(0, 1);
+
+                //continue parsing
+                if (s.IndexOf(' ') != -1)
                 {
-                    sentCmd = "say";
-                    sentMsg = Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s;
+                    sentCmd = s.Split(' ')[0];
+                    sentMsg = s.Substring(s.IndexOf(' ') + 1);
                 }
-           
-               
-               
+                else if (s != "")
+                {
+                    sentCmd = s;
+                }
+            }
+            //anything else is treated as chat
+            else
+            {
+                sentCmd = "say";
+                sentMsg = Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s;
+            }
+
+
+
             try
             {
-                
+
                 Command cmd = Command.all.Find(sentCmd);
                 if (cmd != null)
                 {
@@ -247,7 +241,7 @@ namespace MCForge_.Gui
                     handleComm(Console.ReadLine());
                     return;
                 }
-            
+
 
             }
             catch (Exception e)
@@ -258,10 +252,9 @@ namespace MCForge_.Gui
                 return;
             }
             //handleComm(Console.ReadLine());
-        
-      
+
+
         } */
-        
 
         public static bool CurrentUpdate = false;
         static bool msgOpen = false;
@@ -272,88 +265,85 @@ namespace MCForge_.Gui
             CurrentUpdate = true;
             Thread updateThread = new Thread(new ThreadStart(delegate
             {
-				using (WebClient Client = new WebClient())
-				{
-					if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
-					try
-					{
-						if (Client.DownloadString(Program.CurrentVersionFile) != Server.Version)
-						{
-							if (Server.autoupdate == true || p != null)
-							{
-								if (Server.autonotify == true || p != null)
-								{
-									if (p != null) Server.restartcountdown = "20";
-									Player.GlobalMessage("Update found. Prepare for restart in &f" + Server.restartcountdown + Server.DefaultColor + " seconds.");
-									Server.s.Log("Update found.  Prepare for restart in " + Server.restartcountdown + " seconds.");
-									double nxtTime = Convert.ToDouble(Server.restartcountdown);
-									DateTime nextupdate = DateTime.Now.AddMinutes(nxtTime);
-									int timeLeft = Convert.ToInt32(Server.restartcountdown);
-									System.Timers.Timer countDown = new System.Timers.Timer();
-									countDown.Interval = 1000;
-									countDown.Start();
-									countDown.Elapsed += delegate
-									{
-										if (Server.autoupdate == true || p != null)
-										{
-											Player.GlobalMessage("Updating in &f" + timeLeft + Server.DefaultColor + " seconds.");
-											Server.s.Log("Updating in " + timeLeft + " seconds.");
-											timeLeft = timeLeft - 1;
-											if (timeLeft < 0)
-											{
-												Player.GlobalMessage("---UPDATING SERVER---");
-												Server.s.Log("---UPDATING SERVER---");
-												countDown.Stop();
-												countDown.Dispose();
-												PerformUpdate(false);
-											}
-										}
-										else
-										{
-											Player.GlobalMessage("Stopping auto restart.");
-											Server.s.Log("Stopping auto restart.");
-											countDown.Stop();
-											countDown.Dispose();
-										}
-									};
-								}
-								else
-								{
-									PerformUpdate(false);
-								}
+                WebClient Client = new WebClient();
 
-							}
-							else
-							{
-								if (!msgOpen && !usingConsole)
-								{
-									if (Server.checkUpdates == true)
-									{
-										msgOpen = true;
-										if (MessageBox.Show("New version found. Would you like to update?", "Update?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-										{
-											PerformUpdate(false);
-										}
-										msgOpen = false;
-									}
-								}
-								else
-								{
-									ConsoleColor prevColor = Console.ForegroundColor;
-									Console.ForegroundColor = ConsoleColor.Red;
-									Console.WriteLine("An update was found!");
-									Console.WriteLine("Update using the file at " + DLLLocation + " and placing it over the top of your current MCForge_.dll!");
-									Console.ForegroundColor = prevColor;
-								}
-							}
-						}
-						else
-						{
-							Player.SendMessage(p, "No update found!");
-						}
-					}
-					catch { Server.s.Log("No web server found to update on."); }
-				}
+                if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
+                try
+                {
+                    if (Client.DownloadString(Program.CurrentVersionFile) != Server.Version)
+                    {
+                        if (Server.autoupdate == true || p != null)
+                        {
+                            if (Server.autonotify == true || p != null)
+                            {
+                                if (p != null) Server.restartcountdown = "20";
+                                Player.GlobalMessage("Update found. Prepare for restart in &f" + Server.restartcountdown + Server.DefaultColor + " seconds.");
+                                Server.s.Log("Update found. Prepare for restart in " + Server.restartcountdown + " seconds.");
+                                double nxtTime = Convert.ToDouble(Server.restartcountdown);
+                                DateTime nextupdate = DateTime.Now.AddMinutes(nxtTime);
+                                int timeLeft = Convert.ToInt32(Server.restartcountdown);
+                                System.Timers.Timer countDown = new System.Timers.Timer();
+                                countDown.Interval = 1000;
+                                countDown.Start();
+                                countDown.Elapsed += delegate
+                                {
+                                    if (Server.autoupdate == true || p != null)
+                                    {
+                                        Player.GlobalMessage("Updating in &f" + timeLeft + Server.DefaultColor + " seconds.");
+                                        Server.s.Log("Updating in " + timeLeft + " seconds.");
+                                        timeLeft = timeLeft - 1;
+                                        if (timeLeft < 0)
+                                        {
+                                            Player.GlobalMessage("---UPDATING SERVER---");
+                                            Server.s.Log("---UPDATING SERVER---");
+                                            countDown.Stop();
+                                            countDown.Dispose();
+                                            PerformUpdate(false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Player.GlobalMessage("Stopping auto restart.");
+                                        Server.s.Log("Stopping auto restart.");
+                                        countDown.Stop();
+                                        countDown.Dispose();
+                                    }
+                                };
+                            }
+                            else
+                            {
+                                PerformUpdate(false);
+                            }
+
+                        }
+                        else
+                        {
+                            if (!msgOpen && !usingConsole)
+                            {
+                                msgOpen = true;
+                                if (MessageBox.Show("New version found. Would you like to update?", "Update?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                {
+                                    PerformUpdate(false);
+                                }
+                                msgOpen = false;
+                            }
+                            else
+                            {
+                                ConsoleColor prevColor = Console.ForegroundColor;
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("An update was found!");
+                                Console.WriteLine("Update using the file at " + DLLLocation + " and placing it over the top of your current MCForge_.dll!");
+                                Console.ForegroundColor = prevColor;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "No update found!");
+                    }
+                }
+                catch { Server.s.Log("No web server found to update on."); }
+                Client.Dispose();
                 CurrentUpdate = false;
             })); updateThread.Start();
         }
@@ -428,12 +418,12 @@ namespace MCForge_.Gui
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
                 Client.DownloadFile(Program.ChangelogLocation, "extra/Changelog.txt");
-                
+
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale
-                if(Server.levels != null && Server.levels.Any())
+                if (Server.levels != null && Server.levels.Any())
                     foreach (Level l in Server.levels) l.Save();
-                
+
                 if (Player.players != null && Player.players.Any())
                     foreach (Player pl in Player.players) pl.save();
 
@@ -511,13 +501,8 @@ namespace MCForge_.Gui
                 if (Server.listen != null) Server.listen.Close();
                 if (!Server.mono || fullRestart)
                 {
-					using (Process Restarter = new Process())
-					{
-						Restarter.StartInfo.FileName = "Restarter.exe";
-						Restarter.StartInfo.Arguments = "Program.cs";
-
-						Restarter.Start();
-					}
+                    Application.Restart();
+                    Server.process.Kill();
                 }
                 else
                 {
@@ -535,7 +520,7 @@ namespace MCForge_.Gui
                 foreach (Player p in kickList) { p.Kick("Server restarted! Rejoin!"); }
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
-            
+
             try
             {
                 string level = null;
@@ -546,10 +531,10 @@ namespace MCForge_.Gui
                     l.saveChanges();
                 }
 
-                //File.WriteAllText("text/autoload.txt", level);
+                File.WriteAllText("text/autoload.txt", level);
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
-            
         }
     }
 }
+
