@@ -1,15 +1,16 @@
 v5.1.0.0
--
--
--
--
--
--
--
--
--
-
-
+- Fixed a bug that caused the console to crash, when clicking on a player
+- Fixed a bug where the server would crash, when generating economy.properties
+- /draw can now be undone with /undo
+- /rankmsg has been successfully added to command list (left out from last release)
+- Added spam control (Mutes players after [X] amount of messages and for [Y] minutes
+- Fixed delay on server start
+- Fixed the updater
+- Added: /perbuildmax [Level] [Rank] - Sets the max rank to build on a map, doesn't exlude player's with access to the command
+- Added: /pervisitmax [Level] [Rank] - Sets the max rank to visit a map, doesn't exclude player's with access to the command
+- Added: /patrol - Teleports you to a random guest.
+- Options for /allowguns now save over server restarts
+- New /whois stat(Cuboided blocks) - Shows how many blocks a player has cuboided.
 
 v5.0.0.0
 - Added a Maps tab to the GUI.
