@@ -136,7 +136,6 @@
     <Compile Include="Commands\CmdSendCmd.cs" />
     <Compile Include="Commands\CmdSetPass.cs" />
     <Compile Include="Commands\CmdShutdown.cs" />
-    <Compile Include="Commands\CmdSilentCuboid.cs" />
     <Compile Include="Commands\CmdSPlace.cs" />
     <Compile Include="Commands\CmdTColor.cs" />
     <Compile Include="Commands\CmdCmdUnload.cs" />

@@ -445,6 +445,7 @@ public static byte maxGuests = 10;
                 DataTable totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
                 if (totalCuboided.Rows.Count == 0)
                     MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
+                totalCuboided.Dispose();
             }
 
             if (levels != null)
