@@ -38,6 +38,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             wait = 0;
+            p.pyramidblock = "stone";
             int number = message.Split(' ').Length;
             if (number > 2) { Help(p); wait = 1; return; }
             if (number == 2)
@@ -72,7 +73,7 @@ namespace MCForge
                     byte t = Block.Byte(message);
                     if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); wait = 1; return; }
                     if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
-                    File.WriteAllText("pyramid/" + p.name + "block.txt", message);
+                    p.pyramidblock = message;
 
                 } CatchPos cpos; cpos.solid = solid; cpos.type = type;
                 cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;

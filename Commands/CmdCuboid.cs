@@ -80,7 +80,7 @@ namespace MCForge
                 else if (msg == "random") { solid = SolidType.random; }
                 else
                 {
-                    byte t = Block.Byte(message);
+                    byte t = Block.Byte(msg);
                     if (t == 255) { Player.SendMessage(p, "There is no block \"" + msg + "\"."); wait = 1; return; }
 
                     if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
