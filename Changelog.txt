@@ -11,6 +11,9 @@ v5.1.0.0
 - Added: /patrol - Teleports you to a random guest.
 - Options for /allowguns now save over server restarts
 - New /whois stat(Cuboided blocks) - Shows how many blocks a player has cuboided.
+- Added: /quick [Function] [Block] [Type] - Instantly complete a cuboid.
+	- Functions include: cuboid, pyramid, replace, replaceall, replacenot and spheroid.
+- Removed: /silentcuboid - No longer required, integrated into cuboid in necessary times. Text files are also no longer required for /pyramid
 
 v5.0.0.0
 - Added a Maps tab to the GUI.
