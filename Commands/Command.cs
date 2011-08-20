@@ -169,6 +169,7 @@ namespace MCForge
             all.Add(new CmdPaint());
             all.Add(new CmdPass());
             all.Add(new CmdPaste());
+            all.Add(new CmdPatrol());
             all.Add(new CmdPause());
             all.Add(new CmdPay());
             all.Add(new CmdpCinema());

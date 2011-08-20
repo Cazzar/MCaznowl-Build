@@ -107,6 +107,10 @@ namespace MCForge
         public bool worldChat = true;
         public bool fishstill = false;
         public bool guns = true;
+        
+        //Pervisit and Perbuild Maxes
+        public LevelPermission perbuildmax = LevelPermission.Nobody;
+        public LevelPermission pervisitmax = LevelPermission.Nobody;
 
         public int speedPhysics = 250;
         public int overload = 1500;
@@ -425,6 +429,20 @@ namespace MCForge
                     }
                 }
 
+		errorLocation = "Map Max Rank Checking";
+                if (Owners == "")
+                {
+                    if (p.group.Permission > this.perbuildmax && (!inZone || !AllowBuild))
+                    {
+                        if (!p.group.CanExecute(Command.all.Find("perbuildmax")))
+                        {
+                            p.SendBlockchange(x, y, z, b);
+                            Player.SendMessage(p, "Your rank is to high to build here");
+                            return;
+                        }
+                    }
+                }
+
                 errorLocation = "Block sending";
                 if (Block.Convert(b) != Block.Convert(type) && !Instant)
                     Player.GlobalBlockchange(this, x, y, z, type);
@@ -608,6 +626,9 @@ namespace MCForge
 							SW.WriteLine("Unload = " + unload);
 							SW.WriteLine("PerBuild = " + PermissionToName(permissionbuild));
 							SW.WriteLine("PerVisit = " + PermissionToName(permissionvisit));
+                            				SW.WriteLine("PerBuildMax = " + Group.findPerm(perbuildmax).trueName.ToLower());
+                            				SW.WriteLine("PerVisitMax = " + Group.findPerm(pervisitmax).trueName.ToLower());
+                            				SW.WriteLine("Guns = " + guns.ToString());
 						}
 
 						Server.s.Log("SAVED: Level \"" + name + "\". (" + players.Count + "/" + Player.players.Count + "/" + Server.players + ")");
@@ -836,6 +857,15 @@ namespace MCForge
 											case "pervisit":
 												if (PermissionFromName(value) != LevelPermission.Null) level.permissionvisit = PermissionFromName(value);
 												break;
+											case "perbuildmax":
+                                                						if (PermissionFromName(value) != LevelPermission.Null) level.perbuildmax = PermissionFromName(value);
+                                                						break;
+                                            						case "pervisitmax":
+                                                						if (PermissionFromName(value) != LevelPermission.Null) level.pervisitmax = PermissionFromName(value);
+                                                						break;
+                                            						case "guns":
+                                                						level.guns = bool.Parse(value);
+                                               						        break;
 										}
 									}
 								}

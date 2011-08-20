@@ -60,6 +60,7 @@ namespace MCForge
                     Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel.rp));
                     Player.SendMessage(p, "Instant building: " + FoundCheck(foundLevel.Instant));
                     Player.SendMessage(p, "RP chat: " + FoundCheck(!foundLevel.worldChat));
+                    Player.SendMessage(p, "Guns: " + FoundCheck(foundLevel.guns));
                     return;
                 }
             }

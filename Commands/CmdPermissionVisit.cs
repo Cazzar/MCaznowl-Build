@@ -63,6 +63,9 @@ namespace MCForge
 					SW.WriteLine("Unload = " + p.level.unload);
 					SW.WriteLine("PerBuild = " + Group.findPerm(p.level.permissionbuild).trueName.ToLower());
 					SW.WriteLine("PerVisit = " + message.ToLower());
+                    SW.WriteLine("PerBuildMax = " + Group.findPerm(p.level.perbuildmax).trueName.ToLower());
+                    SW.WriteLine("PerVisitMax = " + Group.findPerm(p.level.pervisitmax).trueName.ToLower());
+                    SW.WriteLine("Guns = " + p.level.guns.ToString());
 				}
                 p.level.permissionvisit = Perm;
                 Server.s.Log(p.level.name + " visit permission changed to " + message + ".");
@@ -105,6 +108,9 @@ namespace MCForge
 						SW.WriteLine("Unload = " + level.unload);
 						SW.WriteLine("PerBuild = " + s.ToLower());
 						SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
+                        SW.WriteLine("PerBuildMax = " + Group.findPerm(level.perbuildmax).trueName.ToLower());
+                        SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
+                        SW.WriteLine("Guns = " + level.guns.ToString());
 					}
                     level.permissionvisit = Perm;
                     Server.s.Log(level.name + " visit permission changed to " + s + ".");
