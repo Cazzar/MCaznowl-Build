@@ -46,7 +46,7 @@ namespace MCForge
                     if (!p.ignorePermission)
                         if (p.group.Permission < foundLevel.permissionvisit) { Player.SendMessage(p, "You're not allowed to go to " + foundLevel.name + "."); return; }
                     if (!p.ignorePermission)
-                        if (p.group.Permission > foundLevel.pervisitmax) { if (!p.group.CanExecute(Command.all.Find("pervisitmax"))) { Player.SendMessage(p, "Your rank is too high to go to " + foundLevel.name + "."); } return; }
+                        if (p.group.Permission > foundLevel.pervisitmax) { if (!p.group.CanExecute(Command.all.Find("pervisitmax"))) { Player.SendMessage(p, "Your rank must be " + foundLevel.pervisitmax + " or lower to go there!"); } return; }
                     {
                         if (!File.Exists("text/lockdown/map/" + message + ""))
                         {

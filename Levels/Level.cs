@@ -437,7 +437,7 @@ namespace MCForge
                         if (!p.group.CanExecute(Command.all.Find("perbuildmax")))
                         {
                             p.SendBlockchange(x, y, z, b);
-                            Player.SendMessage(p, "Your rank is to high to build here");
+                            Player.SendMessage(p, "Your rank must be " + perbuildmax + " or lower to build here!");
                             return;
                         }
                     }
