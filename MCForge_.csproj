@@ -100,6 +100,7 @@
     <Compile Include="Commands\CmdFaq.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
     <Compile Include="Commands\CmdGifToCin.cs" />
+    <Compile Include="Commands\CmdPatrol.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
     <Compile Include="Commands\CmdHigh5.cs" />
