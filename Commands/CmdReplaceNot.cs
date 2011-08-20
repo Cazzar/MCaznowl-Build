@@ -28,22 +28,24 @@ namespace MCForge
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
         public CmdReplaceNot() { }
+        public static byte wait;
 
         public override void Use(Player p, string message)
         {
+            wait = 0;
             int number = message.Split(' ').Length;
             CatchPos cpos = new CatchPos(); byte btype;
-            if (number < 2) { Help(p); return; }
+            if (number < 2) { Help(p); wait = 1; return; }
 
             btype = Block.Byte(message.Split(' ')[0]);
-            if (btype == 255) { Player.SendMessage(p, message.Split(' ')[0] + " does not exist, please spell it correctly."); return; }
+            if (btype == 255) { Player.SendMessage(p, message.Split(' ')[0] + " does not exist, please spell it correctly."); wait = 1; return; }
 
             cpos.type = btype;
 
-            if (Block.Byte(message.Split(' ')[1]) == 255) { Player.SendMessage(p, message.Split(' ')[1] + " does not exist, please spell it correctly."); return; }
+            if (Block.Byte(message.Split(' ')[1]) == 255) { Player.SendMessage(p, message.Split(' ')[1] + " does not exist, please spell it correctly."); wait = 1; return; }
 
             cpos.type2 = Block.Byte(message.Split(' ')[1]);
-            if (!Block.canPlace(p, cpos.type2)) { Player.SendMessage(p, "Cannot place this block type!"); return; }
+            if (!Block.canPlace(p, cpos.type2)) { Player.SendMessage(p, "Cannot place this block type!"); wait = 1; return; }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             Player.SendMessage(p, "Place two blocks to determine the edges.");
@@ -86,16 +88,19 @@ namespace MCForge
             {
                 Player.SendMessage(p, "You tried to replace " + buffer.Count + " blocks.");
                 Player.SendMessage(p, "You cannot replace more than " + p.group.maxBlocks + ".");
+                wait = 1;
                 return;
             }
 
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            Int64 addition = p.cuboidblocks + buffer.Count;
+            p.cuboidblocks = addition;
 
             buffer.ForEach(delegate(Pos pos)
             {
                 p.level.Blockchange(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
             });
-
+            wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)

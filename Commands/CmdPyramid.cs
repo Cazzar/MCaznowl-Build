@@ -33,112 +33,64 @@ namespace MCForge
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
         public CmdPyramid() { }
+        public static byte wait;
 
         public override void Use(Player p, string message)
         {
-            if (!Directory.Exists("pyramid"))
+            wait = 0;
+            int number = message.Split(' ').Length;
+            if (number > 2) { Help(p); wait = 1; return; }
+            if (number == 2)
             {
-                Directory.CreateDirectory("pyramid");
+                int pos = message.IndexOf(' ');
+                string t = message.Substring(0, pos).ToLower();
+                string s = message.Substring(pos + 1).ToLower();
+                byte type = Block.Byte(t);
+                if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); wait = 1; return; }
+                if (!Block.canPlace(p, type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
+                SolidType solid;
+                if (s == "solid") { solid = SolidType.solid; }
+                else if (s == "hollow") { solid = SolidType.hollow; }
+                else if (s == "reverse") { solid = SolidType.reverse; }
+                else { Help(p); wait = 1; return; }
+                CatchPos cpos; cpos.solid = solid; cpos.type = type;
+                cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
+                cpos.type = Block.Byte(message);
+                p.pyramidblock = t;
             }
-            if (!File.Exists("pyramid/" + p.name + "block.txt"))
+            else if (message != "")
             {
-                int number = message.Split(' ').Length;
-                if (number > 2) { Help(p); return; }
-                if (number == 2)
-                {
-                    int pos = message.IndexOf(' ');
-                    string t = message.Substring(0, pos).ToLower();
-                    string s = message.Substring(pos + 1).ToLower();
-                    byte type = Block.Byte(t);
-                    if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); return; }
-                    if (!Block.canPlace(p, type)) { Player.SendMessage(p, "Cannot place that."); return; }
-                    SolidType solid;
-                    if (s == "solid") { solid = SolidType.solid; }
-                    else if (s == "hollow") { solid = SolidType.hollow; }
-                    else if (s == "reverse") { solid = SolidType.reverse; }
-                    else { Help(p); return; }
-                    CatchPos cpos; cpos.solid = solid; cpos.type = type;
-                    cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
-                    cpos.type = Block.Byte(message);
-                    File.WriteAllText("pyramid/" + p.name + "block.txt", t);
-                }
-                else if (message != "")
-                {
-                    SolidType solid = SolidType.hollow;
-                    message = message.ToLower();
-                    byte type; unchecked { type = (byte)-1; }
-                    File.WriteAllText("pyramid/" + p.name + "block.txt", "stone");
-                    if (message == "solid") { solid = SolidType.solid; }
-                    else if (message == "hollow") { solid = SolidType.hollow; }
-                    else if (message == "reverse") { solid = SolidType.reverse; }
-                    else
-                    {
-                        byte t = Block.Byte(message);
-                        if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); return; }
-                        if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); return; }
-                        File.WriteAllText("pyramid/" + p.name + "block.txt", message);
-
-                    } CatchPos cpos; cpos.solid = solid; cpos.type = type;
-                    cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
-                }
+                SolidType solid = SolidType.hollow;
+                message = message.ToLower();
+                byte type; unchecked { type = (byte)-1; }
+                p.pyramidblock = "stone";
+                if (message == "solid") { solid = SolidType.solid; }
+                else if (message == "hollow") { solid = SolidType.hollow; }
+                else if (message == "reverse") { solid = SolidType.reverse; }
                 else
                 {
-                    CatchPos cpos; cpos.solid = SolidType.solid; unchecked { cpos.type = (byte)-1; }
-                    cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
-                }
-                Player.SendMessage(p, "Place two blocks to determine the edges.");
-                p.ClearBlockchange();
-                if (!File.Exists("pyramid/" + p.name + "block.txt"))
-                {
-                    File.WriteAllText("pyramid/" + p.name + "block.txt", "stone");
-                }
-                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                    byte t = Block.Byte(message);
+                    if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); wait = 1; return; }
+                    if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
+                    File.WriteAllText("pyramid/" + p.name + "block.txt", message);
+
+                } CatchPos cpos; cpos.solid = solid; cpos.type = type;
+                cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             }
             else
             {
-                Player.SendMessage(p, "The pyramid you are already creating needs time to finish. If its not finished or there has been an error, in thirty seconds a new one will be started for you");
-                Thread.Sleep(30000);
-                Player.SendMessage(p, "30 seconds are up, restarting pyramid process");
-                Thread.Sleep(2000);
-                if (File.Exists("pyramid/" + p.name + "x1.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "x1.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "x2.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "x2.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "y1.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "y1.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "y2.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "y2.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "z1.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "z1.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "z2.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "z2.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "block.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "block.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "total.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "total.txt");
-                }
-                if (File.Exists("pyramid/" + p.name + "total2.txt"))
-                {
-                    File.Delete("pyramid/" + p.name + "total2.txt");
-                }
-                Use(p, message);
+                CatchPos cpos; cpos.solid = SolidType.solid; unchecked { cpos.type = (byte)-1; }
+                cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             }
+            Player.SendMessage(p, "Place two blocks to determine the edges.");
+            p.ClearBlockchange();
+            if (p.pyramidblock == "")
+            {
+                p.pyramidblock = "stone";
+            }
+            p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
+        
 
         public override void Help(Player p)
         {
@@ -151,28 +103,9 @@ namespace MCForge
             p.SendBlockchange(x, y, z, b);
             CatchPos bp = (CatchPos)p.blockchangeObject;
             bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
-
-            //<writes in text file the x coords>
-            using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "x1.txt", true))
-            {
-                writer.WriteLine(bp.x);
-            }
-            //</writes in text file the x coords>
-
-            //<writes in text file the y coords>
-            using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "z1.txt", true))
-            {
-                writer.WriteLine(bp.y);
-            }
-            //</writes in text file the y coords>
-
-            //<writes in text file the z coords>
-            using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "y1.txt", true))
-            {
-                writer.WriteLine(bp.z);
-            }
-            //</writes in text file the z coords>
-
+            p.pyramidx1 = bp.x;
+            p.pyramidz1 = bp.y;
+            p.pyramidy1 = bp.z;
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
         }
         public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
@@ -183,441 +116,327 @@ namespace MCForge
             CatchPos cpos = (CatchPos)p.blockchangeObject;
             cpos.x = x; cpos.y = y; cpos.z = z; p.blockchangeObject = cpos;
             List<Pos> buffer = new List<Pos>();
+            p.pyramidsilent = true;
 
             switch (cpos.solid)
             {
                 case SolidType.solid:
                     buffer.Capacity = Math.Abs(cpos.x - x) * Math.Abs(cpos.y - y) * Math.Abs(cpos.z - z);
-                    //<writes in text file new coordinates for x>
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "x2.txt", true))
+                    p.pyramidx2 = cpos.x;
+                    p.pyramidz2 = cpos.y;
+                    p.pyramidy2 = cpos.z;
+
+                    if (p.pyramidz1 == p.pyramidz2) //checks if pyramid is on a level surface
                     {
-                        writer.WriteLine(cpos.x);
-                    }
-                    //</writes in text file new coordinates for x>
-
-                    //<writes in text file new coordinates for y>
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "z2.txt", true))
-                    {
-                        writer.WriteLine(cpos.y);
-                    }
-                    //</writes in text file new coordinates for y>
-
-                    //<writes in text file new coordinates for z>
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "y2.txt", true))
-                    {
-                        writer.WriteLine(cpos.z);
-                    }
-                    //</writes in text file new coordinates for z>
-
-                    String x1read = File.ReadAllText("pyramid/" + p.name + "x1.txt");
-                    String x2read = File.ReadAllText("pyramid/" + p.name + "x2.txt");
-                    String y1read = File.ReadAllText("pyramid/" + p.name + "y1.txt");
-                    String y2read = File.ReadAllText("pyramid/" + p.name + "y2.txt");
-                    String z1read = File.ReadAllText("pyramid/" + p.name + "z1.txt");
-                    String z2read = File.ReadAllText("pyramid/" + p.name + "z2.txt");
-                    int x1parse = int.Parse(x1read);
-                    int x2parse = int.Parse(x2read);
-                    int y1parse = int.Parse(y1read);
-                    int y2parse = int.Parse(y2read);
-                    int z1parse = int.Parse(z1read);
-                    int z2parse = int.Parse(z2read);
-
-
-                    if (z1parse == z2parse) //checks if pyramid is on a level surface
-                    {
-                        Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt"));
-                        click(p, x1parse + " " + z2parse + " " + y1parse);
-                        click(p, x2parse + " " + z2parse + " " + y2parse);
+                        Command.all.Find("cuboid").Use(p, p.pyramidblock);
+                        click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
+                        click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
 
                         for (int i = 1; i > 0; ) //looper to create pyramid
                         {
-                            if (x1parse == x2parse)
+                            if (p.pyramidx1 == p.pyramidx2)
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
-                                click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords from text files
                                 i--;
                             }
-                            else if (y1parse == y2parse) { i--; }
-                            if (x1parse > x2parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            else if (p.pyramidy1 == p.pyramidy2) { i--; }
+                            if (p.pyramidx1 > p.pyramidx2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((x1parse - x2parse) == 1)
+                                if ((p.pyramidx1 - p.pyramidx2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
-                                    click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                     i--;
                                 }
                             }
-                            else if ((x2parse - x1parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidx2 - p.pyramidx1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
                                 i--;
                             }
-                            if (y1parse > y2parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            if (p.pyramidy1 > p.pyramidy2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((y1parse - y2parse) == 1)
+                                if ((p.pyramidy1 - p.pyramidy2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
-                                    click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                     i--;
                                 }
                             }
-                            else if ((y2parse - y1parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidy2 - p.pyramidy1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
-                                click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                 i--;
                             }
-                            Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                            click(p, x1parse + " " + z2parse + " " + y1parse); //clicks on coords from text files
-                            click(p, x2parse + " " + z2parse + " " + y2parse); //clicks on coords from text files
+                            Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                            click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                            click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                             
-                            if (x1parse > x2parse) //checks if one is greater than the other. This way it knows which one to add one two and which one to minus one from so that it reaches the middle.
+                            if (p.pyramidx1 > p.pyramidx2) //checks if one is greater than the other. This way it knows which one to add one two and which one to minus one from so that it reaches the middle.
                             {
-                                x1parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x1parse)); //adds toone
-                                x2parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x2parse)); //adds to the other
+                                p.pyramidx1--;
+                                p.pyramidx2++;
                             }
                             else
                             {
-                                x1parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x1parse)); //adds to the other one
-                                x2parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x2parse)); //takes from the other one
+                                p.pyramidx1++;
+                                p.pyramidx2--;
                             }
 
-                            if (y1parse > y2parse) //does the same for the y coords
+                            if (p.pyramidy1 > p.pyramidy2) //does the same for the y coords
                             {
-                                y1parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(y1parse));
-                                y2parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(y2parse));
+                                p.pyramidy1--;
+                                p.pyramidy2++;
                             }
                             else
                             {
-                                y1parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(y1parse));
-                                y2parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(y2parse));
+                                p.pyramidy1++;
+                                p.pyramidy2--;
                             }
-                            z2parse++;
-                            File.WriteAllText("pyramid/" + p.name + "z2.txt", Convert.ToString(z2parse)); //adds to the z coords                                     
+                            p.pyramidz2++;                             
                         }
 
-                        //<deletes all the text files>
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
-                        Player.SendMessage(p, "Pyramid Completed");
-                        //</deletes all the text files>
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidblock = "";
+                        p.pyramidsilent = false;
+                        Player.SendMessage(p, "Pyramid completed.");
+                        wait = 2;
                     }
                     else
                     {
-                        //<what happens if pyramid is not level>
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidblock = "";
                         Player.SendMessage(p, "The two edges of the pyramid must be on the same level");
-                        //</what happens if pyramid is not level>
+                        wait = 1;
                     }
 
                     break;
 
                 case SolidType.reverse:
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "x2.txt", true))
-                    {
-                        writer.WriteLine(cpos.x);
-                    }
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "z2.txt", true))
-                    {
-                        writer.WriteLine(cpos.y);
-                    }
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "y2.txt", true))
-                    {
-                        writer.WriteLine(cpos.z);
-                    }
+                    p.pyramidx2 = cpos.x;
+                    p.pyramidz2 = cpos.y;
+                    p.pyramidy2 = cpos.z;
 
-                    String x111read = File.ReadAllText("pyramid/" + p.name + "x1.txt");
-                    String x211read = File.ReadAllText("pyramid/" + p.name + "x2.txt");
-                    String y111read = File.ReadAllText("pyramid/" + p.name + "y1.txt");
-                    String y211read = File.ReadAllText("pyramid/" + p.name + "y2.txt");
-                    String z111read = File.ReadAllText("pyramid/" + p.name + "z1.txt");
-                    String z211read = File.ReadAllText("pyramid/" + p.name + "z2.txt");
-                    int x111parse = int.Parse(x111read);
-                    int x211parse = int.Parse(x211read);
-                    int y111parse = int.Parse(y111read);
-                    int y211parse = int.Parse(y211read);
-                    int z111parse = int.Parse(z111read);
-                    int z211parse = int.Parse(z211read);
-
-                    if (z111parse == z211parse)
+                    if (p.pyramidz1 == p.pyramidz2)
                     {
                         for (int i = 1; i > 0; )
                         {
-                            if (x111parse == x211parse)
+                            if (p.pyramidx1 == p.pyramidx2)
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x111parse + " " + z211parse + " " + y111parse); //clicks on coords from text files
-                                click(p, x211parse + " " + z211parse + " " + y211parse); //clicks on coords from text files
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                 i--;
                             }
-                            else if (y111parse == y211parse) { i--; }
-                            if (x111parse > x211parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            else if (p.pyramidy1 == p.pyramidy2) { i--; }
+                            if (p.pyramidx1 > p.pyramidx2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((x111parse - x211parse) == 1)
+                                if ((p.pyramidx1 - p.pyramidx2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x111parse + " " + z211parse + " " + y111parse); //clicks on coords from text files
-                                    click(p, x211parse + " " + z211parse + " " + y211parse); //clicks on coords from text files
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                     i--;
                                 }
                             }
-                            else if ((x211parse - x111parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidx2 - p.pyramidx1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x111parse + " " + z211parse + " " + y111parse); //clicks on coords from text files
-                                click(p, x211parse + " " + z211parse + " " + y211parse); //clicks on coords from text files
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2); //clicks on coords
                                 i--;
                             }
-                            if (y111parse > y211parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            if (p.pyramidy1 > p.pyramidy2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((y111parse - y211parse) == 1)
+                                if ((p.pyramidy1 - p.pyramidy2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x111parse + " " + z211parse + " " + y111parse); //clicks on coords from text files
-                                    click(p, x211parse + " " + z211parse + " " + y211parse);
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                     i--;
                                 }
                             }
-                            else if ((y211parse - y111parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidy2 - p.pyramidy1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x111parse + " " + z211parse + " " + y111parse); //clicks on coords from text files
-                                click(p, x211parse + " " + z211parse + " " + y211parse);
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords from text files
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                 i--;
                             }
-                            Command.all.Find("silentcuboid").Use(p, "air");
-                            click(p, x111parse + " " + z211parse + " " + y111parse);
-                            click(p, x211parse + " " + z211parse + " " + y211parse);
-                            Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt") + " " + "walls");
-                            click(p, x111parse + " " + z211parse + " " + y111parse);
-                            click(p, x211parse + " " + z211parse + " " + y211parse);
+                            Command.all.Find("cuboid").Use(p, "air");
+                            click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
+                            click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
+                            Command.all.Find("cuboid").Use(p, p.pyramidblock + " " + "walls");
+                            click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
+                            click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
 
-                            if (x111parse > x211parse)
+                            if (p.pyramidx1 > p.pyramidx2)
                             {
-                                x111parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x111parse));
-                                x211parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x211parse));
+                                p.pyramidx1--;
+                                p.pyramidx2++;
                             }
                             else
                             {
-                                x111parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x111parse));
-                                x211parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x211parse));
+                                p.pyramidx1++;
+                                p.pyramidx2--;
                             }
 
-                            if (y111parse > y211parse)
+                            if (p.pyramidy1 > p.pyramidy2)
                             {
-                                y111parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(x111parse));
-                                y211parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(x211parse));
+                                p.pyramidy1--;
+                                p.pyramidy2++;
                             }
                             else
                             {
-                                y111parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(y111parse));
-                                y211parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(y211parse));
+                                p.pyramidy1++;
+                                p.pyramidy2--;
                             }
-                            z211parse--;
-                            File.WriteAllText("pyramid/" + p.name + "z2.txt", Convert.ToString(z211parse));
+                            p.pyramidz2--;
                         }
 
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidz2 = 0;
+                        p.pyramidblock = "";
+                        wait = 2;
+                        p.pyramidsilent = false;
                         Player.SendMessage(p, "Pyramid Completed");
                     }
                     else
                     {
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidz2 = 0;
+                        p.pyramidblock = "";
+                        wait = 1;
                         Player.SendMessage(p, "The two edges of the pyramid must be on the same level");
                     }
                     break;
 
                 case SolidType.hollow:
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "x2.txt", true))
-                    {
-                        writer.WriteLine(cpos.x);
-                    }
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "z2.txt", true))
-                    {
-                        writer.WriteLine(cpos.y);
-                    }
-                    using (StreamWriter writer = new StreamWriter("pyramid/" + p.name + "y2.txt", true))
-                    {
-                        writer.WriteLine(cpos.z);
-                    }
+                    p.pyramidx2 = cpos.x;
+                    p.pyramidz2 = cpos.y;
+                    p.pyramidy2 = cpos.z;
 
-                    String x11read = File.ReadAllText("pyramid/" + p.name + "x1.txt");
-                    String x21read = File.ReadAllText("pyramid/" + p.name + "x2.txt");
-                    String y11read = File.ReadAllText("pyramid/" + p.name + "y1.txt");
-                    String y21read = File.ReadAllText("pyramid/" + p.name + "y2.txt");
-                    String z11read = File.ReadAllText("pyramid/" + p.name + "z1.txt");
-                    String z21read = File.ReadAllText("pyramid/" + p.name + "z2.txt");
-                    int x11parse = int.Parse(x11read);
-                    int x21parse = int.Parse(x21read);
-                    int y11parse = int.Parse(y11read);
-                    int y21parse = int.Parse(y21read);
-                    int z11parse = int.Parse(z11read);
-                    int z21parse = int.Parse(z21read);
-
-                    if (z11parse == z21parse)
+                    if (p.pyramidz1 == p.pyramidz2)
                     {
-                        Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt"));
-                        click(p, x11parse + " " + z21parse + " " + y11parse);
-                        click(p, x21parse + " " + z21parse + " " + y21parse);
+                        Command.all.Find("cuboid").Use(p, p.pyramidblock);
+                        click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
+                        click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
 
                         for (int i = 1; i > 0; )
                         {
-                            if (x11parse == x21parse)
+                            if (p.pyramidx1 == p.pyramidx2)
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x11parse + " " + z21parse + " " + y11parse); //clicks on coords from text files
-                                click(p, x21parse + " " + z21parse + " " + y21parse);
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                 i--;
                             }
-                            else if (y11parse == y21parse) { i--; }
-                            if (x11parse > x21parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            else if (p.pyramidy1 == p.pyramidy2) { i--; }
+                            if (p.pyramidx1 > p.pyramidx2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((x11parse - x21parse) == 1)
+                                if ((p.pyramidx1 - p.pyramidx2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x11parse + " " + z21parse + " " + y11parse); //clicks on coords from text files
-                                    click(p, x21parse + " " + z21parse + " " + y21parse);
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                     i--;
                                 }
                             }
-                            else if ((x21parse - x11parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidx2 - p.pyramidx1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x11parse + " " + z21parse + " " + y11parse); //clicks on coords from text files
-                                click(p, x21parse + " " + z21parse + " " + y21parse);
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                 i--;
                             }
-                            if (y11parse > y21parse) //checks if 2 coords are the same for x and provides escape sequence if they are
+                            if (p.pyramidy1 > p.pyramidy2) //checks if 2 coords are the same for x and provides escape sequence if they are
                             {
-                                if ((y11parse - y21parse) == 1)
+                                if ((p.pyramidy1 - p.pyramidy2) == 1)
                                 {
-                                    Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                    click(p, x11parse + " " + z21parse + " " + y11parse); //clicks on coords from text files
-                                    click(p, x21parse + " " + z21parse + " " + y21parse);
+                                    Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                    click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                    click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                     i--;
                                 }
                             }
-                            else if ((y21parse - y11parse) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
+                            else if ((p.pyramidy2 - p.pyramidy1) == 1)  //checks if 2 coords are the same for y and provides escape sequence if they are
                             {
-                                Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt")); //cuboid
-                                click(p, x11parse + " " + z21parse + " " + y11parse); //clicks on coords from text files
-                                click(p, x21parse + " " + z21parse + " " + y21parse);
+                                Command.all.Find("cuboid").Use(p, p.pyramidblock); //cuboid
+                                click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1); //clicks on coords
+                                click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
                                 i--;
                             }
-                            Command.all.Find("silentcuboid").Use(p, File.ReadAllText("pyramid/" + p.name + "block.txt") + " " + "walls");
-                            click(p, x11parse + " " + z21parse + " " + y11parse);
-                            click(p, x21parse + " " + z21parse + " " + y21parse);
+                            Command.all.Find("cuboid").Use(p, p.pyramidblock + " " + "walls");
+                            click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
+                            click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
 
-                            if (x11parse > x21parse)
+                            if (p.pyramidx1 > p.pyramidx2)
                             {
-                                x11parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x11parse));
-                                x21parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x21parse));
+                                p.pyramidx1--;
+                                p.pyramidx2++;
                             }
                             else
                             {
-                                x11parse++;
-                                File.WriteAllText("pyramid/" + p.name + "x1.txt", Convert.ToString(x11parse));
-                                x21parse--;
-                                File.WriteAllText("pyramid/" + p.name + "x2.txt", Convert.ToString(x21parse));
+                                p.pyramidx1++;
+                                p.pyramidx2--;
                             }
 
-                            if (y11parse > y21parse)
+                            if (p.pyramidy1 > p.pyramidy2)
                             {
-                                y11parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(x11parse));
-                                y21parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(x21parse));
+                                p.pyramidy1--;
+                                p.pyramidy2++;
                             }
                             else
                             {
-                                y11parse++;
-                                File.WriteAllText("pyramid/" + p.name + "y1.txt", Convert.ToString(y11parse));
-                                y21parse--;
-                                File.WriteAllText("pyramid/" + p.name + "y2.txt", Convert.ToString(y21parse));
+                                p.pyramidy1++;
+                                p.pyramidy2--;
                             }
-                            z21parse++;
-                            File.WriteAllText("pyramid/" + p.name + "z2.txt", Convert.ToString(z21parse));
+                            p.pyramidz2++;
                         }
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidz2 = 0;
+                        p.pyramidblock = "";
+                        wait = 2;
+                        p.pyramidsilent = false;
                         Player.SendMessage(p, "Pyramid Completed");
                     }
                     else
                     {
-                        File.Delete("pyramid/" + p.name + "x1.txt");
-                        File.Delete("pyramid/" + p.name + "x2.txt");
-                        File.Delete("pyramid/" + p.name + "y1.txt");
-                        File.Delete("pyramid/" + p.name + "y2.txt");
-                        File.Delete("pyramid/" + p.name + "z1.txt");
-                        File.Delete("pyramid/" + p.name + "z2.txt");
-                        if (File.Exists("pyramid/" + p.name + "block.txt"))
-                        {
-                            File.Delete("pyramid/" + p.name + "block.txt");
-                        }
+                        p.pyramidx1 = 0;
+                        p.pyramidx2 = 0;
+                        p.pyramidy1 = 0;
+                        p.pyramidy2 = 0;
+                        p.pyramidz1 = 0;
+                        p.pyramidz2 = 0;
+                        p.pyramidblock = "";
+                        wait = 1;
                         Player.SendMessage(p, "The two edges of the pyramid must be on the same level");
                     }
                     break;
@@ -638,11 +457,13 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "Tried to pyramid " + buffer.Count + " blocks, but your limit is " + p.group.maxBlocks + ".");
                     Player.SendMessage(p, "Executed pyramid up to limit.");
+                    wait = 2;
                 }
                 else
                 {
                     Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
                 }
+                wait = 2;
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
                 return;
             }
@@ -651,6 +472,7 @@ namespace MCForge
             {
                 Player.SendMessage(p, "You tried to pyramid " + buffer.Count + " blocks.");
                 Player.SendMessage(p, "You cannot pyramid more than " + p.group.maxBlocks + ".");
+                wait = 1;
                 return;
             }
 
@@ -660,7 +482,7 @@ namespace MCForge
             {
                 p.level.Blockchange(p, pos.x, pos.y, pos.z, type);
             });
-
+            wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)

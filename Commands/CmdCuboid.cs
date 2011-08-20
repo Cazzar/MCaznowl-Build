@@ -33,8 +33,14 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            int number = 0;
+            string msg = String.Empty;
+            try
+            {
+                number = message.Split(' ').Length;
+            }
+            catch { }
             wait = 0;
-            int number = message.Split(' ').Length;
             if (number > 2) { Help(p); wait = 1;  return; }
             if (number == 2)
             {
@@ -60,18 +66,22 @@ namespace MCForge
             else if (message != "")
             {
                 SolidType solid = SolidType.solid;
-                message = message.ToLower();
+                try
+                {
+                    msg = message.ToLower();
+                }
+                catch { }
                 byte type; unchecked { type = (byte)-1; }
-                if (message == "solid") { solid = SolidType.solid; }
-                else if (message == "hollow") { solid = SolidType.hollow; }
-                else if (message == "walls") { solid = SolidType.walls; }
-                else if (message == "holes") { solid = SolidType.holes; }
-                else if (message == "wire") { solid = SolidType.wire; }
-                else if (message == "random") { solid = SolidType.random; }
+                if (msg == "solid") { solid = SolidType.solid; }
+                else if (msg == "hollow") { solid = SolidType.hollow; }
+                else if (msg == "walls") { solid = SolidType.walls; }
+                else if (msg == "holes") { solid = SolidType.holes; }
+                else if (msg == "wire") { solid = SolidType.wire; }
+                else if (msg == "random") { solid = SolidType.random; }
                 else
                 {
                     byte t = Block.Byte(message);
-                    if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); wait = 1; return; }
+                    if (t == 255) { Player.SendMessage(p, "There is no block \"" + msg + "\"."); wait = 1; return; }
 
                     if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
 
@@ -84,7 +94,10 @@ namespace MCForge
                 CatchPos cpos; cpos.solid = SolidType.solid; unchecked { cpos.type = (byte)-1; }
                 cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             }
-            Player.SendMessage(p, "Place two blocks to determine the edges.");
+            if (p.pyramidsilent == false)
+            {
+                Player.SendMessage(p, "Place two blocks to determine the edges.");
+            }
             p.ClearBlockchange();
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
@@ -270,7 +283,10 @@ namespace MCForge
                 return;
             }
 
-            Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            if (p.pyramidsilent == false)
+            {
+                Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            }
             Int64 addition3 = p.cuboidblocks + buffer.Count;
             p.cuboidblocks = addition3;
 

@@ -28,9 +28,11 @@ namespace MCForge
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
         public CmdSpheroid() { }
+        public static byte wait = 0;
 
         public override void Use(Player p, string message)
         {
+            wait = 0;
             CatchPos cpos;
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0;
@@ -44,7 +46,7 @@ namespace MCForge
             {
                 cpos.type = Block.Byte(message);
                 cpos.vertical = false;
-                if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); return; }
+                if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
                 if (cpos.type == Block.Zero)
                 {
                     if (message.ToLower() == "vertical")
@@ -53,22 +55,22 @@ namespace MCForge
                     }
                     else
                     {
-                        Help(p); return;
+                        Help(p); wait = 1; return;
                     }
                 }
             }
             else
             {
                 cpos.type = Block.Byte(message.Split(' ')[0]);
-                if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); return; }
+                if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
                 if (cpos.type == Block.Zero || message.Split(' ')[1].ToLower() != "vertical")
                 {
-                    Help(p); return;
+                    Help(p); wait = 1; return;
                 }
                 cpos.vertical = true;
             }
 
-            if (!Block.canPlace(p, cpos.type) && cpos.type != Block.Zero) { Player.SendMessage(p, "Cannot place this block type!"); return; }
+            if (!Block.canPlace(p, cpos.type) && cpos.type != Block.Zero) { Player.SendMessage(p, "Cannot place this block type!"); wait = 1; return; }
 
             p.blockchangeObject = cpos;
 
@@ -130,6 +132,7 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "You tried to spheroid " + totalBlocks + " blocks.");
                     Player.SendMessage(p, "You cannot spheroid more than " + p.group.maxBlocks + ".");
+                    wait = 1;
                     return;
                 }
 
@@ -204,9 +207,12 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "You tried to spheroid " + buffer.Count * ydiff + " blocks.");
                     Player.SendMessage(p, "You cannot spheroid more than " + p.group.maxBlocks + ".");
+                    wait = 1;
                     return;
                 }
                 Player.SendMessage(p, buffer.Count * ydiff + " blocks.");
+                Int64 addition = p.cuboidblocks + buffer.Count;
+                p.cuboidblocks = addition;
 
                 foreach (Pos Pos in buffer)
                 {
@@ -216,7 +222,7 @@ namespace MCForge
                     }
                 }
             }
-
+            wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)

@@ -218,7 +218,6 @@ namespace MCForge
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
             all.Add(new CmdShutdown());
-            all.Add(new CmdSilentCuboid());
             all.Add(new CmdSlap());
             all.Add(new CmdSpawn());
             all.Add(new CmdSpheroid());
