@@ -58,7 +58,11 @@ namespace MCForge
             }
             catch { }
             Player.SendMessage(p, "> > &cdied &a" + playerDb.Rows[0]["TotalDeaths"] + Server.DefaultColor + " times");
-            Player.SendMessage(p, "> > &bmodified &a" + playerDb.Rows[0]["totalBlocks"] + Server.DefaultColor + " blocks.");
+            Int64 actualoverall = Convert.ToInt64(playerDb.Rows[0]["totalBlocks"]);
+            Int64 cuboidblocks = Convert.ToInt64(playerDb.Rows[0]["totalCuboided"]);
+            Int64 totaloverall = actualoverall - cuboidblocks;
+            Player.SendMessage(p, "> > &bmanually-modified &a" + totaloverall + " &eblocks.");
+            Player.SendMessage(p, "> > &4cuboided &a" + playerDb.Rows[0]["totalCuboided"] + " &eblocks.");
             Player.SendMessage(p, "> > was last seen on &a" + playerDb.Rows[0]["LastLogin"]);
             Player.SendMessage(p, "> > first logged into the server on &a" + playerDb.Rows[0]["FirstLogin"]);
             Player.SendMessage(p, "> > logged in &a" + playerDb.Rows[0]["totalLogin"] + Server.DefaultColor + " times, &c" + playerDb.Rows[0]["totalKicked"] + Server.DefaultColor + " of which ended in a kick.");
