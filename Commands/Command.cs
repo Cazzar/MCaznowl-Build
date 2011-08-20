@@ -175,8 +175,10 @@ namespace MCForge
             all.Add(new CmdpCinema());
             all.Add(new CmdpCinema2());
             all.Add(new CmdPCount());
+            all.Add(new CmdPerbuildMax());
             all.Add(new CmdPermissionBuild());
             all.Add(new CmdPermissionVisit());
+            all.Add(new CmdPervisitMax());
             all.Add(new CmdPhysics());
             all.Add(new CmdPlace());
             all.Add(new CmdPlayerCLS());
