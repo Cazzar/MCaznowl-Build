@@ -29,20 +29,22 @@ namespace MCForge
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
         public CmdCuboid() { }
+        public static byte wait;
 
         public override void Use(Player p, string message)
         {
+            wait = 0;
             int number = message.Split(' ').Length;
-            if (number > 2) { Help(p); return; }
+            if (number > 2) { Help(p); wait = 1;  return; }
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
                 string t = message.Substring(0, pos).ToLower();
                 string s = message.Substring(pos + 1).ToLower();
                 byte type = Block.Byte(t);
-                if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); return; }
+                if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); wait = 1; return; }
 
-                if (!Block.canPlace(p, type)) { Player.SendMessage(p, "Cannot place that."); return; }
+                if (!Block.canPlace(p, type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
 
                 SolidType solid;
                 if (s == "solid") { solid = SolidType.solid; }
@@ -69,9 +71,9 @@ namespace MCForge
                 else
                 {
                     byte t = Block.Byte(message);
-                    if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); return; }
+                    if (t == 255) { Player.SendMessage(p, "There is no block \"" + message + "\"."); wait = 1; return; }
 
-                    if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); return; }
+                    if (!Block.canPlace(p, t)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
 
                     type = t;
                 } CatchPos cpos; cpos.solid = solid; cpos.type = type;
@@ -245,11 +247,13 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "Tried to cuboid " + buffer.Count + " blocks, but your limit is " + p.group.maxBlocks + ".");
                     Player.SendMessage(p, "Executed cuboid up to limit.");
+                    wait = 2;
                 }
                 else
                 {
                     Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
                 }
+                wait = 2;
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
                 return;
             }
@@ -258,16 +262,19 @@ namespace MCForge
             {
                 Player.SendMessage(p, "You tried to cuboid " + buffer.Count + " blocks.");
                 Player.SendMessage(p, "You cannot cuboid more than " + p.group.maxBlocks + ".");
+                wait = 1;
                 return;
             }
 
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            Int64 addition = p.cuboidblocks + buffer.Count;
+            p.cuboidblocks = addition;
 
             buffer.ForEach(delegate(Pos pos)
             {
                 p.level.Blockchange(p, pos.x, pos.y, pos.z, type);
             });
-
+            wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
