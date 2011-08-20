@@ -187,6 +187,7 @@ namespace MCForge
             all.Add(new CmdPossess());
             all.Add(new CmdPromote());
             all.Add(new CmdPyramid());
+            all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
             all.Add(new CmdRedo());
