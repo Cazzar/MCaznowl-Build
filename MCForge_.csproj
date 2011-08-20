@@ -111,6 +111,8 @@
     <Compile Include="Commands\CmdLoginMessage.cs" />
     <Compile Include="Commands\CmdLogoutMessage.cs" />
     <Compile Include="Commands\CmdMain.cs" />
+	<Compile Include="Commands\CmdPerbuildMax.cs" />
+	<Compile Include="Commands\CmdPervisitMax.cs" />
     <Compile Include="Commands\CmdMaze.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
