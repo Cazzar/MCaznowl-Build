@@ -132,7 +132,7 @@ namespace MCForge
             }
             if (type == "replacenot")
             {
-                CmdCuboid.wait = 0;
+                CmdReplaceNot.wait = 0;
                 Command.all.Find(type).Use(p, msg);
                 while (CmdReplaceNot.wait == 0)
                 {
@@ -163,7 +163,7 @@ namespace MCForge
                 }
                 if (CmdSpheroid.wait != 1)
                 {
-                    if (CmdCuboid.wait == 2)
+                    if (CmdSpheroid.wait == 2)
                     {
                         Command.all.Find("reveal").Use(p, "all");
                         if (p.level.Instant == true)
