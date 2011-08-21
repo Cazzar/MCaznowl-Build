@@ -1125,10 +1125,13 @@ namespace MCForge
 
                 if (Diff > 12)
                 {
-                    Server.s.Log(name + " attempted to build with a " + Diff.ToString() + " distance offset");
-                    GlobalMessageOps("To Ops &f-" + color + name + "&f- attempted to build with a " + Diff.ToString() + " distance offset");
-                    SendMessage("You can't build that far away.");
-                    SendBlockchange(x, y, z, b); return;
+                    if (lastCMD != "click")
+                    {
+                        Server.s.Log(name + " attempted to build with a " + Diff.ToString() + " distance offset");
+                        GlobalMessageOps("To Ops &f-" + color + name + "&f- attempted to build with a " + Diff.ToString() + " distance offset");
+                        SendMessage("You can't build that far away.");
+                        SendBlockchange(x, y, z, b); return;
+                    }
                 }
 
                 if (Server.antiTunnel)
