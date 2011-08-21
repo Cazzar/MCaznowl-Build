@@ -44,7 +44,10 @@ namespace MCForge
                 }
                 catch { }
                 Player.SendMessage(p, "> > &cdied &a" + who.overallDeath + Server.DefaultColor + " times");
-                Int64 totaloverall = who.overallBlocks - who.cuboidblocks;
+                Int64 whatminus = who.cuboidblocks * 2;
+                Int64 totaloverall = who.overallBlocks - whatminus;
+                Player.SendMessage(p, "Overall = " + who.overallBlocks);
+                Player.SendMessage(p, "Cuboid = " + who.cuboidblocks);
                 Player.SendMessage(p, "> > &bmanually-modified &a" + totaloverall + " &eblocks. Changed &a" + who.loginBlocks + " &esince logging in.");
                 Player.SendMessage(p, "> > &4cuboided &a" + who.cuboidblocks + " &eblocks.");
                 string storedTime = Convert.ToDateTime(DateTime.Now.Subtract(who.timeLogged).ToString()).ToString("HH:mm:ss");
