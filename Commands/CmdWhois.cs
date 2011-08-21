@@ -44,11 +44,7 @@ namespace MCForge
                 }
                 catch { }
                 Player.SendMessage(p, "> > &cdied &a" + who.overallDeath + Server.DefaultColor + " times");
-                Int64 whatminus = who.cuboidblocks * 2;
-                Int64 totaloverall = who.overallBlocks - whatminus;
-                Player.SendMessage(p, "> > &bmanually-modified &a" + totaloverall + " &eblocks.");
-                Player.SendMessage(p, "> > &4cuboided &a" + who.cuboidblocks + " &eblocks.");
-                Player.SendMessage(p, "> > &9changed-since-login: &a" + who.loginBlocks);
+                Player.SendMessage(p, "> > &bmodified &a" + who.overallBlocks + " &eblocks, of which &a" + who.cuboidblocks + " &ewere &4cuboided &eand &a" + who.loginBlocks + " &ewere changed &9since logging in&e.");
                 string storedTime = Convert.ToDateTime(DateTime.Now.Subtract(who.timeLogged).ToString()).ToString("HH:mm:ss");
 				Player.SendMessage(p, "> > time spent on server: " + who.time.Split(' ')[0] + " Days, " + who.time.Split(' ')[1] + " Hours, " + who.time.Split(' ')[2] + " Minutes, " + who.time.Split(' ')[3] + " Seconds.");
                 Player.SendMessage(p, "> > been logged in for &a" + storedTime);

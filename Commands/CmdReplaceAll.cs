@@ -63,8 +63,6 @@ namespace MCForge
             Player.SendMessage(p, stored.Count + " blocks out of " + currentBlock + " are " + Block.Name(b1));
             Int64 addition = p.cuboidblocks + stored.Count;
             p.cuboidblocks = addition;
-            Int64 addition2 = p.loginCuboidBlocks + stored.Count;
-            p.loginCuboidBlocks = addition2;
 
             foreach (Pos Pos in stored)
             {
