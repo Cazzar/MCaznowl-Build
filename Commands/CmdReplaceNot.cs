@@ -95,6 +95,8 @@ namespace MCForge
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
             Int64 addition = p.cuboidblocks + buffer.Count;
             p.cuboidblocks = addition;
+            Int64 addition2 = p.loginCuboidBlocks + buffer.Count;
+            p.loginCuboidBlocks = addition2;
 
             buffer.ForEach(delegate(Pos pos)
             {

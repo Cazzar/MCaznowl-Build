@@ -213,6 +213,8 @@ namespace MCForge
                 Player.SendMessage(p, buffer.Count * ydiff + " blocks.");
                 Int64 addition = p.cuboidblocks + buffer.Count;
                 p.cuboidblocks = addition;
+                Int64 addition2 = p.loginCuboidBlocks + buffer.Count;
+                p.loginCuboidBlocks = addition2;
 
                 foreach (Pos Pos in buffer)
                 {

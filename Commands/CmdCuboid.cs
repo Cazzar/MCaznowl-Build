@@ -260,8 +260,10 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "Tried to cuboid " + buffer.Count + " blocks, but your limit is " + p.group.maxBlocks + ".");
                     Player.SendMessage(p, "Executed cuboid up to limit.");
-                    Int64 addition = p.cuboidblocks + buffer.Count;
+                    Int64 addition = p.cuboidblocks + p.group.maxBlocks;
                     p.cuboidblocks = addition;
+                    Int64 addition4 = p.loginCuboidBlocks + p.group.maxBlocks;
+                    p.loginCuboidBlocks = addition4;                    
                     wait = 2;
                 }
                 else
@@ -269,6 +271,8 @@ namespace MCForge
                     Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
                     Int64 addition2 = p.cuboidblocks + buffer.Count;
                     p.cuboidblocks = addition2;
+                    Int64 addition5 = p.loginCuboidBlocks + buffer.Count;
+                    p.loginCuboidBlocks = addition5;
                 }
                 wait = 2;
                 if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
@@ -289,6 +293,8 @@ namespace MCForge
             }
             Int64 addition3 = p.cuboidblocks + buffer.Count;
             p.cuboidblocks = addition3;
+            Int64 addition6 = p.loginCuboidBlocks + buffer.Count;
+            p.loginCuboidBlocks = addition6;
 
             buffer.ForEach(delegate(Pos pos)
             {

@@ -131,6 +131,7 @@ namespace MCForge
         public Int64 overallBlocks = 0;
         public Int64 cuboidblocks = 0;
         public int loginBlocks = 0;
+        public Int64 loginCuboidBlocks = 0;
 
         public DateTime timeLogged;
         public DateTime firstLogin;
@@ -743,6 +744,7 @@ namespace MCForge
                         return;
                     }
                 }
+                this.loginCuboidBlocks = 0;
                 if (Player.players.Count >= Server.players && ip != "127.0.0.1") { Kick("Server full!"); return; }
                 // Code for limiting no. of guests
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
