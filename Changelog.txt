@@ -18,6 +18,7 @@ v5.1.0.0
 [For OPs] - /report check - Shows the reported list.
 		  - /report view [Player] - Views the report on the specified player.
 		  - /report remove [Player] - Removes the report on the specified player.
+- Added: Doors-only physics - /physics 5
 
 v5.0.0.0
 - Added a Maps tab to the GUI.

@@ -60,7 +60,7 @@ namespace MCForge
                     string nameStore = message.Split(' ')[0];
                     level = Level.Find(nameStore);
                 }
-                if (temp >= 0 && temp <= 4)
+                if (temp >= 0 && temp <= 5)
                 {
                     level.setPhysics(temp);
                     switch (temp)
@@ -95,6 +95,11 @@ namespace MCForge
                             Server.s.Log("Physics are now INSTANT on " + level.name + ".");
                             IRCBot.Say("Physics are now INSTANT on " + level.name + ".");
                             break;
+                        case 5:
+                            Player.GlobalMessage("Physics are now &4Doors-Only" + Server.DefaultColor + " on &b" + level.name + Server.DefaultColor + ".");
+                            Server.s.Log("Physics are now Doors-Only on " + level.name + ".");
+                            IRCBot.Say("Physics are now Doors-Only on " + level.name + ".");
+                            break;
                     }
 
                     level.changed = true;
@@ -112,7 +117,7 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/physics [map] <0/1/2/3/4> - Set the [map]'s physics, 0-Off 1-On 2-Advanced 3-Hardcore 4-Instant");
+            Player.SendMessage(p, "/physics [map] <0/1/2/3/4/5> - Set the [map]'s physics, 0-Off 1-On 2-Advanced 3-Hardcore 4-Instant 5-Doors_Only");
             Player.SendMessage(p, "If [map] is blank, uses Current level");
         }
     }

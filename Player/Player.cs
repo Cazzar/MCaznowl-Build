@@ -1310,7 +1310,7 @@ namespace MCForge
                 case Block.door_book_air:
                     break;
                 case Block.rocketstart:
-                    if (level.physics < 2)
+                    if (level.physics < 2 || level.physics == 5)
                     {
                         SendBlockchange(x, y, z, b);
                     }
@@ -1341,6 +1341,11 @@ namespace MCForge
                     }
                     break;
                 case Block.firework:
+                    if (level.physics == 5)
+                    {
+                        SendBlockchange(x, y, z, b);
+                        return;
+                    }
                     if (level.physics != 0)
                     {
                         mx = rand.Next(0, 2); mz = rand.Next(0, 2);
