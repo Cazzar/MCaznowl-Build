@@ -1120,35 +1120,50 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 ChkPortResult.Text = "Testing Port!";
                 ChkPortResult.BackColor = SystemColors.Control;
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.mcforge.net/checkport.php?&port=" + nPort);
+               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://mcfire.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     using (Stream stream = response.GetResponseStream())
                     {
-                        StreamReader reader = new StreamReader(stream);
-                        if (reader.ReadLine().StartsWith("open"))
+                        using (StreamReader reader = new StreamReader(stream)){
+
+
+
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
                         {
-                            ChkPortResult.Text = "Port Open!";
-                            ChkPortResult.BackColor = Color.Lime;
-                            MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
-                            return;
+                            if (line == "") { continue; }
+                            
+                            if (line == "open")
+                            {
+                                ChkPortResult.Text = "Port Open!";
+                                ChkPortResult.BackColor = Color.Lime;
+                                MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
+                                return;
+                            }
+
+                        MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
+                        ChkPortResult.Text = "Port Not Open: " + line;
+                        ChkPortResult.BackColor = Color.Red;
+                        MessageBox.Show(line);
+                        
+                        }
+
                         }
                     }
                 }
+                else { MessageBox.Show("Could Not connect to site, aborting operation"); }
 
-                MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                ChkPortResult.Text = "Port Not Open";
-                ChkPortResult.BackColor = Color.Red;
 
             }
-            catch/* (Exception ex)*/
+            catch (Exception ex)
             {
                 ChkPortResult.Text = "Testing Port Failed!";
                 ChkPortResult.BackColor = Color.Red;
                 MessageBox.Show("Could not start listening on port " + nPort + ". Another program may be using the port.", "Port check failed");
-
+                MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.StackTrace);
             }
             finally
             {
