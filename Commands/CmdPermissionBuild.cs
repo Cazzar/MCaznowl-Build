@@ -42,32 +42,8 @@ namespace MCForge
 					Player.SendMessage(p, "You cannot change the perbuild of a level with a perbuild higher than your rank.");
 					return;
 				}
-                File.Create("levels/level properties/" + p.level.name + ".properties").Dispose();
-				using (StreamWriter SW = File.CreateText("levels/level properties/" + p.level.name + ".properties"))
-				{
-					SW.WriteLine("#Level properties for " + p.level.name);
-					SW.WriteLine("Theme = " + p.level.theme);
-					SW.WriteLine("Physics = " + p.level.physics.ToString());
-					SW.WriteLine("Physics speed = " + p.level.speedPhysics.ToString());
-					SW.WriteLine("Physics overload = " + p.level.overload.ToString());
-					SW.WriteLine("Finite mode = " + p.level.finite.ToString());
-					SW.WriteLine("Animal AI = " + p.level.ai.ToString());
-					SW.WriteLine("Edge water = " + p.level.edgeWater.ToString());
-					SW.WriteLine("Survival death = " + p.level.Death.ToString());
-					SW.WriteLine("Fall = " + p.level.fall.ToString());
-					SW.WriteLine("Drown = " + p.level.drown.ToString());
-					SW.WriteLine("MOTD = " + p.level.motd);
-					SW.WriteLine("JailX = " + p.level.jailx.ToString());
-					SW.WriteLine("JailY = " + p.level.jaily.ToString());
-					SW.WriteLine("JailZ = " + p.level.jailz.ToString());
-					SW.WriteLine("Unload = " + p.level.unload);
-					SW.WriteLine("PerBuild = " + message.ToLower());
-					SW.WriteLine("PerVisit = " + Group.findPerm(p.level.permissionvisit).trueName.ToLower());
-                    SW.WriteLine("PerBuildMax = " + Group.findPerm(p.level.perbuildmax).trueName.ToLower());
-                    SW.WriteLine("PerVisitMax = " + Group.findPerm(p.level.pervisitmax).trueName.ToLower());
-                    SW.WriteLine("Guns = " + p.level.guns.ToString());
-				}
                 p.level.permissionbuild = Perm;
+                Level.SaveSettings(p.level);
                 Server.s.Log(p.level.name + " build permission changed to " + message + ".");
                 Player.GlobalMessageLevel(p.level, "build permission changed to " + message + ".");
             }
@@ -87,32 +63,8 @@ namespace MCForge
                 }
                 if (level != null)
                 {
-					File.Create("levels/level properties/" + level.name + ".properties").Dispose();
-					using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
-					{
-						SW.WriteLine("#Level properties for " + level.name);
-						SW.WriteLine("Theme = " + level.theme);
-						SW.WriteLine("Physics = " + level.physics.ToString());
-						SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
-						SW.WriteLine("Physics overload = " + level.overload.ToString());
-						SW.WriteLine("Finite mode = " + level.finite.ToString());
-						SW.WriteLine("Animal AI = " + level.ai.ToString());
-						SW.WriteLine("Edge water = " + level.edgeWater.ToString());
-						SW.WriteLine("Survival death = " + level.Death.ToString());
-						SW.WriteLine("Fall = " + level.fall.ToString());
-						SW.WriteLine("Drown = " + level.drown.ToString());
-						SW.WriteLine("MOTD = " + level.motd);
-						SW.WriteLine("JailX = " + level.jailx.ToString());
-						SW.WriteLine("JailY = " + level.jaily.ToString());
-						SW.WriteLine("JailZ = " + level.jailz.ToString());
-						SW.WriteLine("Unload = " + level.unload);
-						SW.WriteLine("PerBuild = " + s.ToLower());
-						SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
-                        SW.WriteLine("PerBuildMax = " + Group.findPerm(level.perbuildmax).trueName.ToLower());
-                        SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
-                        SW.WriteLine("Guns = " + level.guns.ToString());
-					}
                     level.permissionbuild = Perm;
+                    Level.SaveSettings(level);
                     Server.s.Log(level.name + " build permission changed to " + s + ".");
                     Player.GlobalMessageLevel(level, "build permission changed to " + s + ".");
                     if (p != null)

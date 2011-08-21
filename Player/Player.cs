@@ -1209,6 +1209,11 @@ namespace MCForge
                 {
                     if (level.name != Portals.Rows[LastPortal]["ExitMap"].ToString())
                     {
+                        if (level.permissionvisit > this.group.Permission)
+                        {
+                            Player.SendMessage(this, "You do not have the adequate rank to visit this map!");
+                            return;
+                        }
                         ignorePermission = true;
                         Level thisLevel = level;
                         Command.all.Find("goto").Use(this, Portals.Rows[LastPortal]["ExitMap"].ToString());

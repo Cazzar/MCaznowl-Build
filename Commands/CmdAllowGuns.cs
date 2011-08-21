@@ -45,6 +45,7 @@ namespace MCForge
                     {
                         p.level.guns = false;
                         Player.GlobalMessage("&9Gun usage has been disabled on &c" + p.level.name + "&9!");
+                        Level.SaveSettings(p.level);
                         foreach (Player pl in Player.players)
                         {
                             if (pl.level.name.ToLower() == p.level.name.ToLower())
@@ -61,6 +62,7 @@ namespace MCForge
                     {
                         p.level.guns = true;
                         Player.GlobalMessage("&9Gun usage has been enabled on &c" + p.level.name + "&9!");
+                        Level.SaveSettings(p.level);
                         return;
                     }
                 }
@@ -76,6 +78,7 @@ namespace MCForge
                     {
                         foundLevel.guns = false;
                         Player.GlobalMessage("&9Gun usage has been disabled on &c" + message + "&9!");
+                        Level.SaveSettings(foundLevel);
                         foreach (Player pl in Player.players)
                         {
                             if (pl.level.name.ToLower() == message.ToLower())
@@ -94,6 +97,7 @@ namespace MCForge
                     {
                         foundLevel.guns = true;
                         Player.GlobalMessage("&9Gun usage has been enabled on &c" + message + "&9!");
+                        Level.SaveSettings(foundLevel);
                         return;
                     }
                 }
@@ -115,6 +119,7 @@ namespace MCForge
                 {
                     foundLevel.guns = false;
                     Player.GlobalMessage("&9Gun usage has been disabled on &c" + message + "&9!");
+                    Level.SaveSettings(foundLevel);
                     Player.SendMessage(p, "Gun usage has been disabled on " + message + "!");
                     foreach (Player pl in Player.players)
                     {
@@ -127,6 +132,7 @@ namespace MCForge
                 }
                     foundLevel.guns = true;
                     Player.GlobalMessage("&9Gun usage has been enabled on &c" + message + "&9!");
+                    Level.SaveSettings(foundLevel);
                     Player.SendMessage(p, "Gun usage has been enabled on " + message + "!");
                     return;
                 }

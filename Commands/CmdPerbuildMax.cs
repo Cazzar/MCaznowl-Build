@@ -54,32 +54,8 @@ namespace MCForge
                         return;
                     }
                 }
-                File.Create("levels/level properties/" + p.level.name + ".properties").Dispose();
-                using (StreamWriter SW = File.CreateText("levels/level properties/" + p.level.name + ".properties"))
-                {
-                    SW.WriteLine("#Level properties for " + p.level.name);
-                    SW.WriteLine("Theme = " + p.level.theme);
-                    SW.WriteLine("Physics = " + p.level.physics.ToString());
-                    SW.WriteLine("Physics speed = " + p.level.speedPhysics.ToString());
-                    SW.WriteLine("Physics overload = " + p.level.overload.ToString());
-                    SW.WriteLine("Finite mode = " + p.level.finite.ToString());
-                    SW.WriteLine("Animal AI = " + p.level.ai.ToString());
-                    SW.WriteLine("Edge water = " + p.level.edgeWater.ToString());
-                    SW.WriteLine("Survival death = " + p.level.Death.ToString());
-                    SW.WriteLine("Fall = " + p.level.fall.ToString());
-                    SW.WriteLine("Drown = " + p.level.drown.ToString());
-                    SW.WriteLine("MOTD = " + p.level.motd);
-                    SW.WriteLine("JailX = " + p.level.jailx.ToString());
-                    SW.WriteLine("JailY = " + p.level.jaily.ToString());
-                    SW.WriteLine("JailZ = " + p.level.jailz.ToString());
-                    SW.WriteLine("Unload = " + p.level.unload);
-                    SW.WriteLine("PerBuild = " + Group.findPerm(p.level.permissionbuild).trueName.ToLower());
-                    SW.WriteLine("PerVisit = " + Group.findPerm(p.level.permissionvisit).trueName.ToLower());
-                    SW.WriteLine("PerBuildMax = " + message.ToLower());
-                    SW.WriteLine("PerVisitMax = " + Group.findPerm(p.level.pervisitmax).trueName.ToLower());
-                    SW.WriteLine("Guns = " + p.level.guns.ToString());
-                }
                 p.level.perbuildmax = Perm;
+                Level.SaveSettings(p.level);
                 Server.s.Log(p.level.name + " buildmax permission changed to " + message + ".");
                 Player.GlobalMessageLevel(p.level, "buildmax permission changed to " + message + ".");
             }
@@ -102,32 +78,8 @@ namespace MCForge
                 }
                 if (level != null)
                 {
-                    File.Create("levels/level properties/" + level.name + ".properties").Dispose();
-                    using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
-                    {
-                        SW.WriteLine("#Level properties for " + level.name);
-                        SW.WriteLine("Theme = " + level.theme);
-                        SW.WriteLine("Physics = " + level.physics.ToString());
-                        SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
-                        SW.WriteLine("Physics overload = " + level.overload.ToString());
-                        SW.WriteLine("Finite mode = " + level.finite.ToString());
-                        SW.WriteLine("Animal AI = " + level.ai.ToString());
-                        SW.WriteLine("Edge water = " + level.edgeWater.ToString());
-                        SW.WriteLine("Survival death = " + level.Death.ToString());
-                        SW.WriteLine("Fall = " + level.fall.ToString());
-                        SW.WriteLine("Drown = " + level.drown.ToString());
-                        SW.WriteLine("MOTD = " + level.motd);
-                        SW.WriteLine("JailX = " + level.jailx.ToString());
-                        SW.WriteLine("JailY = " + level.jaily.ToString());
-                        SW.WriteLine("JailZ = " + level.jailz.ToString());
-                        SW.WriteLine("Unload = " + level.unload);
-                        SW.WriteLine("PerBuild = " + Group.findPerm(level.permissionbuild).trueName.ToLower());
-                        SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
-                        SW.WriteLine("PerBuildMax = " + s.ToLower());
-                        SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
-                        SW.WriteLine("Guns = " + level.guns.ToString());
-                    }
                     level.perbuildmax = Perm;
+                    Level.SaveSettings(level);
                     Server.s.Log(level.name + " buildmax permission changed to " + s + ".");
                     Player.GlobalMessageLevel(level, "buildmax permission changed to " + s + ".");
                     if (p != null)

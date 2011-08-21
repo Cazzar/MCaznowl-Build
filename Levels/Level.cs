@@ -494,6 +494,36 @@ namespace MCForge
             //    b.lastaction.Add(foo); edits.Add(foo); p.actions.Add(foo);
             //} b.type = type;
         }
+
+        public static void SaveSettings(Level level)
+        {
+            File.Create("levels/level properties/" + level.name + ".properties").Dispose();
+            using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+            {
+                SW.WriteLine("#Level properties for " + level.name);
+                SW.WriteLine("Theme = " + level.theme);
+                SW.WriteLine("Physics = " + level.physics.ToString());
+                SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
+                SW.WriteLine("Physics overload = " + level.overload.ToString());
+                SW.WriteLine("Finite mode = " + level.finite.ToString());
+                SW.WriteLine("Animal AI = " + level.ai.ToString());
+                SW.WriteLine("Edge water = " + level.edgeWater.ToString());
+                SW.WriteLine("Survival death = " + level.Death.ToString());
+                SW.WriteLine("Fall = " + level.fall.ToString());
+                SW.WriteLine("Drown = " + level.drown.ToString());
+                SW.WriteLine("MOTD = " +level.motd);
+                SW.WriteLine("JailX = " + level.jailx.ToString());
+                SW.WriteLine("JailY = " + level.jaily.ToString());
+                SW.WriteLine("JailZ = " + level.jailz.ToString());
+                SW.WriteLine("Unload = " + level.unload);
+                SW.WriteLine("PerBuild = " + Group.findPerm(level.permissionbuild).trueName.ToLower());
+                SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
+                SW.WriteLine("PerBuildMax = " + Group.findPerm(level.perbuildmax).trueName.ToLower());
+                SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
+                SW.WriteLine("Guns = " + level.guns.ToString());
+            }
+        }
+
         public void Blockchange(ushort x, ushort y, ushort z, byte type, bool overRide = false, string extraInfo = "")    //Block change made by physics
         {
             if (x < 0 || y < 0 || z < 0) return;
@@ -626,9 +656,9 @@ namespace MCForge
 							SW.WriteLine("Unload = " + unload);
 							SW.WriteLine("PerBuild = " + PermissionToName(permissionbuild));
 							SW.WriteLine("PerVisit = " + PermissionToName(permissionvisit));
-                            				SW.WriteLine("PerBuildMax = " + Group.findPerm(perbuildmax).trueName.ToLower());
-                            				SW.WriteLine("PerVisitMax = " + Group.findPerm(pervisitmax).trueName.ToLower());
-                            				SW.WriteLine("Guns = " + guns.ToString());
+                            SW.WriteLine("PerBuildMax = " + Group.findPerm(perbuildmax).trueName.ToLower());
+                            SW.WriteLine("PerVisitMax = " + Group.findPerm(pervisitmax).trueName.ToLower());
+                            SW.WriteLine("Guns = " + guns.ToString());
 						}
 
 						Server.s.Log("SAVED: Level \"" + name + "\". (" + players.Count + "/" + Player.players.Count + "/" + Server.players + ")");

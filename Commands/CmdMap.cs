@@ -28,6 +28,7 @@ namespace MCForge
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdMap() { }
+        public static bool gettinginfo = false;
 
         public override void Use(Player p, string message)
         {
@@ -47,20 +48,22 @@ namespace MCForge
                 }
                 else
                 {
+                    gettinginfo = true;
                     Player.SendMessage(p, "MOTD: &b" + foundLevel.motd);
-                    Player.SendMessage(p, "Finite mode: " + FoundCheck(foundLevel.finite));
-                    Player.SendMessage(p, "Animal AI: " + FoundCheck(foundLevel.ai));
-                    Player.SendMessage(p, "Edge water: " + FoundCheck(foundLevel.edgeWater));
-                    Player.SendMessage(p, "Grass growing: " + FoundCheck(foundLevel.GrassGrow));
+                    Player.SendMessage(p, "Finite mode: " + FoundCheck(foundLevel, foundLevel.finite));
+                    Player.SendMessage(p, "Animal AI: " + FoundCheck(foundLevel, foundLevel.ai));
+                    Player.SendMessage(p, "Edge water: " + FoundCheck(foundLevel, foundLevel.edgeWater));
+                    Player.SendMessage(p, "Grass growing: " + FoundCheck(foundLevel, foundLevel.GrassGrow));
                     Player.SendMessage(p, "Physics speed: &b" + foundLevel.speedPhysics);
                     Player.SendMessage(p, "Physics overload: &b" + foundLevel.overload);
-                    Player.SendMessage(p, "Survival death: " + FoundCheck(foundLevel.Death) + "(Fall: " + foundLevel.fall + ", Drown: " + foundLevel.drown + ")");
-                    Player.SendMessage(p, "Killer blocks: " + FoundCheck(foundLevel.Killer));
-                    Player.SendMessage(p, "Unload: " + FoundCheck(foundLevel.unload));
-                    Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel.rp));
-                    Player.SendMessage(p, "Instant building: " + FoundCheck(foundLevel.Instant));
-                    Player.SendMessage(p, "RP chat: " + FoundCheck(!foundLevel.worldChat));
-                    Player.SendMessage(p, "Guns: " + FoundCheck(foundLevel.guns));
+                    Player.SendMessage(p, "Survival death: " + FoundCheck(foundLevel, foundLevel.Death) + "(Fall: " + foundLevel.fall + ", Drown: " + foundLevel.drown + ")");
+                    Player.SendMessage(p, "Killer blocks: " + FoundCheck(foundLevel, foundLevel.Killer));
+                    Player.SendMessage(p, "Unload: " + FoundCheck(foundLevel, foundLevel.unload));
+                    Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel, foundLevel.rp));
+                    Player.SendMessage(p, "Instant building: " + FoundCheck(foundLevel, foundLevel.Instant));
+                    Player.SendMessage(p, "RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat));
+                    Player.SendMessage(p, "Guns: " + FoundCheck(foundLevel, foundLevel.guns));
+                    gettinginfo = false;
                     return;
                 }
             }
@@ -84,10 +87,10 @@ namespace MCForge
                 switch (foundStart)
                 {
                     case "theme": foundLevel.theme = message.Substring(message.IndexOf(' ') + 1); foundLevel.ChatLevel("Map theme: &b" + foundLevel.theme); break;
-                    case "finite": foundLevel.finite = !foundLevel.finite; foundLevel.ChatLevel("Finite mode: " + FoundCheck(foundLevel.finite)); break;
-                    case "ai": foundLevel.ai = !foundLevel.ai; foundLevel.ChatLevel("Animal AI: " + FoundCheck(foundLevel.ai)); break;
-                    case "edge": foundLevel.edgeWater = !foundLevel.edgeWater; foundLevel.ChatLevel("Edge water: " + FoundCheck(foundLevel.edgeWater)); break;
-                    case "grass": foundLevel.GrassGrow = !foundLevel.GrassGrow; foundLevel.ChatLevel("Growing grass: " + FoundCheck(foundLevel.GrassGrow)); break;
+                    case "finite": foundLevel.finite = !foundLevel.finite; foundLevel.ChatLevel("Finite mode: " + FoundCheck(foundLevel, foundLevel.finite)); break;
+                    case "ai": foundLevel.ai = !foundLevel.ai; foundLevel.ChatLevel("Animal AI: " + FoundCheck(foundLevel, foundLevel.ai)); break;
+                    case "edge": foundLevel.edgeWater = !foundLevel.edgeWater; foundLevel.ChatLevel("Edge water: " + FoundCheck(foundLevel, foundLevel.edgeWater)); break;
+                    case "grass": foundLevel.GrassGrow = !foundLevel.GrassGrow; foundLevel.ChatLevel("Growing grass: " + FoundCheck(foundLevel, foundLevel.GrassGrow)); break;
                     case "ps":
                     case "physicspeed":
                         if (int.Parse(message.Split(' ')[1]) < 10) { Player.SendMessage(p, "Cannot go below 10"); return; }
@@ -105,18 +108,18 @@ namespace MCForge
                         else foundLevel.motd = message.Substring(message.IndexOf(' ') + 1);
                         foundLevel.ChatLevel("Map MOTD: &b" + foundLevel.motd);
                         break;
-                    case "death": foundLevel.Death = !foundLevel.Death; foundLevel.ChatLevel("Survival death: " + FoundCheck(foundLevel.Death)); break;
-                    case "killer": foundLevel.Killer = !foundLevel.Killer; foundLevel.ChatLevel("Killer blocks: " + FoundCheck(foundLevel.Killer)); break;
+                    case "death": foundLevel.Death = !foundLevel.Death; foundLevel.ChatLevel("Survival death: " + FoundCheck(foundLevel, foundLevel.Death)); break;
+                    case "killer": foundLevel.Killer = !foundLevel.Killer; foundLevel.ChatLevel("Killer blocks: " + FoundCheck(foundLevel, foundLevel.Killer)); break;
                     case "fall": foundLevel.fall = int.Parse(message.Split(' ')[1]); foundLevel.ChatLevel("Fall distance: &b" + foundLevel.fall); break;
                     case "drown": foundLevel.drown = int.Parse(message.Split(' ')[1]) * 10; foundLevel.ChatLevel("Drown time: &b" + (foundLevel.drown / 10)); break;
-                    case "unload": foundLevel.unload = !foundLevel.unload; foundLevel.ChatLevel("Auto unload: " + FoundCheck(foundLevel.unload)); break;
+                    case "unload": foundLevel.unload = !foundLevel.unload; foundLevel.ChatLevel("Auto unload: " + FoundCheck(foundLevel, foundLevel.unload)); break;
                     case "rp":
-                    case "restartphysics": foundLevel.rp = !foundLevel.rp; foundLevel.ChatLevel("Auto physics: " + FoundCheck(foundLevel.rp)); break;
+                    case "restartphysics": foundLevel.rp = !foundLevel.rp; foundLevel.ChatLevel("Auto physics: " + FoundCheck(foundLevel, foundLevel.rp)); break;
                     case "instant":
                         if (p.group.Permission < LevelPermission.Admin) { Player.SendMessage(p, "This is reserved for Super+"); return; }
-                        foundLevel.Instant = !foundLevel.Instant; foundLevel.ChatLevel("Instant building: " + FoundCheck(foundLevel.Instant)); break;
+                        foundLevel.Instant = !foundLevel.Instant; foundLevel.ChatLevel("Instant building: " + FoundCheck(foundLevel, foundLevel.Instant)); break;
                     case "chat":
-                        foundLevel.worldChat = !foundLevel.worldChat; foundLevel.ChatLevel("RP chat: " + FoundCheck(!foundLevel.worldChat)); break;
+                        foundLevel.worldChat = !foundLevel.worldChat; foundLevel.ChatLevel("RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat)); break;
                     default:
                         Player.SendMessage(p, "Could not find option entered.");
                         return;
@@ -126,8 +129,12 @@ namespace MCForge
             }
             catch { Player.SendMessage(p, "INVALID INPUT"); }
         }
-        public string FoundCheck(bool check)
+        public string FoundCheck(Level level, bool check)        
         {
+            if (gettinginfo == false)
+            {
+                Level.SaveSettings(level);
+            }
             if (check) return "&aON";
             else return "&cOFF";
         }
