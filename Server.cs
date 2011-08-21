@@ -807,10 +807,8 @@ processThread.Start();
                 bool begin = false;
                 try
                 {
-                    using (p = new Player(listen.EndAccept(result)))
-                    {
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
-                    }
+					p = new Player(listen.EndAccept(result));
+                    listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
                 catch (SocketException e)
