@@ -54,6 +54,17 @@ namespace MCForge
                 Player.SendMessage(p, "Build rank = " + Group.findPerm(foundLevel.permissionbuild).color + Group.findPerm(foundLevel.permissionbuild).trueName + Server.DefaultColor + " : Visit rank = " + Group.findPerm(foundLevel.permissionvisit).color + Group.findPerm(foundLevel.permissionvisit).trueName);
             } catch (Exception e) { Server.ErrorLog(e); }
 
+            Player.SendMessage(p, "BuildMax Rank = " + Group.findPerm(foundLevel.perbuildmax).color + Group.findPerm(foundLevel.perbuildmax).trueName + Server.DefaultColor + " : VisitMax Rank = " + Group.findPerm(foundLevel.pervisitmax).color + Group.findPerm(foundLevel.pervisitmax).trueName);
+
+            if (foundLevel.guns == true)
+            {
+                Player.SendMessage(p, "&cGuns &eare &aonline &eon " + foundLevel.name + ".");
+            }
+            else
+            {
+                Player.SendMessage(p, "&cGuns &eare &coffline &eon " + foundLevel.name + ".");
+            }
+
             if (Directory.Exists(@Server.backupLocation + "/" + foundLevel.name))
             {
                 int latestBackup = Directory.GetDirectories(@Server.backupLocation + "/" + foundLevel.name).Length;
