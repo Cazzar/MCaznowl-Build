@@ -111,9 +111,9 @@
     <Compile Include="Commands\CmdLoginMessage.cs" />
     <Compile Include="Commands\CmdLogoutMessage.cs" />
     <Compile Include="Commands\CmdMain.cs" />
-	<Compile Include="Commands\CmdPerbuildMax.cs" />
-	<Compile Include="Commands\CmdPervisitMax.cs" />
-	<Compile Include="Commands\CmdQuick.cs" />
+    <Compile Include="Commands\CmdPerbuildMax.cs" />
+    <Compile Include="Commands\CmdPervisitMax.cs" />
+    <Compile Include="Commands\CmdQuick.cs" />
     <Compile Include="Commands\CmdMaze.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
     <Compile Include="Commands\CmdMoveAll.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Commands\CmdP2P.cs" />
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
+    <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
     <Compile Include="Commands\CmdPossess.cs" />
