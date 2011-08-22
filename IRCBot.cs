@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using Meebey.SmartIrc4net;
 using System.Threading;
+using System.IO;
 
 namespace MCForge
 {
@@ -101,7 +102,8 @@ namespace MCForge
         }
         void OnDisconnected(object sender, EventArgs e)
         {
-            try { irc.Connect(server, 6667); }
+            Server.s.Log("Disconnected from IRC");
+            try { irc.Connect(server, Server.ircPort); }
             catch { Console.WriteLine("Failed to reconnect to IRC"); }
         }
 
@@ -294,7 +296,7 @@ namespace MCForge
                             }
                             break;
                         case "load":
-                            if (Level.Find(msg.Split(' ')[0]) != null)
+                            if (File.Exists("levels/" + msg.Split(' ')[0] + ".lvl"))
                             {
                                 Command.all.Find("load").Use(null, msg);
                             }
