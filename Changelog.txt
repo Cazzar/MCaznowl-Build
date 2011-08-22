@@ -1,6 +1,7 @@
 v5.1.0.1
 - Added load-on-/goto option for maps, defaults to on and requires the "Load on /goto" server option enabled to work. Disabling the option on a map will prevent it from being loaded with /goto
 - Added Zombie Survival mode! :D Use /zombiegame to start it, there are several other commands as well
+- Fixed AFK kick!!
 
 v5.1.0.0
 - Fixed a bug that caused the console to crash, when clicking on a player
