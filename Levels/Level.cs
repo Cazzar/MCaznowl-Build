@@ -233,8 +233,11 @@ namespace MCForge
 
             if (changed)
             {
-                Save();
-                saveChanges();
+                if (!Server.noLevelSaving && !Server.ZombieModeOn)
+                {
+                    Save();
+                    saveChanges();
+                }
             }
             physThread.Abort();
             physThread.Join();

@@ -43,7 +43,10 @@ namespace MCForge
                     Thread.Sleep(_interval);
                     Server.ml.Queue(delegate
                     {
-                        Run();
+                        if (!Server.noLevelSaving && !Server.ZombieModeOn)
+                        {
+                            Run();
+                        }
                     });
 
                     if (Player.players.Count > 0)

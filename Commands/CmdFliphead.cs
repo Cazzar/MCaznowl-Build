@@ -1,4 +1,4 @@
-/*
+﻿/*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -19,42 +19,27 @@ using System;
 
 namespace MCForge
 {
-    public class CmdSpawn : Command
+    public class CmdFlipHead : Command
     {
-        public override string name { get { return "spawn"; } }
-        public override string shortcut { get { return ""; } }
+        public override string name { get { return "fliphead"; } }
+        public override string shortcut { get { return "fh"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public CmdSpawn() { }
+        public CmdFlipHead() { }
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
-            ushort x = (ushort)((0.5 + p.level.spawnx) * 32);
-            ushort y = (ushort)((1 + p.level.spawny) * 32);
-            ushort z = (ushort)((0.5 + p.level.spawnz) * 32);
-            if (!p.referee)
-            {
-                if (Server.infection)
-                {
-                    CmdZombieGame.infect.Add(p);
-                    CmdZombieGame.players.Remove(p);
-                    p.color = c.red;
-                    Player.GlobalDie(p, false);
-                    Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                }
-            }
-            unchecked
-            {
-                p.SendPos((byte)-1, x, y, z,
-                            p.level.rotx,
-                            p.level.roty);
-            }
+            p.flipHead = !p.flipHead;
+
+            if (p.flipHead)
+                p.SendMessage("Your head was broken!");
+            else
+                p.SendMessage("Your head was healed!");
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/spawn - Teleports yourself to the spawn location.");
+            Player.SendMessage(p, "/fliphead - Does as it says on the tin (only works while infected)");
         }
     }
 }

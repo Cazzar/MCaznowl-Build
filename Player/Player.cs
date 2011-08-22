@@ -176,6 +176,22 @@ namespace MCForge
         public ushort countdowntempz;
         public bool countdownsettemps = false;
 
+        //Zombie
+        public bool referee = false;
+        public string Original = "";
+        public int blockCount = 50;
+        public bool voted = false;
+        public int blocksStacked = 0;
+        public int infectThisRound = 0;
+        public int lastYblock = 0;
+        public int lastXblock = 0;
+        public int lastZblock = 0;
+        public bool infected = false;
+        public bool aka = false;
+        public bool flipHead = true;
+        public int playersInfected = 1;
+        public int NoClipcount = 0;
+
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
@@ -313,6 +329,30 @@ namespace MCForge
             if (Server.afkset.Contains(p.name))
                 return "afk";
             return "active";
+        }
+
+        public bool CheckIfInsideBlock(Player p)
+        {
+            int px = p.pos[0] / 32;
+            int py = p.pos[1] / 32;
+            int pz = p.pos[2] / 32;
+            ushort x, y, z;
+            x = (ushort)px;
+            y = (ushort)py;
+            z = (ushort)pz;
+            y = (ushort)Math.Round((decimal)(((y * 32) + 4) / 32));
+
+            byte b = this.level.GetTile(x, (ushort)((int)y - 1), z);
+            byte b1 = this.level.GetTile(x, (ushort)((int)y - 2), z);
+
+            if (!Block.Walkthrough(b) && !Block.Walkthrough(b1))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //This is so that plugin devs can declare a player without needing a socket..
@@ -1036,6 +1076,14 @@ namespace MCForge
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
             }
+            this.Original = this.name;
+            if (Server.infection == true)
+            {
+                CmdZombieGame.infect.Add(this);
+                CmdZombieGame.players.Remove(this);
+                this.color = c.red;
+                Player.GlobalSpawn(this, this.pos[0], this.pos[1], this.pos[2], this.rot[0], this.rot[1], false);
+            }
         }
 
         public void SetPrefix()
@@ -1060,6 +1108,33 @@ namespace MCForge
                 ushort z = NTHO(message, 4);
                 byte action = message[6];
                 byte type = message[7];
+
+                if (action == 1 && Server.ZombieModeOn)
+                {
+                    if (!referee)
+                    {
+                        if (lastYblock == y - 1 && lastXblock == x && lastZblock == z)
+                        {
+                            blocksStacked++;
+                        }
+                        else
+                        {
+                            blocksStacked = 0;
+                        }
+                        if (blocksStacked == 2)
+                        {
+                            SendMessage("You are pillaring! Stop before you get kicked!");
+                        }
+                        if (blocksStacked == 4)
+                        {
+                            Command.all.Find("kick").Use(null, Original + " No pillaring allowed!");
+                        }
+                    }
+                }
+
+                lastYblock = y;
+                lastXblock = x;
+                lastZblock = z;
 
                 manualChange(x, y, z, action, type);
             }
@@ -1097,6 +1172,7 @@ namespace MCForge
                 SendBlockchange(x, y, z, b);
                 return;
             }
+
             if (Server.verifyadmins == true)
             {
                 if (this.adminpen == true)
@@ -1104,6 +1180,27 @@ namespace MCForge
                     SendBlockchange(x, y, z, b);
                     this.SendMessage("&cYou must use &a/pass [Password]&c to verify!");
                     return;
+                }
+            }
+
+            if (Server.ZombieModeOn && (action == 1 || (action == 0 && this.painting)))
+            {
+                if (blockCount == 0)
+                {
+                    if (!referee)
+                    {
+                        SendMessage("You have no blocks left.");
+                        SendBlockchange(x, y, z, b); return;
+                    }
+                }
+
+                if (!referee)
+                {
+                    blockCount--;
+                    if (blockCount == 40 || blockCount == 30 || blockCount == 20 || blockCount <= 10 && blockCount >= 0)
+                    {
+                        SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
+                    }
                 }
             }
 
@@ -1478,6 +1575,21 @@ namespace MCForge
                 ushort x = NTHO(message, 1);
                 ushort y = NTHO(message, 3);
                 ushort z = NTHO(message, 5);
+
+                if (!this.referee && Server.noRespawn && Server.ZombieModeOn)
+                {
+                    if (this.pos[0] >= x + 70 || this.pos[0] <= x - 70)
+                    {
+                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
+                        return;
+                    }
+                    if (this.pos[2] >= z + 70 || this.pos[2] <= z - 70)
+                    {
+                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
+                        return;
+                    }
+                }
+
                 byte rotx = message[7];
                 byte roty = message[8];
                 pos = new ushort[3] { x, y, z };
@@ -2622,7 +2734,7 @@ namespace MCForge
                 HTNO(pos[2]).CopyTo(buffer, 5);
                 buffer[7] = rot[0];
 
-                if (Server.flipHead)
+                if (Server.flipHead || (this.flipHead && this.infected))
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[8] = rot[1];
                     else
@@ -2651,7 +2763,7 @@ namespace MCForge
                 buffer = new byte[3]; buffer[0] = id;
                 buffer[1] = rot[0];
 
-                if (Server.flipHead)
+                if (Server.flipHead || (this.flipHead && this.infected))
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[2] = rot[1];
                     else
@@ -2673,7 +2785,7 @@ namespace MCForge
                     Buffer.BlockCopy(System.BitConverter.GetBytes((sbyte)(pos[2] - oldpos[2])), 0, buffer, 3, 1);
                     buffer[4] = rot[0];
 
-                    if (Server.flipHead)
+                    if (Server.flipHead || (this.flipHead && this.infected))
                         if (rot[1] > 64 && rot[1] < 192)
                             buffer[5] = rot[1];
                         else
@@ -2713,9 +2825,78 @@ namespace MCForge
             if (MessageHasBadColorCodes(from, message))
                 return;
 
+            if (Server.voting == true)
+            {
+                if (message.ToLower() == "yes" || message.ToLower() == "ye" || message.ToLower() == "y")
+                {
+                    if (!from.voted)
+                    {
+                        Server.YesVotes++;
+                        SendMessage(from, c.red + "Thanks For Voting!");
+                        from.voted = true;
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else if (message.ToLower() == "no" || message.ToLower() == "n")
+                {
+                    if (!from.voted)
+                    {
+                        Server.NoVotes++;
+                        SendMessage(from, c.red + "Thanks For Voting!");
+                        from.voted = true;
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (Server.votingforlevel == true)
+            {
+                if (message.ToLower() == "1" || message.ToLower() == "one")
+                {
+                    if (!from.voted)
+                    {
+                        Server.YesLevelVotes++;
+                        SendMessage(from, c.red + "Thanks For Voting!");
+                        from.voted = true;
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else if (message.ToLower() == "2" || message.ToLower() == "two")
+                {
+                    if (!from.voted)
+                    {
+                        Server.NoLevelVotes++;
+                        SendMessage(from, c.red + "Thanks For Voting!");
+                        from.voted = true;
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (showname)
             {
-                message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
+                String referee = "";
+                if (from.referee)
+                {
+                    referee = c.green + "[Referee] ";
+                }
+                message = referee + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
             }
             players.ForEach(delegate(Player p)
             {
@@ -3110,7 +3291,28 @@ namespace MCForge
             {
                 if (p.Loading && p != from) { return; }
                 if (p.level != from.level || (from.hidden && !self)) { return; }
-                if (p != from) { p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty); }
+                if (p != from)
+                {
+                    if (Server.ZombieModeOn)
+                    {
+                        if (from.infected)
+                        {
+                            if (Server.ZombieName != "")
+                                p.SendSpawn(from.id, c.red + Server.ZombieName + possession, x, y, z, rotx, roty);
+                            else
+                                p.SendSpawn(from.id, c.red + from.name + possession, x, y, z, rotx, roty);
+                            return;
+                        }
+                        else if (from.referee)
+                            return;
+                        else
+                        {
+                            p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
+                            return;
+                        }
+                    }
+                    p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
+                }
                 else if (self)
                 {
                     if (!p.ignorePermission)
@@ -3193,6 +3395,19 @@ namespace MCForge
 
         public void leftGame(string kickString = "", bool skip = false)
         {
+            Server.count = 1;
+
+            if (CmdZombieGame.players.Contains(this))
+            {
+                this.color = this.group.color;
+                CmdZombieGame.players.Remove(this);
+            }
+            else if (CmdZombieGame.infect.Contains(this))
+            {
+                this.color = this.group.color;
+                CmdZombieGame.infect.Remove(this);
+            }
+
             try
             {
                 if (disconnected)
@@ -3359,6 +3574,22 @@ namespace MCForge
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
+                }
+
+                if (Server.infection == true)
+                {
+                    int infectCount = 0;
+                    CmdZombieGame.infect.ForEach(delegate(Player player)
+                    {
+                        infectCount = infectCount + 1;
+                    });
+
+                    if (infectCount <= 1 && Server.count == 1)
+                    {
+                        CmdZombieGame.InfectedPlayerDC();
+                    }
+                    Server.count++;
+                    return;
                 }
 
             }
