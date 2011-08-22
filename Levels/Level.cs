@@ -107,6 +107,7 @@ namespace MCForge
         public bool worldChat = true;
         public bool fishstill = false;
         public bool guns = true;
+        public bool loadOnGoto = true;
         
         //Pervisit and Perbuild Maxes
         public LevelPermission perbuildmax = LevelPermission.Nobody;
@@ -501,6 +502,7 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
             {
                 SW.WriteLine("#Level properties for " + level.name);
+                SW.WriteLine("#Drown-time in seconds is [drown time] * 200 / 3 / 1000");
                 SW.WriteLine("Theme = " + level.theme);
                 SW.WriteLine("Physics = " + level.physics.ToString());
                 SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
@@ -521,6 +523,7 @@ namespace MCForge
                 SW.WriteLine("PerBuildMax = " + Group.findPerm(level.perbuildmax).trueName.ToLower());
                 SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
                 SW.WriteLine("Guns = " + level.guns.ToString());
+                SW.WriteLine("LoadOnGoto = " + level.loadOnGoto);
             }
         }
 
@@ -635,31 +638,7 @@ namespace MCForge
 						File.Delete(path);
 						File.Move(path + ".back", path);
 
-						File.Create("levels/level properties/" + name + ".properties").Dispose();
-						using (StreamWriter SW = File.CreateText("levels/level properties/" + name + ".properties"))
-						{
-							SW.WriteLine("#Level properties for " + name);
-							SW.WriteLine("Theme = " + theme);
-							SW.WriteLine("Physics = " + physics.ToString());
-							SW.WriteLine("Physics speed = " + speedPhysics.ToString());
-							SW.WriteLine("Physics overload = " + overload.ToString());
-							SW.WriteLine("Finite mode = " + finite.ToString());
-							SW.WriteLine("Animal AI = " + ai.ToString());
-							SW.WriteLine("Edge water = " + edgeWater.ToString());
-							SW.WriteLine("Survival death = " + Death.ToString());
-							SW.WriteLine("Fall = " + fall.ToString());
-							SW.WriteLine("Drown = " + drown.ToString());
-							SW.WriteLine("MOTD = " + motd);
-							SW.WriteLine("JailX = " + jailx.ToString());
-							SW.WriteLine("JailY = " + jaily.ToString());
-							SW.WriteLine("JailZ = " + jailz.ToString());
-							SW.WriteLine("Unload = " + unload);
-							SW.WriteLine("PerBuild = " + PermissionToName(permissionbuild));
-							SW.WriteLine("PerVisit = " + PermissionToName(permissionvisit));
-                            SW.WriteLine("PerBuildMax = " + Group.findPerm(perbuildmax).trueName.ToLower());
-                            SW.WriteLine("PerVisitMax = " + Group.findPerm(pervisitmax).trueName.ToLower());
-                            SW.WriteLine("Guns = " + guns.ToString());
-						}
+                        SaveSettings(this);
 
 						Server.s.Log("SAVED: Level \"" + name + "\". (" + players.Count + "/" + Player.players.Count + "/" + Server.players + ")");
 						changed = false;
@@ -888,14 +867,17 @@ namespace MCForge
 												if (PermissionFromName(value) != LevelPermission.Null) level.permissionvisit = PermissionFromName(value);
 												break;
 											case "perbuildmax":
-                                                						if (PermissionFromName(value) != LevelPermission.Null) level.perbuildmax = PermissionFromName(value);
-                                                						break;
-                                            						case "pervisitmax":
-                                                						if (PermissionFromName(value) != LevelPermission.Null) level.pervisitmax = PermissionFromName(value);
-                                                						break;
-                                            						case "guns":
-                                                						level.guns = bool.Parse(value);
-                                               						        break;
+                                                if (PermissionFromName(value) != LevelPermission.Null) level.perbuildmax = PermissionFromName(value);
+                                                break;
+                                            case "pervisitmax":
+                                                if (PermissionFromName(value) != LevelPermission.Null) level.pervisitmax = PermissionFromName(value);
+                                                break;
+                                            case "guns":
+                                                level.guns = bool.Parse(value);
+                                               	break;
+                                            case "loadongoto":
+                                                level.loadOnGoto = bool.Parse(value);
+                                                break;
 										}
 									}
 								}
@@ -913,6 +895,39 @@ namespace MCForge
                 finally { fs.Close(); }
             }
             else { Server.s.Log("ERROR loading level."); return null; }
+        }
+
+        public static bool CheckLoadOnGoto(string givenName)
+        {
+            try
+            {
+                string foundLocation;
+                foundLocation = "levels/level properties/" + givenName + ".properties";
+                if (!File.Exists(foundLocation))
+                    foundLocation = "levels/level properties/" + givenName;
+                if (!File.Exists(foundLocation))
+                    return true;
+
+                foreach (string line in File.ReadAllLines(foundLocation))
+                {
+                    try
+                    {
+                        if (line[0] != '#')
+                        {
+                            string value = line.Substring(line.IndexOf(" = ") + 3);
+
+                            switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+                            {
+                                case "loadongoto":
+                                    return bool.Parse(value);
+                            }
+                        }
+                    }
+                    catch (Exception e) { Server.ErrorLog(e); }
+                }
+            }
+            catch { }
+            return true;
         }
 
         public void ChatLevel(string message)
