@@ -453,8 +453,11 @@ namespace MCForge
 
                         if (afkCount > Server.afkminutes * 30)
                         {
-                            Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
-                            afkCount = 0;
+                        	if (this != null && !this.name.Equals(""))
+                        	{
+                            		Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
+                            		afkCount = 0;
+                        	}
                         }
                     }
                 };
