@@ -575,9 +575,6 @@ namespace MCForge
 
         public override void Use(Player theP, string message)
         {
-            if (Server.ZombieModeOn)
-            {
-                theP.SendMessage("Zombie Survival is currently in progress!");
                 int num = message.Split(' ').Length;
                 if (num >= 1)
                 {
@@ -593,6 +590,11 @@ namespace MCForge
                         theP.SendMessage("Stopping Zombie Survival...");
                         Server.ZombieModeOn = false;
                         infiniteRounds = false;
+                        return;
+                    }
+                    else if (Server.ZombieModeOn)
+                    {
+                        theP.SendMessage("Zombie Survival is currently in progress!");
                         return;
                     }
                     else if (strings[0].Equals(""))
@@ -633,7 +635,6 @@ namespace MCForge
                 Thread t = new Thread(ZombieMob);
                 p = theP;
                 t.Start(theP);
-            }
         }
 
         public override void Help(Player p)
