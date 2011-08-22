@@ -91,9 +91,16 @@ namespace MCForge
                 }
                 else if (Server.AutoLoad)
                 {
-                    Command.all.Find("load").Use(p, message);
-                    foundLevel = Level.Find(message);
-                    if (foundLevel != null) Use(p, message);
+                    if (!File.Exists("levels/" + message + ".lvl"))
+                        Player.SendMessage(p, "Level \"" + message + "\" doesn't exist!");
+                    else if (Level.Find(message) != null || Level.CheckLoadOnGoto(message))
+                    {
+                        Command.all.Find("load").Use(p, message);
+                        foundLevel = Level.Find(message);
+                        if (foundLevel != null) Use(p, message);
+                    }
+                    else
+                        Player.SendMessage(p, "Level \"" + message + "\" cannot be loaded using /goto!");
                 }
                 else Player.SendMessage(p, "There is no level \"" + message + "\" loaded.");
 

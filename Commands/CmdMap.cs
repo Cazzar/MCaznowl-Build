@@ -59,6 +59,7 @@ namespace MCForge
                     Player.SendMessage(p, "Survival death: " + FoundCheck(foundLevel, foundLevel.Death) + "(Fall: " + foundLevel.fall + ", Drown: " + foundLevel.drown + ")");
                     Player.SendMessage(p, "Killer blocks: " + FoundCheck(foundLevel, foundLevel.Killer));
                     Player.SendMessage(p, "Unload: " + FoundCheck(foundLevel, foundLevel.unload));
+                    Player.SendMessage(p, "Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto));
                     Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel, foundLevel.rp));
                     Player.SendMessage(p, "Instant building: " + FoundCheck(foundLevel, foundLevel.Instant));
                     Player.SendMessage(p, "RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat));
@@ -120,6 +121,9 @@ namespace MCForge
                         foundLevel.Instant = !foundLevel.Instant; foundLevel.ChatLevel("Instant building: " + FoundCheck(foundLevel, foundLevel.Instant)); break;
                     case "chat":
                         foundLevel.worldChat = !foundLevel.worldChat; foundLevel.ChatLevel("RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat)); break;
+                    case "autoload":
+                    case "loadongoto":
+                        foundLevel.loadOnGoto = !foundLevel.loadOnGoto; foundLevel.ChatLevel("Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto)); break;
                     default:
                         Player.SendMessage(p, "Could not find option entered.");
                         return;
@@ -152,8 +156,10 @@ namespace MCForge
             Player.SendMessage(p, "MOTD will set a custom motd for the map. (leave blank to reset)");
             Player.SendMessage(p, "Death will allow survival-style dying (falling, drowning)");
             Player.SendMessage(p, "Fall/drown set the distance/time before dying from each.");
+            Player.SendMessage(p, "Drowning value is 15 for one second of air.");
             Player.SendMessage(p, "Killer turns killer blocks on and off.");
             Player.SendMessage(p, "Unload sets whether the map unloads when no one's there.");
+            Player.SendMessage(p, "Load on /goto sets whether the map can be loaded when some uses /goto. Only works if the load on /goto server option is enabled.");
             Player.SendMessage(p, "RP sets whether the physics auto-start for the map");
             Player.SendMessage(p, "Instant mode works by not updating everyone's screens");
             Player.SendMessage(p, "Chat sets the map to recieve no messages from other maps");
