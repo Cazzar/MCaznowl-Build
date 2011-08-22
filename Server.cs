@@ -802,17 +802,9 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-                Byte[] ob;
-                string code, name;
-
-                name = " ";
-
-                ob = ASCIIEncoding.Default.GetBytes(Server.salt + name);
-
-                code = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ob)).Replace("-", "").ToLower();
-
-                Log("mc://localhost/" + name + "/" + code);
             });
+            if (startZombieModeOnStartup)
+                Command.all.Find("zombiegame").Use(null, "");
         }
         
         public static bool Setup()
