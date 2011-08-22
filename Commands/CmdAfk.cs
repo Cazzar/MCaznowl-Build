@@ -49,6 +49,7 @@ namespace MCForge
                         }
                         Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is AFK " + message);
                         IRCBot.Say(p.name + " is AFK " + message);
+                        p.afkStart = DateTime.Now;
                         return;
 
                     }
