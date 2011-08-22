@@ -29,7 +29,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Data;
-
+using System.Security.Cryptography;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -138,6 +138,30 @@ public static event OnServerError ServerError = null;
 
         //Color list as a char array
         public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+        //Zombie
+        public static bool queLevel = false;
+        public static bool queZombie = false;
+        public static int PlayedRounds = 0;
+        public static bool infection = false;
+        public static string nextZombie = "";
+        public static string nextLevel = "";
+        public static int YesVotes = 0;
+        public static int NoVotes = 0;
+        public static bool voting = false;
+        public static bool votingforlevel = false;
+        public static int YesLevelVotes = 0;
+        public static int NoLevelVotes = 0;
+        public static string lastPlayerToInfect = "";
+        public static string lastLevelVote1 = "";
+        public static string lastLevelVote2 = "";
+        public static int infectCombo = 0;
+        public static int count = 0;
+        public static bool ZombieModeOn = false;
+        public static bool startZombieModeOnStartup = false;
+        public static bool noRespawn = false;
+        public static bool noLevelSaving = false;
+        public static string ZombieName = "";
 
         //Settings
         #region Server Settings
@@ -778,6 +802,16 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
+                Byte[] ob;
+                string code, name;
+
+                name = " ";
+
+                ob = ASCIIEncoding.Default.GetBytes(Server.salt + name);
+
+                code = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ob)).Replace("-", "").ToLower();
+
+                Log("mc://localhost/" + name + "/" + code);
             });
         }
         
