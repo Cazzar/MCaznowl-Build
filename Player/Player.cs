@@ -438,9 +438,9 @@ namespace MCForge
                     if (Server.afkset.Contains(name))
                     {
                         afkCount = 0;
-                        /*if (Server.afkkick > 0 && group.Permission < LevelPermission.Operator)
+                        if (Server.afkkick > 0 && group.Permission < LevelPermission.Operator)
                             if (afkStart.AddMinutes(Server.afkkick) < DateTime.Now)
-                                Kick("Auto-kick, AFK for " + Server.afkkick + " minutes");*/
+                                Kick("Auto-kick, AFK for " + Server.afkkick + " minutes");
                         if ((oldpos[0] != pos[0] || oldpos[1] != pos[1] || oldpos[2] != pos[2]) && (oldrot[0] != rot[0] || oldrot[1] != rot[1]))
                             Command.all.Find("afk").Use(this, "");
                     }
