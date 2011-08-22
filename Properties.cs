@@ -358,7 +358,7 @@ namespace MCForge
                                 catch { Server.s.Log("irc-port invalid! setting to default."); }
                                 break;
                             case "check-updates":
-                                try { Server.checkUpdates = bool.Parse(value); }
+                                try { Server.autonotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "autoload":
@@ -572,7 +572,7 @@ namespace MCForge
             w.WriteLine("max-guests = " + Server.maxGuests.ToString());
             w.WriteLine("max-maps = " + Server.maps.ToString());
             w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
-            w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
+            w.WriteLine("check-updates = " + Server.autonotify.ToString().ToLower());
             w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
             w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
             w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());

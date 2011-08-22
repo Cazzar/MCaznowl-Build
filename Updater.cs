@@ -48,7 +48,7 @@ namespace MCForge
                                 Server.autoupdate = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "notify":
-                                Server.autonotify = (value.ToLower() == "true") ? true : false;
+                                Server.notifyPlayers = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "restartcountdown":
                                 Server.restartcountdown = value;

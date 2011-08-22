@@ -120,6 +120,7 @@ public static event OnServerError ServerError = null;
         //auto updater stuff
         public static bool autoupdate;
         public static bool autonotify;
+        public static bool notifyPlayers;
         public static string restartcountdown = "";
         public static string selectedrevision = "";
         public static bool autorestart;
