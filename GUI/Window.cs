@@ -142,10 +142,10 @@ namespace MCForge.Gui
             if (File.Exists("Changelog.txt"))
             {
                 txtChangelog.Text = "Changelog for " + Server.Version + ":";
-                /*foreach (string line in File.ReadAllLines(("Changelog.txt")))
+                foreach (string line in File.ReadAllLines(("Changelog.txt")))
                 {
                     txtChangelog.AppendText("\r\n           " + line);
-                }*/
+                }
             }
 
             // Bind player list
