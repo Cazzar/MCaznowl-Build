@@ -888,7 +888,26 @@ namespace MCForge
                 SetPrefix();
                 overallDeath = int.Parse(playerDb.Rows[0]["TotalDeaths"].ToString());
                 overallBlocks = int.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim());
-                cuboidblocks = int.Parse(playerDb.Rows[0]["totalCuboided"].ToString().Trim());
+                try
+                {
+                	cuboidblocks = int.Parse(playerDb.Rows[0]["totalCuboided"].ToString().Trim()); 
+                	
+                }
+                catch
+                {
+                	try
+                	{
+                		cuboidblocks =  Convert.ToInt32((playerDb.Rows[0]["totalCuboided"].ToString()));
+                		
+                	}
+                    catch(Exception e) 
+                    {
+                    	Server.ErrorLog(e);
+                    	
+                    }
+                    
+                }
+
                 money = int.Parse(playerDb.Rows[0]["Money"].ToString());
                 totalKicked = int.Parse(playerDb.Rows[0]["totalKicked"].ToString());
                 SendMessage("Welcome back " + color + prefix + name + Server.DefaultColor + "! You've been here " + totalLogins + " times!");
