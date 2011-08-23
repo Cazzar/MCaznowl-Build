@@ -1045,8 +1045,176 @@ namespace MCForge
         {
             try
             {
+                if (physics == 5)
+                {
+                    #region == INCOMING ==
+                    ushort x, y, z;
+
+                    lastCheck = ListCheck.Count;
+                    ListCheck.ForEach(delegate(Check C)
+                    {
+                        try
+                        {
+                            IntToPos(C.b, out x, out y, out z);
+                            string foundInfo = C.extraInfo;
+                            if (PhysicsUpdate != null)
+                            {
+                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo)) { }
+                                //continue;
+                            }
+                        newPhysic: if (foundInfo != "")
+                            {
+                                int currentLoop = 0;
+                                if (!foundInfo.Contains("wait")) if (blocks[C.b] == Block.air) C.extraInfo = "";
+
+                                bool wait = false; int waitnum = 0;
+                                bool door = false;
+
+                                foreach (string s in C.extraInfo.Split(' '))
+                                {
+                                    if (currentLoop % 2 == 0)
+                                    { //Type of code
+                                        switch (s)
+                                        {
+                                            case "wait":
+                                                wait = true;
+                                                waitnum = int.Parse(C.extraInfo.Split(' ')[currentLoop + 1]);
+                                                break;
+                                            case "door":
+                                                door = true;
+                                                break;
+                                        }
+                                    } currentLoop++;
+                                }
+
+                            startCheck:
+                                if (wait)
+                                {
+                                    int storedInt = 0;
+                                    if (door && C.time < 2)
+                                    {
+                                        storedInt = IntOffset(C.b, -1, 0, 0);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                        storedInt = IntOffset(C.b, 1, 0, 0);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                        storedInt = IntOffset(C.b, 0, 1, 0);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                        storedInt = IntOffset(C.b, 0, -1, 0);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                        storedInt = IntOffset(C.b, 0, 0, 1);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                        storedInt = IntOffset(C.b, 0, 0, -1);
+                                        if (Block.tDoor(blocks[storedInt])) { AddUpdate(storedInt, Block.air, false, "wait 10 door 1 revert " + blocks[storedInt].ToString()); }
+                                    }
+
+                                    if (waitnum <= C.time)
+                                    {
+                                        wait = false;
+                                        C.extraInfo = C.extraInfo.Substring(0, C.extraInfo.IndexOf("wait ")) + C.extraInfo.Substring(C.extraInfo.IndexOf(' ', C.extraInfo.IndexOf("wait ") + 5) + 1);
+                                        //C.extraInfo = C.extraInfo.Substring(8);
+                                        goto startCheck;
+                                    }
+                                    else
+                                    {
+                                        C.time++;
+                                        foundInfo = "";
+                                        goto newPhysic;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                switch (blocks[C.b])
+                                {
+                                    case Block.door_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door2_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door3_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door4_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door5_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door6_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door7_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door8_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door10_air:   //door_air         Change any door blocks nearby into door_air
+                                    case Block.door12_air:
+                                    case Block.door13_air:
+                                    case Block.door_iron_air:
+                                    case Block.door_gold_air:
+                                    case Block.door_cobblestone_air:
+                                    case Block.door_red_air:
+                                    case Block.door_dirt_air:
+                                    case Block.door_grass_air:
+                                    case Block.door_blue_air:
+                                    case Block.door_book_air:
+                                        AnyDoor(C, x, y, z, 16); break;
+                                    case Block.door11_air:
+                                    case Block.door14_air:
+                                        AnyDoor(C, x, y, z, 4, true); break;
+                                    case Block.door9_air:   //door_air         Change any door blocks nearby into door_air
+                                        AnyDoor(C, x, y, z, 4); break;
+
+                                    case Block.odoor1_air:
+                                    case Block.odoor2_air:
+                                    case Block.odoor3_air:
+                                    case Block.odoor4_air:
+                                    case Block.odoor5_air:
+                                    case Block.odoor6_air:
+                                    case Block.odoor7_air:
+                                    case Block.odoor8_air:
+                                    case Block.odoor9_air:
+                                    case Block.odoor10_air:
+                                    case Block.odoor11_air:
+                                    case Block.odoor12_air:
+
+                                    case Block.odoor1:
+                                    case Block.odoor2:
+                                    case Block.odoor3:
+                                    case Block.odoor4:
+                                    case Block.odoor5:
+                                    case Block.odoor6:
+                                    case Block.odoor7:
+                                    case Block.odoor8:
+                                    case Block.odoor9:
+                                    case Block.odoor10:
+                                    case Block.odoor11:
+                                    case Block.odoor12:
+                                        odoor(C); break;
+                                    default:    //non special blocks are then ignored, maybe it would be better to avoid getting here and cutting down the list
+                                        if (!C.extraInfo.Contains("wait")) C.time = 255;
+                                        break;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            ListCheck.Remove(C);
+                            //Server.s.Log(e.Message);
+                        }
+
+                    });
+
+                    ListCheck.RemoveAll(Check => Check.time == 255);  //Remove all that are finished with 255 time
+
+                    lastUpdate = ListUpdate.Count;
+                    ListUpdate.ForEach(delegate(Update C)
+                    {
+                        try
+                        {
+                            IntToPos(C.b, out x, out y, out z);
+                            Blockchange(x, y, z, C.type, false, C.extraInfo);
+                        }
+                        catch
+                        {
+                            Server.s.Log("Phys update issue");
+                        }
+                    });
+
+                    ListUpdate.Clear();
+                    #endregion
+                    return;
+                }
                 if (physics > 0)
                 {
+                    #region == INCOMING ==
                     ushort x, y, z; int mx, my, mz;
 
                     Random rand = new Random();
@@ -1205,8 +1373,6 @@ namespace MCForge
                             }
                             else
                             {
-                                List<byte> blocklist = new List<byte>();
-                                
                                 switch (blocks[C.b])
                                 {
                                     case Block.air:         //Placed air
@@ -1250,12 +1416,7 @@ namespace MCForge
                                         break;
 
                                     case Block.water:         //Active_water
-                                        if (physics == 5) Blockchange(x, y, z, Block.water); return;
                                     case Block.activedeathwater:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.activedeathwater); return;
-                                        }
                                         //initialy checks if block is valid
                                         if (!finite)
                                         {
@@ -1282,10 +1443,6 @@ namespace MCForge
                                         break;
 
                                     case Block.WaterDown:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.WaterDown); return;
-                                        }
                                         rand = new Random();
 
                                         if (GetTile(x, (ushort)(y - 1), z) == Block.air)
@@ -1311,10 +1468,6 @@ namespace MCForge
                                         break;
 
                                     case Block.LavaDown:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.LavaDown); return;
-                                        }
                                         rand = new Random();
 
                                         if (GetTile(x, (ushort)(y - 1), z) == Block.air)
@@ -1340,10 +1493,6 @@ namespace MCForge
                                         break;
 
                                     case Block.WaterFaucet:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.WaterFaucet); return;
-                                        }
                                         //rand = new Random();
                                         C.time++;
                                         if (C.time < 2) break;
@@ -1361,10 +1510,6 @@ namespace MCForge
                                         break;
 
                                     case Block.LavaFaucet:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.LavaFaucet); return;
-                                        }
                                         //rand = new Random();
                                         C.time++;
                                         if (C.time < 2) break;
@@ -1382,12 +1527,7 @@ namespace MCForge
                                         break;
 
                                     case Block.lava:         //Active_lava
-                                        if (physics == 5) Blockchange(x, y, z, Block.lava); return;
                                     case Block.activedeathlava:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.activedeathlava); return;
-                                        }
                                         //initialy checks if block is valid
                                         if (C.time < 4) { C.time++; break; }
                                         if (!finite)
@@ -1406,10 +1546,6 @@ namespace MCForge
                                         break;
                                     #region fire
                                     case Block.fire:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.fire); return;
-                                        }
                                         if (C.time < 2) { C.time++; break; }
 
                                         storedRand = rand.Next(1, 20);
@@ -1521,37 +1657,37 @@ namespace MCForge
 
                                         if (physics >= 2)
                                         {
-                                                if (C.time < 4) { C.time++; break; }
+                                            if (C.time < 4) { C.time++; break; }
 
-                                                if (Block.LavaKill(GetTile((ushort)(x - 1), y, z)))
-                                                    AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.fire);
-                                                else if (GetTile((ushort)(x - 1), y, z) == Block.tnt)
-                                                    MakeExplosion((ushort)(x - 1), y, z, -1);
+                                            if (Block.LavaKill(GetTile((ushort)(x - 1), y, z)))
+                                                AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.fire);
+                                            else if (GetTile((ushort)(x - 1), y, z) == Block.tnt)
+                                                MakeExplosion((ushort)(x - 1), y, z, -1);
 
-                                                if (Block.LavaKill(GetTile((ushort)(x + 1), y, z)))
-                                                    AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.fire);
-                                                else if (GetTile((ushort)(x + 1), y, z) == Block.tnt)
-                                                    MakeExplosion((ushort)(x + 1), y, z, -1);
+                                            if (Block.LavaKill(GetTile((ushort)(x + 1), y, z)))
+                                                AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.fire);
+                                            else if (GetTile((ushort)(x + 1), y, z) == Block.tnt)
+                                                MakeExplosion((ushort)(x + 1), y, z, -1);
 
-                                                if (Block.LavaKill(GetTile(x, (ushort)(y - 1), z)))
-                                                    AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.fire);
-                                                else if (GetTile(x, (ushort)(y - 1), z) == Block.tnt)
-                                                    MakeExplosion(x, (ushort)(y - 1), z, -1);
+                                            if (Block.LavaKill(GetTile(x, (ushort)(y - 1), z)))
+                                                AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.fire);
+                                            else if (GetTile(x, (ushort)(y - 1), z) == Block.tnt)
+                                                MakeExplosion(x, (ushort)(y - 1), z, -1);
 
-                                                if (Block.LavaKill(GetTile(x, (ushort)(y + 1), z)))
-                                                    AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.fire);
-                                                else if (GetTile(x, (ushort)(y + 1), z) == Block.tnt)
-                                                    MakeExplosion(x, (ushort)(y + 1), z, -1);
+                                            if (Block.LavaKill(GetTile(x, (ushort)(y + 1), z)))
+                                                AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.fire);
+                                            else if (GetTile(x, (ushort)(y + 1), z) == Block.tnt)
+                                                MakeExplosion(x, (ushort)(y + 1), z, -1);
 
-                                                if (Block.LavaKill(GetTile(x, y, (ushort)(z - 1))))
-                                                    AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.fire);
-                                                else if (GetTile(x, y, (ushort)(z - 1)) == Block.tnt)
-                                                    MakeExplosion(x, y, (ushort)(z - 1), -1);
+                                            if (Block.LavaKill(GetTile(x, y, (ushort)(z - 1))))
+                                                AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.fire);
+                                            else if (GetTile(x, y, (ushort)(z - 1)) == Block.tnt)
+                                                MakeExplosion(x, y, (ushort)(z - 1), -1);
 
-                                                if (Block.LavaKill(GetTile(x, y, (ushort)(z + 1))))
-                                                    AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.fire);
-                                                else if (GetTile(x, y, (ushort)(z + 1)) == Block.tnt)
-                                                    MakeExplosion(x, y, (ushort)(z + 1), -1);
+                                            if (Block.LavaKill(GetTile(x, y, (ushort)(z + 1))))
+                                                AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.fire);
+                                            else if (GetTile(x, y, (ushort)(z + 1)) == Block.tnt)
+                                                MakeExplosion(x, y, (ushort)(z + 1), -1);
                                         }
 
                                         C.time++;
@@ -1567,20 +1703,11 @@ namespace MCForge
                                         break;
                                     #endregion
                                     case Block.finiteWater:
-                                        if (physics == 5) Blockchange(x, y, z, Block.finiteWater); return;
                                     case Block.finiteLava:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.finiteLava); return;
-                                        }
                                         finiteMovement(C, x, y, z);
                                         break;
 
                                     case Block.finiteFaucet:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.finiteFaucet); return;
-                                        }
                                         List<int> bufferfinitefaucet = new List<int>();
 
                                         for (int i = 0; i < 6; ++i) bufferfinitefaucet.Add(i);
@@ -1641,10 +1768,6 @@ namespace MCForge
                                         break;
 
                                     case Block.sand:    //Sand
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.sand); return;
-                                        }
                                         if (PhysSand(C.b, Block.sand))
                                         {
                                             PhysAir(PosToInt((ushort)(x + 1), y, z));
@@ -1657,10 +1780,6 @@ namespace MCForge
                                         break;
 
                                     case Block.gravel:    //Gravel
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.gravel); return;
-                                        }
                                         if (PhysSand(C.b, Block.gravel))
                                         {
                                             PhysAir(PosToInt((ushort)(x + 1), y, z));
@@ -1673,42 +1792,27 @@ namespace MCForge
                                         break;
 
                                     case Block.sponge:    //SPONGE
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.sponge); return;
-                                        }
                                         PhysSponge(C.b);
                                         C.time = 255;
                                         break;
 
                                     //Adv physics updating anything placed next to water or lava
                                     case Block.wood:     //Wood to die in lava
-                                        if (physics == 5) Blockchange(x, y, z, Block.wood); return;
                                     case Block.shrub:     //Tree and plants follow
-                                        if (physics == 5) Blockchange(x, y, z, Block.shrub); return;
                                     case Block.trunk:    //Wood to die in lava
-                                        if (physics == 5) Blockchange(x, y, z, Block.trunk); return;
                                     case Block.leaf:    //Bushes die in lava
-                                        if (physics == 5) Blockchange(x, y, z, Block.leaf); return;
                                     case Block.yellowflower:
-                                        if (physics == 5) Blockchange(x, y, z, Block.yellowflower); return;
                                     case Block.redflower:
-                                        if (physics == 5) Blockchange(x, y, z, Block.redflower); return;
                                     case Block.mushroom:
-                                        if (physics == 5) Blockchange(x, y, z, Block.mushroom); return;
                                     case Block.redmushroom:
-                                        if (physics == 5) Blockchange(x, y, z, Block.redmushroom); return;
                                     case Block.bookcase:    //bookcase
                                         if (physics > 1)   //Adv physics kills flowers and mushroos in water/lava
                                         {
-                                            if (physics != 5)
-                                            {
-                                                PhysAir(PosToInt((ushort)(x + 1), y, z));
-                                                PhysAir(PosToInt((ushort)(x - 1), y, z));
-                                                PhysAir(PosToInt(x, y, (ushort)(z + 1)));
-                                                PhysAir(PosToInt(x, y, (ushort)(z - 1)));
-                                                PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
-                                            }
+                                            PhysAir(PosToInt((ushort)(x + 1), y, z));
+                                            PhysAir(PosToInt((ushort)(x - 1), y, z));
+                                            PhysAir(PosToInt(x, y, (ushort)(z + 1)));
+                                            PhysAir(PosToInt(x, y, (ushort)(z - 1)));
+                                            PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
                                         C.time = 255;
                                         break;
@@ -1724,10 +1828,6 @@ namespace MCForge
                                         break;
 
                                     case Block.lava_fast:         //lava_fast
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.lava_fast); return;
-                                        }
                                         //initialy checks if block is valid
                                         PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast);
                                         PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast);
@@ -1739,10 +1839,6 @@ namespace MCForge
 
                                     //Special blocks that are not saved
                                     case Block.air_flood:   //air_flood
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.air_flood); return;
-                                        }
                                         if (C.time < 1)
                                         {
                                             PhysAirFlood(PosToInt((ushort)(x + 1), y, z), Block.air_flood);
@@ -1815,10 +1911,6 @@ namespace MCForge
                                         odoor(C); break;
 
                                     case Block.air_flood_layer:   //air_flood_layer
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.air_flood_layer); return;
-                                        }
                                         if (C.time < 1)
                                         {
                                             PhysAirFlood(PosToInt((ushort)(x + 1), y, z), Block.air_flood_layer);
@@ -1836,10 +1928,6 @@ namespace MCForge
                                         break;
 
                                     case Block.air_flood_down:   //air_flood_down
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.air_flood_down); return;
-                                        }
                                         if (C.time < 1)
                                         {
                                             PhysAirFlood(PosToInt((ushort)(x + 1), y, z), Block.air_flood_down);
@@ -1858,10 +1946,6 @@ namespace MCForge
                                         break;
 
                                     case Block.air_flood_up:   //air_flood_up
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.air_flood_up); return;
-                                        }
                                         if (C.time < 1)
                                         {
                                             PhysAirFlood(PosToInt((ushort)(x + 1), y, z), Block.air_flood_up);
@@ -1881,82 +1965,69 @@ namespace MCForge
 
                                     case Block.smalltnt:
                                         if (physics < 3) this.Blockchange(x, y, z, Block.air);
-                                        if (physics == 5) this.Blockchange(x, y, z, Block.smalltnt);
 
                                         if (physics >= 3)
                                         {
-                                            if (physics != 5)
+                                            rand = new Random();
+
+                                            if (C.time < 5 && physics == 3)
                                             {
-                                                rand = new Random();
-
-                                                if (C.time < 5 && physics == 3)
-                                                {
-                                                    C.time += 1;
-                                                    if (this.GetTile(x, (ushort)(y + 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 1), z, Block.air); else this.Blockchange(x, (ushort)(y + 1), z, Block.lavastill);
-                                                    break;
-                                                }
-
-
-                                                MakeExplosion(x, y, z, 0);
+                                                C.time += 1;
+                                                if (this.GetTile(x, (ushort)(y + 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 1), z, Block.air); else this.Blockchange(x, (ushort)(y + 1), z, Block.lavastill);
+                                                break;
                                             }
+
+                                            MakeExplosion(x, y, z, 0);
                                         }
                                         else { this.Blockchange(x, y, z, Block.air); }
                                         break;
 
                                     case Block.bigtnt:
                                         if (physics < 3) this.Blockchange(x, y, z, Block.air);
-                                        if (physics == 5) this.Blockchange(x, y, z, Block.air);
 
                                         if (physics >= 3)
                                         {
-                                            if (physics != 5)
+                                            rand = new Random();
+
+                                            if (C.time < 5 && physics == 3)
                                             {
-                                                rand = new Random();
+                                                C.time += 1;
+                                                if (this.GetTile(x, (ushort)(y + 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 1), z, Block.air); else this.Blockchange(x, (ushort)(y + 1), z, Block.lavastill);
+                                                if (this.GetTile(x, (ushort)(y - 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y - 1), z, Block.air); else this.Blockchange(x, (ushort)(y - 1), z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x + 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x + 1), y, z, Block.air); else this.Blockchange((ushort)(x + 1), y, z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x - 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x - 1), y, z, Block.air); else this.Blockchange((ushort)(x - 1), y, z, Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z + 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z + 1), Block.air); else this.Blockchange(x, y, (ushort)(z + 1), Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z - 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z - 1), Block.air); else this.Blockchange(x, y, (ushort)(z - 1), Block.lavastill);
 
-                                                if (C.time < 5 && physics == 3)
-                                                {
-                                                    C.time += 1;
-                                                    if (this.GetTile(x, (ushort)(y + 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 1), z, Block.air); else this.Blockchange(x, (ushort)(y + 1), z, Block.lavastill);
-                                                    if (this.GetTile(x, (ushort)(y - 1), z) == Block.lavastill) this.Blockchange(x, (ushort)(y - 1), z, Block.air); else this.Blockchange(x, (ushort)(y - 1), z, Block.lavastill);
-                                                    if (this.GetTile((ushort)(x + 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x + 1), y, z, Block.air); else this.Blockchange((ushort)(x + 1), y, z, Block.lavastill);
-                                                    if (this.GetTile((ushort)(x - 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x - 1), y, z, Block.air); else this.Blockchange((ushort)(x - 1), y, z, Block.lavastill);
-                                                    if (this.GetTile(x, y, (ushort)(z + 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z + 1), Block.air); else this.Blockchange(x, y, (ushort)(z + 1), Block.lavastill);
-                                                    if (this.GetTile(x, y, (ushort)(z - 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z - 1), Block.air); else this.Blockchange(x, y, (ushort)(z - 1), Block.lavastill);
-
-                                                    break;
-                                                }
-
-                                                MakeExplosion(x, y, z, 1);
+                                                break;
                                             }
+
+                                            MakeExplosion(x, y, z, 1);
                                         }
                                         else { this.Blockchange(x, y, z, Block.air); }
                                         break;
 
                                     case Block.nuketnt:
                                         if (physics < 3) this.Blockchange(x, y, z, Block.air);
-                                        if (physics == 5) this.Blockchange(x, y, z, Block.nuketnt);
 
                                         if (physics >= 3)
                                         {
-                                            if (physics != 5)
+                                            rand = new Random();
+
+                                            if (C.time < 5 && physics == 3)
                                             {
-                                                rand = new Random();
+                                                C.time += 1;
+                                                if (this.GetTile(x, (ushort)(y + 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 2), z, Block.air); else this.Blockchange(x, (ushort)(y + 2), z, Block.lavastill);
+                                                if (this.GetTile(x, (ushort)(y - 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y - 2), z, Block.air); else this.Blockchange(x, (ushort)(y - 2), z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x + 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x + 1), y, z, Block.air); else this.Blockchange((ushort)(x + 1), y, z, Block.lavastill);
+                                                if (this.GetTile((ushort)(x - 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x - 1), y, z, Block.air); else this.Blockchange((ushort)(x - 1), y, z, Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z + 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z + 1), Block.air); else this.Blockchange(x, y, (ushort)(z + 1), Block.lavastill);
+                                                if (this.GetTile(x, y, (ushort)(z - 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z - 1), Block.air); else this.Blockchange(x, y, (ushort)(z - 1), Block.lavastill);
 
-                                                if (C.time < 5 && physics == 3)
-                                                {
-                                                    C.time += 1;
-                                                    if (this.GetTile(x, (ushort)(y + 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y + 2), z, Block.air); else this.Blockchange(x, (ushort)(y + 2), z, Block.lavastill);
-                                                    if (this.GetTile(x, (ushort)(y - 2), z) == Block.lavastill) this.Blockchange(x, (ushort)(y - 2), z, Block.air); else this.Blockchange(x, (ushort)(y - 2), z, Block.lavastill);
-                                                    if (this.GetTile((ushort)(x + 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x + 1), y, z, Block.air); else this.Blockchange((ushort)(x + 1), y, z, Block.lavastill);
-                                                    if (this.GetTile((ushort)(x - 1), y, z) == Block.lavastill) this.Blockchange((ushort)(x - 1), y, z, Block.air); else this.Blockchange((ushort)(x - 1), y, z, Block.lavastill);
-                                                    if (this.GetTile(x, y, (ushort)(z + 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z + 1), Block.air); else this.Blockchange(x, y, (ushort)(z + 1), Block.lavastill);
-                                                    if (this.GetTile(x, y, (ushort)(z - 1)) == Block.lavastill) this.Blockchange(x, y, (ushort)(z - 1), Block.air); else this.Blockchange(x, y, (ushort)(z - 1), Block.lavastill);
-
-                                                    break;
-                                                }
-
-                                                MakeExplosion(x, y, z, 4);
+                                                break;
                                             }
+
+                                            MakeExplosion(x, y, z, 4);
                                         }
                                         else { this.Blockchange(x, y, z, Block.air); }
                                         break;
@@ -1966,10 +2037,6 @@ namespace MCForge
                                         break;
 
                                     case Block.train:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.train); return;
-                                        }
                                         if (rand.Next(1, 10) <= 5) mx = 1; else mx = -1;
                                         if (rand.Next(1, 10) <= 5) my = 1; else my = -1;
                                         if (rand.Next(1, 10) <= 5) mz = 1; else mz = -1;
@@ -2000,10 +2067,6 @@ namespace MCForge
                                         break;
 
                                     case Block.magma:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.magma); return;
-                                        }
                                         C.time++;
                                         if (C.time < 3) break;
 
@@ -2019,50 +2082,42 @@ namespace MCForge
 
                                         if (physics > 1)
                                         {
-                                            if (physics != 5)
+                                            if (C.time > 10)
                                             {
-                                                if (C.time > 10)
+                                                C.time = 0;
+
+                                                if (Block.LavaKill(GetTile((ushort)(x + 1), y, z)))
                                                 {
-                                                    C.time = 0;
+                                                    AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.magma);
+                                                    InnerChange = true;
+                                                } if (Block.LavaKill(GetTile((ushort)(x - 1), y, z)))
+                                                {
+                                                    AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.magma);
+                                                    InnerChange = true;
+                                                } if (Block.LavaKill(GetTile(x, y, (ushort)(z + 1))))
+                                                {
+                                                    AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.magma);
+                                                    InnerChange = true;
+                                                } if (Block.LavaKill(GetTile(x, y, (ushort)(z - 1))))
+                                                {
+                                                    AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.magma);
+                                                    InnerChange = true;
+                                                } if (Block.LavaKill(GetTile(x, (ushort)(y - 1), z)))
+                                                {
+                                                    AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.magma);
+                                                    InnerChange = true;
+                                                }
 
-                                                    if (Block.LavaKill(GetTile((ushort)(x + 1), y, z)))
-                                                    {
-                                                        AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.magma);
-                                                        InnerChange = true;
-                                                    } if (Block.LavaKill(GetTile((ushort)(x - 1), y, z)))
-                                                    {
-                                                        AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.magma);
-                                                        InnerChange = true;
-                                                    } if (Block.LavaKill(GetTile(x, y, (ushort)(z + 1))))
-                                                    {
-                                                        AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.magma);
-                                                        InnerChange = true;
-                                                    } if (Block.LavaKill(GetTile(x, y, (ushort)(z - 1))))
-                                                    {
-                                                        AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.magma);
-                                                        InnerChange = true;
-                                                    } if (Block.LavaKill(GetTile(x, (ushort)(y - 1), z)))
-                                                    {
-                                                        AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.magma);
-                                                        InnerChange = true;
-                                                    }
-
-                                                    if (InnerChange == true)
-                                                    {
-                                                        if (Block.LavaKill(GetTile(x, (ushort)(y + 1), z)))
-                                                            AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.magma);
-                                                    }
+                                                if (InnerChange == true)
+                                                {
+                                                    if (Block.LavaKill(GetTile(x, (ushort)(y + 1), z)))
+                                                        AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.magma);
                                                 }
                                             }
                                         }
 
                                         break;
                                     case Block.geyser:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.geyser);
-                                            return;
-                                        }
                                         C.time++;
 
                                         if (GetTile(x, (ushort)(y - 1), z) == Block.air)
@@ -2077,56 +2132,45 @@ namespace MCForge
 
                                         if (physics > 1)
                                         {
-                                            if (physics != 5)
+                                            if (C.time > 10)
                                             {
-                                                if (C.time > 10)
+                                                C.time = 0;
+
+                                                if (Block.WaterKill(GetTile((ushort)(x + 1), y, z)))
                                                 {
-                                                    C.time = 0;
+                                                    AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.geyser);
+                                                    InnerChange = true;
+                                                } if (Block.WaterKill(GetTile((ushort)(x - 1), y, z)))
+                                                {
+                                                    AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.geyser);
+                                                    InnerChange = true;
+                                                } if (Block.WaterKill(GetTile(x, y, (ushort)(z + 1))))
+                                                {
+                                                    AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.geyser);
+                                                    InnerChange = true;
+                                                } if (Block.WaterKill(GetTile(x, y, (ushort)(z - 1))))
+                                                {
+                                                    AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.geyser);
+                                                    InnerChange = true;
+                                                } if (Block.WaterKill(GetTile(x, (ushort)(y - 1), z)))
+                                                {
+                                                    AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.geyser);
+                                                    InnerChange = true;
+                                                }
 
-                                                    if (Block.WaterKill(GetTile((ushort)(x + 1), y, z)))
-                                                    {
-                                                        AddUpdate(PosToInt((ushort)(x + 1), y, z), Block.geyser);
-                                                        InnerChange = true;
-                                                    } if (Block.WaterKill(GetTile((ushort)(x - 1), y, z)))
-                                                    {
-                                                        AddUpdate(PosToInt((ushort)(x - 1), y, z), Block.geyser);
-                                                        InnerChange = true;
-                                                    } if (Block.WaterKill(GetTile(x, y, (ushort)(z + 1))))
-                                                    {
-                                                        AddUpdate(PosToInt(x, y, (ushort)(z + 1)), Block.geyser);
-                                                        InnerChange = true;
-                                                    } if (Block.WaterKill(GetTile(x, y, (ushort)(z - 1))))
-                                                    {
-                                                        AddUpdate(PosToInt(x, y, (ushort)(z - 1)), Block.geyser);
-                                                        InnerChange = true;
-                                                    } if (Block.WaterKill(GetTile(x, (ushort)(y - 1), z)))
-                                                    {
-                                                        AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.geyser);
-                                                        InnerChange = true;
-                                                    }
-
-                                                    if (InnerChange == true)
-                                                    {
-                                                        if (Block.WaterKill(GetTile(x, (ushort)(y + 1), z)))
-                                                            AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.geyser);
-                                                    }
+                                                if (InnerChange == true)
+                                                {
+                                                    if (Block.WaterKill(GetTile(x, (ushort)(y + 1), z)))
+                                                        AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.geyser);
                                                 }
                                             }
                                         }
                                         break;
 
                                     case Block.birdblack:
-                                        if (physics == 5) Blockchange(x, y, z, Block.birdblack); return;
                                     case Block.birdwhite:
-                                        if (physics == 5) Blockchange(x, y, z, Block.birdwhite); return;
                                     case Block.birdlava:
-                                        if (physics == 5) Blockchange(x, y, z, Block.birdlava); return;
                                     case Block.birdwater:
-                                        if (physics == 5)
-                                        {
-
-                                            Blockchange(x, y, z, Block.birdwater); return;
-                                        }
                                         switch (rand.Next(1, 15))
                                         {
                                             case 1:
@@ -2179,20 +2223,12 @@ namespace MCForge
                                         break;
 
                                     case Block.snaketail:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.snaketail); return;
-                                        }
                                         if (GetTile(IntOffset(C.b, -1, 0, 0)) != Block.snake || GetTile(IntOffset(C.b, 1, 0, 0)) != Block.snake || GetTile(IntOffset(C.b, 0, 0, 1)) != Block.snake ||
                                             GetTile(IntOffset(C.b, 0, 0, -1)) != Block.snake)
                                             C.extraInfo = "revert 0";
                                         break;
                                     case Block.snake:
                                         #region SNAKE
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.snake); return;
-                                        }
                                         if (ai)
                                             Player.players.ForEach(delegate(Player p)
                                             {
@@ -2383,10 +2419,6 @@ namespace MCForge
                                     case Block.birdred:
                                     case Block.birdblue:
                                     case Block.birdkill:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.birdkill); return;
-                                        }
                                         #region HUNTER BIRDS
                                         if (ai)
                                             Player.players.ForEach(delegate(Player p)
@@ -2502,19 +2534,11 @@ namespace MCForge
                                         #endregion
 
                                     case Block.fishbetta:
-                                        if (physics == 5) Blockchange(x, y, z, Block.fishbetta); return;
                                     case Block.fishgold:
-                                        if (physics == 5) Blockchange(x, y, z, Block.fishgold); return;
                                     case Block.fishsalmon:
-                                        if (physics == 5) Blockchange(x, y, z, Block.fishsalmon); return;
                                     case Block.fishshark:
-                                        if (physics == 5) Blockchange(x, y, z, Block.fishshark); return;
                                     case Block.fishsponge:
                                         #region FISH
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.fishsponge); return;
-                                        }
                                         if (ai)
                                             Player.players.ForEach(delegate(Player p)
                                             {
@@ -2642,10 +2666,6 @@ namespace MCForge
                                         #endregion
                                     case Block.fishlavashark:
                                         #region lavafish
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.fishlavashark); return;
-                                        }
                                         if (ai)
                                             Player.players.ForEach(delegate(Player p)
                                             {
@@ -2775,10 +2795,6 @@ namespace MCForge
 
 
                                     case Block.rockethead:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.rockethead); return;
-                                        }
                                         if (rand.Next(1, 10) <= 5) mx = 1; else mx = -1;
                                         if (rand.Next(1, 10) <= 5) my = 1; else my = -1;
                                         if (rand.Next(1, 10) <= 5) mz = 1; else mz = -1;
@@ -2799,7 +2815,7 @@ namespace MCForge
                                                         }
                                                         else
                                                         {
-                                                            if (physics > 2) if (physics != 5) MakeExplosion(x, y, z, 2);
+                                                            if (physics > 2) MakeExplosion(x, y, z, 2);
                                                             else AddUpdate(PosToInt(x, y, z), Block.fire);
                                                         }
                                                         InnerChange = true;
@@ -2808,10 +2824,6 @@ namespace MCForge
                                         break;
 
                                     case Block.firework:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.firework); return;
-                                        }
                                         if (GetTile(x, (ushort)(y - 1), z) == Block.lavastill)
                                         {
                                             if (GetTile(x, (ushort)(y + 1), z) == Block.air)
@@ -2832,21 +2844,12 @@ namespace MCForge
                                         break;
 									//Zombie + creeper stuff
                                     case Block.zombiehead:
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.zombiehead); return;
-                                        }
                                         if (GetTile(IntOffset(C.b, 0, -1, 0)) != Block.zombiebody && GetTile(IntOffset(C.b, 0, -1, 0)) != Block.creeper)
                                             C.extraInfo = "revert 0";
                                         break;
                                     case Block.zombiebody:
-                                        if (physics == 5) Blockchange(x, y, z, Block.zombiebody); return;
                                     case Block.creeper:
                                         #region ZOMBIE
-                                        if (physics == 5)
-                                        {
-                                            Blockchange(x, y, z, Block.creeper); return;
-                                        }
                                         if (GetTile(x, (ushort)(y - 1), z) == Block.air)
                                         {
                                             AddUpdate(C.b, Block.zombiehead);
@@ -3081,7 +3084,7 @@ namespace MCForge
                     });
 
                     ListUpdate.Clear();
-
+                    #endregion
                 }
             }
             catch

@@ -1464,6 +1464,7 @@ namespace MCForge
                     level.Blockchange(this, x, y, z, (byte)(Block.air));
                     break;
             }
+            if ((level.physics == 0 || level.physics == 5) && level.GetTile(x, (ushort)(y - 1), z) == 3) level.Blockchange(this, x, (ushort)(y - 1), z, 2);
         }
 
         public void placeBlock(byte b, byte type, ushort x, ushort y, ushort z)
@@ -1473,7 +1474,7 @@ namespace MCForge
             switch (BlockAction)
             {
                 case 0:     //normal
-                    if (level.physics == 0)
+                    if (level.physics == 0 || level.physics == 5)
                     {
                         switch (type)
                         {
