@@ -36,6 +36,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
+            Server.Exit();
 			using (Process Restarter = new Process())
 			{
 				Restarter.StartInfo.FileName = "Restarter.exe";
