@@ -587,19 +587,19 @@ namespace MCForge
 
                     if (strings[0].Equals("stop"))
                     {
-                        theP.SendMessage("Stopping Zombie Survival...");
+                        Player.GlobalMessage("Stopping Zombie Survival...");
                         Server.ZombieModeOn = false;
                         infiniteRounds = false;
                         return;
                     }
                     else if (Server.ZombieModeOn)
                     {
-                        theP.SendMessage("Zombie Survival is currently in progress!");
+                        Player.GlobalMessage("Zombie Survival is currently in progress!");
                         return;
                     }
                     else if (strings[0].Equals(""))
                     {
-                        theP.SendMessage("Starting Zombie Survival!");
+                        Player.GlobalMessage("Starting Zombie Survival!");
                         Server.ZombieModeOn = true;
                         infiniteRounds = true;
                     }
@@ -613,7 +613,7 @@ namespace MCForge
 
                         if (isNum)
                         {
-                            theP.SendMessage("Starting Zombie Survival for " + strings[0] + " rounds!");
+                            Player.GlobalMessage("Starting Zombie Survival for " + strings[0] + " rounds!");
                             Server.ZombieModeOn = true;
                             amountOfRounds = Convert.ToInt32(strings[0]);
                         }
@@ -626,7 +626,7 @@ namespace MCForge
                 }
                 else
                 {
-                    theP.SendMessage("Starting Zombie Survival!");
+                    Player.GlobalMessage("Starting Zombie Survival!");
                     Server.ZombieModeOn = true;
                     infiniteRounds = true;
                 }
