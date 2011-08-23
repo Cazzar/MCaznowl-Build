@@ -160,8 +160,9 @@ public static event OnServerError ServerError = null;
         public static int count = 0;
         public static bool ZombieModeOn = false;
         public static bool startZombieModeOnStartup = false;
-        public static bool noRespawn = false;
-        public static bool noLevelSaving = false;
+        public static bool noRespawn = true;
+        public static bool noLevelSaving = true;
+        public static bool noPillaring = true;
         public static string ZombieName = "";
 
         //Settings

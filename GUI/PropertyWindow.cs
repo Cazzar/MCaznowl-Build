@@ -485,6 +485,21 @@ namespace MCForge.Gui
                             case "server-owner":
                                 txtServerOwner.Text = value;
                                 break;
+                            case "zombie-on-server-start":
+                                chkZombieOnServerStart.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "no-respawning-during-zombie":
+                                chkNoRespawnDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "no-level-saving-during-zombie":
+                                chkNoLevelSavingDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "no-pillaring-during-zombie":
+                                chkNoPillaringDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "zombie-name-while-infected":
+                                ZombieName.Text = value;
+                                break;
                             case "ignore-ops":
                                 chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -599,6 +614,11 @@ namespace MCForge.Gui
                     w.WriteLine("# adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
                     w.WriteLine("# admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
                     w.WriteLine("# server-owner\t=\tThe minecraft name, of the owner of the server.");
+                    w.WriteLine("# zombie-on-server-start\t=\tStarts Zombie Survival when server is started.");
+                    w.WriteLine("# no-respawning-during-zombie\t=\tDisables respawning (Pressing R) while Zombie is on.");
+                    w.WriteLine("# no-level-saving-during-zombie\t=\tDisables level saving while Zombie Survival is activated.");
+                    w.WriteLine("# no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
+                    w.WriteLine("# zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
                     w.WriteLine();
                     w.WriteLine("# Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("# SQLPort\t=\tPort number to be used for MySQL. Unless you manually changed the port, leave this alone. Default 3306.");
@@ -670,6 +690,11 @@ namespace MCForge.Gui
                     w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
                     w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
                     w.WriteLine("ignore-ops = " + chkIgnoreGlobal.Checked.ToString().ToLower());
+                    w.WriteLine("zombie-on-server-start = " + chkZombieOnServerStart.Checked.ToString().ToLower());
+                    w.WriteLine("no-respawning-during-zombie = " + chkNoRespawnDuringZombie.Checked.ToString().ToLower());
+                    w.WriteLine("no-level-saving-during-zombie = " + chkNoLevelSavingDuringZombie.Checked.ToString().ToLower());
+                    w.WriteLine("no-pillaring-during-zombie = " + chkNoPillaringDuringZombie.Checked.ToString().ToLower());
+                    w.WriteLine("zombie-name-while-infected = " + ZombieName.Text);
                     w.WriteLine();
                     w.WriteLine("# backup options");
                     w.WriteLine("backup-time = " + txtBackup.Text);

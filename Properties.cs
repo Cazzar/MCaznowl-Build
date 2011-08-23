@@ -430,6 +430,26 @@ namespace MCForge
                                 if (value != "")
                                     Server.server_owner = value;
                                 break;
+                            case "zombie-on-server-start":
+                                try { Server.startZombieModeOnStartup = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "no-respawning-during-zombie":
+                                try { Server.noRespawn = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "no-level-saving-during-zombie":
+                                try { Server.noLevelSaving = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "no-pillaring-during-zombie":
+                                try { Server.noPillaring = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "zombie-name-while-infected":
+                                if (value != "")
+                                    Server.ZombieName = value;
+                                break;
                             case "ignore-ops":
                                 try { Server.globalignoreops = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -535,6 +555,11 @@ namespace MCForge
             w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
             w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
             w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
+            w.WriteLine("#   zombie-on-server-start\t=\tStarts Zombie Survival when server is started.");
+            w.WriteLine("#   no-respawning-during-zombie\t=\tDisables respawning (Pressing R) while Zombie is on.");
+            w.WriteLine("#   no-level-saving-during-zombie\t=\tDisables level saving while Zombie Survival is activated.");
+            w.WriteLine("#   no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
+            w.WriteLine("#   zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
             w.WriteLine();
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
             w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
@@ -614,6 +639,11 @@ namespace MCForge
             w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
             w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
             w.WriteLine("server-owner = " + Server.server_owner.ToString());
+            w.WriteLine("zombie-on-server-start = " + Server.startZombieModeOnStartup);
+            w.WriteLine("no-respawning-during-zombie = " + Server.noRespawn);
+            w.WriteLine("no-level-saving-during-zombie = " + Server.noLevelSaving);
+            w.WriteLine("no-pillaring-during-zombie = " + Server.noPillaring);
+            w.WriteLine("zombie-name-while-infected = " + Server.ZombieName);
             w.WriteLine();
             w.WriteLine("# backup options");
             w.WriteLine("backup-time = " + Server.backupInterval.ToString());

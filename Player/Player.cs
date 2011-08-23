@@ -1109,7 +1109,7 @@ namespace MCForge
                 byte action = message[6];
                 byte type = message[7];
 
-                if (action == 1 && Server.ZombieModeOn)
+                if (action == 1 && Server.ZombieModeOn && Server.noPillaring)
                 {
                     if (!referee)
                     {
