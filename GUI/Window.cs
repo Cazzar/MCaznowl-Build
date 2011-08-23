@@ -619,6 +619,7 @@ namespace MCForge.Gui
                     Server.s.Log("The server will now begin auto restart procedures.");
 
                     RemoveNotifyIcon();
+                    Server.Exit();
 					using (Process Restarter = new Process())
 					{
 						Restarter.StartInfo.FileName = "Restarter.exe";
@@ -931,6 +932,7 @@ namespace MCForge.Gui
             if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
+                Server.Exit();
 				using (Process Restarter = new Process())
 				{
 					Restarter.StartInfo.FileName = "Restarter.exe";
