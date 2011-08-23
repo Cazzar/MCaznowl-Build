@@ -826,7 +826,7 @@ processThread.Start();
 
         static void Accept(IAsyncResult result)
         {
-            if (shuttingDown == false)
+            if (!shuttingDown)
             {
                 // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
                 // -Descention
