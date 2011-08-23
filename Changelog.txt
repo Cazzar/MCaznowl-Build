@@ -1,3 +1,7 @@
+v5.1.0.2
+- Fixed the bug that pretty much broke physics
+- Fixed a bug with grass growing on physics 0 and 5
+
 v5.1.0.1
 - Hopefully fixed the error-when-a-new-person-joins bug...
 - Fixed the check for updates option

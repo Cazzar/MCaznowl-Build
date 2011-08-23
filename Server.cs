@@ -863,29 +863,14 @@ processThread.Start();
             foreach (Player p in Player.players) { p.save(); players.Add(p.name); }
             foreach (string p in players)
             {
-                if (!Server.customShutdown)
-                {
-                    Player.Find(p).Kick("Server shutdown. Rejoin in 10 seconds.");
-                }
-
-                else
-                {
-                    Player.Find(p).Kick(Server.customShutdownMessage);
-                }
+                Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
             }
 
             //Player.players.ForEach(delegate(Player p) { p.Kick("Server shutdown. Rejoin in 10 seconds."); });
             Player.connections.ForEach(
             delegate(Player p)
             {
-                if (!Server.customShutdown)
-                {
-                    p.Kick("Server shutdown. Rejoin in 10 seconds.");
-                }
-                else
-                {
-                    p.Kick(Server.customShutdownMessage);
-                }
+                p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
             }
             );
             Plugin.Unload();
