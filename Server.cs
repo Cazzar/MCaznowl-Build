@@ -439,15 +439,15 @@ public static byte maxGuests = 10;
                 {
                     MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
                 }
-                catch (MySql.Data.MySqlClient.MySqlException e)
-                {
-                    Server.s.Log("MySQL settings have not been set! Many features will not be available if MySQL is not enabled");
-                    Server.ErrorLog(e);
-                }
+                //catch (MySql.Data.MySqlClient.MySqlException e)
+                //{
+                //    Server.s.Log("MySQL settings have not been set! Many features will not be available if MySQL is not enabled");
+                //  //  Server.ErrorLog(e);
+                //}
                 catch (Exception e)
                 {
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
-                    Server.ErrorLog(e);
+  //         Server.ErrorLog(e);
                     //process.Kill();
                     return;
                 }
