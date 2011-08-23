@@ -61,8 +61,7 @@ namespace MCForge
             if (stored.Count > (p.group.maxBlocks * 2)) { Player.SendMessage(p, "Cannot replace more than " + (p.group.maxBlocks * 2) + " blocks."); wait = 1; return; }
 
             Player.SendMessage(p, stored.Count + " blocks out of " + currentBlock + " are " + Block.Name(b1));
-            Int64 addition = p.cuboidblocks + stored.Count;
-            p.cuboidblocks = addition;
+            
 
             foreach (Pos Pos in stored)
             {
