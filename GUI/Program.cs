@@ -153,6 +153,9 @@ namespace MCForge_.Gui
         {
             string sentCmd = "", sentMsg = "";
 
+            s = s.Trim(); // Make sure we have no whitespace!
+            if (s.StartsWith("/")) s = s.Remove(0, 1);
+            else goto talk;
             if (s.IndexOf(' ') != -1)
             {
                 sentCmd = s.Split(' ')[0];
@@ -177,6 +180,12 @@ namespace MCForge_.Gui
                     handleComm(Console.ReadLine());
                     return;
                 }
+                else
+                {
+                    Console.WriteLine("CONSOLE: Unknown command.");
+                    handleComm(Console.ReadLine());
+                    return;
+                }
             }
             catch (Exception e)
             {
@@ -186,7 +195,7 @@ namespace MCForge_.Gui
                 return;
             }
 
-        talk: handleComm("say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
+        talk: handleComm("/say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
             handleComm(Console.ReadLine());
         }
         /*
