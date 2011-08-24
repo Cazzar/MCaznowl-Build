@@ -118,6 +118,8 @@ namespace MCForge
                     Load(file, true);
                 }
             }
+            else
+                Directory.CreateDirectory("plugins");
         }
     }
 }

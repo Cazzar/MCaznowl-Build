@@ -412,7 +412,6 @@ public static byte maxGuests = 10;
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Economy.Load();
-            Plugin.Load();
             Group.InitAll();
             Command.InitAll();
             GrpCommands.fillRanks();
@@ -538,7 +537,7 @@ public static byte maxGuests = 10;
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });
-
+            Plugin.Load();
             ml.Queue(delegate
             {
                 bannedIP = PlayerList.Load("banned-ip.txt", null);
