@@ -233,7 +233,7 @@ namespace MCForge
 
             if (changed)
             {
-                if (!Server.noLevelSaving && !Server.ZombieModeOn)
+                if (!Server.ZombieModeOn || !Server.noLevelSaving)
                 {
                     Save();
                     saveChanges();
