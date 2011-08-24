@@ -128,8 +128,8 @@ namespace MCForge
         public bool canBuild = true;
 
         public int money = 0;
-        public Int64 overallBlocks = 0;
-        public Int64 cuboidblocks = 0;
+        public long overallBlocks = 0;
+        
         public int loginBlocks = 0;
 
         public DateTime timeLogged;
@@ -517,7 +517,6 @@ namespace MCForge
                 ", totalDeaths=" + overallDeath +
                 ", Money=" + money +
                 ", totalBlocks=" + overallBlocks + " + " + loginBlocks +
-                ", totalCuboided=" + cuboidblocks +
                 ", totalKicked=" + totalKicked +
                 ", TimeSpent='" + time +
                 "' WHERE Name='" + name + "'";
@@ -891,13 +890,13 @@ namespace MCForge
                 this.totalKicked = 0;
                 this.overallDeath = 0;
                 this.overallBlocks = 0;
-                this.cuboidblocks = 0;
+                
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
-                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalCuboided, totalKicked, TimeSpent)" +
+                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
-                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + cuboidblocks + ", " + totalKicked + ", '" + time + "')");
+                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
 
             }
             else
@@ -930,8 +929,7 @@ namespace MCForge
                 }
                 SetPrefix();
                 overallDeath = int.Parse(playerDb.Rows[0]["TotalDeaths"].ToString());
-                overallBlocks = int.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim());
-                cuboidblocks = int.Parse(playerDb.Rows[0]["totalCuboided"].ToString().Trim());
+                overallBlocks = long.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim());
                 money = int.Parse(playerDb.Rows[0]["Money"].ToString());
                 totalKicked = int.Parse(playerDb.Rows[0]["totalKicked"].ToString());
                 SendMessage("Welcome back " + color + prefix + name + Server.DefaultColor + "! You've been here " + totalLogins + " times!");
