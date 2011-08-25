@@ -864,7 +864,7 @@ namespace MCForge
                         if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
                         {
                             GlobalMessageOps(temp);
-                            IRCBot.Say(temp, true);       //Tells people in op channel on IRC
+                            //IRCBot.Say(temp, true);       //Tells people in op channel on IRC
                         }
 
                         Server.s.Log(temp);
@@ -1030,7 +1030,7 @@ namespace MCForge
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
                 GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
-                IRCBot.Say(this.name + " has joined the server.");
+                //IRCBot.Say(this.name + " has joined the server.");
             }
             if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
             {
@@ -1863,7 +1863,7 @@ namespace MCForge
                     {
                         Server.afkset.Remove(this.name);
                         Player.GlobalMessage("-" + this.color + this.name + Server.DefaultColor + "- is no longer AFK");
-                        IRCBot.Say(this.name + " is no longer AFK");
+                        //IRCBot.Say(this.name + " is no longer AFK");
                     }
                 }
 
@@ -1988,7 +1988,7 @@ namespace MCForge
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
-                    IRCBot.Say(name + ": " + newtext, true);
+                    //IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
                 if (text[0] == '+' || adminchat)
@@ -2000,7 +2000,7 @@ namespace MCForge
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
-                    IRCBot.Say(name + ": " + newtext, true);
+                    //IRCBot.Say(name + ": " + newtext, true);
                     return;
                 }
 
@@ -2073,7 +2073,7 @@ namespace MCForge
                         GlobalChat(this, newtext);
                     }
                     Server.s.Log("<" + name + "> " + newtext);
-                    IRCBot.Say("<" + name + "> " + newtext);
+                    //IRCBot.Say("<" + name + "> " + newtext);
                     return;
                 }
                 Server.s.Log("<" + name + "> " + text);
@@ -2094,7 +2094,7 @@ namespace MCForge
                     GlobalChatLevel(this, text, true);
                 }
 
-                IRCBot.Say(name + ": " + text);
+                //IRCBot.Say(name + ": " + text);
             }
             catch (Exception e) { Server.ErrorLog(e); Player.GlobalMessage("An error occurred: " + e.Message); }
         }
@@ -2414,7 +2414,7 @@ namespace MCForge
                 else
                 {
                     Server.s.Log(message);
-                    IRCBot.Say(message, true);
+                    //IRCBot.Say(message, true);
                 }
                 return;
             }
@@ -3476,7 +3476,7 @@ namespace MCForge
                             File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
                         if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); }
-                        IRCBot.Say(name + " left the game.");
+                        //IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
                         {
@@ -3487,7 +3487,7 @@ namespace MCForge
                     {
                         totalKicked++;
                         GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + ").", false);
-                        IRCBot.Say(name + " kicked (" + kickString + ").");
+                        //IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
                         if (Server.notifyOnJoinLeave)
                             Server.PopupNotify(name + " kicked (" + kickString + ").");

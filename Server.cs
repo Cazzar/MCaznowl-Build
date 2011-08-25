@@ -707,7 +707,7 @@ processThread.Start();
 
                 if (Server.irc)
                 {
-                    new IRCBot();
+                    new ForgeBot(Server.ircChannel, Server.ircNick, Server.ircServer);
                 }
 
 

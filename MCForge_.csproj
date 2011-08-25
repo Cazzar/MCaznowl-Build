@@ -57,10 +57,6 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="Meebey.SmartIrc4net, Version=0.4.0.34161, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Meebey.SmartIrc4net.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Sharkbite.Thresher">
@@ -204,6 +200,7 @@
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
     <Compile Include="Economy.cs" />
+    <Compile Include="ForgeBot.cs" />
     <Compile Include="GUI\EditText.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,7 +370,6 @@
     <Compile Include="Heartbeat\MCForgeBeat.cs" />
     <Compile Include="Heartbeat\MinecraftBeat.cs" />
     <Compile Include="Heartbeat\TChaloBeat.cs" />
-    <Compile Include="IRCBot.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\ConvertDAT.cs" />
     <Compile Include="MySQL.cs" />
