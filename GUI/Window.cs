@@ -747,56 +747,6 @@ namespace MCForge.Gui
                 Command.all.Find(com).Use(null, GetSelectedPlayer().name + args);
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("physics").Use(null, l.name + " 0");
-            }*/
-            levelcommand("physics", " 0");
-        }
-
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("physics").Use(null, l.name + " 1");
-            }*/
-            levelcommand("physics", " 1");
-        }
-
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("physics").Use(null, l.name + " 2");
-            }*/
-            levelcommand("physics", " 2");
-        }
-
-        private void toolStripMenuItem5_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("physics").Use(null, l.name + " 3");
-            }*/
-            levelcommand("physics", " 3");
-        }
-
-        private void toolStripMenuItem6_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("physics").Use(null, l.name + " 4");
-            }*/
-            levelcommand("physics", " 4");
-        }
-
         private void unloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             /*Level l = GetSelectedLevel();
@@ -2010,6 +1960,115 @@ namespace MCForge.Gui
                 txtAdminInput.Clear();
             }
         }
+
+        private void button_saveall_Click(object sender, EventArgs e)
+        {
+            Command.all.Find("save").Use(null, "all");
+        }
+
+        private void killphysics_button_Click(object sender, EventArgs e)
+        {
+            Command.all.Find("killphysics").Use(null, "");
+        }
+
+        private void Unloadempty_button_Click(object sender, EventArgs e)
+        {
+            Command.all.Find("unload").Use(null, "empty");
+        }
+
+        private void dgvMaps_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void loadOngotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " loadongoto");
+        }
+
+        private void instantBuildingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " instant");
+        }
+
+        private void autpPhysicsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " restartphysics");
+        }
+
+        private void gunsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("allowguns");
+        }
+
+        private void unloadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " unload");
+        }
+
+        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map");
+            levelcommand("mapinfo");
+        }
+
+        private void actiondToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void moveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("moveall");
+        }
+
+        private void toolStripMenuItem2_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 0");
+        }
+
+        private void toolStripMenuItem3_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 1");
+        }
+
+        private void toolStripMenuItem4_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 2");
+        }
+
+        private void toolStripMenuItem5_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 3");
+        }
+
+        private void toolStripMenuItem6_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 4");
+        }
+
+        private void toolStripMenuItem7_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("physics", " 5");
+        }
+
+        private void saveToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("save");
+        }
+
+        private void unloadToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            levelcommand("unload");
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("reload");
+        }
+
+
+
 
         /*private void txtLog_TextChanged(object sender, EventArgs e)
         {

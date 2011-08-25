@@ -136,7 +136,9 @@ namespace MCForge
             all.Add(new CmdKickAll());
             all.Add(new CmdKickban());
             all.Add(new CmdKill());
+            all.Add(new CmdKillPhysics());
             all.Add(new CmdLastCmd());
+            all.Add(new CmdLavaSurvival());
             all.Add(new CmdLevels());
             all.Add(new CmdLimit());
             all.Add(new CmdLine());

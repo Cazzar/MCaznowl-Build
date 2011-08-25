@@ -30,7 +30,10 @@ namespace MCForge
         {
             Level level = Level.Find(message.Split(' ')[0]);
             if (level == null) { Player.SendMessage(p, "There is no level named '" + message.Split(' ')[0] + "'."); return; }
-            foreach (Player pl in Player.players) { if (pl.group.Permission < p.group.Permission) Command.all.Find("move").Use(p, pl.name + " " + level.name); else Player.SendMessage(p, "You cannot move " + pl.color + pl.name + Server.DefaultColor + " because they are of equal or higher rank"); }
+            if (p == null)
+                foreach (Player pl in Player.players) { Command.all.Find("move").Use(null, pl.name + " " + level.name); }
+            else
+                foreach (Player pl in Player.players) { if (pl.group.Permission < p.group.Permission) Command.all.Find("move").Use(p, pl.name + " " + level.name); else Player.SendMessage(p, "You cannot move " + pl.color + pl.name + Server.DefaultColor + " because they are of equal or higher rank"); }
         }
         public override void Help(Player p) { Player.SendMessage(p, "/moveall <level> - Moves all players to the level specified."); }
     }

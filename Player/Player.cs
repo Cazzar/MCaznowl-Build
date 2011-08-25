@@ -829,6 +829,7 @@ namespace MCForge
 
                 try { left.Remove(name.ToLower()); }
                 catch { }
+
                 group = Group.findPlayerGroup(name);
 
                 SendMotd();

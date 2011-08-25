@@ -1660,6 +1660,21 @@ MessageBox.Show("Text Box Cleared!!");
             }
         }
 
+        private void groupBox17_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void chkZombieOnServerStart_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
 
        

@@ -501,32 +501,39 @@ namespace MCForge
 
         public static void SaveSettings(Level level)
         {
-            File.Create("levels/level properties/" + level.name + ".properties").Dispose();
-            using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+            try
             {
-                SW.WriteLine("#Level properties for " + level.name);
-                SW.WriteLine("#Drown-time in seconds is [drown time] * 200 / 3 / 1000");
-                SW.WriteLine("Theme = " + level.theme);
-                SW.WriteLine("Physics = " + level.physics.ToString());
-                SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
-                SW.WriteLine("Physics overload = " + level.overload.ToString());
-                SW.WriteLine("Finite mode = " + level.finite.ToString());
-                SW.WriteLine("Animal AI = " + level.ai.ToString());
-                SW.WriteLine("Edge water = " + level.edgeWater.ToString());
-                SW.WriteLine("Survival death = " + level.Death.ToString());
-                SW.WriteLine("Fall = " + level.fall.ToString());
-                SW.WriteLine("Drown = " + level.drown.ToString());
-                SW.WriteLine("MOTD = " +level.motd);
-                SW.WriteLine("JailX = " + level.jailx.ToString());
-                SW.WriteLine("JailY = " + level.jaily.ToString());
-                SW.WriteLine("JailZ = " + level.jailz.ToString());
-                SW.WriteLine("Unload = " + level.unload);
-                SW.WriteLine("PerBuild = " + Group.findPerm(level.permissionbuild).trueName.ToLower());
-                SW.WriteLine("PerVisit = " + Group.findPerm(level.permissionvisit).trueName.ToLower());
-                SW.WriteLine("PerBuildMax = " + Group.findPerm(level.perbuildmax).trueName.ToLower());
-                SW.WriteLine("PerVisitMax = " + Group.findPerm(level.pervisitmax).trueName.ToLower());
-                SW.WriteLine("Guns = " + level.guns.ToString());
-                SW.WriteLine("LoadOnGoto = " + level.loadOnGoto);
+                File.Create("levels/level properties/" + level.name + ".properties").Dispose();
+                using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+                {
+                    SW.WriteLine("#Level properties for " + level.name);
+                    SW.WriteLine("#Drown-time in seconds is [drown time] * 200 / 3 / 1000");
+                    SW.WriteLine("Theme = " + level.theme);
+                    SW.WriteLine("Physics = " + level.physics.ToString());
+                    SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
+                    SW.WriteLine("Physics overload = " + level.overload.ToString());
+                    SW.WriteLine("Finite mode = " + level.finite.ToString());
+                    SW.WriteLine("Animal AI = " + level.ai.ToString());
+                    SW.WriteLine("Edge water = " + level.edgeWater.ToString());
+                    SW.WriteLine("Survival death = " + level.Death.ToString());
+                    SW.WriteLine("Fall = " + level.fall.ToString());
+                    SW.WriteLine("Drown = " + level.drown.ToString());
+                    SW.WriteLine("MOTD = " + level.motd);
+                    SW.WriteLine("JailX = " + level.jailx.ToString());
+                    SW.WriteLine("JailY = " + level.jaily.ToString());
+                    SW.WriteLine("JailZ = " + level.jailz.ToString());
+                    SW.WriteLine("Unload = " + level.unload.ToString());
+                    SW.WriteLine("PerBuild = " + (Group.Exists(PermissionToName(level.permissionbuild).ToLower()) ? PermissionToName(level.permissionbuild).ToLower() : PermissionToName(LevelPermission.Builder)));
+                    SW.WriteLine("PerVisit = " + (Group.Exists(PermissionToName(level.permissionvisit).ToLower()) ? PermissionToName(level.permissionvisit).ToLower() : PermissionToName(LevelPermission.Guest)));
+                    SW.WriteLine("PerBuildMax = " + (Group.Exists(PermissionToName(level.perbuildmax).ToLower()) ? PermissionToName(level.perbuildmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
+                    SW.WriteLine("PerVisitMax = " + (Group.Exists(PermissionToName(level.pervisitmax).ToLower()) ? PermissionToName(level.pervisitmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
+                    SW.WriteLine("Guns = " + level.guns.ToString());
+                    SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                Server.s.Log("Failed to save level properties!");
             }
         }
 
@@ -864,10 +871,10 @@ namespace MCForge
 											case "unload": level.unload = bool.Parse(value); break;
 
 											case "perbuild":
-												if (PermissionFromName(value) != LevelPermission.Null) level.permissionbuild = PermissionFromName(value);
+                                                if (PermissionFromName(value) != LevelPermission.Null) level.permissionbuild = PermissionFromName(value);
 												break;
 											case "pervisit":
-												if (PermissionFromName(value) != LevelPermission.Null) level.permissionvisit = PermissionFromName(value);
+                                                if (PermissionFromName(value) != LevelPermission.Null) level.permissionvisit = PermissionFromName(value);
 												break;
 											case "perbuildmax":
                                                 if (PermissionFromName(value) != LevelPermission.Null) level.perbuildmax = PermissionFromName(value);

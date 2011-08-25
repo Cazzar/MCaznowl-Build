@@ -57,8 +57,15 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Meebey.SmartIrc4net, Version=0.4.0.34161, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Meebey.SmartIrc4net.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Sharkbite.Thresher">
+      <HintPath>.\Sharkbite.Thresher.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,9 +78,6 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Meebey.SmartIrc4net, Version=0.4.0.34161, Culture=neutral, PublicKeyToken=null">
-      <HintPath>Meebey.SmartIrc4net.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=6.3.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
       <HintPath>MySql.Data.dll</HintPath>
     </Reference>
@@ -107,6 +111,8 @@
     <Compile Include="Commands\CmdGifToCin.cs" />
     <Compile Include="Commands\CmdInfect.cs" />
     <Compile Include="Commands\CmdInfected.cs" />
+    <Compile Include="Commands\CmdKillPhysics.cs" />
+    <Compile Include="Commands\CmdLavaSurvival.cs" />
     <Compile Include="Commands\CmdPatrol.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
@@ -468,6 +474,9 @@
     <Content Include="Restarter.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
