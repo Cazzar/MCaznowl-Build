@@ -181,6 +181,10 @@ namespace MCForge.Gui
             this.txtSQLPassword = new System.Windows.Forms.TextBox();
             this.txtSQLUsername = new System.Windows.Forms.TextBox();
             this.grpIRC = new System.Windows.Forms.GroupBox();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.txtIrcId = new System.Windows.Forms.TextBox();
+            this.chkIrcId = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.lblIRC = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
@@ -252,6 +256,7 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.txtIRCPort = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -754,7 +759,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -780,12 +785,13 @@ namespace MCForge.Gui
             this.txtNick.Size = new System.Drawing.Size(106, 21);
             this.txtNick.TabIndex = 16;
             this.toolTip.SetToolTip(this.txtNick, "The Nick that the IRC bot will try and use.");
+            this.txtNick.TextChanged += new System.EventHandler(this.txtNick_TextChanged);
             // 
             // txtIRCServer
             // 
             this.txtIRCServer.Location = new System.Drawing.Point(58, 24);
             this.txtIRCServer.Name = "txtIRCServer";
-            this.txtIRCServer.Size = new System.Drawing.Size(211, 21);
+            this.txtIRCServer.Size = new System.Drawing.Size(123, 21);
             this.txtIRCServer.TabIndex = 15;
             this.toolTip.SetToolTip(this.txtIRCServer, "The IRC server to be used.\nDefault = irc.esper.net\nBetter choice = irc.foonetic.n" +
                     "et");
@@ -812,7 +818,7 @@ namespace MCForge.Gui
             this.ChkTunnels.AutoSize = true;
             this.ChkTunnels.Location = new System.Drawing.Point(18, 20);
             this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(85, 23);
+            this.ChkTunnels.Size = new System.Drawing.Size(83, 23);
             this.ChkTunnels.TabIndex = 4;
             this.ChkTunnels.Text = "Anti-Tunneling";
             this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
@@ -824,7 +830,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(79, 23);
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -849,7 +855,7 @@ namespace MCForge.Gui
             this.chkAutoload.AutoSize = true;
             this.chkAutoload.Location = new System.Drawing.Point(16, 80);
             this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(85, 23);
+            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
             this.chkAutoload.TabIndex = 4;
             this.chkAutoload.Text = "Load on /goto";
             this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
@@ -950,7 +956,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -983,9 +989,9 @@ namespace MCForge.Gui
             // 
             this.chkUseSQL.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkUseSQL.AutoSize = true;
-            this.chkUseSQL.Location = new System.Drawing.Point(22, 275);
+            this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1625,9 +1631,9 @@ namespace MCForge.Gui
             this.grpSQL.Controls.Add(this.label41);
             this.grpSQL.Controls.Add(this.txtSQLPassword);
             this.grpSQL.Controls.Add(this.txtSQLUsername);
-            this.grpSQL.Location = new System.Drawing.Point(22, 304);
+            this.grpSQL.Location = new System.Drawing.Point(22, 310);
             this.grpSQL.Name = "grpSQL";
-            this.grpSQL.Size = new System.Drawing.Size(284, 192);
+            this.grpSQL.Size = new System.Drawing.Size(284, 186);
             this.grpSQL.TabIndex = 29;
             this.grpSQL.TabStop = false;
             this.grpSQL.Text = "MySQL";
@@ -1635,7 +1641,7 @@ namespace MCForge.Gui
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 169);
+            this.linkLabel1.Location = new System.Drawing.Point(12, 164);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(113, 13);
             this.linkLabel1.TabIndex = 30;
@@ -1715,6 +1721,11 @@ namespace MCForge.Gui
             // 
             // grpIRC
             // 
+            this.grpIRC.Controls.Add(this.txtIRCPort);
+            this.grpIRC.Controls.Add(this.label50);
+            this.grpIRC.Controls.Add(this.label49);
+            this.grpIRC.Controls.Add(this.txtIrcId);
+            this.grpIRC.Controls.Add(this.chkIrcId);
             this.grpIRC.Controls.Add(this.label6);
             this.grpIRC.Controls.Add(this.lblIRC);
             this.grpIRC.Controls.Add(this.txtOpChannel);
@@ -1728,10 +1739,49 @@ namespace MCForge.Gui
             this.grpIRC.Controls.Add(this.label5);
             this.grpIRC.Location = new System.Drawing.Point(22, 43);
             this.grpIRC.Name = "grpIRC";
-            this.grpIRC.Size = new System.Drawing.Size(284, 226);
+            this.grpIRC.Size = new System.Drawing.Size(284, 232);
             this.grpIRC.TabIndex = 27;
             this.grpIRC.TabStop = false;
             this.grpIRC.Text = "IRC";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(187, 27);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(30, 13);
+            this.label50.TabIndex = 30;
+            this.label50.Text = "Port:";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(138, 203);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(56, 13);
+            this.label49.TabIndex = 29;
+            this.label49.Text = "Password:";
+            // 
+            // txtIrcId
+            // 
+            this.txtIrcId.Location = new System.Drawing.Point(200, 200);
+            this.txtIrcId.Name = "txtIrcId";
+            this.txtIrcId.PasswordChar = '*';
+            this.txtIrcId.Size = new System.Drawing.Size(69, 21);
+            this.txtIrcId.TabIndex = 28;
+            this.txtIrcId.Tag = "The password used for NickServ";
+            // 
+            // chkIrcId
+            // 
+            this.chkIrcId.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkIrcId.AutoSize = true;
+            this.chkIrcId.Location = new System.Drawing.Point(15, 198);
+            this.chkIrcId.Name = "chkIrcId";
+            this.chkIrcId.Size = new System.Drawing.Size(117, 23);
+            this.chkIrcId.TabIndex = 27;
+            this.chkIrcId.Text = "Identify with NickServ";
+            this.chkIrcId.UseVisualStyleBackColor = true;
+            this.chkIrcId.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label6
             // 
@@ -1912,7 +1962,7 @@ namespace MCForge.Gui
             this.chkAgreeToRules.AutoSize = true;
             this.chkAgreeToRules.Location = new System.Drawing.Point(15, 77);
             this.chkAgreeToRules.Name = "chkAgreeToRules";
-            this.chkAgreeToRules.Size = new System.Drawing.Size(189, 17);
+            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
             this.chkAgreeToRules.TabIndex = 32;
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
@@ -2009,7 +2059,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -2077,7 +2127,7 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(154, 23);
+            this.chkRestart.Size = new System.Drawing.Size(153, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart when an error occurs";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -2088,7 +2138,7 @@ namespace MCForge.Gui
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(16, 80);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(110, 23);
+            this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -2099,7 +2149,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(152, 22);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -2505,6 +2555,13 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // txtIRCPort
+            // 
+            this.txtIRCPort.Location = new System.Drawing.Point(223, 24);
+            this.txtIRCPort.Name = "txtIRCPort";
+            this.txtIRCPort.Size = new System.Drawing.Size(46, 21);
+            this.txtIRCPort.TabIndex = 31;
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2799,5 +2856,10 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.GroupBox groupBox17;
         private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.TextBox txtIrcId;
+        private System.Windows.Forms.CheckBox chkIrcId;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.TextBox txtIRCPort;
     }
 }

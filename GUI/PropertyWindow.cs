@@ -309,6 +309,9 @@ namespace MCForge.Gui
                             case "irc-server":
                                 txtIRCServer.Text = value;
                                 break;
+                            case "irc-port":
+                                txtIRCPort.Text = value;
+                                break;
                             case "irc-nick":
                                 txtNick.Text = value;
                                 break;
@@ -317,6 +320,12 @@ namespace MCForge.Gui
                                 break;
                             case "irc-opchannel":
                                 txtOpChannel.Text = value;
+                                break;
+                            case "irc-identify":
+                                chkIrcId.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "irc-password":
+                                txtIrcId.Text = value;
                                 break;
                             case "anti-tunnels":
                                 ChkTunnels.Checked = (value.ToLower() == "true") ? true : false;
@@ -660,9 +669,9 @@ namespace MCForge.Gui
                     w.WriteLine("irc-server = " + txtIRCServer.Text);
                     w.WriteLine("irc-channel = " + txtChannel.Text);
                     w.WriteLine("irc-opchannel = " + txtOpChannel.Text);
-                    w.WriteLine("irc-port = " + Server.ircPort.ToString());
-                    w.WriteLine("irc-identify = " + Server.ircIdentify.ToString());
-                    w.WriteLine("irc-password = " + Server.ircPassword);
+                    w.WriteLine("irc-port = " + txtIRCPort.Text);
+                    w.WriteLine("irc-identify = " + chkIrcId.Checked.ToString().ToLower());
+                    w.WriteLine("irc-password = " + txtIrcId.Text);
                     w.WriteLine();
                     w.WriteLine("# other options");
                     w.WriteLine("anti-tunnels = " + ChkTunnels.Checked.ToString().ToLower());
@@ -1673,6 +1682,25 @@ MessageBox.Show("Text Box Cleared!!");
         private void chkZombieOnServerStart_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtNick_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            /*if (chkIrcId.Checked)
+            {
+                textBox1.Enabled = true;
+                textBox1.BackColor = Color.White;
+            }
+            else
+            {
+                textBox1.Enabled = false;
+                textBox1.BackColor = Color.LightGray;
+            }*/
         }
 
 
