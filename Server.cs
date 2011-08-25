@@ -57,7 +57,7 @@ public static event OnServerError ServerError = null;
         public event MessageEventHandler OnURLChange;
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
-
+        public ForgeBot IRC;
         public static Thread locationChecker;
 
         public static Thread blockThread;
@@ -707,7 +707,7 @@ processThread.Start();
 
                 if (Server.irc)
                 {
-                    new ForgeBot(Server.ircChannel, Server.ircNick, Server.ircServer);
+                    IRC = new ForgeBot(Server.ircChannel, Server.ircNick, Server.ircServer);
                 }
 
 

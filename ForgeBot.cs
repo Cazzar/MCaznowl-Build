@@ -25,7 +25,10 @@ namespace MCForge
             connection.Listener.OnQuit += new QuitEventHandler(Listener_OnQuit);
             connection.Listener.OnJoin += new JoinEventHandler(Listener_OnJoin);
         }
-
+        public void Say(string message)
+        {
+            connection.Sender.PublicMessage(channel, message);
+        }
         void  Listener_OnJoin(UserInfo user, string channel)
         {
  	        Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " joined IRC");
