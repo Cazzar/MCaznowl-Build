@@ -544,7 +544,7 @@ namespace MCForge_.Gui
                     l.saveChanges();
                 }
 
-                File.WriteAllText("text/autoload.txt", level);
+                if(!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
         }

@@ -1078,17 +1078,20 @@ namespace MCForge.Gui
                         oldlines.Add(l.name + "=" + l.physics);
                     }
                 }
-                File.Delete("text/autoload.txt");
-				using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
-				{
-					foreach (string line in oldlines)
-					{
-						if (line.Trim() != "")
-						{
-							SW.WriteLine(line);
-						}
-					}
-				}
+                if (!Server.AutoLoad)
+                {
+                    File.Delete("text/autoload.txt");
+                    using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
+                    {
+                        foreach (string line in oldlines)
+                        {
+                            if (line.Trim() != "")
+                            {
+                                SW.WriteLine(line);
+                            }
+                        }
+                    }
+                }
             }
             UpdateMapList("'");
             return;

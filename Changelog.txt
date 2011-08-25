@@ -3,6 +3,7 @@ v5.2.0.0
 - Fixed /click for guests
 - Fixed level property file saving, it was breaking on certain maps
 - Fixed commands in the CLI, a slash is once again recognized :D
+- Made it so autoload.txt doesn't save when load on /goto is enabled
 - Made some changes to the right-click menu for the maps box
 - Added a "Games" tab to the properties window, it's for game mode configuration
 - Moved Zombie Survival options into the games tab
