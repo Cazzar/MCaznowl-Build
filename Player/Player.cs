@@ -3376,6 +3376,13 @@ namespace MCForge
 
         public void leftGame(string kickString = "", bool skip = false)
         {
+            //Umm...fixed?
+            if (name == "")
+            {
+                if (socket != null || socket.Connected)
+                    CloseSocket();
+                disconnected = true;
+            }
             Server.count = 1;
 
             if (CmdZombieGame.players.Contains(this))
