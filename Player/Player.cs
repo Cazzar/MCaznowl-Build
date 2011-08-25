@@ -3379,9 +3379,10 @@ namespace MCForge
             //Umm...fixed?
             if (name == "")
             {
-                if (socket != null || socket.Connected)
+                if (socket != null)
                     CloseSocket();
                 disconnected = true;
+                return;
             }
             Server.count = 1;
 
