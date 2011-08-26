@@ -44,6 +44,9 @@ namespace MCForge
 
     public class Level : IDisposable
     {
+        public static bool cancelload = false;
+        public static bool cancelsave = false;
+        public static bool cancelphysics = false;
         public int id;
         public string name;
         public ushort width; // x
@@ -72,13 +75,13 @@ namespace MCForge
         public ushort spawnz;
         public byte rotx;
         public byte roty;
-        public delegate bool OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo);
+        public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo, Level l);
         public event OnPhysicsUpdate PhysicsUpdate = null;
         public delegate void OnLevelUnload(Level l);
         public event OnLevelUnload LevelUnload = null;
         public delegate void OnLevelSave(Level l);
         public event OnLevelSave LevelSave = null;
-        public delegate void OnLevelLoad(Level l);
+        public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
@@ -607,7 +610,14 @@ namespace MCForge
         {
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
+            {
                 LevelSave(this);
+                if (cancelsave)
+                {
+                    cancelsave = false;
+                    return;
+                }
+            }
             try
             {
                 if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
@@ -723,6 +733,15 @@ namespace MCForge
         public static Level Load(string givenName) { return Load(givenName, 0); }
         public static Level Load(string givenName, byte phys)
         {
+            if (LevelLoad != null)
+            {
+                LevelLoad(givenName);
+                if (cancelload)
+                {
+                    cancelload = false;
+                    return null;
+                }
+            }
             MySQL.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
             MySQL.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
             MySQL.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
@@ -1070,8 +1089,7 @@ namespace MCForge
                             string foundInfo = C.extraInfo;
                             if (PhysicsUpdate != null)
                             {
-                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo)) { }
-                                //continue;
+                                PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
                             }
                         newPhysic: if (foundInfo != "")
                             {
@@ -1200,6 +1218,7 @@ namespace MCForge
                             ListCheck.Remove(C);
                             //Server.s.Log(e.Message);
                         }
+                        
 
                     });
 
@@ -1241,8 +1260,7 @@ namespace MCForge
                             string foundInfo = C.extraInfo;
                             if (PhysicsUpdate != null)
                             {
-                                if (PhysicsUpdate(x, y, z, C.time, C.extraInfo)) { }
-                                    //continue;
+                                PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
                             } 
                         newPhysic: if (foundInfo != "")
                             {

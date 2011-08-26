@@ -208,6 +208,7 @@
       <DependentUpon>EditText.cs</DependentUpon>
     </Compile>
     <Compile Include="MySQLTransactionHelper.cs" />
+    <Compile Include="Plugins\Events.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
@@ -450,6 +451,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
+    <Compile Include="Plugins\Plugin.Events.cs" />
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

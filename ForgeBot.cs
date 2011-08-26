@@ -142,11 +142,10 @@ namespace MCForge
             else
                 Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is now known as " + newNick);
         }
-        bool Player_PlayerChat(Player p, string message)
+        void Player_PlayerChat(Player p, string message)
         {
             if (Server.irc && IsConnected())
                 connection.Sender.PublicMessage(p.opchat ? opchannel : channel, p.name + ": " + message);
-            return true;
         }
         public void Connect()
         {

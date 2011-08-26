@@ -31,6 +31,9 @@ namespace MCForge
 {
     public sealed class Player : IDisposable
     {
+        public static bool cancelcommand = false;
+        public static bool cancelchat = false;
+        public static bool cancelBlock = false;
         public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
@@ -237,7 +240,7 @@ namespace MCForge
         /// returning true will tell the server to do nothing else afterwards, this is usefull for a cuboid like plugin
         /// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
         /// </summary>
-        public delegate bool BlockchangeEventHandler2(Player p, ushort x, ushort y, ushort z, byte type);
+        public delegate void BlockchangeEventHandler2(Player p, ushort x, ushort y, ushort z, byte type);
         public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
         public event BlockchangeEventHandler Blockchange = null;
         /// <summary>
@@ -256,7 +259,7 @@ namespace MCForge
         /// returning true will tell the server not to look for anymore blocks/commands, this is usefull if you dont want the server to say Command bla does not exist
         /// returning false will tell the server to continue to look for another block/command, this is usefull if you didnt find the cmd you were looking for...
         /// </summary>
-        public delegate bool OnPlayerCommand(string cmd, Player p, string message);
+        public delegate void OnPlayerCommand(string cmd, Player p, string message);
         public static event OnPlayerCommand PlayerCommand = null;
         /// <summary>
         /// PlayerChat is called when a player says something in chat
@@ -265,7 +268,7 @@ namespace MCForge
         /// returning false will tell the server to send the message normally, this is usefull if you didnt need it
         /// You should return false if you dont need to do anything with it
         /// </summary>
-        public delegate bool OnPlayerChat(Player p, string message);
+        public delegate void OnPlayerChat(Player p, string message);
         public static event OnPlayerChat PlayerChat = null;
         /// <summary>
         /// PlayerDeath is VERY usefull for game modes of all sorts
@@ -1207,8 +1210,12 @@ namespace MCForge
             }
             if (PlayerBlockChange != null)
             {
-                if (PlayerBlockChange(this, x, y, z, type))
+                PlayerBlockChange(this, x, y, z, type);
+                if (cancelBlock)
+                {
+                    cancelBlock = false;
                     return;
+                }
             }
 
             if (group.Permission == LevelPermission.Banned) return;
@@ -2077,14 +2084,15 @@ namespace MCForge
                     return;
                 }
                 Server.s.Log("<" + name + "> " + text);
-                bool test1 = false;
-                bool test2 = false;
                 if (OnChat != null)
-                    test1 = OnChat(this, text);
+                    OnChat(this, text);
                 if (PlayerChat != null)
-                    test2 = PlayerChat(this, text);
-                if (test1 || test2)
+                    PlayerChat(this, text);
+                if (cancelchat)
+                {
+                    cancelchat = false;
                     return;
+                }
                 if (Server.worldChat)
                 {
                     GlobalChat(this, text);
@@ -2200,15 +2208,15 @@ namespace MCForge
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);
                 if (foundShortcut != "") cmd = foundShortcut;
-
-                bool test1 = false;
-                bool test2 = false;
                 if (OnCommand != null)
-                    test1 = OnCommand(cmd, this, message);
+                    OnCommand(cmd, this, message);
                 if (PlayerCommand != null)
-                    test2 = PlayerCommand(cmd, this, message);
-                if (test1 || test2)
+                    PlayerCommand(cmd, this, message);
+                if (cancelcommand)
+                {
+                    cancelcommand = false;
                     return;
+                }
                 try
                 {
                     int foundCb = int.Parse(cmd);

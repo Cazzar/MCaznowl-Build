@@ -8,6 +8,8 @@ v5.2.0.0
 - Added a "Games" tab to the properties window, it's for game mode configuration
 - Moved Zombie Survival options into the games tab
 - Made it so plugins are loaded last
+- Replaced Old irc dll with a new one.
+- Added Plugin.Events.CancelEvent()
 
 v5.1.0.3
 - Fixed level saving!
