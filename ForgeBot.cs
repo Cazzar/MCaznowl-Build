@@ -1,13 +1,12 @@
 ﻿using System;
 using Sharkbite.Irc;
-using System.Threading;
+//using System.Threading;
 
 namespace MCForge
 {
     public class ForgeBot
     {
         private Connection connection;
-        private Thread ircThread;
         private string channel, opchannel;
         private string nick;
         private string server;
@@ -150,7 +149,7 @@ namespace MCForge
         }
         public void Connect()
         {
-            ircThread = new Thread(new ThreadStart(delegate
+            /*new Thread(new ThreadStart(delegate
             {
                 try { connection.Connect(); }
                 catch (Exception e)
@@ -158,7 +157,14 @@ namespace MCForge
                     Server.s.Log("Failed to connect to IRC");
                     Server.ErrorLog(e);
                 }
-            })); ircThread.Start();
+            })).Start();*/
+
+            try { connection.Connect(); }
+            catch (Exception e)
+            {
+                Server.s.Log("Failed to connect to IRC");
+                Server.ErrorLog(e);
+            }
         }
         void Disconnect(string message = "Disconnecting")
         {
