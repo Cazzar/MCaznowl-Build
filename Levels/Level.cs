@@ -533,6 +533,7 @@ namespace MCForge
                     SW.WriteLine("PerVisitMax = " + (Group.Exists(PermissionToName(level.pervisitmax).ToLower()) ? PermissionToName(level.pervisitmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
                     SW.WriteLine("Guns = " + level.guns.ToString());
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                    SW.Close(); SW.Dispose();
                 }
             }
             catch (Exception e)
