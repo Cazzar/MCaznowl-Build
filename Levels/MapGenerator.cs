@@ -43,11 +43,11 @@ namespace MCForge
 
         }
 
-        public bool GenerateMap(Level Lvl, string type)
+        public bool GenerateMap(Level Lvl, string type, int seed = 0, bool useSeed = false)
         {
             Server.s.Log("Attempting map gen");
             if (Inuse) { Server.s.Log("Generator in use"); return false; }
-            Random rand = new System.Random();
+            Random rand = useSeed ? new System.Random(seed) : new System.Random();
             try
             {
                 Inuse = true;

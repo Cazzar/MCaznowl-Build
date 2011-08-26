@@ -35,7 +35,7 @@ namespace MCForge
             if (message == "") { Help(p); return; }
 
             string[] parameters = message.Split(' '); // Grab the parameters from the player's message
-            if (parameters.Length == 5) // make sure there are 5 params
+            if (parameters.Length >= 5 && parameters.Length <= 6) // make sure there are 5 or 6 params
             {
                 switch (parameters[4])
                 {
@@ -55,6 +55,8 @@ namespace MCForge
 
                 string name = parameters[0].ToLower();
                 ushort x = 1, y = 1, z = 1;
+                int seed = 0;
+                bool useSeed = false;
                 try
                 {
                     x = Convert.ToUInt16(parameters[1]);
@@ -62,11 +64,18 @@ namespace MCForge
                     z = Convert.ToUInt16(parameters[3]);
                 }
                 catch { Player.SendMessage(p, "Invalid dimensions."); return; }
+                if (parameters.Length == 6)
+                {
+                    try { seed = Convert.ToInt32(parameters[5]); }
+                    catch { seed = parameters[5].GetHashCode(); }
+                    useSeed = true;
+                }
                 if (!isGood(x)) { Player.SendMessage(p, x + " is not a good dimension! Use a power of 2 next time."); }
                 if (!isGood(y)) { Player.SendMessage(p, y + " is not a good dimension! Use a power of 2 next time."); }
                 if (!isGood(z)) { Player.SendMessage(p, z + " is not a good dimension! Use a power of 2 next time."); }
 
                 if (!Player.ValidName(name)) { Player.SendMessage(p, "Invalid name!"); return; }
+                if (System.IO.File.Exists("levels/" + name + ".lvl")) { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
 
                 try
                 {
@@ -88,7 +97,7 @@ namespace MCForge
                 // create a new level...
                 try
                 {
-                    using(Level lvl = new Level(name, x, y, z, parameters[4]))
+                    using (Level lvl = new Level(name, x, y, z, parameters[4], seed, useSeed))
 						lvl.Save(true); //... and save it.
                 }
                 finally
@@ -96,7 +105,7 @@ namespace MCForge
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
                 }
-                Player.GlobalMessage("Level " + name + " created"); // The player needs some form of confirmation.
+                Player.GlobalMessage("Level \"" + name + "\" created" + (useSeed ? " with seed \"" + parameters[5] + "\"" : "")); // The player needs some form of confirmation.
             }
             else
                 Help(p);
@@ -104,9 +113,11 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/newlvl - creates a new level.");
-            Player.SendMessage(p, "/newlvl mapname 128 64 128 type");
+            Player.SendMessage(p, "/newlvl mapname 128 64 128 type seed");
             Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024");
             Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
+            Player.SendMessage(p, "The seed controls how the level is generated, if the seed is the same the level will be the same.");
+            Player.SendMessage(p, "The seed does not do anything on flat and pixel type maps.");
         }
 
         public bool isGood(ushort value)
