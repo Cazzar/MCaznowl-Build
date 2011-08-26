@@ -116,7 +116,7 @@ namespace MCForge
             Player.SendMessage(p, "/newlvl mapname 128 64 128 type seed");
             Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024");
             Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
-            Player.SendMessage(p, "The seed is optional, controls how the level is generated, if the seed is the same the level will be the same.");
+            Player.SendMessage(p, "The seed is optional, and controls how the level is generated, if the seed is the same the level will be the same.");
             Player.SendMessage(p, "The seed does not do anything on flat and pixel type maps.");
         }
 
