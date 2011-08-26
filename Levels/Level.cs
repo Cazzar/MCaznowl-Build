@@ -239,8 +239,12 @@ namespace MCForge
                     saveChanges();
                 }
             }
-            physThread.Abort();
-            physThread.Join();
+            try
+            {
+                physThread.Abort();
+                physThread.Join();
+            }
+            catch { }
             Server.levels.Remove(this);
             GC.Collect();
             GC.WaitForPendingFinalizers();

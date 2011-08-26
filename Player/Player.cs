@@ -3504,7 +3504,7 @@ namespace MCForge
                     }
                     catch (Exception e)
                     {
-                        Server.ErrorLog(e);
+                        //Server.ErrorLog(e);
                     }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
                     catch { }
