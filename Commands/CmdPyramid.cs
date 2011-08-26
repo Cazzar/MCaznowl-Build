@@ -118,6 +118,12 @@ namespace MCForge
             cpos.x = x; cpos.y = y; cpos.z = z; p.blockchangeObject = cpos;
             List<Pos> buffer = new List<Pos>();
             p.pyramidsilent = true;
+            int total = calculate(p, cpos);
+            if (total > p.group.maxBlocks)
+            {
+                Player.SendMessage(p, "Tried to modify " + total + " blocks, but your limit is " + p.group.maxBlocks + ".");
+                return;
+            }
 
             switch (cpos.solid)
             {
@@ -129,6 +135,7 @@ namespace MCForge
 
                     if (p.pyramidz1 == p.pyramidz2) //checks if pyramid is on a level surface
                     {
+
                         Command.all.Find("cuboid").Use(p, p.pyramidblock);
                         click(p, p.pyramidx1 + " " + p.pyramidz2 + " " + p.pyramidy1);
                         click(p, p.pyramidx2 + " " + p.pyramidz2 + " " + p.pyramidy2);
@@ -443,7 +450,7 @@ namespace MCForge
                     break;
             }
 
-            if (Server.forceCuboid)
+            /*if (Server.forceCuboid)
             {
                 int counter = 1;
                 buffer.ForEach(delegate(Pos pos)
@@ -475,16 +482,78 @@ namespace MCForge
                 Player.SendMessage(p, "You cannot pyramid more than " + p.group.maxBlocks + ".");
                 wait = 1;
                 return;
-            }
+            }*/
 
-            Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            Player.SendMessage(p, total + " blocks.");
 
-            buffer.ForEach(delegate(Pos pos)
+            /*buffer.ForEach(delegate(Pos pos)
             {
                 p.level.Blockchange(p, pos.x, pos.y, pos.z, type);
             });
-            wait = 2;
+            wait = 2;*/
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+        }
+        private static int calculate(Player p, CatchPos cpos)
+        {
+            int total = 0;
+            for (int xx = Math.Min(cpos.x, p.pyramidx1); xx <= Math.Max(cpos.x, p.pyramidx1); ++xx)
+                for (int zz = Math.Min(cpos.z, p.pyramidy1); zz <= Math.Max(cpos.z, p.pyramidy1); ++zz)
+                {
+                    total += 1;
+                }
+            int finaltotal = 0;
+            int totald2 = (int)Math.Sqrt(total);
+            int xxx = 0;
+            int zzz = 0;
+            int minx = Math.Min(cpos.x, p.pyramidx1);
+            int maxx = Math.Max(cpos.x, p.pyramidx1);
+            int minz = Math.Min(cpos.z, p.pyramidy1);
+            int maxz = Math.Max(cpos.z, p.pyramidy1);
+            for (int i = 0; i < totald2 / 2; i++)
+            {
+                for (int xx = minx; xx <= maxx; ++xx)
+                    xxx += 1;
+                for (int zz = minz; zz <= maxz; ++zz)
+                    zzz += 1;
+                finaltotal += xxx * zzz;
+                xxx = 0;
+                zzz = 0;
+                maxx -= 2;
+                maxz -= 2;
+            }
+            if (cpos.solid == SolidType.hollow) finaltotal = finaltotal - calculatehollow(p, cpos);
+            return finaltotal;
+        }
+        private static int calculatehollow(Player p, CatchPos cpos)
+        {
+            int total = 0;
+            int minx = Math.Min(cpos.x, p.pyramidx1);
+            int maxx = Math.Max(cpos.x, p.pyramidx1) - 2;
+            int minz = Math.Min(cpos.z, p.pyramidy1);
+            int maxz = Math.Max(cpos.z, p.pyramidy1) - 2;
+            for (int xx = minx; xx <= maxx; ++xx)
+                for (int zz = minz; zz <= maxz; ++zz)
+                {
+                    total += 1;
+                }
+            int finaltotal = 0;
+            int totald2 = (int)Math.Sqrt(total);
+            int xxx = 0;
+            int zzz = 0;
+            for (int i = 0; i < totald2 / 2; i++)
+            {
+                for (int xx = minx; xx <= maxx; ++xx)
+                    xxx += 1;
+                for (int zz = minz; zz <= maxz; ++zz)
+                    zzz += 1;
+                finaltotal += xxx * zzz;
+                xxx = 0;
+                zzz = 0;
+                maxx -= 2;
+                maxz -= 2;
+            }
+            finaltotal -= total;
+            return finaltotal;
         }
         void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
         {
