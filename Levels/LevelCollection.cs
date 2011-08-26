@@ -210,6 +210,18 @@ namespace MCForge
 
             del = delegate(Level l)
             {
+                return l.loadOnGoto;
+            };
+            props.Add(new LevelMethodDescriptor("Load on /goto", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
+                return l.unload;
+            };
+            props.Add(new LevelMethodDescriptor("Unload Empty", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
                 if (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()))
                 {
                     return true;

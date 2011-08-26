@@ -190,7 +190,7 @@ namespace MCForge.Gui
             }
             else
             {
-                this.Text = Server.name + " MCForge Version: " + Server.Version;
+                this.Text = Server.name + " - MCForge " + Server.Version;
             }
         }
 
@@ -1022,6 +1022,8 @@ namespace MCForge.Gui
                 Gunschk.Checked = l.guns;
                 Fallnumeric.Value = l.fall;
                 drownNumeric.Value = l.drown;
+                LoadOnGotoChk.Checked = l.loadOnGoto;
+                UnloadChk.Checked = l.unload;
                 AutoLoadChk.Checked = false;
                 if (File.Exists("text/autoload.txt"))
                 {
@@ -1068,6 +1070,8 @@ namespace MCForge.Gui
             l.guns = Gunschk.Checked;
             l.fall = (int)Fallnumeric.Value;
             l.drown = (int)drownNumeric.Value;
+            l.loadOnGoto = LoadOnGotoChk.Checked;
+            l.unload = UnloadChk.Checked;
             {
                 List<string> oldlines = new List<string>();
                 using (StreamReader r = new StreamReader("text/autoload.txt"))
@@ -1091,17 +1095,14 @@ namespace MCForge.Gui
                         oldlines.Add(l.name + "=" + l.physics);
                     }
                 }
-                if (!Server.AutoLoad)
+                File.Delete("text/autoload.txt");
+                using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
                 {
-                    File.Delete("text/autoload.txt");
-                    using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
+                    foreach (string line in oldlines)
                     {
-                        foreach (string line in oldlines)
+                        if (line.Trim() != "")
                         {
-                            if (line.Trim() != "")
-                            {
-                                SW.WriteLine(line);
-                            }
+                            SW.WriteLine(line);
                         }
                     }
                 }
@@ -1118,7 +1119,7 @@ namespace MCForge.Gui
                 mapgen = true;
                 try
                 {
-                    Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower());
+                    Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower() + (!String.IsNullOrEmpty(seedtxtbox.Text) ? " " + seedtxtbox.Text : ""));
                 }
                 catch
                 {

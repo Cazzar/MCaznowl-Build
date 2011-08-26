@@ -34,23 +34,34 @@ namespace MCForge
         {
             if (message.ToLower() == "empty")
             {
-                Boolean Empty = true;
+                Boolean Empty = true, AnyEmpty = false;
 
-                foreach (Level l in Server.levels)
-                {
-                    Empty = true;
-                    Player.players.ForEach(delegate(Player pl)
+                unload_loop:
+                    try
                     {
-                        if (pl.level == l) Empty = false;
-                    });
+                        foreach (Level l in Server.levels)
+                        {
+                            Empty = true;
+                            foreach (Player pl in Player.players)
+                            {
+                                if (Server.mainLevel == l || pl.level == l)
+                                {
+                                    Empty = false;
+                                    break;
+                                }
+                            }
 
-                    if (Empty == true && l.unload)
-                    {
-                        l.Unload();
-                        return;
+                            if (Empty == true && l.unload)
+                            {
+                                AnyEmpty = true;
+                                l.Unload();
+                                goto unload_loop;
+                            }
+                        }
                     }
-                }
-                Player.SendMessage(p, "No levels were empty.");
+                    catch { goto unload_loop; }
+                
+                if(!AnyEmpty) Player.SendMessage(p, "No levels were empty.");
                 return;
             }
 
