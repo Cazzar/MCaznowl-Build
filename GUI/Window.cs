@@ -475,7 +475,7 @@ namespace MCForge.Gui
                 }
                 else
                 {
-                    Player.GlobalMessage("Console [" + Server.ZallState + "]: " + txtInput.Text);
+                    Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + txtInput.Text);
                     //IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     Server.IRC.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     WriteLine("<CONSOLE> " + txtInput.Text);
