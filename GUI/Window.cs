@@ -60,6 +60,8 @@ namespace MCForge.Gui
 
         internal static Server s;
 
+        //System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000);
+
         public Window()
         {
             InitializeComponent();
@@ -164,8 +166,16 @@ namespace MCForge.Gui
 				{
 					UpdateClientList(Player.players);
 					UpdateMapList("'");
+                    Server.s.Log("Lists updated!");
 				}; UpdateListTimer.Start();
 			}
+
+            /*UpdateListTimer.Elapsed += delegate
+			{
+				UpdateClientList(Player.players);
+				UpdateMapList("'");
+                Server.s.Log("Lists updated!");
+			}; UpdateListTimer.Start();*/
         }
 
         void btnPropertiesenable() { btnProperties.Enabled = true; }
@@ -449,7 +459,8 @@ namespace MCForge.Gui
                     newtext = text.Remove(0, 1).Trim();
                     Player.GlobalMessageOps(newtext);
                     Server.s.OpLog("(OPs): Console: " + newtext);
-                    IRCBot.Say("Console: " + newtext, true);
+                    //IRCBot.Say("Console: " + newtext, true);
+                    Server.IRC.Say("Console: " + newtext, true);
                     //   WriteLine("(OPs):<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
                 }
@@ -458,13 +469,15 @@ namespace MCForge.Gui
                     newtext = text.Remove(0, 1).Trim();
                     Player.GlobalMessageAdmins(newtext);
                     Server.s.AdminLog("(Admins): Console: " + newtext);
-                    IRCBot.Say("Console: " + newtext, true);
+                    //IRCBot.Say("Console: " + newtext, true);
+                    Server.IRC.Say("Console: " + newtext, true);
                     txtInput.Clear();
                 }
                 else
                 {
                     Player.GlobalMessage("Console [" + Server.ZallState + "]: " + txtInput.Text);
-                    IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
+                    //IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
+                    Server.IRC.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     WriteLine("<CONSOLE> " + txtInput.Text);
                     txtInput.Clear();
                 }

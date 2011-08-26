@@ -48,7 +48,8 @@ namespace MCForge
                             message = "";
                         }
                         Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is AFK " + message);
-                        IRCBot.Say(p.name + " is AFK " + message);
+                        //IRCBot.Say(p.name + " is AFK " + message);
+                        Server.IRC.Say(p.name + " is AFK " + message);
                         p.afkStart = DateTime.Now;
                         return;
 
@@ -57,7 +58,8 @@ namespace MCForge
                     {
                         Server.afkset.Remove(p.name);
                         Player.GlobalMessage("-" + p.color + p.name + Server.DefaultColor + "- is no longer AFK");
-                        IRCBot.Say(p.name + " is no longer AFK");
+                        //IRCBot.Say(p.name + " is no longer AFK");
+                        Server.IRC.Say(p.name + " is no longer AFK");
                         return;
                     }
                 }

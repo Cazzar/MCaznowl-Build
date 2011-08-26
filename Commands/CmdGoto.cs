@@ -83,7 +83,7 @@ namespace MCForge
                             if (startLevel.unload && !startLevel.name.Contains("&cMuseum "))
                             {
                                 foreach (Player pl in Player.players) if (pl.level == startLevel) skipUnload = true;
-                                if (!skipUnload && Server.AutoLoad) startLevel.Unload();
+                                if (!skipUnload && Server.AutoLoad) startLevel.Unload(true);
                             }
                         }
                         else Player.SendMessage(p, "The level " + message + " is locked.");
