@@ -906,7 +906,7 @@ namespace MCForge
 					}
                 }
                 catch (Exception ex) { Server.ErrorLog(ex); return null; }
-                finally { fs.Close(); }
+                finally { fs.Close(); fs.Dispose(); }
             }
             else { Server.s.Log("ERROR loading level."); return null; }
         }
