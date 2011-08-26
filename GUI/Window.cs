@@ -60,7 +60,7 @@ namespace MCForge.Gui
 
         internal static Server s;
 
-        //System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000);
+        System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000);
 
         public Window()
         {
@@ -160,7 +160,7 @@ namespace MCForge.Gui
             dgvMapsTab.DataSource = new LevelCollection(new LevelListViewForTab());
             dgvMapsTab.Font = new Font("Calibri", 8.25f);
 
-			using (System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000))
+			/*using (System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000))
 			{
 				UpdateListTimer.Elapsed += delegate
 				{
@@ -168,14 +168,14 @@ namespace MCForge.Gui
 					UpdateMapList("'");
                     Server.s.Log("Lists updated!");
 				}; UpdateListTimer.Start();
-			}
+			}*/
 
-            /*UpdateListTimer.Elapsed += delegate
+            UpdateListTimer.Elapsed += delegate
 			{
 				UpdateClientList(Player.players);
 				UpdateMapList("'");
-                Server.s.Log("Lists updated!");
-			}; UpdateListTimer.Start();*/
+                //Server.s.Log("Lists updated!");
+			}; UpdateListTimer.Start();
         }
 
         void btnPropertiesenable() { btnProperties.Enabled = true; }
@@ -475,7 +475,7 @@ namespace MCForge.Gui
                 }
                 else
                 {
-                    Player.GlobalMessage("Console [" + Server.ZallState + "]: " + txtInput.Text);
+                    Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + txtInput.Text);
                     //IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     Server.IRC.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
                     WriteLine("<CONSOLE> " + txtInput.Text);

@@ -333,23 +333,25 @@ public static byte maxGuests = 10;
                         Log("Downloading Restarter.pdb failed, please try again later");
                     }
                 }
-                if (!File.Exists("Meebey.SmartIRC4Net.dll"))
+                if (!File.Exists("Sharkbite.Thresher.dll"))
                 {
-                    Log("Meebey.SmartIRC4Net.dll doesn't exist, Downloading");
+                    Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
                     try
                     {
                         using (WebClient WEB = new WebClient())
                         {
-                            WEB.DownloadFile("http://www.mediafire.com/?jj9w8x6sjpgoi5o", "Meebey.SmartIRC4Net.dll");
+                            // We should put this on mcforge.net, hence why there's the commented line.
+                            WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
+                            //WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
                         }
-                        if (File.Exists("Meebey.SmartIRC4Net.dll"))
+                        if (File.Exists("Sharkbite.Thresher.dll"))
                         {
-                            Log("Meebey.SmartIRC4Net.dll download succesful!");
+                            Log("Sharkbite.Thresher.dll download succesful!");
                         }
                     }
                     catch
                     {
-                        Log("Downloading Meebey.SmartIRC4Net.dll failed, please try again later");
+                        Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
                     }
                 }
             }

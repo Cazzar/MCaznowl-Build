@@ -147,7 +147,7 @@ namespace MCForge
         // Extra storage for custom commands
         public ExtrasCollection Extras = new ExtrasCollection();
 
-        public Level(string n, ushort x, ushort y, ushort z, string type)
+        public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
             width = x; depth = y; height = z;
             if (width < 16) { width = 16; }
@@ -179,7 +179,7 @@ namespace MCForge
                     break;
 
                 case "space":
-                    Random rand = new Random();
+                    Random rand = useSeed ? new Random(seed) : new Random();
 
                     for (x = 0; x < width; ++x)
                         for (z = 0; z < height; ++z)
@@ -195,7 +195,7 @@ namespace MCForge
                 case "ocean":
                 case "forest":
                 case "desert":
-                    Server.MapGen.GenerateMap(this, type);
+                    Server.MapGen.GenerateMap(this, type, seed, useSeed);
                     break;
 
                 default:
@@ -536,6 +536,7 @@ namespace MCForge
                     SW.WriteLine("PerVisitMax = " + (Group.Exists(PermissionToName(level.pervisitmax).ToLower()) ? PermissionToName(level.pervisitmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
                     SW.WriteLine("Guns = " + level.guns.ToString());
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                    SW.Close(); SW.Dispose();
                 }
             }
             catch (Exception e)
