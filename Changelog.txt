@@ -4,6 +4,7 @@ v5.2.0.0
 - Fixed /moveall and /map in the console
 - Fixed /click for guests
 - Fixed /pyramid so it respects block limits
+- Fixed /newlvl so that you can't create a level that already exists
 - Fixed level property file saving, it was breaking on certain maps
 - Fixed commands in the CLI, a slash is once again recognized :D
 - Fixed in-game messages from the console so they have proper coloring again
