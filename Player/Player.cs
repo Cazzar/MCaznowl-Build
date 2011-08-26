@@ -2421,7 +2421,9 @@ namespace MCForge
                 }
                 else
                 {
-                    if (Server.IRC.usedCmd == "")
+                    if (!Server.irc)
+                        Server.s.Log(message);
+                    else if (String.IsNullOrEmpty(Server.IRC.usedCmd))
                         Server.s.Log(message);
                     else
                         Server.IRC.Pm(Server.IRC.usedCmd, message);
