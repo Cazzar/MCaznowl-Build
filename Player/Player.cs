@@ -2413,7 +2413,10 @@ namespace MCForge
                 }
                 else
                 {
-                    Server.s.Log(message);
+                    if (Server.IRC.usedCmd == "")
+                        Server.s.Log(message);
+                    else
+                        Server.IRC.Pm(Server.IRC.usedCmd, message);
                     //IRCBot.Say(message, true);
                 }
                 return;
@@ -3522,7 +3525,7 @@ namespace MCForge
                     }*/
 
                     if (Server.AutoLoad && level.unload && !level.name.Contains("Museum " + Server.DefaultColor) && IsAloneOnCurrentLevel())
-                        level.Unload();
+                        level.Unload(true);
 
 
                     try

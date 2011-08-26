@@ -62,7 +62,8 @@ namespace MCForge
                             }
                         }
                         Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
-                        IRCBot.Say("The map, " + message + " has been reloaded.");
+                        //IRCBot.Say("The map, " + message + " has been reloaded.");
+                        Server.IRC.Say("The map, " + message + " has been reloaded.");
                         Server.s.Log("The map, " + message + " was reloaded by the console");
                         return;
                     }
@@ -81,7 +82,8 @@ namespace MCForge
                             }
                         }
                         Player.GlobalMessage("&cThe map, " + message + " has been reloaded!");
-						IRCBot.Say("The map, " + message + " has been reloaded.");
+						//IRCBot.Say("The map, " + message + " has been reloaded.");
+                        Server.IRC.Say("The map, " + message + " has been reloaded.");
 						Server.s.Log("The map, " + message + " was reloaded by " + p.name);
 						p.ignorePermission = false;
 						return;

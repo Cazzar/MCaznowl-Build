@@ -133,7 +133,8 @@ namespace MCForge
                 }
                 Group.findPerm(LevelPermission.Banned).playerList.Save();
 
-                IRCBot.Say(message + " was banned.");
+                //IRCBot.Say(message + " was banned.");
+                Server.IRC.Say(message + " was banned.");
                 Server.s.Log("BANNED: " + message.ToLower());
 
                 if (totalBan == true)

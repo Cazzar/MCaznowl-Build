@@ -32,7 +32,8 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            IRCBot.Reset();
+            //IRCBot.Reset();
+            Server.IRC.Reset();
         }
         public override void Help(Player p)
         {

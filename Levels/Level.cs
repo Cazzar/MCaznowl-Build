@@ -220,7 +220,7 @@ namespace MCForge
             }
         }
 
-        public bool Unload()
+        public bool Unload(bool silent = false)
         {
             if (Server.mainLevel == this) return false;
             if (this.name.Contains("&cMuseum ")) return false;
@@ -249,7 +249,7 @@ namespace MCForge
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            Player.GlobalMessageOps("&3" + name + Server.DefaultColor + " was unloaded.");
+            if(!silent) Player.GlobalMessageOps("&3" + name + Server.DefaultColor + " was unloaded.");
             Server.s.Log(name + " was unloaded.");
             return true;
         }
