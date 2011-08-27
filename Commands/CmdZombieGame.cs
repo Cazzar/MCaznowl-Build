@@ -54,7 +54,7 @@ namespace MCForge
                 MyLocation:
                 playersInfected = 1;
                 zombieGame();
-                changeLevel();
+                //changeLevel();
                 if (!infiniteRounds)
                 {
                     if (amountOfRounds != cut)
