@@ -112,6 +112,7 @@ public static event OnServerError ServerError = null;
         public struct levelID { public int ID; public string name; }
 
         public static List<string> afkset = new List<string>();
+        public static List<string> ircafkset = new List<string>();
         public static List<string> afkmessages = new List<string>();
         public static List<string> messages = new List<string>();
 
