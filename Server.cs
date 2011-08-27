@@ -340,9 +340,8 @@ public static byte maxGuests = 10;
                     {
                         using (WebClient WEB = new WebClient())
                         {
-                            // We should put this on mcforge.net, hence why there's the commented line.
-                            WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            //WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
+                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
+                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
                         }
                         if (File.Exists("Sharkbite.Thresher.dll"))
                         {
