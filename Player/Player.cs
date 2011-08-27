@@ -3683,7 +3683,7 @@ namespace MCForge
                 bool used = false;
 
                 foreach (Player p in players)
-                    if (p.id == i) used = true;
+                    if (p.id == i) { used = true; break; }
 
                 if (!used)
                     return i;
