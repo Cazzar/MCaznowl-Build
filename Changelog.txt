@@ -10,6 +10,7 @@ v5.2.0.0
 - Made it so plugins are loaded last
 - Replaced Old irc dll with a new one.
 - Added Plugin.Events.CancelEvent()
+- Some events have been updated (Might break old plugins)
 
 v5.1.0.3
 - Fixed level saving!
