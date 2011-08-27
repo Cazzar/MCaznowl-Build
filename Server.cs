@@ -707,11 +707,9 @@ processThread.Start();
                 }
                 else File.Create("text/messages.txt").Close();
 
-                if (Server.irc)
-                {
-                    IRC = new ForgeBot(Server.ircChannel, Server.ircOpChannel, Server.ircNick, Server.ircServer);
-                    IRC.Connect();
-                }
+                // We always construct this to prevent errors...
+                IRC = new ForgeBot(Server.ircChannel, Server.ircOpChannel, Server.ircNick, Server.ircServer);
+                if (Server.irc) IRC.Connect();
 
 
                 // string CheckName = "FROSTEDBUTTS";

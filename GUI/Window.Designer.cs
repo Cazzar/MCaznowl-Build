@@ -86,6 +86,7 @@ namespace MCForge.Gui
             this.gunsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actiondToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,6 +138,7 @@ namespace MCForge.Gui
             this.UnloadedList = new System.Windows.Forms.ListBox();
             this.ldmapbt = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label35 = new System.Windows.Forms.Label();
             this.AutoLoadChk = new System.Windows.Forms.CheckBox();
             this.label23 = new System.Windows.Forms.Label();
             this.drownNumeric = new System.Windows.Forms.NumericUpDown();
@@ -165,6 +167,8 @@ namespace MCForge.Gui
             this.label11 = new System.Windows.Forms.Label();
             this.SaveMap = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.seedtxtbox = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.xtxtbox = new System.Windows.Forms.ComboBox();
             this.ytxtbox = new System.Windows.Forms.ComboBox();
             this.ztxtbox = new System.Windows.Forms.ComboBox();
@@ -239,7 +243,9 @@ namespace MCForge.Gui
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label33 = new System.Windows.Forms.Label();
             this.txtOpInput = new System.Windows.Forms.TextBox();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadOnGotoChk = new System.Windows.Forms.CheckBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.UnloadChk = new System.Windows.Forms.CheckBox();
             this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.PlayersTextBox = new MCForge.Gui.AutoScrollTextBox();
@@ -456,21 +462,28 @@ namespace MCForge.Gui
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click_1);
+            // 
+            // reloadToolStripMenuItem
+            // 
+            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.reloadToolStripMenuItem.Text = "Reload";
+            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // unloadToolStripMenuItem
             // 
             this.unloadToolStripMenuItem.Name = "unloadToolStripMenuItem";
-            this.unloadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.unloadToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.unloadToolStripMenuItem.Text = "Unload";
             this.unloadToolStripMenuItem.Click += new System.EventHandler(this.unloadToolStripMenuItem_Click_1);
             // 
             // moveAllToolStripMenuItem
             // 
             this.moveAllToolStripMenuItem.Name = "moveAllToolStripMenuItem";
-            this.moveAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.moveAllToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.moveAllToolStripMenuItem.Text = "Move All";
             this.moveAllToolStripMenuItem.Click += new System.EventHandler(this.moveAllToolStripMenuItem_Click);
             // 
@@ -991,6 +1004,10 @@ namespace MCForge.Gui
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.UnloadChk);
+            this.panel2.Controls.Add(this.label36);
+            this.panel2.Controls.Add(this.LoadOnGotoChk);
+            this.panel2.Controls.Add(this.label35);
             this.panel2.Controls.Add(this.AutoLoadChk);
             this.panel2.Controls.Add(this.label23);
             this.panel2.Controls.Add(this.drownNumeric);
@@ -1023,6 +1040,15 @@ namespace MCForge.Gui
             this.panel2.Size = new System.Drawing.Size(318, 207);
             this.panel2.TabIndex = 48;
             // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(179, 83);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(74, 13);
+            this.label35.TabIndex = 39;
+            this.label35.Text = "Load on /goto:";
+            // 
             // AutoLoadChk
             // 
             this.AutoLoadChk.AutoSize = true;
@@ -1037,9 +1063,9 @@ namespace MCForge.Gui
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(4, 125);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(55, 13);
+            this.label23.Size = new System.Drawing.Size(58, 13);
             this.label23.TabIndex = 37;
-            this.label23.Text = "Auto-Load";
+            this.label23.Text = "Auto-Load:";
             // 
             // drownNumeric
             // 
@@ -1105,7 +1131,7 @@ namespace MCForge.Gui
             // edgewaterchk
             // 
             this.edgewaterchk.AutoSize = true;
-            this.edgewaterchk.Location = new System.Drawing.Point(288, 90);
+            this.edgewaterchk.Location = new System.Drawing.Point(288, 64);
             this.edgewaterchk.Name = "edgewaterchk";
             this.edgewaterchk.Size = new System.Drawing.Size(15, 14);
             this.edgewaterchk.TabIndex = 29;
@@ -1123,7 +1149,7 @@ namespace MCForge.Gui
             // finitechk
             // 
             this.finitechk.AutoSize = true;
-            this.finitechk.Location = new System.Drawing.Point(288, 63);
+            this.finitechk.Location = new System.Drawing.Point(288, 46);
             this.finitechk.Name = "finitechk";
             this.finitechk.Size = new System.Drawing.Size(15, 14);
             this.finitechk.TabIndex = 27;
@@ -1132,7 +1158,7 @@ namespace MCForge.Gui
             // Killerbloxchk
             // 
             this.Killerbloxchk.AutoSize = true;
-            this.Killerbloxchk.Location = new System.Drawing.Point(288, 11);
+            this.Killerbloxchk.Location = new System.Drawing.Point(288, 10);
             this.Killerbloxchk.Name = "Killerbloxchk";
             this.Killerbloxchk.Size = new System.Drawing.Size(15, 14);
             this.Killerbloxchk.TabIndex = 26;
@@ -1141,7 +1167,7 @@ namespace MCForge.Gui
             // SurvivalStyleDeathchk
             // 
             this.SurvivalStyleDeathchk.AutoSize = true;
-            this.SurvivalStyleDeathchk.Location = new System.Drawing.Point(288, 38);
+            this.SurvivalStyleDeathchk.Location = new System.Drawing.Point(288, 28);
             this.SurvivalStyleDeathchk.Name = "SurvivalStyleDeathchk";
             this.SurvivalStyleDeathchk.Size = new System.Drawing.Size(15, 14);
             this.SurvivalStyleDeathchk.TabIndex = 25;
@@ -1160,7 +1186,7 @@ namespace MCForge.Gui
             // 
             this.physlvlnumeric.Location = new System.Drawing.Point(76, 36);
             this.physlvlnumeric.Maximum = new decimal(new int[] {
-            4,
+            5,
             0,
             0,
             0});
@@ -1187,7 +1213,7 @@ namespace MCForge.Gui
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(179, 91);
+            this.label20.Location = new System.Drawing.Point(179, 65);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(89, 13);
             this.label20.TabIndex = 19;
@@ -1196,7 +1222,7 @@ namespace MCForge.Gui
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(179, 64);
+            this.label19.Location = new System.Drawing.Point(179, 47);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(68, 13);
             this.label19.TabIndex = 18;
@@ -1205,7 +1231,7 @@ namespace MCForge.Gui
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(179, 38);
+            this.label18.Location = new System.Drawing.Point(179, 28);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(103, 13);
             this.label18.TabIndex = 17;
@@ -1214,7 +1240,7 @@ namespace MCForge.Gui
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(179, 11);
+            this.label17.Location = new System.Drawing.Point(179, 10);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(67, 13);
             this.label17.TabIndex = 16;
@@ -1269,6 +1295,8 @@ namespace MCForge.Gui
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.seedtxtbox);
+            this.panel1.Controls.Add(this.label34);
             this.panel1.Controls.Add(this.xtxtbox);
             this.panel1.Controls.Add(this.ytxtbox);
             this.panel1.Controls.Add(this.ztxtbox);
@@ -1285,6 +1313,22 @@ namespace MCForge.Gui
             this.panel1.Size = new System.Drawing.Size(190, 207);
             this.panel1.TabIndex = 45;
             // 
+            // seedtxtbox
+            // 
+            this.seedtxtbox.Location = new System.Drawing.Point(45, 142);
+            this.seedtxtbox.Name = "seedtxtbox";
+            this.seedtxtbox.Size = new System.Drawing.Size(139, 21);
+            this.seedtxtbox.TabIndex = 16;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(4, 146);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(33, 13);
+            this.label34.TabIndex = 15;
+            this.label34.Text = "Seed:";
+            // 
             // xtxtbox
             // 
             this.xtxtbox.FormattingEnabled = true;
@@ -1294,10 +1338,11 @@ namespace MCForge.Gui
             "64",
             "128",
             "256",
-            "512"});
-            this.xtxtbox.Location = new System.Drawing.Point(44, 56);
+            "512",
+            "1024"});
+            this.xtxtbox.Location = new System.Drawing.Point(45, 34);
             this.xtxtbox.Name = "xtxtbox";
-            this.xtxtbox.Size = new System.Drawing.Size(140, 21);
+            this.xtxtbox.Size = new System.Drawing.Size(139, 21);
             this.xtxtbox.TabIndex = 14;
             // 
             // ytxtbox
@@ -1309,10 +1354,11 @@ namespace MCForge.Gui
             "64",
             "128",
             "256",
-            "512"});
-            this.ytxtbox.Location = new System.Drawing.Point(44, 83);
+            "512",
+            "1024"});
+            this.ytxtbox.Location = new System.Drawing.Point(45, 61);
             this.ytxtbox.Name = "ytxtbox";
-            this.ytxtbox.Size = new System.Drawing.Size(140, 21);
+            this.ytxtbox.Size = new System.Drawing.Size(139, 21);
             this.ytxtbox.TabIndex = 13;
             // 
             // ztxtbox
@@ -1324,15 +1370,16 @@ namespace MCForge.Gui
             "64",
             "128",
             "256",
-            "512"});
-            this.ztxtbox.Location = new System.Drawing.Point(44, 108);
+            "512",
+            "1024"});
+            this.ztxtbox.Location = new System.Drawing.Point(45, 88);
             this.ztxtbox.Name = "ztxtbox";
-            this.ztxtbox.Size = new System.Drawing.Size(140, 21);
+            this.ztxtbox.Size = new System.Drawing.Size(139, 21);
             this.ztxtbox.TabIndex = 12;
             // 
             // nametxtbox
             // 
-            this.nametxtbox.Location = new System.Drawing.Point(45, 8);
+            this.nametxtbox.Location = new System.Drawing.Point(45, 7);
             this.nametxtbox.Name = "nametxtbox";
             this.nametxtbox.Size = new System.Drawing.Size(139, 21);
             this.nametxtbox.TabIndex = 9;
@@ -1340,7 +1387,7 @@ namespace MCForge.Gui
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 86);
+            this.label10.Location = new System.Drawing.Point(4, 64);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(34, 13);
             this.label10.TabIndex = 8;
@@ -1349,7 +1396,7 @@ namespace MCForge.Gui
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 111);
+            this.label9.Location = new System.Drawing.Point(4, 91);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(35, 13);
             this.label9.TabIndex = 7;
@@ -1358,7 +1405,7 @@ namespace MCForge.Gui
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 59);
+            this.label8.Location = new System.Drawing.Point(4, 37);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(36, 13);
             this.label8.TabIndex = 6;
@@ -1367,7 +1414,7 @@ namespace MCForge.Gui
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 11);
+            this.label7.Location = new System.Drawing.Point(4, 10);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(38, 13);
             this.label7.TabIndex = 5;
@@ -1376,11 +1423,11 @@ namespace MCForge.Gui
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 146);
+            this.label4.Location = new System.Drawing.Point(4, 119);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Map type:";
+            this.label4.Text = "Type:";
             // 
             // maptypecombo
             // 
@@ -1394,9 +1441,9 @@ namespace MCForge.Gui
             "Pixel",
             "Desert",
             "Space"});
-            this.maptypecombo.Location = new System.Drawing.Point(63, 142);
+            this.maptypecombo.Location = new System.Drawing.Point(45, 115);
             this.maptypecombo.Name = "maptypecombo";
-            this.maptypecombo.Size = new System.Drawing.Size(121, 21);
+            this.maptypecombo.Size = new System.Drawing.Size(139, 21);
             this.maptypecombo.TabIndex = 1;
             // 
             // CreateNewMap
@@ -1416,13 +1463,13 @@ namespace MCForge.Gui
             this.dgvMapsTab.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvMapsTab.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvMapsTab.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMapsTab.Location = new System.Drawing.Point(8, 220);
+            this.dgvMapsTab.Location = new System.Drawing.Point(7, 220);
             this.dgvMapsTab.MultiSelect = false;
             this.dgvMapsTab.Name = "dgvMapsTab";
             this.dgvMapsTab.ReadOnly = true;
             this.dgvMapsTab.RowHeadersVisible = false;
             this.dgvMapsTab.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMapsTab.Size = new System.Drawing.Size(684, 262);
+            this.dgvMapsTab.Size = new System.Drawing.Size(683, 262);
             this.dgvMapsTab.TabIndex = 39;
             this.dgvMapsTab.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMapsTab_CellClick);
             this.dgvMapsTab.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMapsTab_CellClick);
@@ -2076,12 +2123,32 @@ namespace MCForge.Gui
             this.txtOpInput.TabIndex = 30;
             this.txtOpInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtOpInput_KeyDown);
             // 
-            // reloadToolStripMenuItem
+            // LoadOnGotoChk
             // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.reloadToolStripMenuItem.Text = "Reload";
-            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            this.LoadOnGotoChk.AutoSize = true;
+            this.LoadOnGotoChk.Location = new System.Drawing.Point(288, 82);
+            this.LoadOnGotoChk.Name = "LoadOnGotoChk";
+            this.LoadOnGotoChk.Size = new System.Drawing.Size(15, 14);
+            this.LoadOnGotoChk.TabIndex = 40;
+            this.LoadOnGotoChk.UseVisualStyleBackColor = true;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(179, 100);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(104, 13);
+            this.label36.TabIndex = 41;
+            this.label36.Text = "Unload when empty:";
+            // 
+            // UnloadChk
+            // 
+            this.UnloadChk.AutoSize = true;
+            this.UnloadChk.Location = new System.Drawing.Point(288, 100);
+            this.UnloadChk.Name = "UnloadChk";
+            this.UnloadChk.Size = new System.Drawing.Size(15, 14);
+            this.UnloadChk.TabIndex = 42;
+            this.UnloadChk.UseVisualStyleBackColor = true;
             // 
             // txtCommandsUsed
             // 
@@ -2270,7 +2337,6 @@ namespace MCForge.Gui
         private Panel panel2;
         private Label label13;
         private Label label17;
-        private Label label16;
         private Label label15;
         private Label label19;
         private Label label18;
@@ -2390,5 +2456,12 @@ namespace MCForge.Gui
         private ToolStripMenuItem unloadToolStripMenuItem;
         private ToolStripMenuItem moveAllToolStripMenuItem;
         private ToolStripMenuItem reloadToolStripMenuItem;
+        private TextBox seedtxtbox;
+        private Label label34;
+        private Label label16;
+        private Label label35;
+        private CheckBox LoadOnGotoChk;
+        private CheckBox UnloadChk;
+        private Label label36;
     }
 }

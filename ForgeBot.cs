@@ -16,20 +16,23 @@ namespace MCForge
         {
             this.channel = channel; this.opchannel = opchannel; this.nick = nick; this.server = server;
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
-            //Regstering events for outgoing
-            Player.PlayerChat += new Player.OnPlayerChat(Player_PlayerChat);
-            Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
-            Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-            //Regstering events for incoming
-            connection.Listener.OnNick += new NickEventHandler(Listener_OnNick);
-            connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
-            connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
-            connection.Listener.OnPrivate += new PrivateMessageEventHandler(Listener_OnPrivate);
-            connection.Listener.OnError += new ErrorMessageEventHandler(Listener_OnError);
-            connection.Listener.OnQuit += new QuitEventHandler(Listener_OnQuit);
-            connection.Listener.OnJoin += new JoinEventHandler(Listener_OnJoin);
-            connection.Listener.OnPart += new PartEventHandler(Listener_OnPart);
-            connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
+            if (Server.irc)
+            {
+                //Regstering events for outgoing
+                Player.PlayerChat += new Player.OnPlayerChat(Player_PlayerChat);
+                Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
+                Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
+                //Regstering events for incoming
+                connection.Listener.OnNick += new NickEventHandler(Listener_OnNick);
+                connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
+                connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
+                connection.Listener.OnPrivate += new PrivateMessageEventHandler(Listener_OnPrivate);
+                connection.Listener.OnError += new ErrorMessageEventHandler(Listener_OnError);
+                connection.Listener.OnQuit += new QuitEventHandler(Listener_OnQuit);
+                connection.Listener.OnJoin += new JoinEventHandler(Listener_OnJoin);
+                connection.Listener.OnPart += new PartEventHandler(Listener_OnPart);
+                connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
+            }
         }
         public void Say(string message, bool opchat = false)
         {
@@ -43,6 +46,7 @@ namespace MCForge
         }
         public void Reset()
         {
+            if (!Server.irc) return;
             reset = true;
             Disconnect("Bot resetting...");
             Connect();
@@ -60,12 +64,14 @@ namespace MCForge
 
         void Player_PlayerDisconnect(Player p, string reason)
         {
-            connection.Sender.PublicMessage(channel, p.name + " left the game (" + reason + ")");
+            if(Server.irc && IsConnected())
+                connection.Sender.PublicMessage(channel, p.name + " left the game (" + reason + ")");
         }
 
         void Player_PlayerConnect(Player p)
         {
-            connection.Sender.PublicMessage(channel, p.name + " joined the game");
+            if(Server.irc && IsConnected())
+                connection.Sender.PublicMessage(channel, p.name + " joined the game");
         }
 
         void Listener_OnQuit(UserInfo user, string reason)
@@ -157,6 +163,8 @@ namespace MCForge
         }
         public void Connect()
         {
+            if (!Server.irc) return;
+
             /*new Thread(new ThreadStart(delegate
             {
                 try { connection.Connect(); }
@@ -176,10 +184,11 @@ namespace MCForge
         }
         void Disconnect(string message = "Disconnecting")
         {
-            if(IsConnected()) connection.Disconnect(message);
+            if(Server.irc && IsConnected()) connection.Disconnect(message);
         }
         public bool IsConnected()
         {
+            if (!Server.irc) return false;
             try { return connection.Connected; }
             catch { return false; }
         }

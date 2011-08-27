@@ -2421,9 +2421,7 @@ namespace MCForge
                 }
                 else
                 {
-                    if (!Server.irc)
-                        Server.s.Log(message);
-                    else if (String.IsNullOrEmpty(Server.IRC.usedCmd))
+                    if (!Server.irc || String.IsNullOrEmpty(Server.IRC.usedCmd))
                         Server.s.Log(message);
                     else
                         Server.IRC.Pm(Server.IRC.usedCmd, message);
@@ -3555,18 +3553,23 @@ namespace MCForge
                         File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
                         using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
                         {
-                            foreach (UndoPos uP in UndoBuffer)
+                            try
                             {
-                                w.Write(uP.mapName + " " +
-                                    uP.x + " " + uP.y + " " + uP.z + " " +
-                                    uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                    uP.type + " " + uP.newtype + " ");
+                                foreach (UndoPos uP in UndoBuffer)
+                                {
+                                    w.Write(uP.mapName + " " +
+                                        uP.x + " " + uP.y + " " + uP.z + " " +
+                                        uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                        uP.type + " " + uP.newtype + " ");
+                                }
                             }
+                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
+                            w.Close(); w.Dispose();
                         }
                         if (PlayerDisconnect != null)
                             PlayerDisconnect(this, kickString);
                     }
-                    catch (Exception e) { Server.ErrorLog(e); }
+                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
 
                     this.Dispose();
                 }
