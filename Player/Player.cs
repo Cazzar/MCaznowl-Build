@@ -3564,7 +3564,6 @@ namespace MCForge
                                 }
                             }
                             catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                            w.Close(); w.Dispose();
                         }
                         if (PlayerDisconnect != null)
                             PlayerDisconnect(this, kickString);

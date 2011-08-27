@@ -177,16 +177,16 @@ namespace MCForge
                     switch (key)
                     {
                         case "AFK":
-                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is AFK"); Server.afkset.Add(user.Nick); break;
+                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is AFK"); Server.ircafkset.Add(user.Nick); break;
                         case "Away":
-                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is Away"); Server.afkset.Add(user.Nick); break;
+                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is Away"); Server.ircafkset.Add(user.Nick); break;
                     }
                 }
             }
-            else if (Server.afkset.Contains(newNick))
+            else if (Server.ircafkset.Contains(newNick))
             {
                 Player.GlobalMessage("[IRC] " + Server.IRCColour + newNick + Server.DefaultColor + " is back");
-                Server.afkset.Remove(newNick);
+                Server.ircafkset.Remove(newNick);
             }
             else
                 Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is now known as " + newNick);
