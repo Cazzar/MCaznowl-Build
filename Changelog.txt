@@ -1,5 +1,5 @@
 v5.2.0.0
-- Fixed a possible memory leak with level unloading
+- Fixed several possible memory leaks
 - Fixed /moveall and /map in the console
 - Fixed /click for guests
 - Fixed /pyramid so it respects block limits
