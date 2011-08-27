@@ -16,14 +16,24 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MCForge
 {
     class LavaSurvival
     {
+        public class Settings
+        {
+        }
+        public class MapSettings
+        {
+            List<ushort[]> blocks;
 
+            public MapSettings()
+            {
+                blocks = new List<ushort[]>();
+            }
+        }
     }
 }
