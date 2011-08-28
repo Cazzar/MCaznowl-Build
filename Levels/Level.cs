@@ -3326,13 +3326,8 @@ namespace MCForge
                 case 38:
                 case 39:
                 case 40:
-                    if (physics > 1)   //Adv physics kills flowers and mushrooms plus wood in lava
-                    {
-                        if (physics != 5)
-                        {
-                            AddUpdate(b, 0);
-                        }
-                    }
+                    if (physics > 1 && physics != 5)   //Adv physics kills flowers and mushrooms plus wood in lava
+                        AddUpdate(b, 0);
                     break;
 
                 default:

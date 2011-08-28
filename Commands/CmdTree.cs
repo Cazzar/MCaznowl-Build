@@ -44,57 +44,12 @@ namespace MCForge
 
         void AddTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Random Rand = new Random();
-
-            byte height = (byte)Rand.Next(5, 8);
-            for (ushort yy = 0; yy < height; yy++) p.level.Blockchange(p, x, (ushort)(y + yy), z, Block.trunk);
-
-            short top = (short)(height - Rand.Next(2, 4));
-
-            for (short xx = (short)-top; xx <= top; ++xx)
-            {
-                for (short yy = (short)-top; yy <= top; ++yy)
-                {
-                    for (short zz = (short)-top; zz <= top; ++zz)
-                    {
-                        short Dist = (short)(Math.Sqrt(xx * xx + yy * yy + zz * zz));
-                        if (Dist < top + 1)
-                        {
-                            if (Rand.Next((int)(Dist)) < 2)
-                            {
-                                try
-                                {
-                                    p.level.Blockchange(p, (ushort)(x + xx), (ushort)(y + yy + height), (ushort)(z + zz), Block.leaf);
-                                }
-                                catch { }
-                            }
-                        }
-                    }
-                }
-            }
+            new MapGenerator().AddTree(p.level, x, y, z, new Random(), true);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddCactus(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Random Rand = new Random();
-
-            byte height = (byte)Rand.Next(3, 6);
-            ushort yy;
-
-            for (yy = 0; yy <= height; yy++) p.level.Blockchange(p, x, (ushort)(y + yy), z, Block.green);
-
-            int inX = 0, inZ = 0;
-
-            switch (Rand.Next(1, 3))
-            {
-                case 1: inX = -1; break;
-                case 2:
-                default: inZ = -1; break;
-            }
-
-            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++) p.level.Blockchange(p, (ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
-            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++) p.level.Blockchange(p, (ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
-
+            new MapGenerator().AddCactus(p.level, x, y, z, new Random(), true);
             if (!p.staticCommands) p.ClearBlockchange();
         }
 
