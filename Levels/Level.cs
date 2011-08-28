@@ -3594,7 +3594,7 @@ namespace MCForge
             IntToPos(b, out x, out y, out z);
             
 
-            if(GetTile((ushort)(x + 1), y, z) == Block.leaf
+            //if(GetTile((ushort)(x + 1), y, z) == Block.leaf
             return false;
         }
 
