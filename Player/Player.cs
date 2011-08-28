@@ -29,7 +29,7 @@ using System.Linq;
 
 namespace MCForge
 {
-    public sealed class Player : IDisposable
+    public sealed partial class Player : IDisposable
     {
         public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
