@@ -132,6 +132,8 @@ namespace MCForge
         List<Check> ListCheck = new List<Check>();  //A list of blocks that need to be updated
         List<Update> ListUpdate = new List<Update>();  //A list of block to change after calculation
 
+        Dictionary<int, sbyte> leaves = new Dictionary<int, sbyte>(); // Holds block state for leaf decay
+
         //CTF STUFF
         public CTFGame ctfgame = new CTFGame();
         public bool ctfmode = false;
@@ -3603,26 +3605,29 @@ namespace MCForge
         //================================================================================================================
         private bool PhysLeaf(int b)
         {
-            int foundTrunk = -1;
+            byte type, dist = 4;
             ushort x, y, z;
             IntToPos(b, out x, out y, out z);
 
-            for (int xx = -4; xx <= 4; xx++)
+            for (int xx = -dist; xx <= dist; xx++)
             {
-                for (int yy = -4; yy <= 4; yy++)
+                for (int yy = -dist; yy <= dist; yy++)
                 {
-                    for (int zz = -4; zz <= 4; zz++)
+                    for (int zz = -dist; zz <= dist; zz++)
                     {
-                        if (GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz)) == Block.trunk) { foundTrunk = PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz)); goto next; }
+                        type = GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz));
+                        if (type == Block.trunk)
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = 0;
+                        else if (type == Block.leaf)
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -2;
+                        else
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -1;
                     }
                 }
             }
-            next:
-            if (foundTrunk < 0) return true;
-            
 
 
-            //if(GetTile((ushort)(x + 1), y, z) == Block.leaf
+
             return false;
         }
 

@@ -31,6 +31,7 @@ namespace MCForge
         private string nick;
         private string server;
         private bool reset = false;
+        private byte retries = 0;
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
@@ -75,6 +76,7 @@ namespace MCForge
         {
             if (!Server.irc) return;
             reset = true;
+            retries = 0;
             Disconnect("Bot resetting...");
             Connect();
         }
@@ -150,6 +152,7 @@ namespace MCForge
         {
             Server.s.Log("Connected to IRC!");
             reset = false;
+            retries = 0;
             if (Server.ircIdentify && Server.ircPassword != "")
             {
                 Server.s.Log("Identifying with NickServ");
@@ -161,7 +164,7 @@ namespace MCForge
 
         void Listener_OnDisconnected()
         {
-            if(!reset) Connect();
+            if (!reset && retries < 3) { retries++; Connect(); }
         }
 
         void Listener_OnNick(UserInfo user, string newNick)
