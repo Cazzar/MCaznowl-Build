@@ -36,9 +36,14 @@ namespace MCForge
             string temp;
             foreach (string dev in Server.devs)
             {
-                temp = dev.Substring(0, 1);
-                temp = temp.ToUpper() + dev.Remove(0, 1);
-                devlist += temp + ", ";
+                if (dev == "copyboy")
+                    devlist += dev + ", ";
+                else
+                {
+                    temp = dev.Substring(0, 1);
+                    temp = temp.ToUpper() + dev.Remove(0, 1);
+                    devlist += temp + ", ";
+                }
             }
             devlist = devlist.Remove(devlist.Length - 2);
             Player.SendMessage(p, "&9MCForge Development Team: " + Server.DefaultColor + devlist);

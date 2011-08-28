@@ -3588,11 +3588,26 @@ namespace MCForge
             }
         }
         //================================================================================================================
-        private bool PhysLeaf(int b, Random rand, byte noCheck = 0)
+        private bool PhysLeaf(int b)
         {
+            int foundTrunk = -1;
             ushort x, y, z;
             IntToPos(b, out x, out y, out z);
+
+            for (int xx = -4; xx <= 4; xx++)
+            {
+                for (int yy = -4; yy <= 4; yy++)
+                {
+                    for (int zz = -4; zz <= 4; zz++)
+                    {
+                        if (GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz)) == Block.trunk) { foundTrunk = PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz)); goto next; }
+                    }
+                }
+            }
+            next:
+            if (foundTrunk < 0) return true;
             
+
 
             //if(GetTile((ushort)(x + 1), y, z) == Block.leaf
             return false;
