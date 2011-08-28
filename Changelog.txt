@@ -13,6 +13,8 @@ v5.2.0.0
 - Made it so autoload.txt doesn't save when load on /goto is enabled
 - Made some changes to the right-click menu for the maps box
 - Made a change to the window title, it looks much more professional
+- Improved the tree generator, the trunk now makes more sense
+- Added leaf decay! Use /map leafdecay to turn it on, requires physics
 - Added missing stuff to the "Maps" tab
 - Added seed option to /newlvl, check /help newlvl for more information
 - Added a "Games" tab to the properties window, it's for game mode configuration

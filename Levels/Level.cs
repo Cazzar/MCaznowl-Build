@@ -1418,6 +1418,7 @@ namespace MCForge
                                         PhysAir(PosToInt(x, y, (ushort)(z + 1)));
                                         PhysAir(PosToInt(x, y, (ushort)(z - 1)));
                                         PhysAir(PosToInt(x, (ushort)(y + 1), z));  //Check block above the air
+                                        if (GetTile(x, (ushort)(y - 1), z) == Block.leaf) PhysAir(PosToInt(x, (ushort)(y - 1), z)); // Check below if leaf
 
                                         //Edge of map water
                                         if (edgeWater == true)
@@ -3606,14 +3607,15 @@ namespace MCForge
         private bool PhysLeaf(int b)
         {
             byte type, dist = 4;
+            int i, xx, yy, zz;
             ushort x, y, z;
             IntToPos(b, out x, out y, out z);
 
-            for (int xx = -dist; xx <= dist; xx++)
+            for (xx = -dist; xx <= dist; xx++)
             {
-                for (int yy = -dist; yy <= dist; yy++)
+                for (yy = -dist; yy <= dist; yy++)
                 {
-                    for (int zz = -dist; zz <= dist; zz++)
+                    for (zz = -dist; zz <= dist; zz++)
                     {
                         type = GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz));
                         if (type == Block.trunk)
@@ -3626,9 +3628,45 @@ namespace MCForge
                 }
             }
 
+            for (i = 1; i <= 4; i++)
+            {
+                for (xx = -dist; xx <= dist; xx++)
+                {
+                    for (yy = -dist; yy <= dist; yy++)
+                    {
+                        for (zz = -dist; zz <= dist; zz++)
+                        {
+                            try
+                            {
+                                if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
+                                {
+                                    if (leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
+                                    if (leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-            return false;
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] = (sbyte)i;
+                                }
+                            }
+                            catch { /*Server.s.Log("Leaf decay error!");*/ }
+                        }
+                    }
+                }
+            }
+
+            //Server.s.Log((leaves[b] < 0).ToString()); // This is a debug line that spams the console to hell!
+            return leaves[b] < 0;
         }
 
 

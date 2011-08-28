@@ -470,7 +470,7 @@ namespace MCForge
                                     yyy = (ushort)(y + yy + height);
                                     zzz = (ushort)(z + zz);
 
-                                    if (xxx != x || zzz != z || yyy < top)
+                                    if (xxx != x || zzz != z || yyy < top - 1)
                                     {
                                         if (blockChange) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
                                         else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);

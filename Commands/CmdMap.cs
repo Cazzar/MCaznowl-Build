@@ -54,6 +54,7 @@ namespace MCForge
                     Player.SendMessage(p, "Animal AI: " + FoundCheck(foundLevel, foundLevel.ai));
                     Player.SendMessage(p, "Edge water: " + FoundCheck(foundLevel, foundLevel.edgeWater));
                     Player.SendMessage(p, "Grass growing: " + FoundCheck(foundLevel, foundLevel.GrassGrow));
+                    Player.SendMessage(p, "Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay));
                     Player.SendMessage(p, "Physics speed: &b" + foundLevel.speedPhysics);
                     Player.SendMessage(p, "Physics overload: &b" + foundLevel.overload);
                     Player.SendMessage(p, "Survival death: " + FoundCheck(foundLevel, foundLevel.Death) + "(Fall: " + foundLevel.fall + ", Drown: " + foundLevel.drown + ")");
@@ -125,6 +126,9 @@ namespace MCForge
                     case "autoload":
                     case "loadongoto":
                         foundLevel.loadOnGoto = !foundLevel.loadOnGoto; foundLevel.ChatLevel("Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto)); if(p == null) Player.SendMessage(p, "Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto, true)); break;
+                    case "leaf":
+                    case "leafdecay":
+                        foundLevel.leafDecay = !foundLevel.leafDecay; foundLevel.ChatLevel("Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay)); if (p == null) Player.SendMessage(p, "Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay)); break;
                     default:
                         Player.SendMessage(p, "Could not find option entered.");
                         return;
@@ -145,7 +149,8 @@ namespace MCForge
             Player.SendMessage(p, "/map [level] [toggle] - Sets [toggle] on [level]");
             Player.SendMessage(p, "Possible toggles: theme, finite, ai, edge, ps, overload, motd, death, fall, drown, unload, rp, instant, killer, chat");
             Player.SendMessage(p, "Edge will cause edge water to flow.");
-            Player.SendMessage(p, "Grass will make grass not grow without physics");
+            Player.SendMessage(p, "Grass will make grass not grow without physics.");
+            Player.SendMessage(p, "Leaf decay will make leaves not connected to a log within 4 blocks disappear randomly.");
             Player.SendMessage(p, "Finite will cause all liquids to be finite.");
             Player.SendMessage(p, "AI will make animals hunt or flee.");
             Player.SendMessage(p, "PS will set the map's physics speed.");
