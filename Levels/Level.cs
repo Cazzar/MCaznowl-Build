@@ -111,6 +111,7 @@ namespace MCForge
         public bool fishstill = false;
         public bool guns = true;
         public bool loadOnGoto = true;
+        public bool leafDecay = false;
         
         //Pervisit and Perbuild Maxes
         public LevelPermission perbuildmax = LevelPermission.Nobody;
@@ -536,6 +537,7 @@ namespace MCForge
                     SW.WriteLine("PerVisitMax = " + (Group.Exists(PermissionToName(level.pervisitmax).ToLower()) ? PermissionToName(level.pervisitmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
                     SW.WriteLine("Guns = " + level.guns.ToString());
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                    SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
                 }
             }
             catch (Exception e)
@@ -910,6 +912,9 @@ namespace MCForge
                                                	break;
                                             case "loadongoto":
                                                 level.loadOnGoto = bool.Parse(value);
+                                                break;
+                                            case "leafdecay":
+                                                level.leafDecay = bool.Parse(value);
                                                 break;
 										}
 									}
@@ -1444,6 +1449,17 @@ namespace MCForge
                                         }
                                         break;
 
+                                    case Block.leaf:
+                                        if(!leafDecay) goto case Block.wood;
+                                        byte noCheck = 0;
+                                        ushort xx = x, yy = y, zz = z;
+                                        int lastPos = C.b;
+
+                                        leafdecay:
+                                        
+
+                                        goto case Block.wood;
+
                                     case Block.water:         //Active_water
                                     case Block.activedeathwater:
                                         //initialy checks if block is valid
@@ -1829,7 +1845,6 @@ namespace MCForge
                                     case Block.wood:     //Wood to die in lava
                                     case Block.shrub:     //Tree and plants follow
                                     case Block.trunk:    //Wood to die in lava
-                                    case Block.leaf:    //Bushes die in lava
                                     case Block.yellowflower:
                                     case Block.redflower:
                                     case Block.mushroom:
@@ -3389,12 +3404,9 @@ namespace MCForge
                         case 38:
                         case 39:
                         case 40:
-                            if (physics > 1)   //Adv physics crushes plants with sand
+                            if (physics > 1 && physics != 5)   //Adv physics crushes plants with sand
                             {
-                                if (physics != 5)
-                                {
-                                    moved = true;
-                                }
+                                moved = true;
                             }
                             else
                             { blocked = true; }
@@ -3576,6 +3588,15 @@ namespace MCForge
             }
         }
         //================================================================================================================
+        private bool PhysLeaf(int b, Random rand, byte noCheck = 0)
+        {
+            ushort x, y, z;
+            IntToPos(b, out x, out y, out z);
+            
+
+            if(GetTile((ushort)(x + 1), y, z) == Block.leaf
+            return false;
+        }
 
 
 
