@@ -39,12 +39,10 @@ namespace MCForge
             {
                 foreach (Player pl in Player.players)
                 {
-                    if (pl.group.Permission >= Server.opchatperm)
+                    if (pl.group.Permission >= Server.opchatperm && !pl.hidden)
                     {
-                        if (pl.hidden == false)
-                        {
-                            isopson = true;
-                        }
+                        isopson = true;
+                        break; // We're done, break out of this loop
                     }
                 }
             }

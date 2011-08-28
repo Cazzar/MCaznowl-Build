@@ -112,6 +112,7 @@ public static event OnServerError ServerError = null;
         public struct levelID { public int ID; public string name; }
 
         public static List<string> afkset = new List<string>();
+        public static List<string> ircafkset = new List<string>();
         public static List<string> afkmessages = new List<string>();
         public static List<string> messages = new List<string>();
 
@@ -201,7 +202,7 @@ public static byte maxGuests = 10;
         public static bool irc = false;
         public static bool safemode = false;
         public static int ircPort = 6667;
-        public static string ircNick = "MCZall_Minecraft_Bot";
+        public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
         public static string ircChannel = "#changethis";
         public static string ircOpChannel = "#changethistoo";
@@ -340,9 +341,8 @@ public static byte maxGuests = 10;
                     {
                         using (WebClient WEB = new WebClient())
                         {
-                            // We should put this on mcforge.net, hence why there's the commented line.
-                            WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            //WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
+                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
+                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
                         }
                         if (File.Exists("Sharkbite.Thresher.dll"))
                         {

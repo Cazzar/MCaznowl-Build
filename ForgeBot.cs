@@ -16,6 +16,8 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.IO;
+using System.Collections.Generic;
 using Sharkbite.Irc;
 //using System.Threading;
 
@@ -24,6 +26,7 @@ namespace MCForge
     public class ForgeBot
     {
         private Connection connection;
+        private List<string> banCmd;
         private string channel, opchannel;
         private string nick;
         private string server;
@@ -33,13 +36,15 @@ namespace MCForge
         {
             this.channel = channel; this.opchannel = opchannel; this.nick = nick; this.server = server;
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
+            banCmd = new List<string>();
             if (Server.irc)
             {
-                //Regstering events for outgoing
+                // Regster events for outgoing
                 Player.PlayerChat += new Player.OnPlayerChat(Player_PlayerChat);
                 Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                 Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-                //Regstering events for incoming
+                
+                // Regster events for incoming
                 connection.Listener.OnNick += new NickEventHandler(Listener_OnNick);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
                 connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
@@ -49,6 +54,11 @@ namespace MCForge
                 connection.Listener.OnJoin += new JoinEventHandler(Listener_OnJoin);
                 connection.Listener.OnPart += new PartEventHandler(Listener_OnPart);
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
+
+                // Load banned commands list
+                if (!File.Exists("text/ircbancmd.txt")) File.Create("text/ircbancmd.txt").Dispose();
+                foreach (string line in File.ReadAllLines("text/ircbancmd.txt"))
+                    banCmd.Add(line);
             }
         }
         public void Say(string message, bool opchat = false)
@@ -75,6 +85,7 @@ namespace MCForge
         }
         void Listener_OnPart(UserInfo user, string channel, string reason)
         {
+            if (user.Nick == nick) return;
             Server.s.Log(user.Nick + " has left channel " + channel);
             Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
         }
@@ -93,6 +104,7 @@ namespace MCForge
 
         void Listener_OnQuit(UserInfo user, string reason)
         {
+            if (user.Nick == nick) return;
             Server.s.Log(user.Nick + " has left IRC");
             Player.GlobalMessage(Server.IRCColour + user.Nick + Server.DefaultColor + " has left IRC");
         }
@@ -104,11 +116,16 @@ namespace MCForge
 
         void Listener_OnPrivate(UserInfo user, string message)
         {
+            if (!Server.ircControllers.Contains(user.Nick)) { Pm(user.Nick, "You are not an IRC controller!"); return; }
+            if (message.Split(' ')[0] == "resetbot" || banCmd.Contains(message.Split(' ')[0])) { Pm(user.Nick, "You cannot use this command from IRC!"); return; }
+
             Command cmd = Command.all.Find(message.Split(' ')[0]);
             if (cmd != null)
             {
+                Server.s.Log("IRC Command: /" + message);
                 usedCmd = user.Nick;
-                cmd.Use(null, message.Substring(message.IndexOf(' ')).Trim());
+                try { cmd.Use(null, message.Split(' ').Length > 1 ? message.Substring(message.IndexOf(' ')).Trim() : ""); }
+                catch { Pm(user.Nick, "Failed command!"); }
                 usedCmd = "";
             }
             else
@@ -131,6 +148,7 @@ namespace MCForge
 
         void Listener_OnRegistered()
         {
+            Server.s.Log("Connected to IRC!");
             reset = false;
             if (Server.ircIdentify && Server.ircPassword != "")
             {
@@ -159,16 +177,16 @@ namespace MCForge
                     switch (key)
                     {
                         case "AFK":
-                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is AFK"); Server.afkset.Add(user.Nick); break;
+                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is AFK"); Server.ircafkset.Add(user.Nick); break;
                         case "Away":
-                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is Away"); Server.afkset.Add(user.Nick); break;
+                            Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is Away"); Server.ircafkset.Add(user.Nick); break;
                     }
                 }
             }
-            else if (Server.afkset.Contains(newNick))
+            else if (Server.ircafkset.Contains(newNick))
             {
                 Player.GlobalMessage("[IRC] " + Server.IRCColour + newNick + Server.DefaultColor + " is back");
-                Server.afkset.Remove(newNick);
+                Server.ircafkset.Remove(newNick);
             }
             else
                 Player.GlobalMessage("[IRC] " + Server.IRCColour + user.Nick + Server.DefaultColor + " is now known as " + newNick);
@@ -192,16 +210,17 @@ namespace MCForge
                 }
             })).Start();*/
 
+            Server.s.Log("Connecting to IRC...");
             try { connection.Connect(); }
             catch (Exception e)
             {
-                Server.s.Log("Failed to connect to IRC");
+                Server.s.Log("Failed to connect to IRC!");
                 Server.ErrorLog(e);
             }
         }
         void Disconnect(string message = "Disconnecting")
         {
-            if(Server.irc && IsConnected()) connection.Disconnect(message);
+            if (Server.irc && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from IRC!"); }
         }
         public bool IsConnected()
         {

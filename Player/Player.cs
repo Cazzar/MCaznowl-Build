@@ -733,7 +733,7 @@ namespace MCForge
                         return;
                     }
                 }
-                if (Player.players.Count >= Server.players && ip != "127.0.0.1") { Kick("Server full!"); return; }
+                if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
                 // Code for limiting no. of guests
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
                 {
@@ -3509,7 +3509,6 @@ namespace MCForge
                                 }
                             }
                             catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                            w.Close(); w.Dispose();
                         }
                         if (PlayerDisconnect != null)
                             PlayerDisconnect(this, kickString);
