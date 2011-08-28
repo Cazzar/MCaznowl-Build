@@ -34,6 +34,7 @@ namespace MCForge
         public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
+        System.Timers.Timer muteTimer = new System.Timers.Timer(1000);
         public static List<string> emoteList = new List<string>();
         public List<string> listignored = new List<string>();
         public List<string> mapgroups = new List<string>();
@@ -1882,7 +1883,6 @@ namespace MCForge
                     if (this.consecutivemessages >= Server.spamcounter)
                     {
                         int total = Server.mutespamtime;
-                        System.Timers.Timer muteTimer = new System.Timers.Timer(1000);
                         Command.all.Find("mute").Use(null, this.name);
                         Player.GlobalMessage(this.name + " has been &0muted &efor spamming!");
                         muteTimer.Elapsed += delegate
@@ -3392,6 +3392,10 @@ namespace MCForge
                 }
                 afkTimer.Stop();
                 afkTimer.Dispose();
+                muteTimer.Stop();
+                muteTimer.Dispose();
+                timespent.Stop();
+                timespent.Dispose();
                 afkCount = 0;
                 afkStart = DateTime.Now;
 
