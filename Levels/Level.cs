@@ -1561,11 +1561,11 @@ namespace MCForge
                                         if (C.time < 4) { C.time++; break; }
                                         if (!finite)
                                         {
-                                            if (rand.Next(3) == 0) PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
-                                            if (rand.Next(3) == 0) PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
-                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
-                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
-                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                            PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
+                                            PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
+                                            PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
+                                            PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
+                                            PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
                                         }
                                         else
                                         {
