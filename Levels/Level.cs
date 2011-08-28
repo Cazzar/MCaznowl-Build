@@ -1561,11 +1561,11 @@ namespace MCForge
                                         if (C.time < 4) { C.time++; break; }
                                         if (!finite)
                                         {
-                                            PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
-                                            PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
-                                            PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
-                                            PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
-                                            PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                            if (rand.Next(3) == 0) PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
+                                            if (rand.Next(3) == 0) PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
+                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
+                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
+                                            if (rand.Next(3) == 0) PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
                                         }
                                         else
                                         {
@@ -3326,13 +3326,8 @@ namespace MCForge
                 case 38:
                 case 39:
                 case 40:
-                    if (physics > 1)   //Adv physics kills flowers and mushrooms plus wood in lava
-                    {
-                        if (physics != 5)
-                        {
-                            AddUpdate(b, 0);
-                        }
-                    }
+                    if (physics > 1 && physics != 5)   //Adv physics kills flowers and mushrooms plus wood in lava
+                        AddUpdate(b, 0);
                     break;
 
                 default:

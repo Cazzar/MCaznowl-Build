@@ -441,12 +441,19 @@ namespace MCForge
         #endregion
 
         //
-        void AddTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand)
+        public void AddTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false)
         {
+            System.Collections.Generic.List<ushort> trunk = new System.Collections.Generic.List<ushort>();
             byte height = (byte)Rand.Next(5, 8);
-            for (ushort yy = 0; yy < height; yy++) Lvl.skipChange(x, (ushort)(y + yy), z, Block.trunk);
-
             short top = (short)(height - Rand.Next(2, 4));
+            ushort xxx, yyy, zzz;
+            for (ushort yy = 0; yy < top + height; yy++)
+            {
+                if (blockChange) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.trunk);
+                else Lvl.skipChange(x, (ushort)(y + yy), z, Block.trunk);
+                trunk.Add((ushort)(y + yy));
+            }
+
 
             for (short xx = (short)-top; xx <= top; ++xx)
             {
@@ -461,7 +468,15 @@ namespace MCForge
                             {
                                 try
                                 {
-                                    Lvl.skipChange((ushort)(x + xx), (ushort)(y + yy + height), (ushort)(z + zz), Block.leaf);
+                                    xxx = (ushort)(x + xx);
+                                    yyy = (ushort)(y + yy + height);
+                                    zzz = (ushort)(z + zz);
+
+                                    if (xxx != x || zzz != z || !trunk.Contains(yyy))
+                                    {
+                                        if (blockChange) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                        else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
+                                    }
                                 }
                                 catch { }
                             }
@@ -470,12 +485,15 @@ namespace MCForge
                 }
             }
         }
-        void AddCactus(Level Lvl, ushort x, ushort y, ushort z, Random Rand)
+        public void AddCactus(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false)
         {
             byte height = (byte)Rand.Next(3, 6);
             ushort yy;
 
-            for (yy = 0; yy <= height; yy++) Lvl.skipChange(x, (ushort)(y + yy), z, Block.green);
+            for (yy = 0; yy <= height; yy++) {
+                if (blockChange) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.green);
+                else Lvl.skipChange(x, (ushort)(y + yy), z, Block.green);
+            }
 
             int inX = 0, inZ = 0;
 
@@ -486,8 +504,16 @@ namespace MCForge
                 default: inZ = -1; break;
             }
 
-            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++) Lvl.skipChange((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
-            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++) Lvl.skipChange((ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
+            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++)
+            {
+                if (blockChange) Lvl.Blockchange((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
+                else Lvl.skipChange((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
+            }
+            for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++)
+            {
+                if (blockChange) Lvl.Blockchange((ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
+                else Lvl.skipChange((ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
+            }
         }
 
         private bool TreeCheck(Level Lvl, ushort x, ushort z, ushort y, short dist)         //return true if tree is near
