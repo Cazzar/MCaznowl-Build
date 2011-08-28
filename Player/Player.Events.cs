@@ -4,9 +4,10 @@ namespace MCForge
 {
     public partial class Player
     {
-        public static bool cancelcommand = false;
-        public static bool cancelchat = false;
-        public static bool cancelBlock = false;
+        public bool cancelcommand = false;
+        public bool cancelchat = false;
+        public bool cancelmove = false;
+        public bool cancelBlock = false;
         /// <summary>
         /// BlockchangeEventHandler2 event is called when a player removes or places a block
         /// However, this event will due normal permission checking and normal block placing unless the event you cancel the event
@@ -63,6 +64,16 @@ namespace MCForge
         /// <param name="p">The player that died</param>
         /// <param name="deathblock">The block that killed him (in byte)</param>
         public delegate void OnPlayerDeath(Player p, byte deathblock);
+        /// <summary>
+        /// This method is called when a player moves on the server
+        /// </summary>
+        /// <param name="p">The player that moved</param>
+        /// <param name="x">The x cord.</param>
+        /// <param name="y">The y cord.</param>
+        /// <param name="z">The z cord.</param>
+        public delegate void OnPlayerMove(Player p, ushort x, ushort y, ushort z);
+        public static event OnPlayerMove PlayerMove = null;
+        public event OnPlayerMove OnMove = null;
         public static event OnPlayerDeath PlayerDeath = null;
         public static event BlockchangeEventHandler2 PlayerBlockChange = null;
         public event OnPlayerChat OnChat = null;

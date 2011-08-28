@@ -24,10 +24,11 @@ namespace MCForge.Plugins
 {
     public enum Events
     {
-        Command,
-        Chat,
+        PlayerCommand,
+        PlayerChat,
         BlockChange,
         LevelLoad,
-        LevelSave
+        LevelSave,
+        PlayerMove
     }
 }

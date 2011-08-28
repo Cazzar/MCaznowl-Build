@@ -31,6 +31,7 @@ namespace MCForge
         private string nick;
         private string server;
         private bool reset = false;
+        private byte retries = 0;
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
@@ -43,7 +44,7 @@ namespace MCForge
                 Player.PlayerChat += new Player.OnPlayerChat(Player_PlayerChat);
                 Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                 Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-                
+
                 // Regster events for incoming
                 connection.Listener.OnNick += new NickEventHandler(Listener_OnNick);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
@@ -63,7 +64,7 @@ namespace MCForge
         }
         public void Say(string message, bool opchat = false)
         {
-            if(Server.irc && IsConnected())
+            if (Server.irc && IsConnected())
                 connection.Sender.PublicMessage(opchat ? opchannel : channel, message);
         }
         public void Pm(string user, string message)
@@ -75,13 +76,14 @@ namespace MCForge
         {
             if (!Server.irc) return;
             reset = true;
+            retries = 0;
             Disconnect("Bot resetting...");
             Connect();
         }
-        void  Listener_OnJoin(UserInfo user, string channel)
+        void Listener_OnJoin(UserInfo user, string channel)
         {
             Server.s.Log(user.Nick + " has joined channel " + channel);
- 	        Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
+            Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
         }
         void Listener_OnPart(UserInfo user, string channel, string reason)
         {
@@ -92,13 +94,13 @@ namespace MCForge
 
         void Player_PlayerDisconnect(Player p, string reason)
         {
-            if(Server.irc && IsConnected())
+            if (Server.irc && IsConnected())
                 connection.Sender.PublicMessage(channel, p.name + " left the game (" + reason + ")");
         }
 
         void Player_PlayerConnect(Player p)
         {
-            if(Server.irc && IsConnected())
+            if (Server.irc && IsConnected())
                 connection.Sender.PublicMessage(channel, p.name + " joined the game");
         }
 
@@ -150,6 +152,7 @@ namespace MCForge
         {
             Server.s.Log("Connected to IRC!");
             reset = false;
+            retries = 0;
             if (Server.ircIdentify && Server.ircPassword != "")
             {
                 Server.s.Log("Identifying with NickServ");
@@ -161,13 +164,13 @@ namespace MCForge
 
         void Listener_OnDisconnected()
         {
-            if(!reset) Connect();
+            if (!reset && retries < 3) { retries++; Connect(); }
         }
 
         void Listener_OnNick(UserInfo user, string newNick)
         {
             //Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " changed nick to " + newNick);
-            
+
             string key;
             if (newNick.Split('|').Length == 2)
             {

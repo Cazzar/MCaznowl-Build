@@ -29,17 +29,20 @@ namespace MCForge.Plugins
         /// Check to see if an event is stopped
         /// </summary>
         /// <param name="e">The event to check</param>
+        /// <param name="p">The Player that event is related to (null if not dealing with player event)</param>
         /// <returns>This returns true or false, true means its stopped, false means its not</returns>
-        public static bool IsEventCancled(Events e)
+        public static bool IsEventCancled(Events e, Player p)
         {
             switch (e)
             {
                 case Events.BlockChange:
-                    return Player.cancelBlock;
-                case Events.Chat:
-                    return Player.cancelchat;
-                case Events.Command:
-                    return Player.cancelcommand;
+                    return p.cancelBlock;
+                case Events.PlayerChat:
+                    return p.cancelchat;
+                case Events.PlayerCommand:
+                    return p.cancelcommand;
+                case Events.PlayerMove:
+                    return p.cancelmove;
                 case Events.LevelLoad:
                     return Level.cancelload;
                 case Events.LevelSave:
@@ -52,19 +55,23 @@ namespace MCForge.Plugins
         /// Cancel a server event
         /// </summary>
         /// <param name="e">The event that you want to cancel</param>
-        public static void CancelEvent(Events e) {
+        /// <param name="p">The Player that event is related to (null if not dealing with player event)</param>
+        public static void CancelEvent(Events e, Player p) {
             //TODO
             //Add some more events to be canceled
             switch (e)
             {
                 case Events.BlockChange:
-                    Player.cancelBlock = true;
+                    p.cancelBlock = true;
                     break;
-                case Events.Chat:
-                    Player.cancelchat = true;
+                case Events.PlayerChat:
+                    p.cancelchat = true;
                     break;
-                case Events.Command:
-                    Player.cancelcommand = true;
+                case Events.PlayerCommand:
+                    p.cancelcommand = true;
+                    break;
+                case Events.PlayerMove:
+                    p.cancelmove = true;
                     break;
                 case Events.LevelLoad:
                     Level.cancelsave = true;

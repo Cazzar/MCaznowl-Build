@@ -1523,11 +1523,20 @@ namespace MCForge
                         return;
                     }
                 }
-
+                if (OnMove != null)
+                    OnMove(this, x, y, z);
+                if (PlayerMove != null)
+                    PlayerMove(this, x, y, z);
+                if (cancelmove)
+                {
+                    unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
+                    return;
+                }
                 byte rotx = message[7];
                 byte roty = message[8];
                 pos = new ushort[3] { x, y, z };
                 rot = new byte[2] { rotx, roty };
+
             }
         }
 
