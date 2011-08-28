@@ -1450,15 +1450,27 @@ namespace MCForge
                                         break;
 
                                     case Block.leaf:
-                                        if(!leafDecay) goto case Block.wood;
-                                        byte noCheck = 0;
-                                        ushort xx = x, yy = y, zz = z;
-                                        int lastPos = C.b;
+                                        if (physics > 1)   //Adv physics kills flowers and mushroos in water/lava
+                                        {
+                                            PhysAir(PosToInt((ushort)(x + 1), y, z));
+                                            PhysAir(PosToInt((ushort)(x - 1), y, z));
+                                            PhysAir(PosToInt(x, y, (ushort)(z + 1)));
+                                            PhysAir(PosToInt(x, y, (ushort)(z - 1)));
+                                            PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
+                                        }
 
-                                        leafdecay:
-                                        
-
-                                        goto case Block.wood;
+                                        if (!leafDecay) break;
+                                        if (C.time > rand.Next(20, 100))
+                                        {
+                                            if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
+                                            C.time = 255;
+                                        }
+                                        else
+                                        {
+                                            //AddCheckPost(C.b);
+                                            C.time++;
+                                        }
+                                        break;
 
                                     case Block.water:         //Active_water
                                     case Block.activedeathwater:
@@ -3361,6 +3373,7 @@ namespace MCForge
                 //case 10:    //active_lava
                 case 12:    //sand
                 case 13:    //gravel
+                case 18:    //leaf
                 case 110:   //wood_float
                     /*case 112:   //lava_fast
                     case Block.WaterDown:
