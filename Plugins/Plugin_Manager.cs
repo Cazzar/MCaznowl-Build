@@ -38,6 +38,11 @@ namespace MCForge
 	    public abstract string creator { get; }
 	    public abstract bool LoadAtStartup { get; }
         public abstract void Help(Player p);
+        /// <summary>
+        /// Look to see if a plugin is loaded
+        /// </summary>
+        /// <param name="name">The name of the plugin</param>
+        /// <returns>Returns the plugin (returns null if non is found)</returns>
         public static Plugin Find(string name)
         {
             List<Plugin> tempList = new List<Plugin>();
@@ -59,6 +64,11 @@ namespace MCForge
             if (tempPlayer != null) return tempPlayer;
             return null;
         }
+        /// <summary>
+        /// Load a plugin
+        /// </summary>
+        /// <param name="pluginname">The file path of the dll file</param>
+        /// <param name="startup">Is this startup?</param>
         public static void Load(string pluginname, bool startup)
         {
 	    String creator = "";
@@ -80,13 +90,13 @@ namespace MCForge
                 here:
                 Plugin.all.Add((Plugin)instance);
 		        creator = ((Plugin)instance).creator;
-	        if (((Plugin)instance).LoadAtStartup)
-		{
+                if (((Plugin)instance).LoadAtStartup)
+                {
                     ((Plugin)instance).Load(startup);
                     Server.s.Log("Plugin: " + ((Plugin)instance).name + " loaded...build: " + ((Plugin)instance).build);
-		}
-		else
-		    Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
+                }
+                else
+                    Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
                 Server.s.Log(((Plugin)instance).welcome);
             }
             catch (FileNotFoundException e)
@@ -113,19 +123,30 @@ namespace MCForge
 				Thread.Sleep(1000);
             }
         }
+        /// <summary>
+        /// Unload a plugin
+        /// </summary>
+        /// <param name="p">The plugin to unload</param>
+        /// <param name="shutdown">Is this shutdown?</param>
         public static void Unload(Plugin p, bool shutdown)
         {
             p.Unload(shutdown);
             all.Remove(p);
             Server.s.Log(p.name + " was unloaded...how ever you cant re-load it until you restart!");
         }
-	public static void Unload()
-	{
-		all.ForEach(delegate(Plugin p)
-		{
-			Unload(p, true);
-		});
-	}
+        /// <summary>
+        /// Unload all plugins
+        /// </summary>
+        public static void Unload()
+        {
+            all.ForEach(delegate(Plugin p)
+            {
+                Unload(p, true);
+            });
+        }
+        /// <summary>
+        /// Load all plugins
+        /// </summary>
         public static void Load()
         {
             if (Directory.Exists("plugins"))

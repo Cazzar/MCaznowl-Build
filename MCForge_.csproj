@@ -209,7 +209,10 @@
     </Compile>
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
+    <Compile Include="Player\Player.Events.cs" />
+    <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />
+    <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />

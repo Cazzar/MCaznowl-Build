@@ -31,9 +31,6 @@ namespace MCForge
 {
     public sealed class Player : IDisposable
     {
-        public static bool cancelcommand = false;
-        public static bool cancelchat = false;
-        public static bool cancelBlock = false;
         public static List<Player> players = new List<Player>();
         public static Dictionary<string, string> left = new Dictionary<string, string>();
         public static List<Player> connections = new List<Player>(Server.players);
@@ -234,58 +231,6 @@ namespace MCForge
 
         public Level level = Server.mainLevel;
         public bool Loading = true;     //True if player is loading a map.
-
-        /// <summary>
-        /// OnBlockchange is called when a player places/deletes a block. You must return a bool for this method
-        /// returning true will tell the server to do nothing else afterwards, this is usefull for a cuboid like plugin
-        /// returning false will tell the server to normally place/delete the block or continue like normal, this is usefull for like a block recorder plugin.
-        /// </summary>
-        public delegate void BlockchangeEventHandler2(Player p, ushort x, ushort y, ushort z, byte type);
-        public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
-        public event BlockchangeEventHandler Blockchange = null;
-        /// <summary>
-        /// PlayerConnect is called when a player connects to the server.
-        /// </summary>
-        public delegate void OnPlayerConnect(Player p);
-        public static event OnPlayerConnect PlayerConnect = null;
-        /// <summary>
-        /// PlayerDisconnect is called when a player dissconnects
-        /// </summary>
-        public delegate void OnPlayerDisconnect(Player p, string reason);
-        public static event OnPlayerDisconnect PlayerDisconnect = null;
-        /// <summary>
-        /// PlayerCommand is called when a player does ANY command on the server
-        /// You must return a bool for this method
-        /// returning true will tell the server not to look for anymore blocks/commands, this is usefull if you dont want the server to say Command bla does not exist
-        /// returning false will tell the server to continue to look for another block/command, this is usefull if you didnt find the cmd you were looking for...
-        /// </summary>
-        public delegate void OnPlayerCommand(string cmd, Player p, string message);
-        public static event OnPlayerCommand PlayerCommand = null;
-        /// <summary>
-        /// PlayerChat is called when a player says something in chat
-        /// You must return a bool for this method
-        /// returning true will tell the server not to send the message, this is usefull for clanchats or teamchat plugins
-        /// returning false will tell the server to send the message normally, this is usefull if you didnt need it
-        /// You should return false if you dont need to do anything with it
-        /// </summary>
-        public delegate void OnPlayerChat(Player p, string message);
-        public static event OnPlayerChat PlayerChat = null;
-        /// <summary>
-        /// PlayerDeath is VERY usefull for game modes of all sorts
-        /// It is called when a player dies...simple
-        /// </summary>
-        public delegate void OnPlayerDeath(Player p, byte deathblock);
-        public static event OnPlayerDeath PlayerDeath = null;
-        public static event BlockchangeEventHandler2 PlayerBlockChange = null;
-        public event OnPlayerChat OnChat = null;
-        public event OnPlayerCommand OnCommand = null;
-        public event OnPlayerDeath OnDeath = null;
-        public void ClearPlayerCommand() { OnCommand = null; }
-        public void ClearPlayerChat() { OnChat = null; }
-        public void ClearPlayerDeath() { OnDeath = null; }
-        public void ClearBlockchange() { Blockchange = null; }
-        public bool HasBlockchange() { return (Blockchange == null); }
-        public object blockchangeObject = null;
         public ushort[] lastClick = new ushort[3] { 0, 0, 0 };
 
         public ushort[] pos = new ushort[3] { 0, 0, 0 };

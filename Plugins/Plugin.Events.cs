@@ -24,7 +24,37 @@ namespace MCForge.Plugins
 {
 	public partial class Plugin
 	{
+
+        /// <summary>
+        /// Check to see if an event is stopped
+        /// </summary>
+        /// <param name="e">The event to check</param>
+        /// <returns>This returns true or false, true means its stopped, false means its not</returns>
+        public static bool IsEventCancled(Events e)
+        {
+            switch (e)
+            {
+                case Events.BlockChange:
+                    return Player.cancelBlock;
+                case Events.Chat:
+                    return Player.cancelchat;
+                case Events.Command:
+                    return Player.cancelcommand;
+                case Events.LevelLoad:
+                    return Level.cancelload;
+                case Events.LevelSave:
+                    return Level.cancelsave;
+                default:
+                    return false;
+            }
+        }
+        /// <summary>
+        /// Cancel a server event
+        /// </summary>
+        /// <param name="e">The event that you want to cancel</param>
         public static void CancelEvent(Events e) {
+            //TODO
+            //Add some more events to be canceled
             switch (e)
             {
                 case Events.BlockChange:
