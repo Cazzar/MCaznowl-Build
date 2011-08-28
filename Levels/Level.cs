@@ -111,6 +111,7 @@ namespace MCForge
         public bool fishstill = false;
         public bool guns = true;
         public bool loadOnGoto = true;
+        public bool leafDecay = false;
         
         //Pervisit and Perbuild Maxes
         public LevelPermission perbuildmax = LevelPermission.Nobody;
@@ -130,6 +131,8 @@ namespace MCForge
 
         List<Check> ListCheck = new List<Check>();  //A list of blocks that need to be updated
         List<Update> ListUpdate = new List<Update>();  //A list of block to change after calculation
+
+        Dictionary<int, sbyte> leaves = new Dictionary<int, sbyte>(); // Holds block state for leaf decay
 
         //CTF STUFF
         public CTFGame ctfgame = new CTFGame();
@@ -536,6 +539,7 @@ namespace MCForge
                     SW.WriteLine("PerVisitMax = " + (Group.Exists(PermissionToName(level.pervisitmax).ToLower()) ? PermissionToName(level.pervisitmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
                     SW.WriteLine("Guns = " + level.guns.ToString());
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                    SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
                 }
             }
             catch (Exception e)
@@ -910,6 +914,9 @@ namespace MCForge
                                                	break;
                                             case "loadongoto":
                                                 level.loadOnGoto = bool.Parse(value);
+                                                break;
+                                            case "leafdecay":
+                                                level.leafDecay = bool.Parse(value);
                                                 break;
 										}
 									}
@@ -1411,6 +1418,7 @@ namespace MCForge
                                         PhysAir(PosToInt(x, y, (ushort)(z + 1)));
                                         PhysAir(PosToInt(x, y, (ushort)(z - 1)));
                                         PhysAir(PosToInt(x, (ushort)(y + 1), z));  //Check block above the air
+                                        if (GetTile(x, (ushort)(y - 1), z) == Block.leaf) PhysAir(PosToInt(x, (ushort)(y - 1), z)); // Check below if leaf
 
                                         //Edge of map water
                                         if (edgeWater == true)
@@ -1440,6 +1448,29 @@ namespace MCForge
                                         }
                                         else
                                         {
+                                            C.time++;
+                                        }
+                                        break;
+
+                                    case Block.leaf:
+                                        if (physics > 1)   //Adv physics kills flowers and mushroos in water/lava
+                                        {
+                                            PhysAir(PosToInt((ushort)(x + 1), y, z));
+                                            PhysAir(PosToInt((ushort)(x - 1), y, z));
+                                            PhysAir(PosToInt(x, y, (ushort)(z + 1)));
+                                            PhysAir(PosToInt(x, y, (ushort)(z - 1)));
+                                            PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
+                                        }
+
+                                        if (!leafDecay) break;
+                                        if (C.time > rand.Next(20, 100))
+                                        {
+                                            if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
+                                            C.time = 255;
+                                        }
+                                        else
+                                        {
+                                            //AddCheckPost(C.b);
                                             C.time++;
                                         }
                                         break;
@@ -1829,7 +1860,6 @@ namespace MCForge
                                     case Block.wood:     //Wood to die in lava
                                     case Block.shrub:     //Tree and plants follow
                                     case Block.trunk:    //Wood to die in lava
-                                    case Block.leaf:    //Bushes die in lava
                                     case Block.yellowflower:
                                     case Block.redflower:
                                     case Block.mushroom:
@@ -3346,6 +3376,7 @@ namespace MCForge
                 //case 10:    //active_lava
                 case 12:    //sand
                 case 13:    //gravel
+                case 18:    //leaf
                 case 110:   //wood_float
                     /*case 112:   //lava_fast
                     case Block.WaterDown:
@@ -3389,12 +3420,9 @@ namespace MCForge
                         case 38:
                         case 39:
                         case 40:
-                            if (physics > 1)   //Adv physics crushes plants with sand
+                            if (physics > 1 && physics != 5)   //Adv physics crushes plants with sand
                             {
-                                if (physics != 5)
-                                {
-                                    moved = true;
-                                }
+                                moved = true;
                             }
                             else
                             { blocked = true; }
@@ -3576,6 +3604,70 @@ namespace MCForge
             }
         }
         //================================================================================================================
+        private bool PhysLeaf(int b)
+        {
+            byte type, dist = 4;
+            int i, xx, yy, zz;
+            ushort x, y, z;
+            IntToPos(b, out x, out y, out z);
+
+            for (xx = -dist; xx <= dist; xx++)
+            {
+                for (yy = -dist; yy <= dist; yy++)
+                {
+                    for (zz = -dist; zz <= dist; zz++)
+                    {
+                        type = GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz));
+                        if (type == Block.trunk)
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = 0;
+                        else if (type == Block.leaf)
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -2;
+                        else
+                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -1;
+                    }
+                }
+            }
+
+            for (i = 1; i <= 4; i++)
+            {
+                for (xx = -dist; xx <= dist; xx++)
+                {
+                    for (yy = -dist; yy <= dist; yy++)
+                    {
+                        for (zz = -dist; zz <= dist; zz++)
+                        {
+                            try
+                            {
+                                if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
+                                {
+                                    if (leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] = (sbyte)i;
+
+                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] = (sbyte)i;
+                                }
+                            }
+                            catch { /*Server.s.Log("Leaf decay error!");*/ }
+                        }
+                    }
+                }
+            }
+
+            //Server.s.Log((leaves[b] < 0).ToString()); // This is a debug line that spams the console to hell!
+            return leaves[b] < 0;
+        }
 
 
 

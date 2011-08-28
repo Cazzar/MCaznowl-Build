@@ -443,7 +443,6 @@ namespace MCForge
         //
         public void AddTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false)
         {
-            System.Collections.Generic.List<ushort> trunk = new System.Collections.Generic.List<ushort>();
             byte height = (byte)Rand.Next(5, 8);
             short top = (short)(height - Rand.Next(2, 4));
             ushort xxx, yyy, zzz;
@@ -451,7 +450,6 @@ namespace MCForge
             {
                 if (blockChange) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.trunk);
                 else Lvl.skipChange(x, (ushort)(y + yy), z, Block.trunk);
-                trunk.Add((ushort)(y + yy));
             }
 
 
@@ -472,7 +470,7 @@ namespace MCForge
                                     yyy = (ushort)(y + yy + height);
                                     zzz = (ushort)(z + zz);
 
-                                    if (xxx != x || zzz != z || !trunk.Contains(yyy))
+                                    if (xxx != x || zzz != z || yyy < top - 1)
                                     {
                                         if (blockChange) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
                                         else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
