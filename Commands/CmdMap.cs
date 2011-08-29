@@ -128,7 +128,10 @@ namespace MCForge
                         foundLevel.loadOnGoto = !foundLevel.loadOnGoto; foundLevel.ChatLevel("Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto)); if(p == null) Player.SendMessage(p, "Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto, true)); break;
                     case "leaf":
                     case "leafdecay":
-                        foundLevel.leafDecay = !foundLevel.leafDecay; foundLevel.ChatLevel("Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay)); if (p == null) Player.SendMessage(p, "Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay)); break;
+                        foundLevel.leafDecay = !foundLevel.leafDecay; foundLevel.ChatLevel("Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay)); if (p == null) Player.SendMessage(p, "Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay, true)); break;
+                    case "flow":
+                    case "randomflow":
+                        foundLevel.randomFlow = !foundLevel.randomFlow; foundLevel.ChatLevel("Random flow: " + FoundCheck(foundLevel, foundLevel.randomFlow)); if (p == null) Player.SendMessage(p, "Random flow: " + FoundCheck(foundLevel, foundLevel.randomFlow, true)); break;
                     default:
                         Player.SendMessage(p, "Could not find option entered.");
                         return;
@@ -152,6 +155,7 @@ namespace MCForge
             Player.SendMessage(p, "Grass will make grass not grow without physics.");
             Player.SendMessage(p, "Leaf decay will make leaves not connected to a log within 4 blocks disappear randomly.");
             Player.SendMessage(p, "Finite will cause all liquids to be finite.");
+            Player.SendMessage(p, "Random flow makes mass flooding liquids flow less uniformly.");
             Player.SendMessage(p, "AI will make animals hunt or flee.");
             Player.SendMessage(p, "PS will set the map's physics speed.");
             Player.SendMessage(p, "Overload will change how easy/hard it is to kill physics.");

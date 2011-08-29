@@ -73,9 +73,11 @@ namespace MCForge.Gui
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this.finiteModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomFlowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.animalAIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.edgeWaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.growingGrassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.leafDecayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.survivalDeathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.killerBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unloadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -138,6 +140,9 @@ namespace MCForge.Gui
             this.UnloadedList = new System.Windows.Forms.ListBox();
             this.ldmapbt = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.UnloadChk = new System.Windows.Forms.CheckBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.LoadOnGotoChk = new System.Windows.Forms.CheckBox();
             this.label35 = new System.Windows.Forms.Label();
             this.AutoLoadChk = new System.Windows.Forms.CheckBox();
             this.label23 = new System.Windows.Forms.Label();
@@ -243,9 +248,8 @@ namespace MCForge.Gui
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label33 = new System.Windows.Forms.Label();
             this.txtOpInput = new System.Windows.Forms.TextBox();
-            this.LoadOnGotoChk = new System.Windows.Forms.CheckBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.UnloadChk = new System.Windows.Forms.CheckBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.chkRndFlow = new System.Windows.Forms.CheckBox();
             this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.PlayersTextBox = new MCForge.Gui.AutoScrollTextBox();
@@ -293,9 +297,11 @@ namespace MCForge.Gui
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.physicsToolStripMenuItem,
             this.finiteModeToolStripMenuItem,
+            this.randomFlowToolStripMenuItem,
             this.animalAIToolStripMenuItem,
             this.edgeWaterToolStripMenuItem,
             this.growingGrassToolStripMenuItem,
+            this.leafDecayToolStripMenuItem,
             this.survivalDeathToolStripMenuItem,
             this.killerBlocksToolStripMenuItem,
             this.unloadToolStripMenuItem1,
@@ -370,6 +376,13 @@ namespace MCForge.Gui
             this.finiteModeToolStripMenuItem.Text = "Finite Mode";
             this.finiteModeToolStripMenuItem.Click += new System.EventHandler(this.finiteModeToolStripMenuItem_Click);
             // 
+            // randomFlowToolStripMenuItem
+            // 
+            this.randomFlowToolStripMenuItem.Name = "randomFlowToolStripMenuItem";
+            this.randomFlowToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.randomFlowToolStripMenuItem.Text = "Random Flow";
+            this.randomFlowToolStripMenuItem.Click += new System.EventHandler(this.randomFlowToolStripMenuItem_Click);
+            // 
             // animalAIToolStripMenuItem
             // 
             this.animalAIToolStripMenuItem.Name = "animalAIToolStripMenuItem";
@@ -390,6 +403,13 @@ namespace MCForge.Gui
             this.growingGrassToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.growingGrassToolStripMenuItem.Text = "Grass Growing";
             this.growingGrassToolStripMenuItem.Click += new System.EventHandler(this.growingGrassToolStripMenuItem_Click);
+            // 
+            // leafDecayToolStripMenuItem
+            // 
+            this.leafDecayToolStripMenuItem.Name = "leafDecayToolStripMenuItem";
+            this.leafDecayToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.leafDecayToolStripMenuItem.Text = "Leaf Decay";
+            this.leafDecayToolStripMenuItem.Click += new System.EventHandler(this.leafDecayToolStripMenuItem_Click);
             // 
             // survivalDeathToolStripMenuItem
             // 
@@ -1004,6 +1024,8 @@ namespace MCForge.Gui
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.chkRndFlow);
+            this.panel2.Controls.Add(this.label37);
             this.panel2.Controls.Add(this.UnloadChk);
             this.panel2.Controls.Add(this.label36);
             this.panel2.Controls.Add(this.LoadOnGotoChk);
@@ -1040,10 +1062,37 @@ namespace MCForge.Gui
             this.panel2.Size = new System.Drawing.Size(318, 207);
             this.panel2.TabIndex = 48;
             // 
+            // UnloadChk
+            // 
+            this.UnloadChk.AutoSize = true;
+            this.UnloadChk.Location = new System.Drawing.Point(288, 82);
+            this.UnloadChk.Name = "UnloadChk";
+            this.UnloadChk.Size = new System.Drawing.Size(15, 14);
+            this.UnloadChk.TabIndex = 42;
+            this.UnloadChk.UseVisualStyleBackColor = true;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(179, 82);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(104, 13);
+            this.label36.TabIndex = 41;
+            this.label36.Text = "Unload when empty:";
+            // 
+            // LoadOnGotoChk
+            // 
+            this.LoadOnGotoChk.AutoSize = true;
+            this.LoadOnGotoChk.Location = new System.Drawing.Point(288, 66);
+            this.LoadOnGotoChk.Name = "LoadOnGotoChk";
+            this.LoadOnGotoChk.Size = new System.Drawing.Size(15, 14);
+            this.LoadOnGotoChk.TabIndex = 40;
+            this.LoadOnGotoChk.UseVisualStyleBackColor = true;
+            // 
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(179, 83);
+            this.label35.Location = new System.Drawing.Point(179, 67);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(74, 13);
             this.label35.TabIndex = 39;
@@ -1125,13 +1174,13 @@ namespace MCForge.Gui
             "Flee"});
             this.Aicombo.Location = new System.Drawing.Point(29, 142);
             this.Aicombo.Name = "Aicombo";
-            this.Aicombo.Size = new System.Drawing.Size(99, 21);
+            this.Aicombo.Size = new System.Drawing.Size(62, 21);
             this.Aicombo.TabIndex = 30;
             // 
             // edgewaterchk
             // 
             this.edgewaterchk.AutoSize = true;
-            this.edgewaterchk.Location = new System.Drawing.Point(288, 64);
+            this.edgewaterchk.Location = new System.Drawing.Point(288, 50);
             this.edgewaterchk.Name = "edgewaterchk";
             this.edgewaterchk.Size = new System.Drawing.Size(15, 14);
             this.edgewaterchk.TabIndex = 29;
@@ -1149,7 +1198,7 @@ namespace MCForge.Gui
             // finitechk
             // 
             this.finitechk.AutoSize = true;
-            this.finitechk.Location = new System.Drawing.Point(288, 46);
+            this.finitechk.Location = new System.Drawing.Point(288, 34);
             this.finitechk.Name = "finitechk";
             this.finitechk.Size = new System.Drawing.Size(15, 14);
             this.finitechk.TabIndex = 27;
@@ -1158,7 +1207,7 @@ namespace MCForge.Gui
             // Killerbloxchk
             // 
             this.Killerbloxchk.AutoSize = true;
-            this.Killerbloxchk.Location = new System.Drawing.Point(288, 10);
+            this.Killerbloxchk.Location = new System.Drawing.Point(288, 2);
             this.Killerbloxchk.Name = "Killerbloxchk";
             this.Killerbloxchk.Size = new System.Drawing.Size(15, 14);
             this.Killerbloxchk.TabIndex = 26;
@@ -1167,7 +1216,7 @@ namespace MCForge.Gui
             // SurvivalStyleDeathchk
             // 
             this.SurvivalStyleDeathchk.AutoSize = true;
-            this.SurvivalStyleDeathchk.Location = new System.Drawing.Point(288, 28);
+            this.SurvivalStyleDeathchk.Location = new System.Drawing.Point(288, 18);
             this.SurvivalStyleDeathchk.Name = "SurvivalStyleDeathchk";
             this.SurvivalStyleDeathchk.Size = new System.Drawing.Size(15, 14);
             this.SurvivalStyleDeathchk.TabIndex = 25;
@@ -1213,7 +1262,7 @@ namespace MCForge.Gui
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(179, 65);
+            this.label20.Location = new System.Drawing.Point(179, 51);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(89, 13);
             this.label20.TabIndex = 19;
@@ -1222,7 +1271,7 @@ namespace MCForge.Gui
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(179, 47);
+            this.label19.Location = new System.Drawing.Point(179, 35);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(68, 13);
             this.label19.TabIndex = 18;
@@ -1231,7 +1280,7 @@ namespace MCForge.Gui
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(179, 28);
+            this.label18.Location = new System.Drawing.Point(179, 18);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(103, 13);
             this.label18.TabIndex = 17;
@@ -1240,7 +1289,7 @@ namespace MCForge.Gui
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(179, 10);
+            this.label17.Location = new System.Drawing.Point(179, 2);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(67, 13);
             this.label17.TabIndex = 16;
@@ -2123,32 +2172,23 @@ namespace MCForge.Gui
             this.txtOpInput.TabIndex = 30;
             this.txtOpInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtOpInput_KeyDown);
             // 
-            // LoadOnGotoChk
+            // label37
             // 
-            this.LoadOnGotoChk.AutoSize = true;
-            this.LoadOnGotoChk.Location = new System.Drawing.Point(288, 82);
-            this.LoadOnGotoChk.Name = "LoadOnGotoChk";
-            this.LoadOnGotoChk.Size = new System.Drawing.Size(15, 14);
-            this.LoadOnGotoChk.TabIndex = 40;
-            this.LoadOnGotoChk.UseVisualStyleBackColor = true;
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(179, 97);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(71, 13);
+            this.label37.TabIndex = 43;
+            this.label37.Text = "Random flow:";
             // 
-            // label36
+            // chkRndFlow
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(179, 100);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(104, 13);
-            this.label36.TabIndex = 41;
-            this.label36.Text = "Unload when empty:";
-            // 
-            // UnloadChk
-            // 
-            this.UnloadChk.AutoSize = true;
-            this.UnloadChk.Location = new System.Drawing.Point(288, 100);
-            this.UnloadChk.Name = "UnloadChk";
-            this.UnloadChk.Size = new System.Drawing.Size(15, 14);
-            this.UnloadChk.TabIndex = 42;
-            this.UnloadChk.UseVisualStyleBackColor = true;
+            this.chkRndFlow.AutoSize = true;
+            this.chkRndFlow.Location = new System.Drawing.Point(288, 98);
+            this.chkRndFlow.Name = "chkRndFlow";
+            this.chkRndFlow.Size = new System.Drawing.Size(15, 14);
+            this.chkRndFlow.TabIndex = 44;
+            this.chkRndFlow.UseVisualStyleBackColor = true;
             // 
             // txtCommandsUsed
             // 
@@ -2463,5 +2503,9 @@ namespace MCForge.Gui
         private CheckBox LoadOnGotoChk;
         private CheckBox UnloadChk;
         private Label label36;
+        private ToolStripMenuItem randomFlowToolStripMenuItem;
+        private ToolStripMenuItem leafDecayToolStripMenuItem;
+        private CheckBox chkRndFlow;
+        private Label label37;
     }
 }

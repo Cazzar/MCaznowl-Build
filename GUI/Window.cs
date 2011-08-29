@@ -1024,6 +1024,7 @@ namespace MCForge.Gui
                 drownNumeric.Value = l.drown;
                 LoadOnGotoChk.Checked = l.loadOnGoto;
                 UnloadChk.Checked = l.unload;
+                chkRndFlow.Checked = l.randomFlow;
                 AutoLoadChk.Checked = false;
                 if (File.Exists("text/autoload.txt"))
                 {
@@ -1072,6 +1073,7 @@ namespace MCForge.Gui
             l.drown = (int)drownNumeric.Value;
             l.loadOnGoto = LoadOnGotoChk.Checked;
             l.unload = UnloadChk.Checked;
+            l.randomFlow = chkRndFlow.Checked;
             {
                 List<string> oldlines = new List<string>();
                 using (StreamReader r = new StreamReader("text/autoload.txt"))
@@ -2082,6 +2084,16 @@ namespace MCForge.Gui
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             levelcommand("reload");
+        }
+
+        private void leafDecayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " leafdecay");
+        }
+
+        private void randomFlowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " randomflow");
         }
 
 

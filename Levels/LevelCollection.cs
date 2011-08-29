@@ -173,6 +173,12 @@ namespace MCForge
 
             del = delegate(Level l)
             {
+                return l.randomFlow;
+            };
+            props.Add(new LevelMethodDescriptor("Random Flow", del, typeof(bool)));
+
+            del = delegate(Level l)
+            {
                 return l.edgeWater;
             };
             props.Add(new LevelMethodDescriptor("Edge-Water", del, typeof(bool)));

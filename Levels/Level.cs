@@ -112,6 +112,7 @@ namespace MCForge
         public bool guns = true;
         public bool loadOnGoto = true;
         public bool leafDecay = false;
+        public bool randomFlow = true;
         
         //Pervisit and Perbuild Maxes
         public LevelPermission perbuildmax = LevelPermission.Nobody;
@@ -133,6 +134,7 @@ namespace MCForge
         List<Update> ListUpdate = new List<Update>();  //A list of block to change after calculation
 
         Dictionary<int, sbyte> leaves = new Dictionary<int, sbyte>(); // Holds block state for leaf decay
+        Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>(); // Holds random flow data for liqiud physics
 
         //CTF STUFF
         public CTFGame ctfgame = new CTFGame();
@@ -540,6 +542,7 @@ namespace MCForge
                     SW.WriteLine("Guns = " + level.guns.ToString());
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
                     SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
+                    SW.WriteLine("RandomFlow = " + level.randomFlow.ToString());
                 }
             }
             catch (Exception e)
@@ -918,6 +921,9 @@ namespace MCForge
                                             case "leafdecay":
                                                 level.leafDecay = bool.Parse(value);
                                                 break;
+                                            case "randomflow":
+                                                level.randomFlow = bool.Parse(value);
+                                                break;
 										}
 									}
 								}
@@ -1262,6 +1268,7 @@ namespace MCForge
                         {
                             IntToPos(C.b, out x, out y, out z);
                             bool InnerChange = false; bool skip = false;
+                            byte flow = 0;
                             int storedRand = 0;
                             Player foundPlayer = null; int foundNum = 75, currentNum, newNum, oldNum;
                             string foundInfo = C.extraInfo;
@@ -1418,7 +1425,7 @@ namespace MCForge
                                         PhysAir(PosToInt(x, y, (ushort)(z + 1)));
                                         PhysAir(PosToInt(x, y, (ushort)(z - 1)));
                                         PhysAir(PosToInt(x, (ushort)(y + 1), z));  //Check block above the air
-                                        if (GetTile(x, (ushort)(y - 1), z) == Block.leaf) PhysAir(PosToInt(x, (ushort)(y - 1), z)); // Check below if leaf
+                                        PhysAir(PosToInt(x, (ushort)(y - 1), z)); // Check block below the air
 
                                         //Edge of map water
                                         if (edgeWater == true)
@@ -1480,21 +1487,50 @@ namespace MCForge
                                         //initialy checks if block is valid
                                         if (!finite)
                                         {
-                                            if (!PhysSpongeCheck(C.b))
+                                            if (randomFlow)
                                             {
-                                                if (GetTile(x, (ushort)(y + 1), z) != Block.Zero) { PhysSandCheck(PosToInt(x, (ushort)(y + 1), z)); }
-                                                PhysWater(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
-                                                PhysWater(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
-                                                PhysWater(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
-                                                PhysWater(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
-                                                PhysWater(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                                if (!PhysSpongeCheck(C.b))
+                                                {
+                                                    flow = PhysFlowDirections(C.b);
+                                                    if (!liquids.ContainsKey(C.b)) liquids.Add(C.b, new bool[5]);
+                                                    if (GetTile(x, (ushort)(y + 1), z) != Block.Zero) { PhysSandCheck(PosToInt(x, (ushort)(y + 1), z)); }
+                                                    if (!liquids[C.b][0] && (rand.Next(6) == 0 || flow < 2)) { PhysWater(PosToInt((ushort)(x + 1), y, z), blocks[C.b]); liquids[C.b][0] = true; }
+                                                    if (!liquids[C.b][1] && (rand.Next(6) == 0 || flow < 2)) { PhysWater(PosToInt((ushort)(x - 1), y, z), blocks[C.b]); liquids[C.b][1] = true; }
+                                                    if (!liquids[C.b][2] && (rand.Next(6) == 0 || flow < 2)) { PhysWater(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]); liquids[C.b][2] = true; }
+                                                    if (!liquids[C.b][3] && (rand.Next(6) == 0 || flow < 2)) { PhysWater(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]); liquids[C.b][3] = true; }
+                                                    if (!liquids[C.b][4] && (rand.Next(6) == 0 || flow < 2)) { PhysWater(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]); liquids[C.b][4] = true; }
+                                                }
+                                                else
+                                                {
+                                                    AddUpdate(C.b, Block.air);  //was placed near sponge
+                                                    C.time = 255;
+                                                }
+
+                                                if (C.extraInfo.IndexOf("wait") == -1 && liquids.ContainsKey(C.b))
+                                                    if (liquids[C.b][0] && liquids[C.b][1] && liquids[C.b][2] && liquids[C.b][3] && liquids[C.b][4])
+                                                    {
+                                                        liquids.Remove(C.b);
+                                                        C.time = 255;
+                                                    }
                                             }
                                             else
                                             {
-                                                AddUpdate(C.b, Block.air);  //was placed near sponge
-                                            }
+                                                if (!PhysSpongeCheck(C.b))
+                                                {
+                                                    if (GetTile(x, (ushort)(y + 1), z) != Block.Zero) { PhysSandCheck(PosToInt(x, (ushort)(y + 1), z)); }
+                                                    PhysWater(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
+                                                    PhysWater(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
+                                                    PhysWater(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
+                                                    PhysWater(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
+                                                    PhysWater(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                                }
+                                                else
+                                                {
+                                                    AddUpdate(C.b, Block.air);  //was placed near sponge
+                                                }
 
-                                            if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
+                                                if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
+                                            }
                                         }
                                         else
                                         {
@@ -1592,17 +1628,39 @@ namespace MCForge
                                         if (C.time < 4) { C.time++; break; }
                                         if (!finite)
                                         {
-                                            PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
-                                            PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
-                                            PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
-                                            PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
-                                            PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                            if (randomFlow)
+                                            {
+                                                C.time = (byte)rand.Next(4);
+                                                flow = PhysFlowDirections(C.b);
+                                                if (!liquids.ContainsKey(C.b)) liquids.Add(C.b, new bool[5]);
+                                                if (!liquids[C.b][0] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]); liquids[C.b][0] = true; }
+                                                if (!liquids[C.b][1] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]); liquids[C.b][1] = true; }
+                                                if (!liquids[C.b][2] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]); liquids[C.b][2] = true; }
+                                                if (!liquids[C.b][3] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]); liquids[C.b][3] = true; }
+                                                if (!liquids[C.b][4] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]); liquids[C.b][4] = true; }
+                                                
+                                                if (C.extraInfo.IndexOf("wait") == -1 && liquids.ContainsKey(C.b))
+                                                    if (liquids[C.b][0] && liquids[C.b][1] && liquids[C.b][2] && liquids[C.b][3] && liquids[C.b][4])
+                                                    {
+                                                        liquids.Remove(C.b);
+                                                        C.time = 255;
+                                                    }
+                                            }
+                                            else
+                                            {
+                                                PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
+                                                PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
+                                                PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
+                                                PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
+                                                PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
+                                                
+                                                if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
+                                            }
                                         }
                                         else
                                         {
                                             goto case Block.finiteWater;
                                         }
-                                        if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
                                         break;
                                     #region fire
                                     case Block.fire:
@@ -1888,12 +1946,26 @@ namespace MCForge
 
                                     case Block.lava_fast:         //lava_fast
                                         //initialy checks if block is valid
-                                        PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast);
-                                        PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast);
-                                        PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast);
-                                        PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast);
-                                        PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast);
-                                        C.time = 255;
+                                        if (randomFlow)
+                                        {
+                                            flow = PhysFlowDirections(C.b);
+                                            if (!liquids.ContainsKey(C.b)) liquids.Add(C.b, new bool[5]);
+                                            if (!liquids[C.b][0] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast); liquids[C.b][0] = true; }
+                                            if (!liquids[C.b][1] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast); liquids[C.b][1] = true; }
+                                            if (!liquids[C.b][2] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast); liquids[C.b][2] = true; }
+                                            if (!liquids[C.b][3] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast); liquids[C.b][3] = true; }
+                                            if (!liquids[C.b][4] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast); liquids[C.b][4] = true; }
+                                            if (liquids[C.b][0] && liquids[C.b][1] && liquids[C.b][2] && liquids[C.b][3] && liquids[C.b][4]) C.time = 255;
+                                        }
+                                        else
+                                        {
+                                            PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast);
+                                            PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast);
+                                            PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast);
+                                            PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast);
+                                            PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast);
+                                            C.time = 255;
+                                        }
                                         break;
 
                                     //Special blocks that are not saved
@@ -3668,6 +3740,23 @@ namespace MCForge
             //Server.s.Log((leaves[b] < 0).ToString()); // This is a debug line that spams the console to hell!
             return leaves[b] < 0;
         }
+        //================================================================================================================
+        private byte PhysFlowDirections(int b, bool up = false)
+        {
+            byte dir = 0;
+            ushort x, y, z;
+            IntToPos(b, out x, out y, out z);
+
+            if (GetTile((ushort)(x + 1), y, z) == Block.air) dir++;
+            if (GetTile((ushort)(x - 1), y, z) == Block.air) dir++;
+            if (up && GetTile(x, (ushort)(y + 1), z) == Block.air) dir++;
+            if (GetTile(x, (ushort)(y - 1), z) == Block.air) dir++;
+            if (GetTile(x, y, (ushort)(z + 1)) == Block.air) dir++;
+            if (GetTile(x, y, (ushort)(z - 1)) == Block.air) dir++;
+
+            return dir;
+        }
+        //================================================================================================================
 
 
 

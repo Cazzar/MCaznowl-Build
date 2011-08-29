@@ -158,6 +158,8 @@ namespace MCForge
                 Server.s.Log("Identifying with NickServ");
                 connection.Sender.PrivateMessage("nickserv", "IDENTIFY " + Server.ircPassword);
             }
+
+            Server.s.Log("Joining channels...");
             connection.Sender.Join(channel);
             connection.Sender.Join(opchannel);
         }
