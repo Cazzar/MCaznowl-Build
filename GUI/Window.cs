@@ -1025,6 +1025,7 @@ namespace MCForge.Gui
                 LoadOnGotoChk.Checked = l.loadOnGoto;
                 UnloadChk.Checked = l.unload;
                 chkRndFlow.Checked = l.randomFlow;
+                leafDecayChk.Checked = l.leafDecay;
                 AutoLoadChk.Checked = false;
                 if (File.Exists("text/autoload.txt"))
                 {
@@ -1074,6 +1075,7 @@ namespace MCForge.Gui
             l.loadOnGoto = LoadOnGotoChk.Checked;
             l.unload = UnloadChk.Checked;
             l.randomFlow = chkRndFlow.Checked;
+            l.leafDecay = leafDecayChk.Checked;
             {
                 List<string> oldlines = new List<string>();
                 using (StreamReader r = new StreamReader("text/autoload.txt"))

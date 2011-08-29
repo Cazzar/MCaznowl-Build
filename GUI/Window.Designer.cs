@@ -255,6 +255,8 @@ namespace MCForge.Gui
             this.PlayersTextBox = new MCForge.Gui.AutoScrollTextBox();
             this.txtAdminLog = new MCForge.Gui.AutoScrollTextBox();
             this.txtOpLog = new MCForge.Gui.AutoScrollTextBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.leafDecayChk = new System.Windows.Forms.CheckBox();
             this.mapsStrip.SuspendLayout();
             this.playerStrip.SuspendLayout();
             this.iconContext.SuspendLayout();
@@ -1024,6 +1026,8 @@ namespace MCForge.Gui
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.leafDecayChk);
+            this.panel2.Controls.Add(this.label38);
             this.panel2.Controls.Add(this.chkRndFlow);
             this.panel2.Controls.Add(this.label37);
             this.panel2.Controls.Add(this.UnloadChk);
@@ -1101,7 +1105,7 @@ namespace MCForge.Gui
             // AutoLoadChk
             // 
             this.AutoLoadChk.AutoSize = true;
-            this.AutoLoadChk.Location = new System.Drawing.Point(76, 124);
+            this.AutoLoadChk.Location = new System.Drawing.Point(76, 109);
             this.AutoLoadChk.Name = "AutoLoadChk";
             this.AutoLoadChk.Size = new System.Drawing.Size(15, 14);
             this.AutoLoadChk.TabIndex = 38;
@@ -1110,7 +1114,7 @@ namespace MCForge.Gui
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(4, 125);
+            this.label23.Location = new System.Drawing.Point(4, 109);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(58, 13);
             this.label23.TabIndex = 37;
@@ -1142,7 +1146,7 @@ namespace MCForge.Gui
             // Gunschk
             // 
             this.Gunschk.AutoSize = true;
-            this.Gunschk.Location = new System.Drawing.Point(76, 104);
+            this.Gunschk.Location = new System.Drawing.Point(76, 93);
             this.Gunschk.Name = "Gunschk";
             this.Gunschk.Size = new System.Drawing.Size(15, 14);
             this.Gunschk.TabIndex = 33;
@@ -1160,7 +1164,7 @@ namespace MCForge.Gui
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 104);
+            this.label5.Location = new System.Drawing.Point(4, 94);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 31;
@@ -1189,7 +1193,7 @@ namespace MCForge.Gui
             // grasschk
             // 
             this.grasschk.AutoSize = true;
-            this.grasschk.Location = new System.Drawing.Point(76, 63);
+            this.grasschk.Location = new System.Drawing.Point(76, 61);
             this.grasschk.Name = "grasschk";
             this.grasschk.Size = new System.Drawing.Size(15, 14);
             this.grasschk.TabIndex = 28;
@@ -1225,7 +1229,7 @@ namespace MCForge.Gui
             // chatlvlchk
             // 
             this.chatlvlchk.AutoSize = true;
-            this.chatlvlchk.Location = new System.Drawing.Point(76, 83);
+            this.chatlvlchk.Location = new System.Drawing.Point(76, 77);
             this.chatlvlchk.Name = "chatlvlchk";
             this.chatlvlchk.Size = new System.Drawing.Size(15, 14);
             this.chatlvlchk.TabIndex = 24;
@@ -1298,7 +1302,7 @@ namespace MCForge.Gui
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(4, 64);
+            this.label16.Location = new System.Drawing.Point(4, 62);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(37, 13);
             this.label16.TabIndex = 15;
@@ -1316,7 +1320,7 @@ namespace MCForge.Gui
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(4, 84);
+            this.label13.Location = new System.Drawing.Point(4, 78);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(64, 13);
             this.label13.TabIndex = 12;
@@ -2255,6 +2259,24 @@ namespace MCForge.Gui
             this.txtOpLog.Size = new System.Drawing.Size(672, 186);
             this.txtOpLog.TabIndex = 29;
             // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(4, 125);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(60, 13);
+            this.label38.TabIndex = 45;
+            this.label38.Text = "Leaf decay:";
+            // 
+            // leafDecayChk
+            // 
+            this.leafDecayChk.AutoSize = true;
+            this.leafDecayChk.Location = new System.Drawing.Point(76, 125);
+            this.leafDecayChk.Name = "leafDecayChk";
+            this.leafDecayChk.Size = new System.Drawing.Size(15, 14);
+            this.leafDecayChk.TabIndex = 46;
+            this.leafDecayChk.UseVisualStyleBackColor = true;
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2507,5 +2529,7 @@ namespace MCForge.Gui
         private ToolStripMenuItem leafDecayToolStripMenuItem;
         private CheckBox chkRndFlow;
         private Label label37;
+        private CheckBox leafDecayChk;
+        private Label label38;
     }
 }
