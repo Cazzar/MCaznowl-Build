@@ -1,4 +1,5 @@
 v5.2.0.0
+- Fixed the server-breaking freeze bug! YES!!!
 - Fixed several possible memory leaks
 - Fixed /moveall and /map in the console
 - Fixed /click for guests
