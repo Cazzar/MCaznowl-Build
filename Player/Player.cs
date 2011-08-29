@@ -2340,8 +2340,8 @@ namespace MCForge
         retry:*/ try
             {
 
-                //socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
-                socket.Send(buffer);
+                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                //socket.Send(buffer);
                 buffer = null;
                 /*      if (buffer[0] != 1)
                     {

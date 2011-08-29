@@ -51,6 +51,7 @@ namespace MCForge
                     gettinginfo = true;
                     Player.SendMessage(p, "MOTD: &b" + foundLevel.motd);
                     Player.SendMessage(p, "Finite mode: " + FoundCheck(foundLevel, foundLevel.finite));
+                    Player.SendMessage(p, "Random flow: " + FoundCheck(foundLevel, foundLevel.randomFlow));
                     Player.SendMessage(p, "Animal AI: " + FoundCheck(foundLevel, foundLevel.ai));
                     Player.SendMessage(p, "Edge water: " + FoundCheck(foundLevel, foundLevel.edgeWater));
                     Player.SendMessage(p, "Grass growing: " + FoundCheck(foundLevel, foundLevel.GrassGrow));
