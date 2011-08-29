@@ -334,6 +334,25 @@ public static byte maxGuests = 10;
                         Log("Downloading Restarter.pdb failed, please try again later");
                     }
                 }
+                if (!File.Exists("MySql.Data.dll"))
+                {
+                    Log("MySql.Data.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/MySql.Data.dll", "MySql.Data.dll");
+                        }
+                        if (File.Exists("MySql.Data.dll"))
+                        {
+                            Log("MySql.Data.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading MySql.Data.dll failed, please try again later");
+                    }
+                }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
                 {
                     Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
