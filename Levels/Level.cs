@@ -1452,7 +1452,7 @@ namespace MCForge
                                         }
                                         break;
 
-                                    case Block.leaf:
+                                    /*case Block.leaf:
                                         if (physics > 1)   //Adv physics kills flowers and mushroos in water/lava
                                         {
                                             PhysAir(PosToInt((ushort)(x + 1), y, z));
@@ -1473,7 +1473,7 @@ namespace MCForge
                                             //AddCheckPost(C.b);
                                             C.time++;
                                         }
-                                        break;
+                                        break;*/
 
                                     case Block.water:         //Active_water
                                     case Block.activedeathwater:

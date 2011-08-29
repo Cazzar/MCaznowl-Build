@@ -83,7 +83,7 @@ namespace MCForge
         void Listener_OnJoin(UserInfo user, string channel)
         {
             Server.s.Log(user.Nick + " has joined channel " + channel);
-            Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
+            Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has joined the" + (channel == opchannel ? " operator " : " ") + "channel");
         }
         void Listener_OnPart(UserInfo user, string channel, string reason)
         {
