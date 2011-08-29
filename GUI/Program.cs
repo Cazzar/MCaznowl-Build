@@ -120,7 +120,7 @@ namespace MCForge_.Gui
                     s.OnSystem += Console.WriteLine;
                     s.Start();
 
-                    Console.Title = Server.name + " MCForge Version: " + Server.Version;
+                    Console.Title = Server.name + " - MCForge " + Server.Version;
                     usingConsole = true;
                     handleComm(Console.ReadLine());
 
