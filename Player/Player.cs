@@ -3071,7 +3071,7 @@ namespace MCForge
         }
 
 
-        private static bool MessageHasBadColorCodes(Player from, string message)
+        public static bool MessageHasBadColorCodes(Player from, string message)
         {
             string[] checkmessagesplit = message.Split(' ');
             bool lastendwithcolour = false;
@@ -3082,10 +3082,13 @@ namespace MCForge
                 {
                     if (lastendwithcolour == true)
                     {
-                        from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
-                        from.SendMessage("Message not sent");
-                        Server.s.Log(from.name + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
-                        GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                        if (from != null)
+                        {
+                            from.SendMessage("Sorry, Your colour codes were invalid (You cannot use 2 colour codes next to each other");
+                            from.SendMessage("Message not sent");
+                            Server.s.Log(from.name + " tried to send an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                            GlobalMessageOps(from.color + from.name + " " + Server.DefaultColor + " tried to sent an invalid colour code message (2 colour codes were next to each other), the offending message was not sent.");
+                        }
                         return true;
                     }
                     else if (s.Length == 2)
@@ -3115,12 +3118,15 @@ namespace MCForge
                 s.Trim();
                 if (s.StartsWith("%"))
                 {
-                    if (lastendwithcolour == true)
+                    if (lastendwithcolour)
                     {
-                        who.SendMessage("Sorry, Your colour codes in this command were invalid (You cannot use 2 colour codes next to each other");
-                        who.SendMessage("Command failed.");
-                        Server.s.Log(who.name + " attempted to send a command with invalid colours codes (2 colour codes were next to each other)!");
-                        GlobalMessageOps(who.color + who.name + " " + Server.DefaultColor + " attempted to send a command with invalid colours codes (2 colour codes were next to each other)!");
+                        if (who != null)
+                        {
+                            who.SendMessage("Sorry, Your colour codes in this command were invalid (You cannot use 2 colour codes next to each other");
+                            who.SendMessage("Command failed.");
+                            Server.s.Log(who.name + " attempted to send a command with invalid colours codes (2 colour codes were next to each other)!");
+                            GlobalMessageOps(who.color + who.name + " " + Server.DefaultColor + " attempted to send a command with invalid colours codes (2 colour codes were next to each other)!");
+                        }
                         return true;
                     }
                     else if (s.Length == 2)

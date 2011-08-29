@@ -120,6 +120,7 @@ namespace MCForge
         {
             if (!Server.ircControllers.Contains(user.Nick)) { Pm(user.Nick, "You are not an IRC controller!"); return; }
             if (message.Split(' ')[0] == "resetbot" || banCmd.Contains(message.Split(' ')[0])) { Pm(user.Nick, "You cannot use this command from IRC!"); return; }
+            if (Player.CommandHasBadColourCodes(null, message)) { Pm(user.Nick, "Your command had invalid color codes!"); return; }
 
             Command cmd = Command.all.Find(message.Split(' ')[0]);
             if (cmd != null)
@@ -144,6 +145,7 @@ namespace MCForge
                 if (allowedchars.IndexOf(ch) == -1)
                     msg = msg.Replace(ch.ToString(), "*");
             }
+            if (Player.MessageHasBadColorCodes(null, msg)) return;
             Server.s.Log("[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": " + msg);
             Player.GlobalMessage(Server.IRCColour + "[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": &f" + msg);
         }
