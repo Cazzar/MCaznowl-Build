@@ -1503,7 +1503,7 @@ namespace MCForge
                                                 else
                                                 {
                                                     AddUpdate(C.b, Block.air);  //was placed near sponge
-                                                    C.time = 255;
+                                                    if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
                                                 }
 
                                                 if (C.extraInfo.IndexOf("wait") == -1 && liquids.ContainsKey(C.b))
