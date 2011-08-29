@@ -4,6 +4,7 @@ v5.2.0.0
 - Fixed /click for guests
 - Fixed /pyramid so it respects block limits
 - Fixed /unload empty
+- Fixed /hide and /xhide to use custom login/logout messages
 - Fixed level property file saving, it was breaking on certain maps
 - Fixed commands in the CLI, a slash is once again recognized :D
 - Fixed in-game messages from the console so they have proper coloring again
@@ -14,6 +15,7 @@ v5.2.0.0
 - Made some changes to the right-click menu for the maps box
 - Made a change to the window title, it looks much more professional
 - Improved the tree generator, the trunk now makes more sense
+- Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics
 - Added missing stuff to the "Maps" tab
 - Added seed option to /newlvl, check /help newlvl for more information

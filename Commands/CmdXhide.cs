@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.IO;
 
 namespace MCForge
 {
@@ -39,13 +40,13 @@ namespace MCForge
             if (p.hidden)
             {
                 Player.GlobalDie(p, true);
-                Player.GlobalChat(p, "&c- " + p.color + p.prefix + p.name + Server.DefaultColor + " disconnected.", false);
+                Player.GlobalChat(p, "&c- " + p.color + p.prefix + p.name + Server.DefaultColor + " " + (File.Exists("text/logout/" + p.name + ".txt") ? File.ReadAllText("text/logout/" + p.name + ".txt") : "Disconnected."), false);
 
             }
             else
             {
                 Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false, "");
-                Player.GlobalChat(p, "&a+ " + p.color + p.prefix + p.name + Server.DefaultColor + " joined the game.", false);
+                Player.GlobalChat(p, "&a+ " + p.color + p.prefix + p.name + Server.DefaultColor + " " + (File.Exists("text/logout/" + p.name + ".txt") ? File.ReadAllText("text/logout/" + p.name + ".txt") : "joined the game."), false);
             }
         }
         public override void Help(Player p)
