@@ -1785,6 +1785,7 @@ namespace MCForge
                     return;
                 }
 
+                if (MessageHasBadColorCodes(this, text)) return;
                 if (storedMessage != "")
                 {
                     if (!text.EndsWith(">") && !text.EndsWith("<"))

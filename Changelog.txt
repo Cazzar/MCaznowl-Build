@@ -10,6 +10,7 @@ v5.2.0.0
 - Fixed commands in the CLI, a slash is once again recognized :D
 - Fixed in-game messages from the console so they have proper coloring again
 - Fixed the player and map lists in the GUI not updating
+- Fixed color code exploits which crash clients
 - Completey remade the IRC bot, it now uses a different DLL (no more virus alert :D)
 - /resetbot no longer nukes the server console
 - Made it so autoload.txt doesn't save when load on /goto is enabled
