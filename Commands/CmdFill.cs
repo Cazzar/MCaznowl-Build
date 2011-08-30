@@ -171,7 +171,7 @@ namespace MCForge
                         deep--;
                     }
 
-                    if (x - 1 > 0)
+                    if (x > 0)
                         if (GetTile((ushort)(x - 1), y, z, p.level, blocks) == oldType)
                         {
                             deep++;
@@ -190,7 +190,7 @@ namespace MCForge
                         deep--;
                     }
 
-                    if (z - 1 > 0)
+                    if (z > 0)
                         if (GetTile(x, y, (ushort)(z - 1), p.level, blocks) == oldType)
                         {
                             deep++;
@@ -212,7 +212,7 @@ namespace MCForge
 
                 if (fillType == 0 || fillType == FillType.Down || fillType > FillType.Layer)
                 {
-                    if (y - 1 > 0)
+                    if (y > 0)
                         if (GetTile(x, (ushort)(y - 1), z, p.level, blocks) == oldType)
                         {
                             deep++;
