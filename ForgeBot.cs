@@ -147,7 +147,7 @@ namespace MCForge
             }
             if (Player.MessageHasBadColorCodes(null, msg)) return;
             Server.s.Log("[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": " + msg);
-            Player.GlobalMessage(Server.IRCColour + "[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": &f" + msg);
+            Player.GlobalMessage(Server.IRCColour + "[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": &f" + msg.Trim());
         }
 
         void Listener_OnRegistered()
