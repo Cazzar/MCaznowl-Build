@@ -1955,7 +1955,12 @@ namespace MCForge
                                             if (!liquids[C.b][2] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast); liquids[C.b][2] = true; }
                                             if (!liquids[C.b][3] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast); liquids[C.b][3] = true; }
                                             if (!liquids[C.b][4] && (rand.Next(6) == 0 || flow < 2)) { PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast); liquids[C.b][4] = true; }
-                                            if (liquids[C.b][0] && liquids[C.b][1] && liquids[C.b][2] && liquids[C.b][3] && liquids[C.b][4]) C.time = 255;
+                                            
+                                            if (liquids[C.b][0] && liquids[C.b][1] && liquids[C.b][2] && liquids[C.b][3] && liquids[C.b][4])
+                                            {
+                                                liquids.Remove(C.b);
+                                                C.time = 255;
+                                            }
                                         }
                                         else
                                         {
