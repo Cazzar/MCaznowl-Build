@@ -96,8 +96,8 @@ namespace MCForge
                 byte oldType = p.level.GetTile(x, y, z);
                 p.SendBlockchange(x, y, z, oldType);
 
-                if (cpos.type == oldType) { Player.SendMessage(p, "Cannot fill the same time"); return; }
-                if (!Block.canPlace(p, oldType) && !Block.BuildIn(oldType)) { Player.SendMessage(p, "Cannot fill that."); return; }
+                if (cpos.type == oldType) { Player.SendMessage(p, "Cannot fill with the same type."); return; }
+                if (!Block.canPlace(p, oldType) && !Block.BuildIn(oldType)) { Player.SendMessage(p, "Cannot fill with that."); return; }
 
                 byte[] mapBlocks = new byte[p.level.blocks.Length];
                 List<Pos> buffer = new List<Pos>();
