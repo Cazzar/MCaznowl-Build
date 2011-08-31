@@ -55,6 +55,7 @@ namespace MCForge
                     Player.SendMessage(p, "Animal AI: " + FoundCheck(foundLevel, foundLevel.ai));
                     Player.SendMessage(p, "Edge water: " + FoundCheck(foundLevel, foundLevel.edgeWater));
                     Player.SendMessage(p, "Grass growing: " + FoundCheck(foundLevel, foundLevel.GrassGrow));
+                    Player.SendMessage(p, "Tree growing: " + FoundCheck(foundLevel, foundLevel.growTrees));
                     Player.SendMessage(p, "Leaf decay: " + FoundCheck(foundLevel, foundLevel.leafDecay));
                     Player.SendMessage(p, "Physics speed: &b" + foundLevel.speedPhysics);
                     Player.SendMessage(p, "Physics overload: &b" + foundLevel.overload);
@@ -133,6 +134,9 @@ namespace MCForge
                     case "flow":
                     case "randomflow":
                         foundLevel.randomFlow = !foundLevel.randomFlow; foundLevel.ChatLevel("Random flow: " + FoundCheck(foundLevel, foundLevel.randomFlow)); if (p == null) Player.SendMessage(p, "Random flow: " + FoundCheck(foundLevel, foundLevel.randomFlow, true)); break;
+                    case "tree":
+                    case "growtrees":
+                        foundLevel.growTrees = !foundLevel.growTrees; foundLevel.ChatLevel("Tree growing: " + FoundCheck(foundLevel, foundLevel.growTrees)); if (p == null) Player.SendMessage(p, "Tree growing: " + FoundCheck(foundLevel, foundLevel.growTrees, true)); break;
                     default:
                         Player.SendMessage(p, "Could not find option entered.");
                         return;
@@ -154,6 +158,7 @@ namespace MCForge
             Player.SendMessage(p, "Possible toggles: theme, finite, ai, edge, ps, overload, motd, death, fall, drown, unload, rp, instant, killer, chat");
             Player.SendMessage(p, "Edge will cause edge water to flow.");
             Player.SendMessage(p, "Grass will make grass not grow without physics.");
+            Player.SendMessage(p, "Tree growing will make saplings grow into trees after a while.");
             Player.SendMessage(p, "Leaf decay will make leaves not connected to a log within 4 blocks disappear randomly.");
             Player.SendMessage(p, "Finite will cause all liquids to be finite.");
             Player.SendMessage(p, "Random flow makes mass flooding liquids flow less uniformly.");

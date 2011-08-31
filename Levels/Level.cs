@@ -113,6 +113,7 @@ namespace MCForge
         public bool loadOnGoto = true;
         public bool leafDecay = false;
         public bool randomFlow = true;
+        public bool growTrees = false;
         
         //Pervisit and Perbuild Maxes
         public LevelPermission perbuildmax = LevelPermission.Nobody;
@@ -543,6 +544,7 @@ namespace MCForge
                     SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
                     SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
                     SW.WriteLine("RandomFlow = " + level.randomFlow.ToString());
+                    SW.WriteLine("GrowTrees = " + level.growTrees.ToString());
                 }
             }
             catch (Exception e)
@@ -923,6 +925,9 @@ namespace MCForge
                                                 break;
                                             case "randomflow":
                                                 level.randomFlow = bool.Parse(value);
+                                                break;
+                                            case "growtrees":
+                                                level.growTrees = bool.Parse(value);
                                                 break;
 										}
 									}
@@ -1469,17 +1474,27 @@ namespace MCForge
                                             PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
 
-                                        if (!leafDecay) break;
-                                        if (C.time > rand.Next(20, 100))
+                                        if (!leafDecay) { C.time = 255; break; }
+                                        if (C.time < rand.Next(20, 100)) { C.time++; break; }
+                                        
+                                        if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
+                                        C.time = 255;
+                                        break;
+
+                                    case Block.shrub:
+                                        if (physics > 1)   //Adv physics kills flowers and mushroos in water/lava
                                         {
-                                            if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
-                                            C.time = 255;
+                                            PhysAir(PosToInt((ushort)(x + 1), y, z));
+                                            PhysAir(PosToInt((ushort)(x - 1), y, z));
+                                            PhysAir(PosToInt(x, y, (ushort)(z + 1)));
+                                            PhysAir(PosToInt(x, y, (ushort)(z - 1)));
+                                            PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
-                                        else
-                                        {
-                                            //AddCheckPost(C.b);
-                                            C.time++;
-                                        }
+
+                                        if (!growTrees) { C.time = 255; break; }
+                                        if (C.time < 20) { if (rand.Next(20) == 0) C.time++; break; }
+                                        new MapGenerator().AddTree(this, x, y, z, rand, true, false);
+                                        C.time = 255;
                                         break;
 
                                     case Block.water:         //Active_water
@@ -1916,7 +1931,6 @@ namespace MCForge
 
                                     //Adv physics updating anything placed next to water or lava
                                     case Block.wood:     //Wood to die in lava
-                                    case Block.shrub:     //Tree and plants follow
                                     case Block.trunk:    //Wood to die in lava
                                     case Block.yellowflower:
                                     case Block.redflower:
@@ -3451,9 +3465,26 @@ namespace MCForge
             {
                 //case 8:     //active water
                 //case 10:    //active_lava
+                case 6:     //shrub
                 case 12:    //sand
                 case 13:    //gravel
                 case 18:    //leaf
+                case 21:    //cloth 21-36
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 27:
+                case 28:
+                case 29:
+                case 30:
+                case 31:
+                case 32:
+                case 33:
+                case 34:
+                case 35:
+                case 36:
                 case 110:   //wood_float
                     /*case 112:   //lava_fast
                     case Block.WaterDown:

@@ -2359,10 +2359,13 @@ namespace MCForge
                     Disconnect();
                 else goto retry;
             }*/
-            catch (SocketException)
+            catch (SocketException e)
             {
                 buffer = null;
                 Disconnect();
+#if DEBUG
+                Server.ErrorLog(e);
+#endif
             }
         }
 
