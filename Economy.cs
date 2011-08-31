@@ -37,7 +37,12 @@ namespace MCForge
             //Ranks
             public static bool Ranks = false;
             public static LevelPermission MaxRank = LevelPermission.AdvBuilder;
-            public static int RankPrice = 100;
+            public static List<Rank> RanksList = new List<Rank>();
+            public class Rank
+            {
+                public Group group;
+                public int price = 1000;
+            }
         }
 
         public static void Load()
@@ -76,7 +81,24 @@ namespace MCForge
                             break;
 
                         case "rank":
-                            if (linear[1] == "price") { Settings.RankPrice = int.Parse(linear[2]); }
+                            if (linear[1] == "price") 
+                            {
+                                Economy.Settings.Rank rnk = new Economy.Settings.Rank();
+                                rnk = Economy.FindRank(linear[2]);
+                                if (rnk == null)
+                                {
+                                    rnk = new Economy.Settings.Rank();
+                                    rnk.group = Group.Find(linear[2]);
+                                    rnk.price = int.Parse(linear[3]);
+                                    Economy.Settings.RanksList.Add(rnk);
+                                }
+                                else
+                                {
+                                    Economy.Settings.RanksList.Remove(rnk);
+                                    rnk.price = int.Parse(linear[3]);
+                                    Economy.Settings.RanksList.Add(rnk);
+                                }
+                            }
                             if (linear[1] == "maxrank")
                             {
                                 Group grp = Group.Find(linear[2]);
@@ -156,8 +178,11 @@ namespace MCForge
                 //rank
                 w.WriteLine();
                 w.WriteLine("rank:enabled:" + Settings.Ranks);
-                w.WriteLine("rank:price:" + Settings.RankPrice);
                 w.WriteLine("rank:maxrank:" + Settings.MaxRank);
+                foreach (Settings.Rank rnk in Settings.RanksList)
+                {
+                    w.WriteLine("rank:price:" + rnk.group.name + ":" + rnk.price);
+                }
                 //maps
                 w.WriteLine();
                 w.WriteLine("level:enabled:" + Settings.Levels);
@@ -190,6 +215,42 @@ namespace MCForge
                 catch { }
             }
             return found;
+        }
+
+        public static Settings.Rank FindRank(string name)
+        {
+            Settings.Rank found = null;
+            foreach (Settings.Rank rnk in Settings.RanksList)
+            {
+                try
+                {
+                    if (rnk.group.name.ToLower() == name.ToLower())
+                    {
+                        found = rnk;
+                    }
+                }
+                catch { }
+            }
+            return found;
+        }
+
+        public static Economy.Settings.Rank NextRank(Player p)
+        {
+            Group foundGroup = p.group;
+            Group nextGroup = null; bool nextOne = false;
+            for (int i = 0; i < Group.GroupList.Count; i++)
+            {
+                Group grp = Group.GroupList[i];
+                if (nextOne)
+                {
+                    if (grp.Permission >= LevelPermission.Nobody) break;
+                    nextGroup = grp;
+                    break;
+                }
+                if (grp == foundGroup)
+                    nextOne = true;
+            }
+            return Economy.FindRank(nextGroup.name);
         }
 
     }

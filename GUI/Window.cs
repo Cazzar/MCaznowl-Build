@@ -1118,12 +1118,33 @@ namespace MCForge.Gui
         private void CreateNewMap_Click(object sender, EventArgs e)
         {
             if (mapgen) { MessageBox.Show("Map generator already in use."); return; }
+
+            string name;
+            string x;
+            string y;
+            string z;
+            string type;
+            string seed;
+
+            try { name = nametxtbox.Text; } catch { name = ""; }
+            try { x = xtxtbox.SelectedItem.ToString(); } catch { x = ""; }
+            try { y = ytxtbox.SelectedItem.ToString(); } catch { y = ""; }
+            try { z = ztxtbox.SelectedItem.ToString(); } catch { z = ""; }
+            try { type = maptypecombo.SelectedItem.ToString().ToLower(); } catch { type = ""; }
+            try { seed = seedtxtbox.Text.ToLower(); } catch { seed = ""; }
+
+            if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(x) || String.IsNullOrEmpty(y) || String.IsNullOrEmpty(z) || String.IsNullOrEmpty(type))
+            {
+                MessageBox.Show("You left a box blank!"); 
+                return;
+            }
+
             new Thread(() =>
             {
                 mapgen = true;
                 try
                 {
-                    Command.all.Find("newlvl").Use(null, nametxtbox.Text + " " + xtxtbox.SelectedItem.ToString().ToLower() + " " + ytxtbox.SelectedItem.ToString().ToLower() + " " + ztxtbox.SelectedItem.ToString().ToLower() + " " + maptypecombo.SelectedItem.ToString().ToLower() + (!String.IsNullOrEmpty(seedtxtbox.Text) ? " " + seedtxtbox.Text : ""));
+                    Command.all.Find("newlvl").Use(null, name + " " + x + " " + y + " " + z + " " + type + (!String.IsNullOrEmpty(seed) ? " " + seed : ""));
                 }
                 catch
                 {
@@ -1133,26 +1154,15 @@ namespace MCForge.Gui
                 if (File.Exists("levels/" + nametxtbox.Text + ".lvl"))
                 {
                     MessageBox.Show("Created Level");
-                    try
-                    {
-                        UnloadedlistUpdate();
-                        UpdateMapList("'");
-                    }
-                    catch { }
                 }
                 else
                 {
                     MessageBox.Show("Level may not have been created.");
-                    try
-                    {
-                        UnloadedlistUpdate();
-                        UpdateMapList("'");
-                    }
-                    catch { }
                 }
                 mapgen = false;
-                return;
             }).Start(); ;
+            UnloadedlistUpdate();
+            UpdateMapList("'");
         }
 
         private void ldmapbt_Click(object sender, EventArgs e)

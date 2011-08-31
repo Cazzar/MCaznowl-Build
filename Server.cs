@@ -432,12 +432,12 @@ public static byte maxGuests = 10;
 
             Properties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
-            Economy.Load();
             Group.InitAll();
             Command.InitAll();
             GrpCommands.fillRanks();
             Block.SetBlocks();
             Awards.Load();
+            Economy.Load();
 
             if (File.Exists("text/emotelist.txt"))
             {

@@ -28,6 +28,9 @@ v5.2.0.0
 - Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins
 - Added Plugin.Events.CancelEvent()
 - Some events have been updated (Might break old plugins)
+- Changed Economy so you can now have different prices for ranks
+- Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes
+- /renamelvl now renames backups aswell
 
 v5.1.0.3
 - Fixed level saving!

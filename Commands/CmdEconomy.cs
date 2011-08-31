@@ -268,9 +268,14 @@ namespace MCForge.Commands
                                         else { Economy.Settings.Ranks = false; Player.SendMessage(p, "Ranks are now disabled for the economy system"); break; }
 
                                     case "price":
-                                        Economy.Settings.RankPrice = int.Parse(par3);
-                                        Player.SendMessage(p, "Changed rank price");
-                                        break;
+                                         Economy.Settings.Rank rnk = Economy.FindRank(par3);
+                                         if (rnk == null) { Player.SendMessage(p, "That isn't a rank or it's past the max rank"); break; }
+                                         else
+                                         {
+                                             rnk.price = int.Parse(par4);
+                                             Player.SendMessage(p, "Changed rank price for " + rnk.group.name);
+                                             break;
+                                         }
 
                                     case "maxrank":
                                     case "max":
@@ -278,7 +283,30 @@ namespace MCForge.Commands
                                     case "maximumrank":
                                         Group grp = Group.Find(par3);
                                         if (grp == null) { Player.SendMessage(p, "That isn't a rank!!"); break; }
-                                        else { Economy.Settings.MaxRank = grp.Permission; Player.SendMessage(p, "Set max rank"); break; }
+                                        else 
+                                        { 
+                                            Economy.Settings.MaxRank = grp.Permission; Player.SendMessage(p, "Set max rank");
+                                            int lasttrueprice = 0;
+                                            foreach (Group group in Group.GroupList)
+                                            {
+                                                if (group.Permission > grp.Permission) { break; }
+                                                if (!(group.Permission <= Group.Find(Server.defaultRank).Permission))
+                                                {
+                                                    Economy.Settings.Rank rank = new Economy.Settings.Rank();
+                                                    rank = Economy.FindRank(group.name);
+                                                    if (rank == null)
+                                                    {
+                                                        rank = new Economy.Settings.Rank();
+                                                        rank.group = group;
+                                                        if (lasttrueprice == 0) { rank.price = 1000; }
+                                                        else { rank.price = lasttrueprice + 250; }
+                                                        Economy.Settings.RanksList.Add(rank);
+                                                    }
+                                                    else { lasttrueprice = rank.price; }
+                                                }
+                                            }
+                                            break;
+                                        }
 
                                     default:
                                         Player.SendMessage(p, "That wasn't a valid command addition");
@@ -425,8 +453,8 @@ namespace MCForge.Commands
                         case "ranks":
                         case "rank":
                             if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission >= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
-                            if (p.EnoughMoney(Economy.Settings.RankPrice) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy the next rank"); return; }
-                            else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.Settings.RankPrice; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
+                            if (p.EnoughMoney(Economy.NextRank(p).price) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy the next rank"); return; }
+                            else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.FindRank(p.group.name).price; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
 
                         default:
                             Player.SendMessage(p, "That wasn't a valid command addition");
@@ -491,8 +519,12 @@ namespace MCForge.Commands
                            case "ranks":
                            case "rank":
                                if (Economy.Settings.Ranks == false) { Player.SendMessage(p, "Ranks are not enabled for the economy system"); return; }
-                               Player.SendMessage(p, "Ranks cost " + Economy.Settings.RankPrice.ToString() + " each");
                                Player.SendMessage(p, "The maximum buyable rank is " + Economy.Settings.MaxRank.ToString());
+                               Player.SendMessage(p, "Ranks cost:");
+                               foreach (Economy.Settings.Rank rnk in Economy.Settings.RanksList)
+                               {
+                                   Player.SendMessage(p, rnk.group.name + ": " + rnk.price);
+                               }
                                return;
 
                            default:

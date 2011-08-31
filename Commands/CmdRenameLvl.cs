@@ -58,10 +58,43 @@ namespace MCForge
                 }
                 catch { }
 
-                MySQL.executeQuery("RENAME TABLE `Block" + foundLevel.name.ToLower() + "` TO `Block" + newName.ToLower() +
-                    "`, `Portals" + foundLevel.name.ToLower() + "` TO `Portals" + newName.ToLower() +
-                    "`, `Messages" + foundLevel.name.ToLower() + "` TO Messages" + newName.ToLower() +
-                    ", `Zone" + foundLevel.name.ToLower() + "` TO `Zone" + newName.ToLower() + "`");
+                //Move and rename backups
+                try
+                {
+                    bool stop = false;
+                    int i = 1;
+                    while (stop == false)
+                    {
+                        if (File.Exists(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/" + foundLevel.name + ".lvl"))
+                        {
+                            Directory.CreateDirectory(@Server.backupLocation + "/" + newName + "/" + i + "/");
+                            File.Move(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/" + foundLevel.name + ".lvl", @Server.backupLocation + "/" + newName + "/" + i + "/" + newName + ".lvl");
+                            if (dirempty(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/"))
+                                Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/");
+                        }
+                        else
+                        {
+                            File.Delete("levels/" + foundLevel.name + ".lvl.backup");
+                            if (Directory.Exists(@Server.backupLocation + "/" + foundLevel.name + "/"))
+                            {
+                                if (dirempty(@Server.backupLocation + "/" + foundLevel.name + "/"))
+                                    Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/");
+                            }
+                            i = 1;
+                            stop = true;
+                        }
+                        i++;
+                    }
+                }
+                catch { }
+
+                if (Server.useMySQL == true)
+                {
+                    MySQL.executeQuery("RENAME TABLE `Block" + foundLevel.name.ToLower() + "` TO `Block" + newName.ToLower() +
+                        "`, `Portals" + foundLevel.name.ToLower() + "` TO `Portals" + newName.ToLower() +
+                        "`, `Messages" + foundLevel.name.ToLower() + "` TO Messages" + newName.ToLower() +
+                        ", `Zone" + foundLevel.name.ToLower() + "` TO `Zone" + newName.ToLower() + "`");
+                }
 
                 Player.GlobalMessage("Renamed " + foundLevel.name + " to " + newName);
             }
@@ -71,6 +104,16 @@ namespace MCForge
         {
             Player.SendMessage(p, "/renamelvl <level> <new name> - Renames <level> to <new name>");
             Player.SendMessage(p, "Portals going to <level> will be lost");
+        }
+
+        public bool dirempty(string dir)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(dir);
+            string[] files = System.IO.Directory.GetFiles(dir);
+            if (dirs.Length == 0 && files.Length == 0)
+                return true;
+            else
+                return false;
         }
     }
 }
