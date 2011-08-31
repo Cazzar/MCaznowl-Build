@@ -139,7 +139,7 @@ namespace MCForge
                 try
                 {
                     int temp = int.Parse(phys);
-                    if (temp >= 1 && temp <= 4)
+                    if (temp >= 1 && temp <= 5)
                     {
                         level.setPhysics(temp);
                     }
