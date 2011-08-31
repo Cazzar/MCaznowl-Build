@@ -1026,6 +1026,7 @@ namespace MCForge.Gui
                 UnloadChk.Checked = l.unload;
                 chkRndFlow.Checked = l.randomFlow;
                 leafDecayChk.Checked = l.leafDecay;
+                TreeGrowChk.Checked = l.growTrees;
                 AutoLoadChk.Checked = false;
                 if (File.Exists("text/autoload.txt"))
                 {
@@ -1076,6 +1077,7 @@ namespace MCForge.Gui
             l.unload = UnloadChk.Checked;
             l.randomFlow = chkRndFlow.Checked;
             l.leafDecay = leafDecayChk.Checked;
+            l.growTrees = TreeGrowChk.Checked;
             {
                 List<string> oldlines = new List<string>();
                 using (StreamReader r = new StreamReader("text/autoload.txt"))
@@ -2106,6 +2108,11 @@ namespace MCForge.Gui
         private void randomFlowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             levelcommand("map", " randomflow");
+        }
+
+        private void treeGrowingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            levelcommand("map", " growtrees");
         }
 
 

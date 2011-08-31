@@ -18,6 +18,7 @@ v5.2.0.0
 - Made a change to the window title, it looks much more professional
 - Improved the tree generator, the trunk now makes more sense
 - Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow
+- Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics
 - Added missing stuff to the "Maps" tab
 - Added seed option to /newlvl, check /help newlvl for more information
