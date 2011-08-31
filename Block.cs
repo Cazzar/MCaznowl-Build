@@ -634,7 +634,6 @@ namespace MCForge
                 case mushroom:
                 case redmushroom:
                 case shrub:
-                case Zero:
                     return true;
             }
             return false;
