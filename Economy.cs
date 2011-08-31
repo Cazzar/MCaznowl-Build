@@ -55,102 +55,106 @@ namespace MCForge
                 {
                     line = r.ReadLine().ToLower().Trim();
                     string[] linear = line.ToLower().Trim().Split(':');
-                    switch (linear[0])
+                    try
                     {
-                        case "enabled":
-                            if (linear[1] == "true") { Settings.Enabled = true; }
-                            else if (linear[1] == "false") { Settings.Enabled = false; }
-                            break;
+                        switch (linear[0])
+                        {
+                            case "enabled":
+                                if (linear[1] == "true") { Settings.Enabled = true; }
+                                else if (linear[1] == "false") { Settings.Enabled = false; }
+                                break;
 
-                        case "title":
-                            if (linear[1] == "price") { Settings.TitlePrice = int.Parse(linear[2]); }
-                            if (linear[1] == "enabled")
-                            {
-                                if (linear[2] == "true") { Settings.Titles = true; }
-                                else if (linear[2] == "false") { Settings.Titles = false; }
-                            }
-                            break;
-
-                        case "color":
-                            if (linear[1] == "price") { Settings.ColorPrice = int.Parse(linear[2]); }
-                            if (linear[1] == "enabled")
-                            {
-                                if (linear[2] == "true") { Settings.Colors = true; }
-                                else if (linear[2] == "false") { Settings.Colors = false; }
-                            }
-                            break;
-
-                        case "rank":
-                            if (linear[1] == "price") 
-                            {
-                                Economy.Settings.Rank rnk = new Economy.Settings.Rank();
-                                rnk = Economy.FindRank(linear[2]);
-                                if (rnk == null)
+                            case "title":
+                                if (linear[1] == "price") { Settings.TitlePrice = int.Parse(linear[2]); }
+                                if (linear[1] == "enabled")
                                 {
-                                    rnk = new Economy.Settings.Rank();
-                                    rnk.group = Group.Find(linear[2]);
-                                    rnk.price = int.Parse(linear[3]);
-                                    Economy.Settings.RanksList.Add(rnk);
+                                    if (linear[2] == "true") { Settings.Titles = true; }
+                                    else if (linear[2] == "false") { Settings.Titles = false; }
                                 }
-                                else
+                                break;
+
+                            case "color":
+                                if (linear[1] == "price") { Settings.ColorPrice = int.Parse(linear[2]); }
+                                if (linear[1] == "enabled")
                                 {
-                                    Economy.Settings.RanksList.Remove(rnk);
-                                    rnk.price = int.Parse(linear[3]);
-                                    Economy.Settings.RanksList.Add(rnk);
+                                    if (linear[2] == "true") { Settings.Colors = true; }
+                                    else if (linear[2] == "false") { Settings.Colors = false; }
                                 }
-                            }
-                            if (linear[1] == "maxrank")
-                            {
-                                Group grp = Group.Find(linear[2]);
-                                if (grp != null) { Settings.MaxRank = grp.Permission; }
-                            }
-                            if (linear[1] == "enabled")
-                            {
-                                if (linear[2] == "true") { Settings.Ranks = true; }
-                                else if (linear[2] == "false") { Settings.Ranks = false; }
-                            }
-                            break;
+                                break;
 
-                        case "level":
-                            if (linear[1] == "enabled")
-                            {
-                                if (linear[2] == "true") { Settings.Levels = true; }
-                                else if (linear[2] == "false") { Settings.Levels = false; }
-                            }
-                            if (linear[1] == "levels")
-                            {
-                                Settings.Level lvl = new Settings.Level();
-                                if (FindLevel(linear[2]) != null) { lvl = FindLevel(linear[2]); Settings.LevelsList.Remove(lvl); }
-                                switch (linear[3])
+                            case "rank":
+                                if (linear[1] == "price")
                                 {
-                                    case "name":
-                                        lvl.name = linear[4];
-                                        break;
-
-                                    case "price":
-                                        lvl.price = int.Parse(linear[4]);
-                                        break;
-
-                                    case "x":
-                                        lvl.x = linear[4];
-                                        break;
-
-                                    case "y":
-                                        lvl.y = linear[4];
-                                        break;
-
-                                    case "z":
-                                        lvl.z = linear[4];
-                                        break;
-
-                                    case "type":
-                                        lvl.type = linear[4];
-                                        break;
+                                    Economy.Settings.Rank rnk = new Economy.Settings.Rank();
+                                    rnk = Economy.FindRank(linear[2]);
+                                    if (rnk == null)
+                                    {
+                                        rnk = new Economy.Settings.Rank();
+                                        rnk.group = Group.Find(linear[2]);
+                                        rnk.price = int.Parse(linear[3]);
+                                        Economy.Settings.RanksList.Add(rnk);
+                                    }
+                                    else
+                                    {
+                                        Economy.Settings.RanksList.Remove(rnk);
+                                        rnk.price = int.Parse(linear[3]);
+                                        Economy.Settings.RanksList.Add(rnk);
+                                    }
                                 }
-                                Settings.LevelsList.Add(lvl);
-                            }
-                            break;
+                                if (linear[1] == "maxrank")
+                                {
+                                    Group grp = Group.Find(linear[2]);
+                                    if (grp != null) { Settings.MaxRank = grp.Permission; }
+                                }
+                                if (linear[1] == "enabled")
+                                {
+                                    if (linear[2] == "true") { Settings.Ranks = true; }
+                                    else if (linear[2] == "false") { Settings.Ranks = false; }
+                                }
+                                break;
+
+                            case "level":
+                                if (linear[1] == "enabled")
+                                {
+                                    if (linear[2] == "true") { Settings.Levels = true; }
+                                    else if (linear[2] == "false") { Settings.Levels = false; }
+                                }
+                                if (linear[1] == "levels")
+                                {
+                                    Settings.Level lvl = new Settings.Level();
+                                    if (FindLevel(linear[2]) != null) { lvl = FindLevel(linear[2]); Settings.LevelsList.Remove(lvl); }
+                                    switch (linear[3])
+                                    {
+                                        case "name":
+                                            lvl.name = linear[4];
+                                            break;
+
+                                        case "price":
+                                            lvl.price = int.Parse(linear[4]);
+                                            break;
+
+                                        case "x":
+                                            lvl.x = linear[4];
+                                            break;
+
+                                        case "y":
+                                            lvl.y = linear[4];
+                                            break;
+
+                                        case "z":
+                                            lvl.z = linear[4];
+                                            break;
+
+                                        case "type":
+                                            lvl.type = linear[4];
+                                            break;
+                                    }
+                                    Settings.LevelsList.Add(lvl);
+                                }
+                                break;
+                        }
                     }
+                    catch { }
                 }
                 r.Close();
             }
