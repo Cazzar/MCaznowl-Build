@@ -2281,6 +2281,7 @@ namespace MCForge
         {
             Player p = Find(to);
             if (p == this) { SendMessage("Trying to talk to yourself, huh?"); return; }
+            if (p == null) { SendMessage("Could not find player."); return;  }
             if (p.hidden) { if (this.hidden == false) { Player.SendMessage(p, "Could not find player."); } }
             if (p.ignoreglobal == true)
             {
