@@ -6,18 +6,24 @@ v5.2.0.0
 - Fixed /pyramid so it respects block limits
 - Fixed /unload empty
 - Fixed /hide and /xhide to use custom login/logout messages
+- Fixed /renamelvl so it renames backups, and won't error if MySQL is disabled
 - Fixed level property file saving, it was breaking on certain maps
 - Fixed commands in the CLI, a slash is once again recognized :D
 - Fixed in-game messages from the console so they have proper coloring again
 - Fixed the player and map lists in the GUI not updating
 - Fixed color code exploits which crash clients
+- Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes
 - Completey remade the IRC bot, it now uses a different DLL (no more virus alert :D)
 - /resetbot no longer nukes the server console
 - Made it so autoload.txt doesn't save when load on /goto is enabled
 - Made some changes to the right-click menu for the maps box
 - Made a change to the window title, it looks much more professional
+- Made it so you can now have different prices for ranks in the Economy
+- Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins
+- Made changes to some events (Might break old plugins)
 - Improved the tree generator, the trunk now makes more sense
 - Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow
+- Added Plugin.Events.CancelEvent()
 - Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics
 - Added missing stuff to the "Maps" tab
@@ -26,12 +32,6 @@ v5.2.0.0
 - Added server port and NickServ identify to the IRC/SQL settings tab
 - Moved Zombie Survival options into the "Games" tab
 - Removed the duplicate "death count" option
-- Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins
-- Added Plugin.Events.CancelEvent()
-- Some events have been updated (Might break old plugins)
-- Changed Economy so you can now have different prices for ranks
-- Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes
-- /renamelvl now renames backups aswell
 
 v5.1.0.3
 - Fixed level saving!
