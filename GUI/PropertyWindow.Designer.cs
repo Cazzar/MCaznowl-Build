@@ -258,6 +258,7 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button2 = new System.Windows.Forms.Button();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1858,6 +1859,7 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.groupBox8);
             this.tabPage1.Controls.Add(this.groupBox7);
             this.tabPage1.Controls.Add(this.groupBox6);
@@ -2576,6 +2578,16 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(377, 153);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(10, 10);
+            this.button2.TabIndex = 48;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2876,5 +2888,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.TextBox txtIRCPort;
         private System.Windows.Forms.CheckBox chkShowEmptyRanks;
+        private System.Windows.Forms.Button button2;
     }
 }
