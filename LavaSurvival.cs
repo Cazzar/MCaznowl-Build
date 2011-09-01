@@ -93,7 +93,7 @@ namespace MCForge
         public void SaveMapSettings(MapSettings settings)
         {
             if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
-            using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+            using (StreamWriter SW = File.CreateText("properties/lava/" + settings.name + ".properties"))
             {
                 SW.WriteLine("#Lava Survival properties for " + settings.name);
                 SW.WriteLine("Property = " /* INSERT VARIABLE HERE */);
