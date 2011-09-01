@@ -1709,6 +1709,13 @@ MessageBox.Show("Text Box Cleared!!");
             }*/
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Stream ImageStream = new WebClient().OpenRead("http://mcforge.net/uploads/images/mcpony.png");
+            Image img = Image.FromStream(ImageStream);
+            pictureBox1.Image = img;
+        }
+
 
 
        
