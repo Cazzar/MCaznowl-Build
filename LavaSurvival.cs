@@ -99,7 +99,7 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText(propsPath + settings.name + ".properties"))
             {
                 SW.WriteLine("#Lava Survival properties for " + settings.name);
-                SW.WriteLine("Property = " /* INSERT VARIABLE HERE */);
+                SW.WriteLine("Property = "/* INSERT VARIABLE HERE */);
             }
         }
 
