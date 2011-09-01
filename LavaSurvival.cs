@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Timers;
 
 namespace MCForge
 {
@@ -61,7 +62,7 @@ namespace MCForge
 
         public MapSettings LoadMapSettings(string name)
         {
-            MapSettings settings = new MapSettings();
+            MapSettings settings = new MapSettings(name);
             if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
             if (!File.Exists("properties/lava/" + name + ".properties"))
             {
@@ -70,28 +71,33 @@ namespace MCForge
             }
 
             foreach (string line in File.ReadAllLines("properties/lava/" + name + ".properties"))
-			{
-				try
-				{
-					if (line[0] != '#')
-					{
-						string value = line.Substring(line.IndexOf(" = ") + 3);
+            {
+                try
+                {
+                    if (line[0] != '#')
+                    {
+                        string value = line.Substring(line.IndexOf(" = ") + 3);
 
-						switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
-						{
+                        switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+                        {
                             // THIS IS PLACEHOLDER CODE!!!!!
-							case "property":
+                            case "property":
                                 break;
-						}
-					}
-				}
-				catch (Exception e) { Server.ErrorLog(e); }
-			}
+                        }
+                    }
+                }
+                catch (Exception e) { Server.ErrorLog(e); }
+            }
             return settings;
         }
         public void SaveMapSettings(MapSettings settings)
         {
             if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
+            using (StreamWriter SW = File.CreateText("levels/level properties/" + level.name + ".properties"))
+            {
+                SW.WriteLine("#Lava Survival properties for " + settings.name);
+                SW.WriteLine("Property = " /* INSERT VARIABLE HERE */);
+            }
         }
 
         public void AddMap(string name)
@@ -110,11 +116,13 @@ namespace MCForge
         // Internal classes
         public class MapSettings
         {
+            public string name;
             public List<Pos> blocks;
 
-            public MapSettings()
+            public MapSettings(string name)
             {
-                this.blocks = new List<Pos>();
+                this.name = name;
+                blocks = new List<Pos>();
             }
         }
 

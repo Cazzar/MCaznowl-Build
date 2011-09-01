@@ -75,5 +75,9 @@ namespace MCForge
             
             return tmp.ToArray();
         }
+        public static string Capitalize(this string str)
+        {
+            return str.Substring(0, 1).ToUpper() + str.Remove(0, 1);
+        }
     }
 }
