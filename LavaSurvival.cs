@@ -25,6 +25,7 @@ namespace MCForge
     class LavaSurvival
     {
         // Private variables
+        private string propsPath = "properties/lavasurvival/";
         private List<string> maps;
 
         // Public variables
@@ -63,14 +64,14 @@ namespace MCForge
         public MapSettings LoadMapSettings(string name)
         {
             MapSettings settings = new MapSettings(name);
-            if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
-            if (!File.Exists("properties/lava/" + name + ".properties"))
+            if (!Directory.Exists(propsPath)) Directory.CreateDirectory(propsPath);
+            if (!File.Exists(propsPath + name + ".properties"))
             {
                 SaveMapSettings(settings);
                 return settings;
             }
 
-            foreach (string line in File.ReadAllLines("properties/lava/" + name + ".properties"))
+            foreach (string line in File.ReadAllLines(propsPath + name + ".properties"))
             {
                 try
                 {
@@ -92,8 +93,10 @@ namespace MCForge
         }
         public void SaveMapSettings(MapSettings settings)
         {
-            if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
-            using (StreamWriter SW = File.CreateText("properties/lava/" + settings.name + ".properties"))
+            if (!Directory.Exists(propsPath)) Directory.CreateDirectory(propsPath);
+
+            File.Create(propsPath + settings.name + ".properties").Dispose();
+            using (StreamWriter SW = File.CreateText(propsPath + settings.name + ".properties"))
             {
                 SW.WriteLine("#Lava Survival properties for " + settings.name);
                 SW.WriteLine("Property = " /* INSERT VARIABLE HERE */);
