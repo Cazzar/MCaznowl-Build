@@ -2260,7 +2260,6 @@ namespace MCForge
                         case "cmdlist":
                         case "commands": cmd = "help"; message = "old"; break;
                         case "cmdhelp": cmd = "help"; break;
-                        case "who": cmd = "players"; break;
                         case "worlds":
                         case "maps": cmd = "levels"; break;
                         case "mapsave": cmd = "save"; break;

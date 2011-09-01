@@ -25,7 +25,7 @@ namespace MCForge
     {
 
         public override string name { get { return "players"; } }
-        public override string shortcut { get { return ""; } }
+        public override string shortcut { get { return "who"; } }
         public override string type { get { return "information"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
@@ -42,10 +42,24 @@ namespace MCForge
                 {
                     if (grp.name != "nobody")
                     {
-                        groups groups;
-                        groups.group = grp;
-                        groups.players = new List<string>();
-                        playerList.Add(groups);
+                        if (String.IsNullOrEmpty(message) || !Group.Exists(message))
+                        {
+                            groups groups;
+                            groups.group = grp;
+                            groups.players = new List<string>();
+                            playerList.Add(groups);
+                        }
+                        else
+                        {
+                            Group grp2 = Group.Find(message);
+                            if (grp2 != null && grp == grp2)
+                            {
+                                groups groups;
+                                groups.group = grp;
+                                groups.players = new List<string>();
+                                playerList.Add(groups);
+                            }
+                        }
                     }
                 }
 
@@ -53,29 +67,35 @@ namespace MCForge
                 int totalPlayers = 0;
                 foreach (Player pl in Player.players)
                 {
-                    if (!pl.hidden || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
+                    if (!pl.hidden || p.group.Permission > LevelPermission.Operator || Server.devs.Contains(p.name.ToLower()))
                     {
-                        totalPlayers++;
-                        string foundName = pl.name;
+                        if (String.IsNullOrEmpty(message) || !Group.Exists(message) || Group.Find(message) == pl.group)
+                        {
+                            totalPlayers++;
+                            string foundName = pl.name;
 
-                        if (Server.afkset.Contains(pl.name))
-                        {
-                            foundName = pl.name + "-afk";
-                        }
+                            if (Server.afkset.Contains(pl.name))
+                            {
+                                foundName = pl.name + "-afk";
+                            }
 
-                        if (Server.devs.Contains(pl.name.ToLower()))
-                        {
-                            if (pl.voice)
-                                devs += " " + "&f+" + Server.DefaultColor + foundName + " (" + pl.level.name + "),";
-                            else
-                                devs += " " + foundName + " (" + pl.level.name + "),";
-                        }
-                        else
-                        {
+                            if (Server.devs.Contains(pl.name.ToLower()))
+                            {
+                                if (pl.voice)
+                                    devs += " " + "&f+" + Server.DefaultColor + foundName + " (" + pl.level.name + "),";
+                                else
+                                    devs += " " + foundName + " (" + pl.level.name + "),";
+                            }
+
                             if (pl.voice)
                                 playerList.Find(grp => grp.group == pl.group).players.Add("&f+" + Server.DefaultColor + foundName + " (" + pl.level.name + ")");
                             else
                                 playerList.Find(grp => grp.group == pl.group).players.Add(foundName + " (" + pl.level.name + ")");
+                        }
+                        else
+                        {
+                            Player.SendMessage(p, "There are no players of that rank online.");
+                            return;
                         }
                     }
                 }
@@ -88,18 +108,18 @@ namespace MCForge
                 for (int i = playerList.Count - 1; i >= 0; i--)
                 {
                     groups groups = playerList[i];
-                    string appendString = "";
-
-                    foreach (string player in groups.players)
+                    if (groups.players.Count > 0 || Server.showEmptyRanks)
                     {
-                        appendString += ", " + player;
+                        string appendString = "";
+                        foreach (string player in groups.players)
+                            appendString += ", " + player;
+
+                        if (appendString != "")
+                            appendString = appendString.Remove(0, 2);
+                        appendString = ":" + groups.group.color + getPlural(groups.group.trueName) + ": " + appendString;
+
+                        Player.SendMessage(p, appendString);
                     }
-
-                    if (appendString != "")
-                        appendString = appendString.Remove(0, 2);
-                    appendString = ":" + groups.group.color + getPlural(groups.group.trueName) + ": " + appendString;
-
-                    Player.SendMessage(p, appendString);
                 }
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -124,7 +144,7 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/players - Shows name and general rank of all players");
+            Player.SendMessage(p, "/players [rank] - Shows name and general rank of all players");
         }
     }
 }

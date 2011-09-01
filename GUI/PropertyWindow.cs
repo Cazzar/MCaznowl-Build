@@ -561,6 +561,9 @@ namespace MCForge.Gui
                                     numSpamMute.Value = 60;
                                 }
                                 break;
+                            case "show-empty-ranks":
+                                chkShowEmptyRanks.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
 
                                 
 
@@ -749,6 +752,9 @@ namespace MCForge.Gui
                     w.WriteLine("mute-on-spam = " + chkSpamControl.Checked.ToString().ToLower());
                     w.WriteLine("spam-messages = " + numSpamMessages.Value.ToString());
                     w.WriteLine("spam-mute-time = " + numSpamMute.Value.ToString());
+                    w.WriteLine();
+                    w.WriteLine("#Show Empty Ranks in /players");
+                    w.WriteLine("show-empty-ranks = " + chkShowEmptyRanks.Checked.ToString().ToLower());
                 }
                 w.Flush();
                 w.Close();

@@ -282,6 +282,9 @@ public static byte maxGuests = 10;
         public static bool hackrank_kick = true;
         public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
 
+        // lol useless junk here lolololasdf poop
+        public static bool showEmptyRanks = false;
+
         #endregion
 
         public static MainLoop ml;

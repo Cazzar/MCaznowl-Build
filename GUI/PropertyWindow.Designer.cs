@@ -140,6 +140,7 @@ namespace MCForge.Gui
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.chkShowEmptyRanks = new System.Windows.Forms.CheckBox();
             this.chkIgnoreGlobal = new System.Windows.Forms.CheckBox();
             this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
             this.chkRepeatMessages = new System.Windows.Forms.CheckBox();
@@ -181,6 +182,7 @@ namespace MCForge.Gui
             this.txtSQLPassword = new System.Windows.Forms.TextBox();
             this.txtSQLUsername = new System.Windows.Forms.TextBox();
             this.grpIRC = new System.Windows.Forms.GroupBox();
+            this.txtIRCPort = new System.Windows.Forms.TextBox();
             this.label50 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.txtIrcId = new System.Windows.Forms.TextBox();
@@ -256,7 +258,6 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.txtIRCPort = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1305,6 +1306,7 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.chkShowEmptyRanks);
             this.groupBox13.Controls.Add(this.chkIgnoreGlobal);
             this.groupBox13.Controls.Add(this.chkNotifyOnJoinLeave);
             this.groupBox13.Controls.Add(this.chkRepeatMessages);
@@ -1319,10 +1321,21 @@ namespace MCForge.Gui
             this.groupBox13.Controls.Add(this.label34);
             this.groupBox13.Location = new System.Drawing.Point(10, 283);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(341, 223);
+            this.groupBox13.Size = new System.Drawing.Size(475, 223);
             this.groupBox13.TabIndex = 40;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Extra";
+            // 
+            // chkShowEmptyRanks
+            // 
+            this.chkShowEmptyRanks.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkShowEmptyRanks.AutoSize = true;
+            this.chkShowEmptyRanks.Location = new System.Drawing.Point(239, 66);
+            this.chkShowEmptyRanks.Name = "chkShowEmptyRanks";
+            this.chkShowEmptyRanks.Size = new System.Drawing.Size(154, 23);
+            this.chkShowEmptyRanks.TabIndex = 41;
+            this.chkShowEmptyRanks.Text = "Show empty ranks in /players";
+            this.chkShowEmptyRanks.UseVisualStyleBackColor = true;
             // 
             // chkIgnoreGlobal
             // 
@@ -1744,6 +1757,13 @@ namespace MCForge.Gui
             this.grpIRC.TabStop = false;
             this.grpIRC.Text = "IRC";
             // 
+            // txtIRCPort
+            // 
+            this.txtIRCPort.Location = new System.Drawing.Point(223, 24);
+            this.txtIRCPort.Name = "txtIRCPort";
+            this.txtIRCPort.Size = new System.Drawing.Size(46, 21);
+            this.txtIRCPort.TabIndex = 31;
+            // 
             // label50
             // 
             this.label50.AutoSize = true;
@@ -2127,9 +2147,9 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(153, 23);
+            this.chkRestart.Size = new System.Drawing.Size(92, 23);
             this.chkRestart.TabIndex = 4;
-            this.chkRestart.Text = "Restart when an error occurs";
+            this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
             // 
             // chkMono
@@ -2177,9 +2197,9 @@ namespace MCForge.Gui
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(399, 171);
+            this.pictureBox1.Location = new System.Drawing.Point(392, 166);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(68, 60);
+            this.pictureBox1.Size = new System.Drawing.Size(68, 68);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 27;
             this.pictureBox1.TabStop = false;
@@ -2555,13 +2575,6 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
-            // txtIRCPort
-            // 
-            this.txtIRCPort.Location = new System.Drawing.Point(223, 24);
-            this.txtIRCPort.Name = "txtIRCPort";
-            this.txtIRCPort.Size = new System.Drawing.Size(46, 21);
-            this.txtIRCPort.TabIndex = 31;
-            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2861,5 +2874,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkIrcId;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.TextBox txtIRCPort;
+        private System.Windows.Forms.CheckBox chkShowEmptyRanks;
     }
 }
