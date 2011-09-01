@@ -166,6 +166,9 @@ public static event OnServerError ServerError = null;
         public static bool noPillaring = true;
         public static string ZombieName = "";
 
+        // Lava Survival
+        public LavaSurvival lava = new LavaSurvival();
+
         //Settings
         #region Server Settings
         public const byte version = 7;

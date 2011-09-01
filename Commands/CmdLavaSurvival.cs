@@ -26,7 +26,7 @@ namespace MCForge
         public override string shortcut { get { return "ls"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdLavaSurvival() { }
 
         public override void Use(Player p, string message)
@@ -35,7 +35,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/lavasurvival - Various commands to setup Lava Survival.");
+            Player.SendMessage(p, "/lavasurvival - Various commands to setup and use Lava Survival.");
         }
     }
 }

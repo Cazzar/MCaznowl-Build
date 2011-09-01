@@ -23,17 +23,101 @@ namespace MCForge
 {
     class LavaSurvival
     {
-        public class Settings
+        // Private variables
+        private List<string> maps;
+
+        // Public variables
+        public bool active = false;
+        public Level currentMap;
+        public MapSettings mapSettings;
+
+        // Constructors
+        public LavaSurvival()
         {
+            maps = new List<string>();
         }
+
+        // Private methods
+
+
+        // Public methods
+        public bool Start()
+        {
+            return false;
+        }
+        public bool Stop()
+        {
+            return false;
+        }
+
+        public void LoadSettings()
+        {
+
+        }
+        public void SaveSettings()
+        {
+
+        }
+
+        public MapSettings LoadMapSettings(string name)
+        {
+            MapSettings settings = new MapSettings();
+            if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
+            if (!File.Exists("properties/lava/" + name + ".properties"))
+            {
+                SaveMapSettings(settings);
+                return settings;
+            }
+
+            foreach (string line in File.ReadAllLines("properties/lava/" + name + ".properties"))
+			{
+				try
+				{
+					if (line[0] != '#')
+					{
+						string value = line.Substring(line.IndexOf(" = ") + 3);
+
+						switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+						{
+                            // THIS IS PLACEHOLDER CODE!!!!!
+							case "property":
+                                break;
+						}
+					}
+				}
+				catch (Exception e) { Server.ErrorLog(e); }
+			}
+            return settings;
+        }
+        public void SaveMapSettings(MapSettings settings)
+        {
+            if (!Directory.Exists("properties/lava")) Directory.CreateDirectory("properties/lava");
+        }
+
+        public void AddMap(string name)
+        {
+            if(!maps.Contains(name)) maps.Add(name);
+        }
+        public void RemoveMap(string name)
+        {
+            if (maps.Contains(name)) maps.Remove(name);
+        }
+        public bool HasMap(string name)
+        {
+            return maps.Contains(name);
+        }
+
+        // Internal classes
         public class MapSettings
         {
-            List<ushort[]> blocks;
+            public List<Pos> blocks;
 
             public MapSettings()
             {
-                blocks = new List<ushort[]>();
+                this.blocks = new List<Pos>();
             }
         }
+
+        public struct Pos { public ushort x, y, z; }
     }
 }
