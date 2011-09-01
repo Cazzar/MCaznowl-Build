@@ -37,11 +37,18 @@ namespace MCForge
         {
             if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
             Level foundLevel = Level.Find(message.Split(' ')[0]);
+            if (foundLevel == null)
+            {
+                Player.SendMessage(p, "Level not found");
+                return;
+            }
+
             string newName = message.Split(' ')[1];
 
             if (File.Exists("levels/" + newName)) { Player.SendMessage(p, "Level already exists."); return; }
             if (foundLevel == Server.mainLevel) { Player.SendMessage(p, "Cannot rename the main level."); return; }
-            if (foundLevel != null) foundLevel.Unload();
+               
+            foundLevel.Unload();
 
             try
             {
@@ -61,29 +68,28 @@ namespace MCForge
                 //Move and rename backups
                 try
                 {
-                    bool stop = false;
-                    int i = 1;
-                    while (stop == false)
+                    for(int i = 1; ; i++)
                     {
-                        if (File.Exists(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/" + foundLevel.name + ".lvl"))
+                        string foundLevelDir = @Server.backupLocation + "/" + foundLevel.name + "/" + i + "/";
+                        string newNameDir = @Server.backupLocation + "/" + newName + "/" + i + "/";
+
+                        if (File.Exists(foundLevelDir + foundLevel.name + ".lvl"))
                         {
-                            Directory.CreateDirectory(@Server.backupLocation + "/" + newName + "/" + i + "/");
-                            File.Move(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/" + foundLevel.name + ".lvl", @Server.backupLocation + "/" + newName + "/" + i + "/" + newName + ".lvl");
-                            if (dirempty(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/"))
-                                Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/" + i + "/");
+                            Directory.CreateDirectory(newNameDir);
+                            File.Move(foundLevelDir + foundLevel.name + ".lvl", newNameDir + newName + ".lvl");
+                            if (DirectoryEmpty(foundLevelDir))
+                                Directory.Delete(foundLevelDir);
                         }
                         else
                         {
                             File.Delete("levels/" + foundLevel.name + ".lvl.backup");
                             if (Directory.Exists(@Server.backupLocation + "/" + foundLevel.name + "/"))
                             {
-                                if (dirempty(@Server.backupLocation + "/" + foundLevel.name + "/"))
+                                if (DirectoryEmpty(@Server.backupLocation + "/" + foundLevel.name + "/"))
                                     Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/");
                             }
-                            i = 1;
-                            stop = true;
+                            break;
                         }
-                        i++;
                     }
                 }
                 catch { }
@@ -106,14 +112,14 @@ namespace MCForge
             Player.SendMessage(p, "Portals going to <level> will be lost");
         }
 
-        public bool dirempty(string dir)
+        public static bool DirectoryEmpty(string dir)
         {
-            string[] dirs = System.IO.Directory.GetDirectories(dir);
-            string[] files = System.IO.Directory.GetFiles(dir);
-            if (dirs.Length == 0 && files.Length == 0)
-                return true;
-            else
+            if(System.IO.Directory.GetDirectories(dir).Length > 0)
                 return false;
+            if (System.IO.Directory.GetFiles(dir).Length > 0)
+                return false;
+
+            return true;
         }
     }
 }
