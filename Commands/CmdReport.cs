@@ -111,7 +111,7 @@ namespace MCForge
                     Player.SendMessage(p, readtext);
                     return;
                 }
-                if (msg1.ToLower() == "remove")
+                if (msg1.ToLower() == "delete")
                 {
                     if (p.group.Permission < LevelPermission.Operator)
                     {

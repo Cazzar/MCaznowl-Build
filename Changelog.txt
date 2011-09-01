@@ -15,6 +15,7 @@ v5.2.0.0
 - Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes
 - Completey remade the IRC bot, it now uses a different DLL (no more virus alert :D)
 - /resetbot no longer nukes the server console
+- /players now has an option to not show ranks that nobody is in, and you can see only players of a certain rank with /players [rank]
 - Made it so autoload.txt doesn't save when load on /goto is enabled
 - Made some changes to the right-click menu for the maps box
 - Made a change to the window title, it looks much more professional
@@ -32,6 +33,7 @@ v5.2.0.0
 - Added server port and NickServ identify to the IRC/SQL settings tab
 - Moved Zombie Survival options into the "Games" tab
 - Removed the duplicate "death count" option
+= 
 
 v5.1.0.3
 - Fixed level saving!

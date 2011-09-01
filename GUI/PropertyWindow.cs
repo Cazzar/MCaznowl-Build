@@ -561,6 +561,9 @@ namespace MCForge.Gui
                                     numSpamMute.Value = 60;
                                 }
                                 break;
+                            case "show-empty-ranks":
+                                chkShowEmptyRanks.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
 
                                 
 
@@ -749,6 +752,9 @@ namespace MCForge.Gui
                     w.WriteLine("mute-on-spam = " + chkSpamControl.Checked.ToString().ToLower());
                     w.WriteLine("spam-messages = " + numSpamMessages.Value.ToString());
                     w.WriteLine("spam-mute-time = " + numSpamMute.Value.ToString());
+                    w.WriteLine();
+                    w.WriteLine("#Show Empty Ranks in /players");
+                    w.WriteLine("show-empty-ranks = " + chkShowEmptyRanks.Checked.ToString().ToLower());
                 }
                 w.Flush();
                 w.Close();
@@ -1701,6 +1707,13 @@ MessageBox.Show("Text Box Cleared!!");
                 textBox1.Enabled = false;
                 textBox1.BackColor = Color.LightGray;
             }*/
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Stream ImageStream = new WebClient().OpenRead("http://mcforge.net/uploads/images/mcpony.png");
+            Image img = Image.FromStream(ImageStream);
+            pictureBox1.Image = img;
         }
 
 

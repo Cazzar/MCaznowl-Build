@@ -470,6 +470,7 @@
     </Content>
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
+    <Content Include="mcpony.png" />
     <Content Include="Restarter.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
