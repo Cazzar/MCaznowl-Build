@@ -33,7 +33,6 @@ v5.2.0.0
 - Added server port and NickServ identify to the IRC/SQL settings tab
 - Moved Zombie Survival options into the "Games" tab
 - Removed the duplicate "death count" option
-= 
 
 v5.1.0.3
 - Fixed level saving!
