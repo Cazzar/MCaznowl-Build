@@ -197,6 +197,7 @@
     <Compile Include="Commands\pcreate.cs" />
     <Compile Include="Commands\pload.cs" />
     <Compile Include="Commands\punload.cs" />
+    <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
     <Compile Include="Economy.cs" />

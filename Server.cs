@@ -58,6 +58,7 @@ public static event OnServerError ServerError = null;
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
         public static ForgeBot IRC;
+        //public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
 
         public static Thread blockThread;
@@ -250,6 +251,7 @@ public static byte maxGuests = 10;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";
+        public static string GlobalChatColor = "&a";
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
