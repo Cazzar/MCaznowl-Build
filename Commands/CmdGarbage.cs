@@ -22,7 +22,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/garbage - Forces the .NET garbage collecter to run, which releases unused memory. You shouldn't need to use this often.");
+            Player.SendMessage(p, "/garbage - Forces the .NET garbage collector to run, which releases unused memory. You shouldn't need to use this often.");
         }
     }
 }
