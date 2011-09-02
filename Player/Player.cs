@@ -2133,12 +2133,13 @@ namespace MCForge
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
+                //DO NOT REMOVE THE TWO COMMANDS BELOW, /PONY AND /RAINBOWDASHISCOOLERTHANYOU. -EricKilla
                 if (cmd.ToLower() == "pony")
                 {
                     if (ponycount < 2)
                     {
                         GlobalMessage(this.color + this.name + Server.DefaultColor + " just so happens to be a proud brony! Everyone give " + this.color + this.name + Server.DefaultColor + " a brohoof!");
-                        ponycount++;
+                        ponycount += 1;
                     }
                     else
                     {
@@ -2151,7 +2152,7 @@ namespace MCForge
                     if (rdcount < 2)
                     {
                         GlobalMessage("&1T&2H&3I&4S &5S&6E&7R&8V&9E&aR &bJ&cU&dS&eT &fG&0O&1T &22&30 &4P&CE&7R&DC&EE&9N&1T &5C&6O&7O&8L&9E&aR&b!");
-                        rdcount++;
+                        rdcount += 1;
                     }
                     else
                     {
@@ -2260,7 +2261,6 @@ namespace MCForge
                         case "cmdlist":
                         case "commands": cmd = "help"; message = "old"; break;
                         case "cmdhelp": cmd = "help"; break;
-                        case "who": cmd = "players"; break;
                         case "worlds":
                         case "maps": cmd = "levels"; break;
                         case "mapsave": cmd = "save"; break;

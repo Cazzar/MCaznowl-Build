@@ -58,6 +58,7 @@ public static event OnServerError ServerError = null;
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
         public static ForgeBot IRC;
+        //public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
 
         public static Thread blockThread;
@@ -96,7 +97,7 @@ public static event OnServerError ServerError = null;
         public static PlayerList muted;
         public static PlayerList ignored;
 
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "copyboy"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -250,6 +251,7 @@ public static byte maxGuests = 10;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";
+        public static string GlobalChatColor = "&a";
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
@@ -281,6 +283,9 @@ public static byte maxGuests = 10;
         //hackrank stuff
         public static bool hackrank_kick = true;
         public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
+
+        // lol useless junk here lolololasdf poop
+        public static bool showEmptyRanks = false;
 
         #endregion
 
