@@ -56,6 +56,7 @@ namespace MCForge.Gui
             cmbDefaultColour.Items.AddRange(colors);
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
+            cmbGlobalChatColor.Items.AddRange(colors);
             if (Server.irc == false)
             {
                 grpIRC.BackColor = Color.LightGray;
@@ -223,11 +224,11 @@ namespace MCForge.Gui
                         switch (key.ToLower())
                         {
                             case "server-name":
-                                if (ValidString(value, "![]:.,{}~-+()?_/\\ ")) txtName.Text = value;
+                                if (ValidString(value, "![]:.,{}~-+()?_/\\' ")) txtName.Text = value;
                                 else txtName.Text = "[MCForge] Minecraft server";
                                 break;
                             case "motd":
-                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\ ")) txtMOTD.Text = value; // allow = in the motd
+                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\' ")) txtMOTD.Text = value; // allow = in the motd
                                 else txtMOTD.Text = "Welcome to my server!";
                                 break;
                             case "port":
@@ -565,6 +566,22 @@ namespace MCForge.Gui
                                 chkShowEmptyRanks.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
+                            case "global-chat-enabled":
+                                chkGlobalChat.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+
+                            case "global-chat-nick":
+                                if (value != "") txtGlobalChatNick.Text = value;
+                                break;
+
+                            case "global-chat-color":
+                                color = c.Parse(value);
+                                if (color == "")
+                                {
+                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
+                                }
+                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(value)); break;
+
                                 
 
                         }
@@ -755,6 +772,11 @@ namespace MCForge.Gui
                     w.WriteLine();
                     w.WriteLine("#Show Empty Ranks in /players");
                     w.WriteLine("show-empty-ranks = " + chkShowEmptyRanks.Checked.ToString().ToLower());
+                    w.WriteLine();
+                    w.WriteLine("#Global Chat Settings");
+                    w.WriteLine("global-chat-enabled = " + chkGlobalChat.Checked.ToString().ToLower());
+                    w.WriteLine("global-chat-nick = " + txtGlobalChatNick.Text);
+                    w.WriteLine("global-chat-color = " + cmbGlobalChatColor.Items[cmbGlobalChatColor.SelectedIndex].ToString());
                 }
                 w.Flush();
                 w.Close();
@@ -1714,6 +1736,11 @@ MessageBox.Show("Text Box Cleared!!");
             Stream ImageStream = new WebClient().OpenRead("http://mcforge.net/uploads/images/mcpony.png");
             Image img = Image.FromStream(ImageStream);
             pictureBox1.Image = img;
+        }
+
+        private void cmbGlobalChatColor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblGlobalChatColor.BackColor = Color.FromName(cmbGlobalChatColor.Items[cmbGlobalChatColor.SelectedIndex].ToString());
         }
 
 

@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Timers;
 using Sharkbite.Irc;
 //using System.Threading;
 
@@ -31,75 +32,48 @@ namespace MCForge
         private byte retries = 0;
         public GlobalChatBot(string nick)
         {
-            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick; 
+            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick;
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
-            if (Server.irc)
+            if (Server.UseGlobalChat)
             {
                 // Regster events for incoming
-                connection.Listener.OnNick += new NickEventHandler(Listener_OnNick);
-                //connection.Listener.OnNickError += new NickErrorEventHandler(Listener_OnNickError);
+                connection.Listener.OnNickError += new NickErrorEventHandler(Listener_OnNickError);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
                 connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
-                connection.Listener.OnError += new ErrorMessageEventHandler(Listener_OnError);
-                connection.Listener.OnQuit += new QuitEventHandler(Listener_OnQuit);
                 connection.Listener.OnJoin += new JoinEventHandler(Listener_OnJoin);
-                connection.Listener.OnPart += new PartEventHandler(Listener_OnPart);
-                //connection.Listener.OnKick += new KickEventHandler(Listener_OnKick);
+                connection.Listener.OnKick += new KickEventHandler(Listener_OnKick);
+                connection.Listener.OnError += new ErrorMessageEventHandler(Listener_OnError);
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
             }
         }
-        public void Say(string message, bool opchat = false)
+        public void Say(string message)
         {
-            if (Server.irc && IsConnected())
+            if (Server.UseGlobalChat && IsConnected())
                 connection.Sender.PublicMessage(channel, message);
         }
         public void Pm(string user, string message)
         {
-            if (Server.irc && IsConnected())
+            if (Server.UseGlobalChat && IsConnected())
                 connection.Sender.PrivateMessage(user, message);
         }
         public void Reset()
         {
-            if (!Server.irc) return;
+            if (!Server.UseGlobalChat) return;
             reset = true;
             retries = 0;
-            Disconnect("Global Chat resetting...");
+            Disconnect("Global Chat Bot resetting...");
             Connect();
         }
+
         void Listener_OnJoin(UserInfo user, string channel)
         {
             if (user.Nick == nick)
-                Server.s.Log("Joined Global Chat!");
-        }
-        void Listener_OnPart(UserInfo user, string channel, string reason)
-        {
-            if (user.Nick == nick) return;
-            Server.s.Log(user.Nick + " has left channel " + channel);
-            //Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
-        }
-
-        void Player_PlayerDisconnect(Player p, string reason)
-        {
-            if (Server.irc && IsConnected())
-                connection.Sender.PublicMessage(channel, p.name + " left the game (" + reason + ")");
-        }
-
-        void Player_PlayerConnect(Player p)
-        {
-            if (Server.irc && IsConnected())
-                connection.Sender.PublicMessage(channel, p.name + " joined the game");
-        }
-
-        void Listener_OnQuit(UserInfo user, string reason)
-        {
-            if (user.Nick == nick) return;
-            Server.s.Log(user.Nick + " has left IRC");
-            Player.GlobalMessage(Server.IRCColour + user.Nick + Server.DefaultColor + " has left IRC");
+                Server.s.Log("Joined the Global Chat!");
         }
 
         void Listener_OnError(ReplyCode code, string message)
         {
-            Server.s.Log("IRC Error: " + message);
+            //Server.s.Log("IRC Error: " + message);
         }
 
         void Listener_OnPublic(UserInfo user, string channel, string message)
@@ -113,53 +87,54 @@ namespace MCForge
                     msg = msg.Replace(ch.ToString(), "*");
             }
             if (Player.MessageHasBadColorCodes(null, msg)) return;
-            Server.s.Log("[Global] " + user.Nick + ": " + msg);
-            //Player.GlobalMessage(Server.IRCColour + "[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": &f" + msg.Trim());
+
+            Server.s.Log(">[Global] " + user.Nick + ": " + msg.Trim());
+            Player.GlobalMessage(Server.GlobalChatColor + ">[Global] " + user.Nick + ": &f" + msg.Trim(), true);
         }
 
         void Listener_OnRegistered()
         {
-            Server.s.Log("Connected to IRC!");
             reset = false;
             retries = 0;
-            if (Server.ircIdentify && Server.ircPassword != "")
-            {
-                Server.s.Log("Identifying with NickServ");
-                connection.Sender.PrivateMessage("nickserv", "IDENTIFY " + Server.ircPassword);
-            }
-
-            Server.s.Log("Joining channels...");
             connection.Sender.Join(channel);
         }
 
         void Listener_OnDisconnected()
         {
-            if (!reset && retries < 3) { retries++; Connect(); }
+            if (!reset && retries < 5) { retries++; Connect(); }
         }
 
-        void Listener_OnNick(UserInfo user, string newNick)
+        void Listener_OnNickError(string badNick, string reason)
         {
-            Player.GlobalMessage("[Global] " + user.Nick + Server.DefaultColor + " is now known as " + newNick);
+            Server.s.Log("Global Chat nick \"" + badNick + "\"is  taken, please choose a different nick.");
         }
+
+        void Listener_OnKick(UserInfo user, string channel, string kickee, string reason)
+        {
+            if (kickee == nick)
+            {
+                Server.s.Log("Kicked from Global Chat, rejoining...");
+                connection.Sender.Join(channel);
+            }
+
+        }
+
         public void Connect()
         {
-            if (!Server.irc) return;
+            if (!Server.UseGlobalChat) return;
 
-            Server.s.Log("Connecting to Global Chat...");
             try { connection.Connect(); }
-            catch (Exception e)
-            {
-                Server.s.Log("Failed to connect to Global Chat!");
-                Server.ErrorLog(e);
-            }
+            catch { }
         }
+
         void Disconnect(string message = "Disconnecting")
         {
-            if (Server.irc && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from Global Chat!"); }
+            if (Server.UseGlobalChat && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from Global Chat!"); }
         }
+
         public bool IsConnected()
         {
-            if (!Server.irc) return false;
+            if (!Server.UseGlobalChat) return false;
             try { return connection.Connected; }
             catch { return false; }
         }

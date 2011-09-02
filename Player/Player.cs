@@ -262,6 +262,9 @@ namespace MCForge
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+        
+        //Global Chat
+        public bool muteGlobal = false;
 
         public bool loggedIn = false;
 
@@ -3196,12 +3199,12 @@ namespace MCForge
                 }
             });
         }
-        public static void GlobalMessage(string message)
+        public static void GlobalMessage(string message, bool global = false)
         {
             message = message.Replace("%", "&");
             players.ForEach(delegate(Player p)
             {
-                if (p.level.worldChat && p.Chatroom == null)
+                if (p.level.worldChat && p.Chatroom == null && (!global || !p.muteGlobal))
                 {
                     Player.SendMessage(p, message);
                 }

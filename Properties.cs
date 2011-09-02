@@ -69,14 +69,14 @@ namespace MCForge
                         switch (key.ToLower())
                         {
                             case "server-name":
-                                if (ValidString(value, "![]:.,{}~-+()?_/\\ "))
+                                if (ValidString(value, "![]:.,{}~-+()?_/\\' "))
                                 {
                                     Server.name = value;
                                 }
                                 else { Server.s.Log("server-name invalid! setting to default."); }
                                 break;
                             case "motd":
-                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\ ")) // allow = in the motd
+                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\' ")) // allow = in the motd
                                 {
                                     Server.motd = value;
                                 }
@@ -486,6 +486,24 @@ namespace MCForge
                                 try { Server.showEmptyRanks = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "global-chat-enabled":
+                                try { Server.UseGlobalChat = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+
+                            case "global-chat-nick":
+                                if (value != "")
+                                    Server.GlobalChatNick = value;
+                                break;
+
+                            case "global-chat-color":
+                                color = c.Parse(value);
+                                if (color == "")
+                                {
+                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
+                                }
+                                Server.GlobalChatColor = color;
+                                break;
 
                         }
                     }
@@ -700,6 +718,11 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("#Show Empty Ranks in /players");
             w.WriteLine("show-empty-ranks = " + Server.showEmptyRanks.ToString().ToLower());
+            w.WriteLine();
+            w.WriteLine("#Global Chat Settings");
+            w.WriteLine("global-chat-enabled = " + Server.UseGlobalChat.ToString().ToLower());
+            w.WriteLine("global-chat-nick = " + Server.GlobalChatNick);
+            w.WriteLine("global-chat-color = " + Server.GlobalChatColor);
         }
     }
 }

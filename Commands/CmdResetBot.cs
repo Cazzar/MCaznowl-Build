@@ -34,6 +34,7 @@ namespace MCForge
         {
             //IRCBot.Reset();
             Server.IRC.Reset();
+            Server.GlobalChat.Reset();
         }
         public override void Help(Player p)
         {
