@@ -167,7 +167,7 @@ public static event OnServerError ServerError = null;
         public static string ZombieName = "";
 
         // Lava Survival
-        public LavaSurvival lava = new LavaSurvival();
+        public static LavaSurvival lava = new LavaSurvival();
 
         //Settings
         #region Server Settings
