@@ -39,7 +39,7 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/globalcls - Cleares the chat for all users.");
+            Player.SendMessage(p, "/globalcls - Clears the chat for all users.");
         }
     }
 }
