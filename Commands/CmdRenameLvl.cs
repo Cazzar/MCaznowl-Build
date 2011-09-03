@@ -53,6 +53,7 @@ namespace MCForge
             try
             {
                 File.Move("levels/" + foundLevel.name + ".lvl", "levels/" + newName + ".lvl");
+                File.Move("levels/" + foundLevel.name + ".lvl.backup", "levels/" + newName + ".lvl.backup");
 
                 try
                 {
@@ -68,10 +69,11 @@ namespace MCForge
                 //Move and rename backups
                 try
                 {
+                    string foundLevelDir, newNameDir;
                     for (int i = 1; ; i++)
                     {
-                        string foundLevelDir = @Server.backupLocation + "/" + foundLevel.name + "/" + i + "/";
-                        string newNameDir = @Server.backupLocation + "/" + newName + "/" + i + "/";
+                        foundLevelDir = @Server.backupLocation + "/" + foundLevel.name + "/" + i + "/";
+                        newNameDir = @Server.backupLocation + "/" + newName + "/" + i + "/";
 
                         if (File.Exists(foundLevelDir + foundLevel.name + ".lvl"))
                         {
@@ -82,12 +84,8 @@ namespace MCForge
                         }
                         else
                         {
-                            File.Delete("levels/" + foundLevel.name + ".lvl.backup");
-                            if (Directory.Exists(@Server.backupLocation + "/" + foundLevel.name + "/"))
-                            {
-                                if (DirectoryEmpty(@Server.backupLocation + "/" + foundLevel.name + "/"))
-                                    Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/");
-                            }
+                            if (DirectoryEmpty(@Server.backupLocation + "/" + foundLevel.name + "/"))
+                                Directory.Delete(@Server.backupLocation + "/" + foundLevel.name + "/");
                             break;
                         }
                     }
@@ -115,9 +113,11 @@ namespace MCForge
 
         public static bool DirectoryEmpty(string dir)
         {
-            if (System.IO.Directory.GetDirectories(dir).Length > 0)
+            if (!Directory.Exists(dir))
+                return true;
+            if (Directory.GetDirectories(dir).Length > 0)
                 return false;
-            if (System.IO.Directory.GetFiles(dir).Length > 0)
+            if (Directory.GetFiles(dir).Length > 0)
                 return false;
 
             return true;
