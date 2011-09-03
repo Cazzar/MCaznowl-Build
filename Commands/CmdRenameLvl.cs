@@ -45,9 +45,9 @@ namespace MCForge
 
             string newName = message.Split(' ')[1];
 
-            if (File.Exists("levels/" + newName)) { Player.SendMessage(p, "Level already exists."); return; }
+            if (File.Exists("levels/" + newName + ".lvl")) { Player.SendMessage(p, "Level already exists."); return; }
             if (foundLevel == Server.mainLevel) { Player.SendMessage(p, "Cannot rename the main level."); return; }
-               
+
             foundLevel.Unload();
 
             try
@@ -68,7 +68,7 @@ namespace MCForge
                 //Move and rename backups
                 try
                 {
-                    for(int i = 1; ; i++)
+                    for (int i = 1; ; i++)
                     {
                         string foundLevelDir = @Server.backupLocation + "/" + foundLevel.name + "/" + i + "/";
                         string newNameDir = @Server.backupLocation + "/" + newName + "/" + i + "/";
@@ -101,7 +101,8 @@ namespace MCForge
                         "`, `Messages" + foundLevel.name.ToLower() + "` TO Messages" + newName.ToLower() +
                         ", `Zone" + foundLevel.name.ToLower() + "` TO `Zone" + newName.ToLower() + "`");
                 }
-
+                try { Command.all.Find("load").Use(p, newName); }
+                catch { }
                 Player.GlobalMessage("Renamed " + foundLevel.name + " to " + newName);
             }
             catch (Exception e) { Player.SendMessage(p, "Error when renaming."); Server.ErrorLog(e); }
@@ -114,7 +115,7 @@ namespace MCForge
 
         public static bool DirectoryEmpty(string dir)
         {
-            if(System.IO.Directory.GetDirectories(dir).Length > 0)
+            if (System.IO.Directory.GetDirectories(dir).Length > 0)
                 return false;
             if (System.IO.Directory.GetFiles(dir).Length > 0)
                 return false;
