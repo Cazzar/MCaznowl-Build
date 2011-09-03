@@ -258,7 +258,12 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox19 = new System.Windows.Forms.GroupBox();
+            this.chkGlobalChat = new System.Windows.Forms.CheckBox();
+            this.txtGlobalChatNick = new System.Windows.Forms.TextBox();
+            this.label51 = new System.Windows.Forms.Label();
+            this.cmbGlobalChatColor = new System.Windows.Forms.ComboBox();
+            this.lblGlobalChatColor = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -299,6 +304,7 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).BeginInit();
             this.groupBox14.SuspendLayout();
+            this.groupBox19.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -651,7 +657,7 @@ namespace MCForge.Gui
             // 
             this.chkHelp.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkHelp.AutoSize = true;
-            this.chkHelp.Location = new System.Drawing.Point(264, 27);
+            this.chkHelp.Location = new System.Drawing.Point(18, 66);
             this.chkHelp.Name = "chkHelp";
             this.chkHelp.Size = new System.Drawing.Size(56, 23);
             this.chkHelp.TabIndex = 20;
@@ -675,7 +681,7 @@ namespace MCForge.Gui
             // 
             this.chkDeath.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkDeath.AutoSize = true;
-            this.chkDeath.Location = new System.Drawing.Point(174, 27);
+            this.chkDeath.Location = new System.Drawing.Point(169, 27);
             this.chkDeath.Name = "chkDeath";
             this.chkDeath.Size = new System.Drawing.Size(75, 23);
             this.chkDeath.TabIndex = 21;
@@ -761,7 +767,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -820,7 +826,7 @@ namespace MCForge.Gui
             this.ChkTunnels.AutoSize = true;
             this.ChkTunnels.Location = new System.Drawing.Point(18, 20);
             this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(85, 23);
+            this.ChkTunnels.Size = new System.Drawing.Size(83, 23);
             this.ChkTunnels.TabIndex = 4;
             this.ChkTunnels.Text = "Anti-Tunneling";
             this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
@@ -832,7 +838,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(79, 23);
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -857,7 +863,7 @@ namespace MCForge.Gui
             this.chkAutoload.AutoSize = true;
             this.chkAutoload.Location = new System.Drawing.Point(16, 80);
             this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(85, 23);
+            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
             this.chkAutoload.TabIndex = 4;
             this.chkAutoload.Text = "Load on /goto";
             this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
@@ -958,7 +964,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -993,7 +999,7 @@ namespace MCForge.Gui
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1291,6 +1297,7 @@ namespace MCForge.Gui
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.groupBox19);
             this.tabPage4.Controls.Add(this.groupBox13);
             this.tabPage4.Controls.Add(this.groupBox12);
             this.tabPage4.Controls.Add(this.groupBox11);
@@ -1322,7 +1329,7 @@ namespace MCForge.Gui
             this.groupBox13.Controls.Add(this.label34);
             this.groupBox13.Location = new System.Drawing.Point(10, 283);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(475, 223);
+            this.groupBox13.Size = new System.Drawing.Size(352, 223);
             this.groupBox13.TabIndex = 40;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Extra";
@@ -1331,7 +1338,7 @@ namespace MCForge.Gui
             // 
             this.chkShowEmptyRanks.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkShowEmptyRanks.AutoSize = true;
-            this.chkShowEmptyRanks.Location = new System.Drawing.Point(239, 66);
+            this.chkShowEmptyRanks.Location = new System.Drawing.Point(192, 66);
             this.chkShowEmptyRanks.Name = "chkShowEmptyRanks";
             this.chkShowEmptyRanks.Size = new System.Drawing.Size(154, 23);
             this.chkShowEmptyRanks.TabIndex = 41;
@@ -1364,7 +1371,7 @@ namespace MCForge.Gui
             // 
             this.chkRepeatMessages.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRepeatMessages.AutoSize = true;
-            this.chkRepeatMessages.Location = new System.Drawing.Point(18, 66);
+            this.chkRepeatMessages.Location = new System.Drawing.Point(219, 105);
             this.chkRepeatMessages.Name = "chkRepeatMessages";
             this.chkRepeatMessages.Size = new System.Drawing.Size(127, 23);
             this.chkRepeatMessages.TabIndex = 29;
@@ -1400,7 +1407,7 @@ namespace MCForge.Gui
             // 
             this.chk17Dollar.Appearance = System.Windows.Forms.Appearance.Button;
             this.chk17Dollar.AutoSize = true;
-            this.chk17Dollar.Location = new System.Drawing.Point(229, 105);
+            this.chk17Dollar.Location = new System.Drawing.Point(255, 27);
             this.chk17Dollar.Name = "chk17Dollar";
             this.chk17Dollar.Size = new System.Drawing.Size(91, 23);
             this.chk17Dollar.TabIndex = 22;
@@ -1411,7 +1418,7 @@ namespace MCForge.Gui
             // 
             this.chkSmile.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSmile.AutoSize = true;
-            this.chkSmile.Location = new System.Drawing.Point(151, 66);
+            this.chkSmile.Location = new System.Drawing.Point(92, 66);
             this.chkSmile.Name = "chkSmile";
             this.chkSmile.Size = new System.Drawing.Size(82, 23);
             this.chkSmile.TabIndex = 19;
@@ -1798,7 +1805,7 @@ namespace MCForge.Gui
             this.chkIrcId.AutoSize = true;
             this.chkIrcId.Location = new System.Drawing.Point(15, 198);
             this.chkIrcId.Name = "chkIrcId";
-            this.chkIrcId.Size = new System.Drawing.Size(120, 23);
+            this.chkIrcId.Size = new System.Drawing.Size(117, 23);
             this.chkIrcId.TabIndex = 27;
             this.chkIrcId.Text = "Identify with NickServ";
             this.chkIrcId.UseVisualStyleBackColor = true;
@@ -1859,7 +1866,6 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
-            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.groupBox8);
             this.tabPage1.Controls.Add(this.groupBox7);
             this.tabPage1.Controls.Add(this.groupBox6);
@@ -1984,7 +1990,7 @@ namespace MCForge.Gui
             this.chkAgreeToRules.AutoSize = true;
             this.chkAgreeToRules.Location = new System.Drawing.Point(15, 77);
             this.chkAgreeToRules.Name = "chkAgreeToRules";
-            this.chkAgreeToRules.Size = new System.Drawing.Size(189, 17);
+            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
             this.chkAgreeToRules.TabIndex = 32;
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
@@ -2081,7 +2087,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -2149,7 +2155,7 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(90, 23);
+            this.chkRestart.Size = new System.Drawing.Size(92, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -2160,7 +2166,7 @@ namespace MCForge.Gui
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(16, 80);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(110, 23);
+            this.chkMono.Size = new System.Drawing.Size(106, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -2171,7 +2177,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(152, 22);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -2578,15 +2584,65 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
-            // button2
+            // groupBox19
             // 
-            this.button2.Location = new System.Drawing.Point(377, 153);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(10, 10);
-            this.button2.TabIndex = 48;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.groupBox19.Controls.Add(this.cmbGlobalChatColor);
+            this.groupBox19.Controls.Add(this.lblGlobalChatColor);
+            this.groupBox19.Controls.Add(this.label51);
+            this.groupBox19.Controls.Add(this.txtGlobalChatNick);
+            this.groupBox19.Controls.Add(this.chkGlobalChat);
+            this.groupBox19.Location = new System.Drawing.Point(368, 283);
+            this.groupBox19.Name = "groupBox19";
+            this.groupBox19.Size = new System.Drawing.Size(117, 104);
+            this.groupBox19.TabIndex = 41;
+            this.groupBox19.TabStop = false;
+            this.groupBox19.Text = "Global Chat";
+            // 
+            // chkGlobalChat
+            // 
+            this.chkGlobalChat.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkGlobalChat.AutoSize = true;
+            this.chkGlobalChat.Location = new System.Drawing.Point(13, 20);
+            this.chkGlobalChat.Name = "chkGlobalChat";
+            this.chkGlobalChat.Size = new System.Drawing.Size(92, 23);
+            this.chkGlobalChat.TabIndex = 0;
+            this.chkGlobalChat.Text = "Use Global Chat";
+            this.chkGlobalChat.UseVisualStyleBackColor = true;
+            // 
+            // txtGlobalChatNick
+            // 
+            this.txtGlobalChatNick.Location = new System.Drawing.Point(42, 49);
+            this.txtGlobalChatNick.Name = "txtGlobalChatNick";
+            this.txtGlobalChatNick.Size = new System.Drawing.Size(63, 21);
+            this.txtGlobalChatNick.TabIndex = 1;
+            this.toolTip.SetToolTip(this.txtGlobalChatNick, "The name of the bot in the Global Chat IRC channel.");
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(6, 52);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(30, 13);
+            this.label51.TabIndex = 2;
+            this.label51.Text = "Nick:";
+            // 
+            // cmbGlobalChatColor
+            // 
+            this.cmbGlobalChatColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGlobalChatColor.FormattingEnabled = true;
+            this.cmbGlobalChatColor.Location = new System.Drawing.Point(6, 76);
+            this.cmbGlobalChatColor.Name = "cmbGlobalChatColor";
+            this.cmbGlobalChatColor.Size = new System.Drawing.Size(72, 21);
+            this.cmbGlobalChatColor.TabIndex = 11;
+            this.toolTip.SetToolTip(this.cmbGlobalChatColor, "THe color of Global Chat text in-game.");
+            this.cmbGlobalChatColor.SelectedIndexChanged += new System.EventHandler(this.cmbGlobalChatColor_SelectedIndexChanged);
+            // 
+            // lblGlobalChatColor
+            // 
+            this.lblGlobalChatColor.Location = new System.Drawing.Point(84, 76);
+            this.lblGlobalChatColor.Name = "lblGlobalChatColor";
+            this.lblGlobalChatColor.Size = new System.Drawing.Size(21, 21);
+            this.lblGlobalChatColor.TabIndex = 12;
             // 
             // PropertyWindow
             // 
@@ -2670,6 +2726,8 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).EndInit();
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
+            this.groupBox19.ResumeLayout(false);
+            this.groupBox19.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2888,6 +2946,11 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.TextBox txtIRCPort;
         private System.Windows.Forms.CheckBox chkShowEmptyRanks;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.GroupBox groupBox19;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.TextBox txtGlobalChatNick;
+        private System.Windows.Forms.CheckBox chkGlobalChat;
+        private System.Windows.Forms.ComboBox cmbGlobalChatColor;
+        private System.Windows.Forms.Label lblGlobalChatColor;
     }
 }

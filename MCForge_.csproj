@@ -104,7 +104,9 @@
     <Compile Include="Commands\CmdFaq.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
     <Compile Include="Commands\CmdFliphead.cs" />
+    <Compile Include="Commands\CmdGarbage.cs" />
     <Compile Include="Commands\CmdGifToCin.cs" />
+    <Compile Include="Commands\CmdGlobal.cs" />
     <Compile Include="Commands\CmdInfect.cs" />
     <Compile Include="Commands\CmdInfected.cs" />
     <Compile Include="Commands\CmdKillPhysics.cs" />
@@ -197,6 +199,7 @@
     <Compile Include="Commands\pcreate.cs" />
     <Compile Include="Commands\pload.cs" />
     <Compile Include="Commands\punload.cs" />
+    <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />
     <Compile Include="Economy.cs" />

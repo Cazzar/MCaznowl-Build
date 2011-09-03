@@ -58,6 +58,7 @@ public static event OnServerError ServerError = null;
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
         public static ForgeBot IRC;
+        public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
 
         public static Thread blockThread;
@@ -253,6 +254,11 @@ public static byte maxGuests = 10;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";
+
+        public static bool UseGlobalChat = true;
+        public static string GlobalChatNick = "MCF" + new Random().Next(Int32.MaxValue);
+        public static string GlobalChatColor = "&6";
+
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
@@ -734,7 +740,10 @@ processThread.Start();
 
                 // We always construct this to prevent errors...
                 IRC = new ForgeBot(Server.ircChannel, Server.ircOpChannel, Server.ircNick, Server.ircServer);
+                GlobalChat = new GlobalChatBot(GlobalChatNick);
+                
                 if (Server.irc) IRC.Connect();
+                if (Server.UseGlobalChat) GlobalChat.Connect();
 
 
                 // string CheckName = "FROSTEDBUTTS";

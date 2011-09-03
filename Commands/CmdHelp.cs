@@ -165,8 +165,8 @@ namespace MCForge
                         if (b != Block.Zero)
                         {
                             Player.SendMessage(p, "Block \"" + message + "\" appears as &b" + Block.Name(Block.Convert(b)));
-                            string foundRank = Level.PermissionToName(Block.BlockList.Find(bs => bs.type == b).lowestRank);
-                            Player.SendMessage(p, "Rank needed: " + foundRank);
+                            Group foundRank = Group.findPerm(Block.BlockList.Find(bs => bs.type == b).lowestRank);
+                            Player.SendMessage(p, "Rank needed: " + foundRank.color + foundRank.name);
                             return;
                         }
                         Plugin plugin = null;

@@ -39,18 +39,20 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
+            if (message.Split(' ')[0] == "all")
+            {
+                p.ignoreglobal = !p.ignoreglobal;
+                p.muteGlobal = p.ignoreglobal;
+                if (p.ignoreglobal) Player.globalignores.Add(p.name);
+                else Player.globalignores.Remove(p.name);
+                Player.SendMessage(p, p.ignoreglobal ? "&cAll chat is now being ignored!" : "&aAll chat is no longer being ignored!");
+                return;
+            }
             if (message.Split(' ')[0] == "global")
             {
-                if (p.ignoreglobal == false)
-                {
-                    Player.globalignores.Add(p.name);
-                    p.ignoreglobal = true;
-                    Player.SendMessage(p, "&cGlobal Chat is now being ignored!");
-                    return;
-                }
-                p.ignoreglobal = false;
-                Player.globalignores.Remove(p.name);
-                Player.SendMessage(p, "&cGlobal Chat is no longer being ignored!");
+                p.muteGlobal = !p.muteGlobal;
+                Player.SendMessage(p, p.muteGlobal ? "&cGlobal Chat is now being ignored!" : "&aGlobal Chat is no longer being ignored!");
                 return;
             }
             if (message.Split(' ')[0] == "list")
@@ -110,7 +112,7 @@ namespace MCForge
             if (p.listignored.Contains(who.name))
             {
                 p.listignored.Remove(who.name);
-                Player.SendMessage(p, "Player is no longer ignored: &c" + who.name + "!");
+                Player.SendMessage(p, "Player is no longer ignored: &a" + who.name + "!");
                 return;
             }
             Player.SendMessage(p, "Something is stuffed.... Tell a MCForge Developer!");
