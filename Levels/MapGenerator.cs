@@ -446,7 +446,7 @@ namespace MCForge
             byte height = (byte)Rand.Next(5, 8);
             short top = (short)(height - Rand.Next(2, 4));
             ushort xxx, yyy, zzz;
-            for (ushort yy = 0; yy < top + height; yy++)
+            for (ushort yy = 0; yy < top + height - 2; yy++)
             {
                 if (overwrite || Lvl.GetTile(x, (ushort)(y + yy), z) == Block.air || (y + yy == y && Lvl.GetTile(x, (ushort)(y + yy), z) == Block.shrub))
                     if (blockChange) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.trunk);
@@ -471,7 +471,7 @@ namespace MCForge
                                     yyy = (ushort)(y + yy + height);
                                     zzz = (ushort)(z + zz);
 
-                                    if ((xxx != x || zzz != z || yy >= top) && (overwrite || Lvl.GetTile(xxx, yyy, zzz) == Block.air))
+                                    if ((xxx != x || zzz != z || yy >= top - 2) && (overwrite || Lvl.GetTile(xxx, yyy, zzz) == Block.air))
                                         if (blockChange) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
                                         else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
                                 }
