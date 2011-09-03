@@ -194,7 +194,6 @@ namespace MCForge.Gui
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.txtServerOwner = new System.Windows.Forms.TextBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -1867,7 +1866,6 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
-            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.groupBox8);
             this.tabPage1.Controls.Add(this.groupBox7);
             this.tabPage1.Controls.Add(this.groupBox6);
@@ -1884,16 +1882,6 @@ namespace MCForge.Gui
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(377, 153);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(10, 10);
-            this.button2.TabIndex = 48;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // groupBox8
             // 
@@ -2958,7 +2946,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.TextBox txtIRCPort;
         private System.Windows.Forms.CheckBox chkShowEmptyRanks;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox19;
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.TextBox txtGlobalChatNick;
