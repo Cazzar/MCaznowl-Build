@@ -97,14 +97,14 @@ namespace MCForge
                     }
                     if (Server.devs.Contains(who.name.ToLower()))
                     {
-                        Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                        Player.SendMessage(p, "You can't ban an MCForge Developer!");
                         if (p != null)
                         {
-                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban an MCForge Developer!");
                         }
                         else
                         {
-                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
+                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban an MCForge Developer!");
                         }
                         return;
                     }

@@ -2633,6 +2633,11 @@ namespace MCForge
             buffer[7] = rotx; buffer[8] = roty;
             SendRaw(8, buffer);
         }
+        // Update user type for weather or not they are opped
+        public void SendUserType(bool op)
+        {
+            SendRaw(15, new byte[] { op ? (byte)100 : (byte)0 });
+        }
         //TODO: Figure a way to SendPos without changing rotation
         public void SendDie(byte id) { SendRaw(0x0C, new byte[1] { id }); }
         public void SendBlockchange(ushort x, ushort y, ushort z, byte type)
