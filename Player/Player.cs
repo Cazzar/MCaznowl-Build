@@ -3258,7 +3258,7 @@ namespace MCForge
                 if (p.level != from.level || (from.hidden && !self)) { return; }
                 if (p != from)
                 {
-                    if (Server.ZombieModeOn)
+                    if (Server.ZombieModeOn && !p.aka)
                     {
                         if (from.infected)
                         {
@@ -3269,14 +3269,19 @@ namespace MCForge
                             return;
                         }
                         else if (from.referee)
+                        {
                             return;
+                    	}
                         else
                         {
                             p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
                             return;
                         }
                     }
+                    else
+                    {
                     p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
+                    }
                 }
                 else if (self)
                 {
