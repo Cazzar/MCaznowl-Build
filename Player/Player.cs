@@ -1434,7 +1434,8 @@ namespace MCForge
                         switch (type)
                         {
                             case Block.dirt: //instant dirt to grass
-                                level.Blockchange(this, x, y, z, (byte)(Block.grass));
+                                if (Block.LightPass(level.GetTile(x, (ushort)(y + 1), z))) level.Blockchange(this, x, y, z, (byte)(Block.grass));
+                                else level.Blockchange(this, x, y, z, (byte)(Block.dirt));
                                 break;
                             case Block.staircasestep:    //stair handler
                                 if (level.GetTile(x, (ushort)(y - 1), z) == Block.staircasestep)
