@@ -1128,7 +1128,7 @@ namespace MCForge.Gui
             string type;
             string seed;
 
-            try { name = nametxtbox.Text; } catch { name = ""; }
+            try { name = nametxtbox.Text.ToLower(); } catch { name = ""; }
             try { x = xtxtbox.SelectedItem.ToString(); } catch { x = ""; }
             try { y = ytxtbox.SelectedItem.ToString(); } catch { y = ""; }
             try { z = ztxtbox.SelectedItem.ToString(); } catch { z = ""; }
