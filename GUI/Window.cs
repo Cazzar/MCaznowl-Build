@@ -1156,6 +1156,12 @@ namespace MCForge.Gui
                 if (File.Exists("levels/" + nametxtbox.Text + ".lvl"))
                 {
                     MessageBox.Show("Created Level");
+                    try
+                    {
+                    	UnloadedlistUpdate();
+            		UpdateMapList("'");
+                    }
+                    catch { }
                 }
                 else
                 {
@@ -1163,8 +1169,6 @@ namespace MCForge.Gui
                 }
                 mapgen = false;
             }).Start(); ;
-            UnloadedlistUpdate();
-            UpdateMapList("'");
         }
 
         private void ldmapbt_Click(object sender, EventArgs e)
