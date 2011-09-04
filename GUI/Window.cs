@@ -1133,7 +1133,7 @@ namespace MCForge.Gui
             try { y = ytxtbox.SelectedItem.ToString(); } catch { y = ""; }
             try { z = ztxtbox.SelectedItem.ToString(); } catch { z = ""; }
             try { type = maptypecombo.SelectedItem.ToString().ToLower(); } catch { type = ""; }
-            try { seed = seedtxtbox.Text.ToLower(); } catch { seed = ""; }
+            try { seed = seedtxtbox.Text; } catch { seed = ""; }
 
             if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(x) || String.IsNullOrEmpty(y) || String.IsNullOrEmpty(z) || String.IsNullOrEmpty(type))
             {
