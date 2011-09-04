@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 
 namespace MCForge
 {
@@ -33,7 +34,34 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            
+            if (message.Split(' ')[0].ToLower() == "save")
+            {
+                if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
+                Savecopy(p, message.Split(' ')[1]); return;
+            }
+            if (message.Split(' ')[0].ToLower() == "load")
+            {
+                if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
+                Loadcopy(p, message.Split(' ')[1]); return;
+            }
+            if (message.Split(' ')[0].ToLower() == "delete")
+            {
+                if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
+                message = message.Split(' ')[1];
+                if (!File.Exists("extra/savecopy/" + p.name + "/" + message + ".cpy")) { Player.SendMessage(p, "No such copy exists"); return; }
+                File.Delete("extra/savecopy/" + p.name + "/" + message + ".cpy");
+                Player.SendMessage(p, "Deleted copy " + message); return;
+            }
+            if (message.ToLower() == "list")
+            {
+                if (!Directory.Exists("extra/savecopy/" + p.name)) { Player.SendMessage(p, "No such directory exists"); return; }
+                FileInfo[] fin = new DirectoryInfo("extra/savecopy/" + p.name).GetFiles();
+                for (int i = 0; i < fin.Length; i++)
+                {
+                    Player.SendMessage(p, fin[i].Name.Replace(".cpy", ""));
+                }
+                return;
+            }
             CatchPos cpos;
             cpos.ignoreTypes = new List<byte>();
             cpos.type = 0;
@@ -74,6 +102,10 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/copy - Copies the blocks in an area.");
+            Player.SendMessage(p, "/copy save <save_name> - Saves what you have copied.");
+            Player.SendMessage(p, "/copy load <load_name> - Loads what you have saved.");
+            Player.SendMessage(p, "/copy delete <delete_name> - Deletes the specified copy.");
+            Player.SendMessage(p, "/copy list - Lists all you have copied.");
             Player.SendMessage(p, "/copy cut - Copies the blocks in an area, then removes them.");
             Player.SendMessage(p, "/copy air - Copies the blocks in an area, including air.");
             Player.SendMessage(p, "/copy ignore <block1> <block2>.. - Ignores <blocks> when copying");
@@ -163,6 +195,113 @@ namespace MCForge
             p.copyoffset[1] = (p.copystart[1] - y);
             p.copyoffset[2] = (p.copystart[2] - z);
 
+        }
+
+        void Savecopy(Player p, string message)
+        {
+            if (message.EndsWith("#"))
+            {
+                message = message.Remove(message.Length - 1);
+                byte[] cnt = new byte[p.CopyBuffer.Count * 7];
+                int k = 0;
+                for (int i = 0; i < p.CopyBuffer.Count; i++)
+                {
+                    BitConverter.GetBytes(p.CopyBuffer[i].x).CopyTo(cnt, 0 + k);
+                    BitConverter.GetBytes(p.CopyBuffer[i].y).CopyTo(cnt, 2 + k);
+                    BitConverter.GetBytes(p.CopyBuffer[i].z).CopyTo(cnt, 4 + k);
+                    cnt[6 + k] = p.CopyBuffer[i].type;  //BitConverter.GetBytes(p.CopyBuffer[i].type).CopyTo(cnt, 6 + k);
+                    k = k + 7;
+                }
+                cnt = cnt.GZip();
+                if (!message.StartsWith("http://", true, System.Globalization.CultureInfo.CurrentCulture)) message = "http://" + message;
+                try
+                {
+                    string savefile = "temp" + p.name + new Random().Next(999) + ".cpy";
+                    using (FileStream fs = new FileStream(savefile, FileMode.Create))
+                    {
+                        fs.Write(cnt, 0, cnt.Length);
+                    }
+                    using (System.Net.WebClient webup = new System.Net.WebClient())
+                    {
+                        webup.UploadFile(message, savefile);
+                        //webup.UploadData(message, cnt);
+                    }
+                    File.Delete(savefile);
+                    Player.SendMessage(p, "Saved copy to " + message + "/" + savefile);
+                }
+                catch (Exception e) { Player.SendMessage(p, "Failed to upload " + message + e); }
+                return;
+            }
+
+            if (Player.ValidName(message))
+            {
+                if (!Directory.Exists("extra/savecopy")) Directory.CreateDirectory("extra/savecopy");
+                if (!Directory.Exists("extra/savecopy/" + p.name)) Directory.CreateDirectory("extra/savecopy/" + p.name);
+                if (Directory.GetFiles("extra/savecopy/" + p.name).Length > 14) { Player.SendMessage(p, "You can only save 15 copy's. /copy delete some."); return; }
+                using (FileStream fs = new FileStream("extra/savecopy/" + p.name + "/" + message + ".cpy", FileMode.Create))
+                {
+                    byte[] cnt = new byte[p.CopyBuffer.Count * 7];
+                    int k = 0;
+                    for (int i = 0; i < p.CopyBuffer.Count; i++)
+                    {
+                        BitConverter.GetBytes(p.CopyBuffer[i].x).CopyTo(cnt, 0 + k);
+                        BitConverter.GetBytes(p.CopyBuffer[i].y).CopyTo(cnt, 2 + k);
+                        BitConverter.GetBytes(p.CopyBuffer[i].z).CopyTo(cnt, 4 + k);
+                        cnt[6 + k] = p.CopyBuffer[i].type;  //BitConverter.GetBytes(p.CopyBuffer[i].type).CopyTo(cnt, 6 + k);
+                        k = k + 7;
+                    }
+                    cnt = cnt.GZip();
+                    fs.Write(cnt, 0, cnt.Length);
+                    fs.Flush();
+                    fs.Close();
+                }
+                Player.SendMessage(p, "Saved copy as " + message);
+            }
+            else Player.SendMessage(p, "Bad file name");
+        }
+
+        void Loadcopy(Player p, string message)
+        {
+            if (message.EndsWith("#"))
+            {
+                try
+                {
+                    p.CopyBuffer.Clear();
+                    message = message.Remove(message.Length - 1);
+                    if (!message.StartsWith("http://", true, System.Globalization.CultureInfo.CurrentCulture)) message = "http://" + message;
+                    using (System.Net.WebClient webget = new System.Net.WebClient())
+                    {
+                        byte[] cnt = webget.DownloadData(message);
+                        cnt = cnt.Decompress();
+                        int k = 0;
+                        for (int i = 0; i < cnt.Length / 7; i++)
+                        {
+                            p.CopyBuffer.Add(new Player.CopyPos() { x = BitConverter.ToUInt16(cnt, 0 + k), y = BitConverter.ToUInt16(cnt, 2 + k), z = BitConverter.ToUInt16(cnt, 4 + k), type = cnt[6 + k] });
+                            k = k + 7;
+                        }
+                        Player.SendMessage(p, "Loaded copy from " + message);
+                    }
+                }
+                catch { Player.SendMessage(p, "Failed to load copy from " + message); }
+                return;
+            }
+            if (!File.Exists("extra/savecopy/" + p.name + "/" + message + ".cpy")) { Player.SendMessage(p, "No such copy exists"); return; }
+            p.CopyBuffer.Clear();
+            using (FileStream fs = new FileStream("extra/savecopy/" + p.name + "/" + message + ".cpy", FileMode.Open))
+            {
+                byte[] cnt = new byte[fs.Length];
+                fs.Read(cnt, 0, (int)fs.Length);
+                cnt = cnt.Decompress();
+                int k = 0;
+                for (int i = 0; i < cnt.Length / 7; i++)
+                {
+                    p.CopyBuffer.Add(new Player.CopyPos() { x = BitConverter.ToUInt16(cnt, 0 + k), y = BitConverter.ToUInt16(cnt, 2 + k), z = BitConverter.ToUInt16(cnt, 4 + k), type = cnt[6 + k] });
+                    k = k + 7;
+                }
+                fs.Flush();
+                fs.Close();
+            }
+            Player.SendMessage(p, "Loaded copy as " + message);
         }
 
         void BufferAdd(Player p, ushort x, ushort y, ushort z, byte type)
