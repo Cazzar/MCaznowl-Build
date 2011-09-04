@@ -240,9 +240,9 @@ namespace MCForge
                 if (pl.level == this) Command.all.Find("goto").Use(pl, Server.mainLevel.name);
             });
 
-            if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving) && (!Server.lava.active || !Server.lava.HasMap(name)))
+            if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving))
             {
-                Save();
+                if (!Server.lava.HasMap(name)) Save();
                 saveChanges();
             }
             try
@@ -262,7 +262,6 @@ namespace MCForge
 
         public void saveChanges()
         {
-            if (Server.lava.active && Server.lava.HasMap(this.name)) return;
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();
@@ -630,7 +629,7 @@ namespace MCForge
                 if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
                 if (!Directory.Exists("levels/level properties")) Directory.CreateDirectory("levels/level properties");
 
-                if (changed == true || !File.Exists(path) || Override && (!Server.lava.active || !Server.lava.HasMap(name)))
+                if (changed == true || !File.Exists(path) || Override)
                 {
 					GZipStream gs;
 					using (FileStream fs = File.Create(path + ".back"))

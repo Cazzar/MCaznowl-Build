@@ -38,7 +38,8 @@ namespace MCForge
                 {
                     try
                     {
-                        l.Save();
+                        if (!Server.lava.HasMap(name)) l.Save();
+                        else { Server.s.Log("The level \"" + l.name + "\" is a Lava Survival level, only saving block change history."); l.saveChanges(); }
                     }
                     catch { }
                 }

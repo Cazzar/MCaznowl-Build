@@ -30,7 +30,7 @@ namespace MCForge
 
         // Public variables
         public bool active = false;
-        public Level currentMap;
+        public Level map;
         public MapSettings mapSettings;
 
         // Constructors
@@ -40,7 +40,17 @@ namespace MCForge
         }
 
         // Private methods
-
+        private string ConcatBlocks(List<BlockPos> blocks)
+        {
+            string str = "";
+            try
+            {
+                foreach (BlockPos bp in blocks)
+                    str += bp.b.ToString() + "," + bp.x.ToString() + "," + bp.y.ToString() + "," + bp.z.ToString() + " ";
+            }
+            catch { }
+            return str.Trim();
+        }
 
         // Public methods
         public bool Start()
@@ -78,11 +88,31 @@ namespace MCForge
                     if (line[0] != '#')
                     {
                         string value = line.Substring(line.IndexOf(" = ") + 3);
-
                         switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
-                            // THIS IS PLACEHOLDER CODE!!!!!
-                            case "property":
+                            case "blocks":
+                                try
+                                {
+                                    string[] blocks = value.Split(' ');
+                                    foreach (string pos in blocks)
+                                    {
+                                        try { settings.blocks.Add(new BlockPos(Convert.ToByte(pos.Split(',')[0]), Convert.ToUInt16(pos.Split(',')[1]), Convert.ToUInt16(pos.Split(',')[2]), Convert.ToUInt16(pos.Split(',')[3]))); }
+                                        catch { }
+                                    }
+                                }
+                                catch { }
+                                break;
+                            case "layerblocks":
+                                try
+                                {
+                                    string[] blocks = value.Split(' ');
+                                    foreach (string pos in blocks)
+                                    {
+                                        try { settings.layerBlocks.Add(new BlockPos(Convert.ToByte(pos.Split(',')[0]), Convert.ToUInt16(pos.Split(',')[1]), Convert.ToUInt16(pos.Split(',')[2]), Convert.ToUInt16(pos.Split(',')[3]))); }
+                                        catch { }
+                                    }
+                                }
+                                catch { }
                                 break;
                         }
                     }
@@ -99,36 +129,51 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText(propsPath + settings.name + ".properties"))
             {
                 SW.WriteLine("#Lava Survival properties for " + settings.name);
-                SW.WriteLine("Property = "/* INSERT VARIABLE HERE */);
+                SW.WriteLine("Blocks = " + ConcatBlocks(settings.blocks));
+                SW.WriteLine("LayerBlocks = " + ConcatBlocks(settings.layerBlocks));
             }
         }
 
         public void AddMap(string name)
         {
-            if(!maps.Contains(name)) maps.Add(name);
+            if (!maps.Contains(name.ToLower())) maps.Add(name.ToLower());
         }
         public void RemoveMap(string name)
         {
-            if (maps.Contains(name)) maps.Remove(name);
+            if (maps.Contains(name.ToLower())) maps.Remove(name.ToLower());
         }
         public bool HasMap(string name)
         {
-            return maps.Contains(name);
+            return maps.Contains(name.ToLower());
         }
 
         // Internal classes
         public class MapSettings
         {
             public string name;
-            public List<Pos> blocks;
+            public List<BlockPos> blocks;
+            public List<BlockPos> layerBlocks;
 
             public MapSettings(string name)
             {
                 this.name = name;
-                blocks = new List<Pos>();
+                blocks = new List<BlockPos>();
+                layerBlocks = new List<BlockPos>();
             }
         }
 
-        public struct Pos { public ushort x, y, z; }
+        public struct BlockPos
+        {
+            public byte b;
+            public ushort x, y, z;
+
+            public BlockPos(byte b, ushort x, ushort y, ushort z)
+            {
+                this.b = b;
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }
+        }
     }
 }
