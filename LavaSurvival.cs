@@ -26,21 +26,32 @@ namespace MCForge
     {
         // Private variables
         private string propsPath = "properties/lavasurvival/";
-        private List<string> maps;
+        private List<string> maps, voted;
+        private Dictionary<string, int> votes;
+        private Timer voteTimer;
 
         // Public variables
-        public bool active = false;
-        public bool configMode = false;
+        public bool active = false, voteActive = false;
         public Level map;
         public MapSettings mapSettings;
+        public MapData mapData;
 
         // Settings
-
+        public bool startOnStartup;
+        public byte voteCount;
+        public double voteTime;
 
         // Constructors
         public LavaSurvival()
         {
             maps = new List<string>();
+            voted = new List<string>();
+            votes = new Dictionary<string, int>();
+
+            startOnStartup = false;
+            voteCount = 2;
+            voteTime = 2;
+            LoadSettings();
         }
 
         // Private methods
@@ -62,14 +73,51 @@ namespace MCForge
             return Math.Max(Math.Min(value, high), low);
         }
 
+        // Event Handlers
+        private void HandleVoteEnd()
+        {
+
+        }
+
         // Public methods
         public bool Start()
         {
-            return false;
+            if (active) return false;
+            if (maps.Count < 1) return false;
+
+            return true;
         }
         public bool Stop()
         {
-            return false;
+            if (!active) return false;
+
+            return true;
+        }
+
+        public void LoadMap(string name)
+        {
+            if (!HasMap(name)) return;
+            if (map != null) map.Unload();
+        }
+
+        public bool AddVote(Player p, string vote)
+        {
+            if (!voteActive || voted.Contains(p.name) || !votes.ContainsKey(vote)) return false;
+            int temp = votes[vote] + 1;
+            votes.Remove(vote);
+            votes.Add(vote, temp);
+            voted.Add(p.name);
+            return true;
+        }
+
+        public bool HasVote(string vote)
+        {
+            return voteActive && votes.ContainsKey(vote);
+        }
+
+        public bool HasPlayer(Player p)
+        {
+            return p.level == map;
         }
 
         public void LoadSettings()
@@ -89,15 +137,25 @@ namespace MCForge
                         string value = line.Substring(line.IndexOf(" = ") + 3);
                         switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
+                            case "start-on-startup":
+                                startOnStartup = bool.Parse(value);
+                                break;
+                            case "vote-count":
+                                voteCount = (byte)NumberClamp(decimal.Parse(value), 0, 10);
+                                break;
+                            case "vote-time":
+                                voteTime = int.Parse(value);
+                                break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))
-                                    if(maps.Contains(mapname)) maps.Add(mapname);
+                                    if(!maps.Contains(mapname)) maps.Add(mapname);
                                 break;
                         }
                     }
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             }
+            SaveSettings();
         }
         public void SaveSettings()
         {
@@ -105,6 +163,9 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText("properties/lavasurvival.properties"))
             {
                 SW.WriteLine("#Lava Survival main properties");
+                SW.WriteLine("start-on-startup = " + startOnStartup.ToString().ToLower());
+                SW.WriteLine("vote-count = " + voteCount);
+                SW.WriteLine("vote-time = " + voteTime);
                 SW.WriteLine("maps = " + ConcatStrings(maps, ","));
             }
         }
@@ -129,46 +190,47 @@ namespace MCForge
                         switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
                             case "fast-chance":
-                                settings.fast = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                settings.fast = (byte)NumberClamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "killer-chance":
-                                settings.killer = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                settings.killer = (byte)NumberClamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "destroy-chance":
-                                settings.destroy = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                settings.destroy = (byte)NumberClamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "water-chance":
-                                settings.water = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                settings.water = (byte)NumberClamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "layer-chance":
-                                settings.layer = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                settings.layer = (byte)NumberClamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "layer-height":
-                                settings.layerHeight = Convert.ToInt32(value);
+                                settings.layerHeight = int.Parse(value);
                                 break;
                             case "layer-count":
-                                settings.layerCount = Convert.ToInt32(value);
+                                settings.layerCount = int.Parse(value);
                                 break;
                             case "layer-interval":
-                                settings.layerInterval = Convert.ToDouble(value);
+                                settings.layerInterval = double.Parse(value);
                                 break;
                             case "round-time":
-                                settings.roundTime = Convert.ToDouble(value);
+                                settings.roundTime = double.Parse(value);
                                 break;
                             case "flood-time":
-                                settings.floodTime = Convert.ToDouble(value);
+                                settings.floodTime = double.Parse(value);
                                 break;
                             case "block-flood":
-                                settings.blockFlood = new Pos(Convert.ToUInt16(value.Split(',')[0]), Convert.ToUInt16(value.Split(',')[1]), Convert.ToUInt16(value.Split(',')[2]));
+                                settings.blockFlood = new Pos(ushort.Parse(value.Split(',')[0]), ushort.Parse(value.Split(',')[1]), ushort.Parse(value.Split(',')[2]));
                                 break;
                             case "block-layer":
-                                settings.blockLayer = new Pos(Convert.ToUInt16(value.Split(',')[0]), Convert.ToUInt16(value.Split(',')[1]), Convert.ToUInt16(value.Split(',')[2]));
+                                settings.blockLayer = new Pos(ushort.Parse(value.Split(',')[0]), ushort.Parse(value.Split(',')[1]), ushort.Parse(value.Split(',')[2]));
                                 break;
                         }
                     }
                 }
-                catch { }
+                catch (Exception e) { Server.ErrorLog(e); }
             }
+            SaveMapSettings(settings);
             return settings;
         }
         public void SaveMapSettings(MapSettings settings)
@@ -219,18 +281,10 @@ namespace MCForge
         public class MapSettings
         {
             public string name;
-            public byte fast;
-            public byte killer;
-            public byte destroy;
-            public byte water;
-            public byte layer;
-            public int layerHeight;
-            public int layerCount;
-            public double layerInterval;
-            public double roundTime;
-            public double floodTime;
-            public Pos blockFlood;
-            public Pos blockLayer;
+            public byte fast, killer, destroy, water, layer;
+            public int layerHeight, layerCount;
+            public double layerInterval, roundTime, floodTime;
+            public Pos blockFlood, blockLayer;
 
             public MapSettings(string name)
             {
@@ -250,9 +304,31 @@ namespace MCForge
             }
         }
 
-        public class MapData
+        public class MapData : IDisposable
         {
+            public bool fast, killer, destroy, water, layer;
+            public int currentLayer;
+            public Timer roundTimer, floodTimer, layerTimer;
 
+            public MapData(MapSettings settings)
+            {
+                fast = false;
+                killer = false;
+                destroy = false;
+                water = false;
+                layer = false;
+                currentLayer = 1;
+                roundTimer = new Timer(TimeSpan.FromMinutes(settings.roundTime).TotalMilliseconds); roundTimer.AutoReset = false;
+                floodTimer = new Timer(TimeSpan.FromMinutes(settings.floodTime).TotalMilliseconds); floodTimer.AutoReset = false;
+                layerTimer = new Timer(TimeSpan.FromMinutes(settings.layerInterval).TotalMilliseconds); layerTimer.AutoReset = true;
+            }
+
+            public void Dispose()
+            {
+                roundTimer.Dispose();
+                floodTimer.Dispose();
+                layerTimer.Dispose();
+            }
         }
 
         public struct Pos

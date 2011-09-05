@@ -436,7 +436,7 @@ namespace MCForge_.Gui
                 // Only save them if they exist, otherwise we fail-whale
                 if (Server.levels != null && Server.levels.Any())
                     foreach (Level l in Server.levels)
-                        if (!Server.lava.configMode && Server.lava.HasMap(l.name)) l.saveChanges();
+                        if (Server.lava.active && Server.lava.HasMap(l.name)) l.saveChanges();
                         else l.Save();
 
                 if (Player.players != null && Player.players.Any())
@@ -541,7 +541,7 @@ namespace MCForge_.Gui
                 string level = null;
                 foreach (Level l in Server.levels)
                 {
-                    if (Server.lava.configMode || !Server.lava.HasMap(l.name))
+                    if (!Server.lava.active || !Server.lava.HasMap(l.name))
                     {
                         level = level + l.name + "=" + l.physics + System.Environment.NewLine;
                         l.Save();

@@ -242,7 +242,7 @@ namespace MCForge
 
             if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving))
             {
-                if (Server.lava.configMode || !Server.lava.HasMap(name)) Save();
+                if (!Server.lava.active || !Server.lava.HasMap(name)) Save();
                 saveChanges();
             }
             try

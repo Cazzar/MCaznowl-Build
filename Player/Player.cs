@@ -1852,6 +1852,21 @@ namespace MCForge
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
 
+                // Lava Survival map vote recorder
+                if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower()))
+                {
+                    if (Server.lava.AddVote(this, text.ToLower()))
+                    {
+                        SendMessage("Your vote for &5" + text.ToLower() + Server.DefaultColor + " has been placed. Thanks!");
+                        GlobalMessageOps(name + " voted for &5" + text.ToLower() + Server.DefaultColor + ".");
+                    }
+                    else
+                    {
+                        SendMessage("&cYou already voted!");
+                        return;
+                    }
+                }
+
                 //CmdVoteKick core vote recorder
                 if (Server.voteKickInProgress && text.Length == 1)
                 {
