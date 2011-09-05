@@ -13,6 +13,10 @@ v5.2.0.0
 - Fixed the player and map lists in the GUI not updating.
 - Fixed color code exploits which crash clients.
 - Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes.
+- Fixed newly "opped" (can break adminium) players having to rejoin before they can actually break adminium.
+- Fixed dirt changing into grass when it shouldn't on physics 0.
+- Added global chat, which allows you to chat with other servers! Can be disabled in the properties.
+- Added /copy [save|load|delete|list], and you can load from a URL by appending a # to the end.
 - Added Plugin.Events.CancelEvent().
 - Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while.
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics.
@@ -34,7 +38,7 @@ v5.2.0.0
 - Made it so you can now have different prices for ranks in the Economy.
 - Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins.
 - Made changes to some events (Might break old plugins).
-- Mede it so /players now has an option to not show ranks that have no one ranked as them online, and you can see only players of a certain rank with /players [rank].
+- Made it so /players now has an option to not show ranks that have no one ranked as them online, and you can see only players of a certain rank with /players [rank].
 - Improved the tree generator, the trunk now makes more sense.
 - Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow.
 
