@@ -30,8 +30,12 @@ namespace MCForge
 
         // Public variables
         public bool active = false;
+        public bool configMode = false;
         public Level map;
         public MapSettings mapSettings;
+
+        // Settings
+
 
         // Constructors
         public LavaSurvival()
@@ -40,16 +44,22 @@ namespace MCForge
         }
 
         // Private methods
-        private string ConcatBlocks(List<BlockPos> blocks)
+        private string ConcatStrings(List<string> list, string separator)
         {
             string str = "";
             try
             {
-                foreach (BlockPos bp in blocks)
-                    str += bp.b.ToString() + "," + bp.x.ToString() + "," + bp.y.ToString() + "," + bp.z.ToString() + " ";
+                foreach (string s in list)
+                    str += separator + s;
+                str = str.Remove(0, 1);
             }
             catch { }
-            return str.Trim();
+            return str;
+        }
+
+        private decimal NumberClamp(decimal value, decimal low, decimal high)
+        {
+            return Math.Max(Math.Min(value, high), low);
         }
 
         // Public methods
@@ -64,11 +74,39 @@ namespace MCForge
 
         public void LoadSettings()
         {
+            if (!File.Exists("properties/lavasurvival.properties"))
+            {
+                SaveSettings();
+                return;
+            }
 
+            foreach (string line in File.ReadAllLines("properties/lavasurvival.properties"))
+            {
+                try
+                {
+                    if (line[0] != '#')
+                    {
+                        string value = line.Substring(line.IndexOf(" = ") + 3);
+                        switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+                        {
+                            case "maps":
+                                foreach (string mapname in value.Split(','))
+                                    if(maps.Contains(mapname)) maps.Add(mapname);
+                                break;
+                        }
+                    }
+                }
+                catch (Exception e) { Server.ErrorLog(e); }
+            }
         }
         public void SaveSettings()
         {
-
+            File.Create("properties/lavasurvival.properties").Dispose();
+            using (StreamWriter SW = File.CreateText("properties/lavasurvival.properties"))
+            {
+                SW.WriteLine("#Lava Survival main properties");
+                SW.WriteLine("maps = " + ConcatStrings(maps, ","));
+            }
         }
 
         public MapSettings LoadMapSettings(string name)
@@ -90,34 +128,46 @@ namespace MCForge
                         string value = line.Substring(line.IndexOf(" = ") + 3);
                         switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
-                            case "blocks":
-                                try
-                                {
-                                    string[] blocks = value.Split(' ');
-                                    foreach (string pos in blocks)
-                                    {
-                                        try { settings.blocks.Add(new BlockPos(Convert.ToByte(pos.Split(',')[0]), Convert.ToUInt16(pos.Split(',')[1]), Convert.ToUInt16(pos.Split(',')[2]), Convert.ToUInt16(pos.Split(',')[3]))); }
-                                        catch { }
-                                    }
-                                }
-                                catch { }
+                            case "fast-chance":
+                                settings.fast = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
                                 break;
-                            case "layerblocks":
-                                try
-                                {
-                                    string[] blocks = value.Split(' ');
-                                    foreach (string pos in blocks)
-                                    {
-                                        try { settings.layerBlocks.Add(new BlockPos(Convert.ToByte(pos.Split(',')[0]), Convert.ToUInt16(pos.Split(',')[1]), Convert.ToUInt16(pos.Split(',')[2]), Convert.ToUInt16(pos.Split(',')[3]))); }
-                                        catch { }
-                                    }
-                                }
-                                catch { }
+                            case "killer-chance":
+                                settings.killer = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                break;
+                            case "destroy-chance":
+                                settings.destroy = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                break;
+                            case "water-chance":
+                                settings.water = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                break;
+                            case "layer-chance":
+                                settings.layer = (byte)NumberClamp(Convert.ToDecimal(value), 0, 100);
+                                break;
+                            case "layer-height":
+                                settings.layerHeight = Convert.ToInt32(value);
+                                break;
+                            case "layer-count":
+                                settings.layerCount = Convert.ToInt32(value);
+                                break;
+                            case "layer-interval":
+                                settings.layerInterval = Convert.ToDouble(value);
+                                break;
+                            case "round-time":
+                                settings.roundTime = Convert.ToDouble(value);
+                                break;
+                            case "flood-time":
+                                settings.floodTime = Convert.ToDouble(value);
+                                break;
+                            case "block-flood":
+                                settings.blockFlood = new Pos(Convert.ToUInt16(value.Split(',')[0]), Convert.ToUInt16(value.Split(',')[1]), Convert.ToUInt16(value.Split(',')[2]));
+                                break;
+                            case "block-layer":
+                                settings.blockLayer = new Pos(Convert.ToUInt16(value.Split(',')[0]), Convert.ToUInt16(value.Split(',')[1]), Convert.ToUInt16(value.Split(',')[2]));
                                 break;
                         }
                     }
                 }
-                catch (Exception e) { Server.ErrorLog(e); }
+                catch { }
             }
             return settings;
         }
@@ -129,18 +179,36 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText(propsPath + settings.name + ".properties"))
             {
                 SW.WriteLine("#Lava Survival properties for " + settings.name);
-                SW.WriteLine("Blocks = " + ConcatBlocks(settings.blocks));
-                SW.WriteLine("LayerBlocks = " + ConcatBlocks(settings.layerBlocks));
+                SW.WriteLine("fast-chance = " + settings.fast);
+                SW.WriteLine("killer-chance = " + settings.killer);
+                SW.WriteLine("destroy-chance = " + settings.destroy);
+                SW.WriteLine("water-chance = " + settings.water);
+                SW.WriteLine("layer-chance = " + settings.layer);
+                SW.WriteLine("layer-height = " + settings.layerHeight);
+                SW.WriteLine("layer-count = " + settings.layerCount);
+                SW.WriteLine("layer-interval = " + settings.layerInterval);
+                SW.WriteLine("round-time = " + settings.roundTime);
+                SW.WriteLine("flood-time = " + settings.floodTime);
+                SW.WriteLine("block-flood = " + settings.blockFlood.x + "," + settings.blockFlood.y + "," + settings.blockFlood.z);
+                SW.WriteLine("block-layer = " + settings.blockLayer.x + "," + settings.blockLayer.y + "," + settings.blockLayer.z);
             }
         }
 
         public void AddMap(string name)
         {
-            if (!maps.Contains(name.ToLower())) maps.Add(name.ToLower());
+            if (!maps.Contains(name.ToLower()))
+            {
+                maps.Add(name.ToLower());
+                SaveSettings();
+            }
         }
         public void RemoveMap(string name)
         {
-            if (maps.Contains(name.ToLower())) maps.Remove(name.ToLower());
+            if (maps.Contains(name.ToLower()))
+            {
+                maps.Remove(name.ToLower());
+                SaveSettings();
+            }
         }
         public bool HasMap(string name)
         {
@@ -151,25 +219,48 @@ namespace MCForge
         public class MapSettings
         {
             public string name;
-            public List<BlockPos> blocks;
-            public List<BlockPos> layerBlocks;
+            public byte fast;
+            public byte killer;
+            public byte destroy;
+            public byte water;
+            public byte layer;
+            public int layerHeight;
+            public int layerCount;
+            public double layerInterval;
+            public double roundTime;
+            public double floodTime;
+            public Pos blockFlood;
+            public Pos blockLayer;
 
             public MapSettings(string name)
             {
                 this.name = name;
-                blocks = new List<BlockPos>();
-                layerBlocks = new List<BlockPos>();
+                fast = 0;
+                killer = 0;
+                destroy = 0;
+                water = 0;
+                layer = 0;
+                layerHeight = 3;
+                layerCount = 10;
+                layerInterval = 2;
+                roundTime = 30;
+                floodTime = 10;
+                blockFlood = new Pos(0, 0, 0);
+                blockLayer = new Pos(0, 0, 0);
             }
         }
 
-        public struct BlockPos
+        public class MapData
         {
-            public byte b;
+
+        }
+
+        public struct Pos
+        {
             public ushort x, y, z;
 
-            public BlockPos(byte b, ushort x, ushort y, ushort z)
+            public Pos(ushort x, ushort y, ushort z)
             {
-                this.b = b;
                 this.x = x;
                 this.y = y;
                 this.z = z;
