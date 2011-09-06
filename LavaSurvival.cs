@@ -62,7 +62,7 @@ namespace MCForge
             {
                 foreach (string s in list)
                     str += separator + s;
-                str = str.Remove(0, 1);
+                str = str.Remove(0, separator.Length);
             }
             catch { }
             return str;
@@ -73,31 +73,82 @@ namespace MCForge
             return Math.Max(Math.Min(value, high), low);
         }
 
-        // Event Handlers
-        private void HandleVoteEnd()
-        {
-
-        }
-
         // Public methods
-        public bool Start()
+        public byte Start()
         {
-            if (active) return false;
-            if (maps.Count < 1) return false;
+            if (active) return 1;
+            if (maps.Count < 1) return 2;
 
-            return true;
+            return 0;
         }
-        public bool Stop()
+        public byte Stop()
         {
-            if (!active) return false;
+            if (!active) return 1;
 
-            return true;
+            return 0;
         }
 
         public void LoadMap(string name)
         {
             if (!HasMap(name)) return;
             if (map != null) map.Unload();
+        }
+
+        public void StartVote()
+        {
+            if (maps.Count < 2) return;
+
+            byte i = 0;
+            string opt, str = "";
+            Random rand = new Random();
+            while (i < Math.Min(voteCount, maps.Count))
+            {
+                opt = maps[rand.Next(maps.Count)];
+                if (!votes.ContainsKey(opt))
+                {
+                    votes.Add(opt, 0);
+                    i++;
+                }
+            }
+
+            foreach (KeyValuePair<string, int> kvp in votes)
+                str += Server.DefaultColor + ", &5" + Extensions.Capitalize(kvp.Key);
+
+            voteActive = true;
+            map.ChatLevel("Vote for the next map! The vote ends in " + voteTime + " minutes.");
+            map.ChatLevel("Choices: " + str.Remove(0, 4));
+        }
+
+        public void EndVote()
+        {
+            voteActive = false;
+            KeyValuePair<string, int> most = new KeyValuePair<string, int>();
+            foreach (KeyValuePair<string, int> kvp in votes)
+            {
+                if (kvp.Value > most.Value) most = kvp;
+                map.ChatLevelOps("&5" + Extensions.Capitalize(kvp.Key) + "&f: &a" + kvp.Value);
+            }
+
+            map.ChatLevel("Vote ended! &5" + Extensions.Capitalize(most.Key) + Server.DefaultColor + " won with &a" + most.Value + Server.DefaultColor + " votes.");
+            map.ChatLevel("You will be transferred in 5 seconds...");
+            Timer timer = new Timer(5000);
+            timer.AutoReset = false;
+            timer.Elapsed += new ElapsedEventHandler(delegate
+            {
+                Command.all.Find("load").Use(null, most.Key);
+                Player.players.ForEach(delegate(Player pl)
+                {
+                    if (HasPlayer(pl))
+                    {
+                        if (Server.afkset.Contains(pl.name)) Command.all.Find("main").Use(pl, "");
+                        else Command.all.Find("goto").Use(pl, most.Key);
+                    }
+                });
+                Command.all.Find("unload").Use(null, map.name);
+                map = Level.Find(most.Key);
+                timer.Dispose();
+            });
+            timer.Start();
         }
 
         public bool AddVote(Player p, string vote)
@@ -141,7 +192,7 @@ namespace MCForge
                                 startOnStartup = bool.Parse(value);
                                 break;
                             case "vote-count":
-                                voteCount = (byte)NumberClamp(decimal.Parse(value), 0, 10);
+                                voteCount = (byte)NumberClamp(decimal.Parse(value), 2, 10);
                                 break;
                             case "vote-time":
                                 voteTime = int.Parse(value);

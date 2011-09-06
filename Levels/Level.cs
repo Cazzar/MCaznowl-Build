@@ -986,6 +986,22 @@ namespace MCForge
             }
         }
 
+        public void ChatLevelOps(string message)
+        {
+            foreach (Player pl in Player.players)
+            {
+                if (pl.level == this && (pl.group.Permission >= Server.opchatperm || Server.devs.Contains(pl.name.ToLower()))) pl.SendMessage(message);
+            }
+        }
+
+        public void ChatLevelAdmins(string message)
+        {
+            foreach (Player pl in Player.players)
+            {
+                if (pl.level == this && (pl.group.Permission >= Server.adminchatperm || Server.devs.Contains(pl.name.ToLower()))) pl.SendMessage(message);
+            }
+        }
+
         public void setPhysics(int newValue)
         {
             if (physics == 0 && newValue != 0)
