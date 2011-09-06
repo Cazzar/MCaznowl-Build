@@ -69,7 +69,7 @@ namespace MCForge
             portalPos.port = new List<portPos>();
 
             p.blockchangeObject = portalPos;
-            Player.SendMessage(p, "Place a the &aEntry block" + Server.DefaultColor + " for the portal"); p.ClearBlockchange();
+            Player.SendMessage(p, "Place an &aEntry block" + Server.DefaultColor + " for the portal"); p.ClearBlockchange();
             p.Blockchange += new Player.BlockchangeEventHandler(EntryChange);
         }
         public override void Help(Player p)

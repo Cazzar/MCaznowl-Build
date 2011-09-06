@@ -96,8 +96,8 @@ namespace MCForge
                             Player.SendMessage(p, "&cBlock will appear as a \"" + Block.Name(Block.Convert(b)) + "\" block");
 
                             if (Block.LightPass(b)) Player.SendMessage(p, "Block will allow light through");
-                            if (Block.Physics(b)) Player.SendMessage(p, "Block effects physics in some way");
-                            else Player.SendMessage(p, "Block will not effect physics in any way");
+                            if (Block.Physics(b)) Player.SendMessage(p, "Block affects physics in some way"); //AFFECT!
+                            else Player.SendMessage(p, "Block will not affect physics in any way"); //It's AFFECT!
                             if (Block.NeedRestart(b)) Player.SendMessage(p, "The block's physics will auto-start");
 
                             if (Block.OPBlocks(b)) Player.SendMessage(p, "Block is unaffected by explosions");

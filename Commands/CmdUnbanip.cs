@@ -25,8 +25,9 @@ namespace MCForge
 {
     public class CmdUnbanip : Command
     {
-        Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
-                                "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
+        //Regex never used, and they always take a while to compile.
+        //Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
+        //                        "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
         public override string name { get { return "unbanip"; } }
         public override string shortcut { get { return ""; } }
         public override string type { get { return "mod"; } }

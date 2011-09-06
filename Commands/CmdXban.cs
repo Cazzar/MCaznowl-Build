@@ -17,71 +17,63 @@
 */
 using System;
 
-namespace MCForge
-{
-   public class CmdXban : Command
-   {
-      
-      public override string name { get { return "xban"; } }
+namespace MCForge {
+    public class CmdXban : Command {
 
-      public override string shortcut { get { return ""; } }
+        public override string name { get { return "xban"; } }
 
-      public override string type { get { return "other"; } }
-   
-      public override bool museumUsable { get { return false; } }
+        public override string shortcut { get { return ""; } }
 
-      public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override string type { get { return "other"; } }
 
-public CmdXban() { }      
-public override void Use(Player p, string message)
-               
-      {
+        public override bool museumUsable { get { return false; } }
 
-                      if (message == "") { Help(p); return; }
+        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
-                      Player who = Player.Find(message.Split(' ')[0]);
-                      string msg = message.Split(' ')[0];
-                      if (Server.devs.Contains(message.ToLower()))
-                      {
-                          Player.SendMessage(p, "You can't ban a MCForge Developer!");
-                          if (p != null)
-                          {
-                              Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
-                          }
-                          else
-                          {
-                              Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
-                          }
-                          return;
-                      }
-                      if (who != null) {
+        public CmdXban() { }
+        public override void Use(Player p, string message) {
 
-                     Command.all.Find("undo").Use(p, msg + " all");
-                     Command.all.Find("ban").Use(p, msg); 
-                     Command.all.Find("banip").Use(p, "@"+msg); 
-                     Command.all.Find("kick").Use(p,message);
-                     Command.all.Find("undo").Use(p,msg+" all");
+            if (message == "") { Help(p); return; }
 
-                                       }
+            Player who = Player.Find(message.Split(' ')[0]);
+            string msg = message.Split(' ')[0];
+            if (Server.devs.Contains(message.ToLower())) {
+                Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                if (p != null) {
+                    Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
+                } else {
+                    Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
+                }
+                return;
+            }
+            if (p != null) {
+                p.ignorePermission = true;
+            }
+            try {
+            if (who != null) {
+                Command.all.Find("ban").Use(p, msg);
+                Command.all.Find("banip").Use(p, "@" + msg);
+                Command.all.Find("kick").Use(p, message);
+                Command.all.Find("xundo").Use(p, msg);
 
-                      else {
+            } else {
+                Command.all.Find("ban").Use(p, msg);
+                Command.all.Find("banip").Use(p, "@" + msg);
+                Command.all.Find("xundo").Use(p, msg);
 
-                           Command.all.Find("undo").Use(p, msg + " all");
-                           Command.all.Find("ban").Use(p,msg);                           
-                           Command.all.Find("banip").Use(p, "@"+msg);
-                           
-                            }
-                     
-                     
-                                         
-                     
-                         
-      }
+            }
 
-      
-      public override void Help(Player p)
-      {
-         Player.SendMessage(p, "/xban [name] [message]- Bans, undoes, and kicks [name] with [message], if specified.");
-      }
-   }
+            } finally {
+                p.ignorePermission = false;
+            }
+
+
+
+        }
+
+
+        public override void Help(Player p) {
+            Player.SendMessage(p, "/xban [name] [message]- Bans, undoes, and kicks [name] with [message], if specified.");
+        }
+    }
 }

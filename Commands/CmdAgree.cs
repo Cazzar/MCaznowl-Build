@@ -68,20 +68,22 @@ namespace MCForge
                 Player.SendMessage(p, "&9You must read /rules before agreeing!");
                 return;
             }
-            if (agreed.Contains(p.name.ToLower()))
+            if ((agreed+" ").Contains(" " + p.name.ToLower() + " ")) //Edited to prevent inner names from working.
             {
                 Player.SendMessage(p, "You have already agreed to the rules!");
                 return;
             }
             p.jailed = false;
-            Player.SendMessage(p, "Thankyou, for agreeing to follow the rules. You may now build and use commands!");
+            Player.SendMessage(p, "Thank you for agreeing to follow the rules. You may now build and use commands!");
             string playerspath = "ranks/agreed.txt";
             if (File.Exists(playerspath))
-            {
-                File.AppendAllText(playerspath, p.name.ToLower());
+            { 
+                //We don't want player "test" to have already agreed if "nate" and "stew" agrred.
+                // the preveious one, though, would put "natesteve" which also allows test
+                //There is a better way, namely regular expressions, but I'll worry about that later.
+                File.AppendAllText(playerspath, " " + p.name.ToLower());  //Ensures every name is seperated by a space.
             }
         
-
         }
 
         public override void Help(Player p)

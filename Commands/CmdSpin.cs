@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message.Split(' ').Length > 1) { Help(p); return; }
-            if (message == "") message = "90";
+            if (message == "") message = "y";
 
             List<Player.CopyPos> newBuffer = new List<Player.CopyPos>();
             int TotalLoop = 0; ushort temp;
@@ -40,7 +40,7 @@ namespace MCForge
 
             switch (message)
             {
-                case "90":
+                case "y":
                     p.CopyBuffer.ForEach(delegate(Player.CopyPos Pos)
                     {
                         temp = Pos.z; Pos.z = Pos.x; Pos.x = temp;
@@ -118,8 +118,8 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/spin <90/180/mirror/upsidedown> - Spins the copied object.");
-            Player.SendMessage(p, "Shotcuts: m for mirror, u for upside down, x for spin 90 on x, z for spin 90 on z.");
+            Player.SendMessage(p, "/spin <y/180/mirror/upsidedown> - Spins the copied object.");
+            Player.SendMessage(p, "Shotcuts: m for mirror, u for upside down, x for spin 90 on x, y for spin 90 on y, z for spin 90 on z.");
         }
     }
 }

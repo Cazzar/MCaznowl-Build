@@ -46,13 +46,13 @@ namespace MCForge
                 p.muteGlobal = p.ignoreglobal;
                 if (p.ignoreglobal) Player.globalignores.Add(p.name);
                 else Player.globalignores.Remove(p.name);
-                Player.SendMessage(p, p.ignoreglobal ? "&cAll chat is now being ignored!" : "&aAll chat is no longer being ignored!");
+                Player.SendMessage(p, p.ignoreglobal ? "&cAll chat is now ignored!" : "&aAll chat is no longer ignored!");
                 return;
             }
             if (message.Split(' ')[0] == "global")
             {
                 p.muteGlobal = !p.muteGlobal;
-                Player.SendMessage(p, p.muteGlobal ? "&cGlobal Chat is now being ignored!" : "&aGlobal Chat is no longer being ignored!");
+                Player.SendMessage(p, p.muteGlobal ? "&cGlobal Chat is now ignored!" : "&aGlobal Chat is no longer ignored!");
                 return;
             }
             if (message.Split(' ')[0] == "list")
@@ -96,14 +96,7 @@ namespace MCForge
                 File.Create("ranks/ignore/" + p.name + ".txt").Dispose();
             }
             string chosenpath = "ranks/ignore/" + p.name + ".txt";
-            if (!File.Exists(chosenpath))
-            {
-                p.listignored.Add(who.name);
-                Player.SendMessage(p, "Player now ignored: &c" + who.name + "!");
-                return;
-            }
-            
-            if (!p.listignored.Contains(who.name))
+            if (!File.Exists(chosenpath) || !p.listignored.Contains(who.name))
             {
                 p.listignored.Add(who.name);
                 Player.SendMessage(p, "Player now ignored: &c" + who.name + "!");

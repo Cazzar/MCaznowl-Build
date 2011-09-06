@@ -58,7 +58,7 @@ namespace MCForge
             else
             {
                 if (!Awards.removeAward(message))
-                    Player.SendMessage(p, "This award doesn't exists!");
+                    Player.SendMessage(p, "This award doesn't exist!"); //corrected spelling error
                 else
                     Player.GlobalChat(p, "Award removed: &6" + message, false);
             }

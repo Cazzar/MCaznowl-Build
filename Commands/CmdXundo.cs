@@ -53,18 +53,18 @@ namespace MCForge
                 {
                     if (who.group.Permission != LevelPermission.Operator)
                     {
-                        p.group.Permission = LevelPermission.Admin;
+                        p.ignorePermission = true;
                         Command.all.Find("undo").Use(p, who.name + " all");
-                        p.group.Permission = LevelPermission.Operator;
+                        p.ignorePermission = false;
                         return;
                     }
                     Player.SendMessage(p, error2);
                 }
                 else
                 {
-                    p.group.Permission = LevelPermission.Admin;
-                    Command.all.Find("undo").Use(p, message + " all");
-                    p.group.Permission = LevelPermission.Operator;
+                    p.ignorePermission = true;
+                    Command.all.Find("undo").Use(p, who.name + " all");
+                    p.ignorePermission = false;
                     return;
                 }
             }
@@ -76,7 +76,6 @@ namespace MCForge
                 return;
             }
             Player.SendMessage(p, error1);
-
         }
 
 

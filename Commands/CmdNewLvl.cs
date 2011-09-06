@@ -114,7 +114,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/newlvl - creates a new level.");
             Player.SendMessage(p, "/newlvl mapname 128 64 128 type seed");
-            Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024");
+            Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024"); //Update this to add more?
             Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
             Player.SendMessage(p, "The seed is optional, and controls how the level is generated.");
             Player.SendMessage(p, "If the seed is the same, the level will be the same.");
@@ -125,10 +125,10 @@ namespace MCForge
         {
             switch (value)
             {
-                case 2:
-                case 4:
-                case 8:
-                case 16:
+                //case 2:
+                //case 4:
+                //case 8:
+                case 16: // below this is currently invalid.
                 case 32:
                 case 64:
                 case 128:

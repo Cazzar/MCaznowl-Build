@@ -77,7 +77,7 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/clones <name> - Finds everyone with the same IP has <name>");
+            Player.SendMessage(p, "/clones <name> - Finds everyone with the same IP as <name>"); //Fixed typo
         }
     }
 }
