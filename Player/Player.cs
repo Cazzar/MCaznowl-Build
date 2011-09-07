@@ -3394,12 +3394,11 @@ namespace MCForge
 
             try
             {
-                if (connections.Contains(this))
-                    connections.Remove(this);
-
                 if (disconnected)
                 {
                     this.CloseSocket();
+                    if (connections.Contains(this))
+                        connections.Remove(this);
                     return;
                 }
                 //   FlyBuffer.Clear();
