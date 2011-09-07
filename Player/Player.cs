@@ -1239,7 +1239,7 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
-                    if (b == Block.griefer_stone) { Kick("Oh noes! You were caught griefing!"); return; }
+                    if (b == Block.griefer_stone) { Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!"); return; }
                 }
 
                 bP.deleted = true;

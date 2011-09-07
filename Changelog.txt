@@ -26,8 +26,9 @@ v5.2.0.0
 	- /global or /gc - Send a message to global chat.
 	- /garbage - Runs the .NET garbage collector, which frees up memory. You shouldn't need to use this often.
 - Added blocks:
-	- griefer_stone - Kicks you when broken! Use sparingly... or all the time.
-	- op_lava - Self expanatory.
+	- griefer_stone - Kicks you when broken! Use sparingly... or all the time. Defaults to Op+ to place.
+	- lava_sponge - Like normal sponge, but cleans up lava instead of water. Defaults to AdvBuilder+ to place/destroy.
+	- op_lava - Self explanatory.
 - Removed the duplicate "death count" option.
 - Moved Zombie Survival options into the "Games" tab.
 - Made it so in the CLI, you must now use a / before commands. No more chat messages being parsed as commands!

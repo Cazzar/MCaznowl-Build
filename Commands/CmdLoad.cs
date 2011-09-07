@@ -49,6 +49,8 @@ namespace MCForge
                     message = message.ToLower();
                 }
 
+                while (Server.levels == null) Thread.Sleep(100); // Do nothing while we wait on the levels list...
+
                 foreach (Level l in Server.levels)
                 {
                     if (l.name == message) { Player.SendMessage(p, message + " is already loaded!"); return; }

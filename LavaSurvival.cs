@@ -156,18 +156,24 @@ namespace MCForge
             try
             {
                 announceTimer.Stop();
+                map.ChatLevel("&4Uh oh, here comes the flood!");
                 if (mapData.layer)
                 {
                     mapData.layerTimer.Elapsed += new ElapsedEventHandler(delegate
                     {
-
+                        if (mapData.currentLayer <= mapSettings.layerCount)
+                        {
+                            map.ChatLevel("&4Layer " + mapData.currentLayer + " flooding...");
+                            map.SetTile((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z, mapData.block);
+                            mapData.currentLayer++;
+                        }
+                        else
+                            mapData.layerTimer.Stop();
                     });
                     mapData.layerTimer.Start();
                 }
                 else
-                {
-
-                }
+                    map.SetTile((ushort)mapSettings.blockLayer.x, (ushort)mapSettings.blockLayer.y, (ushort)mapSettings.blockLayer.z, mapData.block);
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }

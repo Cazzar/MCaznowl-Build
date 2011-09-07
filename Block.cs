@@ -94,6 +94,7 @@ namespace MCForge
         public const byte op_lava = (byte)107;
 
         public const byte griefer_stone = (byte)108;
+        public const byte lava_sponge = (byte)109;
 
         public const byte wood_float = (byte)110;
         public const byte door = (byte)111;
@@ -325,6 +326,8 @@ namespace MCForge
                     case op_lava:
                     case blackrock:
 
+                    case griefer_stone:
+
                     case air_flood:
                     case air_flood_down:
                     case air_flood_layer:
@@ -358,6 +361,7 @@ namespace MCForge
                         break;
 
                     case wood_float:
+                    case lava_sponge:
 
                     case door_air:
                     case door2_air:
@@ -1173,6 +1177,7 @@ namespace MCForge
                 case 107: return "op_lava";
 
                 case 108: return "griefer_stone";
+                case 109: return "lava_sponge";
 
                 case wood_float: return "wood_float";            //TODO
                 case door: return "door_wood";
@@ -1408,6 +1413,7 @@ namespace MCForge
                 case "op_lava": return 107;
 
                 case "griefer_stone": return 108;
+                case "lava_sponge": return 109;
 
                 case "wood_float": return 110;            //TODO
                 case "lava_fast": return 112;
@@ -1625,6 +1631,7 @@ namespace MCForge
                 case 107: return Block.lavastill; //Op_lava
 
                 case 108: return (byte)1; //Griefer_stone
+                case 109: return (byte)19; //Lava_sponge
 
                 case 110: return (byte)5; //wood_float
                 case 112: return (byte)10;
