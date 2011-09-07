@@ -276,7 +276,7 @@ namespace MCForge
 						SW.WriteLine("RankName = " + grp.trueName);
 						SW.WriteLine("Permission = " + (int)grp.Permission);
 						SW.WriteLine("Limit = " + grp.maxBlocks);
-                        SW.WriteLine("MaxUndo = " + grp.maxUndo);
+			            SW.WriteLine("MaxUndo = " + grp.maxUndo);
 						SW.WriteLine("Color = " + grp.color[1]);
 						SW.WriteLine("FileName = " + grp.fileName);
 						SW.WriteLine();
