@@ -255,20 +255,32 @@ namespace MCForge {
 
         public override void Help(Player p) {
             Player.SendMessage(p, "/undo [player] [seconds] - Undoes the blockchanges made by [player] in the previous [seconds].");
-            Player.SendMessage(p, "/undo [player] all - &cWill undo 138 hours 53 minutes and 20 seconds for [player] <"+ undoAllRank +"+>");
-            Player.SendMessage(p, "/undo [player] 0 - &cWill undo 30 minutes <" + undo30Rank + "+>");
+            string rank = undoAllRank;
+            if (rank != null)
+                Player.SendMessage(p, "/undo [player] all - &cWill undo 138 hours 53 minutes and 20 seconds for [player] <" + rank + "+>");
+            rank = undo30Rank;
+            if (rank != null)
+                Player.SendMessage(p, "/undo [player] 0 - &cWill undo 30 minutes <" + rank + "+>");
             Player.SendMessage(p, "/undo physics [seconds] - Undoes the physics for the current map");
         }
 
         public string undoAllRank {
             get {
-                return getLowestAbove(500000).name;
+                try {
+                    return getLowestAbove(500000).name;
+                } catch { // ensures that errors don't happen if the group is null.
+                    return null;
+                }
             }
         }
 
         public string undo30Rank {
             get {
-                return getLowestAbove(1800).name;
+                try {
+                    return getLowestAbove(1800).name;
+                } catch { // ensures that errors don't happen if the group is null.
+                    return null;
+                }
             }
         }
 
