@@ -185,7 +185,7 @@ namespace MCForge {
 
         private long getAllowed(Player p, string param) {
             //We get the custom permission from the properties file.
-            
+
             /* if (p.group.Permission < LevelPermission.Builder && seconds > 120) {
              *     Player.SendMessage(p, "Guests may only undo 2 minutes.");
              *     return;
@@ -255,46 +255,11 @@ namespace MCForge {
 
         public override void Help(Player p) {
             Player.SendMessage(p, "/undo [player] [seconds] - Undoes the blockchanges made by [player] in the previous [seconds].");
-            string rank = undoAllRank;
-            if (rank != null)
-                Player.SendMessage(p, "/undo [player] all - &cWill undo 138 hours 53 minutes and 20 seconds for [player] <" + rank + "+>");
-            rank = undo30Rank;
-            if (rank != null)
-                Player.SendMessage(p, "/undo [player] 0 - &cWill undo 30 minutes <" + rank + "+>");
+            if (p == null || (p.group.maxUndo <= 500000 || p.group.maxUndo == 0))
+                Player.SendMessage(p, "/undo [player] all - &cWill undo 138 hrs, 53 mins, and 20 secs for [player]");
+            if (p == null || (p.group.maxUndo <= 1800 || p.group.maxUndo == 0))
+                Player.SendMessage(p, "/undo [player] 0 - &cWill undo 30 minutes");
             Player.SendMessage(p, "/undo physics [seconds] - Undoes the physics for the current map");
-        }
-
-        public string undoAllRank {
-            get {
-                try {
-                    return getLowestAbove(500000).name;
-                } catch { // ensures that errors don't happen if the group is null.
-                    return null;
-                }
-            }
-        }
-
-        public string undo30Rank {
-            get {
-                try {
-                    return getLowestAbove(1800).name;
-                } catch { // ensures that errors don't happen if the group is null.
-                    return null;
-                }
-            }
-        }
-
-        private Group getLowestAbove(long amt)
-        {
-            Group lowest = null;
-            foreach (Group g in Group.GroupList) {
-                if (g.maxUndo == 0 || g.maxUndo >= amt) {
-                    if (lowest == null || lowest.Permission > g.Permission) {
-                        lowest = g;
-                    }
-                }
-            }
-            return lowest;
         }
     }
 }
