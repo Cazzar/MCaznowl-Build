@@ -201,7 +201,7 @@ namespace MCForge {
              */
             long secs;
             if (param == "all")
-                secs = 500000;
+                secs = (p == null) ? long.MaxValue : p.group.maxUndo;
             else
                 secs = long.Parse(param); //caught by try/catch in outer method
 
