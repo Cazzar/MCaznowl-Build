@@ -497,7 +497,6 @@ namespace MCForge
         #region == INCOMING ==
         static void Receive(IAsyncResult result)
         {
-            throw new Exception();
             //    Server.s.Log(result.AsyncState.ToString());
             Player p = (Player)result.AsyncState;
             if (p.disconnected || p.socket == null)
