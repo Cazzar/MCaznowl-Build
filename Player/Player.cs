@@ -497,6 +497,7 @@ namespace MCForge
         #region == INCOMING ==
         static void Receive(IAsyncResult result)
         {
+            throw new Exception();
             //    Server.s.Log(result.AsyncState.ToString());
             Player p = (Player)result.AsyncState;
             if (p.disconnected || p.socket == null)
@@ -1239,6 +1240,7 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
+                    if (b == Block.griefer_stone) { Kick("Oh noes! You were caught griefing!"); return; }
                 }
 
                 bP.deleted = true;

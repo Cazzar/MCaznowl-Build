@@ -844,7 +844,10 @@ processThread.Start();
                 catch { }
                 Log("Finished setting up server");
             });
-            if (startZombieModeOnStartup)
+
+            if (Server.lava.startOnStartup)
+                Server.lava.Start();
+            else if (startZombieModeOnStartup)
                 Command.all.Find("zombiegame").Use(null, "");
         }
         

@@ -3424,6 +3424,7 @@ namespace MCForge
         private void PhysLava(int b, byte type)
         {
             if (b == -1) { return; }
+            if (physics > 1 && physics != 5 && blocks[b] >= 21 && blocks[b] <= 36) { AddUpdate(b, 0); return; } // Adv physics destroys cloth
             switch (blocks[b])
             {
                 case 0:
@@ -3472,7 +3473,7 @@ namespace MCForge
         private void PhysAir(int b)
         {
             if (b == -1) { return; }
-            if (Block.Convert(blocks[b]) == Block.water || Block.Convert(blocks[b]) == Block.lava) { AddCheck(b); return; }
+            if (Block.Convert(blocks[b]) == Block.water || Block.Convert(blocks[b]) == Block.lava || (blocks[b] >= 21 && blocks[b] <= 36)) { AddCheck(b); return; }
 
             switch (blocks[b])
             {
@@ -3482,22 +3483,6 @@ namespace MCForge
                 case 12:    //sand
                 case 13:    //gravel
                 case 18:    //leaf
-                case 21:    //cloth 21-36
-                case 22:
-                case 23:
-                case 24:
-                case 25:
-                case 26:
-                case 27:
-                case 28:
-                case 29:
-                case 30:
-                case 31:
-                case 32:
-                case 33:
-                case 34:
-                case 35:
-                case 36:
                 case 110:   //wood_float
                     /*case 112:   //lava_fast
                     case Block.WaterDown:
