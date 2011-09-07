@@ -59,7 +59,6 @@ namespace MCForge {
             //if (message.Split(' ').Length == 1) if (char.IsDigit(message, 0)) { message = p.name + " " + message; } else { message = message + " 30"; }
 
             //try { seconds = Convert.ToInt16(message.Split(' ')[1]); } catch { seconds = 2; }
-            if (seconds < 0) return; //User already given message
 
             //At this point, we know the number is valid, and allowed for the particxular person's group.
             if (who != null) {
@@ -208,9 +207,9 @@ namespace MCForge {
 
             if (secs == 0) secs = 5400;
 
-            if (p.group.maxUndo != 0 && secs > p.group.maxUndo) {
-                Player.SendMessage(p, p.group.name + "s may only undo " + p.group.maxUndo + " seconds.");
-                return -1;
+            if (p != null && p.group.maxUndo != 0 && secs > p.group.maxUndo) {
+                Player.SendMessage(p, p.group.name + "s may only undo up to " + p.group.maxUndo + " seconds.");
+                return p.group.maxUndo;
             }
             return secs;
         }

@@ -17,10 +17,8 @@
 */
 using System;
 
-namespace MCForge
-{
-    public class CmdXundo : Command
-    {
+namespace MCForge {
+    public class CmdXundo : Command {
 
         public override string name { get { return "xundo"; } }
 
@@ -33,56 +31,28 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
         public CmdXundo() { }
-        public override void Use(Player p, string message)
-        {
+        public override void Use(Player p, string message) {
 
             if (message == "") { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number != 1) { Help(p); return; }
-         
+
             Player who = Player.Find(message);
 
+            string error = "You are not allowed to undo this player";
 
-            string error1 = "You are not allowed to use this command";
-            string error2 = "You are not allowed to undo this player";
-
-           
-            if (p.group.Permission == LevelPermission.Operator)
-            {
-                if (who != null)
-                {
-                    if (who.group.Permission != LevelPermission.Operator)
-                    {
-                        p.ignorePermission = true;
-                        Command.all.Find("undo").Use(p, who.name + " all");
-                        p.ignorePermission = false;
-                        return;
-                    }
-                    Player.SendMessage(p, error2);
-                }
-                else
-                {
-                    p.ignorePermission = true;
-                    Command.all.Find("undo").Use(p, who.name + " all");
-                    p.ignorePermission = false;
-                    return;
-                }
-            }
-
-
-            if (p.group.Permission > LevelPermission.Operator)
-            {
-                Command.all.Find("undo").Use(p, message + " all");
+            if (who == null || !(who.group.Permission >= LevelPermission.Operator && p.group.Permission < LevelPermission.Operator)) {
+                //This executes if who doesn't exist, if who is lower than Operator, or if the user is an op+.
+                //It also executes on any combination of the three
+                Command.all.Find("undo").Use(p, ((who == null) ? message : who.name) + " all"); //Who null check
                 return;
             }
-            Player.SendMessage(p, error1);
+            Player.SendMessage(p, error);
         }
 
 
-
-        public override void Help(Player p)
-        {
-            Player.SendMessage(p, "/xundo [name]  -  works as 'undo [name] all' but now Ops can use it");
+        public override void Help(Player p) {
+            Player.SendMessage(p, "/xundo [name]  -  works as 'undo [name] all' but now anyone can use it (up to their undo limit)");
         }
     }
 }
