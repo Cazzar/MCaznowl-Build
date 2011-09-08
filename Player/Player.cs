@@ -1858,8 +1858,9 @@ namespace MCForge
                 {
                     if (Server.lava.AddVote(this, text.ToLower()))
                     {
-                        SendMessage("Your vote for &5" + text.ToLower() + Server.DefaultColor + " has been placed. Thanks!");
-                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower() + Server.DefaultColor + ".");
+                        SendMessage("Your vote for &5" + text.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower().Capitalize() + Server.DefaultColor + ".");
+                        return;
                     }
                     else
                     {

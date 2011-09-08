@@ -79,5 +79,16 @@ namespace MCForge
         {
             return str.Substring(0, 1).ToUpper() + str.Remove(0, 1);
         }
+        public static string Concatenate<T>(this List<T> list, string separator)
+        {
+            string str = "";
+            if (list.Count > 0)
+            {
+                foreach (T obj in list)
+                    str += separator + obj.ToString();
+                str = str.Remove(0, separator.Length);
+            }
+            return str;
+        }
     }
 }

@@ -233,6 +233,7 @@ namespace MCForge
         {
             if (Server.mainLevel == this) return false;
             if (this.name.Contains("&cMuseum ")) return false;
+            if (Server.lava.active && Server.lava.map == this) return false;
             if (LevelUnload != null)
                 LevelUnload(this);
             Player.players.ForEach(delegate(Player pl)

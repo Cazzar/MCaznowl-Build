@@ -29,7 +29,7 @@ namespace MCForge
         private List<string> maps, voted;
         private Dictionary<string, int> votes;
         private Random rand = new Random();
-        private Timer announceTimer;
+        private Timer announceTimer, voteTimer, transferTimer;
         private DateTime startTime;
 
         // Public variables
@@ -66,19 +66,6 @@ namespace MCForge
         }
 
         // Private methods
-        private string ConcatStrings(List<string> list, string separator)
-        {
-            string str = "";
-            try
-            {
-                foreach (string s in list)
-                    str += separator + s;
-                str = str.Remove(0, separator.Length);
-            }
-            catch { }
-            return str;
-        }
-
         private decimal NumberClamp(decimal value, decimal low, decimal high)
         {
             return Math.Max(Math.Min(value, high), low);
@@ -96,7 +83,7 @@ namespace MCForge
         public byte Start(string mapName = "")
         {
             if (active) return 1; // Already started
-            if (maps.Count < 1) return 2; // No maps
+            if (maps.Count < 3) return 2; // Not enough maps
             if (!String.IsNullOrEmpty(mapName) && !HasMap(mapName)) return 3; // Map doesn't exist
 
             active = true;
@@ -114,6 +101,11 @@ namespace MCForge
             if (announceTimer.Enabled) announceTimer.Stop();
             try { mapData.Dispose(); }
             catch (Exception e) { Server.ErrorLog(e); }
+            try { voteTimer.Dispose(); }
+            catch (Exception e) { Server.ErrorLog(e); }
+            try { transferTimer.Dispose(); }
+            catch (Exception e) { Server.ErrorLog(e); }
+            LevelCommand("unload");
             return 0;
         }
 
@@ -127,8 +119,8 @@ namespace MCForge
                 mapData.floodTimer.Elapsed += new ElapsedEventHandler(delegate { DoFlood(); });
                 mapData.roundTimer.Start();
                 mapData.floodTimer.Start();
-                startTime = DateTime.Now;
                 announceTimer.Start();
+                startTime = DateTime.Now;
                 roundActive = true;
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -143,6 +135,7 @@ namespace MCForge
             try
             {
                 mapData.Dispose();
+                map.ChatLevel("The round has ended!");
                 StartVote();
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -156,16 +149,15 @@ namespace MCForge
             try
             {
                 announceTimer.Stop();
-                map.ChatLevel("&4Uh oh, here comes the flood!");
+                map.ChatLevel("&4Look out, here comes the flood!");
                 if (mapData.layer)
                 {
+                    DoFloodLayer();
                     mapData.layerTimer.Elapsed += new ElapsedEventHandler(delegate
                     {
                         if (mapData.currentLayer <= mapSettings.layerCount)
                         {
-                            map.ChatLevel("&4Layer " + mapData.currentLayer + " flooding...");
-                            map.SetTile((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z, mapData.block);
-                            mapData.currentLayer++;
+                            DoFloodLayer();
                         }
                         else
                             mapData.layerTimer.Stop();
@@ -173,24 +165,55 @@ namespace MCForge
                     mapData.layerTimer.Start();
                 }
                 else
-                    map.SetTile((ushort)mapSettings.blockLayer.x, (ushort)mapSettings.blockLayer.y, (ushort)mapSettings.blockLayer.z, mapData.block);
+                    map.Blockchange((ushort)mapSettings.blockLayer.x, (ushort)mapSettings.blockLayer.y, (ushort)mapSettings.blockLayer.z, mapData.block, true);
             }
             catch (Exception e) { Server.ErrorLog(e); }
+        }
+
+        public void DoFloodLayer()
+        {
+            map.ChatLevel("&4Layer " + mapData.currentLayer + " flooding...");
+            map.Blockchange((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z, mapData.block, true);
+            mapData.currentLayer++;
         }
 
         public void AnnounceTimeLeft(bool flood, bool round)
         {
             if (!active || !roundActive || startTime == null || map == null) return;
-            if (flood) map.ChatLevel("&b" + new DateTime((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).Ticks).ToString("mm:ss") + Server.DefaultColor + " until the flood.");
-            if (round) map.ChatLevel("&b" + new DateTime((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).Ticks).ToString("mm:ss") + Server.DefaultColor + " until the round ends.");
+
+            if (flood)
+            {
+                double floodMinutes = Math.Round((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).TotalMinutes, 0, MidpointRounding.AwayFromZero);
+                map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
+            }
+            if (round)
+            {
+                double roundMinutes = Math.Round((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).TotalMinutes, 0, MidpointRounding.AwayFromZero);
+                map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
+            }
+        }
+
+        public void AnnounceRoundInfo()
+        {
+            if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
+            if (mapData.layer)
+            {
+                map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &aflood in layers " + Server.DefaultColor + "this round!");
+                map.ChatLevelOps("There will be " + mapSettings.layerCount + " layers, each " + mapSettings.layerHeight + " blocks high.");
+                map.ChatLevelOps("There will be another layer every " + mapSettings.layerInterval + " minutes.");
+            }
+            if (mapData.fast) map.ChatLevel("The lava will be &cfast " + Server.DefaultColor + "this round!");
+            if (mapData.killer) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &ckill you " + Server.DefaultColor + "this round!");
+            if (mapData.destroy) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &cdestroy plants " + (mapData.water ? "" : "and flammable blocks ") + Server.DefaultColor + "this round!");
         }
 
         public void LoadMap(string name)
         {
             if (String.IsNullOrEmpty(name) || !HasMap(name)) return;
 
-            string oldName = "";
-            if (active && map != null) oldName = map.name;
+            name = name.ToLower();
+            Level oldMap = null;
+            if (active && map != null) oldMap = map;
             Command.all.Find("load").Use(null, name);
             map = Level.Find(name);
 
@@ -199,31 +222,30 @@ namespace MCForge
                 mapSettings = LoadMapSettings(name);
                 mapData = GenerateMapData(mapSettings);
 
-                LevelCommand("physics", mapData.destroy ? "2" : "1");
-                LevelCommand("map", "overload 1000000");
-                LevelCommand("map", "motd Lava Survival: " + map.name.Capitalize());
+                map.setPhysics(mapData.destroy ? 2 : 1);
+                map.motd = "Lava Survival: " + map.name.Capitalize();
+                map.overload = 1000000;
+                map.unload = false;
+                map.loadOnGoto = false;
+                Level.SaveSettings(map);
             }
             
             if (active && map != null)
             {
-                Player.players.ForEach(delegate(Player pl)
+                try
                 {
-                    if (HasPlayer(pl))
-                        if (sendAfkMain && Server.afkset.Contains(pl.name)) Command.all.Find("main").Use(pl, "");
-                        else Command.all.Find("goto").Use(pl, map.name);
-                });
-                Command.all.Find("unload").Use(null, oldName);
-
-                if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
-                if (mapData.layer)
-                {
-                    map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &aflood in layers " + Server.DefaultColor + "this round!");
-                    map.ChatLevelOps("There will be " + mapSettings.layerCount + " layers, each " + mapSettings.layerHeight + " blocks high.");
-                    map.ChatLevelOps("There will be another layer every " + mapSettings.layerInterval + " minutes.");
+                    Player.players.ForEach(delegate(Player pl)
+                    {
+                        if (pl.level == oldMap)
+                        {
+                            if (sendAfkMain && Server.afkset.Contains(pl.name)) Command.all.Find("main").Use(pl, "");
+                            else Command.all.Find("goto").Use(pl, map.name);
+                            while (pl.Loading) System.Threading.Thread.Sleep(250); // Sleep for a bit while they load...
+                        }
+                    });
+                    Command.all.Find("unload").Use(null, oldMap.name);
                 }
-                if (mapData.fast) map.ChatLevel("The lava will be &cfast " + Server.DefaultColor + "this round!");
-                if (mapData.killer) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &ckill you " + Server.DefaultColor + "this round!");
-                if (mapData.destroy) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &cdestroy plants " + (mapData.water ? "" : "and flammable blocks ") + Server.DefaultColor + "this round!");
+                catch { }
 
                 StartRound();
             }
@@ -231,14 +253,14 @@ namespace MCForge
 
         public void StartVote()
         {
-            if (maps.Count < 2) return;
+            if (maps.Count < 3) return;
 
             byte i = 0;
             string opt, str = "";
-            while (i < Math.Min(voteCount, maps.Count))
+            while (i < Math.Min(voteCount, maps.Count - 1))
             {
                 opt = maps[rand.Next(maps.Count)];
-                if (!votes.ContainsKey(opt))
+                if (!votes.ContainsKey(opt) && opt != map.name)
                 {
                     votes.Add(opt, 0);
                     str += Server.DefaultColor + ", &5" + opt.Capitalize();
@@ -249,42 +271,47 @@ namespace MCForge
             map.ChatLevel("Vote for the next map! The vote ends in " + voteTime + " minutes.");
             map.ChatLevel("Choices: " + str.Remove(0, 4));
 
-            Timer timer = new Timer(TimeSpan.FromMinutes(voteTime).TotalMilliseconds);
-            timer.AutoReset = false;
-            timer.Elapsed += new ElapsedEventHandler(delegate
+            voteTimer = new Timer(TimeSpan.FromMinutes(voteTime).TotalMilliseconds);
+            voteTimer.AutoReset = false;
+            voteTimer.Elapsed += new ElapsedEventHandler(delegate
             {
                 try
                 {
                     EndVote();
-                    timer.Dispose();
+                    voteTimer.Dispose();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });
-            timer.Start();
+            voteTimer.Start();
             voteActive = true;
         }
 
         public void EndVote()
         {
             voteActive = false;
-            KeyValuePair<string, int> most = new KeyValuePair<string, int>();
+            KeyValuePair<string, int> most = new KeyValuePair<string, int>("", -1);
             foreach (KeyValuePair<string, int> kvp in votes)
             {
                 if (kvp.Value > most.Value) most = kvp;
                 map.ChatLevelOps("&5" + kvp.Key.Capitalize() + "&f: &a" + kvp.Value);
             }
+            votes.Clear();
+            voted.Clear();
 
-            map.ChatLevel("Vote ended! &5" + most.Key.Capitalize() + Server.DefaultColor + " won with &a" + most.Value + Server.DefaultColor + " votes.");
+            map.ChatLevel("The vote has ended! &5" + most.Key.Capitalize() + Server.DefaultColor + " won with &a" + most.Value + Server.DefaultColor + " vote" + (most.Value == 1 ? "" : "s") + ".");
             map.ChatLevel("You will be transferred in 5 seconds...");
-            Timer timer = new Timer(5000);
-            timer.AutoReset = false;
-            timer.Elapsed += new ElapsedEventHandler(delegate
+            transferTimer = new Timer(5000);
+            transferTimer.AutoReset = false;
+            transferTimer.Elapsed += new ElapsedEventHandler(delegate
             {
-                try { LoadMap(most.Key); }
+                try
+                {
+                    LoadMap(most.Key);
+                    transferTimer.Dispose();
+                }
                 catch (Exception e) { Server.ErrorLog(e); }
-                timer.Dispose();
             });
-            timer.Start();
+            transferTimer.Start();
         }
 
         public bool AddVote(Player p, string vote)
@@ -346,7 +373,7 @@ namespace MCForge
                                 voteCount = (byte)NumberClamp(decimal.Parse(value), 2, 10);
                                 break;
                             case "vote-time":
-                                voteTime = int.Parse(value);
+                                voteTime = double.Parse(value);
                                 break;
                             case "setup-rank":
                                 setupRank = Level.PermissionFromName(value.ToLower());
@@ -372,7 +399,7 @@ namespace MCForge
                 SW.WriteLine("vote-count = " + voteCount.ToString());
                 SW.WriteLine("vote-time = " + voteTime.ToString());
                 SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower());
-                SW.WriteLine("maps = " + ConcatStrings(maps, ","));
+                SW.WriteLine("maps = " + maps.Concatenate(","));
             }
         }
 
