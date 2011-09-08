@@ -82,8 +82,22 @@ namespace MCForge
                             bool skipUnload = false;
                             if (startLevel.unload && !startLevel.name.Contains("&cMuseum "))
                             {
-                                foreach (Player pl in Player.players) if (pl.level == startLevel) skipUnload = true;
+                                foreach (Player pl in Player.players) if (pl.level == startLevel) { skipUnload = true; break; }
                                 if (!skipUnload && Server.AutoLoad) startLevel.Unload(true);
+                            }
+
+                            if (Server.lava.active && !Server.lava.sendingPlayers && Server.lava.map == foundLevel)
+                            {
+                                if (Server.lava.roundActive)
+                                {
+                                    Server.lava.AnnounceRoundInfo(p);
+                                    Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p);
+                                }
+                                else
+                                {
+                                    Player.SendMessage(p, "Vote for the next map!");
+                                    Player.SendMessage(p, "Choices: " + Server.lava.getVoteString());
+                                }
                             }
                         }
                         else Player.SendMessage(p, "The level " + message + " is locked.");

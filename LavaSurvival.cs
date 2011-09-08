@@ -33,7 +33,7 @@ namespace MCForge
         private DateTime startTime;
 
         // Public variables
-        public bool active = false, roundActive = false, flooded = false, voteActive = false;
+        public bool active = false, roundActive = false, flooded = false, voteActive = false, sendingPlayers = false;
         public Level map;
         public MapSettings mapSettings;
         public MapData mapData;
@@ -100,12 +100,12 @@ namespace MCForge
             voteActive = false;
             if (announceTimer.Enabled) announceTimer.Stop();
             try { mapData.Dispose(); }
-            catch (Exception e) { Server.ErrorLog(e); }
+            catch { }
             try { voteTimer.Dispose(); }
-            catch (Exception e) { Server.ErrorLog(e); }
+            catch { }
             try { transferTimer.Dispose(); }
-            catch (Exception e) { Server.ErrorLog(e); }
-            LevelCommand("unload");
+            catch { }
+            map.Unload(true, false);
             return 0;
         }
 
@@ -134,7 +134,9 @@ namespace MCForge
             flooded = false;
             try
             {
-                mapData.Dispose();
+                try { mapData.Dispose(); }
+                catch { }
+                map.setPhysics(5);
                 map.ChatLevel("The round has ended!");
                 StartVote();
             }
@@ -165,7 +167,7 @@ namespace MCForge
                     mapData.layerTimer.Start();
                 }
                 else
-                    map.Blockchange((ushort)mapSettings.blockLayer.x, (ushort)mapSettings.blockLayer.y, (ushort)mapSettings.blockLayer.z, mapData.block, true);
+                    map.Blockchange((ushort)mapSettings.blockFlood.x, (ushort)mapSettings.blockFlood.y, (ushort)mapSettings.blockFlood.z, mapData.block, true);
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
@@ -177,34 +179,47 @@ namespace MCForge
             mapData.currentLayer++;
         }
 
-        public void AnnounceTimeLeft(bool flood, bool round)
+        public void AnnounceTimeLeft(bool flood, bool round, Player p = null)
         {
             if (!active || !roundActive || startTime == null || map == null) return;
 
             if (flood)
             {
-                double floodMinutes = Math.Round((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).TotalMinutes, 0, MidpointRounding.AwayFromZero);
-                map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
+                double floodMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).TotalMinutes);
+                if (p == null) map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
+                else Player.SendMessage(p, "&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
             }
             if (round)
             {
-                double roundMinutes = Math.Round((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).TotalMinutes, 0, MidpointRounding.AwayFromZero);
-                map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
+                double roundMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).TotalMinutes);
+                if (p == null) map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
+                else Player.SendMessage(p, "&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
             }
         }
 
-        public void AnnounceRoundInfo()
+        public void AnnounceRoundInfo(Player p = null)
         {
-            if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
-            if (mapData.layer)
+            if (p == null)
             {
-                map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &aflood in layers " + Server.DefaultColor + "this round!");
-                map.ChatLevelOps("There will be " + mapSettings.layerCount + " layers, each " + mapSettings.layerHeight + " blocks high.");
-                map.ChatLevelOps("There will be another layer every " + mapSettings.layerInterval + " minutes.");
+                if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
+                if (mapData.layer)
+                {
+                    map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &aflood in layers " + Server.DefaultColor + "this round!");
+                    map.ChatLevelOps("There will be " + mapSettings.layerCount + " layers, each " + mapSettings.layerHeight + " blocks high.");
+                    map.ChatLevelOps("There will be another layer every " + mapSettings.layerInterval + " minutes.");
+                }
+                if (mapData.fast) map.ChatLevel("The lava will be &cfast " + Server.DefaultColor + "this round!");
+                if (mapData.killer) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &ckill you " + Server.DefaultColor + "this round!");
+                if (mapData.destroy) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &cdestroy plants " + (mapData.water ? "" : "and flammable blocks ") + Server.DefaultColor + "this round!");
             }
-            if (mapData.fast) map.ChatLevel("The lava will be &cfast " + Server.DefaultColor + "this round!");
-            if (mapData.killer) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &ckill you " + Server.DefaultColor + "this round!");
-            if (mapData.destroy) map.ChatLevel("The " + (mapData.water ? "water" : "lava") + " will &cdestroy plants " + (mapData.water ? "" : "and flammable blocks ") + Server.DefaultColor + "this round!");
+            else
+            {
+                if (mapData.water) Player.SendMessage(p, "The map will be flooded with &9water " + Server.DefaultColor + "this round!");
+                if (mapData.layer) Player.SendMessage(p, "The " + (mapData.water ? "water" : "lava") + " will &aflood in layers " + Server.DefaultColor + "this round!");
+                if (mapData.fast) Player.SendMessage(p, "The lava will be &cfast " + Server.DefaultColor + "this round!");
+                if (mapData.killer) Player.SendMessage(p, "The " + (mapData.water ? "water" : "lava") + " will &ckill you " + Server.DefaultColor + "this round!");
+                if (mapData.destroy) Player.SendMessage(p, "The " + (mapData.water ? "water" : "lava") + " will &cdestroy plants " + (mapData.water ? "" : "and flammable blocks ") + Server.DefaultColor + "this round!");
+            }
         }
 
         public void LoadMap(string name)
@@ -232,6 +247,7 @@ namespace MCForge
             
             if (active && map != null)
             {
+                sendingPlayers = true;
                 try
                 {
                     Player.players.ForEach(delegate(Player pl)
@@ -240,12 +256,12 @@ namespace MCForge
                         {
                             if (sendAfkMain && Server.afkset.Contains(pl.name)) Command.all.Find("main").Use(pl, "");
                             else Command.all.Find("goto").Use(pl, map.name);
-                            while (pl.Loading) System.Threading.Thread.Sleep(250); // Sleep for a bit while they load...
                         }
                     });
-                    Command.all.Find("unload").Use(null, oldMap.name);
+                    oldMap.Unload(true, false);
                 }
                 catch { }
+                sendingPlayers = false;
 
                 StartRound();
             }
@@ -268,7 +284,7 @@ namespace MCForge
                 }
             }
 
-            map.ChatLevel("Vote for the next map! The vote ends in " + voteTime + " minutes.");
+            map.ChatLevel("Vote for the next map! The vote ends in " + voteTime + " minute" + (voteTime == 1 ? "" : "s") +".");
             map.ChatLevel("Choices: " + str.Remove(0, 4));
 
             voteTimer = new Timer(TimeSpan.FromMinutes(voteTime).TotalMilliseconds);
@@ -507,6 +523,17 @@ namespace MCForge
         public bool HasMap(string name)
         {
             return maps.Contains(name.ToLower());
+        }
+
+        // Getters/Setters
+        public string getVoteString()
+        {
+            string str = "";
+            foreach (KeyValuePair<string, int> kvp in votes)
+            {
+                str += Server.DefaultColor + ", &5" + kvp.Key.Capitalize();
+            }
+            return votes.Count > 0 ? str.Remove(0, 4) : str;
         }
 
         // Internal classes

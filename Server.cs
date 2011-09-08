@@ -168,7 +168,7 @@ public static event OnServerError ServerError = null;
         public static string ZombieName = "";
 
         // Lava Survival
-        public static LavaSurvival lava = new LavaSurvival();
+        public static LavaSurvival lava;
 
         //Settings
         #region Server Settings
@@ -466,6 +466,9 @@ public static byte maxGuests = 10;
             }
 
             ProfanityFilter.Init();
+
+            // LavaSurvival constructed here...
+            lava = new LavaSurvival();
 
             timeOnline = DateTime.Now;
             {//MYSQL stuff

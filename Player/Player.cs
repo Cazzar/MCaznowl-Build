@@ -2801,6 +2801,21 @@ namespace MCForge
             if (MessageHasBadColorCodes(from, message))
                 return;
 
+            if (Server.lava.HasPlayer(from) && Server.lava.HasVote(message.ToLower()))
+            {
+                if (Server.lava.AddVote(from, message.ToLower()))
+                {
+                    SendMessage(from, "Your vote for &5" + message.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                    Server.lava.map.ChatLevelOps(from.name + " voted for &5" + message.ToLower().Capitalize() + Server.DefaultColor + ".");
+                    return;
+                }
+                else
+                {
+                    SendMessage(from, "&cYou already voted!");
+                    return;
+                }
+            }
+
             if (Server.voting == true)
             {
                 if (message.ToLower() == "yes" || message.ToLower() == "ye" || message.ToLower() == "y")

@@ -229,7 +229,7 @@ namespace MCForge
             }
         }
 
-        public bool Unload(bool silent = false)
+        public bool Unload(bool silent = false, bool save = true)
         {
             if (Server.mainLevel == this) return false;
             if (this.name.Contains("&cMuseum ")) return false;
@@ -243,7 +243,7 @@ namespace MCForge
 
             if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving))
             {
-                if (!Server.lava.active || !Server.lava.HasMap(name)) Save();
+                if ((!Server.lava.active || !Server.lava.HasMap(name)) && save) Save();
                 saveChanges();
             }
             try
