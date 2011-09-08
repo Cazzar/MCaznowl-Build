@@ -88,6 +88,7 @@ namespace MCForge
                         }
                         else
                         {
+                            if (foundLevel == Server.mainLevel) { Player.SendMessage(p, "You cannot use the main map for Lava Survival."); return; }
                             if (Server.lava.HasMap(foundLevel.name))
                             {
                                 Server.lava.RemoveMap(foundLevel.name);
@@ -114,7 +115,6 @@ namespace MCForge
                     }
                     if (s[1] == "block")
                     {
-                        if (s.Length < 2) { SetupHelp(p, "block"); return; }
                         if (!Server.lava.HasMap(p.level.name)) { Player.SendMessage(p, "Add the map before configuring it."); return; }
                         if (s.Length < 3)
                         {
@@ -148,56 +148,110 @@ namespace MCForge
                     }
                     if (s[1] == "settings")
                     {
-                        if (s.Length < 4) { SetupHelp(p, "settings"); return; }
-                        if (!Server.lava.HasMap(p.level.name)) { Player.SendMessage(p, "Add the map before configuring it."); return; }
-                        
-                        LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(p.level.name);
-                        switch (s[2])
+                        if (s.Length < 3)
                         {
-                            case "fast":
-                                settings.fast = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
-                                Player.SendMessage(p, "Fast lava chance: &b" + settings.fast + "%");
-                                break;
-                            case "killer":
-                                settings.killer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
-                                Player.SendMessage(p, "Killer lava/water chance: &b" + settings.killer + "%");
-                                break;
-                            case "destroy":
-                                settings.destroy = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
-                                Player.SendMessage(p, "Destroy blocks chance: &b" + settings.destroy + "%");
-                                break;
-                            case "water":
-                                settings.water = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
-                                Player.SendMessage(p, "Water flood chance: &b" + settings.water + "%");
-                                break;
-                            case "layer":
-                                settings.layer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
-                                Player.SendMessage(p, "Layer flood chance: &b" + settings.layer + "%");
-                                break;
-                            case "layerheight":
-                                settings.layerHeight = int.Parse(s[3]);
-                                Player.SendMessage(p, "Layer height: &b" + settings.layerHeight + " blocks");
-                                break;
-                            case "layercount":
-                                settings.layerCount = int.Parse(s[3]);
-                                Player.SendMessage(p, "Layer count: &b" + settings.layerCount);
-                                break;
-                            case "layertime":
-                                settings.layerInterval = double.Parse(s[3]);
-                                Player.SendMessage(p, "Layer time: &b" + settings.layerInterval + " minutes");
-                                break;
-                            case "roundtime":
-                                settings.roundTime = double.Parse(s[3]);
-                                Player.SendMessage(p, "Round time: &b" + settings.roundTime + " minutes");
-                                break;
-                            case "floodtime":
-                                settings.floodTime = double.Parse(s[3]);
-                                Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minutes");
-                                break;
-                            default:
-                                SetupHelp(p, "settings");
-                                return;
+                            Player.SendMessage(p, "Maps: &b" + Server.lava.GetMaps().Concatenate(", "));
+                            Player.SendMessage(p, "Setup rank: " + Group.findPerm(Server.lava.setupRank).color + Group.findPerm(Server.lava.setupRank).trueName);
+                            Player.SendMessage(p, "Start on server startup: " + (Server.lava.startOnStartup ? "&aON" : "&cOFF"));
+                            Player.SendMessage(p, "Send AFK to main: " + (Server.lava.sendAfkMain ? "&aON" : "&cOFF"));
+                            Player.SendMessage(p, "Vote count: &b" + Server.lava.voteCount);
+                            Player.SendMessage(p, "Vote time: &b" + Server.lava.voteTime + "minute" + (Server.lava.voteTime == 1 ? "" : "s"));
+                            return;
                         }
+
+                        try
+                        {
+                            switch (s[2])
+                            {
+                                case "sendafkmain":
+                                    Server.lava.sendAfkMain = !Server.lava.sendAfkMain;
+                                    Player.SendMessage(p, "Send AFK to main: " + (Server.lava.sendAfkMain ? "&aON" : "&cOFF"));
+                                    break;
+                                case "votecount":
+                                    Server.lava.voteCount = (byte)NumberClamp(decimal.Parse(s[3]), 2, 10);
+                                    Player.SendMessage(p, "Vote count: &b" + Server.lava.voteCount);
+                                    break;
+                                case "votetime":
+                                    Server.lava.voteTime = double.Parse(s[3]);
+                                    Player.SendMessage(p, "Vote time: &b" + Server.lava.voteTime + "minute" + (Server.lava.voteTime == 1 ? "" : "s"));
+                                    break;
+                                default:
+                                    SetupHelp(p, "settings");
+                                    return;
+                            }
+                            Server.lava.SaveSettings();
+                        }
+                        catch { Player.SendMessage(p, "INVALID INPUT"); return; }
+                    }
+                    if (s[1] == "mapsettings")
+                    {
+                        if (!Server.lava.HasMap(p.level.name)) { Player.SendMessage(p, "Add the map before configuring it."); return; }
+                        LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(p.level.name);
+                        if (s.Length < 4)
+                        {
+                            Player.SendMessage(p, "Fast lava chance: &b" + settings.fast + "%");
+                            Player.SendMessage(p, "Killer lava/water chance: &b" + settings.killer + "%");
+                            Player.SendMessage(p, "Destroy blocks chance: &b" + settings.destroy + "%");
+                            Player.SendMessage(p, "Water flood chance: &b" + settings.water + "%");
+                            Player.SendMessage(p, "Layer flood chance: &b" + settings.layer + "%");
+                            Player.SendMessage(p, "Layer height: &b" + settings.layerHeight + " block" + (settings.layerHeight == 1 ? "" : "s"));
+                            Player.SendMessage(p, "Layer count: &b" + settings.layerCount);
+                            Player.SendMessage(p, "Layer time: &b" + settings.layerInterval + " minute" + (settings.layerInterval == 1 ? "" : "s"));
+                            Player.SendMessage(p, "Round time: &b" + settings.roundTime + " minute" + (settings.roundTime == 1 ? "" : "s"));
+                            Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minute" + (settings.floodTime == 1 ? "" : "s"));
+                            return;
+                        }
+
+                        try
+                        {
+                            switch (s[2])
+                            {
+                                case "fast":
+                                    settings.fast = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    Player.SendMessage(p, "Fast lava chance: &b" + settings.fast + "%");
+                                    break;
+                                case "killer":
+                                    settings.killer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    Player.SendMessage(p, "Killer lava/water chance: &b" + settings.killer + "%");
+                                    break;
+                                case "destroy":
+                                    settings.destroy = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    Player.SendMessage(p, "Destroy blocks chance: &b" + settings.destroy + "%");
+                                    break;
+                                case "water":
+                                    settings.water = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    Player.SendMessage(p, "Water flood chance: &b" + settings.water + "%");
+                                    break;
+                                case "layer":
+                                    settings.layer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    Player.SendMessage(p, "Layer flood chance: &b" + settings.layer + "%");
+                                    break;
+                                case "layerheight":
+                                    settings.layerHeight = int.Parse(s[3]);
+                                    Player.SendMessage(p, "Layer height: &b" + settings.layerHeight + " block" + (settings.layerHeight == 1 ? "" : "s"));
+                                    break;
+                                case "layercount":
+                                    settings.layerCount = int.Parse(s[3]);
+                                    Player.SendMessage(p, "Layer count: &b" + settings.layerCount);
+                                    break;
+                                case "layertime":
+                                    settings.layerInterval = double.Parse(s[3]);
+                                    Player.SendMessage(p, "Layer time: &b" + settings.layerInterval + " minute" + (settings.layerInterval == 1 ? "" : "s"));
+                                    break;
+                                case "roundtime":
+                                    settings.roundTime = double.Parse(s[3]);
+                                    Player.SendMessage(p, "Round time: &b" + settings.roundTime + " minute" + (settings.roundTime == 1 ? "" : "s"));
+                                    break;
+                                case "floodtime":
+                                    settings.floodTime = double.Parse(s[3]);
+                                    Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minute" + (settings.floodTime == 1 ? "" : "s"));
+                                    break;
+                                default:
+                                    SetupHelp(p, "mapsettings");
+                                    return;
+                            }
+                        }
+                        catch { Player.SendMessage(p, "INVALID INPUT"); return; }
                         Server.lava.SaveMapSettings(settings);
                     }
                 }
@@ -235,7 +289,44 @@ namespace MCForge
 
         public void SetupHelp(Player p, string mode = "")
         {
-            Player.SendMessage(p, "My ass!");
+            switch (mode)
+            {
+                case "map":
+                    Player.SendMessage(p, "Add or remove maps in Lava Survival.");
+                    Player.SendMessage(p, "<mapname> - Adds or removes <mapname>.");
+                    break;
+                case "block":
+                    Player.SendMessage(p, "View or set the block spawn positions.");
+                    Player.SendMessage(p, "flood - Set the position for the total flood block.");
+                    Player.SendMessage(p, "layer - Set the position for the layer flood base.");
+                    break;
+                case "settings":
+                    Player.SendMessage(p, "View or change the settings for Lava Survival.");
+                    Player.SendMessage(p, "sendafkmain - Toggle sending AFK users to the main map when the map changes.");
+                    Player.SendMessage(p, "votecount <2-10> - Set how many maps will be in the next map vote.");
+                    Player.SendMessage(p, "votetime <time> - Set how long until the next map vote ends.");
+                    break;
+                case "mapsettings":
+                    Player.SendMessage(p, "View or change the settings for a Lava Survival map.");
+                    Player.SendMessage(p, "fast <0-100> - Set the percent chance of fast lava.");
+                    Player.SendMessage(p, "killer <0-100> - Set the percent chance of killer lava/water.");
+                    Player.SendMessage(p, "destroy <0-100> - Set the percent chance of the lava/water destroying blocks.");
+                    Player.SendMessage(p, "water <0-100> - Set the percent chance of a water instead of lava flood.");
+                    Player.SendMessage(p, "layer <0-100> - Set the percent chance of the lava/water flooding in layers.");
+                    Player.SendMessage(p, "layerheight <height> - Set the height of each layer.");
+                    Player.SendMessage(p, "layercount <count> - Set the number of layers to flood.");
+                    Player.SendMessage(p, "layertime <time> - Set the time interval for another layer to flood.");
+                    Player.SendMessage(p, "roundtime <time> - Set how long until the round ends.");
+                    Player.SendMessage(p, "floodtime <time> - Set how long until the map is flooded.");
+                    break;
+                default:
+                    Player.SendMessage(p, "Commands to setup Lava Survival.");
+                    Player.SendMessage(p, "map - Add or remove maps in Lava Survival.");
+                    Player.SendMessage(p, "block - View or set the block spawn positions.");
+                    Player.SendMessage(p, "settings - View or change the settings for Lava Survival.");
+                    Player.SendMessage(p, "mapsettings - View or change the settings for a Lava Survival map.");
+                    break;
+            }
         }
 
         public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)

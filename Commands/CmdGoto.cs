@@ -96,7 +96,7 @@ namespace MCForge
                                 else
                                 {
                                     Player.SendMessage(p, "Vote for the next map!");
-                                    Player.SendMessage(p, "Choices: " + Server.lava.getVoteString());
+                                    Player.SendMessage(p, "Choices: " + Server.lava.GetVoteString());
                                 }
                             }
                         }

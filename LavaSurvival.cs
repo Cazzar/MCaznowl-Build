@@ -526,7 +526,7 @@ namespace MCForge
         }
 
         // Getters/Setters
-        public string getVoteString()
+        public string GetVoteString()
         {
             string str = "";
             foreach (KeyValuePair<string, int> kvp in votes)
@@ -534,6 +534,11 @@ namespace MCForge
                 str += Server.DefaultColor + ", &5" + kvp.Key.Capitalize();
             }
             return votes.Count > 0 ? str.Remove(0, 4) : str;
+        }
+
+        public List<string> GetMaps()
+        {
+            return maps;
         }
 
         // Internal classes
