@@ -52,7 +52,7 @@ namespace MCForge {
                     seconds = getAllowed(p, message);
                 }
             } catch {
-                Player.SendMessage(p, "Invalid seconds.  Using 30 seconds."); //only run if seconds is an invalid number
+                Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo.  Using 30 seconds."); //only run if seconds is an invalid number
                 seconds = 30;
             }
 
@@ -200,8 +200,8 @@ namespace MCForge {
              * return;
              */
             long secs;
-            if (param == "all")
-                secs = (p == null) ? long.MaxValue : p.group.maxUndo;
+            if (param == "all" && p.group.CanExecute(Command.all.Find("xundo")))
+                secs = (p == null || p.group.maxUndo == 0) ? int.MaxValue : p.group.maxUndo;
             else
                 secs = long.Parse(param); //caught by try/catch in outer method
 

@@ -54,7 +54,7 @@ namespace MCForge
                         foreach (Group grp in Group.GroupList)
                         {
                             if (grp.name != "nobody")
-                                Player.SendMessage(p, grp.color + grp.name + " - &bCommand limit: " + grp.maxBlocks + " - &cPermission: " + (int)grp.Permission);
+                                Player.SendMessage(p, grp.color + grp.name + " - &bCommand: " + grp.maxBlocks + " - &2Undo: " + ((grp.maxUndo != 0) ? grp.maxUndo.ToString() : "max") + " - &cPermission: " + (int)grp.Permission);
                         }
                         break;
                     case "build":
