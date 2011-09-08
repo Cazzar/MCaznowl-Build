@@ -60,17 +60,23 @@ namespace MCForge
                 Player.SendMessage(p, "You did not specify the level it would be copied to as!");
                 return;
             }
-            if (!File.Exists("levels/" + msg1 + ".lvl"))
-            {
+            try {
+                File.Copy("levels/" + msg1 + ".lvl", "levels/" + msg2 + ".lvl");
+                File.Copy("levels/level properties/" + msg1 + ".properties", "levels/level properties/" + msg1 + ".properties", false);
+
+            } catch (System.IO.FileNotFoundException) {
                 Player.SendMessage(p, msg2 + " does not exist!");
                 return;
-            }
-            if (File.Exists("level/" + msg2 + ".lvl"))
-            {
+
+            } catch (System.IO.IOException) {
                 Player.SendMessage(p, "The level, &c" + msg2 + " &e already exists!");
                 return;
+
+            } catch (System.ArgumentException) {
+                Player.SendMessage(p, "One or both level names are either invalid, or corrupt.");
+                return;
+
             }
-            File.Copy("levels/" + msg1 + ".lvl", "levels/" + msg2 + ".lvl");
             Player.SendMessage(p, "The level, &c" + msg1 + " &ehas been copied to &c" + msg2 + "!");
         }
         public override void Help(Player p)

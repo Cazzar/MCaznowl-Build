@@ -42,17 +42,17 @@ namespace MCForge
                 }
                 if (who.group.Permission >= p.group.Permission)
                 {
-                    Player.SendMessage(p, "Cannot see the momey of someone of equal or greater rank.");
+                    Player.SendMessage(p, "Cannot see the money of someone of equal or greater rank.");
                     return;
                 }
 
-                Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " has got currently " + who.money + " " + Server.moneys + ".");
+                Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " currently has " + who.money + " " + Server.moneys + ".");
             }  
         }
 
 		public override void Help(Player p)
 		{
-			Player.SendMessage(p, "/money <player> - Shows how many " + Server.moneys + " <player> has");
+			Player.SendMessage(p, "/money <player> - Shows how much " + Server.moneys + " <player> has");
 		}
 	}
 }

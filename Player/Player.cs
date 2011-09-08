@@ -801,7 +801,7 @@ namespace MCForge
                 //Test code to show when people come back with different accounts on the same IP
                 string temp = "Lately known as:";
                 bool found = false;
-                if (ip != "127.0.0.1")
+                if (!ip.StartsWith("127.0.0."))
                 {
                     foreach (KeyValuePair<string, string> prev in left)
                     {
@@ -3852,7 +3852,8 @@ namespace MCForge
 
         private static bool IPInPrivateRange(string ip)
         {
-            if (ip == "127.0.0.1" || ip.StartsWith("192.168.") || ip.StartsWith("10."))
+            //Official loopback is 127.0.0.1/8
+            if (ip.StartsWith("127.0.0.") || ip.StartsWith("192.168.") || ip.StartsWith("10."))
                 return true;
 
             if (ip.StartsWith("172."))

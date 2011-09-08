@@ -41,7 +41,7 @@ namespace MCForge
             try { amountTaken = int.Parse(message.Split(' ')[1]); }
             catch { Player.SendMessage(p, "Invalid amount"); return; }
 
-            if (who.money - amountTaken < 0) { Player.SendMessage(p, "Players cannot have under 0 " + Server.moneys); return; }
+            if (who.money - amountTaken < 0) { Player.SendMessage(p, "Players cannot have less than 0 " + Server.moneys); return; }
             if (amountTaken < 0) { Player.SendMessage(p, "Cannot take negative " + Server.moneys); return; }
 
             who.money -= amountTaken;

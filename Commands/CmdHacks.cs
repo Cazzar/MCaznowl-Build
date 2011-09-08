@@ -42,7 +42,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/hacks - GIVE YOU CONTROL OF THE SERVER!");
+            Player.SendMessage(p, "/hacks - GIVES YOU CONTROL OF THE SERVER!");
         }
     }
 

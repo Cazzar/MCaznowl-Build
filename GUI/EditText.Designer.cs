@@ -107,7 +107,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EditText";
             this.Text = "Edit Text";
-            this.Disposed += new System.EventHandler(this.EditTxt_Unload);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditTxt_Unload);
             this.ResumeLayout(false);
             this.PerformLayout();
 

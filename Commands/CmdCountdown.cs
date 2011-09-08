@@ -419,9 +419,7 @@ namespace MCForge
 
                                 default:
                                     p.SendMessage("You didn't specify a speed, resorting to 'normal'");
-                                    CountdownGame.speed = 750;
-                                    CountdownGame.speedtype = "normal";
-                                    break;
+                                    goto case "normal"; //More efficient
                             }
                             if (par2 == null || par2.Trim() == "")
                             {

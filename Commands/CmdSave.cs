@@ -30,79 +30,58 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public CmdSave() { }
 
-        public override void Use(Player p, string message)
-        {
-            if (message.ToLower() == "all")
-            {
-                foreach (Level l in Server.levels)
-                {
-                    try
-                    {
+        public override void Use(Player p, string message) {
+            if (message.ToLower() == "all") {
+                foreach (Level l in Server.levels) {
+                    try {
                         l.Save();
-                    }
-                    catch { }
+                    } catch { }
                 }
                 Player.GlobalMessage("All levels have been saved.");
-            }
-            else
-            {
-                if (message.Split(' ').Length == 1)         //Just save level given
-                {
-                    Level foundLevel = Level.Find(message);
-                    if (foundLevel != null)
-                    {
-                        foundLevel.Save(true);
-                        Player.SendMessage(p, "Level \"" + foundLevel.name + "\" saved.");
-                        int backupNumber = foundLevel.Backup(true);
-                        if (backupNumber != -1)
-                        {
-                            // Notify console and the player who called /save
-                            Player.SendMessage(null, "Backup " + backupNumber + " saved for " + foundLevel.name);
-                            if (p != null)
-                                p.level.ChatLevel("Backup " + backupNumber + " saved.");
-                        }
-                    }
-                    else
-                    {
-                        Player.SendMessage(p, "Could not find level specified");
-                    }
-                }
-                else if (message.Split(' ').Length == 2)
-                {
-                    Level foundLevel = Level.Find(message.Split(' ')[0]);
-                    string restoreName = message.Split(' ')[1].ToLower();
-                    if (foundLevel != null)
-                    {
-                        foundLevel.Save(true);
-                        int backupNumber = p.level.Backup(true, restoreName);
-                        Player.GlobalMessage(foundLevel.name + " had a backup created named &b" + restoreName);
-                        Player.SendMessage(null, foundLevel.name + " had a backup created named &b" + restoreName);
-                    }
-                    else
-                    {
-                        Player.SendMessage(p, "Could not find level specified");
-                    }
-                }
-                else
-                {
-                    if (p == null)
-                    {
+            } else {
+                if (message == "") { // for empty string/no parameters.
+                    if (p == null) {
                         Use(p, "all");
-                    }
-                    else
-                    {
+                    } else {
                         p.level.Save(true);
                         Player.SendMessage(p, "Level \"" + p.level.name + "\" saved.");
 
                         int backupNumber = p.level.Backup(true);
-                        if (backupNumber != -1)
-                        {
+                        if (backupNumber != -1) {
                             // Notify console and the player who called /save
                             Player.SendMessage(null, "Backup " + backupNumber + " saved for " + p.level.name);
                             if (p != null)
                                 p.level.ChatLevel("Backup " + backupNumber + " saved.");
                         }
                     }
+                } else if (message.Split(' ').Length == 1) { //Just save level given 
+                    Level foundLevel = Level.Find(message);
+                    if (foundLevel != null) {
+                        foundLevel.Save(true);
+                        Player.SendMessage(p, "Level \"" + foundLevel.name + "\" saved.");
+                        int backupNumber = foundLevel.Backup(true);
+                        if (backupNumber != -1) {
+                            // Notify console and the player who called /save
+                            Player.SendMessage(null, "Backup " + backupNumber + " saved for " + foundLevel.name);
+                            if (p != null)
+                                p.level.ChatLevel("Backup " + backupNumber + " saved.");
+                        }
+                    } else {
+                        Player.SendMessage(p, "Could not find level specified");
+                    }
+                } else if (message.Split(' ').Length == 2) {
+                    Level foundLevel = Level.Find(message.Split(' ')[0]);
+                    string restoreName = message.Split(' ')[1].ToLower();
+                    if (foundLevel != null) {
+                        foundLevel.Save(true);
+                        int backupNumber = p.level.Backup(true, restoreName);
+                        Player.GlobalMessage(foundLevel.name + " had a backup created named &b" + restoreName);
+                        Player.SendMessage(null, foundLevel.name + " had a backup created named &b" + restoreName);
+                    } else {
+                        Player.SendMessage(p, "Could not find level specified");
+                    }
+                } else { // Invalid number of arguments
+                    Help(p);
                 }
             }
         }

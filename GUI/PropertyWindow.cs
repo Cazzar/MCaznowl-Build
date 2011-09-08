@@ -911,6 +911,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             txtRankName.Text = foundRank.trueName;
             txtPermission.Text = ((int)foundRank.Permission).ToString();
             txtLimit.Text = foundRank.maxBlocks.ToString();
+            txtMaxUndo.Text = foundRank.maxUndo.ToString();
             cmbColor.SelectedIndex = cmbColor.Items.IndexOf(c.Name(foundRank.color));
             txtFileName.Text = foundRank.fileName;
         }
@@ -973,6 +974,23 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             }
         }
 
+        private void txtMaxUndo_TextChanged(object sender, EventArgs e) {
+            if (txtMaxUndo.Text != "") {
+                long foundMax;
+                try {
+                    foundMax = long.Parse(txtMaxUndo.Text);
+                } catch {
+                    txtMaxUndo.Text = txtMaxUndo.Text.Remove(txtMaxUndo.Text.Length - 1);
+                    return;
+                }
+
+                if (foundMax < 0) { txtMaxUndo.Text = "0"; return; }
+
+                storedRanks[listRanks.SelectedIndex].maxUndo = foundMax;
+            }
+
+        }
+
         private void txtFileName_TextChanged(object sender, EventArgs e)
         {
             if (txtFileName.Text != "")
@@ -984,7 +1002,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
         private void btnAddRank_Click(object sender, EventArgs e)
         {
             Random rand = new Random();
-            Group newGroup = new Group((LevelPermission)5, 600, "CHANGEME", '1', "CHANGEME.txt");
+            Group newGroup = new Group((LevelPermission)5, 600, 30, "CHANGEME", '1', "CHANGEME.txt");
             storedRanks.Add(newGroup);
             listRanks.Items.Add(newGroup.trueName + " = " + (int)newGroup.Permission);
         }

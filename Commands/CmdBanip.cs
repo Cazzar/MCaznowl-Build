@@ -100,41 +100,41 @@ namespace MCForge
             if (p != null) { if (p.ip == message) { Player.SendMessage(p, "You can't ip-ban yourself.!"); return; } }
             if (Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " is already ip-banned."); return; }
 
-            // Console can ban anybody, so skip this section
-            if (p != null)
-            {
-                // Check if IP belongs to an op+
-                // First get names of active ops+ with that ip
-                List<string> opNamesWithThatIP = (from pl in Player.players where (pl.ip == message && pl.@group.Permission >= LevelPermission.Operator) select pl.name).ToList();
-                // Next, add names from the database
-                DataTable dbnames = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
+            // Check if IP belongs to an op+
+            // First get names of active ops+ with that ip
+            List<string> opNamesWithThatIP = (from pl in Player.players where (pl.ip == message && pl.@group.Permission >= LevelPermission.Operator) select pl.name).ToList();
+            // Next, add names from the database
+            DataTable dbnames = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
                 
-                foreach (DataRow row in dbnames.Rows)
-                {
-                    opNamesWithThatIP.Add(row[0].ToString());
-                }
+            foreach (DataRow row in dbnames.Rows)
+            {
+                opNamesWithThatIP.Add(row[0].ToString());
+            }
                
 
-                if (opNamesWithThatIP != null && opNamesWithThatIP.Count > 0)
+            if (opNamesWithThatIP != null && opNamesWithThatIP.Count > 0)
+            {
+                // We have at least one op+ with a matching IP
+                // Check permissions of everybody who matched that IP
+                foreach (string opname in opNamesWithThatIP)
                 {
-                    // We have at least one op+ with a matching IP
-                    // Check permissions of everybody who matched that IP
-                    foreach (string opname in opNamesWithThatIP)
+                    // If one of these guys is a dev, don't allow the ipban to proceed! 
+                    if (Server.devs.Contains(opname.ToLower()))
                     {
-                        // If one of these guys matches a player with a higher rank, or is a dev, don't allow the ipban to proceed! 
-                        if (Server.devs.Contains(opname.ToLower()))
+                        Player.SendMessage(p, "You can't ban a MCForge Developer!");
+                        if (p != null)
                         {
-                            Player.SendMessage(p, "You can't ban a MCForge Developer!");
-                            if (p != null)
-                            {
-                                Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
-                            }
-                            else
-                            {
-                                Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
-                            }
-                            return;
+                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
                         }
+                        else
+                        {
+                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a MCForge Developer!");
+                        }
+                        return;
+                    }
+                    // Console can ban anybody else, so skip this section
+                    if (p != null) {
+                        // If one of these guys matches a player with a higher rank don't allow the ipban to proceed! 
                         Group grp = Group.findPlayerGroup(opname);
                         if (grp != null)
                         {
@@ -149,6 +149,7 @@ namespace MCForge
                     }
                 }
             }
+            
 
             Player.GlobalMessage(message + " got &8ip-banned!");
             if (p != null)
