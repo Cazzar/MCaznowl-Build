@@ -1955,6 +1955,7 @@ namespace MCForge
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
                     return;
                 }
                 if (text[0] == '+' || adminchat)
@@ -1967,6 +1968,7 @@ namespace MCForge
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
                     return;
                 }
 
