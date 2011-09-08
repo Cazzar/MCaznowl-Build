@@ -45,12 +45,17 @@ namespace MCForge {
             try {
                 if (message.Split(' ').Length == 2) {
                     who = Player.Find(message.Split(' ')[0]);
-                    seconds = getAllowed(p, message.Split(' ')[1].ToLower()); // If seconds are invalid, it displays a message and returns -1
+                    message = message.Split(' ')[1].ToLower();
 
                 } else {
-                    who = (p == null) ? null : Player.Find(p.name);
-                    seconds = getAllowed(p, message);
+                    who = (p == null) ? null : p;
                 }
+                //If user is undoing him/herself, then all is go.
+                //If user is undoing someone else, then restrictions are used.
+                if (p == who)
+                    seconds = ((message != "all") ? long.Parse(message) : int.MaxValue);
+                else
+                    seconds = getAllowed(p, message);
             } catch {
                 Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo.  Using 30 seconds."); //only run if seconds is an invalid number
                 seconds = 30;
