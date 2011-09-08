@@ -36,7 +36,7 @@ namespace MCForge
             ushort z = (ushort)((0.5 + p.level.spawnz) * 32);
             if (!p.referee)
             {
-                if (Server.infection)
+                if (Server.infection && !CmdZombieGame.infect.Contains(p))
                 {
                     CmdZombieGame.infect.Add(p);
                     CmdZombieGame.players.Remove(p);

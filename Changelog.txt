@@ -39,6 +39,7 @@ v5.2.0.0
 - Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins.
 - Made changes to some events (Might break old plugins).
 - Made it so /players now has an option to not show ranks that have no one ranked as them online, and you can see only players of a certain rank with /players [rank].
+- Made it so /line now has the shortcut of /l. 
 - Improved the tree generator, the trunk now makes more sense.
 - Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow.
 

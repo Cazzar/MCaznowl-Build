@@ -3374,6 +3374,8 @@ namespace MCForge
             {
                 if (socket != null)
                     CloseSocket();
+                if (connections.Contains(this))
+                    connections.Remove(this);
                 disconnected = true;
                 return;
             }
@@ -3396,9 +3398,7 @@ namespace MCForge
                 {
                     this.CloseSocket();
                     if (connections.Contains(this))
-                    {
                         connections.Remove(this);
-                    }
                     return;
                 }
                 //   FlyBuffer.Clear();
