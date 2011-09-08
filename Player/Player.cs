@@ -1239,6 +1239,7 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
+                    if (b == Block.griefer_stone) { Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!"); return; }
                 }
 
                 bP.deleted = true;
@@ -1852,6 +1853,22 @@ namespace MCForge
 
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
+
+                // Lava Survival map vote recorder
+                if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower()))
+                {
+                    if (Server.lava.AddVote(this, text.ToLower()))
+                    {
+                        SendMessage("Your vote for &5" + text.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower().Capitalize() + Server.DefaultColor + ".");
+                        return;
+                    }
+                    else
+                    {
+                        SendMessage("&cYou already voted!");
+                        return;
+                    }
+                }
 
                 //CmdVoteKick core vote recorder
                 if (Server.voteKickInProgress && text.Length == 1)
@@ -2787,6 +2804,21 @@ namespace MCForge
         {
             if (MessageHasBadColorCodes(from, message))
                 return;
+
+            if (Server.lava.HasPlayer(from) && Server.lava.HasVote(message.ToLower()))
+            {
+                if (Server.lava.AddVote(from, message.ToLower()))
+                {
+                    SendMessage(from, "Your vote for &5" + message.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                    Server.lava.map.ChatLevelOps(from.name + " voted for &5" + message.ToLower().Capitalize() + Server.DefaultColor + ".");
+                    return;
+                }
+                else
+                {
+                    SendMessage(from, "&cYou already voted!");
+                    return;
+                }
+            }
 
             if (Server.voting == true)
             {

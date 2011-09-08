@@ -266,6 +266,8 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.chkGrieferStone = new System.Windows.Forms.CheckBox();
+            this.txtGrieferStone = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -694,7 +696,7 @@ namespace MCForge.Gui
             // chkCheap
             // 
             this.chkCheap.AutoSize = true;
-            this.chkCheap.Location = new System.Drawing.Point(12, 94);
+            this.chkCheap.Location = new System.Drawing.Point(12, 75);
             this.chkCheap.Name = "chkCheap";
             this.chkCheap.Size = new System.Drawing.Size(103, 17);
             this.chkCheap.TabIndex = 23;
@@ -755,7 +757,7 @@ namespace MCForge.Gui
             // hackrank_kick
             // 
             this.hackrank_kick.AutoSize = true;
-            this.hackrank_kick.Location = new System.Drawing.Point(12, 58);
+            this.hackrank_kick.Location = new System.Drawing.Point(12, 47);
             this.hackrank_kick.Name = "hackrank_kick";
             this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
             this.hackrank_kick.TabIndex = 32;
@@ -1518,6 +1520,8 @@ namespace MCForge.Gui
             // 
             // groupBox12
             // 
+            this.groupBox12.Controls.Add(this.txtGrieferStone);
+            this.groupBox12.Controls.Add(this.chkGrieferStone);
             this.groupBox12.Controls.Add(this.chkShutdown);
             this.groupBox12.Controls.Add(this.txtShutdown);
             this.groupBox12.Controls.Add(this.hackrank_kick);
@@ -1537,7 +1541,7 @@ namespace MCForge.Gui
             // chkShutdown
             // 
             this.chkShutdown.AutoSize = true;
-            this.chkShutdown.Location = new System.Drawing.Point(12, 23);
+            this.chkShutdown.Location = new System.Drawing.Point(12, 20);
             this.chkShutdown.Name = "chkShutdown";
             this.chkShutdown.Size = new System.Drawing.Size(158, 17);
             this.chkShutdown.TabIndex = 26;
@@ -1546,7 +1550,7 @@ namespace MCForge.Gui
             // 
             // txtShutdown
             // 
-            this.txtShutdown.Location = new System.Drawing.Point(176, 21);
+            this.txtShutdown.Location = new System.Drawing.Point(176, 18);
             this.txtShutdown.MaxLength = 128;
             this.txtShutdown.Name = "txtShutdown";
             this.txtShutdown.Size = new System.Drawing.Size(145, 21);
@@ -1554,7 +1558,7 @@ namespace MCForge.Gui
             // 
             // hackrank_kick_time
             // 
-            this.hackrank_kick_time.Location = new System.Drawing.Point(211, 56);
+            this.hackrank_kick_time.Location = new System.Drawing.Point(211, 45);
             this.hackrank_kick_time.Name = "hackrank_kick_time";
             this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
             this.hackrank_kick_time.TabIndex = 33;
@@ -1563,7 +1567,7 @@ namespace MCForge.Gui
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(277, 59);
+            this.label36.Location = new System.Drawing.Point(277, 48);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(46, 13);
             this.label36.TabIndex = 34;
@@ -1571,7 +1575,7 @@ namespace MCForge.Gui
             // 
             // txtBanMessage
             // 
-            this.txtBanMessage.Location = new System.Drawing.Point(147, 131);
+            this.txtBanMessage.Location = new System.Drawing.Point(147, 101);
             this.txtBanMessage.MaxLength = 128;
             this.txtBanMessage.Name = "txtBanMessage";
             this.txtBanMessage.Size = new System.Drawing.Size(173, 21);
@@ -1579,7 +1583,7 @@ namespace MCForge.Gui
             // 
             // txtCheap
             // 
-            this.txtCheap.Location = new System.Drawing.Point(121, 92);
+            this.txtCheap.Location = new System.Drawing.Point(121, 73);
             this.txtCheap.Name = "txtCheap";
             this.txtCheap.Size = new System.Drawing.Size(200, 21);
             this.txtCheap.TabIndex = 1;
@@ -1587,7 +1591,7 @@ namespace MCForge.Gui
             // chkBanMessage
             // 
             this.chkBanMessage.AutoSize = true;
-            this.chkBanMessage.Location = new System.Drawing.Point(12, 135);
+            this.chkBanMessage.Location = new System.Drawing.Point(12, 104);
             this.chkBanMessage.Name = "chkBanMessage";
             this.chkBanMessage.Size = new System.Drawing.Size(129, 17);
             this.chkBanMessage.TabIndex = 25;
@@ -2666,6 +2670,23 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // chkGrieferStone
+            // 
+            this.chkGrieferStone.AutoSize = true;
+            this.chkGrieferStone.Location = new System.Drawing.Point(12, 132);
+            this.chkGrieferStone.Name = "chkGrieferStone";
+            this.chkGrieferStone.Size = new System.Drawing.Size(174, 17);
+            this.chkGrieferStone.TabIndex = 35;
+            this.chkGrieferStone.Text = "Custom griefer_stone message:";
+            this.chkGrieferStone.UseVisualStyleBackColor = true;
+            // 
+            // txtGrieferStone
+            // 
+            this.txtGrieferStone.Location = new System.Drawing.Point(186, 129);
+            this.txtGrieferStone.Name = "txtGrieferStone";
+            this.txtGrieferStone.Size = new System.Drawing.Size(134, 21);
+            this.txtGrieferStone.TabIndex = 36;
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2976,5 +2997,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label lblGlobalChatColor;
         private System.Windows.Forms.TextBox txtMaxUndo;
         private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.TextBox txtGrieferStone;
+        private System.Windows.Forms.CheckBox chkGrieferStone;
     }
 }

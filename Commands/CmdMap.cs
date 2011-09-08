@@ -104,7 +104,7 @@ namespace MCForge
                         break;
                     case "overload":
                         if (int.Parse(message.Split(' ')[1]) < 500) { Player.SendMessage(p, "Cannot go below 500 (default is 1500)"); return; }
-                        if (p.group.Permission < LevelPermission.Admin && int.Parse(message.Split(' ')[1]) > 2500) { Player.SendMessage(p, "Only SuperOPs may set higher than 2500"); return; }
+                        if (p != null && p.group.Permission < LevelPermission.Admin && int.Parse(message.Split(' ')[1]) > 2500) { Player.SendMessage(p, "Only SuperOPs may set higher than 2500"); return; }
                         foundLevel.overload = int.Parse(message.Split(' ')[1]);
                         foundLevel.ChatLevel("Physics overload: &b" + foundLevel.overload);
                         break;
@@ -121,10 +121,11 @@ namespace MCForge
                     case "rp":
                     case "restartphysics": foundLevel.rp = !foundLevel.rp; foundLevel.ChatLevel("Auto physics: " + FoundCheck(foundLevel, foundLevel.rp)); if (p == null) Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel, foundLevel.rp, true)); break;
                     case "instant":
-                        if (p.group.Permission < LevelPermission.Admin) { Player.SendMessage(p, "This is reserved for Super+"); return; }
+                        if (p != null && p.group.Permission < LevelPermission.Admin) { Player.SendMessage(p, "This is reserved for Super+"); return; }
                         foundLevel.Instant = !foundLevel.Instant; foundLevel.ChatLevel("Instant building: " + FoundCheck(foundLevel, foundLevel.Instant)); if(p == null) Player.SendMessage(p, "Instant building: " + FoundCheck(foundLevel, foundLevel.Instant, true)); break;
                     case "chat":
                         foundLevel.worldChat = !foundLevel.worldChat; foundLevel.ChatLevel("RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat)); if(p == null) Player.SendMessage(p, "RP chat: " + FoundCheck(foundLevel, !foundLevel.worldChat, true)); break;
+                    case "load":
                     case "autoload":
                     case "loadongoto":
                         foundLevel.loadOnGoto = !foundLevel.loadOnGoto; foundLevel.ChatLevel("Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto)); if(p == null) Player.SendMessage(p, "Load on /goto: " + FoundCheck(foundLevel, foundLevel.loadOnGoto, true)); break;
@@ -155,7 +156,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/map [level] [toggle] - Sets [toggle] on [level]");
-            Player.SendMessage(p, "Possible toggles: theme, finite, ai, edge, ps, overload, motd, death, fall, drown, unload, rp, instant, killer, chat");
+            Player.SendMessage(p, "Possible toggles: theme, finite, randomflow, ai, edge, grass, growtrees, leafdecay, ps, overload, motd, death, fall, drown, unload, loadongoto, rp, instant, killer, chat");
             Player.SendMessage(p, "Edge will cause edge water to flow.");
             Player.SendMessage(p, "Grass will make grass not grow without physics.");
             Player.SendMessage(p, "Tree growing will make saplings grow into trees after a while.");

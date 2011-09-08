@@ -435,7 +435,9 @@ namespace MCForge_.Gui
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale
                 if (Server.levels != null && Server.levels.Any())
-                    foreach (Level l in Server.levels) l.Save();
+                    foreach (Level l in Server.levels)
+                        if (Server.lava.active && Server.lava.HasMap(l.name)) l.saveChanges();
+                        else l.Save();
 
                 if (Player.players != null && Player.players.Any())
                     foreach (Player pl in Player.players) pl.save();
@@ -539,8 +541,11 @@ namespace MCForge_.Gui
                 string level = null;
                 foreach (Level l in Server.levels)
                 {
-                    level = level + l.name + "=" + l.physics + System.Environment.NewLine;
-                    l.Save();
+                    if (!Server.lava.active || !Server.lava.HasMap(l.name))
+                    {
+                        level = level + l.name + "=" + l.physics + System.Environment.NewLine;
+                        l.Save();
+                    }
                     l.saveChanges();
                 }
 

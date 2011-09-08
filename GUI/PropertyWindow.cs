@@ -431,6 +431,14 @@ namespace MCForge.Gui
                                 txtShutdown.Text = value;
                                 break;
 
+                            case "custom-griefer-stone":
+                                chkGrieferStone.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+
+                            case "custom-griefer-stone-message":
+                                txtGrieferStone.Text = value;
+                                break;
+
                             case "auto-restart":
                                 chkRestartTime.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -753,6 +761,8 @@ namespace MCForge.Gui
                     w.WriteLine("custom-ban-message = " + txtBanMessage.Text);
                     w.WriteLine("custom-shutdown = " + chkShutdown.Checked.ToString().ToLower());
                     w.WriteLine("custom-shutdown-message = " + txtShutdown.Text);
+                    w.WriteLine("custom-griefer-stone = " + chkGrieferStone.Checked.ToString().ToLower());
+                    w.WriteLine("custom-griefer-stone-message = " + txtGrieferStone.Text);
                     w.WriteLine("allow-tp-to-higher-ranks = " + chkTpToHigherRanks.Checked.ToString().ToLower());
                     w.WriteLine("server-owner = " + txtServerOwner.Text);
                     w.WriteLine();

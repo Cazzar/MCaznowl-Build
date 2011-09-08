@@ -91,6 +91,10 @@ namespace MCForge
         public const byte op_cobblestone = (byte)104;
         public const byte op_air = (byte)105;
         public const byte op_water = (byte)106;
+        public const byte op_lava = (byte)107;
+
+        public const byte griefer_stone = (byte)108;
+        public const byte lava_sponge = (byte)109;
 
         public const byte wood_float = (byte)110;
         public const byte door = (byte)111;
@@ -319,7 +323,10 @@ namespace MCForge
                     case op_cobblestone:
                     case op_air:
                     case op_water:
+                    case op_lava:
                     case blackrock:
+
+                    case griefer_stone:
 
                     case air_flood:
                     case air_flood_down:
@@ -354,6 +361,7 @@ namespace MCForge
                         break;
 
                     case wood_float:
+                    case lava_sponge:
 
                     case door_air:
                     case door2_air:
@@ -697,6 +705,8 @@ namespace MCForge
         {
             switch (type)
             {
+                case Block.griefer_stone:
+
                 case Block.blue_portal:
                 case Block.orange_portal:
 
@@ -780,6 +790,7 @@ namespace MCForge
                 case Block.op_glass:
                 case Block.op_stone:
                 case Block.op_water:
+                case Block.op_lava:
                 case Block.opsidian:
                 case Block.rocketstart:
 
@@ -825,7 +836,7 @@ namespace MCForge
 
         public static bool BuildIn(byte type)
         {
-            if (type == op_water || Block.portal(type) || Block.mb(type)) return false;
+            if (type == op_water || type == op_lava || Block.portal(type) || Block.mb(type)) return false;
 
             switch (Block.Convert(type))
             {
@@ -1006,7 +1017,7 @@ namespace MCForge
                 case Block.goldrock:
                 case Block.ironrock:
                 case Block.coal:
-                case Block.red:
+                /*case Block.red:
                 case Block.orange:
                 case Block.yellow:
                 case Block.lightgreen:
@@ -1021,7 +1032,7 @@ namespace MCForge
                 case Block.darkpink:
                 case Block.darkgrey:
                 case Block.lightgrey:
-                case Block.white:
+                case Block.white:*/
                 case Block.goldsolid:
                 case Block.iron:
                 case Block.staircasefull:
@@ -1163,6 +1174,10 @@ namespace MCForge
                 case 104: return "op_cobblestone";        //TODO
                 case 105: return "op_air";                //TODO
                 case 106: return "op_water";              //TODO
+                case 107: return "op_lava";
+
+                case 108: return "griefer_stone";
+                case 109: return "lava_sponge";
 
                 case wood_float: return "wood_float";            //TODO
                 case door: return "door_wood";
@@ -1395,6 +1410,10 @@ namespace MCForge
                 case "op_cobblestone": return 104;        //TODO
                 case "op_air": return 105;                //TODO
                 case "op_water": return 106;              //TODO
+                case "op_lava": return 107;
+
+                case "griefer_stone": return 108;
+                case "lava_sponge": return 109;
 
                 case "wood_float": return 110;            //TODO
                 case "lava_fast": return 112;
@@ -1609,6 +1628,10 @@ namespace MCForge
                 case 104: return (byte)4; //Op_cobblestone
                 case 105: return (byte)0; //Op_air - Must be cuboided / replaced
                 case 106: return Block.waterstill; //Op_water
+                case 107: return Block.lavastill; //Op_lava
+
+                case 108: return (byte)1; //Griefer_stone
+                case 109: return (byte)19; //Lava_sponge
 
                 case 110: return (byte)5; //wood_float
                 case 112: return (byte)10;
