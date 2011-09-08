@@ -100,7 +100,6 @@ namespace MCForge.Util
 		public static void Nuke(Level l, ushort x, ushort y, ushort z)
 		{
 			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
-			List<string> toair = new List<string>();
 
 			short num3 = (short)(random.Next(15, 20));
 
@@ -144,7 +143,6 @@ namespace MCForge.Util
 		public static void NukeS(Level l, ushort x, ushort y, ushort z, int size)
 		{
 			foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
-			List<string> toair = new List<string>();
 
 			int num3 = size;
 

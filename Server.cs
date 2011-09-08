@@ -525,8 +525,6 @@ public static byte maxGuests = 10;
                     levels = new List<Level>(Server.maps);
                     MapGen = new MapGenerator();
 
-                    Random random = new Random();
-
                     if (File.Exists("levels/" + Server.level + ".lvl"))
                     {
                         mainLevel = Level.Load(Server.level);
