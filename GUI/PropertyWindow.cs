@@ -32,6 +32,8 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
+        LavaSurvival.MapSettings lsMapSettings;
+
         public PropertyWindow()
         {
             InitializeComponent();
@@ -84,6 +86,7 @@ namespace MCForge.Gui
                 cmbOpChat.Items.Add(grp.name);
                 cmbAdminChat.Items.Add(grp.name);
                 cmbVerificationRank.Items.Add(grp.name);
+                lsCmbSetupRank.Items.Add(grp.name);
                 if (grp.Permission == Server.opchatperm)
                 {
                     opchatperm = grp.name;
@@ -124,6 +127,17 @@ namespace MCForge.Gui
             catch
             {
                 Server.s.Log("Failed to load commands and blocks!");
+            }
+
+            try
+            {
+                LoadLavaSettings();
+                UpdateLavaMapList();
+                UpdateLavaControls();
+            }
+            catch
+            {
+                Server.s.Log("Failed to load Lava Survival settings!");
             }
         }
 
@@ -844,6 +858,8 @@ namespace MCForge.Gui
             SaveRanks();
             SaveCommands();
             SaveBlocks();
+            try { SaveLavaSettings(); }
+            catch { Server.s.Log("Error saving Lava Survival settings!"); }
 
             Properties.Load("properties/server.properties", true);
             GrpCommands.fillRanks();
@@ -1771,10 +1787,132 @@ MessageBox.Show("Text Box Cleared!!");
             lblGlobalChatColor.BackColor = Color.FromName(cmbGlobalChatColor.Items[cmbGlobalChatColor.SelectedIndex].ToString());
         }
 
+        private void label55_Click(object sender, EventArgs e)
+        {
 
+        }
 
-       
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void LoadLavaSettings()
+        {
+            lsCmbSetupRank.SelectedIndex = (Group.findPerm(Server.lava.setupRank) == null) ? 1 : cmbVerificationRank.Items.IndexOf(Group.findPerm(Server.lava.setupRank).name);
+            lsChkStartOnStartup.Checked = Server.lava.startOnStartup;
+            lsChkSendAFKMain.Checked = Server.lava.sendAfkMain;
+            lsNudVoteCount.Value = Server.lava.voteCount;
+            lsNudVoteTime.Value = (decimal)MathHelper.Clamp(Server.lava.voteTime, 1, 10);
+        }
+
+        private void SaveLavaSettings()
+        {
+            Server.lava.setupRank = Group.GroupList.Find(grp => grp.name == lsCmbSetupRank.Items[lsCmbSetupRank.SelectedIndex].ToString()).Permission;
+            Server.lava.startOnStartup = lsChkStartOnStartup.Checked;
+            Server.lava.sendAfkMain = lsChkSendAFKMain.Checked;
+            Server.lava.voteCount = (byte)lsNudVoteCount.Value;
+            Server.lava.voteTime = (double)lsNudVoteTime.Value;
+            Server.lava.SaveSettings();
+        }
+
+        private void UpdateLavaControls()
+        {
+            lsBtnStartGame.Enabled = !Server.lava.active;
+            lsBtnStopGame.Enabled = Server.lava.active;
+            lsBtnEndRound.Enabled = Server.lava.roundActive;
+        }
+
+        private void lsBtnStartGame_Click(object sender, EventArgs e)
+        {
+            Server.lava.Start();
+            UpdateLavaControls();
+        }
+
+        private void lsBtnStopGame_Click(object sender, EventArgs e)
+        {
+            Server.lava.Stop();
+            UpdateLavaControls();
+        }
+
+        private void lsBtnEndRound_Click(object sender, EventArgs e)
+        {
+            Server.lava.EndRound();
+            UpdateLavaControls();
+        }
+
+        private void UpdateLavaMapList()
+        {
+            lsMapUse.Items.Clear();
+            lsMapNoUse.Items.Clear();
+
+            lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+            
+            string name;
+            FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
+            foreach (FileInfo file in fi)
+            {
+                name = file.Name.Replace(".lvl", "");
+                if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                    lsMapNoUse.Items.Add(name);
+            }
+        }
+
+        private void lsAddMap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Server.lava.Stop(); // Doing this so we don't break something...
+                UpdateLavaControls();
+
+                string name;
+                try { name = lsMapNoUse.Items[lsMapNoUse.SelectedIndex].ToString(); }
+                catch { return; }
+
+                if (Level.Find(name) == null)
+                    Command.all.Find("load").Use(null, name);
+                Level level = Level.Find(name);
+                if (level == null) return;
+
+                Server.lava.AddMap(name);
+                level.motd = "Lava Survival: " + level.name.Capitalize();
+                level.overload = 1000000;
+                level.unload = false;
+                level.loadOnGoto = false;
+                Level.SaveSettings(level);
+
+                UpdateLavaMapList();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void lsRemoveMap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Server.lava.Stop(); // Doing this so we don't break something...
+                UpdateLavaControls();
+
+                string name;
+                try { name = lsMapUse.Items[lsMapUse.SelectedIndex].ToString(); }
+                catch { return; }
+
+                if (Level.Find(name) == null)
+                    Command.all.Find("load").Use(null, name);
+                Level level = Level.Find(name);
+                if (level == null) return;
+
+                Server.lava.RemoveMap(name);
+                level.motd = "ignore";
+                level.overload = 1500;
+                level.unload = true;
+                level.loadOnGoto = true;
+                Level.SaveSettings(level);
+
+                UpdateLavaMapList();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
     }
 
 }

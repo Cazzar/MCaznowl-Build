@@ -73,6 +73,12 @@ namespace MCForge
                             return;
                     }
                 }
+                if (s[0] == "end")
+                {
+                    if (!Server.lava.active || !Server.lava.roundActive) { Player.SendMessage(p, "The round hasn't started yet!"); return; }
+                    Server.lava.EndRound();
+                    return;
+                }
                 if (s[0] == "setup")
                 {
                     if (s.Length < 2) { SetupHelp(p); return; }
@@ -168,7 +174,7 @@ namespace MCForge
                                     Player.SendMessage(p, "Send AFK to main: " + (Server.lava.sendAfkMain ? "&aON" : "&cOFF"));
                                     break;
                                 case "votecount":
-                                    Server.lava.voteCount = (byte)NumberClamp(decimal.Parse(s[3]), 2, 10);
+                                    Server.lava.voteCount = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 2, 10);
                                     Player.SendMessage(p, "Vote count: &b" + Server.lava.voteCount);
                                     break;
                                 case "votetime":
@@ -207,23 +213,23 @@ namespace MCForge
                             switch (s[2])
                             {
                                 case "fast":
-                                    settings.fast = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    settings.fast = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Fast lava chance: &b" + settings.fast + "%");
                                     break;
                                 case "killer":
-                                    settings.killer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    settings.killer = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Killer lava/water chance: &b" + settings.killer + "%");
                                     break;
                                 case "destroy":
-                                    settings.destroy = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Destroy blocks chance: &b" + settings.destroy + "%");
                                     break;
                                 case "water":
-                                    settings.water = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    settings.water = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Water flood chance: &b" + settings.water + "%");
                                     break;
                                 case "layer":
-                                    settings.layer = (byte)NumberClamp(decimal.Parse(s[3]), 0, 100);
+                                    settings.layer = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Layer flood chance: &b" + settings.layer + "%");
                                     break;
                                 case "layerheight":
@@ -343,11 +349,6 @@ namespace MCForge
             Player.SendMessage(p, "Position set! &b(" + x + ", " + y + ", " + z + ")");
         }
 
-
-        private decimal NumberClamp(decimal value, decimal low, decimal high)
-        {
-            return Math.Max(Math.Min(value, high), low);
-        }
 
         struct CatchPos { public byte mode; }
     }

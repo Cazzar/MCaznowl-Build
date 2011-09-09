@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Timers;
+using System.Text;
 
 namespace MCForge
 {
@@ -66,11 +67,6 @@ namespace MCForge
         }
 
         // Private methods
-        private decimal NumberClamp(decimal value, decimal low, decimal high)
-        {
-            return Math.Max(Math.Min(value, high), low);
-        }
-
         private void LevelCommand(string name, string msg = "")
         {
             Command cmd = Command.all.Find(name.Trim());
@@ -87,8 +83,9 @@ namespace MCForge
             if (!String.IsNullOrEmpty(mapName) && !HasMap(mapName)) return 3; // Map doesn't exist
 
             active = true;
+            Server.s.Log("[Lava Survival] Game started.");
             try { LoadMap(String.IsNullOrEmpty(mapName) ? maps[rand.Next(maps.Count)] : mapName); }
-            catch (Exception e) { Server.ErrorLog(e); }
+            catch (Exception e) { Server.ErrorLog(e); active = false; return 4; }
             return 0;
         }
         public byte Stop()
@@ -106,6 +103,7 @@ namespace MCForge
             try { transferTimer.Dispose(); }
             catch { }
             map.Unload(true, false);
+            Server.s.Log("[Lava Survival] Game stopped.");
             return 0;
         }
 
@@ -122,6 +120,7 @@ namespace MCForge
                 announceTimer.Start();
                 startTime = DateTime.Now;
                 roundActive = true;
+                Server.s.Log("[Lava Survival] Round started. Map: " + map.name);
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
@@ -138,6 +137,7 @@ namespace MCForge
                 catch { }
                 map.setPhysics(5);
                 map.ChatLevel("The round has ended!");
+                Server.s.Log("[Lava Survival] Round ended.");
                 StartVote();
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -152,6 +152,7 @@ namespace MCForge
             {
                 announceTimer.Stop();
                 map.ChatLevel("&4Look out, here comes the flood!");
+                Server.s.Log("[Lava Survival] Map flooding.");
                 if (mapData.layer)
                 {
                     DoFloodLayer();
@@ -175,6 +176,7 @@ namespace MCForge
         public void DoFloodLayer()
         {
             map.ChatLevel("&4Layer " + mapData.currentLayer + " flooding...");
+            Server.s.Log("[Lava Survival] Layer " + mapData.currentLayer + " flooding.");
             map.Blockchange((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z, mapData.block, true);
             mapData.currentLayer++;
         }
@@ -271,6 +273,10 @@ namespace MCForge
         {
             if (maps.Count < 3) return;
 
+            // Make sure these are cleared or bad stuff happens!
+            votes.Clear();
+            voted.Clear();
+
             byte i = 0;
             string opt, str = "";
             while (i < Math.Min(voteCount, maps.Count - 1))
@@ -305,7 +311,7 @@ namespace MCForge
         public void EndVote()
         {
             voteActive = false;
-            KeyValuePair<string, int> most = new KeyValuePair<string, int>("", -1);
+            KeyValuePair<string, int> most = new KeyValuePair<string, int>(String.Empty, -1);
             foreach (KeyValuePair<string, int> kvp in votes)
             {
                 if (kvp.Value > most.Value) most = kvp;
@@ -386,7 +392,7 @@ namespace MCForge
                                 sendAfkMain = bool.Parse(value);
                                 break;
                             case "vote-count":
-                                voteCount = (byte)NumberClamp(decimal.Parse(value), 2, 10);
+                                voteCount = (byte)MathHelper.Clamp(decimal.Parse(value), 2, 10);
                                 break;
                             case "vote-time":
                                 voteTime = double.Parse(value);
@@ -435,23 +441,24 @@ namespace MCForge
                 {
                     if (line[0] != '#')
                     {
+                        string[] sp;
                         string value = line.Substring(line.IndexOf(" = ") + 3);
                         switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
                             case "fast-chance":
-                                settings.fast = (byte)NumberClamp(decimal.Parse(value), 0, 100);
+                                settings.fast = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "killer-chance":
-                                settings.killer = (byte)NumberClamp(decimal.Parse(value), 0, 100);
+                                settings.killer = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "destroy-chance":
-                                settings.destroy = (byte)NumberClamp(decimal.Parse(value), 0, 100);
+                                settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "water-chance":
-                                settings.water = (byte)NumberClamp(decimal.Parse(value), 0, 100);
+                                settings.water = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "layer-chance":
-                                settings.layer = (byte)NumberClamp(decimal.Parse(value), 0, 100);
+                                settings.layer = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
                                 break;
                             case "layer-height":
                                 settings.layerHeight = int.Parse(value);
@@ -469,10 +476,12 @@ namespace MCForge
                                 settings.floodTime = double.Parse(value);
                                 break;
                             case "block-flood":
-                                settings.blockFlood = new Pos(ushort.Parse(value.Split(',')[0]), ushort.Parse(value.Split(',')[1]), ushort.Parse(value.Split(',')[2]));
+                                sp = value.Split(',');
+                                settings.blockFlood = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
                                 break;
                             case "block-layer":
-                                settings.blockLayer = new Pos(ushort.Parse(value.Split(',')[0]), ushort.Parse(value.Split(',')[1]), ushort.Parse(value.Split(',')[2]));
+                                sp = value.Split(',');
+                                settings.blockLayer = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
                                 break;
                         }
                     }
@@ -528,12 +537,11 @@ namespace MCForge
         // Getters/Setters
         public string GetVoteString()
         {
-            string str = "";
+            StringBuilder sb = new StringBuilder();
             foreach (KeyValuePair<string, int> kvp in votes)
-            {
-                str += Server.DefaultColor + ", &5" + kvp.Key.Capitalize();
-            }
-            return votes.Count > 0 ? str.Remove(0, 4) : str;
+                sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
+            if (votes.Count > 0) sb.Remove(0, 4);
+            return sb.ToString();
         }
 
         public List<string> GetMaps()

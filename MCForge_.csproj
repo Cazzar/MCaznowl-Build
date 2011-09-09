@@ -416,6 +416,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>

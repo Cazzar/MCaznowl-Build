@@ -1188,25 +1188,15 @@ namespace MCForge.Gui
 
         public void UnloadedlistUpdate()
         {
-            List<string> levels = new List<string>(Server.levels.Count);
+            UnloadedList.Items.Clear();
 
-            List<string> unloadedLevels = new List<string>();
-
-            DirectoryInfo di = new DirectoryInfo("levels/");
-            FileInfo[] fi = di.GetFiles("*.lvl");
-            Thread.Sleep(10);
-            foreach (Level l in Server.levels) { levels.Add(l.name.ToLower()); }
+            string name;
+            FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
             foreach (FileInfo file in fi)
             {
-                if (!levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
-                {
-                    unloadedLevels.Add(file.Name.Replace(".lvl", ""));
-                }
-            }
-            UnloadedList.Items.Clear();
-            foreach (String unloaded in unloadedLevels)
-            {
-                UnloadedList.Items.Add(unloaded);
+                name = file.Name.Replace(".lvl", "");
+                if (Level.Find(name.ToLower()) == null)
+                    UnloadedList.Items.Add(name);
             }
         }
         #endregion
