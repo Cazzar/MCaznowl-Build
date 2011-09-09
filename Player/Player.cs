@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Data;
 using System.Linq;
+using System.Text;
 
 namespace MCForge
 {
@@ -2429,99 +2430,97 @@ namespace MCForge
             byte[] buffer = new byte[65];
             unchecked { buffer[0] = id; }
 
+            StringBuilder sb = new StringBuilder(message);
             for (int i = 0; i < 10; i++)
             {
-                message = message.Replace("%" + i, "&" + i);
-                message = message.Replace("&" + i + " &", " &");
+                sb.Replace("%" + i, "&" + i);
+                sb.Replace("&" + i + " &", " &");
             }
             for (char ch = 'a'; ch <= 'f'; ch++)
             {
-                message = message.Replace("%" + ch, "&" + ch);
-                message = message.Replace("&" + ch + " &", " &");
+                sb.Replace("%" + ch, "&" + ch);
+                sb.Replace("&" + ch + " &", " &");
             }
 
             if (Server.dollardollardollar)
-                message = message.Replace("$name", "$" + name);
+                sb.Replace("$name", "$" + name);
             else
-                message = message.Replace("$name", name);
-            message = message.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
-            message = message.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
-            message = message.Replace("$ip", ip);
-            message = message.Replace("$color", color);
-            message = message.Replace("$rank", group.name);
-            message = message.Replace("$level", level.name);
-            message = message.Replace("$deaths", overallDeath.ToString());
-            message = message.Replace("$money", money.ToString());
-            message = message.Replace("$blocks", overallBlocks.ToString());
-            message = message.Replace("$first", firstLogin.ToString());
-            message = message.Replace("$kicked", totalKicked.ToString());
-            message = message.Replace("$server", Server.name);
-            message = message.Replace("$motd", Server.motd);
-            message = message.Replace("$banned", Player.GetBannedCount().ToString());
-
-            message = message.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
+                sb.Replace("$name", name);
+            sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
+            sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
+            sb.Replace("$ip", ip);
+            sb.Replace("$color", color);
+            sb.Replace("$rank", group.name);
+            sb.Replace("$level", level.name);
+            sb.Replace("$deaths", overallDeath.ToString());
+            sb.Replace("$money", money.ToString());
+            sb.Replace("$blocks", overallBlocks.ToString());
+            sb.Replace("$first", firstLogin.ToString());
+            sb.Replace("$kicked", totalKicked.ToString());
+            sb.Replace("$server", Server.name);
+            sb.Replace("$motd", Server.motd);
+            sb.Replace("$banned", Player.GetBannedCount().ToString());
+            sb.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
 
             foreach (var customReplacement in Server.customdollars)
             {
                 if (!customReplacement.Key.StartsWith("//"))
                 {
-                    string oldmessage = message;
                     try
                     {
-                        message = message.Replace(customReplacement.Key, customReplacement.Value);
+                        sb.Replace(customReplacement.Key, customReplacement.Value);
                     }
-                    catch
-                    {
-                        message = oldmessage;
-                    }
+                    catch {}
                 }
             }
 
             if (Server.parseSmiley && parseSmiley)
             {
-                message = message.Replace(":)", "(darksmile)");
-                message = message.Replace(":D", "(smile)");
-                message = message.Replace("<3", "(heart)");
+                sb.Replace(":)", "(darksmile)");
+                sb.Replace(":D", "(smile)");
+                sb.Replace("<3", "(heart)");
             }
 
             byte[] stored = new byte[1];
 
             stored[0] = (byte)1;
-            message = message.Replace("(darksmile)", enc.GetString(stored));
+            sb.Replace("(darksmile)", enc.GetString(stored));
             stored[0] = (byte)2;
-            message = message.Replace("(smile)", enc.GetString(stored));
+            sb.Replace("(smile)", enc.GetString(stored));
             stored[0] = (byte)3;
-            message = message.Replace("(heart)", enc.GetString(stored));
+            sb.Replace("(heart)", enc.GetString(stored));
             stored[0] = (byte)4;
-            message = message.Replace("(diamond)", enc.GetString(stored));
+            sb.Replace("(diamond)", enc.GetString(stored));
             stored[0] = (byte)7;
-            message = message.Replace("(bullet)", enc.GetString(stored));
+            sb.Replace("(bullet)", enc.GetString(stored));
             stored[0] = (byte)8;
-            message = message.Replace("(hole)", enc.GetString(stored));
+            sb.Replace("(hole)", enc.GetString(stored));
             stored[0] = (byte)11;
-            message = message.Replace("(male)", enc.GetString(stored));
+            sb.Replace("(male)", enc.GetString(stored));
             stored[0] = (byte)12;
-            message = message.Replace("(female)", enc.GetString(stored));
+            sb.Replace("(female)", enc.GetString(stored));
             stored[0] = (byte)15;
-            message = message.Replace("(sun)", enc.GetString(stored));
+            sb.Replace("(sun)", enc.GetString(stored));
             stored[0] = (byte)16;
-            message = message.Replace("(right)", enc.GetString(stored));
+            sb.Replace("(right)", enc.GetString(stored));
             stored[0] = (byte)17;
-            message = message.Replace("(left)", enc.GetString(stored));
+            sb.Replace("(left)", enc.GetString(stored));
             stored[0] = (byte)19;
-            message = message.Replace("(double)", enc.GetString(stored));
+            sb.Replace("(double)", enc.GetString(stored));
             stored[0] = (byte)22;
-            message = message.Replace("(half)", enc.GetString(stored));
+            sb.Replace("(half)", enc.GetString(stored));
             stored[0] = (byte)24;
-            message = message.Replace("(uparrow)", enc.GetString(stored));
+            sb.Replace("(uparrow)", enc.GetString(stored));
             stored[0] = (byte)25;
-            message = message.Replace("(downarrow)", enc.GetString(stored));
+            sb.Replace("(downarrow)", enc.GetString(stored));
             stored[0] = (byte)26;
-            message = message.Replace("(rightarrow)", enc.GetString(stored));
+            sb.Replace("(rightarrow)", enc.GetString(stored));
             stored[0] = (byte)30;
-            message = message.Replace("(up)", enc.GetString(stored));
+            sb.Replace("(up)", enc.GetString(stored));
             stored[0] = (byte)31;
-            message = message.Replace("(down)", enc.GetString(stored));
+            sb.Replace("(down)", enc.GetString(stored));
+
+            message = sb.ToString();
 
             int totalTries = 0;
         retryTag: try
@@ -2546,6 +2545,7 @@ namespace MCForge
                 else Server.ErrorLog(e);
             }
         }
+
         public void SendMotd()
         {
             byte[] buffer = new byte[130];
@@ -3713,6 +3713,8 @@ namespace MCForge
             bytes = enc.GetBytes(str.PadRight(size).Substring(0, size));
             return bytes;
         }
+
+        // TODO: Optimize this using a StringBuilder
         static List<string> Wordwrap(string message)
         {
             List<string> lines = new List<string>();
