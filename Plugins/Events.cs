@@ -20,9 +20,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.Plugins
+namespace MCForge
 {
-    public enum Events
+    public enum PlayerEvents
     {
         PlayerCommand,
         PlayerChat,
@@ -30,5 +30,14 @@ namespace MCForge.Plugins
         LevelLoad,
         LevelSave,
         PlayerMove
+    }
+    public enum GlobalLevelEvents
+    {
+        LevelLoad,
+        LevelSave
+    }
+    public enum LevelEvents
+    {
+        LevelUnload
     }
 }

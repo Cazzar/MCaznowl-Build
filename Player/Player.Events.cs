@@ -27,12 +27,18 @@ namespace MCForge
         /// <param name="z">The z cord. of the block</param>
         /// <param name="type">The block the player is holding</param>
         public delegate void BlockchangeEventHandler(Player p, ushort x, ushort y, ushort z, byte type);
+        /// <summary>
+        /// BlockChange event is called when a player removes or places a block
+        /// </summary>
         public event BlockchangeEventHandler Blockchange = null;
         /// <summary>
         /// Player Connect Event is called when a Player connects
         /// </summary>
         /// <param name="p">The player that connected</param>
         public delegate void OnPlayerConnect(Player p);
+        /// <summary>
+        /// PlayerConnect event is called when a player connects (Player p)
+        /// </summary>
         public static event OnPlayerConnect PlayerConnect = null;
         /// <summary>
         /// Player Disconnect is called when a player disconnects
@@ -40,6 +46,9 @@ namespace MCForge
         /// <param name="p">The player that disconnected</param>
         /// <param name="reason">The reason (or kick message)</param>
         public delegate void OnPlayerDisconnect(Player p, string reason);
+        /// <summary>
+        /// PlayerDisconnect event is called when a player disconnects (Player p, string reason)
+        /// </summary>
         public static event OnPlayerDisconnect PlayerDisconnect = null;
         /// <summary>
         /// OnPlayerCommand event is called when a player does a command
@@ -49,6 +58,9 @@ namespace MCForge
         /// <param name="p">The player that used it</param>
         /// <param name="message">The param.</param>
         public delegate void OnPlayerCommand(string cmd, Player p, string message);
+        /// <summary>
+        /// PlayerCommand is called when a player does a command (string cmd, Player p, string message)
+        /// </summary>
         public static event OnPlayerCommand PlayerCommand = null;
         /// <summary>
         /// PlayerChat is event is called when a player chats on the server
@@ -57,6 +69,9 @@ namespace MCForge
         /// <param name="p">The player that talked</param>
         /// <param name="message">The message that the user said</param>
         public delegate void OnPlayerChat(Player p, string message);
+        /// <summary>
+        /// PlayerChat event is called when a player chats (Player p, string message)
+        /// </summary>
         public static event OnPlayerChat PlayerChat = null;
         /// <summary>
         /// The OnPlayerDeath event is called when...a player dies
@@ -72,12 +87,33 @@ namespace MCForge
         /// <param name="y">The y cord.</param>
         /// <param name="z">The z cord.</param>
         public delegate void OnPlayerMove(Player p, ushort x, ushort y, ushort z);
+        /// <summary>
+        /// PlayerMove is called when a player moves (Player p, ushort x, ushort y, ushort z)
+        /// </summary>
         public static event OnPlayerMove PlayerMove = null;
+        /// <summary>
+        /// OnMove is called when the player moves (Player p, ushort x, ushort y, ushort z)
+        /// </summary>
         public event OnPlayerMove OnMove = null;
+        /// <summary>
+        /// PlayerDeath is called when the player dies (Player p, byte deathblock)
+        /// </summary>
         public static event OnPlayerDeath PlayerDeath = null;
+        /// <summary>
+        /// PlayerBlockChange is called when a player places a block
+        /// </summary>
         public static event BlockchangeEventHandler2 PlayerBlockChange = null;
+        /// <summary>
+        /// OnChat is called when the player chats (Player p, string message)
+        /// </summary>
         public event OnPlayerChat OnChat = null;
+        /// <summary>
+        /// OnCommand is called when the player does a command (string cmd, Player p, string message)
+        /// </summary>
         public event OnPlayerCommand OnCommand = null;
+        /// <summary>
+        /// OnDeath is called when the player dies (Player p, byte deathblock)
+        /// </summary>
         public event OnPlayerDeath OnDeath = null;
         public void ClearPlayerCommand() { OnCommand = null; }
         public void ClearPlayerChat() { OnChat = null; }

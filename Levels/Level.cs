@@ -47,6 +47,7 @@ namespace MCForge
         public static bool cancelload = false;
         public static bool cancelsave = false;
         public static bool cancelphysics = false;
+        public bool cancelunload = false;
         public int id;
         public string name;
         public ushort width; // x
@@ -236,6 +237,12 @@ namespace MCForge
             if (Server.lava.active && Server.lava.map == this) return false;
             if (LevelUnload != null)
                 LevelUnload(this);
+            if (cancelunload)
+            {
+                Server.s.Log("Unload canceled by Plugin! (Map: " + name + ")");
+                cancelunload = false;
+                return false;
+            }
             Player.players.ForEach(delegate(Player pl)
             {
                 if (pl.level == this) Command.all.Find("goto").Use(pl, Server.mainLevel.name);
