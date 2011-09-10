@@ -32,7 +32,8 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        LavaSurvival.MapSettings lsMapSettings;
+        System.Timers.Timer lavaControlUpdateTimer;
+        string lsLoadedMap = "";
 
         public PropertyWindow()
         {
@@ -87,6 +88,7 @@ namespace MCForge.Gui
                 cmbAdminChat.Items.Add(grp.name);
                 cmbVerificationRank.Items.Add(grp.name);
                 lsCmbSetupRank.Items.Add(grp.name);
+                lsCmbControlRank.Items.Add(grp.name);
                 if (grp.Permission == Server.opchatperm)
                 {
                     opchatperm = grp.name;
@@ -139,12 +141,28 @@ namespace MCForge.Gui
             {
                 Server.s.Log("Failed to load Lava Survival settings!");
             }
+
+            try
+            {
+                lavaControlUpdateTimer = new System.Timers.Timer(10000);
+                lavaControlUpdateTimer.AutoReset = true;
+                lavaControlUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
+                {
+                    UpdateLavaControls();
+                });
+                lavaControlUpdateTimer.Start();
+            }
+            catch
+            {
+                Server.s.Log("Failed to start lava control update timer!");
+            }
         }
 
         public static bool EditTextOpen = false;
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
+            lavaControlUpdateTimer.Dispose();
             Window.prevLoaded = false;
         }
 
@@ -1799,16 +1817,18 @@ MessageBox.Show("Text Box Cleared!!");
 
         private void LoadLavaSettings()
         {
-            lsCmbSetupRank.SelectedIndex = (Group.findPerm(Server.lava.setupRank) == null) ? 1 : cmbVerificationRank.Items.IndexOf(Group.findPerm(Server.lava.setupRank).name);
+            lsCmbSetupRank.SelectedIndex = (Group.findPerm(Server.lava.setupRank) == null) ? (int)LevelPermission.Admin : lsCmbSetupRank.Items.IndexOf(Group.findPerm(Server.lava.setupRank).name);
+            lsCmbControlRank.SelectedIndex = (Group.findPerm(Server.lava.controlRank) == null) ? (int)LevelPermission.Operator : lsCmbControlRank.Items.IndexOf(Group.findPerm(Server.lava.controlRank).name);
             lsChkStartOnStartup.Checked = Server.lava.startOnStartup;
             lsChkSendAFKMain.Checked = Server.lava.sendAfkMain;
             lsNudVoteCount.Value = Server.lava.voteCount;
-            lsNudVoteTime.Value = (decimal)MathHelper.Clamp(Server.lava.voteTime, 1, 10);
+            lsNudVoteTime.Value = (decimal)MathHelper.Clamp(Server.lava.voteTime, 1, 1000);
         }
 
         private void SaveLavaSettings()
         {
             Server.lava.setupRank = Group.GroupList.Find(grp => grp.name == lsCmbSetupRank.Items[lsCmbSetupRank.SelectedIndex].ToString()).Permission;
+            Server.lava.controlRank = Group.GroupList.Find(grp => grp.name == lsCmbControlRank.Items[lsCmbControlRank.SelectedIndex].ToString()).Permission;
             Server.lava.startOnStartup = lsChkStartOnStartup.Checked;
             Server.lava.sendAfkMain = lsChkSendAFKMain.Checked;
             Server.lava.voteCount = (byte)lsNudVoteCount.Value;
@@ -1818,26 +1838,31 @@ MessageBox.Show("Text Box Cleared!!");
 
         private void UpdateLavaControls()
         {
-            lsBtnStartGame.Enabled = !Server.lava.active;
-            lsBtnStopGame.Enabled = Server.lava.active;
-            lsBtnEndRound.Enabled = Server.lava.roundActive;
+            try
+            {
+                lsBtnStartGame.Enabled = !Server.lava.active;
+                lsBtnStopGame.Enabled = Server.lava.active;
+                lsBtnEndRound.Enabled = Server.lava.roundActive;
+                lsBtnEndVote.Enabled = Server.lava.voteActive;
+            }
+            catch { }
         }
 
         private void lsBtnStartGame_Click(object sender, EventArgs e)
         {
-            Server.lava.Start();
+            if (!Server.lava.active) Server.lava.Start();
             UpdateLavaControls();
         }
 
         private void lsBtnStopGame_Click(object sender, EventArgs e)
         {
-            Server.lava.Stop();
+            if (Server.lava.active) Server.lava.Stop();
             UpdateLavaControls();
         }
 
         private void lsBtnEndRound_Click(object sender, EventArgs e)
         {
-            Server.lava.EndRound();
+            if (Server.lava.roundActive) Server.lava.EndRound();
             UpdateLavaControls();
         }
 
@@ -1880,6 +1905,7 @@ MessageBox.Show("Text Box Cleared!!");
                 level.unload = false;
                 level.loadOnGoto = false;
                 Level.SaveSettings(level);
+                level.Unload(true);
 
                 UpdateLavaMapList();
             }
@@ -1908,8 +1934,61 @@ MessageBox.Show("Text Box Cleared!!");
                 level.unload = true;
                 level.loadOnGoto = true;
                 Level.SaveSettings(level);
+                level.Unload(true);
 
                 UpdateLavaMapList();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void lsMapUse_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string name;
+            try { name = lsMapUse.Items[lsMapUse.SelectedIndex].ToString(); }
+            catch { return; }
+
+            lsLoadedMap = name;
+            try
+            {
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(name);
+                lsNudFastLava.Value = MathHelper.Clamp((decimal)settings.fast, 0, 100);
+                lsNudKiller.Value = MathHelper.Clamp((decimal)settings.killer, 0, 100);
+                lsNudDestroy.Value = MathHelper.Clamp((decimal)settings.destroy, 0, 100);
+                lsNudWater.Value = MathHelper.Clamp((decimal)settings.water, 0, 100);
+                lsNudLayer.Value = MathHelper.Clamp((decimal)settings.layer, 0, 100);
+                lsNudLayerHeight.Value = MathHelper.Clamp((decimal)settings.layerHeight, 1, 1000);
+                lsNudLayerCount.Value = MathHelper.Clamp((decimal)settings.layerCount, 1, 1000);
+                lsNudLayerTime.Value = (decimal)MathHelper.Clamp(settings.layerInterval, 1, 1000);
+                lsNudRoundTime.Value = (decimal)MathHelper.Clamp(settings.roundTime, 1, 1000);
+                lsNudFloodTime.Value = (decimal)MathHelper.Clamp(settings.floodTime, 1, 1000);
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void lsBtnEndVote_Click(object sender, EventArgs e)
+        {
+            if (Server.lava.voteActive) Server.lava.EndVote();
+            UpdateLavaControls();
+        }
+
+        private void lsBtnSaveSettings_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(lsLoadedMap)) return;
+
+            try
+            {
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(lsLoadedMap);
+                settings.fast = (byte)lsNudFastLava.Value;
+                settings.killer = (byte)lsNudKiller.Value;
+                settings.destroy = (byte)lsNudDestroy.Value;
+                settings.water = (byte)lsNudWater.Value;
+                settings.layer = (byte)lsNudLayer.Value;
+                settings.layerHeight = (int)lsNudLayerHeight.Value;
+                settings.layerCount = (int)lsNudLayerCount.Value;
+                settings.layerInterval = (double)lsNudLayerTime.Value;
+                settings.roundTime = (double)lsNudRoundTime.Value;
+                settings.floodTime = (double)lsNudFloodTime.Value;
+                Server.lava.SaveMapSettings(settings);
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
         }

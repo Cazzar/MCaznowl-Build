@@ -719,7 +719,7 @@ namespace MCForge
                         return;
                     }
                 }
-                if (connections.Count >= 5) { Kick("Too many connections!"); return; }
+                //if (connections.Count >= 5) { Kick("Too many connections!"); return; }
 
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Banned))
                 {
@@ -793,7 +793,9 @@ namespace MCForge
                 loggedIn = true;
                 id = FreeId();
 
-                players.Add(this);
+                lock (players)
+                    players.Add(this);
+
                 connections.Remove(this);
 
                 Server.s.PlayerListUpdate();
@@ -2802,6 +2804,8 @@ namespace MCForge
         public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
         public static void GlobalChat(Player from, string message, bool showname)
         {
+            if (from == null) return; // So we don't fucking derp the hell out!
+
             if (MessageHasBadColorCodes(from, message))
                 return;
 
@@ -3622,6 +3626,7 @@ namespace MCForge
         public void Dispose()
         {
             //throw new NotImplementedException();
+            if (connections.Contains(this)) connections.Remove(this);
             Extras.Clear();
             CopyBuffer.Clear();
             RedoBuffer.Clear();

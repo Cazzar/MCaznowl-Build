@@ -260,6 +260,11 @@ namespace MCForge
             }
             catch { }
             Server.levels.Remove(this);
+            try
+            {
+                Gui.Window.thisWindow.UpdateMapList("'");
+            }
+            catch { }
             GC.Collect();
             GC.WaitForPendingFinalizers();
 

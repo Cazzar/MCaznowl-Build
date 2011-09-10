@@ -33,7 +33,8 @@ namespace MCForge
                 if (player != null)
                 {
                     message = message.Substring(message.IndexOf(' ') + 1);
-                    Player.GlobalMessage(player.color + player.voicestring + player.color + player.prefix + player.name + ": &f" + message);
+                    //Player.GlobalMessage(player.color + player.voicestring + player.color + player.prefix + player.name + ": &f" + message);
+                    Player.GlobalChat(player, message);
                 }
                 else
                 {

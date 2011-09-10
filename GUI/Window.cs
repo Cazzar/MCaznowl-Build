@@ -1049,6 +1049,7 @@ namespace MCForge.Gui
 
         private void SaveMap_Click(object sender, EventArgs e)
         {
+            if (prpertiesoflvl == null) return;
             Level l = prpertiesoflvl;
             l.motd = MOTDtxt.Text;
             if (MOTDtxt.Text == "")

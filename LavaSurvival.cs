@@ -43,7 +43,7 @@ namespace MCForge
         public bool startOnStartup, sendAfkMain;
         public byte voteCount;
         public double voteTime;
-        public LevelPermission setupRank;
+        public LevelPermission setupRank, controlRank;
 
         // Constructors
         public LavaSurvival()
@@ -62,7 +62,8 @@ namespace MCForge
             sendAfkMain = true;
             voteCount = 2;
             voteTime = 2;
-            setupRank = LevelPermission.Operator;
+            setupRank = LevelPermission.Admin;
+            controlRank = LevelPermission.Operator;
             LoadSettings();
         }
 
@@ -137,7 +138,7 @@ namespace MCForge
                 catch { }
                 map.setPhysics(5);
                 map.ChatLevel("The round has ended!");
-                Server.s.Log("[Lava Survival] Round ended.");
+                Server.s.Log("[Lava Survival] Round ended. Voting...");
                 StartVote();
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -310,7 +311,10 @@ namespace MCForge
 
         public void EndVote()
         {
+            if (!voteActive) return;
+
             voteActive = false;
+            Server.s.Log("[Lava Survival] Vote ended.");
             KeyValuePair<string, int> most = new KeyValuePair<string, int>(String.Empty, -1);
             foreach (KeyValuePair<string, int> kvp in votes)
             {
@@ -400,6 +404,9 @@ namespace MCForge
                             case "setup-rank":
                                 setupRank = Level.PermissionFromName(value.ToLower());
                                 break;
+                            case "control-rank":
+                                controlRank = Level.PermissionFromName(value.ToLower());
+                                break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))
                                     if(!maps.Contains(mapname)) maps.Add(mapname);
@@ -421,6 +428,7 @@ namespace MCForge
                 SW.WriteLine("vote-count = " + voteCount.ToString());
                 SW.WriteLine("vote-time = " + voteTime.ToString());
                 SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower());
+                SW.WriteLine("control-rank = " + Level.PermissionToName(controlRank).ToLower());
                 SW.WriteLine("maps = " + maps.Concatenate(","));
             }
         }

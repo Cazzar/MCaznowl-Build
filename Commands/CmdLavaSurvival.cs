@@ -35,7 +35,22 @@ namespace MCForge
             if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
             if (String.IsNullOrEmpty(message)) { Help(p); return; }
             string[] s = message.Split(' ');
-            if (p.group.Permission >= Server.lava.setupRank)
+
+            if (s[0] == "go")
+            {
+                if (!Server.lava.active) { Player.SendMessage(p, "There is no Lava Survival game right now."); return; }
+                Command.all.Find("goto").Use(p, Server.lava.map.name);
+                return;
+            }
+            if (s[0] == "info")
+            {
+                if (!Server.lava.active) { Player.SendMessage(p, "There is no Lava Survival game right now."); return; }
+                if (!Server.lava.roundActive) { Player.SendMessage(p, "The round of Lava Survival hasn't started yet."); return; }
+                Server.lava.AnnounceRoundInfo(p);
+                Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p);
+                return;
+            }
+            if (p.group.Permission >= Server.lava.controlRank)
             {
                 if (s[0] == "start")
                 {
@@ -75,10 +90,14 @@ namespace MCForge
                 }
                 if (s[0] == "end")
                 {
-                    if (!Server.lava.active || !Server.lava.roundActive) { Player.SendMessage(p, "The round hasn't started yet!"); return; }
-                    Server.lava.EndRound();
+                    if (!Server.lava.active) { Player.SendMessage(p, "There isn't an active Lava Survival game."); return; }
+                    if (Server.lava.roundActive) Server.lava.EndRound();
+                    else if (Server.lava.voteActive) Server.lava.EndVote();
+                    else Player.SendMessage(p, "There isn't an active round or vote to end.");
                     return;
                 }
+            }
+            if (p.group.Permission >= Server.lava.setupRank) {
                 if (s[0] == "setup")
                 {
                     if (s.Length < 2) { SetupHelp(p); return; }
@@ -262,20 +281,6 @@ namespace MCForge
                     }
                 }
             }
-            if (s[0] == "go")
-            {
-                if (!Server.lava.active) { Player.SendMessage(p, "There is no Lava Survival game right now."); return; }
-                Command.all.Find("goto").Use(p, Server.lava.map.name);
-                return;
-            }
-            if (s[0] == "info")
-            {
-                if (!Server.lava.active) { Player.SendMessage(p, "There is no Lava Survival game right now."); return; }
-                if (!Server.lava.roundActive) { Player.SendMessage(p, "The round of Lava Survival hasn't started yet."); return; }
-                Server.lava.AnnounceRoundInfo(p);
-                Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p);
-                return;
-            }
 
             Help(p);
         }
@@ -285,10 +290,14 @@ namespace MCForge
             Player.SendMessage(p, "The following params are available:");
             Player.SendMessage(p, "go - Join the fun!");
             Player.SendMessage(p, "info - View the current round info and time.");
-            if (p == null || p.group.Permission >= Server.lava.setupRank)
+            if (p == null || p.group.Permission >= Server.lava.controlRank)
             {
                 Player.SendMessage(p, "start [map] - Start the Lava Survival game, optionally on the specified map.");
                 Player.SendMessage(p, "stop - Stop the current Lava Survival game.");
+                Player.SendMessage(p, "end - End the current round or vote.");
+            }
+            if (p == null || p.group.Permission >= Server.lava.setupRank)
+            {
                 Player.SendMessage(p, "setup - Setup lava survival, use it for more info.");
             }
         }
