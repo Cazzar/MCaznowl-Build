@@ -420,6 +420,7 @@ namespace MCForge
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
                     catch { }
+                    if (Server.lava.active) SendMessage("There is a Lava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
                 };
 
