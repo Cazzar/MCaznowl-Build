@@ -96,9 +96,9 @@ namespace MCForge {
                 if (p == who) {
                     Player.SendMessage(p, "Undid your actions for the past &b" + seconds + Server.DefaultColor + " seconds.");
                 } else {
-                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.", false);
+                    Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.", false);
                     // Also notify console
-                    Player.SendMessage(null, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.");
+                    Server.s.Log(who.name + "'s actions for the past " + seconds + " seconds were undone.");
                 }
                 return;
             } else if (undoPhysics) {
@@ -179,9 +179,9 @@ namespace MCForge {
                     }
 
                     if (FoundUser) {
-                        Player.GlobalChat(p, Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.", false);
+                        Player.GlobalMessage(Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.");
                         // Also notify console
-                        Player.SendMessage(null, Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.");
+                        Server.s.Log(message.Split(' ')[0] + "'s actions for the past " + seconds + " seconds were undone.");
                     } else Player.SendMessage(p, "Could not find player specified.");
                 } catch (Exception e) {
                     Server.ErrorLog(e);

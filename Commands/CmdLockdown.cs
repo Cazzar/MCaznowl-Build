@@ -126,14 +126,14 @@ namespace MCForge
                         }
                         Player.GlobalDie(who, false);
                         who.jailed = true;
-                        Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " has been locked down!", true);
+                        Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " has been locked down!");
                         Player.GlobalMessageOps("Locked by: " + ((p == null) ? "Console" : p.name));
                         return;
                     }
                     else
                     {
                         who.jailed = false;
-                        Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " has been unlocked.", true);
+                        Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " has been unlocked.");
                         Player.GlobalMessageOps("Unlocked by: " + ((p == null) ? "Console" : p.name));
                         return;
                     }

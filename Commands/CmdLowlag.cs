@@ -37,12 +37,12 @@ namespace MCForge
             if (Server.updateTimer.Interval > 1000)
             {
                 Server.updateTimer.Interval = 100;
-                Player.GlobalChat(null, "&dLow lag " + Server.DefaultColor + "mode was turned &cOFF" + Server.DefaultColor + ".", false);
+                Player.GlobalMessage("&dLow lag " + Server.DefaultColor + "mode was turned &cOFF" + Server.DefaultColor + ".");
             }
             else
             {
                 Server.updateTimer.Interval = 10000;
-                Player.GlobalChat(null, "&dLow lag " + Server.DefaultColor + "mode was turned &aON" + Server.DefaultColor + ".", false);
+                Player.GlobalMessage("&dLow lag " + Server.DefaultColor + "mode was turned &aON" + Server.DefaultColor + ".");
             }
         }
         public override void Help(Player p)

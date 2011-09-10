@@ -40,7 +40,7 @@ namespace MCForge
             if (foundGroup != null)
             {
                 foundGroup.maxBlocks = newLimit;
-                Player.GlobalChat(null, foundGroup.color + foundGroup.name + Server.DefaultColor + "'s building limits were set to &b" + newLimit, false);
+                Player.GlobalMessage(foundGroup.color + foundGroup.name + Server.DefaultColor + "'s building limits were set to &b" + newLimit);
                 Group.saveGroups(Group.GroupList);
             }
             else

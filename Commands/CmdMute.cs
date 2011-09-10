@@ -37,7 +37,7 @@ namespace MCForge
                 if (Server.muted.Contains(message))
                 {
                     Server.muted.Remove(message);
-                    Player.GlobalChat(null, message + Server.DefaultColor + " is not online but they have been &bun-muted", false);
+                    Player.GlobalMessage(message + Server.DefaultColor + " is not online but they have been &bun-muted");
                     Server.muted.Save("muted.txt");
                     return;
                 }
@@ -47,7 +47,7 @@ namespace MCForge
             if (who.muted)
             {
                 who.muted = false;
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " has been &bun-muted", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &bun-muted", false);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace MCForge
                     if (who != p) if (who.group.Permission > p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher rank."); return; }
                 }
                 who.muted = true;
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " has been &8muted", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &8muted", false);
                 Server.muted.Save("muted.txt");
             }
         }

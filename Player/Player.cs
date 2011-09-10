@@ -2804,6 +2804,8 @@ namespace MCForge
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
         }
+
+        // THIS IS NOT FOR SENDING GLOBAL MESSAGES!!! IT IS TO SEND A MESSAGE FROM A SPECIFIED PLAYER!!!!!!!!!!!!!!
         public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
         public static void GlobalChat(Player from, string message, bool showname)
         {

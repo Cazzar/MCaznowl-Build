@@ -34,7 +34,7 @@ namespace MCForge
         {
             if (message == "") { Help(p); return; }
             message = message.Replace("%", "&"); // Alow colors in global messages
-            Player.GlobalChat(p, message, false);
+            Player.GlobalMessage(message);
             message = message.Replace("&", ""); // converts the MC color codes to IRC. Doesn't seem to work with multiple colors
             //IRCBot.Say(message);
             Server.IRC.Say(message);
