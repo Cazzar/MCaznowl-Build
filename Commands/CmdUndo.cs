@@ -57,7 +57,7 @@ namespace MCForge {
                 if (p == who)
                     seconds = ((message.ToLower() != "all") ? long.Parse(message) : int.MaxValue);
                 else
-                    seconds = getAllowed(p, message);
+                    seconds = getAllowed(p, message.ToLower());
             } catch {
                 Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo. Using 30 seconds."); //only run if seconds is an invalid number
                 seconds = 30;
