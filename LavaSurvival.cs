@@ -53,10 +53,10 @@ namespace MCForge
             votes = new Dictionary<string, int>();
             announceTimer = new Timer(60000);
             announceTimer.AutoReset = true;
-            announceTimer.Elapsed += new ElapsedEventHandler(delegate
+            announceTimer.Elapsed += delegate
             {
                 AnnounceTimeLeft(true, false);
-            });
+            };
 
             startOnStartup = false;
             sendAfkMain = true;
@@ -114,8 +114,8 @@ namespace MCForge
 
             try
             {
-                mapData.roundTimer.Elapsed += new ElapsedEventHandler(delegate { EndRound(); });
-                mapData.floodTimer.Elapsed += new ElapsedEventHandler(delegate { DoFlood(); });
+                mapData.roundTimer.Elapsed += delegate { EndRound(); };
+                mapData.floodTimer.Elapsed += delegate { DoFlood(); };
                 mapData.roundTimer.Start();
                 mapData.floodTimer.Start();
                 announceTimer.Start();
@@ -157,7 +157,7 @@ namespace MCForge
                 if (mapData.layer)
                 {
                     DoFloodLayer();
-                    mapData.layerTimer.Elapsed += new ElapsedEventHandler(delegate
+                    mapData.layerTimer.Elapsed += delegate
                     {
                         if (mapData.currentLayer <= mapSettings.layerCount)
                         {
@@ -165,7 +165,7 @@ namespace MCForge
                         }
                         else
                             mapData.layerTimer.Stop();
-                    });
+                    };
                     mapData.layerTimer.Start();
                 }
                 else
@@ -296,7 +296,7 @@ namespace MCForge
 
             voteTimer = new Timer(TimeSpan.FromMinutes(voteTime).TotalMilliseconds);
             voteTimer.AutoReset = false;
-            voteTimer.Elapsed += new ElapsedEventHandler(delegate
+            voteTimer.Elapsed += delegate
             {
                 try
                 {
@@ -304,7 +304,7 @@ namespace MCForge
                     voteTimer.Dispose();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-            });
+            };
             voteTimer.Start();
             voteActive = true;
         }
@@ -328,7 +328,7 @@ namespace MCForge
             map.ChatLevel("You will be transferred in 5 seconds...");
             transferTimer = new Timer(5000);
             transferTimer.AutoReset = false;
-            transferTimer.Elapsed += new ElapsedEventHandler(delegate
+            transferTimer.Elapsed += delegate
             {
                 try
                 {
@@ -336,7 +336,7 @@ namespace MCForge
                     transferTimer.Dispose();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-            });
+            };
             transferTimer.Start();
         }
 

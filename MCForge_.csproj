@@ -212,6 +212,7 @@
     </Compile>
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
+    <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
     <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />

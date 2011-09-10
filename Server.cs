@@ -170,6 +170,10 @@ public static event OnServerError ServerError = null;
         // Lava Survival
         public static LavaSurvival lava;
 
+        // OmniBan
+        public static OmniBan omniban;
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 10);
+
         //Settings
         #region Server Settings
         public const byte version = 7;
@@ -470,6 +474,9 @@ public static byte maxGuests = 10;
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
 
+            // OmniBan
+            omniban = new OmniBan();
+
             timeOnline = DateTime.Now;
             {//MYSQL stuff
                 try
@@ -749,6 +756,19 @@ processThread.Start();
                 
                 if (Server.irc) IRC.Connect();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
+
+                // OmniBan stuff!
+                new Thread(new ThreadStart(delegate
+                {
+                    omniban.Load(true);
+                })).Start();
+
+                omnibanCheckTimer.Elapsed += delegate
+                {
+                    omniban.Load(true);
+                    omniban.KickAll();
+                };
+                omnibanCheckTimer.Start();
 
 
                 // string CheckName = "FROSTEDBUTTS";

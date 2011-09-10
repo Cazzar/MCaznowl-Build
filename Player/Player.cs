@@ -721,6 +721,8 @@ namespace MCForge
                 }
                 //if (connections.Count >= 5) { Kick("Too many connections!"); return; }
 
+                if (Server.omniban.CheckPlayer(this)) Kick(Server.omniban.kickMsg);
+
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Banned))
                 {
                     if (Server.useWhitelist)
@@ -3887,7 +3889,7 @@ namespace MCForge
 
         #endregion
 
-        private static bool IPInPrivateRange(string ip)
+        public static bool IPInPrivateRange(string ip)
         {
             //Official loopback is 127.0.0.1/8
             if (ip.StartsWith("127.0.0.") || ip.StartsWith("192.168.") || ip.StartsWith("10."))
