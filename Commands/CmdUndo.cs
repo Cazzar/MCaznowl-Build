@@ -29,7 +29,7 @@ namespace MCForge {
         public CmdUndo() { }
 
         public override void Use(Player p, string message) {
-            byte b; long seconds = -1; Player who = null; Player.UndoPos Pos; int CurrentPos = 0;
+            byte b; long seconds = -1; Player who = null; Player.UndoPos Pos; int CurrentPos = 0; bool undoPhysics = false;
             if (p != null)
                 p.RedoBuffer.Clear();
 
@@ -43,21 +43,23 @@ namespace MCForge {
             }
 
             try {
-                if (message.Split(' ').Length == 2) {
-                    who = Player.Find(message.Split(' ')[0]);
+                if (message.Split(' ').Length > 1) {
+                    who = message.Split(' ')[0].ToLower() == "physics" ? null : Player.Find(message.Split(' ')[0]);
+                    undoPhysics = message.Split(' ')[0].ToLower() == "physics";
                     message = message.Split(' ')[1].ToLower();
 
                 } else {
-                    who = (p == null) ? null : p;
+                    who = (p == null || message.ToLower() == "physics") ? null : p;
+                    undoPhysics = message.ToLower() == "physics";
                 }
                 //If user is undoing him/herself, then all is go.
                 //If user is undoing someone else, then restrictions are used.
                 if (p == who)
-                    seconds = ((message != "all") ? long.Parse(message) : int.MaxValue);
+                    seconds = ((message.ToLower() != "all") ? long.Parse(message) : int.MaxValue);
                 else
                     seconds = getAllowed(p, message);
             } catch {
-                Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo.  Using 30 seconds."); //only run if seconds is an invalid number
+                Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo. Using 30 seconds."); //only run if seconds is an invalid number
                 seconds = 30;
             }
 
@@ -99,7 +101,7 @@ namespace MCForge {
                     Player.SendMessage(null, who.color + who.name + Server.DefaultColor + "'s actions for the past &b" + seconds + " seconds were undone.");
                 }
                 return;
-            } else if (message.Split(' ')[0].ToLower() == "physics") {
+            } else if (undoPhysics) {
                 if (p.group.Permission < LevelPermission.AdvBuilder) { Player.SendMessage(p, "Reserved for Adv+"); return; }
 
                 Command.all.Find("physics").Use(p, "0");
