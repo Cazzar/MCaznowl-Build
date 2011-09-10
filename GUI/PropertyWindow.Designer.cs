@@ -290,10 +290,6 @@ namespace MCForge.Gui
             this.lsMapNoUse = new System.Windows.Forms.ListBox();
             this.lsMapUse = new System.Windows.Forms.ListBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.groupBox18 = new System.Windows.Forms.GroupBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.groupBox17 = new System.Windows.Forms.GroupBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
             this.chkNoPillaringDuringZombie = new System.Windows.Forms.CheckBox();
             this.ZombieName = new System.Windows.Forms.TextBox();
@@ -363,8 +359,6 @@ namespace MCForge.Gui
             this.groupBox21.SuspendLayout();
             this.groupBox20.SuspendLayout();
             this.tabPage11.SuspendLayout();
-            this.groupBox18.SuspendLayout();
-            this.groupBox17.SuspendLayout();
             this.groupBox16.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
@@ -833,7 +827,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+            this.chkIRC.Size = new System.Drawing.Size(57, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -892,7 +886,7 @@ namespace MCForge.Gui
             this.ChkTunnels.AutoSize = true;
             this.ChkTunnels.Location = new System.Drawing.Point(18, 20);
             this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(83, 23);
+            this.ChkTunnels.Size = new System.Drawing.Size(85, 23);
             this.ChkTunnels.TabIndex = 4;
             this.ChkTunnels.Text = "Anti-Tunneling";
             this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
@@ -904,7 +898,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(78, 23);
+            this.chkVerify.Size = new System.Drawing.Size(79, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -929,7 +923,7 @@ namespace MCForge.Gui
             this.chkAutoload.AutoSize = true;
             this.chkAutoload.Location = new System.Drawing.Point(16, 80);
             this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
+            this.chkAutoload.Size = new System.Drawing.Size(85, 23);
             this.chkAutoload.TabIndex = 4;
             this.chkAutoload.Text = "Load on /goto";
             this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
@@ -1030,7 +1024,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -1065,7 +1059,7 @@ namespace MCForge.Gui
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -2211,7 +2205,7 @@ namespace MCForge.Gui
             this.chkIrcId.AutoSize = true;
             this.chkIrcId.Location = new System.Drawing.Point(15, 198);
             this.chkIrcId.Name = "chkIrcId";
-            this.chkIrcId.Size = new System.Drawing.Size(117, 23);
+            this.chkIrcId.Size = new System.Drawing.Size(120, 23);
             this.chkIrcId.TabIndex = 27;
             this.chkIrcId.Text = "Identify with NickServ";
             this.chkIrcId.UseVisualStyleBackColor = true;
@@ -2396,7 +2390,7 @@ namespace MCForge.Gui
             this.chkAgreeToRules.AutoSize = true;
             this.chkAgreeToRules.Location = new System.Drawing.Point(15, 77);
             this.chkAgreeToRules.Name = "chkAgreeToRules";
-            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
+            this.chkAgreeToRules.Size = new System.Drawing.Size(189, 17);
             this.chkAgreeToRules.TabIndex = 32;
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
@@ -2493,7 +2487,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -2561,7 +2555,7 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(92, 23);
+            this.chkRestart.Size = new System.Drawing.Size(90, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -2572,7 +2566,7 @@ namespace MCForge.Gui
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(16, 80);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(106, 23);
+            this.chkMono.Size = new System.Drawing.Size(110, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -2583,7 +2577,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(152, 22);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -3048,8 +3042,6 @@ namespace MCForge.Gui
             // tabPage11
             // 
             this.tabPage11.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage11.Controls.Add(this.groupBox18);
-            this.tabPage11.Controls.Add(this.groupBox17);
             this.tabPage11.Controls.Add(this.groupBox16);
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
@@ -3057,44 +3049,6 @@ namespace MCForge.Gui
             this.tabPage11.Size = new System.Drawing.Size(468, 473);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Misc";
-            // 
-            // groupBox18
-            // 
-            this.groupBox18.Controls.Add(this.label48);
-            this.groupBox18.Location = new System.Drawing.Point(140, 6);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(325, 223);
-            this.groupBox18.TabIndex = 43;
-            this.groupBox18.TabStop = false;
-            this.groupBox18.Text = "CTF";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(9, 17);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(114, 13);
-            this.label48.TabIndex = 1;
-            this.label48.Text = "Move along now. Shoo!";
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Controls.Add(this.label47);
-            this.groupBox17.Location = new System.Drawing.Point(6, 235);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(459, 235);
-            this.groupBox17.TabIndex = 42;
-            this.groupBox17.TabStop = false;
-            this.groupBox17.Text = "Spleef";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(7, 21);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(108, 13);
-            this.label47.TabIndex = 0;
-            this.label47.Text = "Nothing to see here...";
             // 
             // groupBox16
             // 
@@ -3394,10 +3348,6 @@ namespace MCForge.Gui
             this.groupBox20.ResumeLayout(false);
             this.groupBox20.PerformLayout();
             this.tabPage11.ResumeLayout(false);
-            this.groupBox18.ResumeLayout(false);
-            this.groupBox18.PerformLayout();
-            this.groupBox17.ResumeLayout(false);
-            this.groupBox17.PerformLayout();
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
             this.tabPage8.ResumeLayout(false);
@@ -3615,10 +3565,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkNoLevelSavingDuringZombie;
         private System.Windows.Forms.CheckBox chkNoRespawnDuringZombie;
         private System.Windows.Forms.CheckBox chkZombieOnServerStart;
-        private System.Windows.Forms.GroupBox groupBox18;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.GroupBox groupBox17;
-        private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TextBox txtIrcId;
         private System.Windows.Forms.CheckBox chkIrcId;
