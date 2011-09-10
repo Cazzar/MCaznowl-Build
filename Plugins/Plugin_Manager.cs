@@ -25,7 +25,7 @@ using System.Threading;
 
 namespace MCForge
 {
-    public abstract class Plugin
+    public abstract partial class Plugin
     {
         public static List<Plugin> all = new List<Plugin>();
         public abstract void Load(bool startup);
