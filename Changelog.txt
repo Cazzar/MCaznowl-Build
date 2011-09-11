@@ -17,6 +17,7 @@ v5.2.0.0
 - Fixed dirt changing into grass when it shouldn't on physics 0.
 - Fixed the "To many connections!" error that would require a restart.
 - Fixed various bugs in Zombie Survival.
+- Fixed being unable to set the lowest rank for any blocks after obsidian in the GUI.
 - Added global chat, which allows you to chat with other servers! Can be disabled in the properties.
 - Added /copy [save|load|delete|list], and you can load from a URL by appending a # to the end.
 - Added a per-rank undo limit and ditched the old hard-coded limits. It's in seconds, set to 0 for no limit.
@@ -35,9 +36,9 @@ v5.2.0.0
 	- /garbage - Runs the .NET garbage collector, which frees up memory. You shouldn't need to use this often.
 	- /lavasurvival or /ls - Setup and use Lava Survival.
 - Added blocks:
-	- griefer_stone - Kicks you when broken! Use sparingly... or all the time. Defaults to Op+ to place.
+	- griefer_stone - The ultimate anti-griefer block! There are several options for it, such as what it looks like in-game. Defaults to Op+ to place/destroy.
 	- lava_sponge - Like normal sponge, but cleans up lava instead of water. Defaults to AdvBuilder+ to place/destroy.
-	- op_lava - Self explanatory.
+	- op_lava - Like op_glass, op_water, ect. Defaults to Op+ to place/destroy.
 - Removed the duplicate "death count" option.
 - Moved Zombie Survival options into the "Games" tab.
 - Made it so in the CLI, you must now use a / before commands. No more chat messages being parsed as commands!

@@ -118,6 +118,9 @@ namespace MCForge.Gui
             cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
             cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
 
+            for (byte b = 1; b < 50; b++)
+                cmbGrieferStoneType.Items.Add(Block.Name(b));
+
             //Load server stuff
             LoadProp("properties/server.properties");
             LoadRanks();
@@ -622,8 +625,18 @@ namespace MCForge.Gui
                                 }
                                 cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(value)); break;
 
-                                
+                            case "griefer-stone-tempban":
+                                chkGrieferStoneBan.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
 
+                            case "griefer-stone-type":
+                                try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(value); }
+                                catch
+                                {
+                                    try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(Block.Name(Convert.ToByte(value))); }
+                                    catch { Server.s.Log("Could not find " + value); }
+                                }
+                                break;
                         }
                     }
                 }
@@ -819,6 +832,10 @@ namespace MCForge.Gui
                     w.WriteLine("global-chat-enabled = " + chkGlobalChat.Checked.ToString().ToLower());
                     w.WriteLine("global-chat-nick = " + txtGlobalChatNick.Text);
                     w.WriteLine("global-chat-color = " + cmbGlobalChatColor.Items[cmbGlobalChatColor.SelectedIndex].ToString());
+                    w.WriteLine();
+                    w.WriteLine("#Griefer_stone Settings");
+                    w.WriteLine("griefer-stone-tempban = " + chkGrieferStoneBan.Checked.ToString().ToLower());
+                    w.WriteLine("griefer-stone-type = " + cmbGrieferStoneType.Items[cmbGrieferStoneType.SelectedIndex].ToString());
                 }
                 w.Flush();
                 w.Close();
@@ -1134,7 +1151,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
         }
         private void txtBlLowest_TextChanged(object sender, EventArgs e)
         {
-            fillLowest(ref txtBlLowest, ref storedBlocks[listBlocks.SelectedIndex].lowestRank);
+            fillLowest(ref txtBlLowest, ref storedBlocks[Block.Byte(listBlocks.SelectedItem.ToString())].lowestRank);
         }
         private void txtBlDisallow_TextChanged(object sender, EventArgs e)
         {

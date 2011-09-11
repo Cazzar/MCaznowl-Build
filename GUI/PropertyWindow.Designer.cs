@@ -131,6 +131,8 @@ namespace MCForge.Gui
             this.lsNudRoundTime = new System.Windows.Forms.NumericUpDown();
             this.lsNudFloodTime = new System.Windows.Forms.NumericUpDown();
             this.lsCmbControlRank = new System.Windows.Forms.ComboBox();
+            this.cmbGrieferStoneType = new System.Windows.Forms.ComboBox();
+            this.chkGrieferStoneBan = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -164,6 +166,7 @@ namespace MCForge.Gui
             this.label51 = new System.Windows.Forms.Label();
             this.chkGlobalChat = new System.Windows.Forms.CheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.label47 = new System.Windows.Forms.Label();
             this.chkShowEmptyRanks = new System.Windows.Forms.CheckBox();
             this.chkIgnoreGlobal = new System.Windows.Forms.CheckBox();
             this.chkNotifyOnJoinLeave = new System.Windows.Forms.CheckBox();
@@ -1365,6 +1368,28 @@ namespace MCForge.Gui
             this.lsCmbControlRank.TabIndex = 9;
             this.toolTip.SetToolTip(this.lsCmbControlRank, "Minimum rank required to administrate Lava Survival.");
             // 
+            // cmbGrieferStoneType
+            // 
+            this.cmbGrieferStoneType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGrieferStoneType.FormattingEnabled = true;
+            this.cmbGrieferStoneType.Location = new System.Drawing.Point(119, 136);
+            this.cmbGrieferStoneType.Name = "cmbGrieferStoneType";
+            this.cmbGrieferStoneType.Size = new System.Drawing.Size(94, 21);
+            this.cmbGrieferStoneType.TabIndex = 13;
+            this.toolTip.SetToolTip(this.cmbGrieferStoneType, "The block type that griefer_stone will look like in-game.");
+            // 
+            // chkGrieferStoneBan
+            // 
+            this.chkGrieferStoneBan.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkGrieferStoneBan.AutoSize = true;
+            this.chkGrieferStoneBan.Location = new System.Drawing.Point(219, 135);
+            this.chkGrieferStoneBan.Name = "chkGrieferStoneBan";
+            this.chkGrieferStoneBan.Size = new System.Drawing.Size(127, 23);
+            this.chkGrieferStoneBan.TabIndex = 43;
+            this.chkGrieferStoneBan.Text = "Griefer_stone Tempban";
+            this.toolTip.SetToolTip(this.chkGrieferStoneBan, "Should griefer_stone tempban the player or just kick them?");
+            this.chkGrieferStoneBan.UseVisualStyleBackColor = true;
+            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
@@ -1695,6 +1720,9 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.chkGrieferStoneBan);
+            this.groupBox13.Controls.Add(this.cmbGrieferStoneType);
+            this.groupBox13.Controls.Add(this.label47);
             this.groupBox13.Controls.Add(this.chkShowEmptyRanks);
             this.groupBox13.Controls.Add(this.chkIgnoreGlobal);
             this.groupBox13.Controls.Add(this.chkNotifyOnJoinLeave);
@@ -1715,6 +1743,15 @@ namespace MCForge.Gui
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Extra";
             // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(15, 139);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(98, 13);
+            this.label47.TabIndex = 42;
+            this.label47.Text = "Griefer_stone type:";
+            // 
             // chkShowEmptyRanks
             // 
             this.chkShowEmptyRanks.Appearance = System.Windows.Forms.Appearance.Button;
@@ -1729,7 +1766,7 @@ namespace MCForge.Gui
             // chkIgnoreGlobal
             // 
             this.chkIgnoreGlobal.AutoSize = true;
-            this.chkIgnoreGlobal.Location = new System.Drawing.Point(194, 145);
+            this.chkIgnoreGlobal.Location = new System.Drawing.Point(194, 168);
             this.chkIgnoreGlobal.Name = "chkIgnoreGlobal";
             this.chkIgnoreGlobal.Size = new System.Drawing.Size(112, 17);
             this.chkIgnoreGlobal.TabIndex = 36;
@@ -1761,7 +1798,7 @@ namespace MCForge.Gui
             // 
             // txtRestartTime
             // 
-            this.txtRestartTime.Location = new System.Drawing.Point(155, 184);
+            this.txtRestartTime.Location = new System.Drawing.Point(155, 193);
             this.txtRestartTime.Name = "txtRestartTime";
             this.txtRestartTime.Size = new System.Drawing.Size(172, 21);
             this.txtRestartTime.TabIndex = 1;
@@ -1769,7 +1806,7 @@ namespace MCForge.Gui
             // 
             // txtMoneys
             // 
-            this.txtMoneys.Location = new System.Drawing.Point(92, 143);
+            this.txtMoneys.Location = new System.Drawing.Point(92, 166);
             this.txtMoneys.Name = "txtMoneys";
             this.txtMoneys.Size = new System.Drawing.Size(82, 21);
             this.txtMoneys.TabIndex = 1;
@@ -1777,7 +1814,7 @@ namespace MCForge.Gui
             // chkRestartTime
             // 
             this.chkRestartTime.AutoSize = true;
-            this.chkRestartTime.Location = new System.Drawing.Point(18, 188);
+            this.chkRestartTime.Location = new System.Drawing.Point(18, 197);
             this.chkRestartTime.Name = "chkRestartTime";
             this.chkRestartTime.Size = new System.Drawing.Size(131, 17);
             this.chkRestartTime.TabIndex = 0;
@@ -1809,7 +1846,7 @@ namespace MCForge.Gui
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(15, 146);
+            this.label34.Location = new System.Drawing.Point(15, 169);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(71, 13);
             this.label34.TabIndex = 11;
@@ -1841,6 +1878,7 @@ namespace MCForge.Gui
             this.txtGrieferStone.Name = "txtGrieferStone";
             this.txtGrieferStone.Size = new System.Drawing.Size(134, 21);
             this.txtGrieferStone.TabIndex = 36;
+            this.toolTip.SetToolTip(this.txtGrieferStone, "Kick message for griefer_stone. Only works if tempban is off!");
             // 
             // chkGrieferStone
             // 
@@ -3626,5 +3664,8 @@ namespace MCForge.Gui
         private System.Windows.Forms.ComboBox lsCmbControlRank;
         private System.Windows.Forms.Label label68;
         private System.Windows.Forms.Button lsBtnEndVote;
+        private System.Windows.Forms.ComboBox cmbGrieferStoneType;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.CheckBox chkGrieferStoneBan;
     }
 }

@@ -160,6 +160,8 @@ namespace MCForge
         public string voicestring = "";
         public int consecutivemessages = 0;
 
+        public int grieferStoneWarn = 0;
+
         //CTF
         public Team team;
         public Team hasflag;
@@ -1244,7 +1246,26 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
-                    if (b == Block.griefer_stone) { Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!"); return; }
+                    
+                    if (b == Block.griefer_stone && !Block.canPlace(group.Permission, Block.griefer_stone) && !Server.devs.Contains(name.ToLower()))
+                    {
+                        if (grieferStoneWarn < 1)
+                            SendMessage("Do not grief! This is your first warning!");
+                        else if (grieferStoneWarn < 2)
+                            SendMessage("Do NOT grief! Next time you will be " + (Server.grieferStoneBan ? "banned for 30 minutes" : "kicked") + "!");
+                        else
+                        {
+                            if (Server.grieferStoneBan)
+                                try { Command.all.Find("tempban").Use(null, name + " 30"); }
+                                catch (Exception ex) { Server.ErrorLog(ex); }
+                            else
+                                Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!");
+                            return;
+                        }
+                        grieferStoneWarn++;
+                        SendBlockchange(x, y, z, b);
+                        return;
+                    }
                 }
 
                 bP.deleted = true;

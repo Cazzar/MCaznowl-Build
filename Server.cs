@@ -299,6 +299,8 @@ public static byte maxGuests = 10;
 
         // lol useless junk here lolololasdf poop
         public static bool showEmptyRanks = false;
+        public static byte grieferStoneType = 1;
+        public static bool grieferStoneBan = true;
 
         #endregion
 

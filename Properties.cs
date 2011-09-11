@@ -512,6 +512,15 @@ namespace MCForge
                                 Server.GlobalChatColor = color;
                                 break;
 
+                            case "griefer-stone-tempban":
+                                try { Server.grieferStoneBan = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+
+                            case "griefer-stone-type":
+                                try { Server.grieferStoneType = (byte)MathHelper.Clamp((decimal)Block.Byte(value), 1, 49); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                         }
                     }
                 }
@@ -732,6 +741,10 @@ namespace MCForge
             w.WriteLine("global-chat-enabled = " + Server.UseGlobalChat.ToString().ToLower());
             w.WriteLine("global-chat-nick = " + Server.GlobalChatNick);
             w.WriteLine("global-chat-color = " + Server.GlobalChatColor);
+            w.WriteLine();
+            w.WriteLine("#Griefer_stone Settings");
+            w.WriteLine("griefer-stone-tempban = " + Server.grieferStoneBan.ToString().ToLower());
+            w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
         }
     }
 }

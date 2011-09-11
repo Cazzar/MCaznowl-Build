@@ -1630,7 +1630,7 @@ namespace MCForge
                 case 106: return Block.waterstill; //Op_water
                 case 107: return Block.lavastill; //Op_lava
 
-                case 108: return (byte)1; //Griefer_stone
+                case 108: return Server.grieferStoneType; //Griefer_stone
                 case 109: return (byte)19; //Lava_sponge
 
                 case 110: return (byte)5; //wood_float
