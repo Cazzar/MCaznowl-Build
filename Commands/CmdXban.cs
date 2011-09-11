@@ -64,7 +64,7 @@ namespace MCForge {
             }
 
             } finally {
-                p.ignorePermission = false;
+                if (p != null) p.ignorePermission = false;
             }
 
 

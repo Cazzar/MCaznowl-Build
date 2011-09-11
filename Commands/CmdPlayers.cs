@@ -67,7 +67,7 @@ namespace MCForge
                 int totalPlayers = 0;
                 foreach (Player pl in Player.players)
                 {
-                    if (!pl.hidden || p.group.Permission > LevelPermission.Operator || Server.devs.Contains(p.name.ToLower()))
+                    if (!pl.hidden || p == null || p.group.Permission > LevelPermission.Operator || Server.devs.Contains(p.name.ToLower()))
                     {
                         if (String.IsNullOrEmpty(message) || !Group.Exists(message) || Group.Find(message) == pl.group)
                         {

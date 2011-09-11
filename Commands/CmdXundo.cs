@@ -41,7 +41,7 @@ namespace MCForge {
 
             string error = "You are not allowed to undo this player";
 
-            if (who == null || !(who.group.Permission >= LevelPermission.Operator && p.group.Permission < LevelPermission.Operator)) {
+            if (who == null || p == null || !(who.group.Permission >= LevelPermission.Operator && p.group.Permission < LevelPermission.Operator)) {
                 //This executes if who doesn't exist, if who is lower than Operator, or if the user is an op+.
                 //It also executes on any combination of the three
                 Command.all.Find("undo").Use(p, ((who == null) ? message : who.name) + " all"); //Who null check
