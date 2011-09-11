@@ -521,6 +521,18 @@ namespace MCForge
                                 try { Server.grieferStoneType = (byte)MathHelper.Clamp((decimal)Block.Byte(value), 1, 49); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "griefer-stone-rank":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.grieferStoneRank = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
+                                break;
                         }
                     }
                 }
@@ -745,6 +757,7 @@ namespace MCForge
             w.WriteLine("#Griefer_stone Settings");
             w.WriteLine("griefer-stone-tempban = " + Server.grieferStoneBan.ToString().ToLower());
             w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
+            w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString());
         }
     }
 }

@@ -275,6 +275,7 @@ namespace MCForge
 
         public void saveChanges()
         {
+            if (!Server.useMySQL) return;
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();

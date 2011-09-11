@@ -301,6 +301,7 @@ public static byte maxGuests = 10;
         public static bool showEmptyRanks = false;
         public static byte grieferStoneType = 1;
         public static bool grieferStoneBan = true;
+        public static LevelPermission grieferStoneRank = LevelPermission.Guest;
 
         #endregion
 

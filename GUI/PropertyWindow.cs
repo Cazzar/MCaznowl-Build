@@ -81,6 +81,7 @@ namespace MCForge.Gui
             string opchatperm = "";
             string adminchatperm = "";
             string verifyadminsperm = "";
+            string grieferstonerank = "";
             foreach (Group grp in Group.GroupList)
             {
                 cmbDefaultRank.Items.Add(grp.name);
@@ -89,6 +90,7 @@ namespace MCForge.Gui
                 cmbVerificationRank.Items.Add(grp.name);
                 lsCmbSetupRank.Items.Add(grp.name);
                 lsCmbControlRank.Items.Add(grp.name);
+                cmbGrieferStoneRank.Items.Add(grp.name);
                 if (grp.Permission == Server.opchatperm)
                 {
                     opchatperm = grp.name;
@@ -100,6 +102,10 @@ namespace MCForge.Gui
                 if (grp.Permission == Server.verifyadminsrank)
                 {
                     verifyadminsperm = grp.name;
+                }
+                if (grp.Permission == Server.grieferStoneRank)
+                {
+                    grieferstonerank = grp.name;
                 }
             }
             listPasswords.Items.Clear();
@@ -117,6 +123,7 @@ namespace MCForge.Gui
             cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
             cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
             cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
+            cmbGrieferStoneRank.SelectedIndex = (grieferstonerank != "") ? cmbGrieferStoneRank.Items.IndexOf(grieferstonerank) : 1;
 
             for (byte b = 1; b < 50; b++)
                 cmbGrieferStoneType.Items.Add(Block.Name(b));
@@ -836,6 +843,7 @@ namespace MCForge.Gui
                     w.WriteLine("#Griefer_stone Settings");
                     w.WriteLine("griefer-stone-tempban = " + chkGrieferStoneBan.Checked.ToString().ToLower());
                     w.WriteLine("griefer-stone-type = " + cmbGrieferStoneType.Items[cmbGrieferStoneType.SelectedIndex].ToString());
+                    w.WriteLine("griefer-stone-rank = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.Items[cmbGrieferStoneRank.SelectedIndex].ToString()).Permission).ToString());
                 }
                 w.Flush();
                 w.Close();

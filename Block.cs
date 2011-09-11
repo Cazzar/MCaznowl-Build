@@ -705,8 +705,6 @@ namespace MCForge
         {
             switch (type)
             {
-                case Block.griefer_stone:
-
                 case Block.blue_portal:
                 case Block.orange_portal:
 
