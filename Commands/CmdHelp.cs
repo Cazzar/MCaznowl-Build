@@ -53,8 +53,8 @@ namespace MCForge
                         message = "";
                         foreach (Group grp in Group.GroupList)
                         {
-                            if (grp.name != "nobody")
-                                Player.SendMessage(p, grp.color + grp.name + " - &bCmd: " + grp.maxBlocks + " - &2Undo: " + ((grp.maxUndo != 0) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
+                            if (grp.name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
+                                Player.SendMessage(p, grp.color + grp.name + " - &bCmd: " + grp.maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
                         }
                         break;
                     case "build":

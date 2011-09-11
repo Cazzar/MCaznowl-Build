@@ -1028,7 +1028,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     return;
                 }
 
-                if (foundMax < 0) { txtMaxUndo.Text = "0"; return; }
+                if (foundMax < -1) { txtMaxUndo.Text = "0"; return; }
 
                 storedRanks[listRanks.SelectedIndex].maxUndo = foundMax;
             }
