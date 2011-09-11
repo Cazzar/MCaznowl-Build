@@ -32,9 +32,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
             if (String.IsNullOrEmpty(message)) { Help(p); return; }
-            string[] s = message.Split(' ');
+            string[] s = message.ToLower().Split(' ');
+            if (p == null && (s[0] == "go" || s[0] == "setup")) { Player.SendMessage(p, "The \"" + s[0] + "\" command can only be used in-game!"); return; }
 
             if (s[0] == "go")
             {
@@ -46,11 +46,11 @@ namespace MCForge
             {
                 if (!Server.lava.active) { Player.SendMessage(p, "There is no Lava Survival game right now."); return; }
                 if (!Server.lava.roundActive) { Player.SendMessage(p, "The round of Lava Survival hasn't started yet."); return; }
-                Server.lava.AnnounceRoundInfo(p);
-                Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p);
+                Server.lava.AnnounceRoundInfo(p, p == null);
+                Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p, p == null);
                 return;
             }
-            if (p.group.Permission >= Server.lava.controlRank)
+            if (p == null || p.group.Permission >= Server.lava.controlRank)
             {
                 if (s[0] == "start")
                 {
@@ -97,7 +97,8 @@ namespace MCForge
                     return;
                 }
             }
-            if (p.group.Permission >= Server.lava.setupRank) {
+            if (p == null || p.group.Permission >= Server.lava.setupRank)
+            {
                 if (s[0] == "setup")
                 {
                     if (s.Length < 2) { SetupHelp(p); return; }
@@ -336,10 +337,10 @@ namespace MCForge
                     break;
                 default:
                     Player.SendMessage(p, "Commands to setup Lava Survival.");
-                    Player.SendMessage(p, "map - Add or remove maps in Lava Survival.");
-                    Player.SendMessage(p, "block - View or set the block spawn positions.");
-                    Player.SendMessage(p, "settings - View or change the settings for Lava Survival.");
-                    Player.SendMessage(p, "mapsettings - View or change the settings for a Lava Survival map.");
+                    Player.SendMessage(p, "map <name> - Add or remove maps in Lava Survival.");
+                    Player.SendMessage(p, "block [mode] - View or set the block spawn positions.");
+                    Player.SendMessage(p, "settings <setting> [value] - View or change the settings for Lava Survival.");
+                    Player.SendMessage(p, "mapsettings <setting> [value] - View or change the settings for a Lava Survival map.");
                     break;
             }
         }

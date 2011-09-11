@@ -96,6 +96,7 @@ namespace MCForge
             active = false;
             roundActive = false;
             voteActive = false;
+            flooded = false;
             if (announceTimer.Enabled) announceTimer.Stop();
             try { mapData.Dispose(); }
             catch { }
@@ -182,27 +183,27 @@ namespace MCForge
             mapData.currentLayer++;
         }
 
-        public void AnnounceTimeLeft(bool flood, bool round, Player p = null)
+        public void AnnounceTimeLeft(bool flood, bool round, Player p = null, bool console = false)
         {
             if (!active || !roundActive || startTime == null || map == null) return;
 
             if (flood)
             {
                 double floodMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).TotalMinutes);
-                if (p == null) map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
+                if (p == null && !console) map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
                 else Player.SendMessage(p, "&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
             }
             if (round)
             {
                 double roundMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).TotalMinutes);
-                if (p == null) map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
+                if (p == null && !console) map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
                 else Player.SendMessage(p, "&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
             }
         }
 
-        public void AnnounceRoundInfo(Player p = null)
+        public void AnnounceRoundInfo(Player p = null, bool console = false)
         {
-            if (p == null)
+            if (p == null && !console)
             {
                 if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
                 if (mapData.layer)
