@@ -28,8 +28,10 @@ namespace MCForge {
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdUndo() { }
 
+        int MAX = -1; // This is the value changed to MAX in the Undo list, and used to allow everything undone.
+
         public override void Use(Player p, string message) {
-            byte b; long seconds = -1; Player who = null; Player.UndoPos Pos; int CurrentPos = 0; bool undoPhysics = false;
+            byte b; long seconds = -2; Player who = null; Player.UndoPos Pos; int CurrentPos = 0; bool undoPhysics = false;
             if (p != null)
                 p.RedoBuffer.Clear();
 
@@ -208,13 +210,13 @@ namespace MCForge {
              */
             long secs;
             if (param == "all" && p.group.CanExecute(Command.all.Find("xundo")))
-                secs = (p == null || p.group.maxUndo == 0) ? int.MaxValue : p.group.maxUndo;
+                secs = (p == null || p.group.maxUndo == MAX) ? int.MaxValue : p.group.maxUndo;
             else
                 secs = long.Parse(param); //caught by try/catch in outer method
 
             if (secs == 0) secs = 5400;
 
-            if (p != null && p.group.maxUndo != 0 && secs > p.group.maxUndo) {
+            if (p != null && p.group.maxUndo != MAX && secs > p.group.maxUndo) {
                 Player.SendMessage(p, p.group.name + "s may only undo up to " + p.group.maxUndo + " seconds.");
                 return p.group.maxUndo;
             }
