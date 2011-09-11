@@ -335,6 +335,13 @@ namespace MCForge
                             case "custom-shutdown-message":
                                 if (value != "") Server.customShutdownMessage = value;
                                 break;
+                            case "custom-griefer-stone":
+                                try { Server.customGrieferStone = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
+                                break;
+                            case "custom-griefer-stone-message":
+                                if (value != "") Server.customGrieferStoneMessage = value;
+                                break;
                             case "rank-super":
                                 try { Server.rankSuper = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
@@ -695,6 +702,8 @@ namespace MCForge
             w.WriteLine("custom-ban-message = " + Server.customBanMessage);
             w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString().ToLower());
             w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
+            w.WriteLine("custom-griefer-stone = " + Server.customGrieferStone.ToString().ToLower());
+            w.WriteLine("custom-griefer-stone-message = " + Server.customGrieferStoneMessage);
             w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
             w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
             w.WriteLine();

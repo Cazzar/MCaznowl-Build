@@ -115,6 +115,22 @@ namespace MCForge.Gui
             this.chkSpamControl = new System.Windows.Forms.CheckBox();
             this.txtGlobalChatNick = new System.Windows.Forms.TextBox();
             this.cmbGlobalChatColor = new System.Windows.Forms.ComboBox();
+            this.lsChkSendAFKMain = new System.Windows.Forms.CheckBox();
+            this.lsChkStartOnStartup = new System.Windows.Forms.CheckBox();
+            this.lsNudVoteCount = new System.Windows.Forms.NumericUpDown();
+            this.lsNudVoteTime = new System.Windows.Forms.NumericUpDown();
+            this.lsCmbSetupRank = new System.Windows.Forms.ComboBox();
+            this.lsNudFastLava = new System.Windows.Forms.NumericUpDown();
+            this.lsNudKiller = new System.Windows.Forms.NumericUpDown();
+            this.lsNudDestroy = new System.Windows.Forms.NumericUpDown();
+            this.lsNudWater = new System.Windows.Forms.NumericUpDown();
+            this.lsNudLayer = new System.Windows.Forms.NumericUpDown();
+            this.lsNudLayerHeight = new System.Windows.Forms.NumericUpDown();
+            this.lsNudLayerCount = new System.Windows.Forms.NumericUpDown();
+            this.lsNudLayerTime = new System.Windows.Forms.NumericUpDown();
+            this.lsNudRoundTime = new System.Windows.Forms.NumericUpDown();
+            this.lsNudFloodTime = new System.Windows.Forms.NumericUpDown();
+            this.lsCmbControlRank = new System.Windows.Forms.ComboBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -159,6 +175,8 @@ namespace MCForge.Gui
             this.chkSmile = new System.Windows.Forms.CheckBox();
             this.label34 = new System.Windows.Forms.Label();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.txtGrieferStone = new System.Windows.Forms.TextBox();
+            this.chkGrieferStone = new System.Windows.Forms.CheckBox();
             this.chkShutdown = new System.Windows.Forms.CheckBox();
             this.txtShutdown = new System.Windows.Forms.TextBox();
             this.hackrank_kick_time = new System.Windows.Forms.TextBox();
@@ -242,11 +260,36 @@ namespace MCForge.Gui
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.groupBox23 = new System.Windows.Forms.GroupBox();
+            this.lsBtnEndVote = new System.Windows.Forms.Button();
+            this.lsBtnEndRound = new System.Windows.Forms.Button();
+            this.lsBtnStopGame = new System.Windows.Forms.Button();
+            this.lsBtnStartGame = new System.Windows.Forms.Button();
+            this.groupBox22 = new System.Windows.Forms.GroupBox();
+            this.lsBtnSaveSettings = new System.Windows.Forms.Button();
+            this.label67 = new System.Windows.Forms.Label();
+            this.label66 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.label64 = new System.Windows.Forms.Label();
+            this.label63 = new System.Windows.Forms.Label();
+            this.label62 = new System.Windows.Forms.Label();
+            this.label61 = new System.Windows.Forms.Label();
+            this.label60 = new System.Windows.Forms.Label();
+            this.label59 = new System.Windows.Forms.Label();
+            this.label58 = new System.Windows.Forms.Label();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.label68 = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.groupBox20 = new System.Windows.Forms.GroupBox();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.lsAddMap = new System.Windows.Forms.Button();
+            this.lsRemoveMap = new System.Windows.Forms.Button();
+            this.lsMapNoUse = new System.Windows.Forms.ListBox();
+            this.lsMapUse = new System.Windows.Forms.ListBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.groupBox18 = new System.Windows.Forms.GroupBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.groupBox17 = new System.Windows.Forms.GroupBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
             this.chkNoPillaringDuringZombie = new System.Windows.Forms.CheckBox();
             this.ZombieName = new System.Windows.Forms.TextBox();
@@ -271,6 +314,18 @@ namespace MCForge.Gui
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudFastLava)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudKiller)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudDestroy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudWater)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudRoundTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudFloodTime)).BeginInit();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -298,9 +353,12 @@ namespace MCForge.Gui
             this.tabControl.SuspendLayout();
             this.tabPage9.SuspendLayout();
             this.tabControl2.SuspendLayout();
+            this.tabPage10.SuspendLayout();
+            this.groupBox23.SuspendLayout();
+            this.groupBox22.SuspendLayout();
+            this.groupBox21.SuspendLayout();
+            this.groupBox20.SuspendLayout();
             this.tabPage11.SuspendLayout();
-            this.groupBox18.SuspendLayout();
-            this.groupBox17.SuspendLayout();
             this.groupBox16.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
@@ -694,7 +752,7 @@ namespace MCForge.Gui
             // chkCheap
             // 
             this.chkCheap.AutoSize = true;
-            this.chkCheap.Location = new System.Drawing.Point(12, 94);
+            this.chkCheap.Location = new System.Drawing.Point(12, 75);
             this.chkCheap.Name = "chkCheap";
             this.chkCheap.Size = new System.Drawing.Size(103, 17);
             this.chkCheap.TabIndex = 23;
@@ -755,7 +813,7 @@ namespace MCForge.Gui
             // hackrank_kick
             // 
             this.hackrank_kick.AutoSize = true;
-            this.hackrank_kick.Location = new System.Drawing.Point(12, 58);
+            this.hackrank_kick.Location = new System.Drawing.Point(12, 47);
             this.hackrank_kick.Name = "hackrank_kick";
             this.hackrank_kick.Size = new System.Drawing.Size(193, 17);
             this.hackrank_kick.TabIndex = 32;
@@ -1063,8 +1121,249 @@ namespace MCForge.Gui
             this.cmbGlobalChatColor.Name = "cmbGlobalChatColor";
             this.cmbGlobalChatColor.Size = new System.Drawing.Size(72, 21);
             this.cmbGlobalChatColor.TabIndex = 11;
-            this.toolTip.SetToolTip(this.cmbGlobalChatColor, "THe color of Global Chat text in-game.");
+            this.toolTip.SetToolTip(this.cmbGlobalChatColor, "The color of Global Chat text in-game.");
             this.cmbGlobalChatColor.SelectedIndexChanged += new System.EventHandler(this.cmbGlobalChatColor_SelectedIndexChanged);
+            // 
+            // lsChkSendAFKMain
+            // 
+            this.lsChkSendAFKMain.Appearance = System.Windows.Forms.Appearance.Button;
+            this.lsChkSendAFKMain.AutoSize = true;
+            this.lsChkSendAFKMain.Location = new System.Drawing.Point(19, 49);
+            this.lsChkSendAFKMain.Name = "lsChkSendAFKMain";
+            this.lsChkSendAFKMain.Size = new System.Drawing.Size(134, 23);
+            this.lsChkSendAFKMain.TabIndex = 1;
+            this.lsChkSendAFKMain.Text = "Send AFK Players To Main";
+            this.toolTip.SetToolTip(this.lsChkSendAFKMain, "Send AFK players to the main map on a map change?");
+            this.lsChkSendAFKMain.UseVisualStyleBackColor = true;
+            // 
+            // lsChkStartOnStartup
+            // 
+            this.lsChkStartOnStartup.Appearance = System.Windows.Forms.Appearance.Button;
+            this.lsChkStartOnStartup.AutoSize = true;
+            this.lsChkStartOnStartup.Location = new System.Drawing.Point(8, 20);
+            this.lsChkStartOnStartup.Name = "lsChkStartOnStartup";
+            this.lsChkStartOnStartup.Size = new System.Drawing.Size(156, 23);
+            this.lsChkStartOnStartup.TabIndex = 0;
+            this.lsChkStartOnStartup.Text = "Start Round On Server Startup";
+            this.toolTip.SetToolTip(this.lsChkStartOnStartup, "Start Lava Survival when the server starts up?");
+            this.lsChkStartOnStartup.UseVisualStyleBackColor = true;
+            // 
+            // lsNudVoteCount
+            // 
+            this.lsNudVoteCount.Location = new System.Drawing.Point(71, 78);
+            this.lsNudVoteCount.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.lsNudVoteCount.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.lsNudVoteCount.Name = "lsNudVoteCount";
+            this.lsNudVoteCount.Size = new System.Drawing.Size(95, 21);
+            this.lsNudVoteCount.TabIndex = 3;
+            this.toolTip.SetToolTip(this.lsNudVoteCount, "How many maps to put in the next map vote.");
+            this.lsNudVoteCount.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // lsNudVoteTime
+            // 
+            this.lsNudVoteTime.Location = new System.Drawing.Point(71, 106);
+            this.lsNudVoteTime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudVoteTime.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudVoteTime.Name = "lsNudVoteTime";
+            this.lsNudVoteTime.Size = new System.Drawing.Size(95, 21);
+            this.lsNudVoteTime.TabIndex = 5;
+            this.toolTip.SetToolTip(this.lsNudVoteTime, "Time until the next map vote ends.");
+            this.lsNudVoteTime.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudVoteTime.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            // 
+            // lsCmbSetupRank
+            // 
+            this.lsCmbSetupRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.lsCmbSetupRank.FormattingEnabled = true;
+            this.lsCmbSetupRank.Location = new System.Drawing.Point(71, 133);
+            this.lsCmbSetupRank.Name = "lsCmbSetupRank";
+            this.lsCmbSetupRank.Size = new System.Drawing.Size(95, 21);
+            this.lsCmbSetupRank.TabIndex = 7;
+            this.toolTip.SetToolTip(this.lsCmbSetupRank, "Minimum rank required to configure Lava Survival.");
+            // 
+            // lsNudFastLava
+            // 
+            this.lsNudFastLava.Location = new System.Drawing.Point(67, 20);
+            this.lsNudFastLava.Name = "lsNudFastLava";
+            this.lsNudFastLava.Size = new System.Drawing.Size(61, 21);
+            this.lsNudFastLava.TabIndex = 1;
+            this.toolTip.SetToolTip(this.lsNudFastLava, "Percent chance for fast lava.");
+            // 
+            // lsNudKiller
+            // 
+            this.lsNudKiller.Location = new System.Drawing.Point(67, 47);
+            this.lsNudKiller.Name = "lsNudKiller";
+            this.lsNudKiller.Size = new System.Drawing.Size(61, 21);
+            this.lsNudKiller.TabIndex = 3;
+            this.toolTip.SetToolTip(this.lsNudKiller, "Percent chance for killer lava/water.");
+            // 
+            // lsNudDestroy
+            // 
+            this.lsNudDestroy.Location = new System.Drawing.Point(67, 74);
+            this.lsNudDestroy.Name = "lsNudDestroy";
+            this.lsNudDestroy.Size = new System.Drawing.Size(61, 21);
+            this.lsNudDestroy.TabIndex = 5;
+            this.toolTip.SetToolTip(this.lsNudDestroy, "Percent chance for lava/water to destroy blocks.");
+            // 
+            // lsNudWater
+            // 
+            this.lsNudWater.Location = new System.Drawing.Point(67, 101);
+            this.lsNudWater.Name = "lsNudWater";
+            this.lsNudWater.Size = new System.Drawing.Size(61, 21);
+            this.lsNudWater.TabIndex = 7;
+            this.toolTip.SetToolTip(this.lsNudWater, "Percent chance for water flood.");
+            // 
+            // lsNudLayer
+            // 
+            this.lsNudLayer.Location = new System.Drawing.Point(67, 128);
+            this.lsNudLayer.Name = "lsNudLayer";
+            this.lsNudLayer.Size = new System.Drawing.Size(61, 21);
+            this.lsNudLayer.TabIndex = 9;
+            this.toolTip.SetToolTip(this.lsNudLayer, "Percent chance for layer flood.");
+            // 
+            // lsNudLayerHeight
+            // 
+            this.lsNudLayerHeight.Location = new System.Drawing.Point(211, 20);
+            this.lsNudLayerHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudLayerHeight.Name = "lsNudLayerHeight";
+            this.lsNudLayerHeight.Size = new System.Drawing.Size(61, 21);
+            this.lsNudLayerHeight.TabIndex = 12;
+            this.toolTip.SetToolTip(this.lsNudLayerHeight, "Height of each layer.");
+            this.lsNudLayerHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lsNudLayerCount
+            // 
+            this.lsNudLayerCount.Location = new System.Drawing.Point(211, 47);
+            this.lsNudLayerCount.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudLayerCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudLayerCount.Name = "lsNudLayerCount";
+            this.lsNudLayerCount.Size = new System.Drawing.Size(61, 21);
+            this.lsNudLayerCount.TabIndex = 14;
+            this.toolTip.SetToolTip(this.lsNudLayerCount, "Number of layers to flood.");
+            this.lsNudLayerCount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lsNudLayerTime
+            // 
+            this.lsNudLayerTime.Location = new System.Drawing.Point(211, 74);
+            this.lsNudLayerTime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudLayerTime.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudLayerTime.Name = "lsNudLayerTime";
+            this.lsNudLayerTime.Size = new System.Drawing.Size(61, 21);
+            this.lsNudLayerTime.TabIndex = 16;
+            this.toolTip.SetToolTip(this.lsNudLayerTime, "Time between each layer.");
+            this.lsNudLayerTime.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lsNudRoundTime
+            // 
+            this.lsNudRoundTime.Location = new System.Drawing.Point(211, 102);
+            this.lsNudRoundTime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudRoundTime.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudRoundTime.Name = "lsNudRoundTime";
+            this.lsNudRoundTime.Size = new System.Drawing.Size(61, 21);
+            this.lsNudRoundTime.TabIndex = 18;
+            this.toolTip.SetToolTip(this.lsNudRoundTime, "Time until the round ends.");
+            this.lsNudRoundTime.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lsNudFloodTime
+            // 
+            this.lsNudFloodTime.Location = new System.Drawing.Point(211, 128);
+            this.lsNudFloodTime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudFloodTime.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lsNudFloodTime.Name = "lsNudFloodTime";
+            this.lsNudFloodTime.Size = new System.Drawing.Size(61, 21);
+            this.lsNudFloodTime.TabIndex = 20;
+            this.toolTip.SetToolTip(this.lsNudFloodTime, "Time until the map is flooded.");
+            this.lsNudFloodTime.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lsCmbControlRank
+            // 
+            this.lsCmbControlRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.lsCmbControlRank.FormattingEnabled = true;
+            this.lsCmbControlRank.Location = new System.Drawing.Point(84, 160);
+            this.lsCmbControlRank.Name = "lsCmbControlRank";
+            this.lsCmbControlRank.Size = new System.Drawing.Size(82, 21);
+            this.lsCmbControlRank.TabIndex = 9;
+            this.toolTip.SetToolTip(this.lsCmbControlRank, "Minimum rank required to administrate Lava Survival.");
             // 
             // tabPage5
             // 
@@ -1518,6 +1817,8 @@ namespace MCForge.Gui
             // 
             // groupBox12
             // 
+            this.groupBox12.Controls.Add(this.txtGrieferStone);
+            this.groupBox12.Controls.Add(this.chkGrieferStone);
             this.groupBox12.Controls.Add(this.chkShutdown);
             this.groupBox12.Controls.Add(this.txtShutdown);
             this.groupBox12.Controls.Add(this.hackrank_kick);
@@ -1534,10 +1835,27 @@ namespace MCForge.Gui
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Messages";
             // 
+            // txtGrieferStone
+            // 
+            this.txtGrieferStone.Location = new System.Drawing.Point(186, 129);
+            this.txtGrieferStone.Name = "txtGrieferStone";
+            this.txtGrieferStone.Size = new System.Drawing.Size(134, 21);
+            this.txtGrieferStone.TabIndex = 36;
+            // 
+            // chkGrieferStone
+            // 
+            this.chkGrieferStone.AutoSize = true;
+            this.chkGrieferStone.Location = new System.Drawing.Point(12, 132);
+            this.chkGrieferStone.Name = "chkGrieferStone";
+            this.chkGrieferStone.Size = new System.Drawing.Size(174, 17);
+            this.chkGrieferStone.TabIndex = 35;
+            this.chkGrieferStone.Text = "Custom griefer_stone message:";
+            this.chkGrieferStone.UseVisualStyleBackColor = true;
+            // 
             // chkShutdown
             // 
             this.chkShutdown.AutoSize = true;
-            this.chkShutdown.Location = new System.Drawing.Point(12, 23);
+            this.chkShutdown.Location = new System.Drawing.Point(12, 20);
             this.chkShutdown.Name = "chkShutdown";
             this.chkShutdown.Size = new System.Drawing.Size(158, 17);
             this.chkShutdown.TabIndex = 26;
@@ -1546,7 +1864,7 @@ namespace MCForge.Gui
             // 
             // txtShutdown
             // 
-            this.txtShutdown.Location = new System.Drawing.Point(176, 21);
+            this.txtShutdown.Location = new System.Drawing.Point(176, 18);
             this.txtShutdown.MaxLength = 128;
             this.txtShutdown.Name = "txtShutdown";
             this.txtShutdown.Size = new System.Drawing.Size(145, 21);
@@ -1554,7 +1872,7 @@ namespace MCForge.Gui
             // 
             // hackrank_kick_time
             // 
-            this.hackrank_kick_time.Location = new System.Drawing.Point(211, 56);
+            this.hackrank_kick_time.Location = new System.Drawing.Point(211, 45);
             this.hackrank_kick_time.Name = "hackrank_kick_time";
             this.hackrank_kick_time.Size = new System.Drawing.Size(60, 21);
             this.hackrank_kick_time.TabIndex = 33;
@@ -1563,7 +1881,7 @@ namespace MCForge.Gui
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(277, 59);
+            this.label36.Location = new System.Drawing.Point(277, 48);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(46, 13);
             this.label36.TabIndex = 34;
@@ -1571,7 +1889,7 @@ namespace MCForge.Gui
             // 
             // txtBanMessage
             // 
-            this.txtBanMessage.Location = new System.Drawing.Point(147, 131);
+            this.txtBanMessage.Location = new System.Drawing.Point(147, 101);
             this.txtBanMessage.MaxLength = 128;
             this.txtBanMessage.Name = "txtBanMessage";
             this.txtBanMessage.Size = new System.Drawing.Size(173, 21);
@@ -1579,7 +1897,7 @@ namespace MCForge.Gui
             // 
             // txtCheap
             // 
-            this.txtCheap.Location = new System.Drawing.Point(121, 92);
+            this.txtCheap.Location = new System.Drawing.Point(121, 73);
             this.txtCheap.Name = "txtCheap";
             this.txtCheap.Size = new System.Drawing.Size(200, 21);
             this.txtCheap.TabIndex = 1;
@@ -1587,7 +1905,7 @@ namespace MCForge.Gui
             // chkBanMessage
             // 
             this.chkBanMessage.AutoSize = true;
-            this.chkBanMessage.Location = new System.Drawing.Point(12, 135);
+            this.chkBanMessage.Location = new System.Drawing.Point(12, 104);
             this.chkBanMessage.Name = "chkBanMessage";
             this.chkBanMessage.Size = new System.Drawing.Size(129, 17);
             this.chkBanMessage.TabIndex = 25;
@@ -2401,6 +2719,10 @@ namespace MCForge.Gui
             // tabPage10
             // 
             this.tabPage10.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage10.Controls.Add(this.groupBox23);
+            this.tabPage10.Controls.Add(this.groupBox22);
+            this.tabPage10.Controls.Add(this.groupBox21);
+            this.tabPage10.Controls.Add(this.groupBox20);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
@@ -2408,11 +2730,318 @@ namespace MCForge.Gui
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Lava Survival";
             // 
+            // groupBox23
+            // 
+            this.groupBox23.Controls.Add(this.lsBtnEndVote);
+            this.groupBox23.Controls.Add(this.lsBtnEndRound);
+            this.groupBox23.Controls.Add(this.lsBtnStopGame);
+            this.groupBox23.Controls.Add(this.lsBtnStartGame);
+            this.groupBox23.Location = new System.Drawing.Point(291, 199);
+            this.groupBox23.Name = "groupBox23";
+            this.groupBox23.Size = new System.Drawing.Size(171, 165);
+            this.groupBox23.TabIndex = 4;
+            this.groupBox23.TabStop = false;
+            this.groupBox23.Text = "Controls";
+            // 
+            // lsBtnEndVote
+            // 
+            this.lsBtnEndVote.Location = new System.Drawing.Point(6, 129);
+            this.lsBtnEndVote.Name = "lsBtnEndVote";
+            this.lsBtnEndVote.Size = new System.Drawing.Size(159, 30);
+            this.lsBtnEndVote.TabIndex = 3;
+            this.lsBtnEndVote.Text = "End Vote";
+            this.lsBtnEndVote.UseVisualStyleBackColor = true;
+            this.lsBtnEndVote.Click += new System.EventHandler(this.lsBtnEndVote_Click);
+            // 
+            // lsBtnEndRound
+            // 
+            this.lsBtnEndRound.Location = new System.Drawing.Point(6, 93);
+            this.lsBtnEndRound.Name = "lsBtnEndRound";
+            this.lsBtnEndRound.Size = new System.Drawing.Size(159, 30);
+            this.lsBtnEndRound.TabIndex = 2;
+            this.lsBtnEndRound.Text = "End Round";
+            this.lsBtnEndRound.UseVisualStyleBackColor = true;
+            this.lsBtnEndRound.Click += new System.EventHandler(this.lsBtnEndRound_Click);
+            // 
+            // lsBtnStopGame
+            // 
+            this.lsBtnStopGame.Location = new System.Drawing.Point(6, 57);
+            this.lsBtnStopGame.Name = "lsBtnStopGame";
+            this.lsBtnStopGame.Size = new System.Drawing.Size(159, 30);
+            this.lsBtnStopGame.TabIndex = 1;
+            this.lsBtnStopGame.Text = "Stop Game";
+            this.lsBtnStopGame.UseVisualStyleBackColor = true;
+            this.lsBtnStopGame.Click += new System.EventHandler(this.lsBtnStopGame_Click);
+            // 
+            // lsBtnStartGame
+            // 
+            this.lsBtnStartGame.Location = new System.Drawing.Point(6, 21);
+            this.lsBtnStartGame.Name = "lsBtnStartGame";
+            this.lsBtnStartGame.Size = new System.Drawing.Size(159, 30);
+            this.lsBtnStartGame.TabIndex = 0;
+            this.lsBtnStartGame.Text = "Start Game";
+            this.lsBtnStartGame.UseVisualStyleBackColor = true;
+            this.lsBtnStartGame.Click += new System.EventHandler(this.lsBtnStartGame_Click);
+            // 
+            // groupBox22
+            // 
+            this.groupBox22.Controls.Add(this.lsBtnSaveSettings);
+            this.groupBox22.Controls.Add(this.lsNudFloodTime);
+            this.groupBox22.Controls.Add(this.label67);
+            this.groupBox22.Controls.Add(this.lsNudRoundTime);
+            this.groupBox22.Controls.Add(this.label66);
+            this.groupBox22.Controls.Add(this.lsNudLayerTime);
+            this.groupBox22.Controls.Add(this.label65);
+            this.groupBox22.Controls.Add(this.lsNudLayerCount);
+            this.groupBox22.Controls.Add(this.label64);
+            this.groupBox22.Controls.Add(this.lsNudLayerHeight);
+            this.groupBox22.Controls.Add(this.label63);
+            this.groupBox22.Controls.Add(this.lsNudLayer);
+            this.groupBox22.Controls.Add(this.label62);
+            this.groupBox22.Controls.Add(this.lsNudWater);
+            this.groupBox22.Controls.Add(this.label61);
+            this.groupBox22.Controls.Add(this.lsNudDestroy);
+            this.groupBox22.Controls.Add(this.label60);
+            this.groupBox22.Controls.Add(this.lsNudKiller);
+            this.groupBox22.Controls.Add(this.label59);
+            this.groupBox22.Controls.Add(this.lsNudFastLava);
+            this.groupBox22.Controls.Add(this.label58);
+            this.groupBox22.Location = new System.Drawing.Point(7, 199);
+            this.groupBox22.Name = "groupBox22";
+            this.groupBox22.Size = new System.Drawing.Size(278, 195);
+            this.groupBox22.TabIndex = 3;
+            this.groupBox22.TabStop = false;
+            this.groupBox22.Text = "Map Settings";
+            // 
+            // lsBtnSaveSettings
+            // 
+            this.lsBtnSaveSettings.Location = new System.Drawing.Point(6, 155);
+            this.lsBtnSaveSettings.Name = "lsBtnSaveSettings";
+            this.lsBtnSaveSettings.Size = new System.Drawing.Size(266, 34);
+            this.lsBtnSaveSettings.TabIndex = 21;
+            this.lsBtnSaveSettings.Text = "Save Map Settings";
+            this.lsBtnSaveSettings.UseVisualStyleBackColor = true;
+            this.lsBtnSaveSettings.Click += new System.EventHandler(this.lsBtnSaveSettings_Click);
+            // 
+            // label67
+            // 
+            this.label67.AutoSize = true;
+            this.label67.Location = new System.Drawing.Point(139, 131);
+            this.label67.Name = "label67";
+            this.label67.Size = new System.Drawing.Size(61, 13);
+            this.label67.TabIndex = 19;
+            this.label67.Text = "Flood Time:";
+            // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.Location = new System.Drawing.Point(139, 105);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(65, 13);
+            this.label66.TabIndex = 17;
+            this.label66.Text = "Round Time:";
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.Location = new System.Drawing.Point(139, 77);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(61, 13);
+            this.label65.TabIndex = 15;
+            this.label65.Text = "Layer Time:";
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Location = new System.Drawing.Point(139, 50);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(66, 13);
+            this.label64.TabIndex = 13;
+            this.label64.Text = "Layer Count:";
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.Location = new System.Drawing.Point(139, 23);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(69, 13);
+            this.label63.TabIndex = 11;
+            this.label63.Text = "Layer Height:";
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.Location = new System.Drawing.Point(7, 131);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(36, 13);
+            this.label62.TabIndex = 8;
+            this.label62.Text = "Layer:";
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Location = new System.Drawing.Point(7, 104);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(40, 13);
+            this.label61.TabIndex = 6;
+            this.label61.Text = "Water:";
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(7, 77);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(47, 13);
+            this.label60.TabIndex = 4;
+            this.label60.Text = "Destroy:";
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(7, 50);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(35, 13);
+            this.label59.TabIndex = 2;
+            this.label59.Text = "Killer:";
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(7, 23);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(54, 13);
+            this.label58.TabIndex = 0;
+            this.label58.Text = "Fast Lava:";
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.lsCmbControlRank);
+            this.groupBox21.Controls.Add(this.label68);
+            this.groupBox21.Controls.Add(this.lsCmbSetupRank);
+            this.groupBox21.Controls.Add(this.label57);
+            this.groupBox21.Controls.Add(this.lsNudVoteTime);
+            this.groupBox21.Controls.Add(this.label56);
+            this.groupBox21.Controls.Add(this.lsNudVoteCount);
+            this.groupBox21.Controls.Add(this.label55);
+            this.groupBox21.Controls.Add(this.lsChkSendAFKMain);
+            this.groupBox21.Controls.Add(this.lsChkStartOnStartup);
+            this.groupBox21.Location = new System.Drawing.Point(291, 6);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(172, 186);
+            this.groupBox21.TabIndex = 2;
+            this.groupBox21.TabStop = false;
+            this.groupBox21.Text = "Settings";
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(8, 164);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(70, 13);
+            this.label68.TabIndex = 8;
+            this.label68.Text = "Control Rank:";
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(8, 137);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(62, 13);
+            this.label57.TabIndex = 6;
+            this.label57.Text = "Setup Rank:";
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(8, 109);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(57, 13);
+            this.label56.TabIndex = 4;
+            this.label56.Text = "Vote Time:";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(8, 82);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(62, 13);
+            this.label55.TabIndex = 2;
+            this.label55.Text = "Vote Count:";
+            this.label55.Click += new System.EventHandler(this.label55_Click);
+            // 
+            // groupBox20
+            // 
+            this.groupBox20.Controls.Add(this.label54);
+            this.groupBox20.Controls.Add(this.label53);
+            this.groupBox20.Controls.Add(this.lsAddMap);
+            this.groupBox20.Controls.Add(this.lsRemoveMap);
+            this.groupBox20.Controls.Add(this.lsMapNoUse);
+            this.groupBox20.Controls.Add(this.lsMapUse);
+            this.groupBox20.Location = new System.Drawing.Point(6, 6);
+            this.groupBox20.Name = "groupBox20";
+            this.groupBox20.Size = new System.Drawing.Size(279, 186);
+            this.groupBox20.TabIndex = 1;
+            this.groupBox20.TabStop = false;
+            this.groupBox20.Text = "Maps";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(187, 17);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(83, 13);
+            this.label54.TabIndex = 6;
+            this.label54.Text = "Maps Not In Use";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(19, 17);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(64, 13);
+            this.label53.TabIndex = 5;
+            this.label53.Text = "Maps In Use";
+            // 
+            // lsAddMap
+            // 
+            this.lsAddMap.Location = new System.Drawing.Point(102, 81);
+            this.lsAddMap.Name = "lsAddMap";
+            this.lsAddMap.Size = new System.Drawing.Size(75, 23);
+            this.lsAddMap.TabIndex = 4;
+            this.lsAddMap.Text = "<< Add";
+            this.lsAddMap.UseVisualStyleBackColor = true;
+            this.lsAddMap.Click += new System.EventHandler(this.lsAddMap_Click);
+            // 
+            // lsRemoveMap
+            // 
+            this.lsRemoveMap.Location = new System.Drawing.Point(102, 110);
+            this.lsRemoveMap.Name = "lsRemoveMap";
+            this.lsRemoveMap.Size = new System.Drawing.Size(75, 23);
+            this.lsRemoveMap.TabIndex = 3;
+            this.lsRemoveMap.Text = "Remove >>";
+            this.lsRemoveMap.UseVisualStyleBackColor = true;
+            this.lsRemoveMap.Click += new System.EventHandler(this.lsRemoveMap_Click);
+            // 
+            // lsMapNoUse
+            // 
+            this.lsMapNoUse.FormattingEnabled = true;
+            this.lsMapNoUse.Location = new System.Drawing.Point(183, 33);
+            this.lsMapNoUse.Name = "lsMapNoUse";
+            this.lsMapNoUse.Size = new System.Drawing.Size(90, 147);
+            this.lsMapNoUse.TabIndex = 2;
+            // 
+            // lsMapUse
+            // 
+            this.lsMapUse.FormattingEnabled = true;
+            this.lsMapUse.Location = new System.Drawing.Point(6, 33);
+            this.lsMapUse.Name = "lsMapUse";
+            this.lsMapUse.Size = new System.Drawing.Size(90, 147);
+            this.lsMapUse.TabIndex = 0;
+            this.lsMapUse.SelectedIndexChanged += new System.EventHandler(this.lsMapUse_SelectedIndexChanged);
+            // 
             // tabPage11
             // 
             this.tabPage11.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage11.Controls.Add(this.groupBox18);
-            this.tabPage11.Controls.Add(this.groupBox17);
             this.tabPage11.Controls.Add(this.groupBox16);
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
@@ -2420,44 +3049,6 @@ namespace MCForge.Gui
             this.tabPage11.Size = new System.Drawing.Size(468, 473);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Misc";
-            // 
-            // groupBox18
-            // 
-            this.groupBox18.Controls.Add(this.label48);
-            this.groupBox18.Location = new System.Drawing.Point(140, 6);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(325, 223);
-            this.groupBox18.TabIndex = 43;
-            this.groupBox18.TabStop = false;
-            this.groupBox18.Text = "Countdown";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(9, 17);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(114, 13);
-            this.label48.TabIndex = 1;
-            this.label48.Text = "Move along now. Shoo!";
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Controls.Add(this.label47);
-            this.groupBox17.Location = new System.Drawing.Point(6, 235);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(459, 235);
-            this.groupBox17.TabIndex = 42;
-            this.groupBox17.TabStop = false;
-            this.groupBox17.Text = "Spleef";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(7, 21);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(108, 13);
-            this.label47.TabIndex = 0;
-            this.label47.Text = "Nothing to see here...";
             // 
             // groupBox16
             // 
@@ -2689,6 +3280,18 @@ namespace MCForge.Gui
             this.tabPage7.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudFastLava)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudKiller)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudDestroy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudWater)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudRoundTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudFloodTime)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -2736,11 +3339,15 @@ namespace MCForge.Gui
             this.tabControl.ResumeLayout(false);
             this.tabPage9.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
+            this.tabPage10.ResumeLayout(false);
+            this.groupBox23.ResumeLayout(false);
+            this.groupBox22.ResumeLayout(false);
+            this.groupBox22.PerformLayout();
+            this.groupBox21.ResumeLayout(false);
+            this.groupBox21.PerformLayout();
+            this.groupBox20.ResumeLayout(false);
+            this.groupBox20.PerformLayout();
             this.tabPage11.ResumeLayout(false);
-            this.groupBox18.ResumeLayout(false);
-            this.groupBox18.PerformLayout();
-            this.groupBox17.ResumeLayout(false);
-            this.groupBox17.PerformLayout();
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
             this.tabPage8.ResumeLayout(false);
@@ -2958,10 +3565,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkNoLevelSavingDuringZombie;
         private System.Windows.Forms.CheckBox chkNoRespawnDuringZombie;
         private System.Windows.Forms.CheckBox chkZombieOnServerStart;
-        private System.Windows.Forms.GroupBox groupBox18;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.GroupBox groupBox17;
-        private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TextBox txtIrcId;
         private System.Windows.Forms.CheckBox chkIrcId;
@@ -2976,5 +3579,52 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label lblGlobalChatColor;
         private System.Windows.Forms.TextBox txtMaxUndo;
         private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.TextBox txtGrieferStone;
+        private System.Windows.Forms.CheckBox chkGrieferStone;
+        private System.Windows.Forms.GroupBox groupBox20;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Button lsAddMap;
+        private System.Windows.Forms.Button lsRemoveMap;
+        private System.Windows.Forms.ListBox lsMapNoUse;
+        private System.Windows.Forms.ListBox lsMapUse;
+        private System.Windows.Forms.GroupBox groupBox21;
+        private System.Windows.Forms.CheckBox lsChkSendAFKMain;
+        private System.Windows.Forms.CheckBox lsChkStartOnStartup;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.NumericUpDown lsNudVoteTime;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.NumericUpDown lsNudVoteCount;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.ComboBox lsCmbSetupRank;
+        private System.Windows.Forms.GroupBox groupBox22;
+        private System.Windows.Forms.NumericUpDown lsNudKiller;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.NumericUpDown lsNudFastLava;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.NumericUpDown lsNudLayer;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.NumericUpDown lsNudWater;
+        private System.Windows.Forms.Label label61;
+        private System.Windows.Forms.NumericUpDown lsNudDestroy;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.NumericUpDown lsNudFloodTime;
+        private System.Windows.Forms.Label label67;
+        private System.Windows.Forms.NumericUpDown lsNudRoundTime;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.NumericUpDown lsNudLayerTime;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.NumericUpDown lsNudLayerCount;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.NumericUpDown lsNudLayerHeight;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.Button lsBtnSaveSettings;
+        private System.Windows.Forms.GroupBox groupBox23;
+        private System.Windows.Forms.Button lsBtnEndRound;
+        private System.Windows.Forms.Button lsBtnStopGame;
+        private System.Windows.Forms.Button lsBtnStartGame;
+        private System.Windows.Forms.ComboBox lsCmbControlRank;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.Button lsBtnEndVote;
     }
 }

@@ -53,14 +53,14 @@ namespace MCForge
                 if (!Awards.addAward(awardName, description))
                     Player.SendMessage(p, "This award already exists!");
                 else
-                    Player.GlobalChat(p, "Award added: &6" + awardName + " : " + description, false);
+                    Player.GlobalMessage("Award added: &6" + awardName + " : " + description);
             }
             else
             {
                 if (!Awards.removeAward(message))
                     Player.SendMessage(p, "This award doesn't exist!"); //corrected spelling error
                 else
-                    Player.GlobalChat(p, "Award removed: &6" + message, false);
+                    Player.GlobalMessage("Award removed: &6" + message);
             }
 
             Awards.Save();

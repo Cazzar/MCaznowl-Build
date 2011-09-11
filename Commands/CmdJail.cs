@@ -53,7 +53,7 @@ namespace MCForge
                         {
                             Player.SendMessage(p, who.name + " was jailed.");
                         }
-                        Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " was &8jailed", false);
+                        Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " was &8jailed", false);
                     }
                     else
                     {
@@ -62,7 +62,7 @@ namespace MCForge
                             Player.SendMessage(p, who.name + " was freed from jail.");
                         }
                         who.jailed = false;
-                        Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " was &afreed" + Server.DefaultColor + " from jail", false);
+                        Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " was &afreed" + Server.DefaultColor + " from jail", false);
                     }
                 }
                 else

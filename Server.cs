@@ -167,6 +167,13 @@ public static event OnServerError ServerError = null;
         public static bool noPillaring = true;
         public static string ZombieName = "";
 
+        // Lava Survival
+        public static LavaSurvival lava;
+
+        // OmniBan
+        public static OmniBan omniban;
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 10);
+
         //Settings
         #region Server Settings
         public const byte version = 7;
@@ -271,6 +278,8 @@ public static byte maxGuests = 10;
         public static string customBanMessage = "You're banned!";
         public static bool customShutdown = false;
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
+        public static bool customGrieferStone = false;
+        public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
@@ -461,6 +470,12 @@ public static byte maxGuests = 10;
             }
 
             ProfanityFilter.Init();
+
+            // LavaSurvival constructed here...
+            lava = new LavaSurvival();
+
+            // OmniBan
+            omniban = new OmniBan();
 
             timeOnline = DateTime.Now;
             {//MYSQL stuff
@@ -742,6 +757,19 @@ processThread.Start();
                 if (Server.irc) IRC.Connect();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
 
+                // OmniBan stuff!
+                new Thread(new ThreadStart(delegate
+                {
+                    omniban.Load(true);
+                })).Start();
+
+                omnibanCheckTimer.Elapsed += delegate
+                {
+                    omniban.Load(true);
+                    omniban.KickAll();
+                };
+                omnibanCheckTimer.Start();
+
 
                 // string CheckName = "FROSTEDBUTTS";
 
@@ -841,7 +869,10 @@ processThread.Start();
                 catch { }
                 Log("Finished setting up server");
             });
-            if (startZombieModeOnStartup)
+
+            if (Server.lava.startOnStartup)
+                Server.lava.Start();
+            else if (startZombieModeOnStartup)
                 Command.all.Find("zombiegame").Use(null, "");
         }
         

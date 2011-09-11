@@ -1,5 +1,7 @@
 ﻿/*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+	Copyright 2011 MCForge
+	
+	Author: fenderrock87
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -16,28 +18,19 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MCForge
 {
-    public enum PlayerEvents
+    public static class MathHelper
     {
-        PlayerCommand,
-        PlayerChat,
-        BlockChange,
-        LevelLoad,
-        LevelSave,
-        PlayerMove
-    }
-    public enum GlobalLevelEvents
-    {
-        LevelLoad,
-        LevelSave
-    }
-    public enum LevelEvents
-    {
-        LevelUnload
+        public static decimal Clamp(decimal value, decimal low, decimal high)
+        {
+            return Math.Max(Math.Min(value, high), low);
+        }
+
+        public static double Clamp(double value, double low, double high)
+        {
+            return Math.Max(Math.Min(value, high), low);
+        }
     }
 }

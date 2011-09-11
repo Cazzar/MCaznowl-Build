@@ -420,6 +420,7 @@ namespace MCForge
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
                     catch { }
+                    if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
                 };
 
@@ -719,7 +720,9 @@ namespace MCForge
                         return;
                     }
                 }
-                if (connections.Count >= 5) { Kick("Too many connections!"); return; }
+                //if (connections.Count >= 5) { Kick("Too many connections!"); return; }
+
+                if (Server.omniban.CheckPlayer(this)) Kick(Server.omniban.kickMsg);
 
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Banned))
                 {
@@ -793,7 +796,9 @@ namespace MCForge
                 loggedIn = true;
                 id = FreeId();
 
-                players.Add(this);
+                lock (players)
+                    players.Add(this);
+
                 connections.Remove(this);
 
                 Server.s.PlayerListUpdate();
@@ -1239,6 +1244,7 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
+                    if (b == Block.griefer_stone) { Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!"); return; }
                 }
 
                 bP.deleted = true;
@@ -1852,6 +1858,22 @@ namespace MCForge
 
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
+
+                // Lava Survival map vote recorder
+                if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower()))
+                {
+                    if (Server.lava.AddVote(this, text.ToLower()))
+                    {
+                        SendMessage("Your vote for &5" + text.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower().Capitalize() + Server.DefaultColor + ".");
+                        return;
+                    }
+                    else
+                    {
+                        SendMessage("&cYou already voted!");
+                        return;
+                    }
+                }
 
                 //CmdVoteKick core vote recorder
                 if (Server.voteKickInProgress && text.Length == 1)
@@ -2782,11 +2804,30 @@ namespace MCForge
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
         }
+
+        // THIS IS NOT FOR SENDING GLOBAL MESSAGES!!! IT IS TO SEND A MESSAGE FROM A SPECIFIED PLAYER!!!!!!!!!!!!!!
         public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
         public static void GlobalChat(Player from, string message, bool showname)
         {
+            if (from == null) return; // So we don't fucking derp the hell out!
+
             if (MessageHasBadColorCodes(from, message))
                 return;
+
+            if (Server.lava.HasPlayer(from) && Server.lava.HasVote(message.ToLower()))
+            {
+                if (Server.lava.AddVote(from, message.ToLower()))
+                {
+                    SendMessage(from, "Your vote for &5" + message.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                    Server.lava.map.ChatLevelOps(from.name + " voted for &5" + message.ToLower().Capitalize() + Server.DefaultColor + ".");
+                    return;
+                }
+                else
+                {
+                    SendMessage(from, "&cYou already voted!");
+                    return;
+                }
+            }
 
             if (Server.voting == true)
             {
@@ -3590,6 +3631,7 @@ namespace MCForge
         public void Dispose()
         {
             //throw new NotImplementedException();
+            if (connections.Contains(this)) connections.Remove(this);
             Extras.Clear();
             CopyBuffer.Clear();
             RedoBuffer.Clear();
@@ -3850,7 +3892,7 @@ namespace MCForge
 
         #endregion
 
-        private static bool IPInPrivateRange(string ip)
+        public static bool IPInPrivateRange(string ip)
         {
             //Official loopback is 127.0.0.1/8
             if (ip.StartsWith("127.0.0.") || ip.StartsWith("192.168.") || ip.StartsWith("10."))

@@ -32,7 +32,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -212,6 +212,7 @@
     </Compile>
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
+    <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
     <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />
@@ -416,6 +417,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>

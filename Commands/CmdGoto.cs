@@ -31,6 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
             if (message == "") { Help(p); return; }
 
             try
@@ -82,8 +83,22 @@ namespace MCForge
                             bool skipUnload = false;
                             if (startLevel.unload && !startLevel.name.Contains("&cMuseum "))
                             {
-                                foreach (Player pl in Player.players) if (pl.level == startLevel) skipUnload = true;
+                                foreach (Player pl in Player.players) if (pl.level == startLevel) { skipUnload = true; break; }
                                 if (!skipUnload && Server.AutoLoad) startLevel.Unload(true);
+                            }
+
+                            if (Server.lava.active && !Server.lava.sendingPlayers && Server.lava.map == foundLevel)
+                            {
+                                if (Server.lava.roundActive)
+                                {
+                                    Server.lava.AnnounceRoundInfo(p);
+                                    Server.lava.AnnounceTimeLeft(!Server.lava.flooded, true, p);
+                                }
+                                else
+                                {
+                                    Player.SendMessage(p, "Vote for the next map!");
+                                    Player.SendMessage(p, "Choices: " + Server.lava.GetVoteString());
+                                }
                             }
                         }
                         else Player.SendMessage(p, "The level " + message + " is locked.");

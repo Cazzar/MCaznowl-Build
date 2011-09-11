@@ -123,7 +123,7 @@ namespace MCForge
                     who.group.playerList.Save();
 
                     if (stealth) Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " is now STEALTH &8banned" + Server.DefaultColor + "!");
-                    else Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!", false);
+                    else Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
 
                     who.group = Group.findPerm(LevelPermission.Banned);
                     who.color = who.group.color;

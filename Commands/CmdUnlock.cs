@@ -48,7 +48,7 @@ namespace MCForge
                 p.SendMessage("Could not locate the folder creating one now.");
                 Directory.CreateDirectory("text/lockdown");
                 Directory.CreateDirectory("text/lockdown/map");
-                p.SendMessage("Added the settings for the command");
+                p.SendMessage("Added the settings for the command.");
             }
             string[] param = message.Split(' ');
             {
@@ -59,10 +59,10 @@ namespace MCForge
                         if (File.Exists("text/lockdown/map/" + param[1] + ""))
                         {
                             File.Delete("text/lockdown/map/" + param[1] + "");
-                            Player.SendMessage(p, "the map " + param[1] + " have been unlocked");
+                            Player.SendMessage(p, "The map " + param[1] + " has been unlocked.");
                         }
                         else
-                            Player.SendMessage(p, "the map " + param[1] + " is not locked or does not exist");
+                            Player.SendMessage(p, "The map " + param[1] + " is not locked or does not exist.");
                     }
                 }
                 if (param.Length == 2) // shift number to the next lockdown command
@@ -79,12 +79,12 @@ namespace MCForge
                                     if (who.level != p.level) Command.all.Find("goto").Use(who, p.level.name);
                                     Player.GlobalDie(who, false);
                                     who.jailed = false;
-                                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " have been unlocked!", true);
+                                    Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been unlocked!", true);
                                     return;
                                 }
-                                else Player.SendMessage(p, "the player " + param[1] + " is not locked down"); return;
+                                else Player.SendMessage(p, "The player " + param[1] + " is not locked down."); return;
                             }
-                            else Player.SendMessage(p, "there is no such player online!"); return;
+                            else Player.SendMessage(p, "There is no such player online!"); return;
                         }
                     }
 
@@ -94,8 +94,8 @@ namespace MCForge
 
         public override void Help(Player p)
         {
-            Player.SendMessage(p, " use /unlock map <mapname> to unlock it (open it).");
-            Player.SendMessage(p, " use /unlock player <playername> to unlock player."); return;
+            Player.SendMessage(p, "Use /unlock map <mapname> to unlock it (open it).");
+            Player.SendMessage(p, "Use /unlock player <playername> to unlock player."); return;
         }
     }
 }

@@ -81,7 +81,7 @@ namespace MCForge
 
             //sent the trick text
             Player.GlobalMessage(p.color + p.name + Server.DefaultColor + "'s rank was set to " + newRank.color + newRank.name);
-            Player.GlobalChat(null, "&6Congratulations!", false);
+            Player.GlobalMessage("&6Congratulations!");
             p.SendMessage("You are now ranked " + newRank.color + newRank.name + Server.DefaultColor + ", type /help for your new set of commands.");
             
             kick(p, newRank);

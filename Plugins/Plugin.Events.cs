@@ -20,64 +20,83 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.Plugins
+namespace MCForge
 {
 	public partial class Plugin
 	{
 
         /// <summary>
-        /// Check to see if an event is stopped
+        /// Check to see if a Player event is stopped
         /// </summary>
         /// <param name="e">The event to check</param>
-        /// <param name="p">The Player that event is related to (null if not dealing with player event)</param>
+        /// <param name="p">The Player that event is related to</param>
         /// <returns>This returns true or false, true means its stopped, false means its not</returns>
-        public static bool IsEventCancled(Events e, Player p)
+        public static bool IsPlayerEventCancled(PlayerEvents e, Player p)
         {
             switch (e)
             {
-                case Events.BlockChange:
+                case PlayerEvents.BlockChange:
                     return p.cancelBlock;
-                case Events.PlayerChat:
+                case PlayerEvents.PlayerChat:
                     return p.cancelchat;
-                case Events.PlayerCommand:
+                case PlayerEvents.PlayerCommand:
                     return p.cancelcommand;
-                case Events.PlayerMove:
+                case PlayerEvents.PlayerMove:
                     return p.cancelmove;
-                case Events.LevelLoad:
-                    return Level.cancelload;
-                case Events.LevelSave:
-                    return Level.cancelsave;
                 default:
                     return false;
             }
         }
         /// <summary>
-        /// Cancel a server event
+        /// Cancel Level event
+        /// </summary>
+        /// <param name="e">The event to cancel</param>
+        /// <param name="l">The level to cancel the event on</param>
+        public static void CancelLevelEvent(LevelEvents e, Level l)
+        {
+            switch (e)
+            {
+                case LevelEvents.LevelUnload:
+                    break;
+            }
+        }
+        /// <summary>
+        /// Cancel Global Level Event
+        /// </summary>
+        /// <param name="e">The event you want to cancel</param>
+        public static void CancelGlobalLevelEvent(GlobalLevelEvents e)
+        {
+            switch (e)
+            {
+                case GlobalLevelEvents.LevelLoad:
+                    Level.cancelload = true;
+                    break;
+                case GlobalLevelEvents.LevelSave:
+                    Level.cancelsave = true;
+                    break;
+            }
+        }
+        /// <summary>
+        /// Cancel a player event
         /// </summary>
         /// <param name="e">The event that you want to cancel</param>
-        /// <param name="p">The Player that event is related to (null if not dealing with player event)</param>
-        public static void CancelEvent(Events e, Player p) {
+        /// <param name="p">The Player that event is related to</param>
+        public static void CancelPlayerEvent(PlayerEvents e, Player p) {
             //TODO
             //Add some more events to be canceled
             switch (e)
             {
-                case Events.BlockChange:
+                case PlayerEvents.BlockChange:
                     p.cancelBlock = true;
                     break;
-                case Events.PlayerChat:
+                case PlayerEvents.PlayerChat:
                     p.cancelchat = true;
                     break;
-                case Events.PlayerCommand:
+                case PlayerEvents.PlayerCommand:
                     p.cancelcommand = true;
                     break;
-                case Events.PlayerMove:
+                case PlayerEvents.PlayerMove:
                     p.cancelmove = true;
-                    break;
-                case Events.LevelLoad:
-                    Level.cancelsave = true;
-                    break;
-                case Events.LevelSave:
-                    Level.cancelload = true;
                     break;
             }
         }

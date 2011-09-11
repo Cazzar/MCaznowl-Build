@@ -33,6 +33,7 @@ namespace MCForge.Commands
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
             if (message == "" || message.IndexOf(' ') != -1) { Help(p); return; }
 
             if (Server.voteKickInProgress == true) { p.SendMessage("Please wait for the current vote to finish!"); return; }
@@ -46,13 +47,13 @@ namespace MCForge.Commands
 
             if (who.group.Permission >= p.group.Permission)
             {
-                Player.GlobalChat(p, p.color + p.name + " " + Server.DefaultColor + "tried to votekick " + who.color + who.name + " " + Server.DefaultColor + "and failed!", false);
+                Player.GlobalChat(p, p.color + p.name + " " + Server.DefaultColor + "tried to votekick " + who.color + who.name + " " + Server.DefaultColor + "but failed!", false);
                 return;
             }
 
             Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " used &a/votekick");
             Player.GlobalMessage("&9A vote to kick " + who.color + who.name + " " + Server.DefaultColor + "has been called!");
-            Player.GlobalMessage("&9Type &aY " + Server.DefaultColor + "or &cN &fto vote.");
+            Player.GlobalMessage("&9Type &aY " + Server.DefaultColor + "or &cN " + Server.DefaultColor + "to vote.");
 
             // 1/3rd of the players must vote or nothing happens
             // Keep it at 0 to disable min number of votes

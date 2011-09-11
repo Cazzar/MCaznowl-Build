@@ -47,7 +47,7 @@ namespace MCForge
             {
                 who.title = "";
                 who.SetPrefix();
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " had their title removed.", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " had their title removed.", false);
                 query = "UPDATE Players SET Title = '' WHERE Name = '" + who.name + "'";
                 MySQL.executeQuery(query);
                 return;
@@ -69,8 +69,8 @@ namespace MCForge
             }
 
             if (newTitle != "")
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " was given the title of &b[" + newTitle + "]", false);
-            else Player.GlobalChat(null, who.color + who.prefix + who.name + Server.DefaultColor + " had their title removed.", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " was given the title of &b[" + newTitle + "]", false);
+            else Player.GlobalChat(who, who.color + who.prefix + who.name + Server.DefaultColor + " had their title removed.", false);
 
             if (newTitle == "")
             {
