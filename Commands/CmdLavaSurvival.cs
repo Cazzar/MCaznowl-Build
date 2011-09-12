@@ -207,6 +207,7 @@ namespace MCForge
                                     return;
                             }
                             Server.lava.SaveSettings();
+                            return;
                         }
                         catch { Player.SendMessage(p, "INVALID INPUT"); return; }
                     }
@@ -280,6 +281,7 @@ namespace MCForge
                         }
                         catch { Player.SendMessage(p, "INVALID INPUT"); return; }
                         Server.lava.SaveMapSettings(settings);
+                        return;
                     }
                 }
             }
