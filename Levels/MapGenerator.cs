@@ -476,7 +476,7 @@ namespace MCForge
                                     if ((xxx != x || zzz != z || yy >= top - 1) && (overwrite || Lvl.GetTile(xxx, yyy, zzz) == Block.air))
                                         if (blockChange)
                                             if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
-                                            else Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                            else Lvl.Blockchange(p, xxx, yyy, zzz, Block.leaf);
                                         else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
                                 }
                                 catch { }

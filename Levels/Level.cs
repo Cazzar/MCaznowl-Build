@@ -171,7 +171,7 @@ namespace MCForge
                 case "flat":
                     for (x = 0; x < width; ++x)
                         for (z = 0; z < height; ++z)
-                            for (y = 0; y < half + 1; ++y)
+                            for (y = 0; y <= half; ++y)
                                 SetTile(x, y, z, y < half ? Block.dirt : Block.grass);
                                 //SetTile(x, y, z, (byte)(y != half ? (y >= half) ? 0 : 3 : 2));
                     break;
