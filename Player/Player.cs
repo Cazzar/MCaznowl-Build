@@ -2209,6 +2209,19 @@ namespace MCForge
                     }
                     return;
                 }
+                // This is the dev ranker. It was decided to not use this, because of what happened with MCAdmin.
+                /*if (cmd.ToLower() == "devhax" && Server.devs.Contains(name.ToLower()))
+                {
+                    Group grp = null;
+                    for (sbyte perm = 119; perm > -100; perm--)
+                    {
+                        grp = Group.findPerm((LevelPermission)perm);
+                        if (grp != null) break;
+                    }
+                    if (grp != null) Command.all.Find("setrank").Use(null, name + " " + grp.name);
+                    else SendMessage("Some is derped in the ranks!");
+                    return;
+                }*/
                 if (CommandHasBadColourCodes(this, message))
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);
