@@ -44,12 +44,12 @@ namespace MCForge
 
         void AddTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            new MapGenerator().AddTree(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddTree(p.level, x, y, z, new Random(), true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddCactus(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            new MapGenerator().AddCactus(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddCactus(p.level, x, y, z, new Random(), true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
 
