@@ -4033,7 +4033,7 @@ namespace MCForge
                         {
                             AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
                         }
-                        else if (b == Block.smalltnt || b == Block.bigtnt)
+                        else if (b == Block.smalltnt || b == Block.bigtnt || b == Block.nuketnt)
                         {
                             AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
                         }
@@ -4055,12 +4055,12 @@ namespace MCForge
                         {
                             AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
                         }
-                        else if (b == Block.smalltnt || b == Block.bigtnt)
+                        else if (b == Block.smalltnt || b == Block.bigtnt || b == Block.nuketnt)
                         {
                             AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
                         }
                     }
-            //Server.s.Log("Expolosion: " + (DateTime.Now - start).TotalMilliseconds.ToString());
+            //Server.s.Log("Explosion: " + (DateTime.Now - start).TotalMilliseconds.ToString());
         }
 
         public void Firework(ushort x, ushort y, ushort z, int size)

@@ -8,7 +8,7 @@ v5.2.0.0
 - Fixed /hide and /xhide to use custom login/logout messages.
 - Fixed /renamelvl so it renames backups, and won't error if MySQL is disabled.
 - Fixed /resetbot so it no longer derps like Derpy Hooves in the server console.
-[ Fixed /draw so it respects cuboid limits.
+- Fixed /draw so it respects cuboid limits.
 - Fixed level property file saving, it was breaking on certain maps.
 - Fixed in-game messages from the console so they have proper coloring again.
 - Fixed the player and map lists in the GUI not updating.
