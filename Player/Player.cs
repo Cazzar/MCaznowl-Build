@@ -3458,58 +3458,91 @@ namespace MCForge
 
             try
             {
+                if (loggedIn)
+                {
+                    try
+                    {
+                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
+                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
+                        DirectoryInfo di = new DirectoryInfo("extra/undo");
+                        if (di.GetDirectories("*").Length >= Server.totalUndo)
+                        {
+                            Directory.Delete("extra/undoPrevious", true);
+                            Directory.Move("extra/undo", "extra/undoPrevious");
+                            Directory.CreateDirectory("extra/undo");
+                        }
+
+                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
+                        di = new DirectoryInfo("extra/undo/" + name);
+                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                        {
+                            try
+                            {
+                                lock (UndoBuffer)
+                                {
+                                    foreach (UndoPos uP in UndoBuffer)
+                                    {
+                                        w.Write(uP.mapName + " " +
+                                            uP.x + " " + uP.y + " " + uP.z + " " +
+                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                            uP.type + " " + uP.newtype + " ");
+                                    }
+                                }
+                            }
+                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
+                        }
+                    }
+                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
+                }
+
                 if (disconnected)
                 {
                     this.CloseSocket();
                     if (connections.Contains(this))
                         connections.Remove(this);
-                    //return;
+                    return;
                 }
-
-                try
+                //   FlyBuffer.Clear();
+                disconnected = true;
+                pingTimer.Stop();
+                pingTimer.Dispose();
+                if (File.Exists("ranks/ignore/" + this.name + ".txt"))
                 {
-                    //   FlyBuffer.Clear();
-                    disconnected = true;
-                    pingTimer.Stop();
-                    pingTimer.Dispose();
-                    if (File.Exists("ranks/ignore/" + this.name + ".txt"))
+                    try
                     {
-                        try
-                        {
-                            File.WriteAllLines("ranks/ignore/" + this.name + ".txt", this.listignored.ToArray());
-                        }
-                        catch
-                        {
-                            Server.s.Log("Failed to save ignored list for player: " + this.name);
-                        }
+                        File.WriteAllLines("ranks/ignore/" + this.name + ".txt", this.listignored.ToArray());
                     }
-                    if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
+                    catch
                     {
-                        try
-                        {
-                            File.WriteAllLines("ranks/ignore/GlobalIgnore.xml", globalignores.ToArray());
-                        }
-                        catch
-                        {
-                            Server.s.Log("failed to save global ignore list!");
-                        }
+                        Server.s.Log("Failed to save ignored list for player: " + this.name);
                     }
-                    afkTimer.Stop();
-                    afkTimer.Dispose();
-                    muteTimer.Stop();
-                    muteTimer.Dispose();
-                    timespent.Stop();
-                    timespent.Dispose();
-                    afkCount = 0;
-                    afkStart = DateTime.Now;
-
-                    if (Server.afkset.Contains(name)) Server.afkset.Remove(name);
-
-                    if (kickString == "") kickString = "Disconnected.";
-
-                    SendKick(kickString);
                 }
-                catch (Exception e) { Server.ErrorLog(e); }
+                if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
+                {
+                    try
+                    {
+                        File.WriteAllLines("ranks/ignore/GlobalIgnore.xml", globalignores.ToArray());
+                    }
+                    catch
+                    {
+                        Server.s.Log("failed to save global ignore list!");
+                    }
+                }
+                afkTimer.Stop();
+                afkTimer.Dispose();
+                muteTimer.Stop();
+                muteTimer.Dispose();
+                timespent.Stop();
+                timespent.Dispose();
+                afkCount = 0;
+                afkStart = DateTime.Now;
+
+                if (Server.afkset.Contains(name)) Server.afkset.Remove(name);
+
+                if (kickString == "") kickString = "Disconnected.";
+
+                SendKick(kickString);
 
                 if (loggedIn)
                 {
@@ -3590,43 +3623,8 @@ namespace MCForge
                     if (Server.AutoLoad && level.unload && !level.name.Contains("Museum " + Server.DefaultColor) && IsAloneOnCurrentLevel())
                         level.Unload(true);
 
-
-                    try
-                    {
-                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
-                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
-                        DirectoryInfo di = new DirectoryInfo("extra/undo");
-                        if (di.GetDirectories("*").Length >= Server.totalUndo)
-                        {
-                            Directory.Delete("extra/undoPrevious", true);
-                            Directory.Move("extra/undo", "extra/undoPrevious");
-                            Directory.CreateDirectory("extra/undo");
-                        }
-
-                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
-                        di = new DirectoryInfo("extra/undo/" + name);
-                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
-                        {
-                            try
-                            {
-                                lock (UndoBuffer)
-                                {
-                                    foreach (UndoPos uP in UndoBuffer)
-                                    {
-                                        w.Write(uP.mapName + " " +
-                                            uP.x + " " + uP.y + " " + uP.z + " " +
-                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                            uP.type + " " + uP.newtype + " ");
-                                    }
-                                }
-                            }
-                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                        }
-                        if (PlayerDisconnect != null)
-                            PlayerDisconnect(this, kickString);
-                    }
-                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
+                    if (PlayerDisconnect != null)
+                        PlayerDisconnect(this, kickString);
 
                     this.Dispose();
                 }
