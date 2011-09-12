@@ -191,6 +191,7 @@ namespace MCForge.Gui
             else
             {
                 this.Text = Server.name + " - MCForge " + Server.Version;
+                notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
             }
         }
 
