@@ -293,7 +293,10 @@ namespace MCForge.Gui
             if (InvokeRequired)
             {
                 PlayerListCallback d = UpdateClientList;
-                Invoke(d, new object[] { players });
+                if (this.IsDisposed) {
+                    return; // Do nothing if we're already disposed.
+                }
+                Invoke(d, new List<Player>[] { players });
             }
             else
             {
@@ -331,7 +334,7 @@ namespace MCForge.Gui
 
         }
 
-        public void UpdateMapList(string blah)
+        public void UpdateMapList(string unused)
         {
             /*
             if (this.InvokeRequired) {
@@ -349,7 +352,7 @@ namespace MCForge.Gui
             if (this.InvokeRequired)
             {
                 LogDelegate d = new LogDelegate(UpdateMapList);
-                this.Invoke(d, blah);
+                this.Invoke(d, new String[] {" "});
             }
             else
             {
