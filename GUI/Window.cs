@@ -349,7 +349,7 @@ namespace MCForge.Gui
             if (this.InvokeRequired)
             {
                 LogDelegate d = new LogDelegate(UpdateMapList);
-                this.Invoke(d, new object[] { blah });
+                this.Invoke(d, blah);
             }
             else
             {

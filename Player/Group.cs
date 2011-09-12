@@ -75,6 +75,8 @@ namespace MCForge
                 int gots = 0;
                 bool foundUndo = false;
 
+                bool foundMaxUndo = false;
+
                 foreach (string s in lines)
                 {
                     try
@@ -162,6 +164,7 @@ namespace MCForge
                                             }
                                             catch { Server.s.Log("Invalid maximum on " + s); break; }
 
+                                            foundMaxUndo = true;
                                             gots++;
                                             foundUndo = true;
                                             thisGroup.maxUndo = foundMax;
@@ -199,6 +202,13 @@ namespace MCForge
 
                                     if (gots >= 5 || (gots >= 4 && !foundUndo))
                                     {
+                                        if (!foundMaxUndo) {
+                                            if ((int)thisGroup.Permission >= 100)
+                                                thisGroup.maxUndo = int.MaxValue;
+                                            else if ((int)thisGroup.Permission >= 80)
+                                                thisGroup.maxUndo = 5400;
+                                        }
+                                        foundMaxUndo = false;
                                         GroupList.Add(new Group(thisGroup.Permission, thisGroup.maxBlocks, thisGroup.maxUndo, thisGroup.trueName, thisGroup.color[0], thisGroup.fileName));
                                     }
                                 }
