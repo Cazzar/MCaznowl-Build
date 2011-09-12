@@ -182,7 +182,7 @@ namespace MCForge
                             Player.SendMessage(p, "Start on server startup: " + (Server.lava.startOnStartup ? "&aON" : "&cOFF"));
                             Player.SendMessage(p, "Send AFK to main: " + (Server.lava.sendAfkMain ? "&aON" : "&cOFF"));
                             Player.SendMessage(p, "Vote count: &b" + Server.lava.voteCount);
-                            Player.SendMessage(p, "Vote time: &b" + Server.lava.voteTime + "minute" + (Server.lava.voteTime == 1 ? "" : "s"));
+                            Player.SendMessage(p, "Vote time: &b" + Server.lava.voteTime + " minute" + (Server.lava.voteTime == 1 ? "" : "s"));
                             return;
                         }
 
