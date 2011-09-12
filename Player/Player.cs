@@ -3463,48 +3463,53 @@ namespace MCForge
                     this.CloseSocket();
                     if (connections.Contains(this))
                         connections.Remove(this);
-                    return;
+                    //return;
                 }
-                //   FlyBuffer.Clear();
-                disconnected = true;
-                pingTimer.Stop();
-                pingTimer.Dispose();
-                if (File.Exists("ranks/ignore/" + this.name + ".txt"))
+
+                try
                 {
-                    try
+                    //   FlyBuffer.Clear();
+                    disconnected = true;
+                    pingTimer.Stop();
+                    pingTimer.Dispose();
+                    if (File.Exists("ranks/ignore/" + this.name + ".txt"))
                     {
-                        File.WriteAllLines("ranks/ignore/" + this.name + ".txt", this.listignored.ToArray());
+                        try
+                        {
+                            File.WriteAllLines("ranks/ignore/" + this.name + ".txt", this.listignored.ToArray());
+                        }
+                        catch
+                        {
+                            Server.s.Log("Failed to save ignored list for player: " + this.name);
+                        }
                     }
-                    catch
+                    if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
                     {
-                        Server.s.Log("Failed to save ignored list for player: " + this.name);
+                        try
+                        {
+                            File.WriteAllLines("ranks/ignore/GlobalIgnore.xml", globalignores.ToArray());
+                        }
+                        catch
+                        {
+                            Server.s.Log("failed to save global ignore list!");
+                        }
                     }
+                    afkTimer.Stop();
+                    afkTimer.Dispose();
+                    muteTimer.Stop();
+                    muteTimer.Dispose();
+                    timespent.Stop();
+                    timespent.Dispose();
+                    afkCount = 0;
+                    afkStart = DateTime.Now;
+
+                    if (Server.afkset.Contains(name)) Server.afkset.Remove(name);
+
+                    if (kickString == "") kickString = "Disconnected.";
+
+                    SendKick(kickString);
                 }
-                if (File.Exists("ranks/ignore/GlobalIgnore.xml"))
-                {
-                    try
-                    {
-                        File.WriteAllLines("ranks/ignore/GlobalIgnore.xml", globalignores.ToArray());
-                    }
-                    catch
-                    {
-                        Server.s.Log("failed to save global ignore list!");
-                    }
-                }
-                afkTimer.Stop();
-                afkTimer.Dispose();
-                muteTimer.Stop();
-                muteTimer.Dispose();
-                timespent.Stop();
-                timespent.Dispose();
-                afkCount = 0;
-                afkStart = DateTime.Now;
-
-                if (Server.afkset.Contains(name)) Server.afkset.Remove(name);
-
-                if (kickString == "") kickString = "Disconnected.";
-
-                SendKick(kickString);
+                catch (Exception e) { Server.ErrorLog(e); }
 
                 if (loggedIn)
                 {
@@ -3605,12 +3610,15 @@ namespace MCForge
                         {
                             try
                             {
-                                foreach (UndoPos uP in UndoBuffer)
+                                lock (UndoBuffer)
                                 {
-                                    w.Write(uP.mapName + " " +
-                                        uP.x + " " + uP.y + " " + uP.z + " " +
-                                        uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                        uP.type + " " + uP.newtype + " ");
+                                    foreach (UndoPos uP in UndoBuffer)
+                                    {
+                                        w.Write(uP.mapName + " " +
+                                            uP.x + " " + uP.y + " " + uP.z + " " +
+                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                            uP.type + " " + uP.newtype + " ");
+                                    }
                                 }
                             }
                             catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }

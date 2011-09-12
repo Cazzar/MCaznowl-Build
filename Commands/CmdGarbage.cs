@@ -18,6 +18,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "Forcing garbage collection...");
             GC.Collect();
+            GC.WaitForPendingFinalizers();
             Player.SendMessage(p, "Garbage collection completed!");
         }
         public override void Help(Player p)
