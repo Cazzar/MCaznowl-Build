@@ -446,7 +446,7 @@ namespace MCForge
             byte height = (byte)Rand.Next(5, 8);
             short top = (short)(height - Rand.Next(2, 4));
             ushort xxx, yyy, zzz;
-            for (ushort yy = 0; yy < top + height - 2; yy++)
+            for (ushort yy = 0; yy < top + height - 1; yy++)
             {
                 if (overwrite || Lvl.GetTile(x, (ushort)(y + yy), z) == Block.air || (y + yy == y && Lvl.GetTile(x, (ushort)(y + yy), z) == Block.shrub))
                     if (blockChange)
@@ -473,10 +473,10 @@ namespace MCForge
                                     yyy = (ushort)(y + yy + height);
                                     zzz = (ushort)(z + zz);
 
-                                    if ((xxx != x || zzz != z || yy >= top - 2) && (overwrite || Lvl.GetTile(xxx, yyy, zzz) == Block.air))
+                                    if ((xxx != x || zzz != z || yy >= top - 1) && (overwrite || Lvl.GetTile(xxx, yyy, zzz) == Block.air))
                                         if (blockChange)
-                                            if (p == null) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.leaf);
-                                            else Lvl.Blockchange(p, x, (ushort)(y + yy), z, Block.leaf);
+                                            if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                            else Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
                                         else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
                                 }
                                 catch { }
@@ -513,16 +513,16 @@ namespace MCForge
             {
                 if (overwrite || Lvl.GetTile((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ)) == Block.air)
                     if (blockChange)
-                        if (p == null) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.green);
-                        else Lvl.Blockchange(p, x, (ushort)(y + yy), z, Block.green);
+                        if (p == null) Lvl.Blockchange((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
+                        else Lvl.Blockchange(p, (ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
                     else Lvl.skipChange((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ), Block.green);
             }
             for (yy = height; yy <= Rand.Next(height + 2, height + 5); yy++)
             {
                 if (overwrite || Lvl.GetTile((ushort)(x + inX), (ushort)(y + yy), (ushort)(z + inZ)) == Block.air)
                     if (blockChange)
-                        if (p == null) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.green);
-                        else Lvl.Blockchange(p, x, (ushort)(y + yy), z, Block.green);
+                        if (p == null) Lvl.Blockchange((ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
+                        else Lvl.Blockchange(p, (ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
                     else Lvl.skipChange((ushort)(x - inX), (ushort)(y + yy), (ushort)(z - inZ), Block.green);
             }
         }
