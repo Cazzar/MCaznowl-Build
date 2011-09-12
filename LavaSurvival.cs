@@ -410,7 +410,7 @@ namespace MCForge
                                 break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))
-                                    if(!maps.Contains(mapname)) maps.Add(mapname);
+                                    if(!String.IsNullOrEmpty(mapname) && !maps.Contains(mapname)) maps.Add(mapname);
                                 break;
                         }
                     }
@@ -524,7 +524,7 @@ namespace MCForge
 
         public void AddMap(string name)
         {
-            if (!maps.Contains(name.ToLower()))
+            if (!String.IsNullOrEmpty(name) && !maps.Contains(name.ToLower()))
             {
                 maps.Add(name.ToLower());
                 SaveSettings();
