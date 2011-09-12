@@ -1676,7 +1676,7 @@ namespace MCForge
                                             {
                                                 if (!PhysSpongeCheck(C.b, true))
                                                 {
-                                                    C.time = (byte)rand.Next(0, 3);
+                                                    C.time = (byte)rand.Next(3);
                                                     if (!liquids.ContainsKey(C.b)) liquids.Add(C.b, new bool[5]);
                                                     if (!liquids[C.b][0] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]); liquids[C.b][0] = true; }
                                                     if (!liquids[C.b][1] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]); liquids[C.b][1] = true; }
