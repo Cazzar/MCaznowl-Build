@@ -72,8 +72,8 @@ namespace MCForge
                 string[] lines = File.ReadAllLines("properties/ranks.properties");
 
                 Group thisGroup = new Group();
-                int gots = 0;
-                bool foundMaxUndo = false;
+                int gots = 0, version = 1;
+                if (lines.Length > 0 && lines[0] == "#Version 2") version = 2;
 
                 foreach (string s in lines)
                 {
@@ -96,7 +96,6 @@ namespace MCForge
                                     {
                                         case "rankname":
                                             gots = 0;
-                                            foundMaxUndo = false;
                                             thisGroup = new Group();
 
                                             if (value.ToLower() == "developers" || value.ToLower() == "devs")
@@ -162,7 +161,6 @@ namespace MCForge
                                             }
                                             catch { Server.s.Log("Invalid maximum on " + s); break; }
 
-                                            foundMaxUndo = true;
                                             gots++;
                                             thisGroup.maxUndo = foundMax;
                                             break;
@@ -197,15 +195,14 @@ namespace MCForge
                                             break;
                                     }
 
-                                    if (gots >= 4)
+                                    if ((gots >= 4 && version < 2) || gots >= 5)
                                     {
-                                        if (!foundMaxUndo) {
+                                        if (version < 2) {
                                             if ((int)thisGroup.Permission >= 100)
                                                 thisGroup.maxUndo = int.MaxValue;
                                             else if ((int)thisGroup.Permission >= 80)
                                                 thisGroup.maxUndo = 5400;
                                         }
-                                        foundMaxUndo = false;
 
                                         GroupList.Add(new Group(thisGroup.Permission, thisGroup.maxBlocks, thisGroup.maxUndo, thisGroup.trueName, thisGroup.color[0], thisGroup.fileName));
                                     }
@@ -217,7 +214,7 @@ namespace MCForge
                             }
                         }
                     }
-                    catch { Server.s.Log("A RANK IS FUCKED UP!"); }
+                    catch { Server.s.Log("A rank is fucked up!"); }
                 }
             }
 
@@ -258,6 +255,7 @@ namespace MCForge
 			File.Create("properties/ranks.properties").Dispose();
 			using (StreamWriter SW = File.CreateText("properties/ranks.properties"))
 			{
+                SW.WriteLine("#Version 2");
 				SW.WriteLine("#RankName = string");
 				SW.WriteLine("#     The name of the rank, use capitalization.");
 				SW.WriteLine("#");
@@ -272,9 +270,8 @@ namespace MCForge
 				SW.WriteLine("#     The command limit for the rank (can be changed in-game with /limit)");
 				SW.WriteLine("#		Must be greater than 0 and less than 10000000");
                 SW.WriteLine("#MaxUndo = num");
-				SW.WriteLine("#     The undo limit for the rank");
+				SW.WriteLine("#     The undo limit for the rank, only applies when undoing others.");
 				SW.WriteLine("#		Must be greater than 0 and less than " + int.MaxValue);
-                SW.WriteLine("#		DO NOT PUT THIS LAST! DOING SO WILL BREAK STUFF!");
 				SW.WriteLine("#Color = char");
 				SW.WriteLine("#     A single letter or number denoting the color of the rank");
 				SW.WriteLine("#	    Possibilities:");

@@ -3987,6 +3987,7 @@ namespace MCForge
 
         public void MakeExplosion(ushort x, ushort y, ushort z, int size)
         {
+            //DateTime start = DateTime.Now;
             int xx, yy, zz; Random rand = new Random(); byte b;
 
             if (physics < 2) return;
@@ -4059,6 +4060,7 @@ namespace MCForge
                             AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
                         }
                     }
+            //Server.s.Log("Expolosion: " + (DateTime.Now - start).TotalMilliseconds.ToString());
         }
 
         public void Firework(ushort x, ushort y, ushort z, int size)
