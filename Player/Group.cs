@@ -213,7 +213,7 @@ namespace MCForge
             if (GroupList.Find(grp => grp.Permission == LevelPermission.Builder) == null) GroupList.Add(new Group(LevelPermission.Builder, 400, 300, "Builder", '2', "builders.txt"));
             if (GroupList.Find(grp => grp.Permission == LevelPermission.AdvBuilder) == null) GroupList.Add(new Group(LevelPermission.AdvBuilder, 1200, 600, "AdvBuilder", '3', "advbuilders.txt"));
             if (GroupList.Find(grp => grp.Permission == LevelPermission.Operator) == null) GroupList.Add(new Group(LevelPermission.Operator, 2500, 5400, "Operator", 'c', "operators.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Admin) == null) GroupList.Add(new Group(LevelPermission.Admin, 65536, -1, "SuperOP", 'e', "uberOps.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Admin) == null) GroupList.Add(new Group(LevelPermission.Admin, 65536, int.MaxValue, "SuperOP", 'e', "uberOps.txt"));
             GroupList.Add(new Group(LevelPermission.Nobody, 65536, -1, "Nobody", '0', "nobody.txt"));
 
             bool swap = true; Group storedGroup;
