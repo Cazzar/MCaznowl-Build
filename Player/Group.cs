@@ -73,8 +73,6 @@ namespace MCForge
 
                 Group thisGroup = new Group();
                 int gots = 0;
-                bool foundUndo = false;
-
                 bool foundMaxUndo = false;
 
                 foreach (string s in lines)
@@ -98,7 +96,7 @@ namespace MCForge
                                     {
                                         case "rankname":
                                             gots = 0;
-                                            foundUndo = false;
+                                            foundMaxUndo = false;
                                             thisGroup = new Group();
 
                                             if (value.ToLower() == "developers" || value.ToLower() == "devs")
@@ -166,7 +164,6 @@ namespace MCForge
 
                                             foundMaxUndo = true;
                                             gots++;
-                                            foundUndo = true;
                                             thisGroup.maxUndo = foundMax;
                                             break;
                                         case "color":
@@ -200,7 +197,7 @@ namespace MCForge
                                             break;
                                     }
 
-                                    if (gots >= 5 || (gots >= 4 && !foundUndo))
+                                    if (gots >= 4)
                                     {
                                         if (!foundMaxUndo) {
                                             if ((int)thisGroup.Permission >= 100)
@@ -209,6 +206,7 @@ namespace MCForge
                                                 thisGroup.maxUndo = 5400;
                                         }
                                         foundMaxUndo = false;
+
                                         GroupList.Add(new Group(thisGroup.Permission, thisGroup.maxBlocks, thisGroup.maxUndo, thisGroup.trueName, thisGroup.color[0], thisGroup.fileName));
                                     }
                                 }
