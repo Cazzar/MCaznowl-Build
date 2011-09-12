@@ -8,6 +8,7 @@ v5.2.0.0
 - Fixed /hide and /xhide to use custom login/logout messages.
 - Fixed /renamelvl so it renames backups, and won't error if MySQL is disabled.
 - Fixed /resetbot so it no longer derps like Derpy Hooves in the server console.
+[ Fixed /draw so it respects cuboid limits.
 - Fixed level property file saving, it was breaking on certain maps.
 - Fixed in-game messages from the console so they have proper coloring again.
 - Fixed the player and map lists in the GUI not updating.
@@ -20,7 +21,7 @@ v5.2.0.0
 - Fixed being unable to set the lowest rank for any blocks after obsidian in the GUI.
 - Added global chat, which allows you to chat with other servers! Can be disabled in the properties.
 - Added /copy [save|load|delete|list], and you can load from a URL by appending a # to the end.
-- Added a per-rank undo limit and ditched the old hard-coded limits. It's in seconds, set to 0 for no limit.
+- Added a per-rank undo limit and ditched the old hard-coded limits. It's in seconds, and the limit only applies to undoing other players.
 - Added Plugin.Events.CancelEvent().
 - Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while.
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics.

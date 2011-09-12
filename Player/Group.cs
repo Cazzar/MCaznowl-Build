@@ -214,7 +214,7 @@ namespace MCForge
                             }
                         }
                     }
-                    catch { Server.s.Log("A rank is fucked up!"); }
+                    catch (Exception e) { Server.s.Log("Encountered an error at line \"" + s + "\" in ranks.properties"); Server.ErrorLog(e); }
                 }
             }
 
