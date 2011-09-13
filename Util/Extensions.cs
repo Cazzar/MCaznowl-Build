@@ -114,14 +114,15 @@ namespace MCForge
         }
         public static string Concatenate<T>(this List<T> list, string separator)
         {
-            StringBuilder sb = new StringBuilder();
             if (list.Count > 0)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (T obj in list)
                     sb.Append(separator + obj.ToString());
                 sb.Remove(0, separator.Length);
+                return sb.ToString();
             }
-            return sb.ToString();
+            return String.Empty;
         }
     }
 }

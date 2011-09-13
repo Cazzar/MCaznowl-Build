@@ -148,7 +148,7 @@ namespace MCForge
             foreach (byte b in Encoding.ASCII.GetBytes(message))
             {
                 if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append(b);
+                    sb.Append((char)b);
                 else
                     sb.Append("*");
             }
