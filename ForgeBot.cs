@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Sharkbite.Irc;
+using System.Text;
 //using System.Threading;
 
 namespace MCForge
@@ -82,16 +83,19 @@ namespace MCForge
         }
         void Listener_OnJoin(UserInfo user, string channel)
         {
-            Server.s.Log(user.Nick + " has joined channel " + channel);
-            Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has joined the" + (channel == opchannel ? " operator " : " ") + "channel");
+            doJoinLeaveMessage(user.Nick, "joined", channel);
         }
         void Listener_OnPart(UserInfo user, string channel, string reason)
         {
             if (user.Nick == nick) return;
-            Server.s.Log(user.Nick + " has left channel " + channel);
-            Player.GlobalMessage(Server.IRCColour + "[IRC] " + user.Nick + " has left the" + (channel == opchannel ? " operator " : " ") + "channel");
+            doJoinLeaveMessage(user.Nick, "left", channel);
         }
 
+        private void doJoinLeaveMessage(string who, string verb, string channel)
+        {
+            Server.s.Log(String.Format("{0} has {1} channel {2}", who, verb, channel));
+            Player.GlobalMessage(String.Format("{0}[IRC] {1} has {2} the{3} channel", Server.IRCColour, who, verb, (channel == opchannel ? " operator" : "")));
+        }
         void Player_PlayerDisconnect(Player p, string reason)
         {
             if (Server.irc && IsConnected())
@@ -137,17 +141,25 @@ namespace MCForge
 
         void Listener_OnPublic(UserInfo user, string channel, string message)
         {
-            string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
-            string msg = message;
+            //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
+            // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
+            StringBuilder sb = new StringBuilder();
 
-            foreach (char ch in msg)
+            foreach (byte b in Encoding.ASCII.GetBytes(message))
             {
-                if (allowedchars.IndexOf(ch) == -1)
-                    msg = msg.Replace(ch.ToString(), "*");
+                if (b != 38 && b != 96 && b >= 32 && b <= 122)
+                    sb.Append(b);
+                else
+                    sb.Append("*");
             }
-            if (Player.MessageHasBadColorCodes(null, msg)) return;
-            Server.s.Log("[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": " + msg);
-            Player.GlobalMessage(Server.IRCColour + "[" + (channel == opchannel ? "(Op) " : "") + "IRC] " + user.Nick + ": &f" + msg.Trim());
+
+            String msg = sb.ToString().Trim();
+
+            if (Player.MessageHasBadColorCodes(null, msg))
+                return;
+
+            Server.s.Log(String.Format("[{0}IRC] {1}: {2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
+            Player.GlobalMessage(Server.IRCColour + String.Format("[{0}IRC] {1}: &f{2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
         }
 
         void Listener_OnRegistered()
