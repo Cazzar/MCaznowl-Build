@@ -81,7 +81,7 @@ namespace MCForge
 
         public bool CheckPlayer(Player p)
         {
-            return p.name.ToLower() != Server.server_owner.ToLower() && !Player.IPInPrivateRange(p.ip) && bans.Contains(p.name.ToLower());
+            return p.name.ToLower() != Server.server_owner.ToLower() && !Player.IPInPrivateRange(p.ip) && (bans.Contains(p.name.ToLower()) || bans.Contains(p.ip));
         }
     }
 }
