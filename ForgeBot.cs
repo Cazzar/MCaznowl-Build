@@ -145,10 +145,10 @@ namespace MCForge
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
             StringBuilder sb = new StringBuilder();
 
-            foreach (byte b in Encoding.ASCII.GetBytes(message))
+            foreach (char b in Encoding.ASCII.GetBytes(message))
             {
                 if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append((char)b);
+                    sb.Append(b);
                 else
                     sb.Append("*");
             }
