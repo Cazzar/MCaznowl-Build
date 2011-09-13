@@ -68,8 +68,13 @@ namespace MCForge
         {
             try
             {
+                kickall:
                 foreach (Player p in Player.players)
-                    if (CheckPlayer(p)) p.Kick(kickMsg);
+                    if (CheckPlayer(p))
+                    {
+                        p.Kick(kickMsg);
+                        goto kickall;
+                    }
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }

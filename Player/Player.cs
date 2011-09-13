@@ -724,7 +724,7 @@ namespace MCForge
                 }
                 //if (connections.Count >= 5) { Kick("Too many connections!"); return; }
 
-                if (Server.omniban.CheckPlayer(this)) Kick(Server.omniban.kickMsg);
+                if (Server.omniban.CheckPlayer(this)) { Kick(Server.omniban.kickMsg); return; }
 
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Banned))
                 {
