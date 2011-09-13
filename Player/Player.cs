@@ -3285,7 +3285,11 @@ namespace MCForge
                 }
             });
         }
-        public static void GlobalMessage(string message, bool global = false)
+        public static void GlobalMessage(string message)
+        {
+            GlobalMessage(message, false);
+        }
+        public static void GlobalMessage(string message, bool global)
         {
             message = message.Replace("%", "&");
             players.ForEach(delegate(Player p)
