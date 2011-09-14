@@ -70,7 +70,7 @@ namespace MCForge
             {
                 MinecraftBeatTimer.Elapsed += delegate
                 {
-                    MinecraftBeatTimer.Interval = 55000;
+                    MinecraftBeatTimer.Interval = 50000;
                     try
                     {
                         Pump(new MinecraftBeat());
@@ -124,6 +124,7 @@ namespace MCForge
                     beat.Prepare();
 
                     // Set all the request settings
+                    //Server.s.Log(beat.Parameters);
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
                     request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);

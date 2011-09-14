@@ -31,7 +31,7 @@ namespace MCForge {
         int MAX = -1; // This is the value changed to MAX in the Undo list, and used to allow everything undone.
 
         public override void Use(Player p, string message) {
-            byte b; long seconds = -2; Player who = null; Player.UndoPos Pos; int CurrentPos = 0; bool undoPhysics = false;
+            byte b; long seconds = -2; Player who = null; Player.UndoPos Pos; int CurrentPos = 0; bool undoPhysics = false; string whoName = String.Empty;
             if (p != null)
                 p.RedoBuffer.Clear();
 
@@ -46,6 +46,7 @@ namespace MCForge {
 
             try {
                 if (message.Split(' ').Length > 1) {
+                    whoName = message.Split(' ')[0];
                     who = message.Split(' ')[0].ToLower() == "physics" ? null : Player.Find(message.Split(' ')[0]);
                     undoPhysics = message.Split(' ')[0].ToLower() == "physics";
                     message = message.Split(' ')[1].ToLower();
@@ -160,30 +161,31 @@ namespace MCForge {
                     if (p != null)
                         p.RedoBuffer.Clear();
 
-                    if (Directory.Exists("extra/undo/" + message.Split(' ')[0])) {
-                        di = new DirectoryInfo("extra/undo/" + message.Split(' ')[0]);
+                    if (Directory.Exists("extra/undo/" + whoName)) {
+                        di = new DirectoryInfo("extra/undo/" + whoName);
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undo/" + message.Split(' ')[0] + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undo/" + whoName + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;
                     }
 
-                    if (Directory.Exists("extra/undoPrevious/" + message.Split(' ')[0])) {
-                        di = new DirectoryInfo("extra/undoPrevious/" + message.Split(' ')[0]);
+                    if (Directory.Exists("extra/undoPrevious/" + whoName))
+                    {
+                        di = new DirectoryInfo("extra/undoPrevious/" + whoName);
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undoPrevious/" + message.Split(' ')[0] + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undoPrevious/" + whoName + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;
                     }
 
                     if (FoundUser) {
-                        Player.GlobalMessage(Server.FindColor(message.Split(' ')[0]) + message.Split(' ')[0] + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.");
+                        Player.GlobalMessage(Server.FindColor(whoName) + whoName + Server.DefaultColor + "'s actions for the past &b" + seconds + Server.DefaultColor + " seconds were undone.");
                         // Also notify console
-                        Server.s.Log(message.Split(' ')[0] + "'s actions for the past " + seconds + " seconds were undone.");
+                        Server.s.Log(whoName + "'s actions for the past " + seconds + " seconds were undone.");
                     } else Player.SendMessage(p, "Could not find player specified.");
                 } catch (Exception e) {
                     Server.ErrorLog(e);

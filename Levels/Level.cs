@@ -3972,7 +3972,7 @@ namespace MCForge
             return leaves[b] < 0;
         }
         //================================================================================================================
-        private byte PhysFlowDirections(int b, bool up = false)
+        private byte PhysFlowDirections(int b, bool down = true, bool up = false)
         {
             byte dir = 0;
             ushort x, y, z;
@@ -3981,7 +3981,7 @@ namespace MCForge
             if (GetTile((ushort)(x + 1), y, z) == Block.air) dir++;
             if (GetTile((ushort)(x - 1), y, z) == Block.air) dir++;
             if (up && GetTile(x, (ushort)(y + 1), z) == Block.air) dir++;
-            if (GetTile(x, (ushort)(y - 1), z) == Block.air) dir++;
+            if (down && GetTile(x, (ushort)(y - 1), z) == Block.air) dir++;
             if (GetTile(x, y, (ushort)(z + 1)) == Block.air) dir++;
             if (GetTile(x, y, (ushort)(z - 1)) == Block.air) dir++;
 
