@@ -869,12 +869,16 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-            });
 
-            if (Server.lava.startOnStartup)
-                Server.lava.Start();
-            else if (startZombieModeOnStartup)
-                Command.all.Find("zombiegame").Use(null, "");
+                try
+                {
+                    if (Server.lava.startOnStartup)
+                        Server.lava.Start();
+                    else if (startZombieModeOnStartup)
+                        Command.all.Find("zombiegame").Use(null, String.Empty);
+                }
+                catch (Exception e) { Server.ErrorLog(e); }
+            });
         }
         
         public static bool Setup()

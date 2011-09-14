@@ -142,18 +142,13 @@ namespace MCForge
                     if (s[1] == "block")
                     {
                         if (!Server.lava.HasMap(p.level.name)) { Player.SendMessage(p, "Add the map before configuring it."); return; }
-                        if (s.Length < 3)
-                        {
-                            LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(p.level.name);
-                            Player.SendMessage(p, "Flood position: &b" + settings.blockFlood.x + ", " + settings.blockFlood.y + ", " + settings.blockFlood.z);
-                            Player.SendMessage(p, "Layer position: &b" + settings.blockLayer.x + ", " + settings.blockLayer.y + ", " + settings.blockLayer.z);
-                            return;
-                        }
+                        if (s.Length < 3) { SetupHelp(p, "block"); return; }
 
                         if (s[2] == "flood")
                         {
                             Player.SendMessage(p, "Place or destroy the block you want to be the total flood block spawn point.");
                             CatchPos cpos; cpos.mode = 0;
+                            cpos.x = 0; cpos.y = 0; cpos.z = 0;
                             p.blockchangeObject = cpos;
                             p.ClearBlockchange();
                             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
@@ -163,6 +158,7 @@ namespace MCForge
                         {
                             Player.SendMessage(p, "Place or destroy the block you want to be the layer flood base spawn point.");
                             CatchPos cpos; cpos.mode = 1;
+                            cpos.x = 0; cpos.y = 0; cpos.z = 0;
                             p.blockchangeObject = cpos;
                             p.ClearBlockchange();
                             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
@@ -170,6 +166,16 @@ namespace MCForge
                         }
 
                         SetupHelp(p, "block");
+                        return;
+                    }
+                    if (s[1] == "safezone" || s[1] == "safe")
+                    {
+                        Player.SendMessage(p, "Place two blocks to determine the edges.");
+                        CatchPos cpos; cpos.mode = 2;
+                        cpos.x = 0; cpos.y = 0; cpos.z = 0;
+                        p.blockchangeObject = cpos;
+                        p.ClearBlockchange();
+                        p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
                         return;
                     }
                     if (s[1] == "settings")
@@ -227,6 +233,9 @@ namespace MCForge
                             Player.SendMessage(p, "Layer time: &b" + settings.layerInterval + " minute" + (settings.layerInterval == 1 ? "" : "s"));
                             Player.SendMessage(p, "Round time: &b" + settings.roundTime + " minute" + (settings.roundTime == 1 ? "" : "s"));
                             Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minute" + (settings.floodTime == 1 ? "" : "s"));
+                            Player.SendMessage(p, "Flood position: &b" + settings.blockFlood.ToString(", "));
+                            Player.SendMessage(p, "Layer position: &b" + settings.blockLayer.ToString(", "));
+                            Player.SendMessage(p, String.Format("Safe zone: &b({0}) ({1})", settings.safeZone[0].ToString(", "), settings.safeZone[1].ToString(", ")));
                             return;
                         }
 
@@ -341,7 +350,8 @@ namespace MCForge
                 default:
                     Player.SendMessage(p, "Commands to setup Lava Survival.");
                     Player.SendMessage(p, "map <name> - Add or remove maps in Lava Survival.");
-                    Player.SendMessage(p, "block [mode] - View or set the block spawn positions.");
+                    Player.SendMessage(p, "block <mode> - Set the block spawn positions.");
+                    Player.SendMessage(p, "safezone - Set the safe zone, which is an area that can't be flooded.");
                     Player.SendMessage(p, "settings <setting> [value] - View or change the settings for Lava Survival.");
                     Player.SendMessage(p, "mapsettings <setting> [value] - View or change the settings for a Lava Survival map.");
                     break;
@@ -354,15 +364,46 @@ namespace MCForge
             p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
             CatchPos cpos = (CatchPos)p.blockchangeObject;
 
+            if (cpos.mode == 2)
+            {
+                cpos.x = x; cpos.y = y; cpos.z = z;
+                p.blockchangeObject = cpos;
+                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
+                return;
+            }
+
             LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(p.level.name);
             if (cpos.mode == 0) settings.blockFlood = new LavaSurvival.Pos(x, y, z);
             if (cpos.mode == 1) settings.blockLayer = new LavaSurvival.Pos(x, y, z);
             Server.lava.SaveMapSettings(settings);
 
-            Player.SendMessage(p, "Position set! &b(" + x + ", " + y + ", " + z + ")");
+            Player.SendMessage(p, String.Format("Position set! &b({0}, {1}, {2})", x, y, z));
+        }
+
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            p.ClearBlockchange();
+            p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
+            CatchPos cpos = (CatchPos)p.blockchangeObject;
+
+            if (cpos.mode == 2)
+            {
+                ushort sx = Math.Min(cpos.x, x);
+                ushort ex = Math.Max(cpos.x, x);
+                ushort sy = Math.Min(cpos.y, y);
+                ushort ey = Math.Max(cpos.y, y);
+                ushort sz = Math.Min(cpos.z, z);
+                ushort ez = Math.Max(cpos.z, z);
+
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(p.level.name);
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos(sx, sy, sz), new LavaSurvival.Pos(ex, ey, ez) };
+                Server.lava.SaveMapSettings(settings);
+
+                Player.SendMessage(p, String.Format("Safe zone set! &b({0}, {1}, {2}) ({3}, {4}, {5})", sx, sy, sz, ex, ey, ez));
+            }
         }
 
 
-        struct CatchPos { public byte mode; }
+        struct CatchPos { public ushort x, y, z; public byte mode; }
     }
 }

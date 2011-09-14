@@ -9,16 +9,18 @@ v5.2.0.0
 - Fixed /renamelvl so it renames backups, and won't error if MySQL is disabled.
 - Fixed /resetbot so it no longer derps like Derpy Hooves in the server console.
 - Fixed /draw so it respects cuboid limits.
+- Fixed /economy.
 - Fixed level property file saving, it was breaking on certain maps.
 - Fixed in-game messages from the console so they have proper coloring again.
 - Fixed the player and map lists in the GUI not updating.
-- Fixed color code exploits which crash clients.
+- Fixed most color code exploits which crash clients, still some left to find.
 - Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes.
 - Fixed newly "opped" (can break adminium) players having to rejoin before they can actually break adminium.
 - Fixed dirt changing into grass when it shouldn't on physics 0.
 - Fixed the "To many connections!" error that would require a restart.
-- Fixed various bugs in Zombie Survival.
+- Fixed a few bugs in Zombie Survival.
 - Fixed being unable to set the lowest rank for any blocks after obsidian in the GUI.
+- Fixed the duplicate "death count" option in the GUI.
 - Added global chat, which allows you to chat with other servers! Can be disabled in the properties.
 - Added /copy [save|load|delete|list], and you can load from a URL by appending a # to the end.
 - Added a per-rank undo limit and ditched the old hard-coded limits. It's in seconds, and the limit only applies to undoing other players.
@@ -42,7 +44,8 @@ v5.2.0.0
 	- griefer_stone - The ultimate anti-griefer block! There are several options for it, such as what it looks like in-game. Defaults to Op+ to place/destroy.
 	- lava_sponge - Like normal sponge, but cleans up lava instead of water. Defaults to AdvBuilder+ to place/destroy.
 	- op_lava - Like op_glass, op_water, ect. Defaults to Op+ to place/destroy.
-- Removed the duplicate "death count" option.
+- Improved the tree generator, the trunk now makes more sense.
+- Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow.
 - Moved Zombie Survival options into the "Games" tab.
 - Made it so in the CLI, you must now use a / before commands. No more chat messages being parsed as commands!
 - Made it so autoload.txt doesn't save when load on /goto is enabled.
@@ -52,8 +55,6 @@ v5.2.0.0
 - Made it so plugins are loaded last, this fixes a problem with accessing levels in plugins.
 - Made changes to some events (Might break old plugins).
 - Made it so /players now has an option to not show ranks that have no one ranked as them online, and you can see only players of a certain rank with /players [rank].
-- Improved the tree generator, the trunk now makes more sense.
-- Improved water/lava physics, they now have random flow. You can go back to the old physics with /map randomflow.
 
 v5.1.0.3
 - Fixed level saving!

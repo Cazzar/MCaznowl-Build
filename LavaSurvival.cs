@@ -492,6 +492,11 @@ namespace MCForge
                                 sp = value.Split(',');
                                 settings.blockLayer = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
                                 break;
+                            case "safe-zone":
+                                sp = value.Split('-');
+                                string[] p1 = sp[0].Split(','), p2 = sp[1].Split(',');
+                                settings.safeZone = new Pos[] { new Pos(ushort.Parse(p1[0]), ushort.Parse(p1[1]), ushort.Parse(p1[2])), new Pos(ushort.Parse(p2[0]), ushort.Parse(p2[1]), ushort.Parse(p2[2])) };
+                                break;
                         }
                     }
                 }
@@ -517,8 +522,9 @@ namespace MCForge
                 SW.WriteLine("layer-interval = " + settings.layerInterval);
                 SW.WriteLine("round-time = " + settings.roundTime);
                 SW.WriteLine("flood-time = " + settings.floodTime);
-                SW.WriteLine("block-flood = " + settings.blockFlood.x + "," + settings.blockFlood.y + "," + settings.blockFlood.z);
-                SW.WriteLine("block-layer = " + settings.blockLayer.x + "," + settings.blockLayer.y + "," + settings.blockLayer.z);
+                SW.WriteLine("block-flood = " + settings.blockFlood.ToString());
+                SW.WriteLine("block-layer = " + settings.blockLayer.ToString());
+                SW.WriteLine(String.Format("safe-zone = {0}-{1}", settings.safeZone[0].ToString(), settings.safeZone[1].ToString()));
             }
         }
 
@@ -543,14 +549,31 @@ namespace MCForge
             return maps.Contains(name.ToLower());
         }
 
+        public bool InSafeZone(Pos pos)
+        {
+            return InSafeZone(pos.x, pos.y, pos.z);
+        }
+
+        public bool InSafeZone(ushort x, ushort y, ushort z)
+        {
+            if (mapSettings == null) return false;
+            if (x >= mapSettings.safeZone[0].x && x <= mapSettings.safeZone[1].x && y >= mapSettings.safeZone[0].y && y <= mapSettings.safeZone[1].y && z >= mapSettings.safeZone[0].z && z <= mapSettings.safeZone[1].z)
+                return true;
+            return false;
+        }
+
         // Getters/Setters
         public string GetVoteString()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (KeyValuePair<string, int> kvp in votes)
-                sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
-            if (votes.Count > 0) sb.Remove(0, 4);
-            return sb.ToString();
+            if (votes.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (KeyValuePair<string, int> kvp in votes)
+                    sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
+                sb.Remove(0, 4);
+                return sb.ToString();
+            }
+            return String.Empty;
         }
 
         public List<string> GetMaps()
@@ -566,6 +589,7 @@ namespace MCForge
             public int layerHeight, layerCount;
             public double layerInterval, roundTime, floodTime;
             public Pos blockFlood, blockLayer;
+            public Pos[] safeZone;
 
             public MapSettings(string name)
             {
@@ -582,6 +606,7 @@ namespace MCForge
                 floodTime = 10;
                 blockFlood = new Pos(0, 0, 0);
                 blockLayer = new Pos(0, 0, 0);
+                safeZone = new Pos[] { new Pos(0, 0, 0), new Pos(0, 0, 0) };
             }
         }
 
@@ -618,11 +643,22 @@ namespace MCForge
         {
             public ushort x, y, z;
 
+
             public Pos(ushort x, ushort y, ushort z)
             {
                 this.x = x;
                 this.y = y;
                 this.z = z;
+            }
+
+            public override string ToString()
+            {
+                return String.Format("{0},{1},{2}", this.x, this.y, this.z);
+            }
+
+            public string ToString(string separator)
+            {
+                return String.Format("{1}{0}{2}{0}{3}", separator, this.x, this.y, this.z);
             }
         }
     }

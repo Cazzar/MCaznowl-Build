@@ -3447,6 +3447,9 @@ namespace MCForge
         private void PhysWater(int b, byte type)
         {
             if (b == -1) { return; }
+            ushort x, y, z; IntToPos(b, out x, out y, out z);
+            if (Server.lava.active && Server.lava.map == this && Server.lava.InSafeZone(x, y, z)) { return; }
+
             switch (blocks[b])
             {
                 case 0:
@@ -3490,7 +3493,10 @@ namespace MCForge
         private void PhysLava(int b, byte type)
         {
             if (b == -1) { return; }
-            if (physics > 1 && physics != 5 && blocks[b] >= 21 && blocks[b] <= 36) { AddUpdate(b, 0); return; } // Adv physics destroys cloth
+            ushort x, y, z; IntToPos(b, out x, out y, out z);
+            if (Server.lava.active && Server.lava.map == this && Server.lava.InSafeZone(x, y, z)) { return; }
+
+            if (physics > 1 && physics != 5 && !PhysSpongeCheck(b, true) && blocks[b] >= 21 && blocks[b] <= 36) { AddUpdate(b, 0); return; } // Adv physics destroys cloth
             switch (blocks[b])
             {
                 case 0:
