@@ -170,6 +170,10 @@ public static event OnServerError ServerError = null;
         // Lava Survival
         public static LavaSurvival lava;
 
+        // OmniBan
+        public static OmniBan omniban;
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 10);
+
         //Settings
         #region Server Settings
         public const byte version = 7;
@@ -295,6 +299,9 @@ public static byte maxGuests = 10;
 
         // lol useless junk here lolololasdf poop
         public static bool showEmptyRanks = false;
+        public static byte grieferStoneType = 1;
+        public static bool grieferStoneBan = true;
+        public static LevelPermission grieferStoneRank = LevelPermission.Guest;
 
         #endregion
 
@@ -470,6 +477,9 @@ public static byte maxGuests = 10;
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
 
+            // OmniBan
+            omniban = new OmniBan();
+
             timeOnline = DateTime.Now;
             {//MYSQL stuff
                 try
@@ -524,8 +534,6 @@ public static byte maxGuests = 10;
                 {
                     levels = new List<Level>(Server.maps);
                     MapGen = new MapGenerator();
-
-                    Random random = new Random();
 
                     if (File.Exists("levels/" + Server.level + ".lvl"))
                     {
@@ -620,12 +628,13 @@ public static byte maxGuests = 10;
                                 {
                                     Command.all.Find("load").Use(null, key + " " + value);
                                     Level l = Level.FindExact(key);
-                                    try
-                                    {
-                                        Gui.Window.thisWindow.UpdateMapList("'");
-                                        Gui.Window.thisWindow.UnloadedlistUpdate();
-                                    }
-                                    catch { }
+                                    //Not needed, as load does it for us.
+                                    //try
+                                    //{
+                                    //        Gui.Window.thisWindow.UpdateMapList("'");
+                                    //        Gui.Window.thisWindow.UnloadedlistUpdate();
+                                    //}
+                                    //catch { }
                                 }
                                 else
                                 {
@@ -750,6 +759,19 @@ processThread.Start();
                 if (Server.irc) IRC.Connect();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
 
+                // OmniBan stuff!
+                new Thread(new ThreadStart(delegate
+                {
+                    omniban.Load(true);
+                })).Start();
+
+                omnibanCheckTimer.Elapsed += delegate
+                {
+                    omniban.Load(true);
+                    omniban.KickAll();
+                };
+                omnibanCheckTimer.Start();
+
 
                 // string CheckName = "FROSTEDBUTTS";
 
@@ -848,12 +870,16 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-            });
 
-            if (Server.lava.startOnStartup)
-                Server.lava.Start();
-            else if (startZombieModeOnStartup)
-                Command.all.Find("zombiegame").Use(null, "");
+                try
+                {
+                    if (Server.lava.startOnStartup)
+                        Server.lava.Start();
+                    else if (startZombieModeOnStartup)
+                        Command.all.Find("zombiegame").Use(null, String.Empty);
+                }
+                catch (Exception e) { Server.ErrorLog(e); }
+            });
         }
         
         public static bool Setup()

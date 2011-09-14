@@ -172,8 +172,10 @@ namespace MCForge.Gui
 
             UpdateListTimer.Elapsed += delegate
 			{
-				UpdateClientList(Player.players);
-				UpdateMapList("'");
+                try {
+                    UpdateClientList(Player.players);
+                    UpdateMapList("'");
+                } catch {} // needed for slower computers
                 //Server.s.Log("Lists updated!");
 			}; UpdateListTimer.Start();
         }
@@ -191,6 +193,7 @@ namespace MCForge.Gui
             else
             {
                 this.Text = Server.name + " - MCForge " + Server.Version;
+                notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
             }
         }
 
@@ -290,10 +293,10 @@ namespace MCForge.Gui
         public void UpdateClientList(List<Player> players)
         {
 
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
                 PlayerListCallback d = UpdateClientList;
-                Invoke(d, new object[] { players });
+                Invoke(d, new List<Player>[] { players });
             }
             else
             {
@@ -331,7 +334,7 @@ namespace MCForge.Gui
 
         }
 
-        public void UpdateMapList(string blah)
+        public void UpdateMapList(string unused)
         {
             /*
             if (this.InvokeRequired) {
@@ -346,10 +349,10 @@ namespace MCForge.Gui
                 dgvMaps.ResumeLayout();
             }
             */
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 LogDelegate d = new LogDelegate(UpdateMapList);
-                this.Invoke(d, new object[] { blah });
+                Invoke(d, new Object[] {" "});
             }
             else
             {
@@ -1049,6 +1052,7 @@ namespace MCForge.Gui
 
         private void SaveMap_Click(object sender, EventArgs e)
         {
+            if (prpertiesoflvl == null) return;
             Level l = prpertiesoflvl;
             l.motd = MOTDtxt.Text;
             if (MOTDtxt.Text == "")
@@ -1158,8 +1162,8 @@ namespace MCForge.Gui
                     MessageBox.Show("Created Level");
                     try
                     {
-                    	UnloadedlistUpdate();
-            		UpdateMapList("'");
+                        UnloadedlistUpdate();
+                        UpdateMapList("'");
                     }
                     catch { }
                 }

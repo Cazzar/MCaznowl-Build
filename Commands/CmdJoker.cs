@@ -54,13 +54,13 @@ namespace MCForge
             {
                 who.joker = true;
                 if (stealth) { Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " is now STEALTH joker'd. "); return; }
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " is now a &aJ&bo&ck&5e&9r" + Server.DefaultColor + ".", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " is now a &aJ&bo&ck&5e&9r" + Server.DefaultColor + ".", false);
             }
             else
             {
                 who.joker = false;
                 if (stealth) { Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " is now STEALTH Unjoker'd. "); return; }
-                Player.GlobalChat(null, who.color + who.name + Server.DefaultColor + " is no longer a &aJ&bo&ck&5e&9r" + Server.DefaultColor + ".", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " is no longer a &aJ&bo&ck&5e&9r" + Server.DefaultColor + ".", false);
             }
         }
         public override void Help(Player p)

@@ -13,13 +13,14 @@ namespace MCForge
         public CmdReferee() { }
         public override void Use(Player p, string message)
         {
-            if (p.referee == true)
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
+            if (p.referee)
             {
                 p.referee = false;
                 LevelPermission perm = Group.findPlayerGroup(name).Permission;
                 Player.GlobalDie(p, false);
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is no longer a referee", false);
-                if (Server.infection == true)
+                if (Server.infection)
                 {
                     Player.GlobalDie(p, false);
                     Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
@@ -44,7 +45,7 @@ namespace MCForge
                 p.referee = true;
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is now a referee", false);
                 Player.GlobalDie(p, false);
-                if (Server.infection == true)
+                if (Server.infection)
                 {
                     p.color = p.group.color;
                     try

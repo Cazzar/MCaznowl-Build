@@ -60,7 +60,7 @@ namespace MCForge
             {
                 if (Awards.giveAward(foundPlayer, awardName))
                 {
-                    Player.GlobalChat(p, Server.FindColor(foundPlayer) + foundPlayer + Server.DefaultColor + " was awarded: &b" + Awards.camelCase(awardName), false);
+                    Player.GlobalMessage(Server.FindColor(foundPlayer) + foundPlayer + Server.DefaultColor + " was awarded: &b" + Awards.camelCase(awardName));
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace MCForge
             {
                 if (Awards.takeAward(foundPlayer, awardName))
                 {
-                    Player.GlobalChat(p, Server.FindColor(foundPlayer) + foundPlayer + Server.DefaultColor + " had their &b" + Awards.camelCase(awardName) + Server.DefaultColor + " award removed", false);
+                    Player.GlobalMessage(Server.FindColor(foundPlayer) + foundPlayer + Server.DefaultColor + " had their &b" + Awards.camelCase(awardName) + Server.DefaultColor + " award removed");
                 }
                 else
                 {

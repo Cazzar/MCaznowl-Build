@@ -38,12 +38,12 @@ namespace MCForge
             if (Server.chatmod)
             {
                 Server.chatmod = false;
-                Player.GlobalChat(null, Server.DefaultColor + "Chat moderation has been disabled.  Everyone can now speak.", false);
+                Player.GlobalMessage(Server.DefaultColor + "Chat moderation has been disabled.  Everyone can now speak.");
             }
             else
             {
                 Server.chatmod = true;
-                Player.GlobalChat(null, Server.DefaultColor + "Chat moderation engaged!  Silence the plebians!", false);
+                Player.GlobalMessage(Server.DefaultColor + "Chat moderation engaged!  Silence the plebians!");
             }
         }
         public override void Help(Player p)

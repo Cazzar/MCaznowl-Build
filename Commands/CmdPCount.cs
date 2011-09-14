@@ -47,10 +47,10 @@ namespace MCForge
            
             foreach (Player pl in Player.players)
             {
-                if (!pl.hidden || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
+                if (!pl.hidden || p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
                 {
                     playerCount++;
-                    if (pl.hidden && (p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
+                    if (pl.hidden && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
                     {
                         hiddenCount++;
                     }

@@ -28,46 +28,35 @@ namespace MCForge
         public override void Help(Player p) { Player.SendMessage(p, "/unflood [liquid] - Unfloods the map you are on of [liquid]"); }
         public override void Use(Player p, string message)
         {
-            Level level = Level.Find(p.level.name);
-            bool instant = level.Instant;
-            if (message == "all")
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
+            if (String.IsNullOrEmpty(message)) { Help(p); return; }
+            if (message.ToLower() != "all" && Block.Byte(message) == Block.Zero) { Player.SendMessage(p, "There is no block \"" + message + "\"."); return; }
+            int phys = p.level.physics;
+            Command.all.Find("physics").Use(p, "0");
+            if (!p.level.Instant)
+                Command.all.Find("map").Use(p, "instant");
+
+            if (message.ToLower() == "all")
             {
-                Command.all.Find("physics").Use(p, "0");
-                if (instant == false)
-                {
-                    Command.all.Find("map").Use(p, "instant");
-                }
                 Command.all.Find("replaceall").Use(p, "lavafall air");
                 Command.all.Find("replaceall").Use(p, "waterfall air");
                 Command.all.Find("replaceall").Use(p, "lava_fast air");
                 Command.all.Find("replaceall").Use(p, "active_lava air");
                 Command.all.Find("replaceall").Use(p, "active_water air");
                 Command.all.Find("replaceall").Use(p, "active_hot_lava air");
+                Command.all.Find("replaceall").Use(p, "active_cold_water air");
                 Command.all.Find("replaceall").Use(p, "magma air");
-                Command.all.Find("reveal").Use(p, "all");
-                if (instant == true)
-                {
-                    Command.all.Find("map").Use(p, "instant");
-                }
-                Command.all.Find("physics").Use(p, "1");
-                Player.GlobalMessage("Unflooded!");
             }
             else
             {
-                Command.all.Find("physics").Use(p, "0");
-                if (instant == false)
-                {
-                    Command.all.Find("map").Use(p, "instant");
-                }
                 Command.all.Find("replaceall").Use(p, message + " air");
-                Command.all.Find("reveal").Use(p, "all");
-                if (instant == true)
-                {
-                    Command.all.Find("map").Use(p, "instant");
-                }
-                Command.all.Find("physics").Use(p, "1");
-                Player.GlobalMessage("Unflooded!");
             }
+
+            if (p.level.Instant)
+                Command.all.Find("map").Use(p, "instant");
+            Command.all.Find("reveal").Use(p, "all");
+            Command.all.Find("physics").Use(p, phys.ToString());
+            Player.GlobalMessage("Unflooded!");
         }
     }
 }

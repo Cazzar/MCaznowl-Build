@@ -57,13 +57,13 @@ namespace MCForge
             {
                 who.invincible = false;
                 if (Server.cheapMessage)
-                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " has stopped being immortal", false);
+                    Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has stopped being immortal", false);
             }
             else
             {
                 who.invincible = true;
                 if (Server.cheapMessage)
-                    Player.GlobalChat(p, who.color + who.name + Server.DefaultColor + " " + Server.cheapMessageGiven, false);
+                    Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " " + Server.cheapMessageGiven, false);
             }
         }
         public override void Help(Player p)

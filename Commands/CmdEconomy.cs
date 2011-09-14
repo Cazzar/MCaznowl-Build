@@ -564,12 +564,14 @@ namespace MCForge.Commands
                        case "setup":
                            if (p.group.Permission >= LevelPermission.Operator)
                            {
-                               Player.SendMessage(p, "Use '/eco setup' to setup the economy system");
-                               Player.SendMessage(p, "Use '/eco setup [title/color/rank] [price]' to setup the prices");
+                                Player.SendMessage(p, "Use '/eco setup' to setup the economy system");
+                               Player.SendMessage(p, "Use '/eco setup [title/color] [price]' to setup the prices");
                                Player.SendMessage(p, "Use '/eco setup [title/color/rank/map] [enable/disable]' to enable/disable that feature");
-                               Player.SendMessage(p, "Use '/eco setup [map] [new] [name] [x] [y] [z] [type] [price]' to setup a map preset");
-                               Player.SendMessage(p, "Use '/eco setup [map] [delete] [name]' to delete a map");
-                               Player.SendMessage(p, "Use '/eco setup [map] [edit] [name] [name/x/y/z/type/price] [value]' to edit a map preset");
+                               Player.SendMessage(p, "Use '/eco setup map new [name] [x] [y] [z] [type] [price]' to setup a map preset");
+                               Player.SendMessage(p, "Use '/eco setup map delete [name]' to delete a map");
+                               Player.SendMessage(p, "Use '/eco setup map edit [name] [name/x/y/z/type/price] [value]' to edit a map preset");
+                               Player.SendMessage(p, "Use '/eco setup rank price [rank] [price]' to set the price for that rank");
+                               Player.SendMessage(p, "Use '/eco setup rank maxrank [rank]' to set the max buyable rank");
                                return;
                            }
                            else { Player.SendMessage(p, "You aren't a high enough rank for that"); return; }

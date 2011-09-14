@@ -268,7 +268,7 @@ namespace MCForge
 				}
 				#endregion
 				#region other
-				if (message2[0].ToLower() == "valcano")
+				if (message2[0].ToLower() == "volcano")
 				{
 					if (message2.Length != 3)
 						goto Help;

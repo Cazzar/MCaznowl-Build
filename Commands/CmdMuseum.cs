@@ -164,7 +164,7 @@ namespace MCForge
 
 						if (!p.hidden)
 						{
-							Player.GlobalChat(null, p.color + p.prefix + p.name + Server.DefaultColor + " went to the " + level.name, false);
+                            Player.GlobalMessage(p.color + p.prefix + p.name + Server.DefaultColor + " went to the " + level.name);
 						}
 					}
                 }

@@ -43,7 +43,7 @@ namespace MCForge
         public bool startOnStartup, sendAfkMain;
         public byte voteCount;
         public double voteTime;
-        public LevelPermission setupRank;
+        public LevelPermission setupRank, controlRank;
 
         // Constructors
         public LavaSurvival()
@@ -53,16 +53,17 @@ namespace MCForge
             votes = new Dictionary<string, int>();
             announceTimer = new Timer(60000);
             announceTimer.AutoReset = true;
-            announceTimer.Elapsed += new ElapsedEventHandler(delegate
+            announceTimer.Elapsed += delegate
             {
                 AnnounceTimeLeft(true, false);
-            });
+            };
 
             startOnStartup = false;
             sendAfkMain = true;
             voteCount = 2;
             voteTime = 2;
-            setupRank = LevelPermission.Operator;
+            setupRank = LevelPermission.Admin;
+            controlRank = LevelPermission.Operator;
             LoadSettings();
         }
 
@@ -95,6 +96,7 @@ namespace MCForge
             active = false;
             roundActive = false;
             voteActive = false;
+            flooded = false;
             if (announceTimer.Enabled) announceTimer.Stop();
             try { mapData.Dispose(); }
             catch { }
@@ -113,8 +115,8 @@ namespace MCForge
 
             try
             {
-                mapData.roundTimer.Elapsed += new ElapsedEventHandler(delegate { EndRound(); });
-                mapData.floodTimer.Elapsed += new ElapsedEventHandler(delegate { DoFlood(); });
+                mapData.roundTimer.Elapsed += delegate { EndRound(); };
+                mapData.floodTimer.Elapsed += delegate { DoFlood(); };
                 mapData.roundTimer.Start();
                 mapData.floodTimer.Start();
                 announceTimer.Start();
@@ -137,7 +139,7 @@ namespace MCForge
                 catch { }
                 map.setPhysics(5);
                 map.ChatLevel("The round has ended!");
-                Server.s.Log("[Lava Survival] Round ended.");
+                Server.s.Log("[Lava Survival] Round ended. Voting...");
                 StartVote();
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -156,7 +158,7 @@ namespace MCForge
                 if (mapData.layer)
                 {
                     DoFloodLayer();
-                    mapData.layerTimer.Elapsed += new ElapsedEventHandler(delegate
+                    mapData.layerTimer.Elapsed += delegate
                     {
                         if (mapData.currentLayer <= mapSettings.layerCount)
                         {
@@ -164,7 +166,7 @@ namespace MCForge
                         }
                         else
                             mapData.layerTimer.Stop();
-                    });
+                    };
                     mapData.layerTimer.Start();
                 }
                 else
@@ -181,27 +183,27 @@ namespace MCForge
             mapData.currentLayer++;
         }
 
-        public void AnnounceTimeLeft(bool flood, bool round, Player p = null)
+        public void AnnounceTimeLeft(bool flood, bool round, Player p = null, bool console = false)
         {
             if (!active || !roundActive || startTime == null || map == null) return;
 
             if (flood)
             {
                 double floodMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.floodTime) - DateTime.Now).TotalMinutes);
-                if (p == null) map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
+                if (p == null && !console) map.ChatLevel("&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
                 else Player.SendMessage(p, "&3" + floodMinutes + " minute" + (floodMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the flood.");
             }
             if (round)
             {
                 double roundMinutes = Math.Ceiling((startTime.AddMinutes(mapSettings.roundTime) - DateTime.Now).TotalMinutes);
-                if (p == null) map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
+                if (p == null && !console) map.ChatLevel("&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
                 else Player.SendMessage(p, "&3" + roundMinutes + " minute" + (roundMinutes == 1 ? "" : "s") + Server.DefaultColor + " until the round ends.");
             }
         }
 
-        public void AnnounceRoundInfo(Player p = null)
+        public void AnnounceRoundInfo(Player p = null, bool console = false)
         {
-            if (p == null)
+            if (p == null && !console)
             {
                 if (mapData.water) map.ChatLevel("The map will be flooded with &9water " + Server.DefaultColor + "this round!");
                 if (mapData.layer)
@@ -295,7 +297,7 @@ namespace MCForge
 
             voteTimer = new Timer(TimeSpan.FromMinutes(voteTime).TotalMilliseconds);
             voteTimer.AutoReset = false;
-            voteTimer.Elapsed += new ElapsedEventHandler(delegate
+            voteTimer.Elapsed += delegate
             {
                 try
                 {
@@ -303,14 +305,17 @@ namespace MCForge
                     voteTimer.Dispose();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-            });
+            };
             voteTimer.Start();
             voteActive = true;
         }
 
         public void EndVote()
         {
+            if (!voteActive) return;
+
             voteActive = false;
+            Server.s.Log("[Lava Survival] Vote ended.");
             KeyValuePair<string, int> most = new KeyValuePair<string, int>(String.Empty, -1);
             foreach (KeyValuePair<string, int> kvp in votes)
             {
@@ -324,7 +329,7 @@ namespace MCForge
             map.ChatLevel("You will be transferred in 5 seconds...");
             transferTimer = new Timer(5000);
             transferTimer.AutoReset = false;
-            transferTimer.Elapsed += new ElapsedEventHandler(delegate
+            transferTimer.Elapsed += delegate
             {
                 try
                 {
@@ -332,7 +337,7 @@ namespace MCForge
                     transferTimer.Dispose();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-            });
+            };
             transferTimer.Start();
         }
 
@@ -400,9 +405,12 @@ namespace MCForge
                             case "setup-rank":
                                 setupRank = Level.PermissionFromName(value.ToLower());
                                 break;
+                            case "control-rank":
+                                controlRank = Level.PermissionFromName(value.ToLower());
+                                break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))
-                                    if(!maps.Contains(mapname)) maps.Add(mapname);
+                                    if(!String.IsNullOrEmpty(mapname) && !maps.Contains(mapname)) maps.Add(mapname);
                                 break;
                         }
                     }
@@ -421,6 +429,7 @@ namespace MCForge
                 SW.WriteLine("vote-count = " + voteCount.ToString());
                 SW.WriteLine("vote-time = " + voteTime.ToString());
                 SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower());
+                SW.WriteLine("control-rank = " + Level.PermissionToName(controlRank).ToLower());
                 SW.WriteLine("maps = " + maps.Concatenate(","));
             }
         }
@@ -483,6 +492,11 @@ namespace MCForge
                                 sp = value.Split(',');
                                 settings.blockLayer = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
                                 break;
+                            case "safe-zone":
+                                sp = value.Split('-');
+                                string[] p1 = sp[0].Split(','), p2 = sp[1].Split(',');
+                                settings.safeZone = new Pos[] { new Pos(ushort.Parse(p1[0]), ushort.Parse(p1[1]), ushort.Parse(p1[2])), new Pos(ushort.Parse(p2[0]), ushort.Parse(p2[1]), ushort.Parse(p2[2])) };
+                                break;
                         }
                     }
                 }
@@ -508,14 +522,15 @@ namespace MCForge
                 SW.WriteLine("layer-interval = " + settings.layerInterval);
                 SW.WriteLine("round-time = " + settings.roundTime);
                 SW.WriteLine("flood-time = " + settings.floodTime);
-                SW.WriteLine("block-flood = " + settings.blockFlood.x + "," + settings.blockFlood.y + "," + settings.blockFlood.z);
-                SW.WriteLine("block-layer = " + settings.blockLayer.x + "," + settings.blockLayer.y + "," + settings.blockLayer.z);
+                SW.WriteLine("block-flood = " + settings.blockFlood.ToString());
+                SW.WriteLine("block-layer = " + settings.blockLayer.ToString());
+                SW.WriteLine(String.Format("safe-zone = {0}-{1}", settings.safeZone[0].ToString(), settings.safeZone[1].ToString()));
             }
         }
 
         public void AddMap(string name)
         {
-            if (!maps.Contains(name.ToLower()))
+            if (!String.IsNullOrEmpty(name) && !maps.Contains(name.ToLower()))
             {
                 maps.Add(name.ToLower());
                 SaveSettings();
@@ -534,14 +549,31 @@ namespace MCForge
             return maps.Contains(name.ToLower());
         }
 
+        public bool InSafeZone(Pos pos)
+        {
+            return InSafeZone(pos.x, pos.y, pos.z);
+        }
+
+        public bool InSafeZone(ushort x, ushort y, ushort z)
+        {
+            if (mapSettings == null) return false;
+            if (x >= mapSettings.safeZone[0].x && x <= mapSettings.safeZone[1].x && y >= mapSettings.safeZone[0].y && y <= mapSettings.safeZone[1].y && z >= mapSettings.safeZone[0].z && z <= mapSettings.safeZone[1].z)
+                return true;
+            return false;
+        }
+
         // Getters/Setters
         public string GetVoteString()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (KeyValuePair<string, int> kvp in votes)
-                sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
-            if (votes.Count > 0) sb.Remove(0, 4);
-            return sb.ToString();
+            if (votes.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (KeyValuePair<string, int> kvp in votes)
+                    sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
+                sb.Remove(0, 4);
+                return sb.ToString();
+            }
+            return String.Empty;
         }
 
         public List<string> GetMaps()
@@ -557,6 +589,7 @@ namespace MCForge
             public int layerHeight, layerCount;
             public double layerInterval, roundTime, floodTime;
             public Pos blockFlood, blockLayer;
+            public Pos[] safeZone;
 
             public MapSettings(string name)
             {
@@ -573,6 +606,7 @@ namespace MCForge
                 floodTime = 10;
                 blockFlood = new Pos(0, 0, 0);
                 blockLayer = new Pos(0, 0, 0);
+                safeZone = new Pos[] { new Pos(0, 0, 0), new Pos(0, 0, 0) };
             }
         }
 
@@ -609,11 +643,22 @@ namespace MCForge
         {
             public ushort x, y, z;
 
+
             public Pos(ushort x, ushort y, ushort z)
             {
                 this.x = x;
                 this.y = y;
                 this.z = z;
+            }
+
+            public override string ToString()
+            {
+                return String.Format("{0},{1},{2}", this.x, this.y, this.z);
+            }
+
+            public string ToString(string separator)
+            {
+                return String.Format("{1}{0}{2}{0}{3}", separator, this.x, this.y, this.z);
             }
         }
     }

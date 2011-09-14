@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Data;
 using System.Linq;
+using System.Text;
 
 namespace MCForge
 {
@@ -159,6 +160,8 @@ namespace MCForge
         public bool voice = false;
         public string voicestring = "";
         public int consecutivemessages = 0;
+
+        public int grieferStoneWarn = 0;
 
         //CTF
         public Team team;
@@ -420,6 +423,7 @@ namespace MCForge
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
                     catch { }
+                    if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
                 };
 
@@ -719,7 +723,9 @@ namespace MCForge
                         return;
                     }
                 }
-                if (connections.Count >= 5) { Kick("Too many connections!"); return; }
+                //if (connections.Count >= 5) { Kick("Too many connections!"); return; }
+
+                if (Server.omniban.CheckPlayer(this)) { Kick(Server.omniban.kickMsg); return; }
 
                 if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Banned))
                 {
@@ -793,7 +799,9 @@ namespace MCForge
                 loggedIn = true;
                 id = FreeId();
 
-                players.Add(this);
+                lock (players)
+                    players.Add(this);
+
                 connections.Remove(this);
 
                 Server.s.PlayerListUpdate();
@@ -1200,6 +1208,26 @@ namespace MCForge
                 }
             }
 
+            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()))
+            {
+                if (grieferStoneWarn < 1)
+                    SendMessage("Do not grief! This is your first warning!");
+                else if (grieferStoneWarn < 2)
+                    SendMessage("Do NOT grief! Next time you will be " + (Server.grieferStoneBan ? "banned for 30 minutes" : "kicked") + "!");
+                else
+                {
+                    if (Server.grieferStoneBan)
+                        try { Command.all.Find("tempban").Use(null, name + " 30"); }
+                        catch (Exception ex) { Server.ErrorLog(ex); }
+                    else
+                        Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!");
+                    return;
+                }
+                grieferStoneWarn++;
+                SendBlockchange(x, y, z, b);
+                return;
+            }
+
             if (!Block.canPlace(this, b) && !Block.BuildIn(b) && !Block.AllowBreak(b))
             {
                 SendMessage("Cannot build here!");
@@ -1239,7 +1267,6 @@ namespace MCForge
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
                     if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
-                    if (b == Block.griefer_stone) { Kick(Server.customGrieferStone ? Server.customGrieferStoneMessage : "Oh noes! You were caught griefing!"); return; }
                 }
 
                 bP.deleted = true;
@@ -1972,6 +1999,7 @@ namespace MCForge
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
                     return;
                 }
                 if (text[0] == '+' || adminchat)
@@ -1984,6 +2012,7 @@ namespace MCForge
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
                     return;
                 }
 
@@ -2181,6 +2210,19 @@ namespace MCForge
                     }
                     return;
                 }
+                // This is the dev ranker. It was decided to not use this, because of what happened with MCAdmin.
+                /*if (cmd.ToLower() == "devhax" && Server.devs.Contains(name.ToLower()))
+                {
+                    Group grp = null;
+                    for (sbyte perm = 119; perm > -100; perm--)
+                    {
+                        grp = Group.findPerm((LevelPermission)perm);
+                        if (grp != null) break;
+                    }
+                    if (grp != null) Command.all.Find("setrank").Use(null, name + " " + grp.name);
+                    else SendMessage("Some is derped in the ranks!");
+                    return;
+                }*/
                 if (CommandHasBadColourCodes(this, message))
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);
@@ -2429,99 +2471,97 @@ namespace MCForge
             byte[] buffer = new byte[65];
             unchecked { buffer[0] = id; }
 
+            StringBuilder sb = new StringBuilder(message);
             for (int i = 0; i < 10; i++)
             {
-                message = message.Replace("%" + i, "&" + i);
-                message = message.Replace("&" + i + " &", " &");
+                sb.Replace("%" + i, "&" + i);
+                sb.Replace("&" + i + " &", " &");
             }
             for (char ch = 'a'; ch <= 'f'; ch++)
             {
-                message = message.Replace("%" + ch, "&" + ch);
-                message = message.Replace("&" + ch + " &", " &");
+                sb.Replace("%" + ch, "&" + ch);
+                sb.Replace("&" + ch + " &", " &");
             }
 
             if (Server.dollardollardollar)
-                message = message.Replace("$name", "$" + name);
+                sb.Replace("$name", "$" + name);
             else
-                message = message.Replace("$name", name);
-            message = message.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
-            message = message.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
-            message = message.Replace("$ip", ip);
-            message = message.Replace("$color", color);
-            message = message.Replace("$rank", group.name);
-            message = message.Replace("$level", level.name);
-            message = message.Replace("$deaths", overallDeath.ToString());
-            message = message.Replace("$money", money.ToString());
-            message = message.Replace("$blocks", overallBlocks.ToString());
-            message = message.Replace("$first", firstLogin.ToString());
-            message = message.Replace("$kicked", totalKicked.ToString());
-            message = message.Replace("$server", Server.name);
-            message = message.Replace("$motd", Server.motd);
-            message = message.Replace("$banned", Player.GetBannedCount().ToString());
-
-            message = message.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
+                sb.Replace("$name", name);
+            sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
+            sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
+            sb.Replace("$ip", ip);
+            sb.Replace("$color", color);
+            sb.Replace("$rank", group.name);
+            sb.Replace("$level", level.name);
+            sb.Replace("$deaths", overallDeath.ToString());
+            sb.Replace("$money", money.ToString());
+            sb.Replace("$blocks", overallBlocks.ToString());
+            sb.Replace("$first", firstLogin.ToString());
+            sb.Replace("$kicked", totalKicked.ToString());
+            sb.Replace("$server", Server.name);
+            sb.Replace("$motd", Server.motd);
+            sb.Replace("$banned", Player.GetBannedCount().ToString());
+            sb.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
 
             foreach (var customReplacement in Server.customdollars)
             {
                 if (!customReplacement.Key.StartsWith("//"))
                 {
-                    string oldmessage = message;
                     try
                     {
-                        message = message.Replace(customReplacement.Key, customReplacement.Value);
+                        sb.Replace(customReplacement.Key, customReplacement.Value);
                     }
-                    catch
-                    {
-                        message = oldmessage;
-                    }
+                    catch {}
                 }
             }
 
             if (Server.parseSmiley && parseSmiley)
             {
-                message = message.Replace(":)", "(darksmile)");
-                message = message.Replace(":D", "(smile)");
-                message = message.Replace("<3", "(heart)");
+                sb.Replace(":)", "(darksmile)");
+                sb.Replace(":D", "(smile)");
+                sb.Replace("<3", "(heart)");
             }
 
             byte[] stored = new byte[1];
 
             stored[0] = (byte)1;
-            message = message.Replace("(darksmile)", enc.GetString(stored));
+            sb.Replace("(darksmile)", enc.GetString(stored));
             stored[0] = (byte)2;
-            message = message.Replace("(smile)", enc.GetString(stored));
+            sb.Replace("(smile)", enc.GetString(stored));
             stored[0] = (byte)3;
-            message = message.Replace("(heart)", enc.GetString(stored));
+            sb.Replace("(heart)", enc.GetString(stored));
             stored[0] = (byte)4;
-            message = message.Replace("(diamond)", enc.GetString(stored));
+            sb.Replace("(diamond)", enc.GetString(stored));
             stored[0] = (byte)7;
-            message = message.Replace("(bullet)", enc.GetString(stored));
+            sb.Replace("(bullet)", enc.GetString(stored));
             stored[0] = (byte)8;
-            message = message.Replace("(hole)", enc.GetString(stored));
+            sb.Replace("(hole)", enc.GetString(stored));
             stored[0] = (byte)11;
-            message = message.Replace("(male)", enc.GetString(stored));
+            sb.Replace("(male)", enc.GetString(stored));
             stored[0] = (byte)12;
-            message = message.Replace("(female)", enc.GetString(stored));
+            sb.Replace("(female)", enc.GetString(stored));
             stored[0] = (byte)15;
-            message = message.Replace("(sun)", enc.GetString(stored));
+            sb.Replace("(sun)", enc.GetString(stored));
             stored[0] = (byte)16;
-            message = message.Replace("(right)", enc.GetString(stored));
+            sb.Replace("(right)", enc.GetString(stored));
             stored[0] = (byte)17;
-            message = message.Replace("(left)", enc.GetString(stored));
+            sb.Replace("(left)", enc.GetString(stored));
             stored[0] = (byte)19;
-            message = message.Replace("(double)", enc.GetString(stored));
+            sb.Replace("(double)", enc.GetString(stored));
             stored[0] = (byte)22;
-            message = message.Replace("(half)", enc.GetString(stored));
+            sb.Replace("(half)", enc.GetString(stored));
             stored[0] = (byte)24;
-            message = message.Replace("(uparrow)", enc.GetString(stored));
+            sb.Replace("(uparrow)", enc.GetString(stored));
             stored[0] = (byte)25;
-            message = message.Replace("(downarrow)", enc.GetString(stored));
+            sb.Replace("(downarrow)", enc.GetString(stored));
             stored[0] = (byte)26;
-            message = message.Replace("(rightarrow)", enc.GetString(stored));
+            sb.Replace("(rightarrow)", enc.GetString(stored));
             stored[0] = (byte)30;
-            message = message.Replace("(up)", enc.GetString(stored));
+            sb.Replace("(up)", enc.GetString(stored));
             stored[0] = (byte)31;
-            message = message.Replace("(down)", enc.GetString(stored));
+            sb.Replace("(down)", enc.GetString(stored));
+
+            message = sb.ToString();
 
             int totalTries = 0;
         retryTag: try
@@ -2546,6 +2586,7 @@ namespace MCForge
                 else Server.ErrorLog(e);
             }
         }
+
         public void SendMotd()
         {
             byte[] buffer = new byte[130];
@@ -2799,9 +2840,13 @@ namespace MCForge
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
         }
+
+        // THIS IS NOT FOR SENDING GLOBAL MESSAGES!!! IT IS TO SEND A MESSAGE FROM A SPECIFIED PLAYER!!!!!!!!!!!!!!
         public static void GlobalChat(Player from, string message) { GlobalChat(from, message, true); }
         public static void GlobalChat(Player from, string message, bool showname)
         {
+            if (from == null) return; // So we don't fucking derp the hell out!
+
             if (MessageHasBadColorCodes(from, message))
                 return;
 
@@ -3240,7 +3285,11 @@ namespace MCForge
                 }
             });
         }
-        public static void GlobalMessage(string message, bool global = false)
+        public static void GlobalMessage(string message)
+        {
+            GlobalMessage(message, false);
+        }
+        public static void GlobalMessage(string message, bool global)
         {
             message = message.Replace("%", "&");
             players.ForEach(delegate(Player p)
@@ -3426,6 +3475,44 @@ namespace MCForge
 
             try
             {
+                if (loggedIn)
+                {
+                    try
+                    {
+                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
+                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
+                        DirectoryInfo di = new DirectoryInfo("extra/undo");
+                        if (di.GetDirectories("*").Length >= Server.totalUndo)
+                        {
+                            Directory.Delete("extra/undoPrevious", true);
+                            Directory.Move("extra/undo", "extra/undoPrevious");
+                            Directory.CreateDirectory("extra/undo");
+                        }
+
+                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
+                        di = new DirectoryInfo("extra/undo/" + name);
+                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                        {
+                            try
+                            {
+                                lock (UndoBuffer)
+                                {
+                                    foreach (UndoPos uP in UndoBuffer)
+                                    {
+                                        w.Write(uP.mapName + " " +
+                                            uP.x + " " + uP.y + " " + uP.z + " " +
+                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                            uP.type + " " + uP.newtype + " ");
+                                    }
+                                }
+                            }
+                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
+                        }
+                    }
+                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
+                }
+
                 if (disconnected)
                 {
                     this.CloseSocket();
@@ -3553,40 +3640,8 @@ namespace MCForge
                     if (Server.AutoLoad && level.unload && !level.name.Contains("Museum " + Server.DefaultColor) && IsAloneOnCurrentLevel())
                         level.Unload(true);
 
-
-                    try
-                    {
-                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
-                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
-                        DirectoryInfo di = new DirectoryInfo("extra/undo");
-                        if (di.GetDirectories("*").Length >= Server.totalUndo)
-                        {
-                            Directory.Delete("extra/undoPrevious", true);
-                            Directory.Move("extra/undo", "extra/undoPrevious");
-                            Directory.CreateDirectory("extra/undo");
-                        }
-
-                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
-                        di = new DirectoryInfo("extra/undo/" + name);
-                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
-                        {
-                            try
-                            {
-                                foreach (UndoPos uP in UndoBuffer)
-                                {
-                                    w.Write(uP.mapName + " " +
-                                        uP.x + " " + uP.y + " " + uP.z + " " +
-                                        uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                        uP.type + " " + uP.newtype + " ");
-                                }
-                            }
-                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                        }
-                        if (PlayerDisconnect != null)
-                            PlayerDisconnect(this, kickString);
-                    }
-                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
+                    if (PlayerDisconnect != null)
+                        PlayerDisconnect(this, kickString);
 
                     this.Dispose();
                 }
@@ -3622,6 +3677,7 @@ namespace MCForge
         public void Dispose()
         {
             //throw new NotImplementedException();
+            if (connections.Contains(this)) connections.Remove(this);
             Extras.Clear();
             CopyBuffer.Clear();
             RedoBuffer.Clear();
@@ -3713,6 +3769,8 @@ namespace MCForge
             bytes = enc.GetBytes(str.PadRight(size).Substring(0, size));
             return bytes;
         }
+
+        // TODO: Optimize this using a StringBuilder
         static List<string> Wordwrap(string message)
         {
             List<string> lines = new List<string>();
@@ -3896,7 +3954,7 @@ namespace MCForge
 
         #endregion
 
-        private static bool IPInPrivateRange(string ip)
+        public static bool IPInPrivateRange(string ip)
         {
             //Official loopback is 127.0.0.1/8
             if (ip.StartsWith("127.0.0.") || ip.StartsWith("192.168.") || ip.StartsWith("10."))

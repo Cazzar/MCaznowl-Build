@@ -102,18 +102,27 @@ namespace MCForge
         }
         public static string Capitalize(this string str)
         {
-            return str.Substring(0, 1).ToUpper() + str.Remove(0, 1);
+            if (String.IsNullOrEmpty(str))
+                return String.Empty;
+            char[] a = str.ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+            return new string(a);
+        }
+        public static string Concatenate<T>(this List<T> list)
+        {
+            return list.Concatenate(String.Empty);
         }
         public static string Concatenate<T>(this List<T> list, string separator)
         {
-            string str = "";
             if (list.Count > 0)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (T obj in list)
-                    str += separator + obj.ToString();
-                str = str.Remove(0, separator.Length);
+                    sb.Append(separator + obj.ToString());
+                sb.Remove(0, separator.Length);
+                return sb.ToString();
             }
-            return str;
+            return String.Empty;
         }
     }
 }

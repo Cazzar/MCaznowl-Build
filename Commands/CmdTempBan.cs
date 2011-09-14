@@ -36,7 +36,7 @@ namespace MCForge
 
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player"); return; }
-            if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot ban someone of the same rank"); return; }
+            if (p != null && who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot ban someone of the same rank"); return; }
             if (Server.devs.Contains(who.name.ToLower()))
             {
                 Player.SendMessage(p, "You can't ban a MCForge Developer!");

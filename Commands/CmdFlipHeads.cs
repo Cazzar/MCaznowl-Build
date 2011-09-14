@@ -33,9 +33,9 @@ namespace MCForge
             Server.flipHead = !Server.flipHead;
 
             if (Server.flipHead)
-                Player.GlobalChat(p, "All necks were broken", false);
+                Player.GlobalMessage("All necks were broken");
             else
-                Player.GlobalChat(p, "All necks were mended", false);
+                Player.GlobalMessage("All necks were mended");
         }
         public override void Help(Player p)
         {
