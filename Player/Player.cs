@@ -3720,7 +3720,6 @@ namespace MCForge
             message = Regex.Replace(message, @"(&[0-9a-f])+$", "");
 
             int limit = 64; string color = "";
-
             while (message.Length > 0)
             {
                 //if (Regex.IsMatch(message, "&a")) break;
@@ -3791,7 +3790,22 @@ namespace MCForge
                         message = message.Substring(1);
                     }
                 }
-            } return lines;
+            }
+            char[] temp;
+            foreach (string l in lines)
+            {
+                temp = l.ToCharArray();
+                if (temp[temp.Length - 2] == '%' || temp[temp.Length - 2] == '&')
+                {
+                    temp[temp.Length - 1] = ' ';
+                    temp[temp.Length - 2] = ' ';
+                }
+                string message1 = "";
+                foreach (char c in temp)
+                    message1 += c;
+                lines[lines.IndexOf(l)] = message1;
+            }
+            return lines;
         }
         public static bool ValidName(string name)
         {
