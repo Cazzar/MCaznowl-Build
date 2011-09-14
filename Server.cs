@@ -628,12 +628,13 @@ public static byte maxGuests = 10;
                                 {
                                     Command.all.Find("load").Use(null, key + " " + value);
                                     Level l = Level.FindExact(key);
-                                    try
-                                    {
-                                        Gui.Window.thisWindow.UpdateMapList("'");
-                                        Gui.Window.thisWindow.UnloadedlistUpdate();
-                                    }
-                                    catch { }
+                                    //Not needed, as load does it for us.
+                                    //try
+                                    //{
+                                    //        Gui.Window.thisWindow.UpdateMapList("'");
+                                    //        Gui.Window.thisWindow.UnloadedlistUpdate();
+                                    //}
+                                    //catch { }
                                 }
                                 else
                                 {

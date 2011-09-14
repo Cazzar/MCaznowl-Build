@@ -172,8 +172,10 @@ namespace MCForge.Gui
 
             UpdateListTimer.Elapsed += delegate
 			{
-				UpdateClientList(Player.players);
-				UpdateMapList("'");
+                try {
+                    UpdateClientList(Player.players);
+                    UpdateMapList("'");
+                } catch {} // needed for slower computers
                 //Server.s.Log("Lists updated!");
 			}; UpdateListTimer.Start();
         }
@@ -291,12 +293,9 @@ namespace MCForge.Gui
         public void UpdateClientList(List<Player> players)
         {
 
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
                 PlayerListCallback d = UpdateClientList;
-                if (this.IsDisposed) {
-                    return; // Do nothing if we're already disposed.
-                }
                 Invoke(d, new List<Player>[] { players });
             }
             else
@@ -350,10 +349,10 @@ namespace MCForge.Gui
                 dgvMaps.ResumeLayout();
             }
             */
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 LogDelegate d = new LogDelegate(UpdateMapList);
-                this.Invoke(d, new String[] {" "});
+                Invoke(d, new Object[] {" "});
             }
             else
             {
@@ -1163,8 +1162,8 @@ namespace MCForge.Gui
                     MessageBox.Show("Created Level");
                     try
                     {
-                    	UnloadedlistUpdate();
-            		UpdateMapList("'");
+                        UnloadedlistUpdate();
+                        UpdateMapList("'");
                     }
                     catch { }
                 }
