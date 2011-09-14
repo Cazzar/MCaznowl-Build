@@ -1842,8 +1842,8 @@ MessageBox.Show("Text Box Cleared!!");
 
         private void LoadLavaSettings()
         {
-            lsCmbSetupRank.SelectedIndex = (Group.findPerm(Server.lava.setupRank) == null) ? (int)LevelPermission.Admin : lsCmbSetupRank.Items.IndexOf(Group.findPerm(Server.lava.setupRank).name);
-            lsCmbControlRank.SelectedIndex = (Group.findPerm(Server.lava.controlRank) == null) ? (int)LevelPermission.Operator : lsCmbControlRank.Items.IndexOf(Group.findPerm(Server.lava.controlRank).name);
+            lsCmbSetupRank.SelectedIndex = (Group.findPerm(Server.lava.setupRank) == null) ? 0 : lsCmbSetupRank.Items.IndexOf(Group.findPerm(Server.lava.setupRank).name);
+            lsCmbControlRank.SelectedIndex = (Group.findPerm(Server.lava.controlRank) == null) ? 0 : lsCmbControlRank.Items.IndexOf(Group.findPerm(Server.lava.controlRank).name);
             lsChkStartOnStartup.Checked = Server.lava.startOnStartup;
             lsChkSendAFKMain.Checked = Server.lava.sendAfkMain;
             lsNudVoteCount.Value = Server.lava.voteCount;
