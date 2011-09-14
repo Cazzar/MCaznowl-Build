@@ -25,7 +25,7 @@ v5.2.0.0
 - Added /copy [save|load|delete|list], and you can load from a URL by appending a # to the end.
 - Added a per-rank undo limit and ditched the old hard-coded limits. It's in seconds, and the limit only applies to undoing other players.
 - Added Plugin.Events.CancelEvent().
-- Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while.
+- Added tree growing! Use /map growtrees to turn it on, place a sapling and wait a while. Requires physics.
 - Added leaf decay! Use /map leafdecay to turn it on, requires physics.
 - Added missing stuff to the "Maps" tab.
 - Added seed option to /newlvl, check /help newlvl for more information.
