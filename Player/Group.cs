@@ -304,7 +304,7 @@ namespace MCForge
             name = name.ToLower();
             foreach (Group gr in GroupList)
             {
-                if (gr.name == name.ToLower()) { return true; }
+                if (gr.name == name) { return true; }
             } return false;
         }
         public static Group Find(string name)
