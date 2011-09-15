@@ -3850,18 +3850,17 @@ namespace MCForge
                 }
             }
             char[] temp;
-            foreach (string l in lines)
+            for (int i = 0; i < lines.Count; i++) // Gotta do it the old fashioned way...
             {
-                temp = l.ToCharArray();
+                temp = lines[i].ToCharArray();
                 if (temp[temp.Length - 2] == '%' || temp[temp.Length - 2] == '&')
                 {
                     temp[temp.Length - 1] = ' ';
                     temp[temp.Length - 2] = ' ';
                 }
-                string message1 = "";
-                foreach (char c in temp)
-                    message1 += c;
-                lines[lines.IndexOf(l)] = message1;
+                StringBuilder message1 = new StringBuilder();
+                message1.Append(temp);
+                lines[i] = message1.ToString();
             }
             return lines;
         }
