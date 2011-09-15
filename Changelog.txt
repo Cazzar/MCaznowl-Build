@@ -13,11 +13,11 @@ v5.2.0.0
 - Fixed level property file saving, it was breaking on certain maps.
 - Fixed in-game messages from the console so they have proper coloring again.
 - Fixed the player and map lists in the GUI not updating.
-- Fixed most color code exploits which crash clients, still some left to find.
+- Fixed all the color code exploits which crash clients... hopefully.
 - Fixed GUI so if a box is left empty in the create level (not including seed) it no longer crashes.
 - Fixed newly "opped" (can break adminium) players having to rejoin before they can actually break adminium.
 - Fixed dirt changing into grass when it shouldn't on physics 0.
-- Fixed the "To many connections!" error that would require a restart.
+- Fixed the "Too many connections!" error that would require a restart.
 - Fixed a few bugs in Zombie Survival.
 - Fixed being unable to set the lowest rank for any blocks after obsidian in the GUI.
 - Fixed the duplicate "death count" option in the GUI.
