@@ -124,7 +124,7 @@ namespace MCForge
             Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name + ".xml"), "MCForgeEncryption", p, message);
             if (message == password)
             {
-                Player.SendMessage(p, "Thank you, " + p.color + p.name + "! " + Server.DefaultColor + "You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
+                Player.SendMessage(p, "Thank you, " + p.color + p.name + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
                 if (p.adminpen == true)
                 {
                     p.adminpen = false;
