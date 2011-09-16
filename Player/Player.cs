@@ -2435,6 +2435,10 @@ namespace MCForge
 
         public static void SendMessage(Player p, string message)
         {
+            SendMessage(p, message, true);
+        }
+        public static void SendMessage(Player p, string message, bool colorParse)
+        {
             if (p == null)
             {
                 if (storeHelp)
@@ -2451,12 +2455,16 @@ namespace MCForge
                 }
                 return;
             }
-            p.SendMessage(p.id, Server.DefaultColor + message);
+            p.SendMessage(p.id, Server.DefaultColor + message, colorParse);
         }
         public void SendMessage(string message)
         {
+            SendMessage(message, true);
+        }
+        public void SendMessage(string message, bool colorParse)
+        {
             if (this == null) { Server.s.Log(message); return; }
-            unchecked { SendMessage(this.id, Server.DefaultColor + message); }
+            unchecked { SendMessage(this.id, Server.DefaultColor + message, colorParse); }
         }
         public void SendChat(Player p, string message)
         {
@@ -2465,6 +2473,10 @@ namespace MCForge
         }
         public void SendMessage(byte id, string message)
         {
+            SendMessage(id, message, true);
+        }
+        public void SendMessage(byte id, string message, bool colorParse)
+        {
             if (this == null) { Server.s.Log(message); return; }
             if (ZoneSpam.AddSeconds(2) > DateTime.Now && message.Contains("This zone belongs to ")) return;
 
@@ -2472,15 +2484,19 @@ namespace MCForge
             unchecked { buffer[0] = id; }
 
             StringBuilder sb = new StringBuilder(message);
-            for (int i = 0; i < 10; i++)
+
+            if (colorParse)
             {
-                sb.Replace("%" + i, "&" + i);
-                sb.Replace("&" + i + " &", " &");
-            }
-            for (char ch = 'a'; ch <= 'f'; ch++)
-            {
-                sb.Replace("%" + ch, "&" + ch);
-                sb.Replace("&" + ch + " &", " &");
+                for (int i = 0; i < 10; i++)
+                {
+                    sb.Replace("%" + i, "&" + i);
+                    sb.Replace("&" + i + " &", " &");
+                }
+                for (char ch = 'a'; ch <= 'f'; ch++)
+                {
+                    sb.Replace("%" + ch, "&" + ch);
+                    sb.Replace("&" + ch + " &", " &");
+                }
             }
 
             if (Server.dollardollardollar)
@@ -3291,12 +3307,13 @@ namespace MCForge
         }
         public static void GlobalMessage(string message, bool global)
         {
-            message = message.Replace("%", "&");
+            if (!global)
+                message = message.Replace("%", "&");
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null && (!global || !p.muteGlobal))
                 {
-                    Player.SendMessage(p, message);
+                    Player.SendMessage(p, message, !global);
                 }
             });
         }
