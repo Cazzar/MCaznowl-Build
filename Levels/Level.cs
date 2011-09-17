@@ -4331,13 +4331,12 @@ namespace MCForge
         {
             //throw new NotImplementedException();
             Extras.Clear();
-            /*liquids.Clear();
+            liquids.Clear();
             leaves.Clear();
             ListCheck.Clear();
             ListUpdate.Clear();
             UndoBuffer.Clear();
-            blocks = null;*/
-            Server.s.Log(name + " disposed!");
+            blocks = null;
         }
     }
 }
