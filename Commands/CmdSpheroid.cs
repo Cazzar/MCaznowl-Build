@@ -119,9 +119,9 @@ namespace MCForge
                 double cz = (ez + sz) / 2 + (((ez + sz) % 2 == 1) ? 0.5 : 0);
 
                 // find axis lengths
-                double rx = Math.Abs(Convert.ToDouble(sx) - cx + 1) + 1.25;
-                double ry = Math.Abs(Convert.ToDouble(sy) - cy + 1) + 1.25;
-                double rz = Math.Abs(Convert.ToDouble(sz) - cz + 1) + 1.25;
+                double rx = Convert.ToDouble(ex) - cx + 0.25;
+                double ry = Convert.ToDouble(ey) - cy + 0.25;
+                double rz = Convert.ToDouble(ez) - cz + 0.25;
 
                 double rx2 = 1 / (rx * rx);
                 double ry2 = 1 / (ry * ry);
@@ -173,8 +173,8 @@ namespace MCForge
                 double cz = (ez + sz) / 2 + (((ez + sz) % 2 == 1) ? 0.5 : 0);
 
                 // find axis lengths
-                double rx = Math.Abs(Convert.ToDouble(sx) - cx + 1) + 1.25;
-                double rz = Math.Abs(Convert.ToDouble(sz) - cz + 1) + 1.25;
+                double rx = Convert.ToDouble(ex) - cx + 0.25;
+                double rz = Convert.ToDouble(ez) - cz + 0.25;
 
                 double rx2 = 1 / (rx * rx);
                 double rz2 = 1 / (rz * rz);
