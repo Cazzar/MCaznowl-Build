@@ -113,19 +113,20 @@ namespace MCForge
                 int sz = Math.Min(cpos.z, z);
                 int ez = Math.Max(cpos.z, z);
 
+                // find center points
+                double cx = (ex + sx) / 2 + (((ex + sx) % 2 == 1) ? 0.5 : 0);
+                double cy = (ey + sy) / 2 + (((ey + sy) % 2 == 1) ? 0.5 : 0);
+                double cz = (ez + sz) / 2 + (((ez + sz) % 2 == 1) ? 0.5 : 0);
+
                 // find axis lengths
-                double rx = (ex - sx + 1) / 2 + .25;
-                double ry = (ey - sy + 1) / 2 + .25;
-                double rz = (ez - sz + 1) / 2 + .25;
+                double rx = Math.Abs(Convert.ToDouble(sx) - cx + 1) + 1.25;
+                double ry = Math.Abs(Convert.ToDouble(sy) - cy + 1) + 1.25;
+                double rz = Math.Abs(Convert.ToDouble(sz) - cz + 1) + 1.25;
 
                 double rx2 = 1 / (rx * rx);
                 double ry2 = 1 / (ry * ry);
                 double rz2 = 1 / (rz * rz);
 
-                // find center points
-                double cx = (ex + sx) / 2;
-                double cy = (ey + sy) / 2;
-                double cz = (ez + sz) / 2;
                 int totalBlocks = (int)(Math.PI * 0.75 * rx * ry * rz);
 
                 if (totalBlocks > p.group.maxBlocks)
@@ -159,47 +160,47 @@ namespace MCForge
             }
             else
             {
-                int radius = Math.Abs(cpos.x - x) / 2;
-                int f = 1 - radius;
-                int ddF_x = 1;
-                int ddF_y = -2 * radius;
-                int xx = 0;
-                int zz = radius;
+                // find start/end coordinates
+                int sx = Math.Min(cpos.x, x);
+                int ex = Math.Max(cpos.x, x);
+                int sy = Math.Min(cpos.y, y);
+                int ey = Math.Max(cpos.y, y);
+                int sz = Math.Min(cpos.z, z);
+                int ez = Math.Max(cpos.z, z);
 
-                int x0 = Math.Min(cpos.x, x) + radius;
-                int z0 = Math.Min(cpos.z, z) + radius;
+                // find center points
+                double cx = (ex + sx) / 2 + (((ex + sx) % 2 == 1) ? 0.5 : 0);
+                double cz = (ez + sz) / 2 + (((ez + sz) % 2 == 1) ? 0.5 : 0);
+
+                // find axis lengths
+                double rx = Math.Abs(Convert.ToDouble(sx) - cx + 1) + 1.25;
+                double rz = Math.Abs(Convert.ToDouble(sz) - cz + 1) + 1.25;
+
+                double rx2 = 1 / (rx * rx);
+                double rz2 = 1 / (rz * rz);
+                double smallrx2 = 1 / ((rx - 1) * (rx - 1));
+                double smallrz2 = 1 / ((rz - 1) * (rz - 1));
 
                 Pos pos = new Pos();
-                pos.x = (ushort)x0; pos.z = (ushort)(z0 + radius); buffer.Add(pos);
-                pos.z = (ushort)(z0 - radius); buffer.Add(pos);
-                pos.x = (ushort)(x0 + radius); pos.z = (ushort)z0; buffer.Add(pos);
-                pos.x = (ushort)(x0 - radius); buffer.Add(pos);
 
-                while (xx < zz)
-                {
-                    if (f >= 0)
-                    {
-                        zz--;
-                        ddF_y += 2;
-                        f += ddF_y;
-                    }
-                    xx++;
-                    ddF_x += 2;
-                    f += ddF_x;
+                for (int xx = sx; xx <= ex; xx += 8)
+                    for (int zz = sz; zz <= ez; zz += 8)
+                        for (int z3 = 0; z3 < 8 && zz + z3 <= ez; z3++)
+                            for (int x3 = 0; x3 < 8 && xx + x3 <= ex; x3++)
+                            {
+                                // get relative coordinates
+                                double dx = (xx + x3 - cx);
+                                double dz = (zz + z3 - cz);
 
-                    pos.z = (ushort)(z0 + zz);
-                    pos.x = (ushort)(x0 + xx); buffer.Add(pos);
-                    pos.x = (ushort)(x0 - xx); buffer.Add(pos);
-                    pos.z = (ushort)(z0 - zz);
-                    pos.x = (ushort)(x0 + xx); buffer.Add(pos);
-                    pos.x = (ushort)(x0 - xx); buffer.Add(pos);
-                    pos.z = (ushort)(z0 + xx);
-                    pos.x = (ushort)(x0 + zz); buffer.Add(pos);
-                    pos.x = (ushort)(x0 - zz); buffer.Add(pos);
-                    pos.z = (ushort)(z0 - xx);
-                    pos.x = (ushort)(x0 + zz); buffer.Add(pos);
-                    pos.x = (ushort)(x0 - zz); buffer.Add(pos);
-                }
+                                // test if it's inside ellipse
+                                if ((dx * dx) * rx2 + (dz * dz) * rz2 <= 1 && (dx * dx) * smallrx2 + (dz * dz) * smallrz2 > 1)
+                                {
+                                    pos.x = (ushort)(x3 + xx);
+                                    pos.y = (ushort)(sy);
+                                    pos.z = (ushort)(zz + z3);
+                                    buffer.Add(pos);
+                                }
+                            }
 
                 int ydiff = Math.Abs(y - cpos.y) + 1;
 
@@ -215,7 +216,7 @@ namespace MCForge
 
                 foreach (Pos Pos in buffer)
                 {
-                    for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); yy++)
+                    for (ushort yy = (ushort)sy; yy <= (ushort)ey; yy++)
                     {
                         p.level.Blockchange(p, Pos.x, yy, Pos.z, type);
                     }
