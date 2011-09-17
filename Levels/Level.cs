@@ -265,6 +265,7 @@ namespace MCForge
                 Gui.Window.thisWindow.UpdateMapList("'");
             }
             catch { }
+            this.Dispose();
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
