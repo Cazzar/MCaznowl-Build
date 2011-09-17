@@ -94,6 +94,24 @@ namespace MCForge
                     }
                 };
                 MCForgeBeatTimer.Start();
+
+                Thread.Sleep(5000);
+                System.Timers.Timer WomBeat = new System.Timers.Timer(55000);
+                WomBeat.Elapsed += delegate
+                {
+                    if (Server.WomDirect)
+                    {
+                        try
+                        {
+                            Pump(new WOMBeat());
+                        }
+                        catch (Exception e)
+                        {
+                            Server.ErrorLog(e);
+                        }
+                    }
+                };
+                WomBeat.Start();
             }));
             backupThread.Start();
         }
