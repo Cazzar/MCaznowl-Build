@@ -125,7 +125,8 @@ namespace MCForge
         {
             if (kickee == nick)
             {
-                Server.s.Log("Kicked from Global Chat, rejoining...");
+                Server.s.Log("Kicked from Global Chat: " + reason);
+                Server.s.Log("Attempting to rejoin...");
                 connection.Sender.Join(channel);
             }
 

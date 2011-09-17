@@ -178,8 +178,11 @@ namespace MCForge
             }
 
             Server.s.Log("Joining channels...");
-            connection.Sender.Join(channel);
-            connection.Sender.Join(opchannel);
+
+            if (!String.IsNullOrEmpty(channel))
+                connection.Sender.Join(channel);
+            if (!String.IsNullOrEmpty(opchannel))
+                connection.Sender.Join(opchannel);
         }
 
         void Listener_OnDisconnected()

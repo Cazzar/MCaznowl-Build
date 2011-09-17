@@ -2388,6 +2388,10 @@ namespace MCForge
         {
             SendRaw(id, new byte[0]);
         }
+        public void SendRaw(int id, byte send)
+        {
+            SendRaw(id, new byte[] { send });
+        }
         public void SendRaw(int id, byte[] send)
         {
             // Abort if socket has been closed
@@ -2506,7 +2510,7 @@ namespace MCForge
             sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
             sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
             sb.Replace("$ip", ip);
-            sb.Replace("$color", color);
+            if (colorParse) sb.Replace("$color", color);
             sb.Replace("$rank", group.name);
             sb.Replace("$level", level.name);
             sb.Replace("$deaths", overallDeath.ToString());
@@ -2711,7 +2715,7 @@ namespace MCForge
         // Update user type for weather or not they are opped
         public void SendUserType(bool op)
         {
-            SendRaw(15, new byte[] { op ? (byte)100 : (byte)0 });
+            SendRaw(15, op ? (byte)100 : (byte)0);
         }
         //TODO: Figure a way to SendPos without changing rotation
         public void SendDie(byte id) { SendRaw(0x0C, new byte[1] { id }); }

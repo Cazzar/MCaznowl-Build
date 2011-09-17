@@ -55,7 +55,7 @@ namespace MCForge
             announceTimer.AutoReset = true;
             announceTimer.Elapsed += delegate
             {
-                AnnounceTimeLeft(true, false);
+                if (!flooded) AnnounceTimeLeft(true, false);
             };
 
             startOnStartup = false;
