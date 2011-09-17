@@ -167,6 +167,7 @@ namespace MCForge
             all.Add(new CmdMute());
             all.Add(new CmdNewLvl());
 			all.Add(new CmdNews());
+            all.Add(new CmdNyan());
 			all.Add(new CmdOHide());
             all.Add(new CmdOpChat());
             all.Add(new CmdOpRules());

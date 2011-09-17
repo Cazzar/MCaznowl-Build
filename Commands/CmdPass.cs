@@ -60,7 +60,7 @@ namespace MCForge
             if (p.adminpen == false)
             {
                 {
-                    Player.SendMessage(p, "You have &calready verified&e, why are you using this?");
+                    Player.SendMessage(p, "You have &calready verified" + Server.DefaultColor + ", why are you using this?");
                     Player.SendMessage(p, "To set a new password use &a/setpass [Pass]!");
                     return;
                 }
@@ -80,12 +80,12 @@ namespace MCForge
             int number = message.Split(' ').Length;
             if (number > 1)
             {
-                Player.SendMessage(p, "Your password must be &cone &eword!");
+                Player.SendMessage(p, "Your password must be &cone " + Server.DefaultColor + "word!");
                 return;
             }
             if (!Directory.Exists("extra/passwords"))
             {
-                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
+                Player.SendMessage(p, "You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
             DirectoryInfo di = new DirectoryInfo("extra/passwords/");
@@ -108,7 +108,7 @@ namespace MCForge
             }
             if (foundone < 0)
             {
-                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
+                Player.SendMessage(p, "You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
             if (foundone > 1)
@@ -118,14 +118,13 @@ namespace MCForge
             }
             if (!File.Exists("extra/passwords/" + p.name + ".xml"))
             {
-                Player.SendMessage(p, "You have not &cset a password,&e use &a/setpass [Password] &cto set one!");
+                Player.SendMessage(p, "You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
             Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name + ".xml"), "MCForgeEncryption", p, message);
             if (message == password)
             {
-                Player.SendMessage(p, "Thankyou, " + p.color + p.name + "! You have now &averified &eand");
-                Player.SendMessage(p, "have &aaccess to admin commands and features!");
+                Player.SendMessage(p, "Thank you, " + p.color + p.name + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
                 if (p.adminpen == true)
                 {
                     p.adminpen = false;
@@ -135,13 +134,13 @@ namespace MCForge
                 return;
             }
             p.passtries++;
-            Player.SendMessage(p, "&cIncorrect Password. &eRemember your password is &ccase sensitive!");
-            Player.SendMessage(p, "If you have &cforgotten your password,&e contact " + Owner + " and they");
-            Player.SendMessage(p, "can reset it! &cIncorrect &eTries: &b" + p.passtries);
+            Player.SendMessage(p, "&cIncorrect Password. " + Server.DefaultColor + "Remember your password is &ccase sensitive!");
+            Player.SendMessage(p, "If you have &cforgotten your password, " + Server.DefaultColor + "contact " + Owner + " and they can reset it! &cIncorrect " + Server.DefaultColor + "Tries: &b" + p.passtries);
             return;
         }
         public class Crypto
         {
+            // This is the base encryption salt! DO NOT CHANGE IT!!!
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
             /// <summary>
             /// Encrypt the given string using AES.  The string can be decrypted using 

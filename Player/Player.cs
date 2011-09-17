@@ -2388,6 +2388,10 @@ namespace MCForge
         {
             SendRaw(id, new byte[0]);
         }
+        public void SendRaw(int id, byte send)
+        {
+            SendRaw(id, new byte[] { send });
+        }
         public void SendRaw(int id, byte[] send)
         {
             // Abort if socket has been closed
@@ -2435,6 +2439,10 @@ namespace MCForge
 
         public static void SendMessage(Player p, string message)
         {
+            SendMessage(p, message, true);
+        }
+        public static void SendMessage(Player p, string message, bool colorParse)
+        {
             if (p == null)
             {
                 if (storeHelp)
@@ -2451,12 +2459,16 @@ namespace MCForge
                 }
                 return;
             }
-            p.SendMessage(p.id, Server.DefaultColor + message);
+            p.SendMessage(p.id, Server.DefaultColor + message, colorParse);
         }
         public void SendMessage(string message)
         {
+            SendMessage(message, true);
+        }
+        public void SendMessage(string message, bool colorParse)
+        {
             if (this == null) { Server.s.Log(message); return; }
-            unchecked { SendMessage(this.id, Server.DefaultColor + message); }
+            unchecked { SendMessage(this.id, Server.DefaultColor + message, colorParse); }
         }
         public void SendChat(Player p, string message)
         {
@@ -2465,6 +2477,10 @@ namespace MCForge
         }
         public void SendMessage(byte id, string message)
         {
+            SendMessage(id, message, true);
+        }
+        public void SendMessage(byte id, string message, bool colorParse)
+        {
             if (this == null) { Server.s.Log(message); return; }
             if (ZoneSpam.AddSeconds(2) > DateTime.Now && message.Contains("This zone belongs to ")) return;
 
@@ -2472,15 +2488,19 @@ namespace MCForge
             unchecked { buffer[0] = id; }
 
             StringBuilder sb = new StringBuilder(message);
-            for (int i = 0; i < 10; i++)
+
+            if (colorParse)
             {
-                sb.Replace("%" + i, "&" + i);
-                sb.Replace("&" + i + " &", " &");
-            }
-            for (char ch = 'a'; ch <= 'f'; ch++)
-            {
-                sb.Replace("%" + ch, "&" + ch);
-                sb.Replace("&" + ch + " &", " &");
+                for (int i = 0; i < 10; i++)
+                {
+                    sb.Replace("%" + i, "&" + i);
+                    sb.Replace("&" + i + " &", " &");
+                }
+                for (char ch = 'a'; ch <= 'f'; ch++)
+                {
+                    sb.Replace("%" + ch, "&" + ch);
+                    sb.Replace("&" + ch + " &", " &");
+                }
             }
 
             if (Server.dollardollardollar)
@@ -2490,7 +2510,7 @@ namespace MCForge
             sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
             sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
             sb.Replace("$ip", ip);
-            sb.Replace("$color", color);
+            if (colorParse) sb.Replace("$color", color);
             sb.Replace("$rank", group.name);
             sb.Replace("$level", level.name);
             sb.Replace("$deaths", overallDeath.ToString());
@@ -2695,7 +2715,7 @@ namespace MCForge
         // Update user type for weather or not they are opped
         public void SendUserType(bool op)
         {
-            SendRaw(15, new byte[] { op ? (byte)100 : (byte)0 });
+            SendRaw(15, op ? (byte)100 : (byte)0);
         }
         //TODO: Figure a way to SendPos without changing rotation
         public void SendDie(byte id) { SendRaw(0x0C, new byte[1] { id }); }
@@ -3291,12 +3311,13 @@ namespace MCForge
         }
         public static void GlobalMessage(string message, bool global)
         {
-            message = message.Replace("%", "&");
+            if (!global)
+                message = message.Replace("%", "&");
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null && (!global || !p.muteGlobal))
                 {
-                    Player.SendMessage(p, message);
+                    Player.SendMessage(p, message, !global);
                 }
             });
         }
@@ -3850,18 +3871,17 @@ namespace MCForge
                 }
             }
             char[] temp;
-            foreach (string l in lines)
+            for (int i = 0; i < lines.Count; i++) // Gotta do it the old fashioned way...
             {
-                temp = l.ToCharArray();
+                temp = lines[i].ToCharArray();
                 if (temp[temp.Length - 2] == '%' || temp[temp.Length - 2] == '&')
                 {
                     temp[temp.Length - 1] = ' ';
                     temp[temp.Length - 2] = ' ';
                 }
-                string message1 = "";
-                foreach (char c in temp)
-                    message1 += c;
-                lines[lines.IndexOf(l)] = message1;
+                StringBuilder message1 = new StringBuilder();
+                message1.Append(temp);
+                lines[i] = message1.ToString();
             }
             return lines;
         }

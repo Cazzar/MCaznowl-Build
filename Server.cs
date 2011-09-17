@@ -70,6 +70,7 @@ public static event OnServerError ServerError = null;
 
         // URL hash for connecting to the server
         public static string Hash = String.Empty;
+        public static string URL = String.Empty;
         
         public static Socket listen;
         public static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();

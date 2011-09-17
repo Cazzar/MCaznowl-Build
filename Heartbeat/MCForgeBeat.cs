@@ -66,7 +66,7 @@ namespace MCForge
             Parameters += "&motd=" + Heart.UrlEncode(Server.motd) +
                     "&lvlcount=" + (byte)Server.levels.Count +
                     "&serverversion=" + Server.Version/*.Replace(".0", "")*/ +
-                    "&hash=" + Server.Hash +
+                    "&hash=" + Server.URL + // Don't mind this, the server list wants the whole URL now. Blame Mojang!
                     "&users=" + (Player.number - hidden) +
                     "&permalinkhash=" + Permalink.UniqueHash;
         }

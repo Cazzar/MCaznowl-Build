@@ -39,18 +39,18 @@ namespace MCForge
             // Only run the code below if we receive a response
             if (!String.IsNullOrEmpty(line.Trim()))
             {
-                string newHash = line.Substring(line.LastIndexOf('=') + 1);
+                string newHash = line.Substring(line.LastIndexOf('/') + 1);
 
                 // Run this code if we don't already have a hash or if the hash has changed
                 if (String.IsNullOrEmpty(Server.Hash) || !newHash.Equals(Server.Hash))
                 {
                     Server.Hash = newHash;
-                    string serverURL = line;
+                    Server.URL = line;
 
                     //serverURL = "http://" + serverURL.Substring(serverURL.IndexOf('.') + 1);
-                    Server.s.UpdateUrl(serverURL);
-                    File.WriteAllText("text/externalurl.txt", serverURL);
-                    Server.s.Log("URL found: " + serverURL);
+                    Server.s.UpdateUrl(Server.URL);
+                    File.WriteAllText("text/externalurl.txt", Server.URL);
+                    Server.s.Log("URL found: " + Server.URL);
                 }
             }
         }

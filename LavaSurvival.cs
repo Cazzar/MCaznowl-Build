@@ -55,7 +55,7 @@ namespace MCForge
             announceTimer.AutoReset = true;
             announceTimer.Elapsed += delegate
             {
-                AnnounceTimeLeft(true, false);
+                if (!flooded) AnnounceTimeLeft(true, false);
             };
 
             startOnStartup = false;
@@ -403,10 +403,12 @@ namespace MCForge
                                 voteTime = double.Parse(value);
                                 break;
                             case "setup-rank":
-                                setupRank = Level.PermissionFromName(value.ToLower());
+                                if (Group.Find(value.ToLower()) != null)
+                                    setupRank = Group.Find(value.ToLower()).Permission;
                                 break;
                             case "control-rank":
-                                controlRank = Level.PermissionFromName(value.ToLower());
+                                if (Group.Find(value.ToLower()) != null)
+                                    controlRank = Group.Find(value.ToLower()).Permission;
                                 break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))

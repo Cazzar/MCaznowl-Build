@@ -143,6 +143,10 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
+
+            if (Server.profanityFilter)
+                message = ProfanityFilter.Parse(message);
+
             StringBuilder sb = new StringBuilder();
 
             foreach (char b in Encoding.ASCII.GetBytes(message))
@@ -174,8 +178,11 @@ namespace MCForge
             }
 
             Server.s.Log("Joining channels...");
-            connection.Sender.Join(channel);
-            connection.Sender.Join(opchannel);
+
+            if (!String.IsNullOrEmpty(channel))
+                connection.Sender.Join(channel);
+            if (!String.IsNullOrEmpty(opchannel))
+                connection.Sender.Join(opchannel);
         }
 
         void Listener_OnDisconnected()

@@ -18,7 +18,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Timers;
+//using System.Timers;
+using System.Text;
 using Sharkbite.Irc;
 //using System.Threading;
 
@@ -61,7 +62,7 @@ namespace MCForge
             if (!Server.UseGlobalChat) return;
             reset = true;
             retries = 0;
-            Disconnect("Global Chat Bot resetting...");
+            Disconnect("Global Chat bot resetting...");
             Connect();
         }
 
@@ -78,18 +79,29 @@ namespace MCForge
 
         void Listener_OnPublic(UserInfo user, string channel, string message)
         {
-            string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
-            string msg = message;
+            //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
+            //string msg = message;
 
-            foreach (char ch in msg)
+            if (Server.profanityFilter)
+                message = ProfanityFilter.Parse(message);
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char b in Encoding.ASCII.GetBytes(message))
             {
-                if (allowedchars.IndexOf(ch) == -1)
-                    msg = msg.Replace(ch.ToString(), "*");
+                if (b != 38 && b != 96 && b >= 32 && b <= 122)
+                    sb.Append(b);
+                else
+                    sb.Append("*");
             }
-            if (Player.MessageHasBadColorCodes(null, msg)) return;
 
-            Server.s.Log(">[Global] " + user.Nick + ": " + msg.Trim());
-            Player.GlobalMessage(Server.GlobalChatColor + ">[Global] " + user.Nick + ": &f" + msg.Trim(), true);
+            string msg = sb.ToString().Trim();
+
+            if (Player.MessageHasBadColorCodes(null, msg))
+                return;
+
+            Server.s.Log(">[Global] " + user.Nick + ": " + msg);
+            Player.GlobalMessage(Server.GlobalChatColor + ">[Global] " + user.Nick + ": &f" + msg, true);
         }
 
         void Listener_OnRegistered()
@@ -106,14 +118,15 @@ namespace MCForge
 
         void Listener_OnNickError(string badNick, string reason)
         {
-            Server.s.Log("Global Chat nick \"" + badNick + "\"is  taken, please choose a different nick.");
+            Server.s.Log("Global Chat nick \"" + badNick + "\" is  taken, please choose a different nick.");
         }
 
         void Listener_OnKick(UserInfo user, string channel, string kickee, string reason)
         {
             if (kickee == nick)
             {
-                Server.s.Log("Kicked from Global Chat, rejoining...");
+                Server.s.Log("Kicked from Global Chat: " + reason);
+                Server.s.Log("Attempting to rejoin...");
                 connection.Sender.Join(channel);
             }
 

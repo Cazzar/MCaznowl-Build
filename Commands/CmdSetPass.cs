@@ -41,7 +41,7 @@ namespace MCForge
         {
             if (p.group.Permission < Server.verifyadminsrank)
             {
-                Player.SendMessage(p, "You do not have the &crequired rank&e to use this command!");
+                Player.SendMessage(p, "You do not have the &crequired rank " + Server.DefaultColor + "to use this command!");
                 return;
             }
             if (Server.verifyadmins == false)
@@ -53,9 +53,7 @@ namespace MCForge
             {
                 if (File.Exists("extra/passwords/" + p.name + ".xml"))
                 {
-                    Player.SendMessage(p, "&cYou already have a password set. &eYou &ccannot change &eit unless");
-                    Player.SendMessage(p, "&cyou verify it with &a/pass [Password]. &eIf you have &cforgotten &eyour");
-                    Player.SendMessage(p, "password, contact &c" + Server.server_owner + " &eand they can %creset it!");
+                    Player.SendMessage(p, "&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact &c" + Server.server_owner + Server.DefaultColor + " and they can &creset it!");
                     return;
                 }
             }
@@ -161,7 +159,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/setpass [Password] - Sets your admin password to [password].");
-            Player.SendMessage(p, "Note: Do NOT set this as your minecraft password!");
+            Player.SendMessage(p, "Note: Do NOT set this as your Minecraft password!");
         }
     }
 }

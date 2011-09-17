@@ -304,7 +304,7 @@ namespace MCForge
             name = name.ToLower();
             foreach (Group gr in GroupList)
             {
-                if (gr.name == name.ToLower()) { return true; }
+                if (gr.name == name) { return true; }
             } return false;
         }
         public static Group Find(string name)
@@ -313,7 +313,7 @@ namespace MCForge
 
             if (name == "adv") name = "advbuilder";
             if (name == "op") name = "operator";
-            if (name == "super" || name == "admin") name = "superop";
+            if (name == "super" || (name == "admin" && !Group.Exists("admin"))) name = "superop";
             if (name == "noone") name = "nobody";
 
             foreach (Group gr in GroupList)

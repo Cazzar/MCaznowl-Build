@@ -111,6 +111,7 @@
     <Compile Include="Commands\CmdInfected.cs" />
     <Compile Include="Commands\CmdKillPhysics.cs" />
     <Compile Include="Commands\CmdLavaSurvival.cs" />
+    <Compile Include="Commands\CmdNyan.cs" />
     <Compile Include="Commands\CmdPatrol.cs" />
     <Compile Include="Commands\CmdGlobalCLS.cs" />
     <Compile Include="Commands\CmdHackRank.cs" />
