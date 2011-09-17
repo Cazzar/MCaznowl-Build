@@ -644,6 +644,9 @@ namespace MCForge.Gui
                                     catch { Server.s.Log("Could not find " + value); }
                                 }
                                 break;
+                            case "wom-direct":
+                                chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                         }
                     }
                 }
@@ -844,6 +847,9 @@ namespace MCForge.Gui
                     w.WriteLine("griefer-stone-tempban = " + chkGrieferStoneBan.Checked.ToString().ToLower());
                     w.WriteLine("griefer-stone-type = " + cmbGrieferStoneType.Items[cmbGrieferStoneType.SelectedIndex].ToString());
                     w.WriteLine("griefer-stone-rank = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.Items[cmbGrieferStoneRank.SelectedIndex].ToString()).Permission).ToString());
+                    w.WriteLine();
+                    w.WriteLine("#WoM Direct thingy");
+                    w.WriteLine("wom-direct = " + chkWomDirect.Checked.ToString().ToLower());
                 }
                 w.Flush();
                 w.Close();
