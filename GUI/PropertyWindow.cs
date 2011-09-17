@@ -1828,8 +1828,13 @@ MessageBox.Show("Text Box Cleared!!");
         {
             try
             {
-                Stream ImageStream = new WebClient().OpenRead("http://mcforge.net/uploads/images/mcpony.png");
-                Image img = Image.FromStream(ImageStream);
+                if (!Directory.Exists("extra/images"))
+                    Directory.CreateDirectory("extra/images");
+                if (!File.Exists("extra/images/mcpony.png"))
+                    using (WebClient WEB = new WebClient())
+                        WEB.DownloadFile("http://mcforge.net/uploads/images/mcpony.png", "extra/images/mcpony.png");
+
+                Image img = Image.FromFile("extra/images/mcpony.png");
                 pictureBox1.Image = img;
             }
             catch { }
