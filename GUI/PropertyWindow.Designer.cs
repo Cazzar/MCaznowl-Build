@@ -316,6 +316,7 @@ namespace MCForge.Gui
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.numCountReset = new System.Windows.Forms.NumericUpDown();
             this.label69 = new System.Windows.Forms.Label();
+            this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -2600,6 +2601,7 @@ namespace MCForge.Gui
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.chkWomDirect);
             this.groupBox2.Controls.Add(this.chkRestart);
             this.groupBox2.Controls.Add(this.chkPublic);
             this.groupBox2.Controls.Add(this.chkVerify);
@@ -3350,6 +3352,16 @@ namespace MCForge.Gui
             this.label69.Size = new System.Drawing.Size(149, 13);
             this.label69.TabIndex = 33;
             this.label69.Text = "Counter Reset Time (seconds):";
+            // chkWomDirect
+            // 
+            this.chkWomDirect.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkWomDirect.AutoSize = true;
+            this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
+            this.chkWomDirect.Name = "chkWomDirect";
+            this.chkWomDirect.Size = new System.Drawing.Size(107, 23);
+            this.chkWomDirect.TabIndex = 25;
+            this.chkWomDirect.Text = "Enable WoM Direct";
+            this.chkWomDirect.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
@@ -3728,5 +3740,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.NumericUpDown numCountReset;
         private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.CheckBox chkWomDirect;
     }
 }

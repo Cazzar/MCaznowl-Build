@@ -644,6 +644,9 @@ namespace MCForge.Gui
                                     catch { Server.s.Log("Could not find " + value); }
                                 }
                                 break;
+                            case "wom-direct":
+                                chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                         }
                     }
                 }
@@ -1647,9 +1650,18 @@ MessageBox.Show("Text Box Cleared!!");
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            Stream ImageStream = new WebClient().OpenRead("http://mcforge.net/uploads/images/mcpony.png");
-            Image img = Image.FromStream(ImageStream);
-            pictureBox1.Image = img;
+            try
+            {
+                if (!Directory.Exists("extra/images"))
+                    Directory.CreateDirectory("extra/images");
+                if (!File.Exists("extra/images/mcpony.png"))
+                    using (WebClient WEB = new WebClient())
+                        WEB.DownloadFile("http://mcforge.net/uploads/images/mcpony.png", "extra/images/mcpony.png");
+
+                Image img = Image.FromFile("extra/images/mcpony.png");
+                pictureBox1.Image = img;
+            }
+            catch { }
         }
 
         private void cmbGlobalChatColor_SelectedIndexChanged(object sender, EventArgs e)

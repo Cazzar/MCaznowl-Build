@@ -535,6 +535,10 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
+                            case "wom-direct":
+                                try { Server.WomDirect = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                         }
                     }
                 }
@@ -768,6 +772,9 @@ namespace MCForge
             w.WriteLine("griefer-stone-tempban = " + Server.grieferStoneBan.ToString().ToLower());
             w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
             w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString());
+            w.WriteLine();
+            w.WriteLine("#WoM Direct thingy");
+            w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
         }
     }
 }

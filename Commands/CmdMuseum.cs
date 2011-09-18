@@ -90,84 +90,82 @@ namespace MCForge
 						rot[1] = header[11];
 					}
 
-					using (Level level = new Level(name, vars[0], vars[2], vars[1], "empty"))
+					Level level = new Level(name, vars[0], vars[2], vars[1], "empty");
+					level.setPhysics(0);
+
+					level.spawnx = vars[3];
+					level.spawnz = vars[4];
+					level.spawny = vars[5];
+					level.rotx = rot[0];
+					level.roty = rot[1];
+
+					byte[] blocks = new byte[level.width * level.height * level.depth];
+					gs.Read(blocks, 0, blocks.Length);
+					level.blocks = blocks;
+					gs.Close();
+
+					level.backedup = true;
+					level.permissionbuild = LevelPermission.Admin;
+
+					level.jailx = (ushort)(level.spawnx * 32); level.jaily = (ushort)(level.spawny * 32); level.jailz = (ushort)(level.spawnz * 32);
+					level.jailrotx = level.rotx; level.jailroty = level.roty;
+
+					p.Loading = true;
+					foreach (Player pl in Player.players) if (p.level == pl.level && p != pl) p.SendDie(pl.id);
+					foreach (PlayerBot b in PlayerBot.playerbots) if (p.level == b.level) p.SendDie(b.id);
+
+					Player.GlobalDie(p, true);
+
+					p.level = level;
+					p.SendMotd();
+
+					p.SendRaw(2);
+					byte[] buffer = new byte[level.blocks.Length + 4];
+					BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
+					//ushort xx; ushort yy; ushort zz;
+
+					for (int i = 0; i < level.blocks.Length; ++i)
+						buffer[4 + i] = Block.Convert(level.blocks[i]);
+
+					buffer = buffer.GZip();
+					int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
+					for (int i = 1; buffer.Length > 0; ++i)
 					{
-						level.setPhysics(0);
+						short length = (short)Math.Min(buffer.Length, 1024);
+						byte[] send = new byte[1027];
+						Player.HTNO(length).CopyTo(send, 0);
+						Buffer.BlockCopy(buffer, 0, send, 2, length);
+						byte[] tempbuffer = new byte[buffer.Length - length];
+						Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
+						buffer = tempbuffer;
+						send[1026] = (byte)(i * 100 / number);
+						p.SendRaw(3, send);
+						Thread.Sleep(10);
+					} buffer = new byte[6];
+					Player.HTNO((short)level.width).CopyTo(buffer, 0);
+					Player.HTNO((short)level.depth).CopyTo(buffer, 2);
+					Player.HTNO((short)level.height).CopyTo(buffer, 4);
+					p.SendRaw(4, buffer);
 
-						level.spawnx = vars[3];
-						level.spawnz = vars[4];
-						level.spawny = vars[5];
-						level.rotx = rot[0];
-						level.roty = rot[1];
+					ushort x = (ushort)((0.5 + level.spawnx) * 32);
+					ushort y = (ushort)((1 + level.spawny) * 32);
+					ushort z = (ushort)((0.5 + level.spawnz) * 32);
 
-						byte[] blocks = new byte[level.width * level.height * level.depth];
-						gs.Read(blocks, 0, blocks.Length);
-						level.blocks = blocks;
-						gs.Close();
+					p.aiming = false;
+					Player.GlobalSpawn(p, x, y, z, level.rotx, level.roty, true);
+					p.ClearBlockchange();
+					p.Loading = false;
 
-						level.backedup = true;
-						level.permissionbuild = LevelPermission.Admin;
+					if (message.IndexOf(' ') == -1)
+						level.name = "&cMuseum " + Server.DefaultColor + "(" + message.Split(' ')[0] + ")";
+					else
+						level.name = "&cMuseum " + Server.DefaultColor + "(" + message.Split(' ')[0] + " " + message.Split(' ')[1] + ")";
 
-						level.jailx = (ushort)(level.spawnx * 32); level.jaily = (ushort)(level.spawny * 32); level.jailz = (ushort)(level.spawnz * 32);
-						level.jailrotx = level.rotx; level.jailroty = level.roty;
-
-						p.Loading = true;
-						foreach (Player pl in Player.players) if (p.level == pl.level && p != pl) p.SendDie(pl.id);
-						foreach (PlayerBot b in PlayerBot.playerbots) if (p.level == b.level) p.SendDie(b.id);
-
-						Player.GlobalDie(p, true);
-
-						p.level = level;
-						p.SendMotd();
-
-						p.SendRaw(2);
-						byte[] buffer = new byte[level.blocks.Length + 4];
-						BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
-						//ushort xx; ushort yy; ushort zz;
-
-						for (int i = 0; i < level.blocks.Length; ++i)
-							buffer[4 + i] = Block.Convert(level.blocks[i]);
-
-						buffer = buffer.GZip();
-						int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
-						for (int i = 1; buffer.Length > 0; ++i)
-						{
-							short length = (short)Math.Min(buffer.Length, 1024);
-							byte[] send = new byte[1027];
-							Player.HTNO(length).CopyTo(send, 0);
-							Buffer.BlockCopy(buffer, 0, send, 2, length);
-							byte[] tempbuffer = new byte[buffer.Length - length];
-							Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
-							buffer = tempbuffer;
-							send[1026] = (byte)(i * 100 / number);
-							p.SendRaw(3, send);
-							Thread.Sleep(10);
-						} buffer = new byte[6];
-						Player.HTNO((short)level.width).CopyTo(buffer, 0);
-						Player.HTNO((short)level.depth).CopyTo(buffer, 2);
-						Player.HTNO((short)level.height).CopyTo(buffer, 4);
-						p.SendRaw(4, buffer);
-
-						ushort x = (ushort)((0.5 + level.spawnx) * 32);
-						ushort y = (ushort)((1 + level.spawny) * 32);
-						ushort z = (ushort)((0.5 + level.spawnz) * 32);
-
-						p.aiming = false;
-						Player.GlobalSpawn(p, x, y, z, level.rotx, level.roty, true);
-						p.ClearBlockchange();
-						p.Loading = false;
-
-						if (message.IndexOf(' ') == -1)
-							level.name = "&cMuseum " + Server.DefaultColor + "(" + message.Split(' ')[0] + ")";
-						else
-							level.name = "&cMuseum " + Server.DefaultColor + "(" + message.Split(' ')[0] + " " + message.Split(' ')[1] + ")";
-
-						if (!p.hidden)
-						{
-                            Player.GlobalMessage(p.color + p.prefix + p.name + Server.DefaultColor + " went to the " + level.name);
-						}
+					if (!p.hidden)
+					{
+                        Player.GlobalMessage(p.color + p.prefix + p.name + Server.DefaultColor + " went to the " + level.name);
 					}
-                }
+				}
                 catch (Exception ex) { Player.SendMessage(p, "Error loading level."); Server.ErrorLog(ex); return; }
                 finally { fs.Close(); }
             }

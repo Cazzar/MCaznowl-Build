@@ -101,7 +101,7 @@ namespace MCForge
                 return;
 
             Server.s.Log(">[Global] " + user.Nick + ": " + msg);
-            Player.GlobalMessage(Server.GlobalChatColor + ">[Global] " + user.Nick + ": &f" + msg, true);
+            Player.GlobalMessage(String.Format("{0}[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
         }
 
         void Listener_OnRegistered()

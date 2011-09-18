@@ -36,7 +36,7 @@ namespace MCForge
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
-            this.channel = channel; this.opchannel = opchannel; this.nick = nick; this.server = server;
+            this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
             banCmd = new List<string>();
             if (Server.irc)
@@ -144,9 +144,6 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
 
-            if (Server.profanityFilter)
-                message = ProfanityFilter.Parse(message);
-
             StringBuilder sb = new StringBuilder();
 
             foreach (char b in Encoding.ASCII.GetBytes(message))
@@ -163,7 +160,7 @@ namespace MCForge
                 return;
 
             Server.s.Log(String.Format("[{0}IRC] {1}: {2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
-            Player.GlobalMessage(Server.IRCColour + String.Format("[{0}IRC] {1}: &f{2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
+            Player.GlobalMessage(String.Format("{0}[{1}IRC] {2}: &f{3}", (channel == opchannel ? "(Op) " : ""), Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
         }
 
         void Listener_OnRegistered()

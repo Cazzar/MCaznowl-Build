@@ -97,7 +97,7 @@ public static event OnServerError ServerError = null;
         public static PlayerList ircControllers;
         public static PlayerList muted;
         public static PlayerList ignored;
-        public static bool WomDirect = false;
+        
         public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
@@ -289,6 +289,7 @@ public static event OnServerError ServerError = null;
         public static bool adminsjoinsilent = false;
         public static bool mono = false;
         public static string server_owner = "Notch";
+        public static bool WomDirect = false;
 
         public static bool flipHead = false;
 

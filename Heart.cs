@@ -95,10 +95,10 @@ namespace MCForge
                 };
                 MCForgeBeatTimer.Start();
 
-                Thread.Sleep(5000);
-                System.Timers.Timer WomBeat = new System.Timers.Timer(55000);
+                System.Timers.Timer WomBeat = new System.Timers.Timer(500);
                 WomBeat.Elapsed += delegate
                 {
+                    WomBeat.Interval = 50000;
                     if (Server.WomDirect)
                     {
                         try
