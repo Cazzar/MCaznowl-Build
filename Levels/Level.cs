@@ -4337,7 +4337,7 @@ namespace MCForge
             ListCheck.Clear();
             ListUpdate.Clear();
             UndoBuffer.Clear();
-            blocks = null;
+            //blocks = null; // DO NOT USE! CAUSES CRASHES!
         }
     }
 }
