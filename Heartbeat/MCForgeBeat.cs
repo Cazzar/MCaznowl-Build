@@ -68,7 +68,8 @@ namespace MCForge
                     "&serverversion=" + Server.Version/*.Replace(".0", "")*/ +
                     "&hash=" + Server.URL + // Don't mind this, the server list wants the whole URL now. Blame Mojang!
                     "&users=" + (Player.number - hidden) +
-                    "&permalinkhash=" + Permalink.UniqueHash;
+                    "&permalinkhash=" + Permalink.UniqueHash +
+                    "&globalchat=" + (Server.UseGlobalChat ? Server.GlobalChatNick : String.Empty);
         }
 
         public void OnPump(string line)

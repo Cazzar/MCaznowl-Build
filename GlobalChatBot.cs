@@ -82,26 +82,12 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
 
-            if (Server.profanityFilter)
-                message = ProfanityFilter.Parse(message);
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char b in Encoding.ASCII.GetBytes(message))
-            {
-                if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append(b);
-                else
-                    sb.Append("*");
-            }
-
-            string msg = sb.ToString().Trim();
-
-            if (Player.MessageHasBadColorCodes(null, msg))
+            message = message.MCCharFilter();
+            if (Player.MessageHasBadColorCodes(null, message))
                 return;
 
-            Server.s.Log(">[Global] " + user.Nick + ": " + msg);
-            Player.GlobalMessage(String.Format("{0}[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
+            Server.s.Log(">[Global] " + user.Nick + ": " + message);
+            Player.GlobalMessage(String.Format("{0}[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
         }
 
         void Listener_OnRegistered()

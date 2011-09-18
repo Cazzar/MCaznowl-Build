@@ -22,7 +22,7 @@ namespace MCForge
             if (p != null && p.muteGlobal) { Player.SendMessage(p, "You cannot use Global Chat while you have it muted."); return; }
                 
             Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message);
-            Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + message, true);
+            Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + (Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
             Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message);
         }
         public override void Help(Player p)

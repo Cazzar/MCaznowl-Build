@@ -144,23 +144,12 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
 
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char b in Encoding.ASCII.GetBytes(message))
-            {
-                if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append(b);
-                else
-                    sb.Append("*");
-            }
-
-            String msg = sb.ToString().Trim();
-
-            if (Player.MessageHasBadColorCodes(null, msg))
+            message = message.MCCharFilter();
+            if (Player.MessageHasBadColorCodes(null, message))
                 return;
 
-            Server.s.Log(String.Format("[{0}IRC] {1}: {2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
-            Player.GlobalMessage(String.Format("{0}[{1}IRC] {2}: &f{3}", (channel == opchannel ? "(Op) " : ""), Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
+            Server.s.Log(String.Format("[{0}IRC] {1}: {2}", (channel == opchannel ? "(Op) " : ""), user.Nick, message));
+            Player.GlobalMessage(String.Format("{0}[{1}IRC] {2}: &f{3}", Server.IRCColour, (channel == opchannel ? "(Op) " : ""), user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
         }
 
         void Listener_OnRegistered()

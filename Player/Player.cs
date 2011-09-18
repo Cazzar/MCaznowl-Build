@@ -526,11 +526,10 @@ namespace MCForge
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
-                p.disconnected = true;
+                Player.SaveUndo(p);
                 if (connections.Contains(p))
-                {
                     connections.Remove(p);
-                }
+                p.disconnected = true;
             }
             catch (Exception e)
             {
@@ -3478,6 +3477,7 @@ namespace MCForge
                     CloseSocket();
                 if (connections.Contains(this))
                     connections.Remove(this);
+                SaveUndo();
                 disconnected = true;
                 return;
             }
@@ -3496,44 +3496,7 @@ namespace MCForge
 
             try
             {
-                if (loggedIn)
-                {
-                    try
-                    {
-                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
-                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
-                        DirectoryInfo di = new DirectoryInfo("extra/undo");
-                        if (di.GetDirectories("*").Length >= Server.totalUndo)
-                        {
-                            Directory.Delete("extra/undoPrevious", true);
-                            Directory.Move("extra/undo", "extra/undoPrevious");
-                            Directory.CreateDirectory("extra/undo");
-                        }
-
-                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
-                        di = new DirectoryInfo("extra/undo/" + name);
-                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
-                        {
-                            try
-                            {
-                                lock (UndoBuffer)
-                                {
-                                    foreach (UndoPos uP in UndoBuffer)
-                                    {
-                                        w.Write(uP.mapName + " " +
-                                            uP.x + " " + uP.y + " " + uP.z + " " +
-                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                            uP.type + " " + uP.newtype + " ");
-                                    }
-                                }
-                            }
-                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                        }
-                    }
-                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
-                }
-
+                SaveUndo();
                 if (disconnected)
                 {
                     this.CloseSocket();
@@ -3693,6 +3656,45 @@ namespace MCForge
             }
             catch (Exception e) { Server.ErrorLog(e); }
             finally { this.CloseSocket(); }
+        }
+
+        public void SaveUndo()
+        {
+            SaveUndo(this);
+        }
+        public static void SaveUndo(Player p)
+        {
+            if (p == null || p.UndoBuffer == null || p.UndoBuffer.Count < 1) return;
+            try
+            {
+                if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
+                if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
+                DirectoryInfo di = new DirectoryInfo("extra/undo");
+                if (di.GetDirectories("*").Length >= Server.totalUndo)
+                {
+                    Directory.Delete("extra/undoPrevious", true);
+                    Directory.Move("extra/undo", "extra/undoPrevious");
+                    Directory.CreateDirectory("extra/undo");
+                }
+
+                if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
+                di = new DirectoryInfo("extra/undo/" + p.name);
+                File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                {
+                    lock (p.UndoBuffer)
+                    {
+                        foreach (UndoPos uP in p.UndoBuffer)
+                        {
+                            w.Write(uP.mapName + " " +
+                                uP.x + " " + uP.y + " " + uP.z + " " +
+                                uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                uP.type + " " + uP.newtype + " ");
+                        }
+                    }
+                }
+            }
+            catch (Exception e) { Server.s.Log("Error saving undo data for " + p.name + "!"); Server.ErrorLog(e); }
         }
 
         public void Dispose()
