@@ -575,7 +575,7 @@ namespace MCForge
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
         }
-        static void SaveProps(StreamWriter w)
+        public static void SaveProps(StreamWriter w)
         {
             w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
             w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
