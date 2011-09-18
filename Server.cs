@@ -183,8 +183,8 @@ public static event OnServerError ServerError = null;
         public static string name = "[MCForge] Default";
         public static string motd = "Welcome!";
         public static byte players = 12;
-//for the limiting no. of guests:
-public static byte maxGuests = 10;
+        //for the limiting no. of guests:
+        public static byte maxGuests = 10;
 
         public static byte maps = 5;
         public static int port = 25565;
@@ -197,6 +197,7 @@ public static byte maxGuests = 10;
         public static bool checkspam = false;
         public static int spamcounter = 8;
         public static int mutespamtime = 60;
+        public static int spamcountreset = 5;
 
         public static string ZallState = "Alive";
 

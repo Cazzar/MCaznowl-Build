@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\Class1.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdAgree.cs" />
     <Compile Include="Commands\CmdAka.cs" />

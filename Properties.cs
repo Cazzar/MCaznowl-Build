@@ -486,8 +486,10 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "spam-mute-time":
-                                try { Server.mutespamtime = int.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                try { Server.mutespamtime = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "spam-counter-reset-time":
+                                try { Server.spamcountreset = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "show-empty-ranks":
                                 try { Server.showEmptyRanks = bool.Parse(value); }
@@ -571,7 +573,7 @@ namespace MCForge
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
         }
-        static void SaveProps(StreamWriter w)
+        public static void SaveProps(StreamWriter w)
         {
             w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
             w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
@@ -635,6 +637,13 @@ namespace MCForge
             w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
             w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
             w.WriteLine("#   spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
+            w.WriteLine("#   spam-counter-reset-time\t=\tThe amount of seconds the consecutive messages have to fall between to be considered spam.");
+            w.WriteLine();
+            w.WriteLine("#   As an example, if you wanted the spam to only mute if a user posts 5 messages in a row within 2 seconds, you would use the folowing:");
+            w.WriteLine("#   mute-on-spam\t=\ttrue");
+            w.WriteLine("#   spam-messages\t=\t5");
+            w.WriteLine("#   spam-mute-time\t=\t60");
+            w.WriteLine("#   spam-counter-reset-time\t=\t2");
             w.WriteLine();
             w.WriteLine();
             w.WriteLine("# Server options");
@@ -745,6 +754,7 @@ namespace MCForge
             w.WriteLine("mute-on-spam = " + Server.checkspam.ToString().ToLower());
             w.WriteLine("spam-messages = " + Server.spamcounter.ToString());
             w.WriteLine("spam-mute-time = " + Server.mutespamtime.ToString());
+            w.WriteLine("spam-counter-reset-time = " + Server.spamcountreset.ToString());
             w.WriteLine();
             w.WriteLine("#Show Empty Ranks in /players");
             w.WriteLine("show-empty-ranks = " + Server.showEmptyRanks.ToString().ToLower());
