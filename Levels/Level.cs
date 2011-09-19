@@ -3962,7 +3962,7 @@ namespace MCForge
                 }
             }
 
-            for (i = 1; i <= 4; i++)
+            for (i = 1; i <= dist; i++)
             {
                 for (xx = -dist; xx <= dist; xx++)
                 {
@@ -3974,26 +3974,32 @@ namespace MCForge
                             {
                                 if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
                                 {
-                                    if (leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] = (sbyte)i;
                                 }
                             }
-                            catch { /*Server.s.Log("Leaf decay error!");*/ }
+                            catch { Server.s.Log("Leaf decay error!"); }
                         }
                     }
                 }
@@ -4337,6 +4343,9 @@ namespace MCForge
             ListCheck.Clear();
             ListUpdate.Clear();
             UndoBuffer.Clear();
+            blockCache.Clear();
+            ZoneList.Clear();
+            ctfgame.Dispose();
             //blocks = null; // DO NOT USE! CAUSES CRASHES!
         }
     }

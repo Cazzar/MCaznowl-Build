@@ -243,6 +243,9 @@ namespace MCForge
         public byte[] rot = new byte[2] { 0, 0 };
         byte[] oldrot = new byte[2] { 0, 0 };
 
+        //ushort[] clippos = new ushort[3] { 0, 0, 0 };
+        //byte[] cliprot = new byte[2] { 0, 0 };
+
         // grief/spam detection
         public static int spamBlockCount = 200;
         public static int spamBlockTimer = 5;
@@ -286,22 +289,24 @@ namespace MCForge
             return "active";
         }
 
-        public bool CheckIfInsideBlock(Player p)
+        public bool CheckIfInsideBlock()
         {
-            int px = p.pos[0] / 32;
-            int py = p.pos[1] / 32;
-            int pz = p.pos[2] / 32;
+            return CheckIfInsideBlock(this);
+        }
+        public static bool CheckIfInsideBlock(Player p)
+        {
             ushort x, y, z;
-            x = (ushort)px;
-            y = (ushort)py;
-            z = (ushort)pz;
+            x = (ushort)(p.pos[0] / 32);
+            y = (ushort)(p.pos[1] / 32);
             y = (ushort)Math.Round((decimal)(((y * 32) + 4) / 32));
+            z = (ushort)(p.pos[2] / 32);
 
-            byte b = this.level.GetTile(x, (ushort)((int)y - 1), z);
-            byte b1 = this.level.GetTile(x, (ushort)((int)y - 2), z);
+            byte b = p.level.GetTile(x, y, z);
+            byte b1 = p.level.GetTile(x, (ushort)(y - 1), z);
 
-            if (!Block.Walkthrough(b) && !Block.Walkthrough(b1))
+            if (!Block.Walkthrough(Block.Convert(b)) || !Block.Walkthrough(Block.Convert(b1)))
             {
+                Server.s.Log("HAAAAAAAX!!");
                 return true;
             }
             else
@@ -1509,6 +1514,11 @@ namespace MCForge
         {
             if (!loggedIn || trainGrab || following != "" || frozen)
                 return;
+            /*if (CheckIfInsideBlock())
+            {
+                unchecked { this.SendPos((byte)-1, (ushort)(clippos[0] - 18), (ushort)(clippos[1] - 18), (ushort)(clippos[2] - 18), cliprot[0], cliprot[1]); }
+                return;
+            }*/
 
             byte[] message = (byte[])m;
             byte thisid = message[0];
@@ -1567,7 +1577,11 @@ namespace MCForge
                 byte roty = message[8];
                 pos = new ushort[3] { x, y, z };
                 rot = new byte[2] { rotx, roty };
-
+                /*if (!CheckIfInsideBlock())
+                {
+                    clippos = pos;
+                    cliprot = rot;
+                }*/
             }
         }
 
@@ -2114,56 +2128,45 @@ namespace MCForge
         {
             try
             {
-                if (Server.verifyadmins == true)
+                if (Server.verifyadmins)
                 {
-                    if (this.adminpen == true)
+                    if (cmd.ToLower() == "setpass")
                     {
-                        if (cmd == "setpass")
-                        {
-                            Command.all.Find("setpass").Use(this, message);
-                            Server.s.CommandUsed(this.name + " used /setpass");
-                            return;
-                        }
-                        if (cmd == "pass")
-                        {
-                            Command.all.Find("pass").Use(this, message);
-                            Server.s.CommandUsed(this.name + " used /pass");
-                            return;
-                        }
+                        Command.all.Find(cmd).Use(this, message);
+                        Server.s.CommandUsed(this.name + " used /setpass");
+                        return;
+                    }
+                    if (cmd.ToLower() == "pass")
+                    {
+                        Command.all.Find(cmd).Use(this, message);
+                        Server.s.CommandUsed(this.name + " used /pass");
+                        return;
                     }
                 }
-                if (Server.agreetorulesonentry == true)
+                if (Server.agreetorulesonentry)
                 {
-                    if (cmd == "agree")
+                    if (cmd.ToLower() == "agree")
                     {
-                        Command.all.Find("agree").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /agree");
                         return;
                     }
-                    if (cmd == "rules")
+                    if (cmd.ToLower() == "rules")
                     {
-                        Command.all.Find("rules").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /rules");
                         return;
                     }
-                    if (cmd == "disagree")
+                    if (cmd.ToLower() == "disagree")
                     {
-                        Command.all.Find("disagree").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /disagree");
                         return;
                     }
                 }
 
-                if (cmd == "") { SendMessage("No command entered."); return; }
-                if (Server.agreetorulesonentry == false)
-                {
-                    if (jailed)
-                    {
-                        SendMessage("You cannot use any commands while jailed.");
-                        return;
-                    }
-                }
-                if (Server.agreetorulesonentry == true)
+                if (cmd == String.Empty) { SendMessage("No command entered."); return; }
+                if (Server.agreetorulesonentry)
                 {
                     if (jailed)
                     {
@@ -2171,9 +2174,14 @@ namespace MCForge
                         return;
                     }
                 }
-                if (Server.verifyadmins == true)
+                if (jailed)
                 {
-                    if (this.adminpen == true)
+                    SendMessage("You cannot use any commands while jailed.");
+                    return;
+                }
+                if (Server.verifyadmins)
+                {
+                    if (this.adminpen)
                     {
                         this.SendMessage("&cYou must use &a/pass [Password]&c to verify!");
                         return;
@@ -2268,7 +2276,7 @@ namespace MCForge
                             }
                         }
 
-                        if (cmd != "setpass" || cmd != "pass")
+                        if (cmd.ToLower() != "setpass" || cmd.ToLower() != "pass")
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
                         }
@@ -3705,6 +3713,9 @@ namespace MCForge
             CopyBuffer.Clear();
             RedoBuffer.Clear();
             UndoBuffer.Clear();
+            spamBlockLog.Clear();
+            spamChatLog.Clear();
+            spyChatRooms.Clear();
             try
             {
                 //this.commThread.Abort();

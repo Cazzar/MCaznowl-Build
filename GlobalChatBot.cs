@@ -33,7 +33,7 @@ namespace MCForge
         private byte retries = 0;
         public GlobalChatBot(string nick)
         {
-            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick;
+            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
             if (Server.UseGlobalChat)
             {
@@ -109,7 +109,7 @@ namespace MCForge
 
         void Listener_OnKick(UserInfo user, string channel, string kickee, string reason)
         {
-            if (kickee == nick)
+            if (kickee.Trim().ToLower() == nick.ToLower())
             {
                 Server.s.Log("Kicked from Global Chat: " + reason);
                 Server.s.Log("Attempting to rejoin...");
