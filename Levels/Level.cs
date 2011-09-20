@@ -1539,7 +1539,7 @@ namespace MCForge
                                             PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
 
-                                        if (!leafDecay) { C.time = 255; break; }
+                                        if (!leafDecay) { C.time = 255; leaves.Clear(); break; }
                                         if (C.time < 5) { if (rand.Next(10) == 0) C.time++; break; }
                                         if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
                                         C.time = 255;
