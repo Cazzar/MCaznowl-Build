@@ -5,6 +5,7 @@ v5.3.0.0
 - Added option for WoM Direct heartbeat.
 - Added commands:
 	- /nyan - 100% self-explanatory!
+- Made improvements to leaf decay, should be more random now.
 - Disabled color codes in Global Chat, it's just too risky with the exploits.
 
 v5.2.0.0
