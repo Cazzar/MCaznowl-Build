@@ -75,7 +75,8 @@ namespace MCForge
             try
             {
                 object instance = Activator.CreateInstance(Assembly.LoadFrom(pluginname).GetTypes()[0]);
-                if (((Plugin)instance).MCForge_Version != Server.Version && ((Plugin)instance).MCForge_Version != "")
+                String plugin_version_string = ((Plugin)instance).MCForge_Version;
+                if (plugin_version_string != "" && new Version(plugin_version_string) != Server.Version)
                 {
                     Server.s.Log("This plugin (" + ((Plugin)instance).name + ") isnt compatible with this version of MCForge!");
                     Thread.Sleep(1000);
