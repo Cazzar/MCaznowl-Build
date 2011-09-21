@@ -279,7 +279,8 @@ namespace MCForge_.Gui
                 if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
                 try
                 {
-                    if (Convert.ToInt32(Client.DownloadString(Program.CurrentVersionFile).Replace(".", "")) > Convert.ToInt32(Server.Version.Replace(".", "")))
+                    Version availableUpdateVersion = new Version(Client.DownloadString(Program.CurrentVersionFile));
+                    if (availableUpdateVersion > Server.Version)
                     {
                         if (Server.autoupdate == true || p != null)
                         {
