@@ -197,9 +197,9 @@
     <Compile Include="Commands\CmdZz.cs" />
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
-    <Compile Include="Commands\pcreate.cs" />
-    <Compile Include="Commands\pload.cs" />
-    <Compile Include="Commands\punload.cs" />
+    <Compile Include="Commands\CmdPCreate.cs" />
+    <Compile Include="Commands\CmdPLoad.cs" />
+    <Compile Include="Commands\CmdPUnload.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="CTFGame.cs" />

@@ -1341,7 +1341,7 @@ namespace MCForge
                             string command = Message[0];
                             Message.RemoveAt(0);
                             string args = string.Join(" ", Message.ToArray());
-                            Command.all.Find(command).Use(p, args);
+                            HandleCommand(command, args);
                         }
                         else
                             Player.SendMessage(p, message);
@@ -2686,6 +2686,7 @@ namespace MCForge
                     Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
                     buffer = tempbuffer;
                     send[1026] = (byte)(i * 100 / number);
+                    //send[1026] = (byte)(100 - (i * 100 / number)); // Backwards progress lololol...
                     SendRaw(3, send);
                     if (ip == "127.0.0.1") { }
                     else if (Server.updateTimer.Interval > 1000) Thread.Sleep(100);
@@ -3619,7 +3620,7 @@ namespace MCForge
                     else
                     {
                         totalKicked++;
-                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + ").", false);
+                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + Server.DefaultColor + ").", false);
                         //IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
                         if (Server.notifyOnJoinLeave)
