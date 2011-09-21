@@ -195,6 +195,16 @@ namespace MCForge
                                     SetTile(x, y, z, 7);
                                 else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
                                     SetTile(x, y, z, rand.Next(100) == 0 ? Block.iron : Block.obsidian);
+                    break;
+
+                case "rainbow":
+                    Random random = useSeed ? new Random(seed) : new Random();
+                    for (x = 0; x < width; ++x)
+                        for (z = 0; z < height; ++z)
+                            for (y = 0; y < depth; ++y) 
+                                if (y == 0 || y == depth - 1 || x == 0 || x == width - 1 || z == 0 || z == height - 1)
+                                SetTile(x,y,z, (byte)random.Next(21, 36));
+
                 	break;
 
                 case "island":

@@ -1589,12 +1589,13 @@ namespace MCForge.Gui
             "Flat",
             "Pixel",
             "Desert",
-            "Space"});
+            "Space",
+            "Rainbow"});
             this.maptypecombo.Location = new System.Drawing.Point(45, 115);
             this.maptypecombo.Name = "maptypecombo";
             this.maptypecombo.Size = new System.Drawing.Size(84, 21);
             this.maptypecombo.TabIndex = 1;
-            // 
+            //
             // CreateNewMap
             // 
             this.CreateNewMap.Location = new System.Drawing.Point(4, 168);

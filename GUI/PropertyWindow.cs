@@ -1254,6 +1254,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void ChkPort_Click(object sender, EventArgs e)
         {
+            ChkPortResult.Text = "Testing Port!";
+            ChkPortResult.BackColor = SystemColors.Control;
+
             int nPort = 0;
             nPort = Int32.Parse(txtPort.Text);
 
@@ -1272,10 +1275,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     listener = null;
                 }
 
-                ChkPortResult.Text = "Testing Port!";
-                ChkPortResult.BackColor = SystemColors.Control;
+               
 
-               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://mcfire.tk/port.php?port=" + nPort);
+               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -1300,16 +1302,16 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                             }
 
                         MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                        ChkPortResult.Text = "Port Not Open: " + line;
+                        ChkPortResult.Text = "Port Not Open";
                         ChkPortResult.BackColor = Color.Red;
-                        MessageBox.Show(line);
+                        
                         
                         }
 
                         }
                     }
                 }
-                else { MessageBox.Show("Could Not connect to site, aborting operation"); }
+                else { MessageBox.Show("Could Not connect to site, try again later."); }
 
 
             }
