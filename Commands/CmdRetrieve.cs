@@ -37,7 +37,7 @@ namespace MCForge
         {
             try
             {
-                if (!File.Exists("extra/copy/index.copydb")) { Player.SendMessage(p, "No copy index found! Save something before trying to retrieve it!"); return; }
+                if (!File.Exists("extra/copy/index.copydb")) { File.Create("extra/copy/index.copydb").Dispose(); /*Player.SendMessage(p, "No copy index found! Save something before trying to retrieve it!"); return;*/ }
                 if (message == "") { Help(p); return; }
                 if (message.Split(' ')[0] == "info")
                 {

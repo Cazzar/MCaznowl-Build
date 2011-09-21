@@ -1942,6 +1942,14 @@ MessageBox.Show("Text Box Cleared!!");
                 if (level == null) return;
 
                 Server.lava.AddMap(name);
+
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(level.name);
+                settings.blockFlood = new LavaSurvival.Pos((ushort)(level.width / 2), (ushort)(level.depth - 1), (ushort)(level.height / 2));
+                settings.blockLayer = new LavaSurvival.Pos(0, (ushort)(level.depth / 2), 0);
+                ushort x = (ushort)(level.width / 2), y = (ushort)(level.depth / 2), z = (ushort)(level.height / 2);
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3),(ushort)(y + 4), (ushort)(z + 3)) };
+                Server.lava.SaveMapSettings(settings);
+
                 level.motd = "Lava Survival: " + level.name.Capitalize();
                 level.overload = 1000000;
                 level.unload = false;

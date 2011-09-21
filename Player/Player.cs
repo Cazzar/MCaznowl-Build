@@ -3701,22 +3701,22 @@ namespace MCForge
             if (p == null || p.UndoBuffer == null || p.UndoBuffer.Count < 1) return;
             try
             {
-                if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
-                if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
-                DirectoryInfo di = new DirectoryInfo("extra/undo");
-                if (di.GetDirectories("*").Length >= Server.totalUndo)
+                lock (p.UndoBuffer)
                 {
-                    Directory.Delete("extra/undoPrevious", true);
-                    Directory.Move("extra/undo", "extra/undoPrevious");
-                    Directory.CreateDirectory("extra/undo");
-                }
+                    if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
+                    if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
+                    DirectoryInfo di = new DirectoryInfo("extra/undo");
+                    if (di.GetDirectories("*").Length >= Server.totalUndo)
+                    {
+                        Directory.Delete("extra/undoPrevious", true);
+                        Directory.Move("extra/undo", "extra/undoPrevious");
+                        Directory.CreateDirectory("extra/undo");
+                    }
 
-                if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
-                di = new DirectoryInfo("extra/undo/" + p.name);
-                File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
-                {
-                    lock (p.UndoBuffer)
+                    if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
+                    di = new DirectoryInfo("extra/undo/" + p.name);
+                    File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
                     {
                         foreach (UndoPos uP in p.UndoBuffer)
                         {
