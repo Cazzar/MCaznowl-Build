@@ -297,6 +297,7 @@ namespace MCForge
 
         public byte GetTile(ushort x, ushort y, ushort z)
         {
+            if (blocks == null) return Block.Zero;
             //if (PosToInt(x, y, z) >= blocks.Length) { return null; }
             //Avoid internal overflow
             if (x < 0) { return Block.Zero; }
@@ -315,6 +316,7 @@ namespace MCForge
         }
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
+            if (blocks == null) return;
             blocks[x + width * z + width * height * y] = type;
             //blockchanges[x + width * z + width * height * y] = pName;
         }
@@ -633,6 +635,7 @@ namespace MCForge
 
         public void Save(Boolean Override = false)
         {
+            if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
             {
@@ -1053,7 +1056,7 @@ namespace MCForge
 
         public void setPhysics(int newValue)
         {
-            if (physics == 0 && newValue != 0)
+            if (physics == 0 && newValue != 0 && blocks != null)
             {
                 for (int i = 0; i < blocks.Length; i++)
                     // Optimization hack, since no blocks under 183 ever need a restart
@@ -4345,7 +4348,7 @@ namespace MCForge
             blockCache.Clear();
             ZoneList.Clear();
             ctfgame.Dispose();
-            //blocks = null; // DO NOT USE! CAUSES CRASHES!
+            blocks = null;
         }
     }
 }

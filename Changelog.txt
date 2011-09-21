@@ -1,4 +1,5 @@
 v5.3.0.0
+- Fixed a massive memory leak with level unloading.
 - Fixed leaving a channel name black in the IRC settings causing a crash.
 - Fixed /spheroid being lopsided with even numbers.
 - Fixed the update checker so it only updates if there actually is an update.

@@ -77,7 +77,7 @@ namespace MCForge
                 if (!Player.ValidName(name)) { Player.SendMessage(p, "Invalid name!"); return; }
                 if (System.IO.File.Exists("levels/" + name + ".lvl")) { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
 
-                try
+                /*try
                 {
                     if (p != null)
                     if (p.group.Permission < LevelPermission.Admin)
@@ -92,13 +92,16 @@ namespace MCForge
                 catch 
                 { 
                     Player.SendMessage(p, "An error occured"); 
-                }
+                }*/
 
                 // create a new level...
                 try
                 {
                     using (Level lvl = new Level(name, x, y, z, parameters[4], seed, useSeed))
-						lvl.Save(true); //... and save it.
+                    {
+                        lvl.Save(true); //... and save it.
+                        lvl.Dispose(); // Then take out the garbage.
+                    }
                 }
                 finally
                 {

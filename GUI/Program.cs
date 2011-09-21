@@ -430,7 +430,7 @@ namespace MCForge_.Gui
                 if (!oldrevision) { filelocation = (DLLLocation); }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
-                Client.DownloadFile(Program.ChangelogLocation, "extra/Changelog.txt");
+                Client.DownloadFile(Program.ChangelogLocation, "Changelog.txt");
 
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale

@@ -1086,6 +1086,7 @@ namespace MCForge
             {
                 // Don't ya just love it when the server tattles?
                 GlobalMessageOps(name + " has triggered a block change error");
+                GlobalMessageOps(e.GetType().ToString() + ": " + e.Message);
                 Server.ErrorLog(e);
             }
         }
@@ -2290,6 +2291,7 @@ namespace MCForge
                             {
                                 Server.ErrorLog(e);
                                 Player.SendMessage(this, "An error occured when using the command!");
+                                Player.SendMessage(this, e.GetType().ToString() + ": " + e.Message);
                             }
                         }));
                         commThread.Start();
@@ -2647,6 +2649,7 @@ namespace MCForge
 
         public void SendMap()
         {
+            if (level.blocks == null) return;
             SendRaw(2);
             byte[] buffer = new byte[level.blocks.Length + 4];
             BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
