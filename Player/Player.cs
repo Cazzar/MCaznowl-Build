@@ -1335,7 +1335,17 @@ namespace MCForge
                     string message = Messages.Rows[LastMsg]["Message"].ToString().Trim();
                     if (message != prevMsg || Server.repeatMessage)
                     {
-                        Player.SendMessage(p, message);
+                        if (message.StartsWith("/"))
+                        {
+                            List<string> Message = message.Remove(0, 1).Split(' ').ToList();
+                            string command = Message[0];
+                            Message.RemoveAt(0);
+                            string args = string.Join(" ", Message.ToArray());
+                            Command.all.Find(command).Use(p, args);
+                        }
+                        else
+                            Player.SendMessage(p, message);
+
                         prevMsg = message;
                     }
                     SendBlockchange(x, y, z, b);
