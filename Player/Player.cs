@@ -2650,41 +2650,53 @@ namespace MCForge
         public void SendMap()
         {
             if (level.blocks == null) return;
-            SendRaw(2);
-            byte[] buffer = new byte[level.blocks.Length + 4];
-            BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
-            //ushort xx; ushort yy; ushort z;z
-
-            for (int i = 0; i < level.blocks.Length; ++i)
+            bool derp = false;
+            try
             {
-                buffer[4 + i] = Block.Convert(level.blocks[i]);
+                SendRaw(2);
+                byte[] buffer = new byte[level.blocks.Length + 4];
+                BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
+                //ushort xx; ushort yy; ushort z;z
+
+                for (int i = 0; i < level.blocks.Length; ++i)
+                {
+                    try { buffer[4 + i] = Block.Convert(level.blocks[i]); }
+                    catch { derp = true; break; }
+                }
+
+                buffer = buffer.GZip();
+                int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
+                for (int i = 1; buffer.Length > 0; ++i)
+                {
+                    short length = (short)Math.Min(buffer.Length, 1024);
+                    byte[] send = new byte[1027];
+                    HTNO(length).CopyTo(send, 0);
+                    Buffer.BlockCopy(buffer, 0, send, 2, length);
+                    byte[] tempbuffer = new byte[buffer.Length - length];
+                    Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
+                    buffer = tempbuffer;
+                    send[1026] = (byte)(i * 100 / number);
+                    SendRaw(3, send);
+                    if (ip == "127.0.0.1") { }
+                    else if (Server.updateTimer.Interval > 1000) Thread.Sleep(100);
+                    else Thread.Sleep(10);
+                } buffer = new byte[6];
+                HTNO((short)level.width).CopyTo(buffer, 0);
+                HTNO((short)level.depth).CopyTo(buffer, 2);
+                HTNO((short)level.height).CopyTo(buffer, 4);
+                SendRaw(4, buffer);
+                Loading = false;
             }
-
-            buffer = buffer.GZip();
-            int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
-            for (int i = 1; buffer.Length > 0; ++i)
+            catch
             {
-                short length = (short)Math.Min(buffer.Length, 1024);
-                byte[] send = new byte[1027];
-                HTNO(length).CopyTo(send, 0);
-                Buffer.BlockCopy(buffer, 0, send, 2, length);
-                byte[] tempbuffer = new byte[buffer.Length - length];
-                Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
-                buffer = tempbuffer;
-                send[1026] = (byte)(i * 100 / number);
-                SendRaw(3, send);
-                if (ip == "127.0.0.1") { }
-                else if (Server.updateTimer.Interval > 1000) Thread.Sleep(100);
-                else Thread.Sleep(10);
-            } buffer = new byte[6];
-            HTNO((short)level.width).CopyTo(buffer, 0);
-            HTNO((short)level.depth).CopyTo(buffer, 2);
-            HTNO((short)level.height).CopyTo(buffer, 4);
-            SendRaw(4, buffer);
-            Loading = false;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+                Kick("An error occurred when sending the map data!");
+            }
+            finally
+            {
+                if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
         {
