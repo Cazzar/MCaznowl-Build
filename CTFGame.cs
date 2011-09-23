@@ -30,7 +30,7 @@ using System.Threading;
 
 namespace MCForge
 {
-    public class CTFGame
+    public class CTFGame : IDisposable
     {
         public List<Team> teams = new List<Team>();
 
@@ -244,6 +244,14 @@ namespace MCForge
             }
             
            
+        }
+
+        public void Dispose()
+        {
+            gameOn = false;
+            teams.Clear();
+            onTeamCheck.Dispose();
+            flagReturn.Dispose();
         }
     }
 }

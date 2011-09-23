@@ -3,13 +3,13 @@ using System.IO;
 
 namespace MCForge
 {
-    public class pload : Command
+    public class CmdPLoad : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override bool museumUsable { get { return true; } }
         public override string name { get { return "pload"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "Moderate"; } }
+        public override string type { get { return "mod"; } }
         public override void Use(Player p, string message)
         {
             if (File.Exists("plugins/" + message + ".dll"))
@@ -21,6 +21,6 @@ namespace MCForge
         {
             Player.SendMessage(p, "/pload <filename> - Load a plugin in your plugins folder!");
         }
-        public pload() { }
+        public CmdPLoad() { }
     }
 }

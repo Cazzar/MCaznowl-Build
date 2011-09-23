@@ -176,9 +176,8 @@ namespace MCForge
                     {
                         p.level.ctfgame.RemoveTeam("&" + t.color);
                     }
-                    p.level.ctfgame.onTeamCheck.Stop();
-                    p.level.ctfgame.onTeamCheck.Dispose();
                     p.level.ctfgame.gameOn = false;
+                    p.level.ctfgame.Dispose();
                     p.level.ctfmode = false;
                     p.level.ctfgame = new CTFGame();
                     p.level.ctfgame.mapOn = p.level;

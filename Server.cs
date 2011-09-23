@@ -65,7 +65,7 @@ public static event OnServerError ServerError = null;
 
         public static int speedPhysics = 250;
 
-        public static string Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); } }
+        public static Version Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; } }
 
         // URL hash for connecting to the server
         public static string Hash = String.Empty;
@@ -802,14 +802,17 @@ processThread.Start();
 
                 locationChecker = new Thread(new ThreadStart(delegate
                 {
+                    Player p, who;
+                    ushort x, y, z;
+                    int i;
                     while (true)
                     {
                         Thread.Sleep(3);
-                        for (int i = 0; i < Player.players.Count; i++)
+                        for (i = 0; i < Player.players.Count; i++)
                         {
                             try
                             {
-                                Player p = Player.players[i];
+                                p = Player.players[i];
 
                                 if (p.frozen)
                                 {
@@ -817,7 +820,7 @@ processThread.Start();
                                 }
                                 else if (p.following != "")
                                 {
-                                    Player who = Player.Find(p.following);
+                                    who = Player.Find(p.following);
                                     if (who == null || who.level != p.level)
                                     {
                                         p.following = "";
@@ -842,14 +845,14 @@ processThread.Start();
                                 }
                                 else if (p.possess != "")
                                 {
-                                    Player who = Player.Find(p.possess);
+                                    who = Player.Find(p.possess);
                                     if (who == null || who.level != p.level)
                                         p.possess = "";
                                 }
 
-                                ushort x = (ushort)(p.pos[0] / 32);
-                                ushort y = (ushort)(p.pos[1] / 32);
-                                ushort z = (ushort)(p.pos[2] / 32);
+                                x = (ushort)(p.pos[0] / 32);
+                                y = (ushort)(p.pos[1] / 32);
+                                z = (ushort)(p.pos[2] / 32);
 
                                 if (p.level.Death)
                                     p.RealDeath(x, y, z);

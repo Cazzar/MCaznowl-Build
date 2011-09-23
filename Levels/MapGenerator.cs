@@ -45,6 +45,8 @@ namespace MCForge
 
         public bool GenerateMap(Level Lvl, string type, int seed = 0, bool useSeed = false)
         {
+            DateTime startTime = DateTime.Now;
+
             Server.s.Log("Attempting map gen");
             if (Inuse) { Server.s.Log("Generator in use"); return false; }
             Random rand = useSeed ? new System.Random(seed) : new System.Random();
@@ -240,6 +242,7 @@ namespace MCForge
                     }
                 }
 
+                Server.s.Log("Total time was " + (DateTime.Now - startTime).TotalSeconds.ToString() + " seconds.");
             }
             catch (Exception e)
             {
@@ -487,6 +490,76 @@ namespace MCForge
             }
         }
 
+        public void AddNotchTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
+        {
+            Server.s.Log("AddNotchTree()");
+            byte dist, tile;
+            byte height = (byte)Rand.Next(3, 7);
+            byte top = (byte)(height - 2);
+            short xx, yy, zz;
+            ushort xxx, yyy, zzz;
+            for (yy = 0; yy <= height; yy++)
+            {
+                yyy = (ushort)(y + yy);
+                tile = Lvl.GetTile(x, yyy, z);
+                if (overwrite || tile == Block.air || (yyy == y && tile == Block.shrub))
+                    if (blockChange)
+                        if (p == null) Lvl.Blockchange(x, yyy, z, Block.trunk);
+                        else Lvl.Blockchange(p, x, yyy, z, Block.trunk);
+                    else Lvl.skipChange(x, yyy, z, Block.trunk);
+            }
+
+            for (yy = top; yy <= height + 1; yy++)
+            {
+                dist = yy > height - 1 ? (byte)1 : (byte)2;
+                for (xx = (short)-dist; xx <= dist; xx++)
+                {
+                    for (zz = (short)-dist; zz <= dist; zz++)
+                    {
+                        xxx = (ushort)(x + xx);
+                        yyy = (ushort)(y + yy);
+                        zzz = (ushort)(z + zz);
+                        tile = Lvl.GetTile(xxx, yyy, zzz);
+                        //Server.s.Log(String.Format("{0} {1} {2}", xxx, yyy, zzz));
+
+                        if ((xxx == x && zzz == z && yy <= height) || (!overwrite && tile != Block.air))
+                            continue;
+
+                        if (Math.Abs(xx) == dist && Math.Abs(zz) == dist)
+                        {
+                            if (yy > height)
+                                continue;
+
+                            if (Rand.Next(2) == 0)
+                            {
+                                if (blockChange)
+                                    if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                    else Lvl.Blockchange(p, xxx, yyy, zzz, Block.leaf);
+                                else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
+                            }
+                        }
+                        else
+                        {
+                            if (blockChange)
+                                if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                else Lvl.Blockchange(p, xxx, yyy, zzz, Block.leaf);
+                            else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void AddNotchBigTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNotchPineTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddCactus(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
         {
             byte height = (byte)Rand.Next(3, 6);
@@ -529,13 +602,14 @@ namespace MCForge
 
         private bool TreeCheck(Level Lvl, ushort x, ushort z, ushort y, short dist)         //return true if tree is near
         {
+            byte foundTile;
             for (short xx = (short)-dist; xx <= +dist; ++xx)
             {
                 for (short yy = (short)-dist; yy <= +dist; ++yy)
                 {
                     for (short zz = (short)-dist; zz <= +dist; ++zz)
                     {
-                        byte foundTile = Lvl.GetTile((ushort)(x + xx), (ushort)(z + zz), (ushort)(y + yy));
+                        foundTile = Lvl.GetTile((ushort)(x + xx), (ushort)(z + zz), (ushort)(y + yy));
                         if (foundTile == Block.trunk || foundTile == Block.green)
                         {
                             return true;

@@ -5,13 +5,13 @@ using System.Text;
 
 namespace MCForge
 {
-    public class punload : Command
+    public class CmdPUnload : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override bool museumUsable { get { return true; } }
         public override string name { get { return "punload"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "Moderate"; } }
+        public override string type { get { return "mod"; } }
         public override void Use(Player p, string message)
         {
             if (Plugin.Find(message) != null)
@@ -23,6 +23,6 @@ namespace MCForge
         {
             Player.SendMessage(p, "/punload <Plugin name> - Unload a plugin that is loaded");
         }
-        public punload() { }
+        public CmdPUnload() { }
     }
 }

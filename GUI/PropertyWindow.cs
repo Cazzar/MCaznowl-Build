@@ -1197,6 +1197,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void ChkPort_Click(object sender, EventArgs e)
         {
+            ChkPortResult.Text = "Testing Port!";
+            ChkPortResult.BackColor = SystemColors.Control;
+
             int nPort = 0;
             nPort = Int32.Parse(txtPort.Text);
 
@@ -1215,10 +1218,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     listener = null;
                 }
 
-                ChkPortResult.Text = "Testing Port!";
-                ChkPortResult.BackColor = SystemColors.Control;
+               
 
-               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://mcfire.tk/port.php?port=" + nPort);
+               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -1243,16 +1245,16 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                             }
 
                         MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                        ChkPortResult.Text = "Port Not Open: " + line;
+                        ChkPortResult.Text = "Port Not Open";
                         ChkPortResult.BackColor = Color.Red;
-                        MessageBox.Show(line);
+                        
                         
                         }
 
                         }
                     }
                 }
-                else { MessageBox.Show("Could Not connect to site, aborting operation"); }
+                else { MessageBox.Show("Could Not connect to site, try again later."); }
 
 
             }
@@ -1883,6 +1885,14 @@ MessageBox.Show("Text Box Cleared!!");
                 if (level == null) return;
 
                 Server.lava.AddMap(name);
+
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(level.name);
+                settings.blockFlood = new LavaSurvival.Pos((ushort)(level.width / 2), (ushort)(level.depth - 1), (ushort)(level.height / 2));
+                settings.blockLayer = new LavaSurvival.Pos(0, (ushort)(level.depth / 2), 0);
+                ushort x = (ushort)(level.width / 2), y = (ushort)(level.depth / 2), z = (ushort)(level.height / 2);
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3),(ushort)(y + 4), (ushort)(z + 3)) };
+                Server.lava.SaveMapSettings(settings);
+
                 level.motd = "Lava Survival: " + level.name.Capitalize();
                 level.overload = 1000000;
                 level.unload = false;

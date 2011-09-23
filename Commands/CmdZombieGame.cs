@@ -488,7 +488,7 @@ namespace MCForge
             Player.GlobalMessage(playersString);
             players.ForEach(delegate(Player winners)
             {
-                if (!winners.CheckIfInsideBlock(winners))
+                if (!winners.CheckIfInsideBlock())
                 {
                     Player.GlobalDie(winners, false);
                     Player.GlobalSpawn(winners, winners.pos[0], winners.pos[1], winners.pos[2], winners.rot[0], winners.rot[1], false);

@@ -195,6 +195,16 @@ namespace MCForge
                                     SetTile(x, y, z, 7);
                                 else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
                                     SetTile(x, y, z, rand.Next(100) == 0 ? Block.iron : Block.obsidian);
+                    break;
+
+                case "rainbow":
+                    Random random = useSeed ? new Random(seed) : new Random();
+                    for (x = 0; x < width; ++x)
+                        for (z = 0; z < height; ++z)
+                            for (y = 0; y < depth; ++y) 
+                                if (y == 0 || y == depth - 1 || x == 0 || x == width - 1 || z == 0 || z == height - 1)
+                                SetTile(x,y,z, (byte)random.Next(21, 36));
+
                 	break;
 
                 case "island":
@@ -297,6 +307,7 @@ namespace MCForge
 
         public byte GetTile(ushort x, ushort y, ushort z)
         {
+            if (blocks == null) return Block.Zero;
             //if (PosToInt(x, y, z) >= blocks.Length) { return null; }
             //Avoid internal overflow
             if (x < 0) { return Block.Zero; }
@@ -315,6 +326,7 @@ namespace MCForge
         }
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
+            if (blocks == null) return;
             blocks[x + width * z + width * height * y] = type;
             //blockchanges[x + width * z + width * height * y] = pName;
         }
@@ -633,6 +645,7 @@ namespace MCForge
 
         public void Save(Boolean Override = false)
         {
+            if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
             {
@@ -1053,7 +1066,7 @@ namespace MCForge
 
         public void setPhysics(int newValue)
         {
-            if (physics == 0 && newValue != 0)
+            if (physics == 0 && newValue != 0 && blocks != null)
             {
                 for (int i = 0; i < blocks.Length; i++)
                     // Optimization hack, since no blocks under 183 ever need a restart
@@ -1539,9 +1552,8 @@ namespace MCForge
                                             PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
 
-                                        if (!leafDecay) { C.time = 255; break; }
-                                        if (C.time < rand.Next(20, 100)) { C.time++; break; }
-                                        
+                                        if (!leafDecay) { C.time = 255; leaves.Clear(); break; }
+                                        if (C.time < 5) { if (rand.Next(10) == 0) C.time++; break; }
                                         if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
                                         C.time = 255;
                                         break;
@@ -3962,7 +3974,7 @@ namespace MCForge
                 }
             }
 
-            for (i = 1; i <= 4; i++)
+            for (i = 1; i <= dist; i++)
             {
                 for (xx = -dist; xx <= dist; xx++)
                 {
@@ -3974,26 +3986,32 @@ namespace MCForge
                             {
                                 if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
                                 {
-                                    if (leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] = (sbyte)i;
                                 }
                             }
-                            catch { /*Server.s.Log("Leaf decay error!");*/ }
+                            catch { Server.s.Log("Leaf decay error!"); }
                         }
                     }
                 }
@@ -4337,7 +4355,10 @@ namespace MCForge
             ListCheck.Clear();
             ListUpdate.Clear();
             UndoBuffer.Clear();
-            //blocks = null; // DO NOT USE! CAUSES CRASHES!
+            blockCache.Clear();
+            ZoneList.Clear();
+            ctfgame.Dispose();
+            blocks = null;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace MCForge
         private byte retries = 0;
         public GlobalChatBot(string nick)
         {
-            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick;
+            server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
             if (Server.UseGlobalChat)
             {
@@ -82,26 +82,12 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
 
-            if (Server.profanityFilter)
-                message = ProfanityFilter.Parse(message);
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char b in Encoding.ASCII.GetBytes(message))
-            {
-                if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append(b);
-                else
-                    sb.Append("*");
-            }
-
-            string msg = sb.ToString().Trim();
-
-            if (Player.MessageHasBadColorCodes(null, msg))
+            message = message.MCCharFilter();
+            if (Player.MessageHasBadColorCodes(null, message))
                 return;
 
-            Server.s.Log(">[Global] " + user.Nick + ": " + msg);
-            Player.GlobalMessage(String.Format("{0}[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
+            Server.s.Log(">[Global] " + user.Nick + ": " + message);
+            Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
 
         void Listener_OnRegistered()
@@ -123,7 +109,7 @@ namespace MCForge
 
         void Listener_OnKick(UserInfo user, string channel, string kickee, string reason)
         {
-            if (kickee == nick)
+            if (kickee.Trim().ToLower() == nick.ToLower())
             {
                 Server.s.Log("Kicked from Global Chat: " + reason);
                 Server.s.Log("Attempting to rejoin...");

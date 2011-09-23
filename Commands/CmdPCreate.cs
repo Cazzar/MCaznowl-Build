@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace MCForge
 {
-    public class pcreate : Command
+    public class CmdPCreate : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override bool museumUsable { get { return true; } }
         public override string name { get { return "pcreate"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "Moderate"; } }
+        public override string type { get { return "mod"; } }
         public override void Use(Player p, string message)
         {
             Player.SendMessage(p, "Creating a plugin example source");
@@ -46,7 +46,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/pcreate <Plugin name> - Create a example .cs file!");
         }
-        public pcreate() { }
+        public CmdPCreate() { }
         public string[] ListToArray(List<string> list)
         {
             string[] temp = new string[list.Count];

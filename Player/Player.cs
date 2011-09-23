@@ -242,6 +242,9 @@ namespace MCForge
         public byte[] rot = new byte[2] { 0, 0 };
         byte[] oldrot = new byte[2] { 0, 0 };
 
+        //ushort[] clippos = new ushort[3] { 0, 0, 0 };
+        //byte[] cliprot = new byte[2] { 0, 0 };
+
         // grief/spam detection
         public static int spamBlockCount = 200;
         public static int spamBlockTimer = 5;
@@ -287,22 +290,24 @@ namespace MCForge
             return "active";
         }
 
-        public bool CheckIfInsideBlock(Player p)
+        public bool CheckIfInsideBlock()
         {
-            int px = p.pos[0] / 32;
-            int py = p.pos[1] / 32;
-            int pz = p.pos[2] / 32;
+            return CheckIfInsideBlock(this);
+        }
+        public static bool CheckIfInsideBlock(Player p)
+        {
             ushort x, y, z;
-            x = (ushort)px;
-            y = (ushort)py;
-            z = (ushort)pz;
+            x = (ushort)(p.pos[0] / 32);
+            y = (ushort)(p.pos[1] / 32);
             y = (ushort)Math.Round((decimal)(((y * 32) + 4) / 32));
+            z = (ushort)(p.pos[2] / 32);
 
-            byte b = this.level.GetTile(x, (ushort)((int)y - 1), z);
-            byte b1 = this.level.GetTile(x, (ushort)((int)y - 2), z);
+            byte b = p.level.GetTile(x, y, z);
+            byte b1 = p.level.GetTile(x, (ushort)(y - 1), z);
 
-            if (!Block.Walkthrough(b) && !Block.Walkthrough(b1))
+            if (!Block.Walkthrough(Block.Convert(b)) || !Block.Walkthrough(Block.Convert(b1)))
             {
+                Server.s.Log("HAAAAAAAX!!");
                 return true;
             }
             else
@@ -533,11 +538,10 @@ namespace MCForge
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
-                p.disconnected = true;
+                Player.SaveUndo(p);
                 if (connections.Contains(p))
-                {
                     connections.Remove(p);
-                }
+                p.disconnected = true;
             }
             catch (Exception e)
             {
@@ -1089,6 +1093,7 @@ namespace MCForge
             {
                 // Don't ya just love it when the server tattles?
                 GlobalMessageOps(name + " has triggered a block change error");
+                GlobalMessageOps(e.GetType().ToString() + ": " + e.Message);
                 Server.ErrorLog(e);
             }
         }
@@ -1337,7 +1342,17 @@ namespace MCForge
                     string message = Messages.Rows[LastMsg]["Message"].ToString().Trim();
                     if (message != prevMsg || Server.repeatMessage)
                     {
-                        Player.SendMessage(p, message);
+                        if (message.StartsWith("/"))
+                        {
+                            List<string> Message = message.Remove(0, 1).Split(' ').ToList();
+                            string command = Message[0];
+                            Message.RemoveAt(0);
+                            string args = string.Join(" ", Message.ToArray());
+                            HandleCommand(command, args);
+                        }
+                        else
+                            Player.SendMessage(p, message);
+
                         prevMsg = message;
                     }
                     SendBlockchange(x, y, z, b);
@@ -1517,6 +1532,11 @@ namespace MCForge
         {
             if (!loggedIn || trainGrab || following != "" || frozen)
                 return;
+            /*if (CheckIfInsideBlock())
+            {
+                unchecked { this.SendPos((byte)-1, (ushort)(clippos[0] - 18), (ushort)(clippos[1] - 18), (ushort)(clippos[2] - 18), cliprot[0], cliprot[1]); }
+                return;
+            }*/
 
             byte[] message = (byte[])m;
             byte thisid = message[0];
@@ -1575,7 +1595,11 @@ namespace MCForge
                 byte roty = message[8];
                 pos = new ushort[3] { x, y, z };
                 rot = new byte[2] { rotx, roty };
-
+                /*if (!CheckIfInsideBlock())
+                {
+                    clippos = pos;
+                    cliprot = rot;
+                }*/
             }
         }
 
@@ -2122,56 +2146,45 @@ namespace MCForge
         {
             try
             {
-                if (Server.verifyadmins == true)
+                if (Server.verifyadmins)
                 {
-                    if (this.adminpen == true)
+                    if (cmd.ToLower() == "setpass")
                     {
-                        if (cmd == "setpass")
-                        {
-                            Command.all.Find("setpass").Use(this, message);
-                            Server.s.CommandUsed(this.name + " used /setpass");
-                            return;
-                        }
-                        if (cmd == "pass")
-                        {
-                            Command.all.Find("pass").Use(this, message);
-                            Server.s.CommandUsed(this.name + " used /pass");
-                            return;
-                        }
+                        Command.all.Find(cmd).Use(this, message);
+                        Server.s.CommandUsed(this.name + " used /setpass");
+                        return;
+                    }
+                    if (cmd.ToLower() == "pass")
+                    {
+                        Command.all.Find(cmd).Use(this, message);
+                        Server.s.CommandUsed(this.name + " used /pass");
+                        return;
                     }
                 }
-                if (Server.agreetorulesonentry == true)
+                if (Server.agreetorulesonentry)
                 {
-                    if (cmd == "agree")
+                    if (cmd.ToLower() == "agree")
                     {
-                        Command.all.Find("agree").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /agree");
                         return;
                     }
-                    if (cmd == "rules")
+                    if (cmd.ToLower() == "rules")
                     {
-                        Command.all.Find("rules").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /rules");
                         return;
                     }
-                    if (cmd == "disagree")
+                    if (cmd.ToLower() == "disagree")
                     {
-                        Command.all.Find("disagree").Use(this, "");
+                        Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /disagree");
                         return;
                     }
                 }
 
-                if (cmd == "") { SendMessage("No command entered."); return; }
-                if (Server.agreetorulesonentry == false)
-                {
-                    if (jailed)
-                    {
-                        SendMessage("You cannot use any commands while jailed.");
-                        return;
-                    }
-                }
-                if (Server.agreetorulesonentry == true)
+                if (cmd == String.Empty) { SendMessage("No command entered."); return; }
+                if (Server.agreetorulesonentry)
                 {
                     if (jailed)
                     {
@@ -2179,9 +2192,14 @@ namespace MCForge
                         return;
                     }
                 }
-                if (Server.verifyadmins == true)
+                if (jailed)
                 {
-                    if (this.adminpen == true)
+                    SendMessage("You cannot use any commands while jailed.");
+                    return;
+                }
+                if (Server.verifyadmins)
+                {
+                    if (this.adminpen)
                     {
                         this.SendMessage("&cYou must use &a/pass [Password]&c to verify!");
                         return;
@@ -2276,7 +2294,7 @@ namespace MCForge
                             }
                         }
 
-                        if (cmd != "setpass" || cmd != "pass")
+                        if (cmd.ToLower() != "setpass" || cmd.ToLower() != "pass")
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
                         }
@@ -2290,6 +2308,7 @@ namespace MCForge
                             {
                                 Server.ErrorLog(e);
                                 Player.SendMessage(this, "An error occured when using the command!");
+                                Player.SendMessage(this, e.GetType().ToString() + ": " + e.Message);
                             }
                         }));
                         commThread.Start();
@@ -2647,41 +2666,55 @@ namespace MCForge
 
         public void SendMap()
         {
-            SendRaw(2);
-            byte[] buffer = new byte[level.blocks.Length + 4];
-            BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
-            //ushort xx; ushort yy; ushort z;z
-
-            for (int i = 0; i < level.blocks.Length; ++i)
+            if (level.blocks == null) return;
+            bool derp = false;
+            try
             {
-                buffer[4 + i] = Block.Convert(level.blocks[i]);
+                SendRaw(2);
+                byte[] buffer = new byte[level.blocks.Length + 4];
+                BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
+                //ushort xx; ushort yy; ushort z;z
+
+                for (int i = 0; i < level.blocks.Length; ++i)
+                {
+                    try { buffer[4 + i] = Block.Convert(level.blocks[i]); }
+                    catch { derp = true; break; }
+                }
+
+                buffer = buffer.GZip();
+                int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
+                for (int i = 1; buffer.Length > 0; ++i)
+                {
+                    short length = (short)Math.Min(buffer.Length, 1024);
+                    byte[] send = new byte[1027];
+                    HTNO(length).CopyTo(send, 0);
+                    Buffer.BlockCopy(buffer, 0, send, 2, length);
+                    byte[] tempbuffer = new byte[buffer.Length - length];
+                    Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
+                    buffer = tempbuffer;
+                    send[1026] = (byte)(i * 100 / number);
+                    //send[1026] = (byte)(100 - (i * 100 / number)); // Backwards progress lololol...
+                    SendRaw(3, send);
+                    if (ip == "127.0.0.1") { }
+                    else if (Server.updateTimer.Interval > 1000) Thread.Sleep(100);
+                    else Thread.Sleep(10);
+                } buffer = new byte[6];
+                HTNO((short)level.width).CopyTo(buffer, 0);
+                HTNO((short)level.depth).CopyTo(buffer, 2);
+                HTNO((short)level.height).CopyTo(buffer, 4);
+                SendRaw(4, buffer);
+                Loading = false;
             }
-
-            buffer = buffer.GZip();
-            int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
-            for (int i = 1; buffer.Length > 0; ++i)
+            catch
             {
-                short length = (short)Math.Min(buffer.Length, 1024);
-                byte[] send = new byte[1027];
-                HTNO(length).CopyTo(send, 0);
-                Buffer.BlockCopy(buffer, 0, send, 2, length);
-                byte[] tempbuffer = new byte[buffer.Length - length];
-                Buffer.BlockCopy(buffer, length, tempbuffer, 0, buffer.Length - length);
-                buffer = tempbuffer;
-                send[1026] = (byte)(i * 100 / number);
-                SendRaw(3, send);
-                if (ip == "127.0.0.1") { }
-                else if (Server.updateTimer.Interval > 1000) Thread.Sleep(100);
-                else Thread.Sleep(10);
-            } buffer = new byte[6];
-            HTNO((short)level.width).CopyTo(buffer, 0);
-            HTNO((short)level.depth).CopyTo(buffer, 2);
-            HTNO((short)level.height).CopyTo(buffer, 4);
-            SendRaw(4, buffer);
-            Loading = false;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+                Kick("An error occurred when sending the map data!");
+            }
+            finally
+            {
+                if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
         {
@@ -3485,6 +3518,7 @@ namespace MCForge
                     CloseSocket();
                 if (connections.Contains(this))
                     connections.Remove(this);
+                SaveUndo();
                 disconnected = true;
                 return;
             }
@@ -3503,44 +3537,7 @@ namespace MCForge
 
             try
             {
-                if (loggedIn)
-                {
-                    try
-                    {
-                        if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
-                        if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
-                        DirectoryInfo di = new DirectoryInfo("extra/undo");
-                        if (di.GetDirectories("*").Length >= Server.totalUndo)
-                        {
-                            Directory.Delete("extra/undoPrevious", true);
-                            Directory.Move("extra/undo", "extra/undoPrevious");
-                            Directory.CreateDirectory("extra/undo");
-                        }
-
-                        if (!Directory.Exists("extra/undo/" + name)) Directory.CreateDirectory("extra/undo/" + name);
-                        di = new DirectoryInfo("extra/undo/" + name);
-                        File.Create("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                        using (StreamWriter w = File.CreateText("extra/undo/" + name + "/" + di.GetFiles("*.undo").Length + ".undo"))
-                        {
-                            try
-                            {
-                                lock (UndoBuffer)
-                                {
-                                    foreach (UndoPos uP in UndoBuffer)
-                                    {
-                                        w.Write(uP.mapName + " " +
-                                            uP.x + " " + uP.y + " " + uP.z + " " +
-                                            uP.timePlaced.ToString().Replace(' ', '&') + " " +
-                                            uP.type + " " + uP.newtype + " ");
-                                    }
-                                }
-                            }
-                            catch { Server.s.Log("Error saving undo data for " + this.name + "!"); }
-                        }
-                    }
-                    catch (Exception e) { Server.s.Log("Error saving undo data for " + this.name + "!"); Server.ErrorLog(e); }
-                }
-
+                SaveUndo();
                 if (disconnected)
                 {
                     this.CloseSocket();
@@ -3630,7 +3627,7 @@ namespace MCForge
                     else
                     {
                         totalKicked++;
-                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + ").", false);
+                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + Server.DefaultColor + ").", false);
                         //IRCBot.Say(name + " kicked (" + kickString + ").");
                         Server.s.Log(name + " kicked (" + kickString + ").");
                         if (Server.notifyOnJoinLeave)
@@ -3702,6 +3699,45 @@ namespace MCForge
             finally { this.CloseSocket(); }
         }
 
+        public void SaveUndo()
+        {
+            SaveUndo(this);
+        }
+        public static void SaveUndo(Player p)
+        {
+            if (p == null || p.UndoBuffer == null || p.UndoBuffer.Count < 1) return;
+            try
+            {
+                lock (p.UndoBuffer)
+                {
+                    if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
+                    if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
+                    DirectoryInfo di = new DirectoryInfo("extra/undo");
+                    if (di.GetDirectories("*").Length >= Server.totalUndo)
+                    {
+                        Directory.Delete("extra/undoPrevious", true);
+                        Directory.Move("extra/undo", "extra/undoPrevious");
+                        Directory.CreateDirectory("extra/undo");
+                    }
+
+                    if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
+                    di = new DirectoryInfo("extra/undo/" + p.name);
+                    File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                    {
+                        foreach (UndoPos uP in p.UndoBuffer)
+                        {
+                            w.Write(uP.mapName + " " +
+                                uP.x + " " + uP.y + " " + uP.z + " " +
+                                uP.timePlaced.ToString().Replace(' ', '&') + " " +
+                                uP.type + " " + uP.newtype + " ");
+                        }
+                    }
+                }
+            }
+            catch (Exception e) { Server.s.Log("Error saving undo data for " + p.name + "!"); Server.ErrorLog(e); }
+        }
+
         public void Dispose()
         {
             //throw new NotImplementedException();
@@ -3710,6 +3746,9 @@ namespace MCForge
             CopyBuffer.Clear();
             RedoBuffer.Clear();
             UndoBuffer.Clear();
+            spamBlockLog.Clear();
+            spamChatLog.Clear();
+            spyChatRooms.Clear();
             try
             {
                 //this.commThread.Abort();
