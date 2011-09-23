@@ -37,7 +37,7 @@ namespace MCForge {
 
             Player who = Player.Find(message.Split(' ')[0]);
             string msg = message.Split(' ')[0];
-            if (Server.devs.Contains(message.ToLower())) {
+            if (Server.devs.Contains(who.name.ToLower())) {
                 Player.SendMessage(p, "You can't ban a MCForge Developer!");
                 if (p != null) {
                     Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");
