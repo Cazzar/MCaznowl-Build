@@ -249,6 +249,7 @@ namespace MCForge.Gui
             this.txtMain = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.chkRestart = new System.Windows.Forms.CheckBox();
             this.chkMono = new System.Windows.Forms.CheckBox();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
@@ -304,6 +305,8 @@ namespace MCForge.Gui
             this.chkZombieOnServerStart = new System.Windows.Forms.CheckBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.numCountReset = new System.Windows.Forms.NumericUpDown();
+            this.label69 = new System.Windows.Forms.Label();
             this.numSpamMute = new System.Windows.Forms.NumericUpDown();
             this.label45 = new System.Windows.Forms.Label();
             this.numSpamMessages = new System.Windows.Forms.NumericUpDown();
@@ -314,9 +317,6 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.numCountReset = new System.Windows.Forms.NumericUpDown();
-            this.label69 = new System.Windows.Forms.Label();
-            this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -370,10 +370,10 @@ namespace MCForge.Gui
             this.groupBox16.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).BeginInit();
             this.groupBox14.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSave
@@ -2615,6 +2615,17 @@ namespace MCForge.Gui
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Advanced Configuration";
             // 
+            // chkWomDirect
+            // 
+            this.chkWomDirect.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkWomDirect.AutoSize = true;
+            this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
+            this.chkWomDirect.Name = "chkWomDirect";
+            this.chkWomDirect.Size = new System.Drawing.Size(110, 23);
+            this.chkWomDirect.TabIndex = 25;
+            this.chkWomDirect.Text = "Enable WoM Direct";
+            this.chkWomDirect.UseVisualStyleBackColor = true;
+            // 
             // chkRestart
             // 
             this.chkRestart.Appearance = System.Windows.Forms.Appearance.Button;
@@ -3220,6 +3231,34 @@ namespace MCForge.Gui
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Spam Control";
             // 
+            // numCountReset
+            // 
+            this.numCountReset.Location = new System.Drawing.Point(170, 143);
+            this.numCountReset.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numCountReset.Name = "numCountReset";
+            this.numCountReset.Size = new System.Drawing.Size(60, 21);
+            this.numCountReset.TabIndex = 34;
+            this.numCountReset.Tag = "The number of seconds before the message counter is reset.";
+            this.numCountReset.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numCountReset.ValueChanged += new System.EventHandler(this.numCountReset_ValueChanged);
+            // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Location = new System.Drawing.Point(15, 145);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(149, 13);
+            this.label69.TabIndex = 33;
+            this.label69.Text = "Counter Reset Time (seconds):";
+            // 
             // numSpamMute
             // 
             this.numSpamMute.Location = new System.Drawing.Point(158, 104);
@@ -3325,44 +3364,6 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
-            // numCountReset
-            // 
-            this.numCountReset.Location = new System.Drawing.Point(170, 143);
-            this.numCountReset.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.numCountReset.Name = "numCountReset";
-            this.numCountReset.Size = new System.Drawing.Size(60, 21);
-            this.numCountReset.TabIndex = 34;
-            this.numCountReset.Tag = "The number of seconds before the message counter is reset.";
-            this.numCountReset.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.numCountReset.ValueChanged += new System.EventHandler(this.numCountReset_ValueChanged);
-            // 
-            // label69
-            // 
-            this.label69.AutoSize = true;
-            this.label69.Location = new System.Drawing.Point(15, 145);
-            this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(149, 13);
-            this.label69.TabIndex = 33;
-            this.label69.Text = "Counter Reset Time (seconds):";
-            // chkWomDirect
-            // 
-            this.chkWomDirect.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkWomDirect.AutoSize = true;
-            this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
-            this.chkWomDirect.Name = "chkWomDirect";
-            this.chkWomDirect.Size = new System.Drawing.Size(107, 23);
-            this.chkWomDirect.TabIndex = 25;
-            this.chkWomDirect.Text = "Enable WoM Direct";
-            this.chkWomDirect.UseVisualStyleBackColor = true;
-            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3459,11 +3460,11 @@ namespace MCForge.Gui
             this.tabPage8.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).EndInit();
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).EndInit();
             this.ResumeLayout(false);
 
         }
