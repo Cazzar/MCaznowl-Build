@@ -32,7 +32,8 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        System.Timers.Timer lavaControlUpdateTimer;
+        Form lavaMapBrowser;
+        System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
         public PropertyWindow()
@@ -46,6 +47,7 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             Icon = Gui.Window.ActiveForm.Icon;
+            lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -154,13 +156,14 @@ namespace MCForge.Gui
 
             try
             {
-                lavaControlUpdateTimer = new System.Timers.Timer(10000);
-                lavaControlUpdateTimer.AutoReset = true;
-                lavaControlUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
+                lavaUpdateTimer = new System.Timers.Timer(10000);
+                lavaUpdateTimer.AutoReset = true;
+                lavaUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
                 {
                     UpdateLavaControls();
+                    UpdateLavaMapList(false);
                 });
-                lavaControlUpdateTimer.Start();
+                lavaUpdateTimer.Start();
             }
             catch
             {
@@ -172,7 +175,8 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
-            lavaControlUpdateTimer.Dispose();
+            lavaUpdateTimer.Dispose();
+            lavaMapBrowser.Dispose();
             Window.prevLoaded = false;
         }
 
@@ -1908,21 +1912,42 @@ MessageBox.Show("Text Box Cleared!!");
             UpdateLavaControls();
         }
 
-        private void UpdateLavaMapList()
+        private void UpdateLavaMapList(bool useList = true, bool noUseList = true)
         {
-            lsMapUse.Items.Clear();
-            lsMapNoUse.Items.Clear();
-
-            lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
-            
-            string name;
-            FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
-            foreach (FileInfo file in fi)
+            if (!useList && !noUseList) return;
+            try
             {
-                name = file.Name.Replace(".lvl", "");
-                if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                    lsMapNoUse.Items.Add(name);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                    return;
+                }
+
+                int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
+                if (useList) lsMapUse.Items.Clear();
+                if (noUseList) lsMapNoUse.Items.Clear();
+
+                if (useList)
+                {
+                    lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+                    try { if (useIndex > -1) lsMapUse.SelectedIndex = useIndex; }
+                    catch { }
+                }
+                if (noUseList)
+                {
+                    string name;
+                    FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
+                    foreach (FileInfo file in fi)
+                    {
+                        name = file.Name.Replace(".lvl", "");
+                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                            lsMapNoUse.Items.Add(name);
+                    }
+                    try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
+                    catch { }
+                }
             }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
         private void lsAddMap_Click(object sender, EventArgs e)
@@ -2039,6 +2064,22 @@ MessageBox.Show("Text Box Cleared!!");
                 settings.roundTime = (double)lsNudRoundTime.Value;
                 settings.floodTime = (double)lsNudFloodTime.Value;
                 Server.lava.SaveMapSettings(settings);
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                lavaMapBrowser = new LavaMapBrowser();
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
