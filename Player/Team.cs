@@ -44,23 +44,18 @@ namespace MCForge
         {
             if (p.team != this)
             {
-                if (p.carryingFlag) { p.spawning = true; mapOn.ctfgame.DropFlag(p, p.hasflag); p.spawning = false; }
                 if (p.team != null) { p.team.RemoveMember(p); }
                 p.team = this;
                 Player.GlobalDie(p, false);
-                p.CTFtempcolor = p.color;
-                p.CTFtempprefix = p.prefix;
+                //p.CTFtempcolor = p.color;
+                //p.CTFtempprefix = p.prefix;
                 p.color = "&" + color;
-                p.carryingFlag = false;
+                //p.carryingFlag = false;
                 p.hasflag = null;
                 p.prefix = p.color + "[" + c.Name("&" + color).ToUpper() + "] ";
                 players.Add(p);
                 mapOn.ChatLevel(p.color + p.prefix + p.name + Server.DefaultColor + " has joined the " + teamstring + ".");
                 Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                if (mapOn.ctfgame.gameOn)
-                {
-                    SpawnPlayer(p);
-                }
             }
         }
 
@@ -68,15 +63,11 @@ namespace MCForge
         {
             if (p.team == this)
             {
-                if (p.carryingFlag)
-                {
-                    mapOn.ctfgame.DropFlag(p, p.hasflag);
-                }
                 p.team = null;
                 Player.GlobalDie(p, false);
-                p.color = p.CTFtempcolor;
-                p.prefix = p.CTFtempprefix;
-                p.carryingFlag = false;
+                //p.color = p.CTFtempcolor;
+                //p.prefix = p.CTFtempprefix;
+                //p.carryingFlag = false;
                 p.hasflag = null;
                 players.Remove(p);
                 mapOn.ChatLevel(p.color + p.prefix + p.name + Server.DefaultColor + " has left the " + teamstring + ".");
@@ -86,7 +77,7 @@ namespace MCForge
 
         public void SpawnPlayer(Player p)
         {
-            p.spawning = true;
+            //p.spawning = true;
             if (spawns.Count != 0)
             {
                 Random random = new Random();
@@ -105,7 +96,7 @@ namespace MCForge
                 {
                     p.SendSpawn((byte)-1, p.name, x1, y1, z1, (byte)rotx, 0);
                 }
-                p.health = 100;
+                //p.health = 100;
             }
             else
             {
@@ -120,7 +111,7 @@ namespace MCForge
                     p.SendSpawn((byte)-1, p.name, x, y, z, (byte)rotx, (byte)roty);
                 }
             }
-            p.spawning = false;
+            //p.spawning = false;
         }
 
         public void AddSpawn(ushort x, ushort y, ushort z, ushort rotx, ushort roty)

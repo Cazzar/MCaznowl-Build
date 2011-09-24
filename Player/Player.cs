@@ -166,12 +166,6 @@ namespace MCForge
         //CTF
         public Team team;
         public Team hasflag;
-        public string CTFtempcolor;
-        public string CTFtempprefix;
-        public bool carryingFlag;
-        public bool spawning = false;
-        public bool teamchat = false;
-        public int health = 100;
 
         //Countdown
         public bool playerofcountdown = false;
@@ -1675,7 +1669,7 @@ namespace MCForge
                     {
                         HandleMsgBlock(this, x, (ushort)((int)y - 1), z, b1);
                     }
-                    else if (b1 == Block.flagbase)
+                    /*else if (b1 == Block.flagbase)
                     {
                         if (team != null)
                         {
@@ -1706,7 +1700,7 @@ namespace MCForge
 
                             }
                         }
-                    }
+                    }*/
                 }
             }
             if (Block.Death(b)) HandleDeath(b); else if (Block.Death(b1)) HandleDeath(b1);
@@ -1759,12 +1753,12 @@ namespace MCForge
                     }
                     if (team != null && this.level.ctfmode)
                     {
-                        if (carryingFlag)
-                        {
-                            level.ctfgame.DropFlag(this, hasflag);
-                        }
+                        //if (carryingFlag)
+                        //{
+                        //    level.ctfgame.DropFlag(this, hasflag);
+                        //}
                         team.SpawnPlayer(this);
-                        this.health = 100;
+                        //this.health = 100;
                     }
                     else if (CountdownGame.playersleftlist.Contains(this))
                     {
@@ -2040,7 +2034,7 @@ namespace MCForge
                     return;
                 }
 
-                if (this.teamchat)
+                /*if (this.teamchat)
                 {
                     if (team == null)
                     {
@@ -2052,7 +2046,7 @@ namespace MCForge
                         Player.SendMessage(p, "(" + team.teamstring + ") " + this.color + this.name + ":&f " + text);
                     }
                     return;
-                }
+                }*/
                 if (this.joker)
                 {
                     if (File.Exists("text/joker.txt"))
