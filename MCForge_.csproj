@@ -208,6 +208,12 @@
     <Compile Include="GUI\EditText.Designer.cs">
       <DependentUpon>EditText.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\LavaMapBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LavaMapBrowser.Designer.cs">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
@@ -418,8 +424,12 @@
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
+    <Compile Include="Util\Serializer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LavaMapBrowser.resx">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
