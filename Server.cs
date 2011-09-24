@@ -89,7 +89,8 @@ public static event OnServerError ServerError = null;
         //Other
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
-
+        public static bool UseCTF = false;
+        public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
@@ -880,6 +881,9 @@ processThread.Start();
                         Server.lava.Start();
                     else if (startZombieModeOnStartup)
                         Command.all.Find("zombiegame").Use(null, String.Empty);
+                    //This doesnt use the main map
+                    if (Server.UseCTF)
+                        ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });
