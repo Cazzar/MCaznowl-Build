@@ -80,7 +80,6 @@ namespace MCForge
             all.Add(new CmdCopyLVL());
 			all.Add(new CmdCountdown());
             all.Add(new CmdCrashServer());
-            all.Add(new CmdCTF());
             all.Add(new CmdCuboid());
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
@@ -90,7 +89,6 @@ namespace MCForge
             all.Add(new CmdDisInfect());
             all.Add(new CmdDraw());
             all.Add(new CmdDrill());
-            all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
             all.Add(new CmdEmote());
             all.Add(new CmdEndRound());
@@ -247,7 +245,6 @@ namespace MCForge
             all.Add(new CmdSummon());
             all.Add(new CmdTake());
             all.Add(new CmdTColor());
-            all.Add(new CmdTeam());
             all.Add(new CmdTempBan());
             all.Add(new CmdText());
             all.Add(new CmdTime());

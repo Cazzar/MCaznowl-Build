@@ -158,11 +158,9 @@
     <Compile Include="Commands\CmdCmdLoad.cs" />
     <Compile Include="Commands\CmdCompile.cs" />
     <Compile Include="Commands\CmdCmdCreate.cs" />
-    <Compile Include="Commands\CmdDrop.cs" />
     <Compile Include="Commands\CmdGun.cs" />
     <Compile Include="Commands\CmdHeartbeat.cs" />
     <Compile Include="Commands\CmdClick.cs" />
-    <Compile Include="Commands\CmdTeam.cs" />
     <Compile Include="Commands\CmdPCount.cs" />
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />

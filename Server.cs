@@ -89,8 +89,6 @@ public static event OnServerError ServerError = null;
         //Other
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
-        //CTF STUFF
-        public static List<CTFGame> CTFGames = new List<CTFGame>();
 
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
