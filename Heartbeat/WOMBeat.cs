@@ -8,7 +8,12 @@ namespace MCForge
         public string URL { get { return "https://direct.worldofminecraft.com/hb.php"; } }
         public string Parameters { get; set; }
         public bool Log { get { return false; } }
-
+        //https://direct.worldofminecraft.com/server.php?ip=24.34.160.117&port=25566&salt=SERVER_SALT_HERE&alt=GamezGalaxy+Lavasurvival&desc=One+of+a+kind+Lavasurvival%21+www.gamezgalaxy.com&flags=%5BLavaSurvival%5D
+        public void SetSettings(string IP, string Port, string SALT, string Name, string Disc, string flags)
+        {
+            string url = "https://direct.worldofminecraft.com/server.php?ip=" + IP + "&port=" + Port + "&salt=" + Server.salt + "&alt=" + Name.Replace(' ', '+') + "&desc=" + Disc.Replace(' ', '+') + "&flags=%5B" + flags + "%5D";
+            //TODO use this url some how..
+        }
         public void Prepare()
         {
              Parameters += "&salt=" + Server.salt +
