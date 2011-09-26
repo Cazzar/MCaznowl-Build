@@ -40,7 +40,8 @@ namespace MCForge.Gui
 
         private void LavaMapBrowser_Unload(object sender, EventArgs e)
         {
-            downloadTextTimer.Dispose();
+            if (downloadTextTimer != null) //derp
+                downloadTextTimer.Dispose();
         }
 
         private void downloadTextUpdate()

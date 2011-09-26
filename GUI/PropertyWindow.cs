@@ -62,6 +62,7 @@ namespace MCForge.Gui
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
             cmbGlobalChatColor.Items.AddRange(colors);
+            button3.Enabled = Server.WomDirect;
             if (Server.irc == false)
             {
                 grpIRC.BackColor = Color.LightGray;
@@ -2082,6 +2083,26 @@ MessageBox.Show("Text Box Cleared!!");
                 lavaMapBrowser.Focus();
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new GUI.WoM().Show();
+        }
+
+        private void chkWomDirect_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = chkWomDirect.Checked;
         }
     }
 

@@ -316,6 +316,7 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button3 = new System.Windows.Forms.Button();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -834,7 +835,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -1066,7 +1067,7 @@ namespace MCForge.Gui
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1684,6 +1685,7 @@ namespace MCForge.Gui
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.button3);
             this.tabPage4.Controls.Add(this.groupBox19);
             this.tabPage4.Controls.Add(this.groupBox13);
             this.tabPage4.Controls.Add(this.groupBox12);
@@ -1698,6 +1700,7 @@ namespace MCForge.Gui
             this.tabPage4.Size = new System.Drawing.Size(488, 509);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
+            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
             // groupBox19
             // 
@@ -2623,6 +2626,7 @@ namespace MCForge.Gui
             this.chkWomDirect.TabIndex = 25;
             this.chkWomDirect.Text = "Enable WoM Direct";
             this.chkWomDirect.UseVisualStyleBackColor = true;
+            this.chkWomDirect.CheckedChanged += new System.EventHandler(this.chkWomDirect_CheckedChanged);
             // 
             // chkRestart
             // 
@@ -3343,6 +3347,16 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(370, 417);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(103, 23);
+            this.button3.TabIndex = 42;
+            this.button3.Text = "Edit WoM Direct";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3719,5 +3733,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.CheckBox chkWomDirect;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

@@ -118,7 +118,7 @@ public static event OnServerError ServerError = null;
         public static List<string> messages = new List<string>();
 
         public static DateTime timeOnline;
-
+        public static string IP;
         //auto updater stuff
         public static bool autoupdate;
         public static bool autonotify;
@@ -865,7 +865,8 @@ processThread.Start();
                 }));
 
                 locationChecker.Start();
-
+                using (WebClient web = new WebClient())
+                    IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");
@@ -886,6 +887,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
+
             });
         }
         
