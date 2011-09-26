@@ -32,7 +32,10 @@
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnDownload = new System.Windows.Forms.Button();
+            this.pbImage = new System.Windows.Forms.PictureBox();
+            this.txtDesc = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvMaps
@@ -49,9 +52,12 @@
             this.dgvMaps.ReadOnly = true;
             this.dgvMaps.RowHeadersVisible = false;
             this.dgvMaps.RowHeadersWidth = 40;
+            this.dgvMaps.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMaps.Size = new System.Drawing.Size(326, 224);
             this.dgvMaps.TabIndex = 0;
+            this.dgvMaps.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_CellClick);
+            this.dgvMaps.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_CellDoubleClick);
             // 
             // txtSearch
             // 
@@ -81,11 +87,33 @@
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
+            // pbImage
+            // 
+            this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbImage.Location = new System.Drawing.Point(12, 269);
+            this.pbImage.Name = "pbImage";
+            this.pbImage.Size = new System.Drawing.Size(150, 150);
+            this.pbImage.TabIndex = 4;
+            this.pbImage.TabStop = false;
+            // 
+            // txtDesc
+            // 
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.Location = new System.Drawing.Point(169, 269);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.ReadOnly = true;
+            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDesc.Size = new System.Drawing.Size(169, 150);
+            this.txtDesc.TabIndex = 5;
+            // 
             // LavaMapBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 275);
+            this.ClientSize = new System.Drawing.Size(350, 431);
+            this.Controls.Add(this.txtDesc);
+            this.Controls.Add(this.pbImage);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
@@ -96,6 +124,7 @@
             this.Load += new System.EventHandler(this.LavaMapBrowser_Load);
             this.Disposed += new System.EventHandler(this.LavaMapBrowser_Unload);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,5 +136,7 @@
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnDownload;
+        private System.Windows.Forms.PictureBox pbImage;
+        private System.Windows.Forms.TextBox txtDesc;
     }
 }

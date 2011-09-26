@@ -2,7 +2,7 @@
  * Serializer.cs
  * This is the Serializer class for the PHPSerializationLibrary
  *  
- * Copyright 2004 Conversive, Inc.
+ * Copyright 2004 Conversive, Inc. (Modified for use with MCForge)
  * 
  */
 
