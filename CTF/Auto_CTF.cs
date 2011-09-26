@@ -155,6 +155,11 @@ namespace MCForge
             string[] lines = File.ReadAllLines("CTF/maps.config");
             foreach (string l in lines)
                 maps.Add(l);
+            if (maps.Count == 0)
+            {
+                Server.s.Log("No maps were found!");
+                return;
+            }
             redbase = new Base();
             bluebase = new Base();
             Start();
@@ -168,7 +173,15 @@ namespace MCForge
             tagging.Elapsed += new System.Timers.ElapsedEventHandler(tagging_Elapsed);
             tagging.Start();
         }
-
+        public void Stop()
+        {
+            tagging.Stop();
+            tagging.Dispose();
+            mainlevel = null;
+            started = false;
+            if (Level.Find("ctf") != null)
+                Command.all.Find("unload").Use(null, "ctf");
+        }
         void tagging_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             Player.players.ForEach(delegate(Player p)
