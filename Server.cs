@@ -250,7 +250,6 @@ public static byte maxGuests = 10;
         public static bool checkUpdates = true;
 
         public static bool useMySQL = true;
-        public static bool useSQLite = false;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
@@ -504,12 +503,9 @@ public static byte maxGuests = 10;
                 }
                 if (useMySQL) MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
                 else SQLite.executeQuery("CREATE TABLE if not exists Players (ID INTEGER PRIMARY KEY AUTOINCREMENT not null, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6));");
+                
                 // Check if the color column exists.
-
-                DataTable colorExists = null;
-
-                if (useMySQL) colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
-                else colorExists = SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
+                DataTable colorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'") : SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
                 if (colorExists.Rows.Count == 0)
                 {
@@ -519,9 +515,7 @@ public static byte maxGuests = 10;
                 colorExists.Dispose();
 
                 // Check if the title color column exists.
-                DataTable tcolorExists = null;
-                if (useMySQL) tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
-                else tcolorExists = SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
+                DataTable tcolorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'") : SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
 
                 if (tcolorExists.Rows.Count == 0)
                 {
@@ -530,17 +524,13 @@ public static byte maxGuests = 10;
                 }
                 tcolorExists.Dispose();
 
-                DataTable timespent = null;
-                if (useMySQL) timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
-                //else timespent = SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
+                DataTable timespent = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'") : SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
 
                 if (timespent.Rows.Count == 0)
                     if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
 
-                DataTable totalCuboided = null;
-                if (useMySQL) totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
-                //else totalCuboided = SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
+                DataTable totalCuboided = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'") : SQLite.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
 
                 if (totalCuboided.Rows.Count == 0)
                     if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");

@@ -8,6 +8,7 @@ v5.3.0.0
 	- /nyan - 100% self-explanatory!
 - Made improvements to leaf decay, should be more random now.
 - Disabled color codes in Global Chat, it's just too risky with the exploits.
+- Added Suppot for SQLite3 (part done)
 
 v5.2.0.0
 - Fixed the server-breaking freeze bug that happened when a player lagged (NOT logged) out.
