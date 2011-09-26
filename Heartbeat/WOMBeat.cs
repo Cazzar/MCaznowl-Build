@@ -42,9 +42,13 @@ namespace MCForge
                         requestStream.Close();
                     }
                 }
-                catch { }
+                catch (Exception e) {
+                    Server.ErrorLog(e); 
+                }
             }
-            catch { }
+            catch (Exception e) {
+                Server.ErrorLog(e);
+            }
         }
         public void Prepare()
         {
