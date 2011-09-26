@@ -41,7 +41,7 @@ namespace MCForge
                 if (who == null) { Player.SendMessage(p, "There is no player \"" + message.Substring(0, pos) + "\"!"); return; }
                 if (message.Substring(pos + 1) == "del")
                 {
-                    MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'");
+                    if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'"); else SQLite.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'");
                     Player.GlobalChat(who, who.color + "*" + Name(who.name) + " color reverted to " + who.group.color + "their group's default" + Server.DefaultColor + ".", false);
                     who.color = who.group.color;
 
@@ -58,7 +58,7 @@ namespace MCForge
                     //Player.GlobalChat(who, p.color + "*" + p.name + "&e changed " + who.color + Name(who.name) +
                     //                  " color to " + color +
                     //                  c.Name(color) + "&e.", false);
-                    MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + who.name + "'");
+                    if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + who.name + "'"); else SQLite.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + who.name + "'");
 
                     Player.GlobalChat(who, who.color + "*" + Name(who.name) + " color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
                     if (p == null)
@@ -78,7 +78,7 @@ namespace MCForge
                 {
                     if (message == "del")
                     {
-                        MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + p.name + "'");
+                        if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + p.name + "'"); else 
 
                         Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color reverted to " + p.group.color + "their group's default" + Server.DefaultColor + ".", false);
                         p.color = p.group.color;
@@ -93,7 +93,7 @@ namespace MCForge
                     else if (color == p.color) { Player.SendMessage(p, "You already have that color."); }
                     else
                     {
-                        MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + p.name + "'");
+                        if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + p.name + "'"); else SQLite.executeQuery("UPDATE Players SET color = '" + c.Name(color) + "' WHERE name = '" + p.name + "'");
 
                         Player.GlobalChat(p, p.color + "*" + Name(p.name) + " color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
                         p.color = color;

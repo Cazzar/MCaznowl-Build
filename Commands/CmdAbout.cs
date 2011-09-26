@@ -62,7 +62,7 @@ namespace MCForge
             message = p.level.foundInfo(x, y, z);
             if (message != "") Player.SendMessage(p, "Physics information: &a" + message);
 
-            DataTable Blocks = MySQL.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+            DataTable Blocks = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
 
             string Username, TimePerformed, BlockUsed;
             bool Deleted, foundOne = false;
