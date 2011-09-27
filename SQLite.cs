@@ -46,7 +46,7 @@ namespace MCForge
         public static void executeQuery(string queryString)
         {
             int totalCount = 0;
-            if (!Server.useSQLite)
+            if (Server.useMySQL)
                 return;
         retry: try
             {
