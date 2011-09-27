@@ -486,8 +486,7 @@ public static byte maxGuests = 10;
             {//MYSQL stuff
                 try
                 {
-                    if (useMySQL)
-                        MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
+                    MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
                 }
                 //catch (MySql.Data.MySqlClient.MySqlException e)
                 //{
