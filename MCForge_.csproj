@@ -235,6 +235,7 @@
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
