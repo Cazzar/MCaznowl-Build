@@ -57,8 +57,12 @@ namespace MCForge.Gui
 
         private void LavaMapBrowser_Unload(object sender, EventArgs e)
         {
-            if (downloadTextTimer != null) //derp
+            // TRY-CATCH FIXES ALL DERPNESS
+            try
+            {
                 downloadTextTimer.Dispose();
+            }
+            catch { }
         }
 
         private void downloadTextUpdate()

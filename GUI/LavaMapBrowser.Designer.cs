@@ -54,7 +54,7 @@
             this.dgvMaps.RowHeadersWidth = 40;
             this.dgvMaps.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMaps.Size = new System.Drawing.Size(326, 224);
+            this.dgvMaps.Size = new System.Drawing.Size(326, 220);
             this.dgvMaps.TabIndex = 0;
             this.dgvMaps.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_CellClick);
             this.dgvMaps.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_CellDoubleClick);
