@@ -238,7 +238,9 @@
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />
+    <Compile Include="ScriptingVB.cs" />
     <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
