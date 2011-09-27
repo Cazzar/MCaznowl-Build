@@ -163,6 +163,7 @@ namespace MCForge.Gui
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.lblGlobalChatColor = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
@@ -316,7 +317,6 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button3 = new System.Windows.Forms.Button();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -835,7 +835,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(52, 23);
+            this.chkIRC.Size = new System.Drawing.Size(57, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -1067,7 +1067,7 @@ namespace MCForge.Gui
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1377,7 +1377,7 @@ namespace MCForge.Gui
             // 
             this.cmbGrieferStoneType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGrieferStoneType.FormattingEnabled = true;
-            this.cmbGrieferStoneType.Location = new System.Drawing.Point(119, 136);
+            this.cmbGrieferStoneType.Location = new System.Drawing.Point(110, 138);
             this.cmbGrieferStoneType.Name = "cmbGrieferStoneType";
             this.cmbGrieferStoneType.Size = new System.Drawing.Size(94, 21);
             this.cmbGrieferStoneType.TabIndex = 13;
@@ -1387,7 +1387,7 @@ namespace MCForge.Gui
             // 
             this.chkGrieferStoneBan.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkGrieferStoneBan.AutoSize = true;
-            this.chkGrieferStoneBan.Location = new System.Drawing.Point(219, 135);
+            this.chkGrieferStoneBan.Location = new System.Drawing.Point(210, 138);
             this.chkGrieferStoneBan.Name = "chkGrieferStoneBan";
             this.chkGrieferStoneBan.Size = new System.Drawing.Size(127, 23);
             this.chkGrieferStoneBan.TabIndex = 43;
@@ -1407,7 +1407,7 @@ namespace MCForge.Gui
             // 
             this.cmbGrieferStoneRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGrieferStoneRank.FormattingEnabled = true;
-            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(157, 111);
+            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(148, 113);
             this.cmbGrieferStoneRank.Name = "cmbGrieferStoneRank";
             this.cmbGrieferStoneRank.Size = new System.Drawing.Size(87, 21);
             this.cmbGrieferStoneRank.TabIndex = 45;
@@ -1685,7 +1685,6 @@ namespace MCForge.Gui
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage4.Controls.Add(this.button3);
             this.tabPage4.Controls.Add(this.groupBox19);
             this.tabPage4.Controls.Add(this.groupBox13);
             this.tabPage4.Controls.Add(this.groupBox12);
@@ -1701,6 +1700,16 @@ namespace MCForge.Gui
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
             this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(241, 109);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(103, 23);
+            this.button3.TabIndex = 42;
+            this.button3.Text = "Edit WoM Direct";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox19
             // 
@@ -1745,6 +1754,7 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.button3);
             this.groupBox13.Controls.Add(this.cmbGrieferStoneRank);
             this.groupBox13.Controls.Add(this.label48);
             this.groupBox13.Controls.Add(this.chkGrieferStoneBan);
@@ -1773,7 +1783,7 @@ namespace MCForge.Gui
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(15, 114);
+            this.label48.Location = new System.Drawing.Point(6, 114);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(140, 13);
             this.label48.TabIndex = 44;
@@ -1782,7 +1792,7 @@ namespace MCForge.Gui
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(15, 139);
+            this.label47.Location = new System.Drawing.Point(6, 139);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(98, 13);
             this.label47.TabIndex = 42;
@@ -3346,16 +3356,6 @@ namespace MCForge.Gui
             this.label38.Size = new System.Drawing.Size(33, 39);
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(370, 417);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 23);
-            this.button3.TabIndex = 42;
-            this.button3.Text = "Edit WoM Direct";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // PropertyWindow
             // 

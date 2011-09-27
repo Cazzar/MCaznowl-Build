@@ -11,12 +11,14 @@ namespace MCForge
         public string Parameters { get; set; }
         public bool Log { get { return false; } }
         //https://direct.worldofminecraft.com/server.php?ip=24.34.160.117&port=25566&salt=SERVER_SALT_HERE&alt=GamezGalaxy+Lavasurvival&desc=One+of+a+kind+Lavasurvival%21+www.gamezgalaxy.com&flags=%5BLavaSurvival%5D
-        public static void SetSettings(string IP, string Port, string Name, string Disc, string flags)
+        public static bool SetSettings(string IP, string Port, string Name, string Disc, string flags)
         {
             string url = "https://direct.worldofminecraft.com/server.php";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
-
-            string Parameters = "ip=" + IP + "&port=" + Port + "&salt=" + Server.salt + "&alt=" + Name.Replace(' ', '+') + "&desc=" + Disc.Replace(' ', '+') + "&flags=%5B" + flags + "%5D";
+            string flag = "&flags=%5B" + flags + "%5D";
+            if (flags.StartsWith("["))
+                flag = "&flags=" + flags;
+            string Parameters = "ip=" + IP + "&port=" + Port + "&salt=" + Server.salt + "&alt=" + Name.Replace(' ', '+') + "&desc=" + Disc.Replace(' ', '+') + flag;
 
             int totalTries = 0;
             int totalTriesStream = 0;
@@ -40,14 +42,18 @@ namespace MCForge
                         requestStream.Write(formData, 0, formData.Length);
                         requestStream.Flush();
                         requestStream.Close();
+                        requestStream.Dispose();
                     }
+                    return true;
                 }
                 catch (Exception e) {
                     Server.ErrorLog(e); 
+                    return false;
                 }
             }
             catch (Exception e) {
                 Server.ErrorLog(e);
+                return false;
             }
         }
         public void Prepare()

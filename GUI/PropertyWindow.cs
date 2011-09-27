@@ -855,6 +855,9 @@ namespace MCForge.Gui
                     w.WriteLine();
                     w.WriteLine("#WoM Direct thingy");
                     w.WriteLine("wom-direct = " + chkWomDirect.Checked.ToString().ToLower());
+                    w.WriteLine("wom-serveralt = " + Server.Server_ALT);
+                    w.WriteLine("wom-serverdis = " + Server.Server_Disc);
+                    w.WriteLine("wom-serverflag = " + Server.Server_Flag);
                 }
                 w.Flush();
                 w.Close();

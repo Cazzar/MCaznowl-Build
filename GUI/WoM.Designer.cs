@@ -112,6 +112,7 @@
             this.Controls.Add(this.label1);
             this.Name = "WoM";
             this.Text = "WoM";
+            this.Load += new System.EventHandler(this.WoM_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
