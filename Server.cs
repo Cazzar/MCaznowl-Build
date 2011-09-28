@@ -865,8 +865,12 @@ processThread.Start();
                 }));
 
                 locationChecker.Start();
-                using (WebClient web = new WebClient())
-                    IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
+                try
+                {
+                    using (WebClient web = new WebClient())
+                        IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
+                }
+                catch { }
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");

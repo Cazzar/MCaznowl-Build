@@ -3,10 +3,20 @@ v5.3.0.0
 - Fixed leaving a channel name black in the IRC settings causing a crash.
 - Fixed /spheroid being lopsided with even numbers.
 - Fixed the update checker so it only updates if there actually is an update.
+- Fixed /xban not working at all if the player is offline.
 - Added option for WoM Direct heartbeat.
+- Added the "Notchian" tree generator, use /tree notch.
+- Added command blocks, prepend a / to your /mb message to make it a command block. Example: /mb /cuboid air random
+- Added a Lava Survival map browser, so you can download maps from within the software.
+- Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
 - Added commands:
 	- /nyan - 100% self-explanatory!
+- Removed commands:
+	- /drop - Old CTF command, not needed.
+	- /team - Old CTF command, not needed.
+- Removed that stupid button next to the command input box.
 - Made improvements to leaf decay, should be more random now.
+- Made it so command and block change errors show the error info in-game.
 - Disabled color codes in Global Chat, it's just too risky with the exploits.
 
 v5.2.0.0

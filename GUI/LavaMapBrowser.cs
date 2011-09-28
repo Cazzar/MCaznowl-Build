@@ -119,7 +119,32 @@ namespace MCForge.Gui
             downloadMap(GetSelectedLavaMap());
         }
 
+        private void dgvMaps_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            LavaMapBrowserData map = GetSelectedLavaMap();
+            if (map != null)
+                loadMapDetails(map, true);
+        }
+
+        private void dgvMaps_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            downloadMap(GetSelectedLavaMap());
+        }
+
+        private void lnkSubmitMap_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://www.mcforge.net/lavamaps/submit");
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open link!");
+            }
+        }
+
         private void updateMapList(string search, bool thread = false) {
+            if (this.listing) return;
             if (thread)
             {
                 listingThread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
@@ -132,7 +157,6 @@ namespace MCForge.Gui
 
             try
             {
-                if (this.listing) return;
                 this.listing = true;
                 string data = String.Empty;
                 using (WebClient WEB = new WebClient())
@@ -182,6 +206,7 @@ namespace MCForge.Gui
 
         private void loadMapDetails(LavaMapBrowserData map, bool thread = false)
         {
+            if (this.loadingDet) return;
             if (thread)
             {
                 detailsThread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
@@ -194,7 +219,6 @@ namespace MCForge.Gui
 
             try
             {
-                if (this.loadingDet) return;
                 this.loadingDet = true;
                 Image img = null;
 
@@ -450,17 +474,5 @@ namespace MCForge.Gui
             }
         }
         #endregion
-
-        private void dgvMaps_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            LavaMapBrowserData map = GetSelectedLavaMap();
-            if (map != null)
-                loadMapDetails(map, true);
-        }
-
-        private void dgvMaps_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            downloadMap(GetSelectedLavaMap());
-        }
     }
 }

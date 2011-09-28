@@ -34,6 +34,7 @@
             this.btnDownload = new System.Windows.Forms.Button();
             this.pbImage = new System.Windows.Forms.PictureBox();
             this.txtDesc = new System.Windows.Forms.TextBox();
+            this.lnkSubmitMap = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.SuspendLayout();
@@ -107,11 +108,23 @@
             this.txtDesc.Size = new System.Drawing.Size(169, 150);
             this.txtDesc.TabIndex = 5;
             // 
+            // lnkSubmitMap
+            // 
+            this.lnkSubmitMap.AutoSize = true;
+            this.lnkSubmitMap.Location = new System.Drawing.Point(12, 422);
+            this.lnkSubmitMap.Name = "lnkSubmitMap";
+            this.lnkSubmitMap.Size = new System.Drawing.Size(72, 13);
+            this.lnkSubmitMap.TabIndex = 6;
+            this.lnkSubmitMap.TabStop = true;
+            this.lnkSubmitMap.Text = "Submit a Map";
+            this.lnkSubmitMap.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSubmitMap_LinkClicked);
+            // 
             // LavaMapBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 431);
+            this.ClientSize = new System.Drawing.Size(350, 439);
+            this.Controls.Add(this.lnkSubmitMap);
             this.Controls.Add(this.txtDesc);
             this.Controls.Add(this.pbImage);
             this.Controls.Add(this.btnDownload);
@@ -138,5 +151,6 @@
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.PictureBox pbImage;
         private System.Windows.Forms.TextBox txtDesc;
+        private System.Windows.Forms.LinkLabel lnkSubmitMap;
     }
 }
