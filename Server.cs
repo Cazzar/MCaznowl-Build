@@ -440,7 +440,7 @@ public static event OnServerError ServerError = null;
             }
             else
             {
-                Log("custom$s.txt does not exist, creating");
+                s.Log("custom$s.txt does not exist, creating");
                 using (StreamWriter SW = File.CreateText("text/custom$s.txt"))
                 {
                     SW.WriteLine("// This is used to create custom $s");
@@ -453,14 +453,7 @@ public static event OnServerError ServerError = null;
                 }
             }
 
-            Properties.Load("properties/server.properties");
-            Updater.Load("properties/update.properties");
-            Group.InitAll();
-            Command.InitAll();
-            GrpCommands.fillRanks();
-            Block.SetBlocks();
-            Awards.Load();
-            Economy.Load();
+            LoadAllSettings();
 
             if (File.Exists("text/emotelist.txt"))
             {
@@ -474,7 +467,6 @@ public static event OnServerError ServerError = null;
                 File.Create("text/emotelist.txt").Dispose();
             }
 
-            ProfanityFilter.Init();
 
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
@@ -885,6 +877,19 @@ processThread.Start();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });
+        }
+
+        public static void LoadAllSettings() {
+            Properties.Load("properties/server.properties");
+            Updater.Load("properties/update.properties");
+            Group.InitAll();
+            Command.InitAll();
+            GrpCommands.fillRanks();
+            Block.SetBlocks();
+            Awards.Load();
+            Economy.Load();
+
+            ProfanityFilter.Init();
         }
         
         public static bool Setup()

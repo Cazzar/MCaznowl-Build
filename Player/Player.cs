@@ -3747,7 +3747,7 @@ namespace MCForge
             RedoBuffer.Clear();
             UndoBuffer.Clear();
             spamBlockLog.Clear();
-            spamChatLog.Clear();
+            //spamChatLog.Clear();
             spyChatRooms.Clear();
             try
             {
