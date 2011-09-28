@@ -74,6 +74,7 @@ namespace MCForge
                     try
                     {
                         Pump(new MinecraftBeat());
+                        Pump(new WOMBeat());
                     }
                     catch (Exception e) { Server.ErrorLog(e); }
                 };
@@ -96,22 +97,6 @@ namespace MCForge
                 MCForgeBeatTimer.Start();
 
                 System.Timers.Timer WomBeat = new System.Timers.Timer(500);
-                WomBeat.Elapsed += delegate
-                {
-                    WomBeat.Interval = 50000;
-                    if (Server.WomDirect)
-                    {
-                        try
-                        {
-                            Pump(new WOMBeat());
-                        }
-                        catch (Exception e)
-                        {
-                            Server.ErrorLog(e);
-                        }
-                    }
-                };
-                WomBeat.Start();
             }));
             backupThread.Start();
         }

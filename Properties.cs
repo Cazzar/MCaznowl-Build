@@ -537,6 +537,15 @@ namespace MCForge
                                 try { Server.WomDirect = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "wom-serveralt":
+                                Server.Server_ALT = value;
+                                break;
+                            case "wom-serverdis":
+                                Server.Server_Disc = value;
+                                break;
+                            case "wom-serverflag":
+                                Server.Server_Flag = value;
+                                break;
                         }
                     }
                 }

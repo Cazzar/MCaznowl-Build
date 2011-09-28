@@ -43,6 +43,8 @@ namespace MCForge
                     return p.cancelcommand;
                 case PlayerEvents.PlayerMove:
                     return p.cancelmove;
+                case PlayerEvents.MYSQLSave:
+                    return p.cancelmysql;
                 default:
                     return false;
             }
@@ -97,6 +99,9 @@ namespace MCForge
                     break;
                 case PlayerEvents.PlayerMove:
                     p.cancelmove = true;
+                    break;
+                case PlayerEvents.MYSQLSave:
+                    p.cancelmysql = true;
                     break;
             }
         }

@@ -475,7 +475,15 @@ namespace MCForge
                 ", totalKicked=" + totalKicked +
                 ", TimeSpent='" + time +
                 "' WHERE Name='" + name + "'";
-
+            if (MySQLSave != null)
+            {
+                MySQLSave(this, commandString);
+                if (cancelmysql)
+                {
+                    cancelmysql = false;
+                    return;
+                }
+            }
             MySQL.executeQuery(commandString);
 
             try
