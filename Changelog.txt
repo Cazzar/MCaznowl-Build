@@ -8,6 +8,7 @@ v5.3.0.0
 - Added the "Notchian" tree generator, use /tree notch.
 - Added command blocks, prepend a / to your /mb message to make it a command block. Example: /mb /cuboid air random
 - Added a Lava Survival map browser, so you can download maps from within the software.
+- Added some default position settings for Lava Survival.
 - Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
 - Added commands:
 	- /nyan - 100% self-explanatory!
