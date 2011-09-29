@@ -45,6 +45,8 @@ namespace MCForge
                     return p.cancelmove;
                 case PlayerEvents.MYSQLSave:
                     return p.cancelmysql;
+                case PlayerEvents.PlayerRankChange:
+                    return Group.cancelrank;
                 default:
                     return false;
             }
@@ -102,6 +104,9 @@ namespace MCForge
                     break;
                 case PlayerEvents.MYSQLSave:
                     p.cancelmysql = true;
+                    break;
+                case PlayerEvents.PlayerRankChange:
+                    Group.cancelrank = true;
                     break;
             }
         }

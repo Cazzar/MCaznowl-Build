@@ -30,7 +30,8 @@ namespace MCForge
         LevelLoad,
         LevelSave,
         PlayerMove,
-        MYSQLSave
+        MYSQLSave,
+        PlayerRankChange
     }
     public enum GlobalLevelEvents
     {
