@@ -10,6 +10,19 @@ namespace MCForge
         public bool cancelBlock = false;
         public bool cancelmysql = false;
         /// <summary>
+        /// This is called when a player goes AFK
+        /// </summary>
+        /// <param name="p">The player that went AFK</param>
+        public delegate void OnAFK(Player p);
+        /// <summary>
+        /// This event is triggered when a player goes AFK
+        /// </summary>
+        public static event OnAFK AFK;
+        /// <summary>
+        /// This event is triggered when a player goes AFK
+        /// </summary>
+        public event OnAFK ONAFK;
+        /// <summary>
         /// This method is called whenever a players data is saved in mysql (even if disabled)
         /// </summary>
         /// <param name="p">The player</param>
