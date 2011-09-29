@@ -145,5 +145,11 @@ namespace MCForge
         public void ClearBlockchange() { Blockchange = null; }
         public bool HasBlockchange() { return (Blockchange == null); }
         public object blockchangeObject = null;
+
+        //lolwut
+        public delegate void BecomeBrony(Player p);
+        public delegate void SonicRainboom(Player p);
+        public static event BecomeBrony OnBecomeBrony;
+        public static event SonicRainboom OnSonicRainboom;
     }
 }

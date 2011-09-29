@@ -58,8 +58,11 @@ namespace MCForge
         }
         public void Prepare()
         {
-             Parameters += "&salt=" + Server.salt +
-                 "&users=" + Player.number;
+            Parameters += "&salt=" + Server.salt +
+                "&users=" + Player.number +
+                "&alt=" + Server.Server_ALT +
+                "&desc=" + Server.Server_Disc +
+                "&flags=" + Server.Server_Flag;
         }
 
         public void OnPump(string line)

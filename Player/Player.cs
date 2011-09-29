@@ -2219,6 +2219,8 @@ namespace MCForge
                     {
                         SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
                     }
+                    if (OnBecomeBrony != null)
+                        OnBecomeBrony(this);
                     return;
                 }
                 if (cmd.ToLower() == "rainbowdashiscoolerthanyou")
@@ -2232,6 +2234,8 @@ namespace MCForge
                     {
                         SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
                     }
+                    if (OnSonicRainboom != null)
+                        OnSonicRainboom(this);
                     return;
                 }
                 // This is the dev ranker. It was decided to not use this, because of what happened with MCAdmin.
