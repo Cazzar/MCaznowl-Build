@@ -23,7 +23,7 @@ namespace MCForge
     public class CmdFreeze : Command
     {
         public override string name { get { return "freeze"; } }
-        public override string shortcut { get { return ""; } }
+        public override string shortcut { get { return "fz"; } }
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
