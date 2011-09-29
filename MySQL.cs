@@ -137,10 +137,10 @@ namespace MCForge
                     sql.WriteLine("-- --------------------------------------------------------");
                     sql.WriteLine();
                     sql.WriteLine("--");
-                    sql.WriteLine("-- Table structure for table");
+                    sql.WriteLine("-- Table structure for table `{0}`", tableName);
                     sql.WriteLine("--");
                     sql.WriteLine();
-                    sql.WriteLine("CREATE TABLE if not exists `{0}` (",tableName);
+                    sql.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (",tableName);
                     List<string[]> tableSchema = new List<string[]>();
                     string[] rowParams;
                     using (DataTable tableRowSchema = fillData("DESCRIBE " + tableName)) {
@@ -153,7 +153,7 @@ namespace MCForge
                                 tmp.Add(row.Field<string>(col));
                             }// end:for(col)
                             rowParams = tmp.ToArray<string>();
-                            rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "" ) + "NULL";
+                            rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT " ) + "NULL";
                             sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + ",", rowParams);
                             pri += (rowParams[3].ToLower().Equals("pri") ? rowParams[0] + ";" : "");
                             tableSchema.Add(rowParams);
@@ -167,7 +167,6 @@ namespace MCForge
                             }
                         }
                     }
-                    sql.WriteLine();
                     sql.WriteLine(");");
                     sql.WriteLine();
                     sql.WriteLine("--");
@@ -196,7 +195,9 @@ namespace MCForge
                                         sql.Write("NULL");
 
                                     } else if (eleType.Name.Equals("DateTime")) {
-                                        sql.Write(row.Field<DateTime>(col).ToShortDateString());
+                                        DateTime dt = row.Field<DateTime>(col);
+                                        
+                                        sql.Write("'{0}-{1}-{2} {3}:{4}:{5}'", new object[] { dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second });
 
                                         ////} else if (eleType.Name.Equals("UInt16")) {
                                         ////    sql.Write(row.Field<UInt16>(col).ToString());

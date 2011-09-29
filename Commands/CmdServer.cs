@@ -327,6 +327,7 @@ namespace MCForge {
 
             Server.s.Log("Creating package...");
             using (ZipPackage package = (ZipPackage)ZipPackage.Open(packagePath, FileMode.Create)) {
+
                 if (withFiles) {
                     Server.s.Log("Collecting Directory structure...");
                     string currDir = Directory.GetCurrentDirectory() + "\\";
@@ -348,6 +349,10 @@ namespace MCForge {
                             }// end:using(fileStream) - Close and dispose fileStream.
                         }
                     }// end:foreach(Uri loc)
+                } else {
+                    ZipPackagePart packagePart =
+                                (ZipPackagePart)package.CreatePart(new Uri("/SQL.sql", UriKind.Relative), "");
+                    CopyStream(File.OpenRead("SQL.sql"), packagePart.GetStream());
                 }// end:if(withFiles)
             }// end:using (Package package) - Close and dispose package.
             Server.s.Log("Server backed up!");
