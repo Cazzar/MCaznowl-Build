@@ -118,8 +118,10 @@ namespace MCForge
             //So we show the tables, and store the result.
             //Also output information data (Same format as phpMyAdmin's dump)
 
+            //Important note:  This does NOT account for foreign keys, BLOB's etc.  It only works for what we actually put in the db.
+
             sql.WriteLine("-- MCForge SQL Database Dump");
-            sql.WriteLine("-- version 0.0.0");
+            sql.WriteLine("-- version 0.5");
             sql.WriteLine("-- http://www.mcforge.net");
             sql.WriteLine("--");
             sql.WriteLine("-- Host: {0}", Server.MySQLHost);
@@ -169,12 +171,12 @@ namespace MCForge
                     }
                     sql.WriteLine(");");
                     sql.WriteLine();
-                    sql.WriteLine("--");
-                    sql.WriteLine("-- Dumping data for table `{0}`", tableName);
-                    sql.WriteLine("--");
-                    sql.WriteLine();
                     using (DataTable tableRowData = fillData("SELECT * FROM  " + tableName)) {
                         if (tableRowData.Rows.Count > 0) {
+                            sql.WriteLine("--");
+                            sql.WriteLine("-- Dumping data for table `{0}`", tableName);
+                            sql.WriteLine("--");
+                            sql.WriteLine();
                             sql.Write("INSERT INTO `{0}` (`", tableName);
                             foreach (string[] rParams in tableSchema) {
                                 sql.Write(rParams[0]);
@@ -194,43 +196,19 @@ namespace MCForge
                                     if (row.IsNull(col)) {
                                         sql.Write("NULL");
 
-                                    } else if (eleType.Name.Equals("DateTime")) {
+                                    } else if (eleType.Name.Equals("DateTime")) { // special format
                                         DateTime dt = row.Field<DateTime>(col);
-                                        
                                         sql.Write("'{0}-{1}-{2} {3}:{4}:{5}'", new object[] { dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second });
-
-                                        ////} else if (eleType.Name.Equals("UInt16")) {
-                                        ////    sql.Write(row.Field<UInt16>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("Int16")) {
-                                        ////    sql.Write(row.Field<Int16>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("UInt32")) {
-                                        ////    sql.Write(row.Field<UInt32>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("Int32")) {
-                                        ////    sql.Write(row.Field<Int32>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("UInt64")) {
-                                        ////    sql.Write(row.Field<UInt64>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("Int64")) {
-                                        ////    sql.Write(row.Field<Int64>(col).ToString());
-
-                                        ////} else if (eleType.Name.Equals("Byte")) {
-                                        ////    sql.Write(row.Field<Byte>(col).ToString());
-
-                                        //} else if (eleType.Name.Equals("SByte")) {
-                                        //    sql.Write(row.Field<SByte>(col).ToString());
 
                                         //} else if (eleType.Name.Equals("Boolean")) {
                                         //    sql.Write(row.Field<Boolean>(col).ToString());
 
-                                    } else if (eleType.Name.Equals("String")) {
+                                    } else if (eleType.Name.Equals("String")) { // Requires ''
                                         sql.Write("'{0}'", row.Field<string>(col));
 
                                     } else {
-                                        sql.Write(row.Field<Object>(col));
+                                        sql.Write(row.Field<Object>(col)); // We assume all other data is left as-is
+                                        //This includes numbers, and booleans.  (As well as objects, but we don't save them into the database)
 
                                     }
                                     sql.Write((col < row.ItemArray.Length - 1 ? ", " : "),"));
@@ -241,12 +219,20 @@ namespace MCForge
 
                             sql.BaseStream.Seek(-1, SeekOrigin.Current);
                             sql.WriteLine(";");
-                            sql.WriteLine();
+                        } else {
+                            sql.WriteLine("-- No data in table `{0}`!", tableName);
                         }
+                        sql.WriteLine();
                     }
                 }// end:foreach(DataRow sqlTablesRow)
             }
         }// end:CopyDatabase()
+
+        internal static void fillDatabase(Stream stream) {
+            foreach (string line in new StreamReader(stream).ReadToEnd().Split('\n')) {
+                executeQuery(line);
+            }
+        }
     }
 }
 

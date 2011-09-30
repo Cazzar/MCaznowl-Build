@@ -127,8 +127,6 @@ namespace MCForge {
             Server.higherranktp = true;
             Server.agreetorulesonentry = false;
 
-            Server.devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur"});
-
             Server.tempBans = new List<Server.TempBan>();
 
             Server.afkset = new List<string>();
@@ -410,6 +408,9 @@ namespace MCForge {
                 PackagePartCollection pc = zip.GetParts();
                 foreach (ZipPackagePart item in pc) {
                     CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
+                    if (item.Uri.IsFile && item.Uri.Segments.ElementAt<string>(item.Uri.Segments.Count()-1).Equals("SQL.sql")) {
+                        MySQL.fillDatabase(item.GetStream());
+                    }
                 }
             }
         }
