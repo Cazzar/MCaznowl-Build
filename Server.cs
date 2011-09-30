@@ -88,9 +88,8 @@ public static event OnServerError ServerError = null;
         //Other
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
-        //CTF STUFF
-        public static List<CTFGame> CTFGames = new List<CTFGame>();
-
+        public static bool UseCTF = false;
+        public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
@@ -118,7 +117,7 @@ public static event OnServerError ServerError = null;
         public static List<string> messages = new List<string>();
 
         public static DateTime timeOnline;
-
+        public static string IP;
         //auto updater stuff
         public static bool autoupdate;
         public static bool autonotify;
@@ -133,6 +132,13 @@ public static event OnServerError ServerError = null;
         //Global VoteKick In Progress Flag
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
+
+
+        //WoM Direct
+        public static string Server_ALT = "";
+        public static string Server_Disc = "";
+        public static string Server_Flag = "";
+
 
         public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
@@ -190,7 +196,7 @@ public static event OnServerError ServerError = null;
         public static bool pub = true;
         public static bool verify = true;
         public static bool worldChat = true;
-        public static bool guestGoto = false;
+//        public static bool guestGoto = false;
 
         //Spam Prevention
         public static bool checkspam = false;
@@ -209,7 +215,7 @@ public static event OnServerError ServerError = null;
         public static bool reportBack = true;
 
         public static bool irc = false;
-        public static bool safemode = false;
+//        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
@@ -858,7 +864,12 @@ processThread.Start();
                 }));
 
                 locationChecker.Start();
-
+                try
+                {
+                    using (WebClient web = new WebClient())
+                        IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
+                }
+                catch { }
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");
@@ -874,8 +885,12 @@ processThread.Start();
                         Server.lava.Start();
                     else if (startZombieModeOnStartup)
                         Command.all.Find("zombiegame").Use(null, String.Empty);
+                    //This doesnt use the main map
+                    if (Server.UseCTF)
+                        ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
+
             });
         }
 

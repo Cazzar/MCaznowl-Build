@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Player who;
-            if (message != "")
+            if (message != String.Empty)
             {
                 who = Player.Find(message);
             }
@@ -47,7 +47,7 @@ namespace MCForge
                 return;
             }
 
-            if (who.group.Permission > p.group.Permission)
+            if (p != null && who.group.Permission > p.group.Permission)
             {
                 Player.SendMessage(p, "Cannot toggle invincibility for someone of higher rank");
                 return;
@@ -56,11 +56,28 @@ namespace MCForge
             if (who.invincible == true)
             {
                 who.invincible = false;
+                if(p != null && who == p)
+                {
+                	Player.SendMessage( p, "You are no longer invincible.");
+                }
+                else
+                {
+                	Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " is no longer invincible.");
+                }
+                
                 if (Server.cheapMessage)
                     Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has stopped being immortal", false);
             }
             else
             {
+            	if(p != null && who == p)
+                {
+                	Player.SendMessage( p, "You are now invincible.");
+                }
+                else
+                {
+            		Player.SendMessage( p, who.color + who.name + Server.DefaultColor + "is now invincible.");
+                }
                 who.invincible = true;
                 if (Server.cheapMessage)
                     Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " " + Server.cheapMessageGiven, false);

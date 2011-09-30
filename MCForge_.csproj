@@ -93,6 +93,7 @@
     <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
+    <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
@@ -159,12 +160,9 @@
     <Compile Include="Commands\CmdCmdLoad.cs" />
     <Compile Include="Commands\CmdCompile.cs" />
     <Compile Include="Commands\CmdCmdCreate.cs" />
-    <Compile Include="Commands\CmdCTF.cs" />
-    <Compile Include="Commands\CmdDrop.cs" />
     <Compile Include="Commands\CmdGun.cs" />
     <Compile Include="Commands\CmdHeartbeat.cs" />
     <Compile Include="Commands\CmdClick.cs" />
-    <Compile Include="Commands\CmdTeam.cs" />
     <Compile Include="Commands\CmdPCount.cs" />
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
@@ -201,9 +199,9 @@
     <Compile Include="Commands\CmdPCreate.cs" />
     <Compile Include="Commands\CmdPLoad.cs" />
     <Compile Include="Commands\CmdPUnload.cs" />
+    <Compile Include="CTF\Auto_CTF.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
-    <Compile Include="CTFGame.cs" />
     <Compile Include="Economy.cs" />
     <Compile Include="ForgeBot.cs" />
     <Compile Include="GUI\EditText.cs">
@@ -211,6 +209,18 @@
     </Compile>
     <Compile Include="GUI\EditText.Designer.cs">
       <DependentUpon>EditText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\LavaMapBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LavaMapBrowser.Designer.cs">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\WoM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\WoM.Designer.cs">
+      <DependentUpon>WoM.cs</DependentUpon>
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
@@ -422,8 +432,12 @@
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
+    <Compile Include="Util\Serializer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LavaMapBrowser.resx">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
@@ -436,6 +450,9 @@
     <EmbeddedResource Include="GUI\Window.resx">
       <DependentUpon>Window.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\WoM.resx">
+      <DependentUpon>WoM.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

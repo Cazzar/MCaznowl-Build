@@ -492,7 +492,6 @@ namespace MCForge
 
         public void AddNotchTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
         {
-            Server.s.Log("AddNotchTree()");
             byte dist, tile;
             byte height = (byte)Rand.Next(3, 7);
             byte top = (byte)(height - 2);

@@ -183,7 +183,10 @@ namespace MCForge {
             Server.pub = true;
             Server.verify = true;
             Server.worldChat = true;
-            Server.guestGoto = false;
+//            Server.guestGoto = false; //Never used
+
+            Server.autorestart = false;
+            Server.restarttime = DateTime.Now;
 
             //Spam Prevention
             Server.checkspam = false;
@@ -200,7 +203,7 @@ namespace MCForge {
             Server.reportBack = true;
 
             Server.irc = false;
-            Server.safemode = false;
+//            Server.safemode = false;
             Server.ircPort = 6667;
             Server.ircNick = "ForgeBot";
             Server.ircServer = "irc.esper.net";
@@ -219,6 +222,7 @@ namespace MCForge {
             Server.rpLimit = 500;
             Server.rpNormLimit = 10000;
 
+            Server.backupLocation = System.Windows.Forms.Application.StartupPath + "/levels/backups";
             Server.backupInterval = 300;
             Server.blockInterval = 60;
 
@@ -294,6 +298,9 @@ namespace MCForge {
             Server.grieferStoneType = 1;
             Server.grieferStoneBan = true;
             Server.grieferStoneRank = LevelPermission.Guest;
+
+            //WOM Direct
+            Server.WomDirect = false;
 
             #endregion
         }

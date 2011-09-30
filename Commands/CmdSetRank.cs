@@ -86,7 +86,12 @@ namespace MCForge
                         Player.SendMessage(p, "Cannot change the rank of someone equal or higher to yourself."); return;
                     }
                 }
-
+                Group.because(who, newRank);
+                if (Group.cancelrank)
+                {
+                    Group.cancelrank = false;
+                    return;
+                }
                 who.group.playerList.Remove(who.name);
                 who.group.playerList.Save();
 

@@ -77,7 +77,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/tree [type] - Turns tree mode on or off.");
-            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2)");
+            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2), (Notch | 3)");
         }
     }
 }

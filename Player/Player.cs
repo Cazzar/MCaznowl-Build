@@ -165,12 +165,6 @@ namespace MCForge
         //CTF
         public Team team;
         public Team hasflag;
-        public string CTFtempcolor;
-        public string CTFtempprefix;
-        public bool carryingFlag;
-        public bool spawning = false;
-        public bool teamchat = false;
-        public int health = 100;
 
         //Countdown
         public bool playerofcountdown = false;
@@ -458,6 +452,10 @@ namespace MCForge
                         	if (this != null && !this.name.Equals(""))
                         	{
                             		Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
+                                    if (AFK != null)
+                                        AFK(this);
+                                    if (ONAFK != null)
+                                        ONAFK(this);
                             		afkCount = 0;
                         	}
                         }
@@ -488,7 +486,15 @@ namespace MCForge
                 ", totalKicked=" + totalKicked +
                 ", TimeSpent='" + time +
                 "' WHERE Name='" + name + "'";
-
+            if (MySQLSave != null)
+            {
+                MySQLSave(this, commandString);
+                if (cancelmysql)
+                {
+                    cancelmysql = false;
+                    return;
+                }
+            }
             MySQL.executeQuery(commandString);
 
             try
@@ -1682,7 +1688,7 @@ namespace MCForge
                     {
                         HandleMsgBlock(this, x, (ushort)((int)y - 1), z, b1);
                     }
-                    else if (b1 == Block.flagbase)
+                    /*else if (b1 == Block.flagbase)
                     {
                         if (team != null)
                         {
@@ -1713,7 +1719,7 @@ namespace MCForge
 
                             }
                         }
-                    }
+                    }*/
                 }
             }
             if (Block.Death(b)) HandleDeath(b); else if (Block.Death(b1)) HandleDeath(b1);
@@ -1766,12 +1772,12 @@ namespace MCForge
                     }
                     if (team != null && this.level.ctfmode)
                     {
-                        if (carryingFlag)
-                        {
-                            level.ctfgame.DropFlag(this, hasflag);
-                        }
+                        //if (carryingFlag)
+                        //{
+                        //    level.ctfgame.DropFlag(this, hasflag);
+                        //}
                         team.SpawnPlayer(this);
-                        this.health = 100;
+                        //this.health = 100;
                     }
                     else if (CountdownGame.playersleftlist.Contains(this))
                     {
@@ -2047,7 +2053,7 @@ namespace MCForge
                     return;
                 }
 
-                if (this.teamchat)
+                /*if (this.teamchat)
                 {
                     if (team == null)
                     {
@@ -2059,7 +2065,7 @@ namespace MCForge
                         Player.SendMessage(p, "(" + team.teamstring + ") " + this.color + this.name + ":&f " + text);
                     }
                     return;
-                }
+                }*/
                 if (this.joker)
                 {
                     if (File.Exists("text/joker.txt"))
@@ -2220,6 +2226,8 @@ namespace MCForge
                     {
                         SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
                     }
+                    if (OnBecomeBrony != null)
+                        OnBecomeBrony(this);
                     return;
                 }
                 if (cmd.ToLower() == "rainbowdashiscoolerthanyou")
@@ -2233,6 +2241,8 @@ namespace MCForge
                     {
                         SendMessage("You have used this command 2 times. You cannot use it anymore! Sorry, Brony!");
                     }
+                    if (OnSonicRainboom != null)
+                        OnSonicRainboom(this);
                     return;
                 }
                 // This is the dev ranker. It was decided to not use this, because of what happened with MCAdmin.

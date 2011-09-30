@@ -237,22 +237,6 @@ namespace MCForge
                                 {
                                     if ((ushort)(pl.pos[2] / 32) == pos.z || (ushort)(pl.pos[2] / 32 + 1) == pos.z || (ushort)(pl.pos[2] / 32 - 1) == pos.z)
                                     {
-                                        if (p.level.ctfmode && !p.level.ctfgame.friendlyfire && p.team == pl.team)
-                                        {
-                                            comeOut = true;
-                                            break;
-                                        }
-                                        if (p.level.ctfmode)
-                                        {
-                                            pl.health = pl.health - 25;
-                                            if (pl.health > 0)
-                                            {
-                                                pl.SendMessage("You have been shot!  You have &c" + pl.health + Server.DefaultColor + " health remaining.");
-                                                comeOut = true;
-                                                break;
-                                            }
-                                        }
-
                                         if (p.level.physics >= 3 && bp.ending >= 2)
                                             pl.HandleDeath(Block.stone, " was blown up by " + p.color + p.name, true);
                                         else

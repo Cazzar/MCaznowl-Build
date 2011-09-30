@@ -32,7 +32,8 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        System.Timers.Timer lavaControlUpdateTimer;
+        Form lavaMapBrowser;
+        System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
         public PropertyWindow()
@@ -46,6 +47,7 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             Icon = Gui.Window.ActiveForm.Icon;
+            lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -60,6 +62,7 @@ namespace MCForge.Gui
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
             cmbGlobalChatColor.Items.AddRange(colors);
+            button3.Enabled = Server.WomDirect;
             if (Server.irc == false)
             {
                 grpIRC.BackColor = Color.LightGray;
@@ -154,13 +157,14 @@ namespace MCForge.Gui
 
             try
             {
-                lavaControlUpdateTimer = new System.Timers.Timer(10000);
-                lavaControlUpdateTimer.AutoReset = true;
-                lavaControlUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
+                lavaUpdateTimer = new System.Timers.Timer(10000);
+                lavaUpdateTimer.AutoReset = true;
+                lavaUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
                 {
                     UpdateLavaControls();
+                    UpdateLavaMapList(false);
                 });
-                lavaControlUpdateTimer.Start();
+                lavaUpdateTimer.Start();
             }
             catch
             {
@@ -172,7 +176,8 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
-            lavaControlUpdateTimer.Dispose();
+            lavaUpdateTimer.Dispose();
+            lavaMapBrowser.Dispose();
             Window.prevLoaded = false;
         }
 
@@ -701,7 +706,7 @@ namespace MCForge.Gui
             Server.autorestart = chkRestartTime.Checked;
             try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
             Server.restartOnError = chkRestart.Checked;
-            Server.level = txtMain.Text;
+            Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main")
             Server.irc = chkIRC.Checked;
             Server.ircNick = txtNick.Text;
             Server.ircServer = txtIRCServer.Text;
@@ -774,6 +779,8 @@ namespace MCForge.Gui
             Server.higherranktp = chkTpToHigherRanks.Checked;
             Server.globalignoreops = chkIgnoreGlobal.Checked; // Wasn't in previous setting-saver
 
+            Server.checkUpdates = chkUpdates.Checked;
+
             Server.cheapMessage = chkCheap.Checked;
             Server.cheapMessageGiven = txtCheap.Text;
             Server.rankSuper = chkrankSuper.Checked;
@@ -802,6 +809,10 @@ namespace MCForge.Gui
             Server.grieferStoneRank = (Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.SelectedItem.ToString()).Permission);
 
             Server.WomDirect = chkWomDirect.Checked;
+            //Server.Server_ALT = ;
+            //Server.Server_Disc = ;
+            //Server.Server_Flag = ;
+
 
         }
 
@@ -1851,21 +1862,42 @@ MessageBox.Show("Text Box Cleared!!");
             UpdateLavaControls();
         }
 
-        private void UpdateLavaMapList()
+        private void UpdateLavaMapList(bool useList = true, bool noUseList = true)
         {
-            lsMapUse.Items.Clear();
-            lsMapNoUse.Items.Clear();
-
-            lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
-            
-            string name;
-            FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
-            foreach (FileInfo file in fi)
+            if (!useList && !noUseList) return;
+            try
             {
-                name = file.Name.Replace(".lvl", "");
-                if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                    lsMapNoUse.Items.Add(name);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                    return;
+                }
+
+                int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
+                if (useList) lsMapUse.Items.Clear();
+                if (noUseList) lsMapNoUse.Items.Clear();
+
+                if (useList)
+                {
+                    lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+                    try { if (useIndex > -1) lsMapUse.SelectedIndex = useIndex; }
+                    catch { }
+                }
+                if (noUseList)
+                {
+                    string name;
+                    FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
+                    foreach (FileInfo file in fi)
+                    {
+                        name = file.Name.Replace(".lvl", "");
+                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                            lsMapNoUse.Items.Add(name);
+                    }
+                    try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
+                    catch { }
+                }
             }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
         private void lsAddMap_Click(object sender, EventArgs e)
@@ -1988,6 +2020,42 @@ MessageBox.Show("Text Box Cleared!!");
 
         private void numCountReset_ValueChanged(object sender, EventArgs e) {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                lavaMapBrowser = new LavaMapBrowser();
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new GUI.WoM().Show();
+        }
+
+        private void chkWomDirect_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = chkWomDirect.Checked;
         }
     }
 

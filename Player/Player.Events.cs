@@ -8,6 +8,30 @@ namespace MCForge
         public bool cancelchat = false;
         public bool cancelmove = false;
         public bool cancelBlock = false;
+        public bool cancelmysql = false;
+        /// <summary>
+        /// This is called when a player goes AFK
+        /// </summary>
+        /// <param name="p">The player that went AFK</param>
+        public delegate void OnAFK(Player p);
+        /// <summary>
+        /// This event is triggered when a player goes AFK
+        /// </summary>
+        public static event OnAFK AFK;
+        /// <summary>
+        /// This event is triggered when a player goes AFK
+        /// </summary>
+        public event OnAFK ONAFK;
+        /// <summary>
+        /// This method is called whenever a players data is saved in mysql (even if disabled)
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <param name="mysqlcommand">The MYSQL Command</param>
+        public delegate void OnMySQLSave(Player p, string mysqlcommand);
+        /// <summary>
+        /// This event is called whenever a players data is saved in mysql (even if disabled) (Can be cancled)
+        /// </summary>
+        public static event OnMySQLSave MySQLSave;
         /// <summary>
         /// BlockchangeEventHandler2 event is called when a player removes or places a block
         /// However, this event will due normal permission checking and normal block placing unless the event you cancel the event
@@ -121,5 +145,11 @@ namespace MCForge
         public void ClearBlockchange() { Blockchange = null; }
         public bool HasBlockchange() { return (Blockchange == null); }
         public object blockchangeObject = null;
+
+        //lolwut
+        public delegate void BecomeBrony(Player p);
+        public delegate void SonicRainboom(Player p);
+        public static event BecomeBrony OnBecomeBrony;
+        public static event SonicRainboom OnSonicRainboom;
     }
 }

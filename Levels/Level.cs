@@ -139,7 +139,6 @@ namespace MCForge
         Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>(); // Holds random flow data for liqiud physics
 
         //CTF STUFF
-        public CTFGame ctfgame = new CTFGame();
         public bool ctfmode = false;
 
         public int lastCheck = 0;
@@ -998,7 +997,6 @@ namespace MCForge
 					catch { }
 
 					Server.s.Log("Level \"" + level.name + "\" loaded.");
-					level.ctfgame.mapOn = level;
 					return level;
                 }
                 catch (Exception ex) { Server.ErrorLog(ex); return null; }
@@ -4357,7 +4355,6 @@ namespace MCForge
             UndoBuffer.Clear();
             blockCache.Clear();
             ZoneList.Clear();
-            ctfgame.Dispose();
             blocks = null;
         }
     }

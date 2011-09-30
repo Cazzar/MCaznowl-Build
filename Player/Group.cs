@@ -23,6 +23,15 @@ namespace MCForge
 {
     public class Group
     {
+        public delegate void RankSet(Player p, Group newrank);
+        public static event RankSet OnPlayerRankSet;
+        public delegate void GroupSave();
+        public static event GroupSave OnGroupSave;
+        public delegate void GroupLoad();
+        public static event GroupLoad OnGroupLoad;
+        public static bool cancelrank = false;
+        //Move along...nothing to see here...
+        public static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) OnPlayerRankSet(p, newrank); }
         public string name;
         public string trueName;
         public string color;
@@ -247,7 +256,8 @@ namespace MCForge
             {
                 pl.group = GroupList.Find(g => g.name == pl.group.name);
             }
-
+            if (OnGroupLoad != null)
+                OnGroupLoad();
             saveGroups(GroupList);
         }
         public static void saveGroups(List<Group> givenList)
@@ -297,6 +307,8 @@ namespace MCForge
 					}
 				}
 			}
+            if (OnGroupSave != null)
+                OnGroupSave();
         }
 
         public static bool Exists(string name)

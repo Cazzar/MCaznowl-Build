@@ -95,9 +95,9 @@ namespace MCForge
                             case "world-chat":
                                 Server.worldChat = (value.ToLower() == "true") ? true : false;
                                 break;
-                            case "guest-goto":
-                                Server.guestGoto = (value.ToLower() == "true") ? true : false;
-                                break;
+                            //case "guest-goto":
+                            //    Server.guestGoto = (value.ToLower() == "true") ? true : false;
+                            //    break;
                             case "max-players":
                                 try
                                 {
@@ -539,6 +539,15 @@ namespace MCForge
                                 try { Server.WomDirect = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "wom-serveralt":
+                                Server.Server_ALT = value;
+                                break;
+                            case "wom-serverdis":
+                                Server.Server_Disc = value;
+                                break;
+                            case "wom-serverflag":
+                                Server.Server_Flag = value;
+                                break;
                         }
                     }
                 }
@@ -590,7 +599,7 @@ namespace MCForge
             w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
             w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
             w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
-            w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
+            w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands (Not implemented yet)");
             w.WriteLine("#   irc\t=\tSet to true to enable the IRC bot");
             w.WriteLine("#   irc-nick\t=\tThe name of the IRC bot");
             w.WriteLine("#   irc-server\t=\tThe server to connect to");
@@ -660,12 +669,13 @@ namespace MCForge
             w.WriteLine("max-guests = " + Server.maxGuests.ToString());
             w.WriteLine("max-maps = " + Server.maps.ToString());
             w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
-            w.WriteLine("check-updates = " + Server.autonotify.ToString().ToLower());
+            w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
             w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
             w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
             w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
             w.WriteLine("restart-on-error = " + Server.restartOnError);
             w.WriteLine("main-name = " + Server.level);
+            //w.WriteLine("guest-goto = " + Server.guestGoto);
             w.WriteLine();
             w.WriteLine("# irc bot options");
             w.WriteLine("irc = " + Server.irc.ToString().ToLower());
@@ -775,6 +785,9 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("#WoM Direct thingy");
             w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
+            w.WriteLine("wom-serveralt = " + Server.Server_ALT);
+            w.WriteLine("wom-serverdis = " + Server.Server_Disc);
+            w.WriteLine("wom-serverflag = " + Server.Server_Flag);
         }
     }
 }
