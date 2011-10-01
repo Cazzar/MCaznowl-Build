@@ -231,6 +231,9 @@
     <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="ScriptingVB.cs" />
+    <Compile Include="Util\BigEndianBitConverter.cs" />
+    <Compile Include="Util\EBitConverter.cs" />
+    <Compile Include="Util\Endianness.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
@@ -429,9 +432,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\LittleEndianBitConverter.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="WebserverStuff\Remote.cs" />
+    <Compile Include="WebserverStuff\Remote.Handler.cs" />
+    <Compile Include="WebserverStuff\WebServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
