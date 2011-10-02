@@ -1034,6 +1034,7 @@ namespace MCForge
                 this.color = c.red;
                 Player.GlobalSpawn(this, this.pos[0], this.pos[1], this.pos[2], this.rot[0], this.rot[1], false);
             }
+            if (Remote.Remote.getRemote() != null) { Remote.Remote.getRemote().sendPlayers(); }
         }
 
         public void SetPrefix()
@@ -3595,6 +3596,7 @@ namespace MCForge
                 if (kickString == "") kickString = "Disconnected.";
 
                 SendKick(kickString);
+                if (Remote.Remote.getRemote() != null) Remote.Remote.getRemote().sendPlayers();
 
                 if (loggedIn)
                 {
@@ -3683,6 +3685,7 @@ namespace MCForge
                 else
                 {
                     connections.Remove(this);
+                    if (Remote.Remote.getRemote() != null) Remote.Remote.getRemote().sendPlayers();
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
@@ -3706,7 +3709,8 @@ namespace MCForge
 
             }
             catch (Exception e) { Server.ErrorLog(e); }
-            finally { this.CloseSocket(); }
+            finally { if (Remote.Remote.getRemote() != null) {Remote.Remote.getRemote().sendPlayers(); }
+                       this.CloseSocket(); }
         }
 
         public void SaveUndo()
