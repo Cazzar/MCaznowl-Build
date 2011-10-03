@@ -26,11 +26,12 @@ namespace MCForge.Remote
 {
     public partial class Remote
     {
+        public static Remote This;
         public string ip;
         public string username;
         public string password;
      
-        public static Remote remote = new Remote();
+        //public static Remote remote;
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
 
@@ -43,7 +44,7 @@ namespace MCForge.Remote
 
         public Remote()
         {
-
+            Remote.This = this;
         }
         public void Start()
         {
@@ -188,12 +189,7 @@ namespace MCForge.Remote
 
         private void HandleMobileDC()
         {
-            
-                Server.s.Log("[Remote] Disconnected.");
-                Player.GlobalMessage("[Remote] Disconnected.");
                 Disconnect();
-                
-            
         }
 
        
@@ -203,7 +199,7 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string msg = Encoding.UTF8.GetString(message, 2, length);
-            //Server.Log(msg);
+            //Server.s.Log(msg);
             if (msg.StartsWith("2.3: "))  //TODO: make a better checker
             {
                 msg = msg.Replace("2.3: ", "");
@@ -212,16 +208,19 @@ namespace MCForge.Remote
             else
             {
                 
-                Server.s.Log("[Remote] A remote tried to connect with a different version.");
+               
                 SendData("VERSION");
+                Server.s.Log("[Remote] A remote tried to connect with a different version.");
             }
 
             
             if (HandleLogin(msg))
             {
                  
-                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
+                 
                  SendData("ACCEPTED");
+                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
+                 sendPlayers();
                  LoggedIn = true;
                  remotes.Add(this);
             }
@@ -301,10 +300,7 @@ namespace MCForge.Remote
             try
             {
 
-                //string accepted = message;
-                //byte[] bytes = new byte[(accepted.Length * 2) + 2];
-                //util.EndianBitConverter.Big.GetBytes((short)accepted.Length).CopyTo(bytes, 0);
-                //Encoding.BigEndianUnicode.GetBytes(accepted).CopyTo(bytes, 2);
+                
                 SendData(0x03);
                 Server.s.Log("[Remote] has been kicked from the server!");
                 
@@ -322,7 +318,8 @@ namespace MCForge.Remote
 
             
             if (LoggedIn)
-                Player.GlobalMessage("%5[Remote] %fhas disconnected. (REMOTE)");
+                Player.GlobalMessage("%5[Remote] %fhas disconnected.");
+            Server.s.Log("[Remote] has disconnected");
             LoggedIn = false;
 
  
@@ -339,6 +336,7 @@ namespace MCForge.Remote
                 catch { }
                 socket = null;
             }
+            remotes.Remove(this);
         }
 
         public void SendData(int id) { SendData(id, new byte[0]); }
@@ -354,6 +352,7 @@ namespace MCForge.Remote
             byte[] bytes = new byte[(p.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
+           // Server.s.Log(p);
             SendData(bytes);
         }
         public void SendData(int id, byte[] send)
@@ -378,9 +377,11 @@ namespace MCForge.Remote
         public void SendData(byte[] send)
         {
             if (socket == null || !socket.Connected) return;
+
             try
             {
                 socket.Send(send);
+                //Server.s.Log("SENT MESSAGES");
                 send = null;
             }
             catch (SocketException)
@@ -409,13 +410,10 @@ namespace MCForge.Remote
         }
         public static Remote getRemote()
         {
-
             foreach (Remote tmp in Remote.remotes)
             {
-                if (remotes.Count == 1)
-                {
+                if (tmp == This)
                     return tmp;
-                }
             }
             return null;
         }
@@ -435,10 +433,18 @@ namespace MCForge.Remote
             foreach (Player p in Player.players) 
             {
                 //builder.Append(i).Append(",").Append(p.name).Append(",").Append(p.level.name).Append(",").Append(p.group.name);  later
+                addPlayer(p);
                 System.Threading.Thread.Sleep(100);
-                SendData(0x04, p.name);
             }
 
+        }
+        internal void addPlayer(Player p)
+        {
+            SendData(0x04, "ADD:" + p.name);
+        }
+        internal void removePlayer(Player p)
+        {
+            SendData(0x04, "DELETE:" + p.name);
         }
     }
 }
