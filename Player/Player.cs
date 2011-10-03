@@ -2648,7 +2648,10 @@ namespace MCForge
                 buffer[129] = 100;
             else
                 buffer[129] = 0;
-
+            if (OnSendMOTD != null)
+            {
+                OnSendMOTD(this, buffer);
+            }
             SendRaw(0, buffer);
 
         }
@@ -2706,6 +2709,10 @@ namespace MCForge
                 HTNO((short)level.width).CopyTo(buffer, 0);
                 HTNO((short)level.depth).CopyTo(buffer, 2);
                 HTNO((short)level.height).CopyTo(buffer, 4);
+                if (OnSendMap != null)
+                {
+                    OnSendMap(this, buffer);
+                }
                 SendRaw(4, buffer);
                 Loading = false;
             }
