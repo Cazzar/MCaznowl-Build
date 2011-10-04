@@ -10,11 +10,11 @@ namespace MCForge
         public bool cancelBlock = false;
         public bool cancelmysql = false;
         //Should people be able to cancel this event?
-        public delegate void SendMOTD(Player p, byte[] buffer);
-        public static event SendMOTD OnSendMOTD;
+        public delegate void MOTDSent(Player p, byte[] buffer);
+        public static event MOTDSent OnSendMOTD;
         //Should people be able to cancel this event?
-        public delegate void SendMap(Player p, byte[] buffer);
-        public static event SendMap OnSendMap;
+        public delegate void MapSent(Player p, byte[] buffer);
+        public static event MapSent OnSendMap;
         /// <summary>
         /// This is called when a player goes AFK
         /// </summary>
