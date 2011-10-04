@@ -75,6 +75,7 @@ namespace MCForge
                     Gui.Window.thisWindow.UpdatePlayerMapCombo();
                     Gui.Window.thisWindow.UnloadedlistUpdate();
                     Gui.Window.thisWindow.UpdateMapList("'");
+                    if (Remote.Remote.getRemote() != null) Remote.Remote.getRemote().checkMaps();
                 }
                 catch { }
                 return;
