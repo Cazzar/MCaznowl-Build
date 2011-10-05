@@ -81,6 +81,11 @@ namespace MCForge
                         Player.SendMessage(p, message + " is already banned.");
                         return;
                     }
+                    if (p != null && foundGroup.Permission >= p.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
+                        return;
+                    }
 
                     foundGroup.playerList.Remove(message);
                     foundGroup.playerList.Save();
@@ -116,6 +121,11 @@ namespace MCForge
                     if (who.group.Permission == LevelPermission.Banned)
                     {
                         Player.SendMessage(p, message + " is already banned.");
+                        return;
+                    }
+                    if (p != null && who.group.Permission >= p.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
                         return;
                     }
 
