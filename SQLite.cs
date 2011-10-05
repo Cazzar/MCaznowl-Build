@@ -29,18 +29,6 @@ namespace MCForge
     class SQLite
     {
         public static string connString = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling =" + Server.DatabasePooling +"; Max Pool Size =1000;";
-        public static void test(string query, bool createDB = false)
-        {
-            using (var conn = new SQLiteConnection(connString))
-            {
-                conn.Open();
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                }
-            }
-        }
 
 
         public static void executeQuery(string queryString)
@@ -80,7 +68,7 @@ namespace MCForge
             int totalCount = 0;
             using (DataTable toReturn = new DataTable("toReturn"))
             {
-                if (!Server.useMySQL)
+                if (Server.useMySQL)
                     return toReturn;
             retry: try
                 {
@@ -109,7 +97,6 @@ namespace MCForge
                     else
                         goto retry;
                 }
-
                 return toReturn;
             }
         }

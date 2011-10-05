@@ -64,7 +64,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
+    <Reference Include="System.Data.SQLite, Version=1.0.76.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>.\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -237,8 +238,12 @@
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
+<<<<<<< HEAD
     <Compile Include="Util\Endianness.cs" />
     <Compile Include="ScriptingVB.cs" />
+=======
+    <Compile Include="Util\Endianness.cs" />
+>>>>>>> DAMNIT i was checking if the server was using MySQL in SQLite.fillData derp
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
