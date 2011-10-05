@@ -262,7 +262,7 @@ public static byte maxGuests = 10;
         public static string MySQLUsername = "root";
         public static string MySQLPassword = "password";
         public static string MySQLDatabaseName = "MCZallDB";
-        public static bool MySQLPooling = true;
+        public static bool DatabasePooling = true;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";

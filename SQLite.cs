@@ -28,7 +28,7 @@ namespace MCForge
 {
     class SQLite
     {
-        public static string connString = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling =" + Server.MySQLPooling +"; Max Pool Size =1000;";
+        public static string connString = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling =" + Server.DatabasePooling +"; Max Pool Size =1000;";
         public static void test(string query, bool createDB = false)
         {
             using (var conn = new SQLiteConnection(connString))
