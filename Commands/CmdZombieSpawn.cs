@@ -24,7 +24,7 @@ namespace MCForge
     {
         public override string name { get { return "zombiespawn"; } }
         public override string shortcut { get { return "zs"; } }
-        public override string type { get { return "build"; } }
+        public override string type { get { return "game"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 

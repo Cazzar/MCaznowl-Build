@@ -43,6 +43,7 @@ namespace MCForge
                             Player.SendMessage(p, "Use &b/help build" + Server.DefaultColor + " for a list of building commands.");
                             Player.SendMessage(p, "Use &b/help mod" + Server.DefaultColor + " for a list of moderation commands.");
                             Player.SendMessage(p, "Use &b/help information" + Server.DefaultColor + " for a list of information commands.");
+                            Player.SendMessage(p, "Use &b/help games" + Server.DefaultColor + " for a list of game commands.");
                             Player.SendMessage(p, "Use &b/help other" + Server.DefaultColor + " for a list of other commands.");
                             Player.SendMessage(p, "Use &b/help colors" + Server.DefaultColor + " to view the color codes.");
                             Player.SendMessage(p, "Use &b/help short" + Server.DefaultColor + " for a list of shortcuts.");
@@ -97,6 +98,20 @@ namespace MCForge
 
                         if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Information commands you may use:");
+                        Player.SendMessage(p, message.Remove(0, 2) + ".");
+                        break;
+                    case "games": case "game":
+                        message = "";
+                        foreach (Command comm in Command.all.commands)
+                        {
+                            if (p == null || p.group.commands.All().Contains(comm))
+                            {
+                                if (comm.type.Contains("game")) message += ", " + getColor(comm.name) + comm.name;
+                            }
+                        }
+
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        Player.SendMessage(p, "Game commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
                     case "other":
@@ -185,6 +200,7 @@ namespace MCForge
                         Player.SendMessage(p, "Could not find command, plugin or block specified.");
                         break;
                 }
+                
             }
             catch (Exception e) { Server.ErrorLog(e); Player.SendMessage(p, "An error occured"); }
         }
