@@ -285,31 +285,37 @@ namespace MCForge
 
         public void saveChanges()
         {
-            if (!Server.useMySQL) return;
+            //if (!Server.useMySQL) return;
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();
 
             string template = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
-
-            using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
+            if (Server.useMySQL)
             {
-                foreach (BlockPos bP in tempCache)
+                using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
                 {
-                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                    foreach (BlockPos bP in tempCache)
+                    {
+                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                    }
+                    transaction.Commit();
                 }
-                transaction.Commit();
             }
-
-            using (var transaction = SQLiteTransactionHelper.Create(SQLite.connString))
+            else
             {
-                foreach (BlockPos bP in tempCache)
+                template = "INSERT INTO Block" + name + " (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
+                using (var transaction = SQLiteTransactionHelper.Create(SQLite.connString))
                 {
-                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                    foreach (BlockPos bP in tempCache)
+                    {
+                        int deleted = bP.deleted ? 0 : 1;
+                        Server.s.Log(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
+                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
+                    }
+                    transaction.Commit();
                 }
-                transaction.Commit();
             }
-
             tempCache.Clear();
         }
 
@@ -828,7 +834,7 @@ namespace MCForge
             }
             else
             {
-                SQLite.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
+                SQLite.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted INT)");
                 SQLite.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
                 SQLite.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
                 SQLite.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");

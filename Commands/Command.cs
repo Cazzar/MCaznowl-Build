@@ -39,6 +39,8 @@ namespace MCForge
         public static CommandList core = new CommandList();
         public static void InitAll()
         {
+            all.Add(new CmdDurl());
+
             all.Add(new CmdAbort());
             all.Add(new CmdAbout());
             all.Add(new CmdAdminChat());

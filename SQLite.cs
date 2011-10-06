@@ -75,7 +75,6 @@ namespace MCForge
                     using (var conn = new SQLiteConnection(connString))
                     {
                         conn.Open();
-                        conn.ChangeDatabase(Server.MySQLDatabaseName);
                         using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn))
                         {
                             da.Fill(toReturn);
