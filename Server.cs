@@ -256,7 +256,7 @@ public static byte maxGuests = 10;
 
         public static bool checkUpdates = true;
 
-        public static bool useMySQL = true;
+        public static bool useMySQL = false;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
