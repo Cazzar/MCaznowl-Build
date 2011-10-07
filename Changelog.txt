@@ -4,6 +4,7 @@ v5.3.0.0
 - Fixed /spheroid being lopsided with even numbers.
 - Fixed the update checker so it only updates if there actually is an update.
 - Fixed /xban not working at all if the player is offline.
+- Fixed a bug in /ban that allowed a player to ban someone ranked higher than them if the player being banned was below rank permission 80. 
 - Added option for WoM Direct heartbeat.
 - Added the "Notchian" tree generator, use /tree notch.
 - Added command blocks, prepend a / to your /mb message to make it a command block. Example: /mb /cuboid air random
