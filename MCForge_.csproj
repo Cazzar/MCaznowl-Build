@@ -239,12 +239,8 @@
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
-<<<<<<< HEAD
     <Compile Include="Util\Endianness.cs" />
     <Compile Include="ScriptingVB.cs" />
-=======
-    <Compile Include="Util\Endianness.cs" />
->>>>>>> DAMNIT i was checking if the server was using MySQL in SQLite.fillData derp
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
