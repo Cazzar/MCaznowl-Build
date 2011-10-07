@@ -31,6 +31,7 @@ namespace MCForge.Remote
         public string ip;
         public string username;
         public string password;
+        
 
         //public static Remote remote;
         byte[] buffer = new byte[0];
@@ -54,7 +55,16 @@ namespace MCForge.Remote
 
                 ip = socket.RemoteEndPoint.ToString().Split(':')[0];
                 Player.GlobalMessage(c.navy + "A Remote has connected to the server");
-                Server.s.Log("[Remote] " + ip + " connected to the server.");
+                Server.s.Log("[Remote] connected to the server.");
+
+               // Player.PlayerChat += new Player.OnPlayerChat(HandlePlayerChat);
+                //Server.s.OnLog += new Server.LogHandler(s_OnLog);
+                Server.s.OnLog += new Server.LogHandler(s_OnLog);
+                Player.PlayerConnect +=new Player.OnPlayerConnect(Player_PlayerConnect);
+                Player.PlayerDisconnect +=new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
+                Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
+                
+                
 
 
                 socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
@@ -118,6 +128,7 @@ namespace MCForge.Remote
 
                     case 11: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 12: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 13: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 25: length = 1; break;
 
 
@@ -148,6 +159,7 @@ namespace MCForge.Remote
 
                         case 11: HandleMobileLogin(message); break;   //Login 
                         case 12: HandleMobileChat(message); break;
+                        case 13: HandleMobileRequest(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -163,6 +175,11 @@ namespace MCForge.Remote
                 Server.s.Log(e.StackTrace);
             }
             return buffer;
+        }
+
+        private void HandleMobileRequest(byte[] message)
+        {
+            //throw new NotImplementedException();
         }
 
         private void HandleMobileChat(byte[] message)
@@ -411,25 +428,6 @@ namespace MCForge.Remote
                 Server.s.Log("Packet " + id + " had no DATA!");
             }
         }
-        public static Remote getRemote()
-        {
-            foreach (Remote tmp in Remote.remotes)
-            {
-                if (tmp == This)
-                    return tmp;
-            }
-            return null;
-        }
-
-        internal void sendLog(string p)
-        {
-            byte[] bytes = new byte[(p.Length * 2) + 2];
-            util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
-            Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
-            SendData(0x05, bytes);
-            System.Threading.Thread.Sleep(100);
-
-        }
         internal void sendPlayers()
         {
             StringBuilder builder = new StringBuilder();
@@ -444,11 +442,23 @@ namespace MCForge.Remote
         }
         internal void addPlayer(Player p)
         {
-            SendData(0x04, "ADD:" + p.name);
+            if (p.title.Equals(null))
+            {
+                SendData(0x04, new StringBuilder("ADD:").Append(p.color).Append(",").Append(p.group.name)
+                    .Append(",").Append(p.name).Append(",").Append("Default").ToString());
+                return;
+            }
+            else
+            {
+                SendData(0x04, new StringBuilder("ADD:")
+                    .Append(p.color).Append(",").Append(p.group.name)
+                    .Append(",").Append(p.name).Append(",")
+                    .Append(p.title).ToString());
+            }
         }
         internal void removePlayer(Player p)
         {
-            SendData(0x04, "DELETE:" + p.name);
+            SendData(0x04, "DELETE:" + p.name); 
         }
         internal void checkMaps()
         {
@@ -477,7 +487,66 @@ namespace MCForge.Remote
         }
         internal void removeMap(Level l)
         {
+            
+        }
+        
+        void s_OnLog(string message)
+        {
+            System.Threading.Thread.Sleep(400);
+            Player p = null;
 
+                //Player.GlobalMessage(message);
+                int id = message.IndexOf('>');
+                if (id > 0)
+                {
+                    string getname = null;
+                    Player.GlobalMessage(id.ToString());
+                    if (id % 2 == 0)
+                    {
+                        getname = message.Substring(12, (id / 2) - 1);
+                    }
+                    else if (id % 2 == 1)
+                    {
+                        getname = message.Substring(12, (id / 2) + 1);
+                    }
+
+                   // Player.GlobalMessage(getname);
+                    p = Player.Find(getname);
+                }
+
+                if (p == null)
+                {
+                    //Player.GlobalMessage(message);
+                    SendData(0x05, new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString());
+                    System.Threading.Thread.Sleep(100);
+                }
+                else
+                {
+                    SendData(0x05, new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString());
+                    System.Threading.Thread.Sleep(100);
+                }
+                
+        }
+
+
+        void Player_PlayerConnect(Player p)
+        {
+            addPlayer(p);
+        }
+        void Player_PlayerDisconnect(Player p, string message)
+        {
+            removePlayer(p);
+        }
+        void Level_LevelLoad(string l)
+        {
+            checkMaps();
+            Level lo = Level.Find(l);
+            if (lo != null) lo.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload);
+            
+        }
+        void Remote_LevelUnload(Level l)
+        {
+            checkMaps();
         }
     }
 }

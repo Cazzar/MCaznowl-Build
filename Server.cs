@@ -696,13 +696,13 @@ public static byte maxGuests = 10;
             });
             /*ml.Queue(delegate
             {
-                Log("Creating listening socket on port " + 5050 + " for remote console...");            FOR LATER USE
+                Log("Creating listening socket on port " + 5050 + " for remote console...");          
                 Remote.RemoteServer webServer;
                 (webServer = new Remote.RemoteServer()).Start();
                 
                 
-            });
-            */
+            });*/
+            
             ml.Queue(delegate
             {
                 updateTimer.Elapsed += delegate
@@ -1015,7 +1015,7 @@ processThread.Start();
                     OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
                 }
             }
-            if (Remote.Remote.getRemote() != null) { Remote.Remote.getRemote().sendLog(DateTime.Now.ToString("(HH:mm:ss) ") + message); }
+            
             Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
         }
 

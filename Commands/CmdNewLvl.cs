@@ -110,6 +110,7 @@ namespace MCForge
                     GC.WaitForPendingFinalizers();
                 }
                 Player.GlobalMessage("Level \"" + name + "\" created" + (useSeed ? " with seed \"" + parameters[5] + "\"" : "")); // The player needs some form of confirmation.
+               
             }
             else
                 Help(p);
