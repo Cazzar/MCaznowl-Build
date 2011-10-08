@@ -50,29 +50,30 @@ namespace MCForge.Remote
         }
         public void Start()
         {
-            try
+            if (RemoteServer.enableRemote)
             {
+                try
+                {
 
-                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                Player.GlobalMessage(c.navy + "A Remote has connected to the server");
-                Server.s.Log("[Remote] connected to the server.");
+                    ip = socket.RemoteEndPoint.ToString().Split(':')[0];
+                    Player.GlobalMessage(c.navy + "A Remote has connected to the server");
+                    Server.s.Log("[Remote] connected to the server.");
+                    
+                    Server.s.OnLog += new Server.LogHandler(s_OnLog);
+                    Server.s.OnSettingsUpdate +=new Server.VoidHandler(s_OnSettingsUpdate);
 
-               // Player.PlayerChat += new Player.OnPlayerChat(HandlePlayerChat);
-                //Server.s.OnLog += new Server.LogHandler(s_OnLog);
-                Server.s.OnLog += new Server.LogHandler(s_OnLog);
-                Player.PlayerConnect +=new Player.OnPlayerConnect(Player_PlayerConnect);
-                Player.PlayerDisconnect +=new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-                Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
-                
-                
+                    Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
+                    Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
+                    Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
 
-
-                socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
-            }
-            catch (Exception e)
-            {
-                Server.s.Log(e.Message);
-                Server.s.Log(e.StackTrace);
+                    
+                    socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
+                }
+                catch (Exception e)
+                {
+                    Server.s.Log(e.Message);
+                    Server.s.Log(e.StackTrace);
+                }
             }
         }
         static void Receive(IAsyncResult result)
@@ -105,6 +106,8 @@ namespace MCForge.Remote
                 Server.s.Log(e.StackTrace);
             }
         }
+
+        #region HandleMessages
         byte[] HandleMessage(byte[] buffer)
         {
             try
@@ -176,12 +179,10 @@ namespace MCForge.Remote
             }
             return buffer;
         }
-
         private void HandleMobileRequest(byte[] message)
         {
             //throw new NotImplementedException();
         }
-
         private void HandleMobileChat(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
@@ -204,14 +205,10 @@ namespace MCForge.Remote
             RemoteChat(m);
 
         }
-
         private void HandleMobileDC()
         {
             Disconnect();
         }
-
-
-
         private void HandleMobileLogin(byte[] message)
         {
 
@@ -238,8 +235,7 @@ namespace MCForge.Remote
 
                 SendData("ACCEPTED");
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
-                sendPlayers();
-                checkMaps();
+                startUp();
                 LoggedIn = true;
                 remotes.Add(this);
             }
@@ -250,7 +246,6 @@ namespace MCForge.Remote
                 Server.s.Log("[Remote] A Remote with incorrect information attempted to join.");
             }
         }
-
         private void HandleInfo(byte[] message)
         {
             short type = BitConverter.ToInt16(message, 0);
@@ -269,17 +264,14 @@ namespace MCForge.Remote
         {
             Server.s.Log("DC");
         }
-
         private void HandleRemoteChatMessagePacket(byte[] message)
         {
             Server.s.Log("REMOTE TRY TO TALK");
         }
-
         private void HandleRemoteHandshake(byte[] message)
         {
             Server.s.Log("REMOTE REQUEST DATA");
         }
-
         private void HandleRemoteLogin(byte[] message)
         {
 
@@ -299,11 +291,11 @@ namespace MCForge.Remote
 
 
         }
-
         private void HandleRemoteJoin(byte[] message)
         {
             Server.s.Log("Remote Has Joined");
         }
+#endregion
 
         public void Kick()
         {
@@ -359,6 +351,7 @@ namespace MCForge.Remote
             remotes.Remove(this);
         }
 
+        #region Packet senders/loggers
         public void SendData(int id) { SendData(id, new byte[0]); }
         public void SendData(int id, string p)
         {
@@ -428,6 +421,13 @@ namespace MCForge.Remote
                 Server.s.Log("Packet " + id + " had no DATA!");
             }
         }
+#endregion
+        internal void startUp()
+        {
+            sendPlayers();
+            sendSettings();
+            //sendGroups();
+        }
         internal void sendPlayers()
         {
             StringBuilder builder = new StringBuilder();
@@ -439,6 +439,22 @@ namespace MCForge.Remote
             }
           
 
+        }
+        internal void sendSettings()
+        {
+            const string RECIEVED_SERVER_NAME = "SRVR_NAME: "; 
+		    const string RECIEVED_SERVER_MOTD = "SRVR_MOTD: "; 
+		    const string RECIEVED_SERVER_PORT = "SRVR_PORT: "; 
+		    const string RECIEVED_SERVER_IS_PUBLIC = "SRVR_PUBLIC: ";
+		    const string RECIEVED_MAIN_NAME = "SRVR_MAIN_NAME: ";
+            const string RECIEVED_ADMINS_JOIN = "SRVR_ADMINS_JOIN: ";
+
+            SendData(0x08, RECIEVED_ADMINS_JOIN + Server.adminsjoinsilent.ToString().ToLower());
+            SendData(0x08, RECIEVED_MAIN_NAME + Server.mainLevel.name.ToString());
+            SendData(0x08, RECIEVED_SERVER_IS_PUBLIC + Server.pub.ToString().ToLower());
+            SendData(0x08, RECIEVED_SERVER_PORT + Server.port.ToString().ToLower());
+            SendData(0x08, RECIEVED_SERVER_MOTD + Server.motd.ToString());
+            SendData(0x08, RECIEVED_SERVER_NAME + Server.name.ToString());
         }
         internal void addPlayer(Player p)
         {
@@ -460,7 +476,7 @@ namespace MCForge.Remote
         {
             SendData(0x04, "DELETE:" + p.name); 
         }
-        internal void checkMaps()
+        internal void sendMaps()
         {
 
             List<string> levels = new List<string>(Server.levels.Count);
@@ -485,14 +501,10 @@ namespace MCForge.Remote
             catch (Exception e) { Server.ErrorLog(e);}
             
         }
-        internal void removeMap(Level l)
-        {
-            
-        }
-        
+
         void s_OnLog(string message)
         {
-            System.Threading.Thread.Sleep(400);
+            
             Player p = null;
 
                 //Player.GlobalMessage(message);
@@ -527,8 +539,6 @@ namespace MCForge.Remote
                 }
                 
         }
-
-
         void Player_PlayerConnect(Player p)
         {
             addPlayer(p);
@@ -539,14 +549,18 @@ namespace MCForge.Remote
         }
         void Level_LevelLoad(string l)
         {
-            checkMaps();
+            sendMaps();
             Level lo = Level.Find(l);
             if (lo != null) lo.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload);
             
         }
         void Remote_LevelUnload(Level l)
         {
-            checkMaps();
+            sendMaps();
+        }
+        void s_OnSettingsUpdate()
+        {
+            sendSettings();
         }
     }
 }

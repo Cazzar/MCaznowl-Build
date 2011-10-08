@@ -26,8 +26,10 @@ namespace MCForge.Remote
 {
     class RemoteServer
     {
-        public static Socket listen;
-        public int port = 5050;  // Select any free port you wish 
+        public Socket listen;
+        public static int port = 5050;
+        public static bool enableRemote = true;
+        
 
         static bool shutdown = false;
        
@@ -35,18 +37,21 @@ namespace MCForge.Remote
 
         public void Start()
         {
-            try
+            if (enableRemote)
             {
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
-                listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                listen.Bind(endpoint);
-                listen.Listen((int)SocketOptionName.MaxConnections);
+                try
+                {
+                    IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
+                    listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    listen.Bind(endpoint);
+                    listen.Listen((int)SocketOptionName.MaxConnections);
 
-                listen.BeginAccept(new AsyncCallback(Accept), null);
-                
+                    listen.BeginAccept(new AsyncCallback(Accept), null);
+
+                }
+                catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
+                catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }
             }
-            catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
-            catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }
         }
 
         void Accept(IAsyncResult result)
