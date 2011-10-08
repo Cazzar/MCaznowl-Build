@@ -218,6 +218,7 @@ namespace MCForge
             all.Add(new CmdRestart());
             all.Add(new CmdRestartPhysics());
             all.Add(new CmdRestore());
+            all.Add(new CmdRestoreSelection());
             all.Add(new CmdRetrieve());
             all.Add(new CmdReveal());
 			all.Add(new CmdReview());
