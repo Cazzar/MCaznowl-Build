@@ -48,7 +48,7 @@ namespace MCForge
                     int tryCounter = 0;
              rerun: try
                     {
-                        ip = MySQL.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'");
+                        ip = Server.useMySQL ? MySQL.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'") : SQLite.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'");
                     }
                     catch (Exception e)
                     {

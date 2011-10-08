@@ -39,6 +39,7 @@ namespace MCForge
 {
     public class Server
     {
+        public static string apppath = Application.StartupPath;
         public delegate void LogHandler(string message);
 public delegate void OnServerError(Exception error);
 public static event OnServerError ServerError = null;
@@ -255,13 +256,13 @@ public static byte maxGuests = 10;
 
         public static bool checkUpdates = true;
 
-        public static bool useMySQL = true;
+        public static bool useMySQL = false;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
         public static string MySQLPassword = "password";
         public static string MySQLDatabaseName = "MCZallDB";
-        public static bool MySQLPooling = true;
+        public static bool DatabasePooling = true;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";
@@ -506,31 +507,39 @@ public static byte maxGuests = 10;
                     //process.Kill();
                     return;
                 }
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
+                if (useMySQL) MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
+                else SQLite.executeQuery("CREATE TABLE if not exists Players (ID INTEGER PRIMARY KEY AUTOINCREMENT not null, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6));");
+                
                 // Check if the color column exists.
-                DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
+                DataTable colorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'") : SQLite.fillData("SELECT color FROM Players");
 
                 if (colorExists.Rows.Count == 0)
                 {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
                 }
                 colorExists.Dispose();
 
                 // Check if the title color column exists.
-                DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
+                DataTable tcolorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'") : SQLite.fillData("SELECT title_color FROM Players");
 
                 if (tcolorExists.Rows.Count == 0)
                 {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                   // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
                 }
                 tcolorExists.Dispose();
-                DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
+
+                DataTable timespent = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'") : SQLite.fillData("SELECT TimeSpent FROM Players");
+
                 if (timespent.Rows.Count == 0)
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
-                DataTable totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
+
+                DataTable totalCuboided = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'") : SQLite.fillData("SELECT totalCuboided FROM Players");
+
                 if (totalCuboided.Rows.Count == 0)
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
                 totalCuboided.Dispose();
             }
 

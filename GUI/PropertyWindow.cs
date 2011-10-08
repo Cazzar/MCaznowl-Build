@@ -717,6 +717,7 @@ namespace MCForge.Gui
                     w.WriteLine("# no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
                     w.WriteLine("# zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
                     w.WriteLine();
+                    w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
                     w.WriteLine("# Host\t=\tThe host name for the database (usually 127.0.0.1)");
                     w.WriteLine("# SQLPort\t=\tPort number to be used for MySQL. Unless you manually changed the port, leave this alone. Default 3306.");
                     w.WriteLine("# Username\t=\tThe username you used to create the database (usually root)");
@@ -807,7 +808,7 @@ namespace MCForge.Gui
                     w.WriteLine("Username = " + txtSQLUsername.Text);
                     w.WriteLine("Password = " + txtSQLPassword.Text);
                     w.WriteLine("DatabaseName = " + txtSQLDatabase.Text);
-                    w.WriteLine("Pooling = " + Server.MySQLPooling);
+                    w.WriteLine("Pooling = " + Server.DatabasePooling);
                     w.WriteLine();
                     w.WriteLine("#Colors");
                     w.WriteLine("defaultColor = " + cmbDefaultColour.Items[cmbDefaultColour.SelectedIndex].ToString());

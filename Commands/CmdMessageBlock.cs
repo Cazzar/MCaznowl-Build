@@ -74,16 +74,16 @@ namespace MCForge
 
             cpos.message = cpos.message.Replace("'", "\\'");
 
-            DataTable Messages = MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+            DataTable Messages = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM `Messages" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
             Messages.Dispose();
 
             if (Messages.Rows.Count == 0)
             {
-                MySQL.executeQuery("INSERT INTO `Messages" + p.level.name + "` (X, Y, Z, Message) VALUES (" + (int)x + ", " + (int)y + ", " + (int)z + ", '" + cpos.message + "')");
+                if (Server.useMySQL) MySQL.executeQuery("INSERT INTO `Messages" + p.level.name + "` (X, Y, Z, Message) VALUES (" + (int)x + ", " + (int)y + ", " + (int)z + ", '" + cpos.message + "')"); else SQLite.executeQuery("INSERT INTO `Messages" + p.level.name + "` (X, Y, Z, Message) VALUES (" + (int)x + ", " + (int)y + ", " + (int)z + ", '" + cpos.message + "')");
             }
             else
             {
-                MySQL.executeQuery("UPDATE `Messages" + p.level.name + "` SET Message='" + cpos.message + "' WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+                if (Server.useMySQL) MySQL.executeQuery("UPDATE `Messages" + p.level.name + "` SET Message='" + cpos.message + "' WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z); else SQLite.executeQuery("UPDATE `Messages" + p.level.name + "` SET Message='" + cpos.message + "' WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
             }
 
             Player.SendMessage(p, "Message block placed.");
@@ -99,7 +99,7 @@ namespace MCForge
         {
             p.showMBs = !p.showMBs;
 
-			using (DataTable Messages = MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "`"))
+            using (DataTable Messages = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + p.level.name + "`") : SQLite.fillData("SELECT * FROM `Messages" + p.level.name + "`"))
 			{
 				int i;
 

@@ -488,7 +488,7 @@ namespace MCForge
                     return;
                 }
             }
-            MySQL.executeQuery(commandString);
+            if (Server.useMySQL) MySQL.executeQuery(commandString); else SQLite.executeQuery(commandString);
 
             try
             {
@@ -662,7 +662,7 @@ namespace MCForge
                     else
                     {
                         // Verify Names is off.  Gotta check the hard way.
-                        DataTable ipQuery = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'");
+                        DataTable ipQuery = Server.useMySQL ? MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'") : SQLite.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'");
 
                         if (ipQuery.Rows.Count > 0)
                         {
@@ -847,7 +847,9 @@ namespace MCForge
                 Player.GlobalMessage("An error occurred: " + e.Message);
             }
 
-            DataTable playerDb = MySQL.fillData("SELECT * FROM Players WHERE Name='" + name + "'");
+            DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT * FROM Players WHERE Name='" + name + "'") : SQLite.fillData("SELECT * FROM Players WHERE Name='" + name + "'");
+
+            Server.s.Log(playerDb.Rows.Count.ToString());
 
             if (playerDb.Rows.Count == 0)
             {
@@ -865,7 +867,12 @@ namespace MCForge
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
+                if (Server.useMySQL)
                 MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
+                    "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
+                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
+                else
+                    SQLite.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                     ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
 
@@ -1298,7 +1305,7 @@ namespace MCForge
         {
             try
             {
-                DataTable Portals = MySQL.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z);
+                DataTable Portals = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z) : SQLite.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z);
 
                 int LastPortal = Portals.Rows.Count - 1;
                 if (LastPortal > -1)
@@ -1335,7 +1342,7 @@ namespace MCForge
         {
             try
             {
-                DataTable Messages = MySQL.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+                DataTable Messages = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
 
                 int LastMsg = Messages.Rows.Count - 1;
                 if (LastMsg > -1)
@@ -3784,11 +3791,11 @@ namespace MCForge
             spamBlockLog.Clear();
             spamChatLog.Clear();
             spyChatRooms.Clear();
-            try
+            /*try
             {
                 //this.commThread.Abort();
             }
-            catch { }
+            catch { }*/
         }
         //fixed undo code
         public bool IsAloneOnCurrentLevel()
