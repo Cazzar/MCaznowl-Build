@@ -310,7 +310,6 @@ namespace MCForge
                     foreach (BlockPos bP in tempCache)
                     {
                         int deleted = bP.deleted ? 0 : 1;
-                        Server.s.Log(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
                         transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
                     }
                     transaction.Commit();

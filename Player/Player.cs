@@ -849,7 +849,6 @@ namespace MCForge
 
             DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT * FROM Players WHERE Name='" + name + "'") : SQLite.fillData("SELECT * FROM Players WHERE Name='" + name + "'");
 
-            Server.s.Log(playerDb.Rows.Count.ToString());
 
             if (playerDb.Rows.Count == 0)
             {
