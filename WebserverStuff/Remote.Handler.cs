@@ -42,17 +42,7 @@ namespace MCForge.Remote
                    return;
 
            }
-           //else if (m[0] == '@')
-           //{
-           //    if (m[1] != ' ')
-           //    {
-           //        HandleCommand("msg", m.Substring(1));  //fix later
-           //    }
-           //    else if (m[1] == ' ')
-           //    {
-           //        HandleCommand("msg", m.Substring(2));
-           //    }
-           //}
+
            Server.s.Log("[Remote]: " + m);
            Player.GlobalMessage(c.navy + "[Remote]: " + c.white + m);
            return ;

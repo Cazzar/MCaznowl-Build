@@ -24,7 +24,7 @@ using System.Threading;
 
 namespace MCForge.Remote
 {
-    class RemoteServer
+   public class RemoteServer
     {
         public Socket listen;
         public static int port = 5050;
@@ -48,6 +48,7 @@ namespace MCForge.Remote
 
                     listen.BeginAccept(new AsyncCallback(Accept), null);
 
+                   Server.s. Log("Creating listening socket on port " + port + " for remote console...");          
                 }
                 catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
                 catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }

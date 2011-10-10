@@ -61,10 +61,11 @@ namespace MCForge.Remote
                     
                     Server.s.OnLog += new Server.LogHandler(s_OnLog);
                     Server.s.OnSettingsUpdate +=new Server.VoidHandler(s_OnSettingsUpdate);
-
                     Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                     Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
                     Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
+                    Group.OnGroupLoad +=new Group.GroupLoad(GroupChanged);
+                    Group.OnGroupSave +=new Group.GroupSave(GroupChanged);
 
                     
                     socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
@@ -359,6 +360,7 @@ namespace MCForge.Remote
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
             SendData(id, bytes);
+            System.Threading.Thread.Sleep(100);
         }
         public void SendData(string p)
         {
@@ -449,12 +451,51 @@ namespace MCForge.Remote
 		    const string RECIEVED_MAIN_NAME = "SRVR_MAIN_NAME: ";
             const string RECIEVED_ADMINS_JOIN = "SRVR_ADMINS_JOIN: ";
 
+            const string RECIEVED_IRC_USE = "IRC_USE: ";
+		    const string RECIEVED_IRC_CHANNEL = "IRC_CHANNEL: ";
+		    const string RECIEVED_IRC_OPCHANNEL = "IRC_OPCHANNEL: ";
+		    const string RECIEVED_IRC_NICK = "IRC_NICK: ";
+		    const string RECIEVED_IRC_COLOR = "IRC_COLOR: ";
+		    const string RECIEVED_IRC_IDENT= "IRC_IDENT: ";
+		    const string RECIEVED_IRC_PASS = "IRC_PASS: ";
+		    const string RECIEVED_IRC_PORT = "IRC_PORT: ";
+
+		    const string RECIEVED_MISC_PHYSICSRESTART = "MISC_PHYSICSRESTART: ";
+		    const string RECIEVED_MISC_RPLIMIT = "MISC_RPLIMIT: ";
+		    const string RECIEVED_MISC_NORMRPLIMIT = "MISC_NORMRPLIMIT: ";
+		    const string RECIEVED_MISC_GLOBALCHAT = "MISC_GLOBALCHAT: ";
+		    const string RECIEVED_MISC_GLOBALCOLOR = "MISC_GLOBALCOLOR: ";
+		    const string RECIEVED_MISC_GLOBALNAME = "MISC_GLOBALNAME: ";
+		    const string RECIEVED_MISC_DOLLAR = "MISC_DOLLAR: ";
+		    const string RECIEVED_MISC_SUPEROPRANK = "MISC_SUPEROPRANK: ";
+		    const string RECIEVED_MISC_PARSEEMOTE = "MISC_PARSEEMOTE: ";
+
             SendData(0x08, RECIEVED_ADMINS_JOIN + Server.adminsjoinsilent.ToString().ToLower());
             SendData(0x08, RECIEVED_MAIN_NAME + Server.mainLevel.name.ToString());
             SendData(0x08, RECIEVED_SERVER_IS_PUBLIC + Server.pub.ToString().ToLower());
             SendData(0x08, RECIEVED_SERVER_PORT + Server.port.ToString().ToLower());
             SendData(0x08, RECIEVED_SERVER_MOTD + Server.motd.ToString());
             SendData(0x08, RECIEVED_SERVER_NAME + Server.name.ToString());
+
+            SendData(0x08, RECIEVED_IRC_USE + Server.irc.ToString().ToLower());
+            SendData(0x08, RECIEVED_IRC_CHANNEL + Server.ircChannel);
+            SendData(0x08, RECIEVED_IRC_OPCHANNEL + Server.ircOpChannel);
+            SendData(0x08, RECIEVED_IRC_NICK + Server.ircNick);
+            SendData(0x08, RECIEVED_IRC_COLOR + Server.IRCColour);
+            SendData(0x08, RECIEVED_IRC_IDENT + Server.ircIdentify.ToString().ToLower());
+            SendData(0x08, RECIEVED_IRC_PASS + Server.ircPassword);
+            SendData(0x08, RECIEVED_IRC_PORT + Server.ircPort);
+
+            SendData(0x08, RECIEVED_MISC_PHYSICSRESTART + Server.physicsRestart.ToString().ToLower());
+            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit);
+            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit);
+            SendData(0x08, RECIEVED_MISC_GLOBALCHAT + Server.UseGlobalChat.ToString().ToLower());
+            SendData(0x08, RECIEVED_MISC_GLOBALCOLOR + Server.GlobalChatColor);
+            SendData(0x08, RECIEVED_MISC_GLOBALNAME + Server.GlobalChatNick);
+            SendData(0x08, RECIEVED_MISC_DOLLAR + Server.dollardollardollar.ToString().ToLower());
+            SendData(0x08, RECIEVED_MISC_SUPEROPRANK + Server.rankSuper.ToString().ToLower());
+            SendData(0x08, RECIEVED_MISC_PARSEEMOTE + Server.parseSmiley.ToString().ToLower());
+
         }
         internal void addPlayer(Player p)
         {
@@ -501,7 +542,13 @@ namespace MCForge.Remote
             catch (Exception e) { Server.ErrorLog(e);}
             
         }
-
+        internal void sendGroups()
+        {
+            foreach(Group g in Group.GroupList)
+            {
+                //SendData(0x07, g.name + "," +g.color + "," g.
+            } 
+        }
         void s_OnLog(string message)
         {
             
@@ -562,5 +609,10 @@ namespace MCForge.Remote
         {
             sendSettings();
         }
+        void GroupChanged()
+        {
+            sendGroups();
+        }
+
     }
 }
