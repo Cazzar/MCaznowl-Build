@@ -152,6 +152,7 @@
     <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdRankMsg.cs" />
     <Compile Include="Commands\CmdReload.cs" />
+    <Compile Include="Commands\CmdRestoreSelection.cs" />
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdScinema.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
