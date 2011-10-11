@@ -39,11 +39,11 @@ namespace MCForge
                 case "3":
                 case "notch": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchTree); break;
                 case "4":
-                case "big": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchBigTree); break;
-                case "5":
-                case "pine": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchPineTree); break;
-                case "6":
                 case "swamp": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchSwampTree); break;
+                /*case "5":
+                case "big": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchBigTree); break;
+                case "6":
+                case "pine": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchPineTree); break;*/
                 default: p.Blockchange += new Player.BlockchangeEventHandler(AddTree); break;
             }
             Player.SendMessage(p, "Select where you wish your tree to grow");
@@ -84,7 +84,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/tree [type] - Turns tree mode on or off.");
-            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2), (Notch | 3), (Big | 4), (Pine | 5), (Swamp | 6)");
+            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2), (Notch | 3), (Swamp | 4)");
         }
     }
 }

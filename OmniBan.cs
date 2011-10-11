@@ -46,7 +46,7 @@ namespace MCForge
                     try
                     {
                         using (WebClient WC = new WebClient())
-                            data = WCDownloadString("http://mcforge.net/omniban.php").ToLower();
+                            data = WC.DownloadString("http://mcforge.net/omniban.php").ToLower();
                     }
                     catch { Load(false); return; }
 

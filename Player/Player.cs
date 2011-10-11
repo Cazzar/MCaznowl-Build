@@ -2038,6 +2038,7 @@ namespace MCForge
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(OPs): " + name + ": " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -2051,6 +2052,7 @@ namespace MCForge
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(Admins): " + name + ": " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -3412,7 +3414,6 @@ namespace MCForge
                     if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
-
                     }
                 });
 
