@@ -33,7 +33,7 @@ namespace MCForge
         public OmniBan()
         {
             bans = new List<string>();
-            kickMsg = "You are banned from all MCForge servers!";
+            kickMsg = "Omniban! Contact MCForge staff to appeal.";
         }
 
         public void Load(bool web)

@@ -39,9 +39,11 @@ namespace MCForge
                 case "3":
                 case "notch": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchTree); break;
                 case "4":
+                case "swamp": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchSwampTree); break;
+                /*case "5":
                 case "big": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchBigTree); break;
-                case "5":
-                case "pine": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchPineTree); break;
+                case "6":
+                case "pine": p.Blockchange += new Player.BlockchangeEventHandler(AddNotchPineTree); break;*/
                 default: p.Blockchange += new Player.BlockchangeEventHandler(AddTree); break;
             }
             Player.SendMessage(p, "Select where you wish your tree to grow");
@@ -50,34 +52,39 @@ namespace MCForge
 
         void AddTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Server.MapGen.AddTree(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddNotchTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Server.MapGen.AddNotchTree(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddNotchTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddNotchBigTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Server.MapGen.AddNotchBigTree(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddNotchBigTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddNotchPineTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Server.MapGen.AddNotchPineTree(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddNotchPineTree(p.level, x, y, z, p.random, true, true, p);
+            if (!p.staticCommands) p.ClearBlockchange();
+        }
+        void AddNotchSwampTree(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            Server.MapGen.AddNotchSwampTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
         void AddCactus(Player p, ushort x, ushort y, ushort z, byte type)
         {
-            Server.MapGen.AddCactus(p.level, x, y, z, new Random(), true, true, p);
+            Server.MapGen.AddCactus(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
 
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/tree [type] - Turns tree mode on or off.");
-            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2), (Notch | 3)");
+            Player.SendMessage(p, "Types - (Fern | 1), (Cactus | 2), (Notch | 3), (Swamp | 4)");
         }
     }
 }

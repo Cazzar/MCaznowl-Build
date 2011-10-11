@@ -262,6 +262,9 @@ namespace MCForge
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+
+        //Random...
+        public Random random = new Random();
         
         //Global Chat
         public bool muteGlobal = false;
@@ -1421,6 +1424,21 @@ namespace MCForge
                 case Block.door_gold_air:
                 case Block.door_cobblestone_air:
                 case Block.door_red_air:
+
+                case Block.door_orange_air:
+                case Block.door_yellow_air:
+                case Block.door_lightgreen_air:
+                case Block.door_aquagreen_air:
+                case Block.door_cyan_air:
+                case Block.door_lightblue_air:
+                case Block.door_purple_air:
+                case Block.door_lightpurple_air:
+                case Block.door_pink_air:
+                case Block.door_darkpink_air:
+                case Block.door_darkgrey_air:
+                case Block.door_lightgrey_air:
+                case Block.door_white_air:
+
                 case Block.door_dirt_air:
                 case Block.door_grass_air:
                 case Block.door_blue_air:
@@ -2035,6 +2053,7 @@ namespace MCForge
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(OPs): " + name + ": " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -2048,6 +2067,7 @@ namespace MCForge
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(Admins): " + name + ": " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -3409,7 +3429,6 @@ namespace MCForge
                     if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
-
                     }
                 });
 

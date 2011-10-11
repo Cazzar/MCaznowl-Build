@@ -36,6 +36,34 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
+            if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
+            if (String.IsNullOrEmpty(message))
+            {
+                if (p.level.guns)
+                {
+                    p.level.guns = false;
+                    Player.GlobalMessage("&9Gun usage has been disabled on &c" + p.level.name + "&9!");
+                    Level.SaveSettings(p.level);
+
+                    foreach (Player pl in Player.players)
+                        if (pl.level == p.level)
+                            pl.aiming = false;
+                }
+                else
+                {
+                    p.level.guns = true;
+                    Player.GlobalMessage("&9Gun usage has been enabled on &c" + p.level.name + "&9!");
+                    Level.SaveSettings(p.level);
+                }
+                return;
+            }
+
+
+
+
+
+
+
             if (p != null)
             {
                 Level foundLevel;
@@ -66,7 +94,7 @@ namespace MCForge
                         return;
                     }
                 }
-                
+
                 if (message != "")
                 {
                     foundLevel = Level.Find(message);
@@ -130,16 +158,16 @@ namespace MCForge
                         }
                     }
                 }
-                    foundLevel.guns = true;
-                    Player.GlobalMessage("&9Gun usage has been enabled on &c" + message + "&9!");
-                    Level.SaveSettings(foundLevel);
-                    Player.SendMessage(p, "Gun usage has been enabled on " + message + "!");
-                    return;
-                }
+                foundLevel.guns = true;
+                Player.GlobalMessage("&9Gun usage has been enabled on &c" + message + "&9!");
+                Level.SaveSettings(foundLevel);
+                Player.SendMessage(p, "Gun usage has been enabled on " + message + "!");
+                return;
             }
+        }
 
-        
-            
+
+
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/allowguns - Allow/disallow guns and missiles on the specified level. If no message is given, the current level is taken.");
