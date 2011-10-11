@@ -706,7 +706,7 @@ namespace MCForge.Gui
             Server.autorestart = chkRestartTime.Checked;
             try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
             Server.restartOnError = chkRestart.Checked;
-            Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main")
+            Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main");
             Server.irc = chkIRC.Checked;
             Server.ircNick = txtNick.Text;
             Server.ircServer = txtIRCServer.Text;

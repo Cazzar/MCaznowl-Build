@@ -404,6 +404,7 @@ public static event OnServerError ServerError = null;
                 }
             }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
 

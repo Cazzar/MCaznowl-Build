@@ -12,7 +12,7 @@ namespace MCForge {
         public override string shortcut { get { return "serv"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
         public CmdServer() { }
 
         public override void Use(Player p, string message) {
@@ -32,8 +32,8 @@ namespace MCForge {
                     Player.SendMessage(p, "Server is now private!");
                     Server.s.Log("Server is now private!");
                     break;
-                case "reset":  //made so only the owner or console can use this command.
-                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower())) {
+                case "reset":  //made so ONLY the owner or console can use this command.
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
                         p.SendMessage("Sorry.  You must be the Server Owner or Console to reset the server.");
                         return;
                     }
@@ -47,19 +47,21 @@ namespace MCForge {
                     //    Command
                     Player.SendMessage(p, "Backing up and deleting current property files.");
                     foreach (string name in Directory.GetFiles("properties")) {
-                        File.Copy(name, name + ".bkp");
+                        File.Copy(name, name + ".bkp"); // create backup first.
                         File.Delete(name);
                     }
                     Player.SendMessage(p, "Done!  Restoring defaults...");
                     //We set he defaults here, then go to reload the settings.
                     setToDefault();
                     goto case "reload";
-                case "reload":
+                case "reload":  // For security, only the owner and Console can use this.
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
+                        p.SendMessage("Sorry.  You must be the Server Owner or Console to reload the server settings.");
+                        return;
+                    }
                     Player.SendMessage(p, "Reloading settings...");
                     Server.LoadAllSettings();
-                    //Plugin.Unload();
-                    //Plugin.Load();
-                    Player.SendMessage(p, "Settings reloaded!");
+                    Player.SendMessage(p, "Settings reloaded!  You may need to restart the server, however.");
                     break;
                 case "backup":
                     goto case "backup all";
@@ -94,6 +96,7 @@ namespace MCForge {
                     ExtractPackage();
                     break;
                 default:
+                    Player.SendMessage(p, "/server " + message + " is not currently implemented.");
                     Help(p);
                     break;
             }
@@ -107,22 +110,7 @@ namespace MCForge {
             CreatePackage("MCForge.zip", withFiles, withDB);
         }
 
-        //private void saveAllFolders(bool withDB) {
-        //    //All folders and files will be saved.  So, first, get their names in a linked list.
-        //    //DeflateStream zipFile = new DeflateStream(File.Create("serverBackup.zip"), CompressionMode.Compress);
-        //    //byte[] bytes = BitConverter.GetBytes('h');
-        //    //zipFile.Write(bytes, 0, bytes.Length);
-        //    //zipFile.Flush();
-        //    //zipFile.Close();
-        //    CreatePackage("MCForge.zip", withDB);
-
-        //}
-
-        //private void saveDatabase() {
-        //    throw new NotImplementedException();
-        //}
-
-        private void setToDefault() {
+        private void setToDefault() { // could do this elsewhere, but will worry about that later.
             //Other
             Server.higherranktp = true;
             Server.agreetorulesonentry = false;
@@ -307,15 +295,14 @@ namespace MCForge {
 
         public override void Help(Player p) {
             Player.SendMessage(p, "/server <reset|restart|reload|update|shutdown|public|private|backup|restore> - All server commands.");
-            Player.SendMessage(p, "/server <reset>   - Reset everything to defaults.  WARNING: This will erase ALL properties.  Use with caution.");
+            Player.SendMessage(p, "/server <reset>   - Reset everything to defaults.  WARNING: This will erase ALL properties.  Use with caution. (Likely requires restart)");
             Player.SendMessage(p, "/server <restart> - Restart the sserver.");
-            Player.SendMessage(p, "/server <reload>  - Reload the server files.");
+            Player.SendMessage(p, "/server <reload>  - Reload the server files. (May require restart)");
             Player.SendMessage(p, "/server <update>  - Update the server");
             Player.SendMessage(p, "/server <shutdown>  - Shutdown the server");
             Player.SendMessage(p, "/server <public>  - Make the server public. (Start listening for new connections.)");
             Player.SendMessage(p, "/server <private> - Make the server private. (Stop listening for new connections.)");
-            Player.SendMessage(p, "Not yet implmented:");
-            Player.SendMessage(p, "/server <backup>  - Make a complete backup of the server and all SQL data.");
+            Player.SendMessage(p, "/server <backup> [all/db/allbutdb] - Make a complete backup of the server and all SQL data.");
             Player.SendMessage(p, "/server <restore> - Restore the server from a backup.");
         }
 
@@ -369,16 +356,6 @@ namespace MCForge {
             }
         }
 
-        //private static void CopyDatabase(StreamWriter sql) {
-        //    string database = Server.MySQLDatabaseName;
-        //    MySQL.executeQuery("SELECT * FROM " + database + ";");
-        //}
-
-
-        //private static void SaveDataBase() {
-        //    throw new NotImplementedException();
-        //}
-
         private static List<Uri> GetAllFiles(DirectoryInfo currDir, Uri baseUri) {
             List<Uri> uriList = new List<Uri>();
             foreach (FileSystemInfo entry in currDir.GetFileSystemInfos()) {
@@ -386,7 +363,9 @@ namespace MCForge {
                     // Make a relative URI
                     Uri fullURI = new Uri(((FileInfo)entry).FullName);
                     Uri relURI = baseUri.MakeRelativeUri(fullURI);
-                    uriList.Add(PackUriHelper.CreatePartUri(relURI));
+                    if (relURI.ToString().IndexOfAny("/\\".ToCharArray()) > 0) {
+                        uriList.Add(PackUriHelper.CreatePartUri(relURI));
+                    }
                 } else {
                     uriList.AddRange(GetAllFiles((DirectoryInfo)entry, baseUri));
                 }
@@ -414,9 +393,11 @@ namespace MCForge {
             using (ZipPackage zip = (ZipPackage)ZipPackage.Open(File.OpenRead("MCForge.zip"))) {
                 PackagePartCollection pc = zip.GetParts();
                 foreach (ZipPackagePart item in pc) {
-                    CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
-                    if (item.Uri.IsFile && item.Uri.Segments.ElementAt<string>(item.Uri.Segments.Count()-1).Equals("SQL.sql")) {
-                        MySQL.fillDatabase(item.GetStream());
+                    try {
+                        CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
+                    } catch {
+                        Directory.CreateDirectory("./" + item.Uri.ToString().Substring(0, item.Uri.ToString().LastIndexOfAny("\\/".ToCharArray())));
+                        CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
                     }
                 }
             }
