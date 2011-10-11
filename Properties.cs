@@ -251,7 +251,7 @@ namespace MCForge
                                 Server.MySQLDatabaseName = value;
                                 break;
                             case "pooling":
-                                try { Server.MySQLPooling = bool.Parse(value); }
+                                try { Server.DatabasePooling = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "defaultcolor":
@@ -588,7 +588,7 @@ namespace MCForge
         }
         public static void SaveProps(StreamWriter w)
         {
-            w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
+            w.WriteLine("#   Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
             w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
             w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
             w.WriteLine("#   port\t=\tThe port to operate from");
@@ -611,14 +611,15 @@ namespace MCForge
             w.WriteLine("#   anti-tunnels\t=\tStops people digging below max-depth");
             w.WriteLine("#   max-depth\t=\tThe maximum allowed depth to dig down");
             w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
-            w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
+            w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag.  Default 1500");
             w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
             w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
-            w.WriteLine("#   profanity-filter\t=\tFilter bad words from the chat.  Default false.");
+            w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
             w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
             w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
             w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
             w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+            w.WriteLine("#   admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
             w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
             w.WriteLine("#   zombie-on-server-start\t=\tStarts Zombie Survival when server is started.");
             w.WriteLine("#   no-respawning-during-zombie\t=\tDisables respawning (Pressing R) while Zombie is on.");
@@ -626,6 +627,7 @@ namespace MCForge
             w.WriteLine("#   no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
             w.WriteLine("#   zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
             w.WriteLine();
+            w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
             w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
             w.WriteLine("#   Username\t=\tThe username you used to create the database (usually root)");
@@ -644,20 +646,19 @@ namespace MCForge
             w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
             w.WriteLine("#   ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
             w.WriteLine();
-            w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
+            w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server.  Default true.");
             w.WriteLine("#   verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
             w.WriteLine();
-            w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
-            w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
+            w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming.  Default false.");
+            w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent \"consecutively\" to be muted.");
             w.WriteLine("#   spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
-            w.WriteLine("#   spam-counter-reset-time\t=\tThe amount of seconds the consecutive messages have to fall between to be considered spam.");
+            w.WriteLine("#   spam-counter-reset-time\t=\tThe amount of seconds the \"consecutive\" messages have to fall between to be considered spam.");
             w.WriteLine();
             w.WriteLine("#   As an example, if you wanted the spam to only mute if a user posts 5 messages in a row within 2 seconds, you would use the folowing:");
             w.WriteLine("#   mute-on-spam\t=\ttrue");
             w.WriteLine("#   spam-messages\t=\t5");
             w.WriteLine("#   spam-mute-time\t=\t60");
             w.WriteLine("#   spam-counter-reset-time\t=\t2");
-            w.WriteLine();
             w.WriteLine();
             w.WriteLine("# Server options");
             w.WriteLine("server-name = " + Server.name);
@@ -732,7 +733,7 @@ namespace MCForge
             w.WriteLine("Username = " + Server.MySQLUsername);
             w.WriteLine("Password = " + Server.MySQLPassword);
             w.WriteLine("DatabaseName = " + Server.MySQLDatabaseName);
-            w.WriteLine("Pooling = " + Server.MySQLPooling);
+            w.WriteLine("Pooling = " + Server.DatabasePooling);
             w.WriteLine();
             w.WriteLine("#Colors");
             w.WriteLine("defaultColor = " + Server.DefaultColor);

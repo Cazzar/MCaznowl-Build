@@ -64,6 +64,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.76.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -96,6 +100,7 @@
     <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
+    <Compile Include="Commands\CmdDurl.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
     <Compile Include="Commands\CmdEndRound.cs" />
@@ -147,6 +152,7 @@
     <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdRankMsg.cs" />
     <Compile Include="Commands\CmdReload.cs" />
+    <Compile Include="Commands\CmdRestoreSelection.cs" />
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdScinema.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
@@ -230,7 +236,13 @@
     <Compile Include="Plugins\Events.cs" />
     <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
+    <Compile Include="Plugins\Plugin_Simpile.cs" />
     <Compile Include="ScriptingVB.cs" />
+    <Compile Include="Util\BigEndianBitConverter.cs" />
+    <Compile Include="Util\EBitConverter.cs" />
+    <Compile Include="Util\Endianness.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
@@ -429,9 +441,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\LittleEndianBitConverter.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="WebserverStuff\Remote.cs" />
+    <Compile Include="WebserverStuff\Remote.Handler.cs" />
+    <Compile Include="WebserverStuff\WebServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>

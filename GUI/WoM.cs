@@ -46,7 +46,7 @@ namespace MCForge.GUI
                 this.Close();
             }
             else
-                MessageBox.Show("There was an error, check the error log for more details!", "Results", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("There was an error, check the error log for more details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void WoM_Load(object sender, EventArgs e)

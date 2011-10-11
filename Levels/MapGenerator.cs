@@ -557,6 +557,66 @@ namespace MCForge
         public void AddNotchPineTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
         {
             throw new NotImplementedException();
+            byte height = (byte)Rand.Next(7, 12);
+        }
+
+        public void AddNotchSwampTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
+        {
+            byte dist, tile;
+            byte height = (byte)Rand.Next(4, 8);
+            byte top = (byte)(height - 2);
+            short xx, yy, zz;
+            ushort xxx, yyy, zzz;
+            for (yy = 0; yy <= height; yy++)
+            {
+                yyy = (ushort)(y + yy);
+                tile = Lvl.GetTile(x, yyy, z);
+                if (overwrite || tile == Block.air || (yyy == y && tile == Block.shrub))
+                    if (blockChange)
+                        if (p == null) Lvl.Blockchange(x, yyy, z, Block.trunk);
+                        else Lvl.Blockchange(p, x, yyy, z, Block.trunk);
+                    else Lvl.skipChange(x, yyy, z, Block.trunk);
+            }
+
+            for (yy = top; yy <= height + 1; yy++)
+            {
+                dist = yy > height - 1 ? (byte)2 : (byte)3;
+                for (xx = (short)-dist; xx <= dist; xx++)
+                {
+                    for (zz = (short)-dist; zz <= dist; zz++)
+                    {
+                        xxx = (ushort)(x + xx);
+                        yyy = (ushort)(y + yy);
+                        zzz = (ushort)(z + zz);
+                        tile = Lvl.GetTile(xxx, yyy, zzz);
+                        //Server.s.Log(String.Format("{0} {1} {2}", xxx, yyy, zzz));
+
+                        if ((xxx == x && zzz == z && yy <= height) || (!overwrite && tile != Block.air))
+                            continue;
+
+                        if (Math.Abs(xx) == dist && Math.Abs(zz) == dist)
+                        {
+                            if (yy > height)
+                                continue;
+
+                            if (Rand.Next(2) == 0)
+                            {
+                                if (blockChange)
+                                    if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                    else Lvl.Blockchange(p, xxx, yyy, zzz, Block.leaf);
+                                else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
+                            }
+                        }
+                        else
+                        {
+                            if (blockChange)
+                                if (p == null) Lvl.Blockchange(xxx, yyy, zzz, Block.leaf);
+                                else Lvl.Blockchange(p, xxx, yyy, zzz, Block.leaf);
+                            else Lvl.skipChange(xxx, yyy, zzz, Block.leaf);
+                        }
+                    }
+                }
+            }
         }
 
         public void AddCactus(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)

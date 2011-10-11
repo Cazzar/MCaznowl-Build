@@ -7,7 +7,7 @@ namespace MCForge
     {
         public override string name { get { return "infect"; } }
         public override string shortcut { get { return "i"; } }
-        public override string type { get { return "mod"; } }
+        public override string type { get { return "game"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public CmdInfect() { }

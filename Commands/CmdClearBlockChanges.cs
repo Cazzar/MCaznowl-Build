@@ -42,7 +42,7 @@ namespace MCForge
             if (l == null && message != "") { Player.SendMessage(p, "Could not find level."); return; }
             if (l == null) l = p.level;
 
-            MySQL.executeQuery("TRUNCATE TABLE `Block" + l.name + "`");
+            if (Server.useMySQL) MySQL.executeQuery("TRUNCATE TABLE `Block" + l.name + "`"); else SQLite.executeQuery("DELETE FROM `Block" + l.name + "`");
             Player.SendMessage(p, "Cleared &cALL" + Server.DefaultColor + " recorded block changes in: &d" + l.name);
         }
         public override void Help(Player p)

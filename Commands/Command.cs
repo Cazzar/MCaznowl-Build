@@ -80,7 +80,7 @@ namespace MCForge
             all.Add(new CmdCopyLVL());
 			all.Add(new CmdCountdown());
             all.Add(new CmdCrashServer());
-//            all.Add(new CmdCTF());
+            all.Add(new CmdCTF());
             all.Add(new CmdCuboid());
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
@@ -218,6 +218,7 @@ namespace MCForge
             all.Add(new CmdRestart());
             all.Add(new CmdRestartPhysics());
             all.Add(new CmdRestore());
+            all.Add(new CmdRestoreSelection());
             all.Add(new CmdRetrieve());
             all.Add(new CmdReveal());
 			all.Add(new CmdReview());

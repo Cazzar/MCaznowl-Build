@@ -77,6 +77,7 @@ namespace MCForge
                                     p.SendSpawn(b.id, b.color + b.name, b.pos[0], b.pos[1], b.pos[2], b.rot[0], b.rot[1]);
 
                             if (!p.hidden) Player.GlobalChat(p, p.color + "*" + p.name + Server.DefaultColor + " went to &b" + foundLevel.name, false);
+                                      
 
                             p.Loading = false;
 

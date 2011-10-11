@@ -263,6 +263,9 @@ namespace MCForge
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+
+        //Random...
+        public Random random = new Random();
         
         //Global Chat
         public bool muteGlobal = false;
@@ -495,7 +498,7 @@ namespace MCForge
                     return;
                 }
             }
-            MySQL.executeQuery(commandString);
+            if (Server.useMySQL) MySQL.executeQuery(commandString); else SQLite.executeQuery(commandString);
 
             try
             {
@@ -669,7 +672,7 @@ namespace MCForge
                     else
                     {
                         // Verify Names is off.  Gotta check the hard way.
-                        DataTable ipQuery = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'");
+                        DataTable ipQuery = Server.useMySQL ? MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'") : SQLite.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'");
 
                         if (ipQuery.Rows.Count > 0)
                         {
@@ -806,7 +809,7 @@ namespace MCForge
                 catch { }
 
                 group = Group.findPlayerGroup(name);
-
+                
                 SendMotd();
                 SendMap();
                 Loading = true;
@@ -854,7 +857,8 @@ namespace MCForge
                 Player.GlobalMessage("An error occurred: " + e.Message);
             }
 
-            DataTable playerDb = MySQL.fillData("SELECT * FROM Players WHERE Name='" + name + "'");
+            DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT * FROM Players WHERE Name='" + name + "'") : SQLite.fillData("SELECT * FROM Players WHERE Name='" + name + "'");
+
 
             if (playerDb.Rows.Count == 0)
             {
@@ -872,7 +876,12 @@ namespace MCForge
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
+                if (Server.useMySQL)
                 MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
+                    "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
+                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
+                else
+                    SQLite.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                     ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
 
@@ -1029,6 +1038,7 @@ namespace MCForge
                 }
             }
             Server.s.Log(name + " [" + ip + "] has joined the server.");
+           
             if (Server.notifyOnJoinLeave)
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
@@ -1041,6 +1051,7 @@ namespace MCForge
                 this.color = c.red;
                 Player.GlobalSpawn(this, this.pos[0], this.pos[1], this.pos[2], this.rot[0], this.rot[1], false);
             }
+            
         }
 
         public void SetPrefix()
@@ -1303,7 +1314,7 @@ namespace MCForge
         {
             try
             {
-                DataTable Portals = MySQL.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z);
+                DataTable Portals = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z) : SQLite.fillData("SELECT * FROM `Portals" + level.name + "` WHERE EntryX=" + (int)x + " AND EntryY=" + (int)y + " AND EntryZ=" + (int)z);
 
                 int LastPortal = Portals.Rows.Count - 1;
                 if (LastPortal > -1)
@@ -1340,7 +1351,7 @@ namespace MCForge
         {
             try
             {
-                DataTable Messages = MySQL.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+                DataTable Messages = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM `Messages" + level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
 
                 int LastMsg = Messages.Rows.Count - 1;
                 if (LastMsg > -1)
@@ -1420,6 +1431,21 @@ namespace MCForge
                 case Block.door_gold_air:
                 case Block.door_cobblestone_air:
                 case Block.door_red_air:
+
+                case Block.door_orange_air:
+                case Block.door_yellow_air:
+                case Block.door_lightgreen_air:
+                case Block.door_aquagreen_air:
+                case Block.door_cyan_air:
+                case Block.door_lightblue_air:
+                case Block.door_purple_air:
+                case Block.door_lightpurple_air:
+                case Block.door_pink_air:
+                case Block.door_darkpink_air:
+                case Block.door_darkgrey_air:
+                case Block.door_lightgrey_air:
+                case Block.door_white_air:
+
                 case Block.door_dirt_air:
                 case Block.door_grass_air:
                 case Block.door_blue_air:
@@ -2034,6 +2060,7 @@ namespace MCForge
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(OPs): " + name + ": " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -2047,6 +2074,7 @@ namespace MCForge
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(Admins): " + name + ": " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -2537,6 +2565,23 @@ namespace MCForge
                     sb.Replace("%" + ch, "&" + ch);
                     sb.Replace("&" + ch + " &", " &");
                 }
+// Begin fix to replace all invalid color codes typed in console or chat with "." 
+                for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
+                {
+                    sb.Replace("%" + ch, ".");
+                    sb.Replace("&" + ch, ".");
+                }
+                for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
+                {
+                    sb.Replace("%" + ch, ".");
+                    sb.Replace("&" + ch, ".");
+                }
+                for (char ch = (char)103; ch <= (char)127; ch++) // Characters that cause clients to disconnect
+                {
+                    sb.Replace("%" + ch, ".");
+                    sb.Replace("&" + ch, ".");
+		}
+// End fix
             }
 
             if (Server.dollardollardollar)
@@ -2654,7 +2699,10 @@ namespace MCForge
                 buffer[129] = 100;
             else
                 buffer[129] = 0;
-
+            if (OnSendMOTD != null)
+            {
+                OnSendMOTD(this, buffer);
+            }
             SendRaw(0, buffer);
 
         }
@@ -2712,6 +2760,10 @@ namespace MCForge
                 HTNO((short)level.width).CopyTo(buffer, 0);
                 HTNO((short)level.depth).CopyTo(buffer, 2);
                 HTNO((short)level.height).CopyTo(buffer, 4);
+                if (OnSendMap != null)
+                {
+                    OnSendMap(this, buffer);
+                }
                 SendRaw(4, buffer);
                 Loading = false;
             }
@@ -3384,7 +3436,6 @@ namespace MCForge
                     if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
-
                     }
                 });
 
@@ -3595,6 +3646,7 @@ namespace MCForge
                 if (kickString == "") kickString = "Disconnected.";
 
                 SendKick(kickString);
+                
 
                 if (loggedIn)
                 {
@@ -3683,6 +3735,7 @@ namespace MCForge
                 else
                 {
                     connections.Remove(this);
+                    
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
@@ -3706,7 +3759,11 @@ namespace MCForge
 
             }
             catch (Exception e) { Server.ErrorLog(e); }
-            finally { this.CloseSocket(); }
+            finally
+            {
+
+                this.CloseSocket();
+            }
         }
 
         public void SaveUndo()
@@ -3759,11 +3816,11 @@ namespace MCForge
             spamBlockLog.Clear();
             //spamChatLog.Clear();
             spyChatRooms.Clear();
-            try
+            /*try
             {
                 //this.commThread.Abort();
             }
-            catch { }
+            catch { }*/
         }
         //fixed undo code
         public bool IsAloneOnCurrentLevel()
