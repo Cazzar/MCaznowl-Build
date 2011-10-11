@@ -13,7 +13,13 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override void Use(Player p, string message)
         {
-            Player.SendMessage(p, "Creating a plugin example source");
+            if (p != null) { Player.SendMessage(p, "Creating a plugin example source"); }
+            else { Server.s.Log("Creating a plugin example source"); }
+
+            string name;
+            if (p != null) name = p.name;
+            else name = Server.name;
+            
             if (!Directory.Exists("plugin_source")) Directory.CreateDirectory("plugin_source");
             List<string> lines = new List<string>();
             lines.Add("#This is an example plugin source!");
@@ -27,7 +33,7 @@ namespace MCForge
             lines.Add("        public override string MCForge_Version { get { return \"" + Server.Version + "\"; } }");
             lines.Add("        public override int build { get { return 100; } }");
             lines.Add("        public override string welcome { get { return \"Loaded Message!\"; } }");
-            lines.Add("        public override string creator { get { return \"" + p.name + "\"; } }");
+            lines.Add("        public override string creator { get { return \"" + name + "\"; } }");
             lines.Add("        public override bool LoadAtStartup { get { return true; } }");
             lines.Add("        public override Load(bool startup)");
             lines.Add("        {");
@@ -44,7 +50,8 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/pcreate <Plugin name> - Create a example .cs file!");
+            if(p!=null)Player.SendMessage(p, "/pcreate <Plugin name> - Create a example .cs file!");
+            else Server.s.Log("/pcreate <Plugin name> - Create a example .cs file!");
         }
         public CmdPCreate() { }
         public string[] ListToArray(List<string> list)

@@ -133,6 +133,7 @@ namespace MCForge.Remote
                     case 11: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 12: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 13: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 25: length = 1; break;
 
 
@@ -164,6 +165,7 @@ namespace MCForge.Remote
                         case 11: HandleMobileLogin(message); break;   //Login 
                         case 12: HandleMobileChat(message); break;
                         case 13: HandleMobileRequest(message); break;
+                        case 14: HandleMobileSettingsChange(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -179,6 +181,193 @@ namespace MCForge.Remote
                 Server.s.Log(e.StackTrace);
             }
             return buffer;
+        }
+
+        private void HandleMobileSettingsChange(byte[] message)
+        {
+
+            const string KEY_SERVER_NAME = "servername:= ";
+    const string KEY_SERVER_MOTD = "servermotd:= ";
+    const string KEY_SERVER_PORT = "serverport:= ";
+    const string KEY_SERVER_IS_PUBLIC = "serverpublic:= ";
+    const string KEY_MAIN_NAME = "servermapname:= ";
+    const string KEY_ADMINS_JOIN = "serveradminjoin:= ";
+
+    const string KEY_IRC_USE = "ircuse:= ";
+    const string KEY_IRC_SERVER = "ircserver:= ";
+    const string KEY_IRC_CHANNEL = "ircchannel:= ";
+    const string KEY_IRC_OPCHANNEL = "ircopchannel:= ";
+    const string KEY_IRC_NICK = "ircnick:= ";
+    const string KEY_IRC_COLOR = "irccolor:= ";
+    const string KEY_IRC_IDENT = "ircident:= ";
+    const string KEY_IRC_PASS = "ircpass:= ";
+    const string KEY_IRC_PORT = "ircport:= ";
+
+    const string KEY_MISC_PHYSICSRESTART = "miscphysicssp:= ";
+    const string KEY_MISC_RPLIMIT = "miscrplimit:= ";
+    const string KEY_MISC_NORMRPLIMIT = "miscnormalrplimit:= ";
+    const string KEY_MISC_GLOBALCHAT = "miscglobalchat:= ";
+    const string KEY_MISC_GLOBALCOLOR = "miscglobalcolor:= ";
+    const string KEY_MISC_GLOBALNAME = "miscglobalnick:= ";
+    const string KEY_MISC_DOLLAR = "miscdollar:= ";
+    const string KEY_MISC_SUPEROPRANK = "miscsuperop:= ";
+    const string KEY_MISC_PARSEEMOTE = "miscparseemote:= ";
+
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
+            string mass = Encoding.UTF8.GetString(message, 2, length);
+            Server.s.Log(mass);
+            try
+            {
+                if (mass.StartsWith(KEY_SERVER_NAME))
+                {
+                    mass = mass.Replace(KEY_SERVER_NAME, "");
+                    Server.name = mass;
+                    Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_ADMINS_JOIN))
+                {
+                    mass = mass.Replace(KEY_ADMINS_JOIN, "");
+                    Server.adminsjoinsilent = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_MOTD))
+                {
+                    mass = mass.Replace(KEY_SERVER_MOTD, "");
+                    Server.motd = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_PORT))
+                {
+                    mass = mass.Replace(KEY_SERVER_PORT, "");
+                    Server.port = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_IS_PUBLIC))
+                {
+                    mass = mass.Replace(KEY_SERVER_IS_PUBLIC, "");
+                    Server.pub = Boolean.Parse(mass);
+                    Properties.Save("properties/server.properties");
+
+                    return;
+                }
+                if (mass.StartsWith(KEY_MAIN_NAME))
+                {
+                    mass = mass.Replace(KEY_MAIN_NAME, "");
+                    Server.level = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                //---------------------------------IRC--------------------------------//
+                if (mass.StartsWith(KEY_IRC_USE))
+                {
+                    mass = mass.Replace(KEY_IRC_USE, "");
+                    Server.irc = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_CHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_CHANNEL, "");
+                    Server.ircChannel = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_OPCHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_OPCHANNEL, "");
+                    Server.ircOpChannel = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_NICK))
+                {
+                    mass = mass.Replace(KEY_IRC_NICK, "");
+                    Server.ircNick = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PORT))
+                {
+                    mass = mass.Replace(KEY_IRC_PORT, "");
+                    Server.ircPort = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PASS))
+                {
+                    mass = mass.Replace(KEY_IRC_PASS, "");
+                    Server.ircPassword = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_COLOR))
+                {
+                    mass = mass.Replace(KEY_IRC_COLOR, "");
+                    Server.IRCColour = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_IDENT))
+                {
+                    mass = mass.Replace(KEY_IRC_IDENT, "");
+                    Server.ircIdentify = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+
+                //------------------MISC-----------------------------------------------//
+                if (mass.StartsWith(KEY_MISC_PHYSICSRESTART))
+                {
+                    mass = mass.Replace(KEY_MISC_PHYSICSRESTART, "");
+                    Server.physicsRestart = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_RPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_RPLIMIT, "");
+                    Server.rpLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_NORMRPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_NORMRPLIMIT, "");
+                    Server.rpNormLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCHAT))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCHAT, "");
+                    Server.UseGlobalChat = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCOLOR))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCOLOR, "");
+                    Server.GlobalChatColor = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALNAME))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALNAME, "");
+                    Server.GlobalChatNick = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_DOLLAR))
+                {
+                    mass = mass.Replace(KEY_MISC_DOLLAR, "");
+                    Server.dollardollardollar = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_SUPEROPRANK))
+                {
+                    mass = mass.Replace(KEY_MISC_SUPEROPRANK, "");
+                    Server.rankSuper = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_PARSEEMOTE))
+                {
+                    mass = mass.Replace(KEY_MISC_PARSEEMOTE, "");
+                    Server.parseSmiley = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+            }
+            catch (FormatException)
+            {
+                Server.s.Log("Remote sent invalid setting");
+            }
+
         }
         private void HandleMobileRequest(byte[] message)
         {
@@ -427,6 +616,7 @@ namespace MCForge.Remote
         internal void startUp()
         {
             sendPlayers();
+            sendMaps();
             sendSettings();
             //sendGroups();
         }
@@ -452,6 +642,7 @@ namespace MCForge.Remote
             const string RECIEVED_ADMINS_JOIN = "SRVR_ADMINS_JOIN: ";
 
             const string RECIEVED_IRC_USE = "IRC_USE: ";
+            const string RECIEVED_IRC_SERVER = "IRC_SERVER: ";
 		    const string RECIEVED_IRC_CHANNEL = "IRC_CHANNEL: ";
 		    const string RECIEVED_IRC_OPCHANNEL = "IRC_OPCHANNEL: ";
 		    const string RECIEVED_IRC_NICK = "IRC_NICK: ";
@@ -478,6 +669,7 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_SERVER_NAME + Server.name.ToString());
 
             SendData(0x08, RECIEVED_IRC_USE + Server.irc.ToString().ToLower());
+            SendData(0x08, RECIEVED_IRC_SERVER + Server.ircServer);
             SendData(0x08, RECIEVED_IRC_CHANNEL + Server.ircChannel);
             SendData(0x08, RECIEVED_IRC_OPCHANNEL + Server.ircOpChannel);
             SendData(0x08, RECIEVED_IRC_NICK + Server.ircNick);
@@ -487,15 +679,17 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_IRC_PORT + Server.ircPort);
 
             SendData(0x08, RECIEVED_MISC_PHYSICSRESTART + Server.physicsRestart.ToString().ToLower());
-            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit);
-            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit);
+            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit.ToString());
+            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit.ToString());
             SendData(0x08, RECIEVED_MISC_GLOBALCHAT + Server.UseGlobalChat.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_GLOBALCOLOR + Server.GlobalChatColor);
             SendData(0x08, RECIEVED_MISC_GLOBALNAME + Server.GlobalChatNick);
             SendData(0x08, RECIEVED_MISC_DOLLAR + Server.dollardollardollar.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_SUPEROPRANK + Server.rankSuper.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_PARSEEMOTE + Server.parseSmiley.ToString().ToLower());
-
+            SendData(0x08, "Done_!*");
+          
+             return;
         }
         internal void addPlayer(Player p)
         {
@@ -537,6 +731,7 @@ namespace MCForge.Remote
                     }
 
                     Server.levels.ForEach(delegate(Level l) { SendData(0x06, "LO_" + l.name); });
+                    
                 }
                
             catch (Exception e) { Server.ErrorLog(e);}
