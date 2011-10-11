@@ -77,12 +77,40 @@ namespace MCForge
         public const byte Zero = 0xff;
 
         //Custom blocks
+        public const byte door_orange_air = (byte)57;
+        public const byte door_yellow_air = (byte)58;
+        public const byte door_lightgreen_air = (byte)59;
+        public const byte door_aquagreen_air = (byte)60;
+        public const byte door_cyan_air = (byte)61;
+        public const byte door_lightblue_air = (byte)62;
+        public const byte door_purple_air = (byte)63;
+        public const byte door_lightpurple_air = (byte)64;
+        public const byte door_pink_air = (byte)65;
+        public const byte door_darkpink_air = (byte)66;
+        public const byte door_darkgrey_air = (byte)67;
+        public const byte door_lightgrey_air = (byte)68;
+        public const byte door_white_air = (byte)69;
+
         public const byte flagbase = (byte)70;
 
         public const byte door_cobblestone = (byte)80;
         public const byte door_cobblestone_air = (byte)81;
-        public const byte door_red = (byte)84;
-        public const byte door_red_air = (byte)85;
+        public const byte door_red = (byte)83;
+        public const byte door_red_air = (byte)84;
+
+        public const byte door_orange = (byte)85;
+        public const byte door_yellow = (byte)86;
+        public const byte door_lightgreen = (byte)87;
+        public const byte door_aquagreen = (byte)89;
+        public const byte door_cyan = (byte)90;
+        public const byte door_lightblue = (byte)91;
+        public const byte door_purple = (byte)92;
+        public const byte door_lightpurple = (byte)93;
+        public const byte door_pink = (byte)94;
+        public const byte door_darkpink = (byte)95;
+        public const byte door_darkgrey = (byte)96;
+        public const byte door_lightgrey = (byte)97;
+        public const byte door_white = (byte)98;
 
         public const byte op_glass = (byte)100;
         public const byte opsidian = (byte)101;
@@ -386,6 +414,20 @@ namespace MCForge
                     case door_blue_air:
                     case door_book_air:
 
+                    case door_orange_air:
+                    case door_yellow_air:
+                    case door_lightgreen_air:
+                    case door_aquagreen_air:
+                    case door_cyan_air:
+                    case door_lightblue_air:
+                    case door_purple_air:
+                    case door_lightpurple_air:
+                    case door_pink_air:
+                    case door_darkpink_air:
+                    case door_darkgrey_air:
+                    case door_lightgrey_air:
+                    case door_white_air:
+
                     case odoor1_air:
                     case odoor2_air:
                     case odoor3_air:
@@ -464,6 +506,20 @@ namespace MCForge
                     case door_book:
                     case door_cobblestone:
                     case door_red:
+
+                    case door_orange:
+                    case door_yellow:
+                    case door_lightgreen:
+                    case door_aquagreen:
+                    case door_cyan:
+                    case door_lightblue:
+                    case door_purple:
+                    case door_lightpurple:
+                    case door_pink:
+                    case door_darkpink:
+                    case door_darkgrey:
+                    case door_lightgrey:
+                    case door_white:
 
                     case tdoor:
                     case tdoor2:
@@ -729,6 +785,20 @@ namespace MCForge
                 case door_book:
                 case door_cobblestone:
                 case door_red:
+
+                case door_orange:
+                case door_yellow:
+                case door_lightgreen:
+                case door_aquagreen:
+                case door_cyan:
+                case door_lightblue:
+                case door_purple:
+                case door_lightpurple:
+                case door_pink:
+                case door_darkpink:
+                case door_darkgrey:
+                case door_lightgrey:
+                case door_white:
 
                 case Block.smalltnt:
                 case Block.bigtnt:
@@ -1015,22 +1085,7 @@ namespace MCForge
                 case Block.goldrock:
                 case Block.ironrock:
                 case Block.coal:
-                /*case Block.red:
-                case Block.orange:
-                case Block.yellow:
-                case Block.lightgreen:
-                case Block.green:
-                case Block.aquagreen:
-                case Block.cyan:
-                case Block.lightblue:
-                case Block.blue:
-                case Block.purple:
-                case Block.lightpurple:
-                case Block.pink:
-                case Block.darkpink:
-                case Block.darkgrey:
-                case Block.lightgrey:
-                case Block.white:*/
+
                 case Block.goldsolid:
                 case Block.iron:
                 case Block.staircasefull:
@@ -1065,6 +1120,20 @@ namespace MCForge
                 case door_book:
                 case door_cobblestone:
                 case door_red:
+
+                case door_orange:
+                case door_yellow:
+                case door_lightgreen:
+                case door_aquagreen:
+                case door_cyan:
+                case door_lightblue:
+                case door_purple:
+                case door_lightpurple:
+                case door_pink:
+                case door_darkpink:
+                case door_darkgrey:
+                case door_lightgrey:
+                case door_white:
 
                 case tdoor:
                 case tdoor2:
@@ -1198,6 +1267,20 @@ namespace MCForge
                 case door_blue: return "door_blue";
                 case door_book: return "door_book";
 
+                case door_orange: return "door_orange";
+                case door_yellow: return "door_yellow";
+                case door_lightgreen: return "door_lightgreen";
+                case door_aquagreen: return "door_aquagreen";
+                case door_cyan: return "door_cyan";
+                case door_lightblue: return "door_lightblue";
+                case door_purple: return "door_purple";
+                case door_lightpurple: return "door_lightpurple";
+                case door_pink: return "door_pink";
+                case door_darkpink: return "door_darkpink";
+                case door_darkgrey: return "door_darkgrey";
+                case door_lightgrey: return "door_lightgrey";
+                case door_white: return "door_white";
+
                 case tdoor: return "tdoor_wood";
                 case tdoor2: return "tdoor_obsidian";
                 case tdoor3: return "tdoor_glass";
@@ -1312,6 +1395,20 @@ namespace MCForge
                 case door_book_air: return "door_book_air";
                 case door_cobblestone_air: return "door_cobblestone_air";
                 case door_red_air: return "door_red_air";
+
+                case door_orange_air: return "door_orange_air";
+                case door_yellow_air: return "door_yellow_air";
+                case door_lightgreen_air: return "door_lightgreen_air";
+                case door_aquagreen_air: return "door_aquagreen_air";
+                case door_cyan_air: return "door_cyan_air";
+                case door_lightblue_air: return "door_lightblue_air";
+                case door_purple_air: return "door_purple_air";
+                case door_lightpurple_air: return "door_lightpurple_air";
+                case door_pink_air: return "door_pink_air";
+                case door_darkpink_air: return "door_darkpink_air";
+                case door_darkgrey_air: return "door_darkgrey_air";
+                case door_lightgrey_air: return "door_lightgrey_air";
+                case door_white_air: return "door_white_air";
 
                 //"AI" blocks
                 case train: return "train";
@@ -1453,6 +1550,20 @@ namespace MCForge
                 case "door18":
                 case "door_red": return door_red;
 
+                case "door_orange": return door_orange;
+                case "door_yellow": return door_yellow;
+                case "door_lightgreen": return door_lightgreen;
+                case "door_aquagreen": return door_aquagreen;
+                case "door_cyan": return door_cyan;
+                case "door_lightblue": return door_lightblue;
+                case "door_purple": return door_purple;
+                case "door_lightpurple": return door_lightpurple;
+                case "door_pink": return door_pink;
+                case "door_darkpink": return door_darkpink;
+                case "door_darkgrey": return door_darkgrey;
+                case "door_lightgrey": return door_lightgrey;
+                case "door_white": return door_white;
+
                 case "tdoor_tree":
                 case "tdoor": return tdoor;
                 case "tdoor_obsidian":
@@ -1586,6 +1697,20 @@ namespace MCForge
                 case "door_cobblestone_air": return door_cobblestone_air;
                 case "door_red_air": return door_red_air;
 
+                case "door_orange_air": return door_orange_air;
+                case "door_yellow_air": return door_yellow_air;
+                case "door_lightgreen_air": return door_lightgreen_air;
+                case "door_aquagreen_air": return door_aquagreen_air;
+                case "door_cyan_air": return door_cyan_air;
+                case "door_lightblue_air": return door_lightblue_air;
+                case "door_purple_air": return door_purple_air;
+                case "door_lightpurple_air": return door_lightpurple_air;
+                case "door_pink_air": return door_pink_air;
+                case "door_darkpink_air": return door_darkpink_air;
+                case "door_darkgrey_air": return door_darkgrey_air;
+                case "door_lightgrey_air": return door_lightgrey_air;
+                case "door_white_air": return door_white_air;
+
                 case "train": return train;
 
                 case "snake": return snake;
@@ -1651,7 +1776,21 @@ namespace MCForge
                 case door_book: return bookcase;
 				case door_gold: return goldsolid;
                 case door_cobblestone: return 4;
-                case door_red: return red; 
+                case door_red: return red;
+
+                case door_orange: return Block.orange;
+                case door_yellow: return yellow;
+                case door_lightgreen: return lightgreen;
+                case door_aquagreen: return aquagreen;
+                case door_cyan: return cyan;
+                case door_lightblue: return lightblue;
+                case door_purple: return purple;
+                case door_lightpurple: return lightpurple;
+                case door_pink: return pink;
+                case door_darkpink: return darkpink;
+                case door_darkgrey: return darkgrey;
+                case door_lightgrey: return lightgrey;
+                case door_white: return white;
 
                 case tdoor: return trunk;//tdoor show by treetype
                 case tdoor2: return obsidian;//tdoor show by obsidian
@@ -1755,6 +1894,20 @@ namespace MCForge
                 case door9_air: return lava;
                 case door8_air: return red;
 
+                case door_orange_air:
+                case door_yellow_air:
+                case door_lightgreen_air:
+                case door_aquagreen_air:
+                case door_cyan_air:
+                case door_lightblue_air:
+                case door_purple_air:
+                case door_lightpurple_air:
+                case door_pink_air:
+                case door_darkpink_air:
+                case door_darkgrey_air:
+                case door_lightgrey_air:
+                case door_white_air:
+
                 case odoor1_air:
                 case odoor2_air:
                 case odoor3_air:
@@ -1829,6 +1982,20 @@ namespace MCForge
                 case door_cobblestone_air: return door_cobblestone;
                 case door_red_air: return door_red;
 
+                case door_orange_air: return door_orange;
+                case door_yellow_air: return door_yellow;
+                case door_lightgreen_air: return door_lightgreen;
+                case door_aquagreen_air: return door_aquagreen;
+                case door_cyan_air: return door_cyan;
+                case door_lightblue_air: return door_lightblue;
+                case door_purple_air: return door_purple;
+                case door_lightpurple_air: return door_lightpurple;
+                case door_pink_air: return door_pink;
+                case door_darkpink_air: return door_darkpink;
+                case door_darkgrey_air: return door_darkgrey;
+                case door_lightgrey_air: return door_lightgrey;
+                case door_white_air: return door_white;
+
                 case odoor1_air:
                 case odoor2_air:
                 case odoor3_air:
@@ -1872,6 +2039,20 @@ namespace MCForge
                 case door_book: return door_book_air;
                 case door_cobblestone: return door_cobblestone_air;
                 case door_red: return door_red_air;
+
+                case door_orange: return door_orange_air;
+                case door_yellow: return door_yellow_air;
+                case door_lightgreen: return door_lightgreen_air;
+                case door_aquagreen: return door_aquagreen_air;
+                case door_cyan: return door_cyan_air;
+                case door_lightblue: return door_lightblue_air;
+                case door_purple: return door_purple_air;
+                case door_lightpurple: return door_lightpurple_air;
+                case door_pink: return door_pink_air;
+                case door_darkpink: return door_darkpink_air;
+                case door_darkgrey: return door_darkgrey_air;
+                case door_lightgrey: return door_lightgrey_air;
+                case door_white: return door_white_air;
                 default: return 0;
             }
         }
