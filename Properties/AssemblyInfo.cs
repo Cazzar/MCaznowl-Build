@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("MCForge")]
 [assembly: AssemblyCopyright("Copyright © 2011")]
 [assembly: AssemblyTrademark("Forging the Way")]
-[assembly: AssemblyDecs("MCForge Development Team")]
+[assembly: AssemblyDevs("MCForge Development Team")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
