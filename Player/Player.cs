@@ -262,6 +262,9 @@ namespace MCForge
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+
+        //Random...
+        public Random random = new Random();
         
         //Global Chat
         public bool muteGlobal = false;

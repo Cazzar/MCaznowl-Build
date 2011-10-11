@@ -262,7 +262,7 @@ namespace MCForge.Gui
         {
             if (mapData == null) return;
             int id = mapData.id;
-            string name = mapData.name.ToLower();
+            string name = mapData.name.ToLower().Replace(" ", "_");
             downloadThread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
                 byte[] data;
