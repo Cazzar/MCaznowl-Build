@@ -295,15 +295,19 @@ namespace MCForge {
 
         public override void Help(Player p) {
             Player.SendMessage(p, "/server <reset|restart|reload|update|shutdown|public|private|backup|restore> - All server commands.");
-            Player.SendMessage(p, "/server <reset>   - Reset everything to defaults.  WARNING: This will erase ALL properties.  Use with caution. (Likely requires restart)");
-            Player.SendMessage(p, "/server <restart> - Restart the sserver.");
-            Player.SendMessage(p, "/server <reload>  - Reload the server files. (May require restart)");
-            Player.SendMessage(p, "/server <update>  - Update the server");
-            Player.SendMessage(p, "/server <shutdown>  - Shutdown the server");
-            Player.SendMessage(p, "/server <public>  - Make the server public. (Start listening for new connections.)");
-            Player.SendMessage(p, "/server <private> - Make the server private. (Stop listening for new connections.)");
-            Player.SendMessage(p, "/server <backup> [all/db/allbutdb] - Make a complete backup of the server and all SQL data.");
-            Player.SendMessage(p, "/server <restore> - Restore the server from a backup.");
+            Player.SendMessage(p, "/server <reset>    - Reset everything to defaults. (Owner only)  WARNING: This will erase ALL properties.  Use with caution. (Likely requires restart)");
+            Player.SendMessage(p, "/server <restart>  - Restart the server.");
+            Player.SendMessage(p, "/server <reload>   - Reload the server files. (May require restart) (Owner only)");
+            Player.SendMessage(p, "/server <update>   - Update the server");
+            Player.SendMessage(p, "/server <shutdown> - Shutdown the server");
+            Player.SendMessage(p, "/server <public>   - Make the server public. (Start listening for new connections.)");
+            Player.SendMessage(p, "/server <private>  - Make the server private. (Stop listening for new connections.)");
+            Player.SendMessage(p, "/server <restore>  - Restore the server from a backup.");
+            Player.SendMessage(p, "/server <backup> [all/db/allbutdb] - Make a backup. (Default is all)");
+            Player.SendMessage(p, "Backup options:");
+            Player.SendMessage(p, "all      - Make a backup of the server and all SQL data. (Default)");
+            Player.SendMessage(p, "db       - Just backup the database.");
+            Player.SendMessage(p, "allbutdb - Backup everything BUT the database.");
         }
 
         //  -------------------------- CreatePackage --------------------------
