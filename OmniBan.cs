@@ -33,7 +33,7 @@ namespace MCForge
         public OmniBan()
         {
             bans = new List<string>();
-            kickMsg = "You are banned from all MCForge servers!";
+            kickMsg = "Omniban! Contact MCForge staff to appeal.";
         }
 
         public void Load(bool web)
@@ -46,7 +46,7 @@ namespace MCForge
                     try
                     {
                         using (WebClient WC = new WebClient())
-                            data = WC.DownloadString("http://mcforge.net/omniban.php").ToLower();
+                            data = WCDownloadString("http://mcforge.net/omniban.php").ToLower();
                     }
                     catch { Load(false); return; }
 
