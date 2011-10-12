@@ -22,7 +22,7 @@ namespace MCForge
             
             if (!Directory.Exists("plugin_source")) Directory.CreateDirectory("plugin_source");
             List<string> lines = new List<string>();
-            lines.Add("#This is an example plugin source!");
+            lines.Add("//This is an example plugin source!");
             lines.Add("using System;");
             lines.Add("namespace MCForge");
             lines.Add("{");
@@ -35,16 +35,16 @@ namespace MCForge
             lines.Add("        public override string welcome { get { return \"Loaded Message!\"; } }");
             lines.Add("        public override string creator { get { return \"" + name + "\"; } }");
             lines.Add("        public override bool LoadAtStartup { get { return true; } }");
-            lines.Add("        public override Load(bool startup)");
+            lines.Add("        public override void Load(bool startup)");
             lines.Add("        {");
             lines.Add("            //LOAD YOUR PLUGIN WITH EVENTS OR OTHER THINGS!");
             lines.Add("        }");
-            lines.Add("        public override Unload(bool shutdown)");
+            lines.Add("        public override void Unload(bool shutdown)");
             lines.Add("        {");
             lines.Add("            //UNLOAD YOUR PLUGIN BY SAVING FILES OR DISPOSING OBJECTS!");
             lines.Add("        }");
-            lines.Add("        public override Help(Player p) { //HELP INFO! }");
-            lines.Add("    }");
+            lines.Add("        public override void Help(Player p) { //HELP INFO! }");
+            lines.Add("    }}");
             lines.Add("}");
             File.WriteAllLines("plugin_source/" + message + ".cs", ListToArray(lines));
         }
