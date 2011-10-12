@@ -468,6 +468,7 @@ public static byte maxGuests = 10;
             Block.SetBlocks();
             Awards.Load();
             Economy.Load();
+            Warp.LOAD();
 
             if (File.Exists("text/emotelist.txt"))
             {
