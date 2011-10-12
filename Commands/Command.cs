@@ -274,6 +274,7 @@ namespace MCForge
             all.Add(new CmdVoteKick());
             all.Add(new CmdVoteResults());
             all.Add(new CmdWarn());
+            all.Add(new CmdWarp());
             all.Add(new CmdWaypoint());
             all.Add(new CmdWhisper());
             if (Server.useWhitelist) { all.Add(new CmdWhitelist()); }

@@ -191,6 +191,7 @@
     <Compile Include="Commands\CmdUnlock.cs" />
     <Compile Include="Commands\CmdVote.cs" />
     <Compile Include="Commands\CmdVoteResults.cs" />
+    <Compile Include="Commands\CmdWarp.cs" />
     <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="Warp.cs" />
     <Compile Include="WebserverStuff\Remote.cs" />
     <Compile Include="WebserverStuff\Remote.Handler.cs" />
     <Compile Include="WebserverStuff\WebServer.cs" />
