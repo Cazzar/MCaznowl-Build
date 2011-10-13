@@ -812,18 +812,8 @@ namespace MCForge
             }
         }
 
-        public static Level Load(string givenName) { return Load(givenName, 0); }
-        public static Level Load(string givenName, byte phys)
+        public static void CreateLeveldb(string givenName)
         {
-            if (LevelLoad != null)
-            {
-                LevelLoad(givenName);
-                if (cancelload)
-                {
-                    cancelload = false;
-                    return null;
-                }
-            }
             if (Server.useMySQL)
             {
                 MySQL.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
@@ -838,6 +828,21 @@ namespace MCForge
                 SQLite.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
                 SQLite.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
             }
+        }
+
+        public static Level Load(string givenName) { return Load(givenName, 0); }
+        public static Level Load(string givenName, byte phys)
+        {
+            if (LevelLoad != null)
+            {
+                LevelLoad(givenName);
+                if (cancelload)
+                {
+                    cancelload = false;
+                    return null;
+                }
+            }
+            CreateLeveldb(givenName);
             
             string path = "levels/" + givenName + ".lvl";
             if (File.Exists(path))
