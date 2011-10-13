@@ -29,6 +29,7 @@ v5.3.0.0
 	- All colours are now represented (/door_orange, /door_cyan, /door_pink etc.)
 - Added /warp
 - Fixed fireworks leaving blocks behind
+- Fixed an error where /rankmsg wouldn't send the whole message, only the first word.
 
 v5.2.0.0
 - Fixed the server-breaking freeze bug that happened when a player lagged (NOT logged) out.
