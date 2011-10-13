@@ -29,8 +29,7 @@ namespace MCForge.Remote
     {
         public static Remote This;
         public string ip;
-        public string username;
-        public string password;
+
         
 
         //public static Remote remote;
@@ -42,7 +41,7 @@ namespace MCForge.Remote
 
         public Socket socket;
         public static List<Remote> remotes = new List<Remote>();
-        public string version = "1.1";
+        public string version = "2.3";
 
         public Remote()
         {
@@ -57,9 +56,11 @@ namespace MCForge.Remote
 
                     ip = socket.RemoteEndPoint.ToString().Split(':')[0];
                     Player.GlobalMessage(c.navy + "A Remote has connected to the server");
-                    Server.s.Log("[Remote] connected to the server.");
+                    Server.s.Log        ("[Remote] connected to the server.");
                     
                     Server.s.OnLog += new Server.LogHandler(s_OnLog);
+                    Server.s.OnAdmin +=new Server.LogHandler(s_OnAdmin);
+                    Server.s.OnOp +=new Server.LogHandler(s_OnOp);
                     Server.s.OnSettingsUpdate +=new Server.VoidHandler(s_OnSettingsUpdate);
                     Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                     Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
@@ -67,6 +68,7 @@ namespace MCForge.Remote
                     Group.OnGroupLoad +=new Group.GroupLoad(GroupChanged);
                     Group.OnGroupSave +=new Group.GroupSave(GroupChanged);
 
+                    
                     
                     socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
                 }
@@ -114,30 +116,13 @@ namespace MCForge.Remote
             try
             {
                 int length = 0; byte msg = buffer[0];
-                // Get the length of the message by checking the first byte
                 switch (msg)
                 {
-                    case 0: length = 0; LoggedIn = true; break;  //Remote Connection
-                    case 1: length = 4; break;   //version and type
-                    case 2: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break; //Login Info Exchange
-                    case 3: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break;  //Handshake
-                    case 4: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break;  //Chat
-                    //case 0x04: length = 1; break; //Entity Use
-                    //case 0x05: length = 1; break; //respawn
-
-                    //case 0x06: length = 1; break; //OnGround incoming
-                    //case 0x07: length = 33; break; //Pos incoming
-                    //case 0x08: length = 9; break; //???
-                    case 10: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break; //DC
-
                     case 11: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 12: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 13: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 25: length = 1; break;
-
-
-
-
                     default:
                         Server.s.Log("unhandled message id " + msg);
                         Kick();
@@ -155,15 +140,10 @@ namespace MCForge.Remote
 
                     switch (msg)
                     {
-                        case 1: HandleInfo(message); break;    //2 - 5
-                        case 0x02: HandleRemoteLogin(message); break;
-                        case 0x03: HandleRemoteHandshake(message); break;
-                        case 0x04: HandleRemoteChatMessagePacket(message); break;
-
-
                         case 11: HandleMobileLogin(message); break;   //Login 
                         case 12: HandleMobileChat(message); break;
                         case 13: HandleMobileRequest(message); break;
+                        case 14: HandleMobileSettingsChange(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -179,6 +159,199 @@ namespace MCForge.Remote
                 Server.s.Log(e.StackTrace);
             }
             return buffer;
+        }
+
+        private void HandleMobileSettingsChange(byte[] message)
+        {
+
+            const string KEY_SERVER_NAME = "servername:= ";
+            const string KEY_SERVER_MOTD = "servermotd:= ";
+            const string KEY_SERVER_PORT = "serverport:= ";
+            const string KEY_SERVER_IS_PUBLIC = "serverpublic:= ";
+            const string KEY_MAIN_NAME = "servermapname:= ";
+            const string KEY_ADMINS_JOIN = "serveradminjoin:= ";
+
+            const string KEY_IRC_USE = "ircuse:= ";
+            const string KEY_IRC_SERVER = "ircserver:= ";
+            const string KEY_IRC_CHANNEL = "ircchannel:= ";
+            const string KEY_IRC_OPCHANNEL = "ircopchannel:= ";
+            const string KEY_IRC_NICK = "ircnick:= ";
+            const string KEY_IRC_COLOR = "irccolor:= ";
+            const string KEY_IRC_IDENT = "ircident:= ";
+            const string KEY_IRC_PASS = "ircpass:= ";
+            const string KEY_IRC_PORT = "ircport:= ";
+
+            const string KEY_MISC_PHYSICSRESTART = "miscphysicssp:= ";
+            const string KEY_MISC_RPLIMIT = "miscrplimit:= ";
+            const string KEY_MISC_NORMRPLIMIT = "miscnormalrplimit:= ";
+            const string KEY_MISC_GLOBALCHAT = "miscglobalchat:= ";
+            const string KEY_MISC_GLOBALCOLOR = "miscglobalcolor:= ";
+            const string KEY_MISC_GLOBALNAME = "miscglobalnick:= ";
+            const string KEY_MISC_DOLLAR = "miscdollar:= ";
+            const string KEY_MISC_SUPEROPRANK = "miscsuperop:= ";
+            const string KEY_MISC_PARSEEMOTE = "miscparseemote:= ";
+
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
+            string mass = Encoding.UTF8.GetString(message, 2, length);
+            Server.s.Log(mass);
+            try
+            {
+                if (mass.StartsWith(KEY_SERVER_NAME))
+                {
+                    mass = mass.Replace(KEY_SERVER_NAME, "");
+                    Server.name = mass;
+                    Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_ADMINS_JOIN))
+                {
+                    mass = mass.Replace(KEY_ADMINS_JOIN, "");
+                    Server.adminsjoinsilent = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_MOTD))
+                {
+                    mass = mass.Replace(KEY_SERVER_MOTD, "");
+                    Server.motd = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_PORT))
+                {
+                    mass = mass.Replace(KEY_SERVER_PORT, "");
+                    Server.port = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_IS_PUBLIC))
+                {
+                    mass = mass.Replace(KEY_SERVER_IS_PUBLIC, "");
+                    Server.pub = Boolean.Parse(mass);
+                    Properties.Save("properties/server.properties");
+
+                    return;
+                }
+                if (mass.StartsWith(KEY_MAIN_NAME))
+                {
+                    mass = mass.Replace(KEY_MAIN_NAME, "");
+                    Server.level = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                //---------------------------------IRC--------------------------------//
+                if (mass.StartsWith(KEY_IRC_USE))
+                {
+                    mass = mass.Replace(KEY_IRC_USE, "");
+                    Server.irc = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_SERVER))
+                {
+                    mass = mass.Replace(KEY_IRC_SERVER, "");
+                    Server.ircServer = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_CHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_CHANNEL, "");
+                    Server.ircChannel = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_OPCHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_OPCHANNEL, "");
+                    Server.ircOpChannel = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_NICK))
+                {
+                    mass = mass.Replace(KEY_IRC_NICK, "");
+                    Server.ircNick = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PORT))
+                {
+                    mass = mass.Replace(KEY_IRC_PORT, "");
+                    Server.ircPort = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PASS))
+                {
+                    mass = mass.Replace(KEY_IRC_PASS, "");
+                    Server.ircPassword = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_COLOR))
+                {
+                    mass = mass.Replace(KEY_IRC_COLOR, "");
+                    Server.IRCColour = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_IDENT))
+                {
+                    mass = mass.Replace(KEY_IRC_IDENT, "");
+                    Server.ircIdentify = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+
+                //------------------MISC-----------------------------------------------//
+                if (mass.StartsWith(KEY_MISC_PHYSICSRESTART))
+                {
+                    mass = mass.Replace(KEY_MISC_PHYSICSRESTART, "");
+                    Server.physicsRestart = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_RPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_RPLIMIT, "");
+                    Server.rpLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_NORMRPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_NORMRPLIMIT, "");
+                    Server.rpNormLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCHAT))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCHAT, "");
+                    Server.UseGlobalChat = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCOLOR))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCOLOR, "");
+                    Server.GlobalChatColor = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALNAME))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALNAME, "");
+                    Server.GlobalChatNick = mass; Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_DOLLAR))
+                {
+                    mass = mass.Replace(KEY_MISC_DOLLAR, "");
+                    Server.dollardollardollar = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_SUPEROPRANK))
+                {
+                    mass = mass.Replace(KEY_MISC_SUPEROPRANK, "");
+                    Server.rankSuper = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_PARSEEMOTE))
+                {
+                    mass = mass.Replace(KEY_MISC_PARSEEMOTE, "");
+                    Server.parseSmiley = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    return;
+                }
+            }
+            catch (FormatException)
+            {
+                Server.s.Log("Remote sent invalid setting");
+            }
+
         }
         private void HandleMobileRequest(byte[] message)
         {
@@ -216,9 +389,9 @@ namespace MCForge.Remote
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string msg = Encoding.UTF8.GetString(message, 2, length);
             //Server.s.Log(msg);
-            if (msg.StartsWith("2.3: "))  //TODO: make a better checker
+            if (msg.StartsWith(version))  //TODO: make a better checker
             {
-                msg = msg.Replace("2.3: ", "");
+                msg = msg.Replace(version + ": ", "");
 
             }
             else
@@ -247,62 +420,11 @@ namespace MCForge.Remote
                 Server.s.Log("[Remote] A Remote with incorrect information attempted to join.");
             }
         }
-        private void HandleInfo(byte[] message)
-        {
-            short type = BitConverter.ToInt16(message, 0);
-            short version = BitConverter.ToInt16(message, 2);
-
-            switch (type)
-            {
-                case 1: Server.s.Log("Desktop remote has joined"); break;
-                case 2: Server.s.Log("Mobile Remote has joined"); break;
-                default: Server.s.Log("Unknown type of remote has attempted to join"); Kick(); return;
-            }
-            //if (version != this.version)
-            //Kick("You have a different version");
-        }
-        private void HandleRemoteDCPacket(byte[] message)
-        {
-            Server.s.Log("DC");
-        }
-        private void HandleRemoteChatMessagePacket(byte[] message)
-        {
-            Server.s.Log("REMOTE TRY TO TALK");
-        }
-        private void HandleRemoteHandshake(byte[] message)
-        {
-            Server.s.Log("REMOTE REQUEST DATA");
-        }
-        private void HandleRemoteLogin(byte[] message)
-        {
-
-            short length = BitConverter.ToInt16(message, 0);
-            if (length > 32) { Kick(); return; }
-            string Info = Encoding.BigEndianUnicode.GetString(message, 2, (length * 2));
-
-            string[] seperate = Info.Split(':');  //need a better way of sending and getting passwords
-            string password = seperate[1];
-            username = seperate[0];
-
-
-
-
-
-
-
-
-        }
-        private void HandleRemoteJoin(byte[] message)
-        {
-            Server.s.Log("Remote Has Joined");
-        }
 #endregion
 
         public void Kick()
         {
             if (disconnected) return;
-
-
             disconnected = true;
             if (LoggedIn)
             {
@@ -312,37 +434,22 @@ namespace MCForge.Remote
 
             try
             {
-
-
                 SendData(0x03);
                 Server.s.Log("[Remote] has been kicked from the server!");
-
-
             }
             catch { }
-
-
             this.Dispose();
         }
         public void Disconnect()
         {
             if (disconnected) return;
             disconnected = true;
-
-
-            if (LoggedIn)
-                Player.GlobalMessage("%5[Remote] %fhas disconnected.");
-            Server.s.Log("[Remote] has disconnected");
+            if (LoggedIn) Player.GlobalMessage("%5[Remote] %fhas disconnected.");Server.s.Log("[Remote] has disconnected");
             LoggedIn = false;
-
-
-
             this.Dispose();
         }
         public void Dispose()
         {
-            //SaveAttributes();
-
             if (socket != null && socket.Connected)
             {
                 try { socket.Close(); }
@@ -424,11 +531,13 @@ namespace MCForge.Remote
             }
         }
 #endregion
+
         internal void startUp()
         {
-            sendPlayers();
-            sendSettings();
             //sendGroups();
+            sendPlayers();
+            sendMaps();
+            sendSettings();
         }
         internal void sendPlayers()
         {
@@ -439,8 +548,6 @@ namespace MCForge.Remote
                 addPlayer(p);
                 System.Threading.Thread.Sleep(100);
             }
-          
-
         }
         internal void sendSettings()
         {
@@ -452,6 +559,7 @@ namespace MCForge.Remote
             const string RECIEVED_ADMINS_JOIN = "SRVR_ADMINS_JOIN: ";
 
             const string RECIEVED_IRC_USE = "IRC_USE: ";
+            const string RECIEVED_IRC_SERVER = "IRC_SERVER: ";
 		    const string RECIEVED_IRC_CHANNEL = "IRC_CHANNEL: ";
 		    const string RECIEVED_IRC_OPCHANNEL = "IRC_OPCHANNEL: ";
 		    const string RECIEVED_IRC_NICK = "IRC_NICK: ";
@@ -478,6 +586,7 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_SERVER_NAME + Server.name.ToString());
 
             SendData(0x08, RECIEVED_IRC_USE + Server.irc.ToString().ToLower());
+            SendData(0x08, RECIEVED_IRC_SERVER + Server.ircServer);
             SendData(0x08, RECIEVED_IRC_CHANNEL + Server.ircChannel);
             SendData(0x08, RECIEVED_IRC_OPCHANNEL + Server.ircOpChannel);
             SendData(0x08, RECIEVED_IRC_NICK + Server.ircNick);
@@ -487,40 +596,41 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_IRC_PORT + Server.ircPort);
 
             SendData(0x08, RECIEVED_MISC_PHYSICSRESTART + Server.physicsRestart.ToString().ToLower());
-            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit);
-            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit);
+            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit.ToString());
+            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit.ToString());
             SendData(0x08, RECIEVED_MISC_GLOBALCHAT + Server.UseGlobalChat.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_GLOBALCOLOR + Server.GlobalChatColor);
             SendData(0x08, RECIEVED_MISC_GLOBALNAME + Server.GlobalChatNick);
             SendData(0x08, RECIEVED_MISC_DOLLAR + Server.dollardollardollar.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_SUPEROPRANK + Server.rankSuper.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_PARSEEMOTE + Server.parseSmiley.ToString().ToLower());
-
+            SendData(0x08, "Done_!*");
+          
+             return;
         }
         internal void addPlayer(Player p)
         {
-            if (p.title.Equals(null))
+            if (p.title == null || p.title == "" || p.title == String.Empty)
             {
-                SendData(0x04, new StringBuilder("ADD:").Append(p.color).Append(",").Append(p.group.name)
-                    .Append(",").Append(p.name).Append(",").Append("Default").ToString());
+                SendData(0x04, new StringBuilder("ADD:").Append("Default").Append(",").Append(p.name)
+                    .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
                 return;
             }
             else
             {
-                SendData(0x04, new StringBuilder("ADD:")
-                    .Append(p.color).Append(",").Append(p.group.name)
-                    .Append(",").Append(p.name).Append(",")
-                    .Append(p.title).ToString());
+                SendData(0x04, new StringBuilder("ADD:").Append(p.title).Append(",").Append(p.name)
+                    .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
             }
         }
         internal void removePlayer(Player p)
         {
             SendData(0x04, "DELETE:" + p.name); 
         }
+        List<string> levels = new List<string>(Server.levels.Count);
         internal void sendMaps()
         {
 
-            List<string> levels = new List<string>(Server.levels.Count);
+           
             levels.Clear();
             try
             {
@@ -537,6 +647,7 @@ namespace MCForge.Remote
                     }
 
                     Server.levels.ForEach(delegate(Level l) { SendData(0x06, "LO_" + l.name); });
+                    
                 }
                
             catch (Exception e) { Server.ErrorLog(e);}
@@ -548,6 +659,14 @@ namespace MCForge.Remote
             {
                 //SendData(0x07, g.name + "," +g.color + "," g.
             } 
+        }
+        void s_OnOp(string message)
+        {
+
+        }
+        void s_OnAdmin(string message)
+        {
+
         }
         void s_OnLog(string message)
         {
@@ -596,14 +715,16 @@ namespace MCForge.Remote
         }
         void Level_LevelLoad(string l)
         {
-            sendMaps();
-            Level lo = Level.Find(l);
-            if (lo != null) lo.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload);
+            
+            
+            Server.s.Log("WAS " + l + " LOADED?");
+            SendData(0x06, "LO_" + l);
+            Server.levels.ForEach(delegate(Level o) { o.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload); });
             
         }
         void Remote_LevelUnload(Level l)
         {
-            sendMaps();
+           SendData(0x06, "UN_" + l.name);
         }
         void s_OnSettingsUpdate()
         {
