@@ -8,58 +8,53 @@ namespace MCForge.Remote
 {
     public class RemoteProperties
     {
-        public static void Load(string fileName)
+        public static void Load()
         {
-            if (File.Exists(fileName))
+            if (File.Exists("properties/remote.properties"))
             {
-                string[] lines = File.ReadAllLines(fileName);
-
-                foreach (string line in lines)
+                foreach (string line in File.ReadAllLines("properties/remote.properties"))
                 {
-                    if (line != "")
+                    try
                     {
-                        string settingNode = line.Split('=')[0].Trim();
-                        string value = "";
-                        if (line.IndexOf('=') >= 0)
-                            value = line.Substring(line.IndexOf('=') + 1).Trim();
-                        switch (settingNode.ToLower())
+                        if (line[0] != '#')
                         {
-                            case "RemoteUsername":
-
-                                if (Properties.ValidString(value, "![]:.,{}~-+()?_/\\' "))
-                                {
-                                    RemoteServer.username = value;
-                                }
-                                else { Server.s.Log("Remote username invalid! setting to default."); }
-
-                                break;
-                            case "RemotePassword":
-
-                                if (Properties.ValidString(value, "![]:.,{}~-+()?_/\\' "))
-                                {
-                                    RemoteServer.password = value;
-                                }
-                                else { Server.s.Log("Remote username invalid! setting to default."); }
-
-                                break;
-                            case "RemotePort":
-                                try { RemoteServer.port = Convert.ToInt32(value); }
-                                catch { Server.s.Log("Invalid Remote port! setting to default."); }
-                                break;
-                            case "UseRemote":
-                                RemoteServer.enableRemote = (value.ToLower() == "true") ? true : false;
-                                break;
-
+                            string value = line.Substring(line.IndexOf(" = ") + 3);
+                            switch (line.Substring(0, line.IndexOf(" = ")))
+                            {
+                                case "RemoteEnable": RemoteServer.enableRemote = bool.Parse(value); break;
+                                case "RemoteUsername": RemoteServer.username = value; break;
+                                case "RemotePassword": RemoteServer.password = value; break;
+                                case "RemotePort": RemoteServer.port = int.Parse(value); break;
+                            }
 
                         }
                     }
+                    catch { Server.s.Log("Failed to load remote properties!"); }
                 }
             }
+
+            else { Save("properties/remote.properties"); Server.s.Log("Created properties file for remote, in Properties > remote.properties"); }
         }
+
         public static void Save(string fileName)
         {
-
+            try
+            {
+                File.Create(fileName).Dispose();
+                using (StreamWriter w = File.CreateText(fileName))
+                {
+                    w.WriteLine("RemoteEnable = " + RemoteServer.enableRemote.ToString().ToLower());
+                    w.WriteLine("RemoteUsername = " + RemoteServer.username);
+                    w.WriteLine("RemotePassword = " + RemoteServer.password);  //TODO: encrypt
+                    w.WriteLine("RemotePort = " + RemoteServer.port.ToString());
+                }
+            }
+            catch
+            {
+                Server.s.Log("remote properties save failed " + fileName);
+            }
         }
+
         public class Crypto
         {
             // This is the base encryption salt! DO NOT CHANGE IT!!!

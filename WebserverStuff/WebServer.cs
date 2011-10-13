@@ -39,6 +39,7 @@ namespace MCForge.Remote
 
         public void Start()
         {
+            RemoteProperties.Load();
             if (enableRemote)
             {
                 try

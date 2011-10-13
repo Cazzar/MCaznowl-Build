@@ -49,11 +49,12 @@ namespace MCForge.Remote
         }
         public void Start()
         {
+           
             if (RemoteServer.enableRemote)
             {
                 try
                 {
-
+                    RemoteProperties.Load();
                     ip = socket.RemoteEndPoint.ToString().Split(':')[0];
                     Player.GlobalMessage(c.navy + "A Remote has connected to the server");
                     Server.s.Log        ("[Remote] connected to the server.");
@@ -65,6 +66,7 @@ namespace MCForge.Remote
                     Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                     Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
                     Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
+                    Level.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload);
                     Group.OnGroupLoad +=new Group.GroupLoad(GroupChanged);
                     Group.OnGroupSave +=new Group.GroupSave(GroupChanged);
 
@@ -79,6 +81,7 @@ namespace MCForge.Remote
                 }
             }
         }
+
         static void Receive(IAsyncResult result)
         {
             Remote p = (Remote)result.AsyncState;
@@ -715,16 +718,13 @@ namespace MCForge.Remote
         }
         void Level_LevelLoad(string l)
         {
-            
-            
-            Server.s.Log("WAS " + l + " LOADED?");
+            //Server.s.Log("WAS " + l + " LOADED?");
             SendData(0x06, "LO_" + l);
-            Server.levels.ForEach(delegate(Level o) { o.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload); });
-            
         }
         void Remote_LevelUnload(Level l)
         {
            SendData(0x06, "UN_" + l.name);
+           //Server.s.Log("WAS " + l.name + " LOADED?");
         }
         void s_OnSettingsUpdate()
         {

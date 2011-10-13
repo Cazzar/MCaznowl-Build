@@ -703,14 +703,12 @@ public static byte maxGuests = 10;
                     return;
                 }
             });
-            /*ml.Queue(delegate
+            ml.Queue(delegate
             {
-                Log("Creating listening socket on port " + 5050 + " for remote console...");          
                 Remote.RemoteServer webServer;
+                Remote.RemoteProperties.Load();
                 (webServer = new Remote.RemoteServer()).Start();
-                
-                
-            });*/
+            });
             
             ml.Queue(delegate
             {

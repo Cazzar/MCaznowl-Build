@@ -169,7 +169,7 @@ namespace MCForge
             Player.PlayerCommand += new Player.OnPlayerCommand(Player_PlayerCommand);
             Player.PlayerBlockChange += new Player.BlockchangeEventHandler2(Player_PlayerBlockChange);
             Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-            mainlevel.LevelUnload += new Level.OnLevelUnload(mainlevel_LevelUnload);
+            Level.LevelUnload += new Level.OnLevelUnload(mainlevel_LevelUnload);
             tagging.Elapsed += new System.Timers.ElapsedEventHandler(tagging_Elapsed);
             tagging.Start();
         }

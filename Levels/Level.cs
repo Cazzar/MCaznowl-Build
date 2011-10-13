@@ -79,9 +79,9 @@ namespace MCForge
         public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo, Level l);
         public event OnPhysicsUpdate PhysicsUpdate = null;
         public delegate void OnLevelUnload(Level l);
-        public event OnLevelUnload LevelUnload = null;
+        public static event OnLevelUnload LevelUnload = null;
         public delegate void OnLevelSave(Level l);
-        public event OnLevelSave LevelSave = null;
+        public static event OnLevelSave LevelSave = null;
         public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
         public ushort jailx, jaily, jailz;
