@@ -468,6 +468,7 @@ public static byte maxGuests = 10;
             Block.SetBlocks();
             Awards.Load();
             Economy.Load();
+            Warp.LOAD();
 
             if (File.Exists("text/emotelist.txt"))
             {
@@ -572,22 +573,18 @@ public static byte maxGuests = 10;
                             else
                             {
                                 Log("mainlevel not found");
-                                mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                                mainLevel.permissionvisit = LevelPermission.Guest;
-                                mainLevel.permissionbuild = LevelPermission.Guest;
+                                mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                                 mainLevel.Save();
+                                Level.CreateLeveldb(Server.level);
                             }
                         }
                     }
                     else
                     {
                         Log("mainlevel not found");
-                        mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                        mainLevel.permissionvisit = LevelPermission.Guest;
-                        mainLevel.permissionbuild = LevelPermission.Guest;
+                        mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                         mainLevel.Save();
+                        Level.CreateLeveldb(Server.level);
                     }
 
                     addLevel(mainLevel);
