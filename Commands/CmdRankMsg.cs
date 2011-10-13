@@ -65,7 +65,7 @@ namespace MCForge
             {
                 if (pl.group.name == findgroup.name)
                 {
-                    pl.SendMessage(p.color + p.name + ": " + Server.DefaultColor + msg2);
+                    pl.SendMessage(p.color + p.name + ": " + Server.DefaultColor + (message.Replace(msg1, "").Trim()));
                 }
             }
         }
