@@ -263,7 +263,7 @@ namespace MCForge
 
         void mainlevel_LevelUnload(Level l)
         {
-            if (started)
+            if (started && l == mainlevel)
             {
                 Server.s.Log("Failed!, A ctf game is curretnly going on!");
                 Plugin.CancelLevelEvent(LevelEvents.LevelUnload, l);
