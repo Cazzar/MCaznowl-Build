@@ -90,6 +90,9 @@ namespace MCForge
         public const byte door_darkgrey_air = (byte)67;
         public const byte door_lightgrey_air = (byte)68;
         public const byte door_white_air = (byte)69;
+        //Seasons
+        public const byte fallsnow = (byte)71;
+        public const byte snow = (byte)72;
 
         public const byte flagbase = (byte)70;
 
@@ -1234,6 +1237,8 @@ namespace MCForge
                 case 49: return "obsidian";
 
                 case 70: return "flagbase";
+                case 71: return "fallsnow";
+                case 72: return "snow";
                 case 100: return "op_glass";
                 case 101: return "opsidian";              //TODO Add command or just use bind?
                 case 102: return "op_brick";              //TODO
@@ -1497,7 +1502,8 @@ namespace MCForge
                 case "bookcase": return 47;
                 case "mossy_cobblestone": return 48;
                 case "obsidian": return 49;
-
+                case "fallsnow": return 71;
+                case "snow": return 72;
                 case "op_glass": return 100;
                 case "opsidian": return 101;              //TODO Add command or just use bind?
                 case "op_brick": return 102;              //TODO
@@ -1758,7 +1764,9 @@ namespace MCForge
 
                 case 110: return (byte)5; //wood_float
                 case 112: return (byte)10;
-
+                case 71:
+                case 72:
+                    return Block.white;
                 case door: return trunk;//door show by treetype
                 case door2: return obsidian;//door show by obsidian
                 case door3: return glass;//door show by glass
@@ -1954,6 +1962,9 @@ namespace MCForge
         {
             switch (b)
             {
+                case snow:
+                    return grass;
+                case fallsnow:
                 case 200:
                 case 202:
                 case 203:
