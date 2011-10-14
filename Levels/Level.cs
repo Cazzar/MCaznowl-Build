@@ -87,6 +87,8 @@ namespace MCForge
         public event OnLevelUnload onLevelUnload = null;
         public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
+        public delegate void OnLevelLoaded(Level l);
+        public static event OnLevelLoaded LevelLoaded;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
 
@@ -1042,6 +1044,8 @@ namespace MCForge
 					catch { }
 
 					Server.s.Log("Level \"" + level.name + "\" loaded.");
+                    if (LevelLoaded != null)
+                        LevelLoaded(level);
 					return level;
                 }
                 catch (Exception ex) { Server.ErrorLog(ex); return null; }
