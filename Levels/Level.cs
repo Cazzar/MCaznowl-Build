@@ -47,6 +47,7 @@ namespace MCForge
         public static bool cancelload = false;
         public static bool cancelsave = false;
         public static bool cancelphysics = false;
+        public bool cancelsave1 = false;
         public bool cancelunload = false;
         public int id;
         public string name;
@@ -82,6 +83,8 @@ namespace MCForge
         public static event OnLevelUnload LevelUnload = null;
         public delegate void OnLevelSave(Level l);
         public static event OnLevelSave LevelSave = null;
+        public event OnLevelSave onLevelSave = null;
+        public event OnLevelUnload onLevelUnload = null;
         public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
         public ushort jailx, jaily, jailz;
@@ -671,6 +674,11 @@ namespace MCForge
             if (LevelSave != null)
             {
                 LevelSave(this);
+                if (cancelsave1)
+                {
+                    cancelsave1 = false;
+                    return;
+                }
                 if (cancelsave)
                 {
                     cancelsave = false;
