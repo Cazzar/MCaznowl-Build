@@ -429,6 +429,14 @@ namespace MCForge_.Gui
                 int vers = int.Parse(verscheck.Split('.')[0]);
                 if (oldrevision) { filelocation = (Program.ArchivePath + Server.selectedrevision + ".exe"); }
                 if (!oldrevision) { filelocation = (DLLLocation); }
+                try
+                {
+                    if (File.Exists("MCLawl.new"))
+                        File.Delete("MCLawl.new");
+                    if (File.Exists("Changelog.txt"))
+                        File.Delete("Changelog.txt");
+                }
+                catch { }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
                 Client.DownloadFile(Program.ChangelogLocation, "Changelog.txt");

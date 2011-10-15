@@ -296,6 +296,7 @@ public static byte maxGuests = 10;
         public static bool mono = false;
         public static string server_owner = "Notch";
         public static bool WomDirect = false;
+        public static bool UseSeasons = false;
 
         public static bool flipHead = false;
 

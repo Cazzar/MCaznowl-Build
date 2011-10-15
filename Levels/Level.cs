@@ -47,6 +47,7 @@ namespace MCForge
         public static bool cancelload = false;
         public static bool cancelsave = false;
         public static bool cancelphysics = false;
+        public bool cancelsave1 = false;
         public bool cancelunload = false;
         public int id;
         public string name;
@@ -82,11 +83,15 @@ namespace MCForge
         public static event OnLevelUnload LevelUnload = null;
         public delegate void OnLevelSave(Level l);
         public static event OnLevelSave LevelSave = null;
+        public event OnLevelSave onLevelSave = null;
+        public event OnLevelUnload onLevelUnload = null;
         public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
+        public delegate void OnLevelLoaded(Level l);
+        public static event OnLevelLoaded LevelLoaded;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
-
+        //public SeasonsCore season;
         public bool edgeWater = false;
 
         public List<Player> players { get { return getPlayers(); } }
@@ -222,6 +227,7 @@ namespace MCForge
             spawny = (ushort)(depth * 0.75f);
             spawnz = (ushort)(height / 2);
             rotx = 0; roty = 0;
+            //season = new SeasonsCore(this);
         }
 
         public void CopyBlocks(byte[] source, int offset)
@@ -666,11 +672,18 @@ namespace MCForge
 
         public void Save(Boolean Override = false)
         {
+            //if (season.started)
+            //    season.Stop(this);
             if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
             {
                 LevelSave(this);
+                if (cancelsave1)
+                {
+                    cancelsave1 = false;
+                    return;
+                }
                 if (cancelsave)
                 {
                     cancelsave = false;
@@ -773,7 +786,7 @@ namespace MCForge
                 Server.ErrorLog(e);
                 return;
             }
-
+            //season.Start(this);
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -937,7 +950,7 @@ namespace MCForge
 					level.jailrotx = level.rotx; level.jailroty = level.roty;
 
 					level.physThread = new Thread(new ThreadStart(level.Physics));
-
+                    //level.season = new SeasonsCore(level);
 					try
 					{
 						DataTable foundDB = MySQL.fillData("SELECT * FROM `Portals" + givenName + "`");
@@ -1034,6 +1047,8 @@ namespace MCForge
 					catch { }
 
 					Server.s.Log("Level \"" + level.name + "\" loaded.");
+                    if (LevelLoaded != null)
+                        LevelLoaded(level);
 					return level;
                 }
                 catch (Exception ex) { Server.ErrorLog(ex); return null; }

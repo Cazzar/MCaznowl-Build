@@ -40,6 +40,7 @@ namespace MCForge
     }
     public enum LevelEvents
     {
-        LevelUnload
+        LevelUnload,
+        LevelSave
     }
 }
