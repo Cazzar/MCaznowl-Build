@@ -414,6 +414,7 @@ public static byte maxGuests = 10;
             if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
             if (!Directory.Exists("extra/copy/")) { Directory.CreateDirectory("extra/copy/"); }
             if (!Directory.Exists("extra/copyBackup/")) { Directory.CreateDirectory("extra/copyBackup/"); }
+            if (!Directory.Exists("extra/Waypoints")) { Directory.CreateDirectory("extra/Waypoints"); }
 
             try
             {
