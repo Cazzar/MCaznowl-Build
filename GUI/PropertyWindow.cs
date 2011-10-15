@@ -32,7 +32,8 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        System.Timers.Timer lavaControlUpdateTimer;
+        Form lavaMapBrowser;
+        System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
         public PropertyWindow()
@@ -46,6 +47,7 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             Icon = Gui.Window.ActiveForm.Icon;
+            lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -60,6 +62,7 @@ namespace MCForge.Gui
             cmbIRCColour.Items.AddRange(colors);
             cmbColor.Items.AddRange(colors);
             cmbGlobalChatColor.Items.AddRange(colors);
+            button3.Enabled = Server.WomDirect;
             if (Server.irc == false)
             {
                 grpIRC.BackColor = Color.LightGray;
@@ -154,13 +157,14 @@ namespace MCForge.Gui
 
             try
             {
-                lavaControlUpdateTimer = new System.Timers.Timer(10000);
-                lavaControlUpdateTimer.AutoReset = true;
-                lavaControlUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
+                lavaUpdateTimer = new System.Timers.Timer(10000);
+                lavaUpdateTimer.AutoReset = true;
+                lavaUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
                 {
                     UpdateLavaControls();
+                    UpdateLavaMapList(false);
                 });
-                lavaControlUpdateTimer.Start();
+                lavaUpdateTimer.Start();
             }
             catch
             {
@@ -172,7 +176,8 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
-            lavaControlUpdateTimer.Dispose();
+            lavaUpdateTimer.Dispose();
+            lavaMapBrowser.Dispose();
             Window.prevLoaded = false;
         }
 
@@ -1076,6 +1081,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void ChkPort_Click(object sender, EventArgs e)
         {
+            ChkPortResult.Text = "Testing Port!";
+            ChkPortResult.BackColor = SystemColors.Control;
+
             int nPort = 0;
             nPort = Int32.Parse(txtPort.Text);
 
@@ -1094,10 +1102,9 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     listener = null;
                 }
 
-                ChkPortResult.Text = "Testing Port!";
-                ChkPortResult.BackColor = SystemColors.Control;
+               
 
-               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://mcfire.tk/port.php?port=" + nPort);
+               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -1122,16 +1129,16 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                             }
 
                         MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                        ChkPortResult.Text = "Port Not Open: " + line;
+                        ChkPortResult.Text = "Port Not Open";
                         ChkPortResult.BackColor = Color.Red;
-                        MessageBox.Show(line);
+                        
                         
                         }
 
                         }
                     }
                 }
-                else { MessageBox.Show("Could Not connect to site, aborting operation"); }
+                else { MessageBox.Show("Could Not connect to site, try again later."); }
 
 
             }
@@ -1728,21 +1735,42 @@ MessageBox.Show("Text Box Cleared!!");
             UpdateLavaControls();
         }
 
-        private void UpdateLavaMapList()
+        private void UpdateLavaMapList(bool useList = true, bool noUseList = true)
         {
-            lsMapUse.Items.Clear();
-            lsMapNoUse.Items.Clear();
-
-            lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
-            
-            string name;
-            FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
-            foreach (FileInfo file in fi)
+            if (!useList && !noUseList) return;
+            try
             {
-                name = file.Name.Replace(".lvl", "");
-                if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                    lsMapNoUse.Items.Add(name);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                    return;
+                }
+
+                int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
+                if (useList) lsMapUse.Items.Clear();
+                if (noUseList) lsMapNoUse.Items.Clear();
+
+                if (useList)
+                {
+                    lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+                    try { if (useIndex > -1) lsMapUse.SelectedIndex = useIndex; }
+                    catch { }
+                }
+                if (noUseList)
+                {
+                    string name;
+                    FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
+                    foreach (FileInfo file in fi)
+                    {
+                        name = file.Name.Replace(".lvl", "");
+                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                            lsMapNoUse.Items.Add(name);
+                    }
+                    try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
+                    catch { }
+                }
             }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
         private void lsAddMap_Click(object sender, EventArgs e)
@@ -1762,6 +1790,14 @@ MessageBox.Show("Text Box Cleared!!");
                 if (level == null) return;
 
                 Server.lava.AddMap(name);
+
+                LavaSurvival.MapSettings settings = Server.lava.LoadMapSettings(level.name);
+                settings.blockFlood = new LavaSurvival.Pos((ushort)(level.width / 2), (ushort)(level.depth - 1), (ushort)(level.height / 2));
+                settings.blockLayer = new LavaSurvival.Pos(0, (ushort)(level.depth / 2), 0);
+                ushort x = (ushort)(level.width / 2), y = (ushort)(level.depth / 2), z = (ushort)(level.height / 2);
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3),(ushort)(y + 4), (ushort)(z + 3)) };
+                Server.lava.SaveMapSettings(settings);
+
                 level.motd = "Lava Survival: " + level.name.Capitalize();
                 level.overload = 1000000;
                 level.unload = false;
@@ -1853,6 +1889,42 @@ MessageBox.Show("Text Box Cleared!!");
                 Server.lava.SaveMapSettings(settings);
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                lavaMapBrowser = new LavaMapBrowser();
+                lavaMapBrowser.Show();
+                lavaMapBrowser.Focus();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new GUI.WoM().Show();
+        }
+
+        private void chkWomDirect_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = chkWomDirect.Checked;
         }
     }
 

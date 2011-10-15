@@ -251,7 +251,7 @@ namespace MCForge
                                 Server.MySQLDatabaseName = value;
                                 break;
                             case "pooling":
-                                try { Server.MySQLPooling = bool.Parse(value); }
+                                try { Server.DatabasePooling = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "defaultcolor":
@@ -537,6 +537,15 @@ namespace MCForge
                                 try { Server.WomDirect = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "wom-serveralt":
+                                Server.Server_ALT = value;
+                                break;
+                            case "wom-serverdis":
+                                Server.Server_Disc = value;
+                                break;
+                            case "wom-serverflag":
+                                Server.Server_Flag = value;
+                                break;
                         }
                     }
                 }
@@ -557,7 +566,7 @@ namespace MCForge
             } return true;
         }
 
-        static void Save(string givenPath)
+       public static void Save(string givenPath)
         {
             try
             {
@@ -615,6 +624,7 @@ namespace MCForge
             w.WriteLine("#   no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
             w.WriteLine("#   zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
             w.WriteLine();
+            w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
             w.WriteLine("#   SQLPort\t=\tPort number to be used for MySQL.  Unless you manually changed the port, leave this alone.  Default 3306.");
             w.WriteLine("#   Username\t=\tThe username you used to create the database (usually root)");
@@ -713,7 +723,7 @@ namespace MCForge
             w.WriteLine("Username = " + Server.MySQLUsername);
             w.WriteLine("Password = " + Server.MySQLPassword);
             w.WriteLine("DatabaseName = " + Server.MySQLDatabaseName);
-            w.WriteLine("Pooling = " + Server.MySQLPooling);
+            w.WriteLine("Pooling = " + Server.DatabasePooling);
             w.WriteLine();
             w.WriteLine("#Colors");
             w.WriteLine("defaultColor = " + Server.DefaultColor);
@@ -765,6 +775,9 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("#WoM Direct thingy");
             w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
+            w.WriteLine("wom-serveralt = " + Server.Server_ALT);
+            w.WriteLine("wom-serverdis = " + Server.Server_Disc);
+            w.WriteLine("wom-serverflag = " + Server.Server_Flag);
         }
     }
 }
