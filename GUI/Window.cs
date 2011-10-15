@@ -564,11 +564,6 @@ namespace MCForge.Gui
 
         //void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
 
-        private void txtHost_TextChanged(object sender, EventArgs e)
-        {
-            if (txtHost.Text != "") Server.ZallState = txtHost.Text;
-        }
-
         private void btnProperties_Click_1(object sender, EventArgs e)
         {
             if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
@@ -891,6 +886,7 @@ namespace MCForge.Gui
                     }
                 }
             }
+            tabControl1.Update();
         }
 
         private void Restart_Click(object sender, EventArgs e)
