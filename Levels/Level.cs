@@ -91,7 +91,7 @@ namespace MCForge
         public static event OnLevelLoaded LevelLoaded;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
-        public SeasonsCore season;
+        //public SeasonsCore season;
         public bool edgeWater = false;
 
         public List<Player> players { get { return getPlayers(); } }
@@ -227,7 +227,7 @@ namespace MCForge
             spawny = (ushort)(depth * 0.75f);
             spawnz = (ushort)(height / 2);
             rotx = 0; roty = 0;
-            season = new SeasonsCore(this);
+            //season = new SeasonsCore(this);
         }
 
         public void CopyBlocks(byte[] source, int offset)
@@ -672,8 +672,8 @@ namespace MCForge
 
         public void Save(Boolean Override = false)
         {
-            if (season.started)
-                season.Stop(this);
+            //if (season.started)
+            //    season.Stop(this);
             if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
@@ -786,7 +786,7 @@ namespace MCForge
                 Server.ErrorLog(e);
                 return;
             }
-            season.Start(this);
+            //season.Start(this);
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -950,7 +950,7 @@ namespace MCForge
 					level.jailrotx = level.rotx; level.jailroty = level.roty;
 
 					level.physThread = new Thread(new ThreadStart(level.Physics));
-                    level.season = new SeasonsCore(level);
+                    //level.season = new SeasonsCore(level);
 					try
 					{
 						DataTable foundDB = MySQL.fillData("SELECT * FROM `Portals" + givenName + "`");
