@@ -566,7 +566,7 @@ namespace MCForge
             } return true;
         }
 
-        static void Save(string givenPath)
+       public static void Save(string givenPath)
         {
             try
             {

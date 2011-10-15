@@ -262,6 +262,9 @@ namespace MCForge
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
+
+        //Random...
+        public Random random = new Random();
         
         //Global Chat
         public bool muteGlobal = false;
@@ -1421,6 +1424,21 @@ namespace MCForge
                 case Block.door_gold_air:
                 case Block.door_cobblestone_air:
                 case Block.door_red_air:
+
+                case Block.door_orange_air:
+                case Block.door_yellow_air:
+                case Block.door_lightgreen_air:
+                case Block.door_aquagreen_air:
+                case Block.door_cyan_air:
+                case Block.door_lightblue_air:
+                case Block.door_purple_air:
+                case Block.door_lightpurple_air:
+                case Block.door_pink_air:
+                case Block.door_darkpink_air:
+                case Block.door_darkgrey_air:
+                case Block.door_lightgrey_air:
+                case Block.door_white_air:
+
                 case Block.door_dirt_air:
                 case Block.door_grass_air:
                 case Block.door_blue_air:
@@ -1453,8 +1471,13 @@ namespace MCForge
 
                         if (192 <= rot[1] && rot[1] <= 196 || 60 <= rot[1] && rot[1] <= 64) { newX = 0; newZ = 0; }
 
-                        level.Blockchange((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2), Block.rockethead);
-                        level.Blockchange((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ), Block.fire);
+                        byte b1 = level.GetTile((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2));
+                        byte b2 = level.GetTile((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ));
+                        if (b1 == Block.air && b2 == Block.air && level.CheckClear((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2)) && level.CheckClear((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ)))
+                        {
+                            level.Blockchange((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2), Block.rockethead);
+                            level.Blockchange((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ), Block.fire);
+                        }
                     }
                     break;
                 case Block.firework:
@@ -1466,9 +1489,13 @@ namespace MCForge
                     if (level.physics != 0)
                     {
                         mx = rand.Next(0, 2); mz = rand.Next(0, 2);
-
-                        level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1), Block.firework);
-                        level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1), Block.lavastill, false, "wait 1 dissipate 100");
+                        byte b1 = level.GetTile((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1));
+                        byte b2 = level.GetTile((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1));
+                        if (b1 == Block.air && b2 == Block.air && level.CheckClear((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1)) && level.CheckClear((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1)))
+                        {
+                            level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1), Block.firework);
+                            level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1), Block.lavastill, false, "wait 1 dissipate 100");
+                        }
                     } SendBlockchange(x, y, z, b);
 
                     break;
@@ -2035,6 +2062,7 @@ namespace MCForge
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(OPs): " + name + ": " + newtext);
                     Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -2048,6 +2076,7 @@ namespace MCForge
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
+                    Server.s.Log("(Admins): " + name + ": " + newtext);
                     Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
@@ -3409,7 +3438,6 @@ namespace MCForge
                     if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
-
                     }
                 });
 

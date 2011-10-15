@@ -28,6 +28,8 @@ namespace MCForge.Remote
     {
         public Socket listen;
         public static int port = 5050;
+        public static string username = "head";
+        public static string password = "lols";
         public static bool enableRemote = true;
         
 
@@ -37,6 +39,7 @@ namespace MCForge.Remote
 
         public void Start()
         {
+            RemoteProperties.Load();
             if (enableRemote)
             {
                 try

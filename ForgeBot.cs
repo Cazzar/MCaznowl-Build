@@ -37,7 +37,9 @@ namespace MCForge
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
             this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
-            connection = new Connection(new ConnectionArgs(nick, server), false, false);
+            ConnectionArgs con = new ConnectionArgs(nick, server);
+            con.Port = Server.ircPort;
+            connection = new Connection(con, false, false);
             banCmd = new List<string>();
             if (Server.irc)
             {
