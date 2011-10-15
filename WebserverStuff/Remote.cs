@@ -62,7 +62,6 @@ namespace MCForge.Remote
                     Server.s.OnLog += new Server.LogHandler(s_OnLog);
                     Server.s.OnAdmin += new Server.LogHandler(s_OnAdmin);
                     Server.s.OnOp += new Server.LogHandler(s_OnOp);
-                    Server.GlobalChat.OnNewGlobalMessage +=new GlobalChatBot.LogHandler(GlobalChat_OnNewGlobalMessage);
                     Server.s.OnSettingsUpdate += new Server.VoidHandler(s_OnSettingsUpdate);
                     Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
                     Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
@@ -609,7 +608,7 @@ namespace MCForge.Remote
         }
         internal void addPlayer(Player p)
         {
-            if (p.title == null || p.title == "" || p.title == String.Empty)
+            if (String.IsNullOrEmpty(p.title))
             {
                 SendData(0x04, new StringBuilder("ADD:").Append("Default").Append(",").Append(p.name)
                     .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
@@ -662,21 +661,12 @@ namespace MCForge.Remote
         void s_OnOp(string message)
         {
             Player p = null;
-            int id = message.IndexOf('>');
-            if (id > 0)
-            {
-                string getname = null;
-                if (id % 2 == 0)
-                {
-                    getname = message.Substring(12, (id / 2) - 1);
-                }
-                else if (id % 2 == 1)
-                {
-                    getname = message.Substring(12, (id / 2) + 1);
-                }
-                p = Player.Find(getname);
-            }
-
+           
+            message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
+            message = message.Replace("(OPs): ", "");    //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+            string[] secondSplit = message.Split(':');
+            string getname = message.Substring(0, secondSplit[0].Length);
+            p = Player.Find(getname);
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
@@ -690,7 +680,7 @@ namespace MCForge.Remote
             }
             else
             {
-                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)2;
@@ -704,21 +694,12 @@ namespace MCForge.Remote
         void s_OnAdmin(string message)
         {
             Player p = null;
-            int id = message.IndexOf('>');
-            if (id > 0)
-            {
-                string getname = null;
-                if (id % 2 == 0)
-                {
-                    getname = message.Substring(12, (id / 2) - 1);
-                }
-                else if (id % 2 == 1)
-                {
-                    getname = message.Substring(12, (id / 2) + 1);
-                }
-                p = Player.Find(getname);
-            }
-
+           
+            message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
+            message = message.Replace("(Admins): ", "");    //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+            string[] secondSplit = message.Split(':');
+            string getname =  message.Substring(0, secondSplit[0].Length);
+            p = Player.Find(getname);
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
@@ -732,7 +713,7 @@ namespace MCForge.Remote
             }
             else
             {
-                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)4;
@@ -743,62 +724,45 @@ namespace MCForge.Remote
             }
            
         }
-        void GlobalChat_OnNewGlobalMessage(string message)
-        {
-            if (Server.UseGlobalChat)
-            {
-                message = message.Remove(0, 8);
-                string messaged = new StringBuilder().Append("Global").Append("ĥ").Append(message).ToString();
-                byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                buffed[0] = (byte)3;
-                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
-                SendData(0x05, buffed);
-                System.Threading.Thread.Sleep(100);
-            }
-        }
         void s_OnLog(string message)
         {
 
             Player p = null;
-            int id = message.IndexOf('>');
-            if (id > 0)
+
+            
+               //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+            if (message.IndexOf(">") > -1)
             {
-                string getname = null;
-                if (id % 2 == 0)
-                {
-                    getname = message.Substring(12, (id / 2) - 1);
-                }
-                else if (id % 2 == 1)
-                {
-                    getname = message.Substring(12, (id / 2) + 1);
-                }
+                message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
+                string[] secondSplit = message.Split('>');
+                string getname = message.Substring(1, secondSplit[0].Length - 1);
                 p = Player.Find(getname);
+                Player.GlobalMessage(getname);
             }
+            
+                if (p == null)
+                {
+                    string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
+                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                    buffed[0] = (byte)1;
+                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-            if (p == null)
-            {
-                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                buffed[0] = (byte)1;
-                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+                    SendData(0x05, buffed);
+                    System.Threading.Thread.Sleep(100);
+                }
+                else
+                {
+                    string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                    buffed[0] = (byte)1;
+                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-                SendData(0x05, buffed);
-                System.Threading.Thread.Sleep(100);
-            }
-            else
-            {
-                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
-                byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                buffed[0] = (byte)1;
-                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
-                SendData(0x05, buffed);
-                System.Threading.Thread.Sleep(100);
-            }
+                    SendData(0x05, buffed);
+                    System.Threading.Thread.Sleep(100);
+                }
+            
 
         }
         void Player_PlayerConnect(Player p)
