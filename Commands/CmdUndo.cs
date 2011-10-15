@@ -66,15 +66,11 @@ namespace MCForge {
                 seconds = 30;
             }
 
-            //if (message.Split(' ').Length == 1) if (char.IsDigit(message, 0)) { message = p.name + " " + message; } else { message = message + " 30"; }
-
-            //try { seconds = Convert.ToInt16(message.Split(' ')[1]); } catch { seconds = 2; }
-
-            //At this point, we know the number is valid, and allowed for the particxular person's group.
+            //At this point, we know the number is valid, and allowed for the particular person's group.
             if (who != null) {
                 if (p != null) {
                     if (who.group.Permission > p.group.Permission && who != p) { Player.SendMessage(p, "Cannot undo a user of higher or equal rank"); return; }
-                    if (who != p && p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP+ may undo other people's actions"); return; }
+                    //if (who != p && p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP+ may undo other people's actions"); return; }
                 }
 
                 for (CurrentPos = who.UndoBuffer.Count - 1; CurrentPos >= 0; --CurrentPos) {
@@ -105,7 +101,7 @@ namespace MCForge {
                 }
                 return;
             } else if (undoPhysics) {
-                if (p.group.Permission < LevelPermission.AdvBuilder) { Player.SendMessage(p, "Reserved for Adv+"); return; }
+                if (p.group.CanExecute(Command.all.Find("physics"))) { Player.SendMessage(p, "You can only undo physics if you can use them."); return; }
 
                 Command.all.Find("physics").Use(p, "0");
                 Level.UndoPos uP;
@@ -148,9 +144,10 @@ namespace MCForge {
                 // Also notify console
                 Player.SendMessage(null, "Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
             } else { // Here, who == null, meaning the user specified is offline
-                if (p != null) {
-                    if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Reserved for OP+"); return; }
-                }
+                //if (p != null) {
+                //    if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Reserved for OP+"); return; }
+                //}
+                //We assume anyone can undo offline users as well.  Of course, only if they can use the command at all.
 
                 bool FoundUser = false;
 
@@ -266,7 +263,7 @@ namespace MCForge {
         public override void Help(Player p) {
             Player.SendMessage(p, "/undo [player] [seconds] - Undoes the blockchanges made by [player] in the previous [seconds].");
             if (p == null || (p.group.maxUndo <= 500000 || p.group.maxUndo == 0))
-                Player.SendMessage(p, "/undo [player] all - &cWill undo 138 hrs, 53 mins, and 20 secs for [player]");
+                Player.SendMessage(p, "/undo [player] all - &cWill undo 68 years, 18 days, 15 hours, 28 minutes, 31 seconds for [player]");
             if (p == null || (p.group.maxUndo <= 1800 || p.group.maxUndo == 0))
                 Player.SendMessage(p, "/undo [player] 0 - &cWill undo 30 minutes");
             Player.SendMessage(p, "/undo physics [seconds] - Undoes the physics for the current map");
