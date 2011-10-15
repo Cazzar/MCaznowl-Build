@@ -37,7 +37,9 @@ namespace MCForge
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
             this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
-            connection = new Connection(new ConnectionArgs(nick, server), false, false);
+            ConnectionArgs con = new ConnectionArgs(nick, server);
+            con.Port = Server.ircPort;
+            connection = new Connection(con, false, false);
             banCmd = new List<string>();
             if (Server.irc)
             {
@@ -144,23 +146,19 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
 
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char b in Encoding.ASCII.GetBytes(message))
-            {
-                if (b != 38 && b != 96 && b >= 32 && b <= 122)
-                    sb.Append(b);
-                else
-                    sb.Append("*");
-            }
-
-            String msg = sb.ToString().Trim();
-
-            if (Player.MessageHasBadColorCodes(null, msg))
-                return;
-
-            Server.s.Log(String.Format("[{0}IRC] {1}: {2}", (channel == opchannel ? "(Op) " : ""), user.Nick, msg));
-            Player.GlobalMessage(String.Format("{0}[{1}IRC] {2}: &f{3}", (channel == opchannel ? "(Op) " : ""), Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(msg) : msg));
+		message = message.MCCharFilter();
+		if (Player.MessageHasBadColorCodes(null, message))
+			return;
+		if (channel == opchannel)
+		{
+			Server.s.Log(String.Format("(OPs): [IRC] {0}: {1}", user.Nick, message));
+			Player.GlobalMessageOps(String.Format("To Ops &f-{0}[IRC] {1}&f- {2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+		}
+		else
+		{
+			Server.s.Log(String.Format("[IRC] {0}: {1}", user.Nick, message));
+			Player.GlobalMessage(String.Format("{0}[IRC] {1}: &f{2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+		}
         }
 
         void Listener_OnRegistered()

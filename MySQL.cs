@@ -30,7 +30,7 @@ namespace MCForge
     public static class MySQL
     {
 		
-        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.MySQLPooling;
+        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
         public static void executeQuery(string queryString, bool createDB = false)
         {
 			int totalCount = 0;

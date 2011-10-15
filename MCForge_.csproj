@@ -64,6 +64,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.76.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -92,9 +96,11 @@
     <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
+    <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
+    <Compile Include="Commands\CmdDurl.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
     <Compile Include="Commands\CmdEndRound.cs" />
@@ -146,6 +152,7 @@
     <Compile Include="Commands\CmdRagequit.cs" />
     <Compile Include="Commands\CmdRankMsg.cs" />
     <Compile Include="Commands\CmdReload.cs" />
+    <Compile Include="Commands\CmdRestoreSelection.cs" />
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdScinema.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
@@ -158,12 +165,9 @@
     <Compile Include="Commands\CmdCmdLoad.cs" />
     <Compile Include="Commands\CmdCompile.cs" />
     <Compile Include="Commands\CmdCmdCreate.cs" />
-    <Compile Include="Commands\CmdCTF.cs" />
-    <Compile Include="Commands\CmdDrop.cs" />
     <Compile Include="Commands\CmdGun.cs" />
     <Compile Include="Commands\CmdHeartbeat.cs" />
     <Compile Include="Commands\CmdClick.cs" />
-    <Compile Include="Commands\CmdTeam.cs" />
     <Compile Include="Commands\CmdPCount.cs" />
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
@@ -187,6 +191,7 @@
     <Compile Include="Commands\CmdUnlock.cs" />
     <Compile Include="Commands\CmdVote.cs" />
     <Compile Include="Commands\CmdVoteResults.cs" />
+    <Compile Include="Commands\CmdWarp.cs" />
     <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
@@ -197,12 +202,12 @@
     <Compile Include="Commands\CmdZz.cs" />
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
-    <Compile Include="Commands\pcreate.cs" />
-    <Compile Include="Commands\pload.cs" />
-    <Compile Include="Commands\punload.cs" />
+    <Compile Include="Commands\CmdPCreate.cs" />
+    <Compile Include="Commands\CmdPLoad.cs" />
+    <Compile Include="Commands\CmdPUnload.cs" />
+    <Compile Include="CTF\Auto_CTF.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
-    <Compile Include="CTFGame.cs" />
     <Compile Include="Economy.cs" />
     <Compile Include="ForgeBot.cs" />
     <Compile Include="GUI\EditText.cs">
@@ -211,16 +216,32 @@
     <Compile Include="GUI\EditText.Designer.cs">
       <DependentUpon>EditText.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\LavaMapBrowser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LavaMapBrowser.Designer.cs">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\WoM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\WoM.Designer.cs">
+      <DependentUpon>WoM.cs</DependentUpon>
+    </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
-    <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />
-    <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
+    <Compile Include="Plugins\Plugin_Simpile.cs" />
     <Compile Include="ScriptingVB.cs" />
+    <Compile Include="Util\BigEndianBitConverter.cs" />
+    <Compile Include="Util\EBitConverter.cs" />
+    <Compile Include="Util\Endianness.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteTransactionHelper.cs" />
     <Compile Include="Util\ExtrasCollection.cs" />
     <Compile Include="FindReference.cs" />
     <Compile Include="Color.cs" />
@@ -419,10 +440,20 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\LittleEndianBitConverter.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
+    <Compile Include="Util\Serializer.cs" />
+    <Compile Include="Warp.cs" />
+    <Compile Include="WebserverStuff\Remote.cs" />
+    <Compile Include="WebserverStuff\Remote.Handler.cs" />
+    <Compile Include="WebserverStuff\RemoteProperties.cs" />
+    <Compile Include="WebserverStuff\WebServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LavaMapBrowser.resx">
+      <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
@@ -435,6 +466,9 @@
     <EmbeddedResource Include="GUI\Window.resx">
       <DependentUpon>Window.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\WoM.resx">
+      <DependentUpon>WoM.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

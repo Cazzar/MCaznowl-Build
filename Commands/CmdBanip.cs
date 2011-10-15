@@ -60,7 +60,7 @@ namespace MCForge
                     int tryCounter = 0;
             rerun:  try
                     {
-                        ip = MySQL.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'");
+                        ip = Server.useMySQL ? MySQL.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'") : SQLite.fillData("SELECT IP FROM Players WHERE Name = '" + message + "'");
                     }
                     catch (Exception e)
                     {
@@ -104,7 +104,7 @@ namespace MCForge
             // First get names of active ops+ with that ip
             List<string> opNamesWithThatIP = (from pl in Player.players where (pl.ip == message && pl.@group.Permission >= LevelPermission.Operator) select pl.name).ToList();
             // Next, add names from the database
-            DataTable dbnames = MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
+            DataTable dbnames = Server.useMySQL ? MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'") : SQLite.fillData("SELECT Name FROM Players WHERE IP = '" + message + "'");
                 
             foreach (DataRow row in dbnames.Rows)
             {

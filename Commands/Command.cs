@@ -90,7 +90,6 @@ namespace MCForge
             all.Add(new CmdDisInfect());
             all.Add(new CmdDraw());
             all.Add(new CmdDrill());
-            all.Add(new CmdDrop());
             all.Add(new CmdEconomy());
             all.Add(new CmdEmote());
             all.Add(new CmdEndRound());
@@ -116,7 +115,7 @@ namespace MCForge
             all.Add(new CmdHackRank());
             all.Add(new CmdHacks());
             all.Add(new CmdHasirc());
-            // all.Add(new CmdHeartbeat()); DEBUG COMMAND DO NOT USE
+            //all.Add(new CmdHeartbeat()); // DEBUG COMMAND DO NOT USE
             all.Add(new CmdHelp());
             all.Add(new CmdHide());
 			all.Add(new CmdHigh5());
@@ -175,9 +174,6 @@ namespace MCForge
             all.Add(new CmdOverseer());
             all.Add(new CmdOZone());
             all.Add(new CmdP2P());
-            all.Add(new pload());
-            all.Add(new pcreate());
-            all.Add(new punload());
             all.Add(new CmdPaint());
             all.Add(new CmdPass());
             all.Add(new CmdPaste());
@@ -188,6 +184,7 @@ namespace MCForge
             all.Add(new CmdpCinema());
             all.Add(new CmdpCinema2());
             all.Add(new CmdPCount());
+            all.Add(new CmdPCreate());
             all.Add(new CmdPerbuildMax());
             all.Add(new CmdPermissionBuild());
             all.Add(new CmdPermissionVisit());
@@ -196,9 +193,11 @@ namespace MCForge
             all.Add(new CmdPlace());
             all.Add(new CmdPlayerCLS());
             all.Add(new CmdPlayers());
+            all.Add(new CmdPLoad());
             all.Add(new CmdPortal());
             all.Add(new CmdPossess());
             all.Add(new CmdPromote());
+            all.Add(new CmdPUnload());
             all.Add(new CmdPyramid());
             all.Add(new CmdQueue());
             all.Add(new CmdQuick());
@@ -219,6 +218,7 @@ namespace MCForge
             all.Add(new CmdRestart());
             all.Add(new CmdRestartPhysics());
             all.Add(new CmdRestore());
+            all.Add(new CmdRestoreSelection());
             all.Add(new CmdRetrieve());
             all.Add(new CmdReveal());
 			all.Add(new CmdReview());
@@ -247,7 +247,6 @@ namespace MCForge
             all.Add(new CmdSummon());
             all.Add(new CmdTake());
             all.Add(new CmdTColor());
-            all.Add(new CmdTeam());
             all.Add(new CmdTempBan());
             all.Add(new CmdText());
             all.Add(new CmdTime());
@@ -275,6 +274,7 @@ namespace MCForge
             all.Add(new CmdVoteKick());
             all.Add(new CmdVoteResults());
             all.Add(new CmdWarn());
+            all.Add(new CmdWarp());
             all.Add(new CmdWaypoint());
             all.Add(new CmdWhisper());
             if (Server.useWhitelist) { all.Add(new CmdWhitelist()); }
@@ -288,9 +288,9 @@ namespace MCForge
 			all.Add(new CmdXmute());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
-            all.Add(new CmdZone());
             all.Add(new CmdZombieGame());
             all.Add(new CmdZombieSpawn());
+            all.Add(new CmdZone());
             all.Add(new CmdZz());
             core.commands = new List<Command>(all.commands);
 

@@ -39,6 +39,7 @@ namespace MCForge
 {
     public class Server
     {
+        public static string apppath = Application.StartupPath;
         public delegate void LogHandler(string message);
 public delegate void OnServerError(Exception error);
 public static event OnServerError ServerError = null;
@@ -66,7 +67,7 @@ public static event OnServerError ServerError = null;
 
         public static int speedPhysics = 250;
 
-        public static string Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); } }
+        public static Version Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; } }
 
         // URL hash for connecting to the server
         public static string Hash = String.Empty;
@@ -89,9 +90,8 @@ public static event OnServerError ServerError = null;
         //Other
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
-        //CTF STUFF
-        public static List<CTFGame> CTFGames = new List<CTFGame>();
-
+        public static bool UseCTF = false;
+        public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
         public static PlayerList ircControllers;
@@ -119,7 +119,7 @@ public static event OnServerError ServerError = null;
         public static List<string> messages = new List<string>();
 
         public static DateTime timeOnline;
-
+        public static string IP;
         //auto updater stuff
         public static bool autoupdate;
         public static bool autonotify;
@@ -134,6 +134,13 @@ public static event OnServerError ServerError = null;
         //Global VoteKick In Progress Flag
         public static bool voteKickInProgress = false;
         public static int voteKickVotesNeeded = 0;
+
+
+        //WoM Direct
+        public static string Server_ALT = "";
+        public static string Server_Disc = "";
+        public static string Server_Flag = "";
+
 
         public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
@@ -249,13 +256,13 @@ public static byte maxGuests = 10;
 
         public static bool checkUpdates = true;
 
-        public static bool useMySQL = true;
+        public static bool useMySQL = false;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
         public static string MySQLPassword = "password";
         public static string MySQLDatabaseName = "MCZallDB";
-        public static bool MySQLPooling = true;
+        public static bool DatabasePooling = true;
 
         public static string DefaultColor = "&e";
         public static string IRCColour = "&5";
@@ -289,6 +296,7 @@ public static byte maxGuests = 10;
         public static bool mono = false;
         public static string server_owner = "Notch";
         public static bool WomDirect = false;
+        public static bool UseSeasons = false;
 
         public static bool flipHead = false;
 
@@ -461,6 +469,7 @@ public static byte maxGuests = 10;
             Block.SetBlocks();
             Awards.Load();
             Economy.Load();
+            Warp.LOAD();
 
             if (File.Exists("text/emotelist.txt"))
             {
@@ -500,31 +509,39 @@ public static byte maxGuests = 10;
                     //process.Kill();
                     return;
                 }
-                MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
+                if (useMySQL) MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
+                else SQLite.executeQuery("CREATE TABLE if not exists Players (ID INTEGER PRIMARY KEY AUTOINCREMENT not null, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6));");
+                
                 // Check if the color column exists.
-                DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
+                DataTable colorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'") : SQLite.fillData("SELECT color FROM Players");
 
                 if (colorExists.Rows.Count == 0)
                 {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
                 }
                 colorExists.Dispose();
 
                 // Check if the title color column exists.
-                DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
+                DataTable tcolorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'") : SQLite.fillData("SELECT title_color FROM Players");
 
                 if (tcolorExists.Rows.Count == 0)
                 {
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                   // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
                 }
                 tcolorExists.Dispose();
-                DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
+
+                DataTable timespent = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'") : SQLite.fillData("SELECT TimeSpent FROM Players");
+
                 if (timespent.Rows.Count == 0)
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
                 timespent.Dispose();
-                DataTable totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
+
+                DataTable totalCuboided = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'") : SQLite.fillData("SELECT totalCuboided FROM Players");
+
                 if (totalCuboided.Rows.Count == 0)
-                    MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
+                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
                 totalCuboided.Dispose();
             }
 
@@ -557,22 +574,18 @@ public static byte maxGuests = 10;
                             else
                             {
                                 Log("mainlevel not found");
-                                mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                                mainLevel.permissionvisit = LevelPermission.Guest;
-                                mainLevel.permissionbuild = LevelPermission.Guest;
+                                mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                                 mainLevel.Save();
+                                Level.CreateLeveldb(Server.level);
                             }
                         }
                     }
                     else
                     {
                         Log("mainlevel not found");
-                        mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                        mainLevel.permissionvisit = LevelPermission.Guest;
-                        mainLevel.permissionbuild = LevelPermission.Guest;
+                        mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                         mainLevel.Save();
+                        Level.CreateLeveldb(Server.level);
                     }
 
                     addLevel(mainLevel);
@@ -688,7 +701,13 @@ public static byte maxGuests = 10;
                     return;
                 }
             });
-
+            ml.Queue(delegate
+            {
+                Remote.RemoteServer webServer;
+                Remote.RemoteProperties.Load();
+                (webServer = new Remote.RemoteServer()).Start();
+            });
+            
             ml.Queue(delegate
             {
                 updateTimer.Elapsed += delegate
@@ -802,14 +821,17 @@ processThread.Start();
 
                 locationChecker = new Thread(new ThreadStart(delegate
                 {
+                    Player p, who;
+                    ushort x, y, z;
+                    int i;
                     while (true)
                     {
                         Thread.Sleep(3);
-                        for (int i = 0; i < Player.players.Count; i++)
+                        for (i = 0; i < Player.players.Count; i++)
                         {
                             try
                             {
-                                Player p = Player.players[i];
+                                p = Player.players[i];
 
                                 if (p.frozen)
                                 {
@@ -817,7 +839,7 @@ processThread.Start();
                                 }
                                 else if (p.following != "")
                                 {
-                                    Player who = Player.Find(p.following);
+                                    who = Player.Find(p.following);
                                     if (who == null || who.level != p.level)
                                     {
                                         p.following = "";
@@ -842,14 +864,14 @@ processThread.Start();
                                 }
                                 else if (p.possess != "")
                                 {
-                                    Player who = Player.Find(p.possess);
+                                    who = Player.Find(p.possess);
                                     if (who == null || who.level != p.level)
                                         p.possess = "";
                                 }
 
-                                ushort x = (ushort)(p.pos[0] / 32);
-                                ushort y = (ushort)(p.pos[1] / 32);
-                                ushort z = (ushort)(p.pos[2] / 32);
+                                x = (ushort)(p.pos[0] / 32);
+                                y = (ushort)(p.pos[1] / 32);
+                                z = (ushort)(p.pos[2] / 32);
 
                                 if (p.level.Death)
                                     p.RealDeath(x, y, z);
@@ -863,7 +885,12 @@ processThread.Start();
                 }));
 
                 locationChecker.Start();
-
+                try
+                {
+                    using (WebClient web = new WebClient())
+                        IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
+                }
+                catch { }
                 try
                 {
                     Gui.Window.thisWindow.UpdateMapList("'");
@@ -879,8 +906,12 @@ processThread.Start();
                         Server.lava.Start();
                     else if (startZombieModeOnStartup)
                         Command.all.Find("zombiegame").Use(null, String.Empty);
+                    //This doesnt use the main map
+                    if (Server.UseCTF)
+                        ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
+
             });
         }
         
@@ -989,7 +1020,7 @@ processThread.Start();
                     OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
                 }
             }
-
+            
             Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
         }
 

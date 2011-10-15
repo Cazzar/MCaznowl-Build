@@ -47,6 +47,7 @@ namespace MCForge
         public static bool cancelload = false;
         public static bool cancelsave = false;
         public static bool cancelphysics = false;
+        public bool cancelsave1 = false;
         public bool cancelunload = false;
         public int id;
         public string name;
@@ -79,14 +80,18 @@ namespace MCForge
         public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo, Level l);
         public event OnPhysicsUpdate PhysicsUpdate = null;
         public delegate void OnLevelUnload(Level l);
-        public event OnLevelUnload LevelUnload = null;
+        public static event OnLevelUnload LevelUnload = null;
         public delegate void OnLevelSave(Level l);
-        public event OnLevelSave LevelSave = null;
+        public static event OnLevelSave LevelSave = null;
+        public event OnLevelSave onLevelSave = null;
+        public event OnLevelUnload onLevelUnload = null;
         public delegate void OnLevelLoad(string level);
         public static event OnLevelLoad LevelLoad = null;
+        public delegate void OnLevelLoaded(Level l);
+        public static event OnLevelLoaded LevelLoaded;
         public ushort jailx, jaily, jailz;
         public byte jailrotx, jailroty;
-
+        //public SeasonsCore season;
         public bool edgeWater = false;
 
         public List<Player> players { get { return getPlayers(); } }
@@ -139,7 +144,6 @@ namespace MCForge
         Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>(); // Holds random flow data for liqiud physics
 
         //CTF STUFF
-        public CTFGame ctfgame = new CTFGame();
         public bool ctfmode = false;
 
         public int lastCheck = 0;
@@ -195,6 +199,16 @@ namespace MCForge
                                     SetTile(x, y, z, 7);
                                 else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 1 || y == depth - 1)
                                     SetTile(x, y, z, rand.Next(100) == 0 ? Block.iron : Block.obsidian);
+                    break;
+
+                case "rainbow":
+                    Random random = useSeed ? new Random(seed) : new Random();
+                    for (x = 0; x < width; ++x)
+                        for (z = 0; z < height; ++z)
+                            for (y = 0; y < depth; ++y) 
+                                if (y == 0 || y == depth - 1 || x == 0 || x == width - 1 || z == 0 || z == height - 1)
+                                SetTile(x,y,z, (byte)random.Next(21, 36));
+
                 	break;
 
                 case "island":
@@ -213,6 +227,7 @@ namespace MCForge
             spawny = (ushort)(depth * 0.75f);
             spawnz = (ushort)(height / 2);
             rotx = 0; roty = 0;
+            //season = new SeasonsCore(this);
         }
 
         public void CopyBlocks(byte[] source, int offset)
@@ -276,27 +291,42 @@ namespace MCForge
 
         public void saveChanges()
         {
-            if (!Server.useMySQL) return;
+            //if (!Server.useMySQL) return;
             if (blockCache.Count == 0) return;
             List<BlockPos> tempCache = blockCache;
             blockCache = new List<BlockPos>();
 
             string template = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
-
-            using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
+            if (Server.useMySQL)
             {
-                foreach (BlockPos bP in tempCache)
+                using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
                 {
-                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                    foreach (BlockPos bP in tempCache)
+                    {
+                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
+                    }
+                    transaction.Commit();
                 }
-                transaction.Commit();
             }
-
+            else
+            {
+                template = "INSERT INTO Block" + name + " (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
+                using (var transaction = SQLiteTransactionHelper.Create(SQLite.connString))
+                {
+                    foreach (BlockPos bP in tempCache)
+                    {
+                        int deleted = bP.deleted ? 0 : 1;
+                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
+                    }
+                    transaction.Commit();
+                }
+            }
             tempCache.Clear();
         }
 
         public byte GetTile(ushort x, ushort y, ushort z)
         {
+            if (blocks == null) return Block.Zero;
             //if (PosToInt(x, y, z) >= blocks.Length) { return null; }
             //Avoid internal overflow
             if (x < 0) { return Block.Zero; }
@@ -315,6 +345,7 @@ namespace MCForge
         }
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
+            if (blocks == null) return;
             blocks[x + width * z + width * height * y] = type;
             //blockchanges[x + width * z + width * height * y] = pName;
         }
@@ -379,7 +410,7 @@ namespace MCForge
                                 if (p.zoneDel)
                                 {
                                     //DB
-                                    MySQL.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'");
+                                    if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'"); else SQLite.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'");
                                     toDel.Add(Zn);
 
                                     p.SendBlockchange(x, y, z, b);
@@ -623,6 +654,14 @@ namespace MCForge
             }
         }
 
+        // Returns true if ListCheck does not already have an check in the position.
+        // Useful for fireworks, which depend on two physics blocks being checked, one with extraInfo.
+        public bool CheckClear(ushort x, ushort y, ushort z)
+        {
+            int b = PosToInt(x, y, z);
+            return !ListCheck.Exists(Check => Check.b == b);
+        }
+
         public void skipChange(ushort x, ushort y, ushort z, byte type)
         {
             if (x < 0 || y < 0 || z < 0) return;
@@ -633,10 +672,18 @@ namespace MCForge
 
         public void Save(Boolean Override = false)
         {
+            //if (season.started)
+            //    season.Stop(this);
+            if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
             {
                 LevelSave(this);
+                if (cancelsave1)
+                {
+                    cancelsave1 = false;
+                    return;
+                }
                 if (cancelsave)
                 {
                     cancelsave = false;
@@ -672,7 +719,7 @@ namespace MCForge
 						byte[] level = new byte[blocks.Length];
 						for (int i = 0; i < blocks.Length; ++i)
 						{
-							if (blocks[i] < 80)
+							if (blocks[i] < 57) //CHANGED THIS TO INCOPARATE SOME MORE SPACE THAT I NEEDED FOR THE door_orange_air ETC.
 							{
 								level[i] = blocks[i];
 							}
@@ -739,7 +786,7 @@ namespace MCForge
                 Server.ErrorLog(e);
                 return;
             }
-
+            //season.Start(this);
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
@@ -786,6 +833,24 @@ namespace MCForge
             }
         }
 
+        public static void CreateLeveldb(string givenName)
+        {
+            if (Server.useMySQL)
+            {
+                MySQL.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
+                MySQL.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
+                MySQL.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
+                MySQL.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
+            }
+            else
+            {
+                SQLite.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted INT)");
+                SQLite.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
+                SQLite.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
+                SQLite.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
+            }
+        }
+
         public static Level Load(string givenName) { return Load(givenName, 0); }
         public static Level Load(string givenName, byte phys)
         {
@@ -798,10 +863,7 @@ namespace MCForge
                     return null;
                 }
             }
-            MySQL.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
-            MySQL.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
-            MySQL.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
-            MySQL.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
+            CreateLeveldb(givenName);
             
             string path = "levels/" + givenName + ".lvl";
             if (File.Exists(path))
@@ -888,7 +950,7 @@ namespace MCForge
 					level.jailrotx = level.rotx; level.jailroty = level.roty;
 
 					level.physThread = new Thread(new ThreadStart(level.Physics));
-
+                    //level.season = new SeasonsCore(level);
 					try
 					{
 						DataTable foundDB = MySQL.fillData("SELECT * FROM `Portals" + givenName + "`");
@@ -897,17 +959,17 @@ namespace MCForge
 						{
 							if (!Block.portal(level.GetTile((ushort)foundDB.Rows[i]["EntryX"], (ushort)foundDB.Rows[i]["EntryY"], (ushort)foundDB.Rows[i]["EntryZ"])))
 							{
-								MySQL.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]);
+                                if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]); else SQLite.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]);
 							}
 						}
 
-						foundDB = MySQL.fillData("SELECT * FROM `Messages" + givenName + "`");
+                        foundDB = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + givenName + "`") : SQLite.fillData("SELECT * FROM `Messages" + givenName + "`");
 
 						for (int i = 0; i < foundDB.Rows.Count; ++i)
 						{
 							if (!Block.mb(level.GetTile((ushort)foundDB.Rows[i]["X"], (ushort)foundDB.Rows[i]["Y"], (ushort)foundDB.Rows[i]["Z"])))
 							{
-								MySQL.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]);
+                                if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]); else SQLite.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]);
 							}
 						}
 						foundDB.Dispose();
@@ -985,7 +1047,8 @@ namespace MCForge
 					catch { }
 
 					Server.s.Log("Level \"" + level.name + "\" loaded.");
-					level.ctfgame.mapOn = level;
+                    if (LevelLoaded != null)
+                        LevelLoaded(level);
 					return level;
                 }
                 catch (Exception ex) { Server.ErrorLog(ex); return null; }
@@ -1053,7 +1116,7 @@ namespace MCForge
 
         public void setPhysics(int newValue)
         {
-            if (physics == 0 && newValue != 0)
+            if (physics == 0 && newValue != 0 && blocks != null)
             {
                 for (int i = 0; i < blocks.Length; i++)
                     // Optimization hack, since no blocks under 183 ever need a restart
@@ -1254,6 +1317,21 @@ namespace MCForge
                                     case Block.door_gold_air:
                                     case Block.door_cobblestone_air:
                                     case Block.door_red_air:
+
+                                    case Block.door_orange_air:
+                                    case Block.door_yellow_air:
+                                    case Block.door_lightgreen_air:
+                                    case Block.door_aquagreen_air:
+                                    case Block.door_cyan_air:
+                                    case Block.door_lightblue_air:
+                                    case Block.door_purple_air:
+                                    case Block.door_lightpurple_air:
+                                    case Block.door_pink_air:
+                                    case Block.door_darkpink_air:
+                                    case Block.door_darkgrey_air:
+                                    case Block.door_lightgrey_air:
+                                    case Block.door_white_air:
+
                                     case Block.door_dirt_air:
                                     case Block.door_grass_air:
                                     case Block.door_blue_air:
@@ -1468,16 +1546,33 @@ namespace MCForge
                                     else
                                     {
                                         if (revert) { AddUpdate(C.b, reverttype); C.extraInfo = ""; }
-                                        if (dissipate) if (rand.Next(1, 100) <= dissipatenum) { AddUpdate(C.b, Block.air); C.extraInfo = ""; }
-                                        if (explode) if (rand.Next(1, 100) <= explodenum) { MakeExplosion(x, y, z, 0); C.extraInfo = ""; }
+                                        // Not setting drop = false can cause occasional leftover blocks, since C.extraInfo is emptied, so
+                                        // drop can generate another block with no dissipate/explode information.
+                                        if (dissipate) if (rand.Next(1, 100) <= dissipatenum)
+                                            {
+                                                if (!ListUpdate.Exists(Update => Update.b == C.b))
+                                                {
+                                                    AddUpdate(C.b, Block.air);
+                                                    C.extraInfo = "";
+                                                    drop = false;
+                                                }
+                                                else
+                                                {
+                                                    AddUpdate(C.b, blocks[C.b], false, C.extraInfo);
+                                                }
+                                            }
+                                        if (explode) if (rand.Next(1, 100) <= explodenum) { MakeExplosion(x, y, z, 0); C.extraInfo = ""; drop = false; }
                                         if (drop)
                                             if (rand.Next(1, 100) <= dropnum)
                                                 if (GetTile(x, (ushort)(y - 1), z) == Block.air || GetTile(x, (ushort)(y - 1), z) == Block.lava || GetTile(x, (ushort)(y - 1), z) == Block.water)
                                                 {
                                                     if (rand.Next(1, 100) < int.Parse(C.extraInfo.Split(' ')[1]))
                                                     {
-                                                        AddUpdate(PosToInt(x, (ushort)(y - 1), z), blocks[C.b], false, C.extraInfo);
-                                                        AddUpdate(C.b, Block.air); C.extraInfo = "";
+                                                        if (AddUpdate(PosToInt(x, (ushort)(y - 1), z), blocks[C.b], false, C.extraInfo))
+                                                        {
+                                                            AddUpdate(C.b, Block.air);
+                                                            C.extraInfo = "";
+                                                        }
                                                     }
                                                 }
 
@@ -1539,9 +1634,8 @@ namespace MCForge
                                             PhysAir(PosToInt(x, (ushort)(y + 1), z));   //Check block above
                                         }
 
-                                        if (!leafDecay) { C.time = 255; break; }
-                                        if (C.time < rand.Next(20, 100)) { C.time++; break; }
-                                        
+                                        if (!leafDecay) { C.time = 255; leaves.Clear(); break; }
+                                        if (C.time < 5) { if (rand.Next(10) == 0) C.time++; break; }
                                         if (PhysLeaf(C.b)) AddUpdate(C.b, 0);
                                         C.time = 255;
                                         break;
@@ -2161,6 +2255,21 @@ namespace MCForge
                                     case Block.door_gold_air:
                                     case Block.door_cobblestone_air:
                                     case Block.door_red_air:
+
+                                    case Block.door_orange_air:
+                                    case Block.door_yellow_air:
+                                    case Block.door_lightgreen_air:
+                                    case Block.door_aquagreen_air:
+                                    case Block.door_cyan_air:
+                                    case Block.door_lightblue_air:
+                                    case Block.door_purple_air:
+                                    case Block.door_lightpurple_air:
+                                    case Block.door_pink_air:
+                                    case Block.door_darkpink_air:
+                                    case Block.door_darkgrey_air:
+                                    case Block.door_lightgrey_air:
+                                    case Block.door_white_air:
+
                                     case Block.door_dirt_air:
                                     case Block.door_grass_air:
                                     case Block.door_blue_air:
@@ -3094,7 +3203,10 @@ namespace MCForge
                                                 {
                                                     if (GetTile((ushort)(x + cx), (ushort)(y + cy), (ushort)(z + cz)) == Block.fire)
                                                     {
-                                                        if (GetTile((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz)) == Block.air || GetTile((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz)) == Block.rocketstart)
+                                                        int bp1 = PosToInt((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz));
+                                                        int bp2 = PosToInt(x, y, z);
+                                                        bool unblocked = !ListUpdate.Exists(Update => Update.b == bp1) && !ListUpdate.Exists(Update => Update.b == bp2);
+                                                        if (unblocked && GetTile((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz)) == Block.air || GetTile((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz)) == Block.rocketstart)
                                                         {
                                                             AddUpdate(PosToInt((ushort)(x - cx), (ushort)(y - cy), (ushort)(z - cz)), Block.rockethead);
                                                             AddUpdate(PosToInt(x, y, z), Block.fire);
@@ -3122,13 +3234,20 @@ namespace MCForge
 
                                                 if (mx > 1)
                                                 {
-                                                    AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.firework);
-                                                    AddUpdate(PosToInt(x, y, z), Block.lavastill);
-                                                    C.extraInfo = "wait 1 dissipate 100";
-                                                    break;
+                                                    int bp = PosToInt(x, (ushort)(y + 1), z);
+                                                    bool unblocked = !ListUpdate.Exists(Update => Update.b == bp);
+                                                    if (unblocked)
+                                                    {
+                                                        AddUpdate(PosToInt(x, (ushort)(y + 1), z), Block.firework, false);
+                                                        AddUpdate(PosToInt(x, y, z), Block.lavastill, false, "wait 1 dissipate 100");
+                                                        // AddUpdate(PosToInt(x, (ushort)(y - 1), z), Block.air);
+                                                        C.extraInfo = "wait 1 dissipate 100";
+                                                        break;
+                                                    }
                                                 }
                                             }
-                                            Firework(x, y, z, 4); break;
+                                            Firework(x, y, z, 4);
+                                            break;
                                         }
                                         break;
 									//Zombie + creeper stuff
@@ -3962,7 +4081,7 @@ namespace MCForge
                 }
             }
 
-            for (i = 1; i <= 4; i++)
+            for (i = 1; i <= dist; i++)
             {
                 for (xx = -dist; xx <= dist; xx++)
                 {
@@ -3974,26 +4093,32 @@ namespace MCForge
                             {
                                 if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
                                 {
-                                    if (leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] = (sbyte)i;
 
-                                    if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
+                                    if (leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))) &&
+                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] == -2)
                                         leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] = (sbyte)i;
                                 }
                             }
-                            catch { /*Server.s.Log("Leaf decay error!");*/ }
+                            catch { Server.s.Log("Leaf decay error!"); }
                         }
                     }
                 }
@@ -4083,8 +4208,14 @@ namespace MCForge
                                             Blockchange(x, y, z, Block.air);
                                             return;
                                         }
-                                        AddUpdate(IntOffset(C.b, xx * 3, yy * 3, zz * 3), Block.rockethead);
-                                        AddUpdate(IntOffset(C.b, xx * 2, yy * 2, zz * 2), Block.fire);
+                                        int b1 = IntOffset(C.b, xx * 3, yy * 3, zz * 3);
+                                        int b2 = IntOffset(C.b, xx * 2, yy * 2, zz * 2);
+                                        bool unblocked = blocks[b1] == Block.air && blocks[b2] == Block.air && !ListUpdate.Exists(Update => Update.b == b1) && !ListUpdate.Exists(Update => Update.b == b2);
+                                        if (unblocked)
+                                        {
+                                            AddUpdate(IntOffset(C.b, xx * 3, yy * 3, zz * 3), Block.rockethead);
+                                            AddUpdate(IntOffset(C.b, xx * 2, yy * 2, zz * 2), Block.fire);
+                                        }
                                     }
                                     else if (b == Block.firework)
                                     {
@@ -4093,8 +4224,14 @@ namespace MCForge
                                             Blockchange(x, y, z, Block.air);
                                             return;
                                         }
-                                        AddUpdate(IntOffset(C.b, xx, yy + 1, zz), Block.lavastill, false, "dissipate 100");
-                                        AddUpdate(IntOffset(C.b, xx, yy + 2, zz), Block.firework);
+                                        int b1 = IntOffset(C.b, xx, yy + 1, zz);
+                                        int b2 = IntOffset(C.b, xx, yy + 2, zz);
+                                        bool unblocked = blocks[b1] == Block.air && blocks[b2] == Block.air && !ListUpdate.Exists(Update => Update.b == b1) && !ListUpdate.Exists(Update => Update.b == b2);
+                                        if (unblocked)
+                                        {
+                                            AddUpdate(b2, Block.firework);
+                                            AddUpdate(b1, Block.lavastill, false, "dissipate 100");
+                                        }
                                     }
                                     else if (b == Block.tnt)
                                     {
@@ -4226,7 +4363,8 @@ namespace MCForge
             if (physics == 5) return;
             storedRand1 = rand.Next(21, 36);
             storedRand2 = rand.Next(21, 36);
-            AddUpdate(PosToInt(x, y, z), Block.air, true);
+            // Not using override, since override = true makes it more likely that a colored block will be generated with no extraInfo, because it sets a Check for that position with no extraInfo.
+            AddUpdate(PosToInt(x, y, z), Block.air);
 
             for (xx = (ushort)(x - (size + 1)); xx <= (ushort)(x + (size + 1)); ++xx)
                 for (yy = (ushort)(y - (size + 1)); yy <= (ushort)(y + (size + 1)); ++yy)
@@ -4234,7 +4372,6 @@ namespace MCForge
                         if (GetTile(xx, yy, zz) == Block.air)
                             if (rand.Next(1, 40) < 2)
                                 AddUpdate(PosToInt(xx, yy, zz), (byte)rand.Next(Math.Min(storedRand1, storedRand2), Math.Max(storedRand1, storedRand2)), false, "drop 100 dissipate 25");
-
         }
 
         public void finiteMovement(Check C, ushort x, ushort y, ushort z)
@@ -4337,7 +4474,9 @@ namespace MCForge
             ListCheck.Clear();
             ListUpdate.Clear();
             UndoBuffer.Clear();
-            //blocks = null; // DO NOT USE! CAUSES CRASHES!
+            blockCache.Clear();
+            ZoneList.Clear();
+            blocks = null;
         }
     }
 }

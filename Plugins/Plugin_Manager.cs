@@ -28,6 +28,7 @@ namespace MCForge
     public abstract partial class Plugin
     {
         public static List<Plugin> all = new List<Plugin>();
+        public static List<Plugin_Simple> all_simple = new List<Plugin_Simple>();
         public abstract void Load(bool startup);
         public abstract void Unload(bool shutdown);
         public abstract string name { get; }
@@ -75,7 +76,8 @@ namespace MCForge
             try
             {
                 object instance = Activator.CreateInstance(Assembly.LoadFrom(pluginname).GetTypes()[0]);
-                if (((Plugin)instance).MCForge_Version != Server.Version && ((Plugin)instance).MCForge_Version != "")
+                String plugin_version = ((Plugin)instance).MCForge_Version;
+                if (plugin_version != "" && new Version(plugin_version) != Server.Version)
                 {
                     Server.s.Log("This plugin (" + ((Plugin)instance).name + ") isnt compatible with this version of MCForge!");
                     Thread.Sleep(1000);
@@ -101,21 +103,23 @@ namespace MCForge
             }
             catch (FileNotFoundException e)
             {
-                Server.ErrorLog(e);
+                Plugin_Simple.Load(pluginname, startup);
             }
             catch (BadImageFormatException e)
             {
-                Server.ErrorLog(e);
+                Plugin_Simple.Load(pluginname, startup);
             }
             catch (PathTooLongException)
             {
             }
             catch (FileLoadException e)
             {
-                Server.ErrorLog(e);
+                Plugin_Simple.Load(pluginname, startup);
             }
             catch (Exception e)
             {
+                try { Server.s.Log("Attempting a simple plugin!"); if (Plugin_Simple.Load(pluginname, startup)) return; }
+                catch { }
                 Server.ErrorLog(e);
 				Server.s.Log("The plugin " + pluginname + " failed to load!");
 				if (creator != "")

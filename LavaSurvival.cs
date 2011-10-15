@@ -606,9 +606,9 @@ namespace MCForge
                 layerInterval = 2;
                 roundTime = 30;
                 floodTime = 10;
-                blockFlood = new Pos(0, 0, 0);
-                blockLayer = new Pos(0, 0, 0);
-                safeZone = new Pos[] { new Pos(0, 0, 0), new Pos(0, 0, 0) };
+                blockFlood = new Pos();
+                blockLayer = new Pos();
+                safeZone = new Pos[] { new Pos(), new Pos() };
             }
         }
 
@@ -655,7 +655,7 @@ namespace MCForge
 
             public override string ToString()
             {
-                return String.Format("{0},{1},{2}", this.x, this.y, this.z);
+                return this.ToString(",");
             }
 
             public string ToString(string separator)

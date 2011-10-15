@@ -62,18 +62,18 @@ namespace MCForge
             message = p.level.foundInfo(x, y, z);
             if (message != "") Player.SendMessage(p, "Physics information: &a" + message);
 
-            DataTable Blocks = MySQL.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
+            DataTable Blocks = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM Block" + p.level.name + " WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
 
             string Username, TimePerformed, BlockUsed;
             bool Deleted, foundOne = false;
-
             for (int i = 0; i < Blocks.Rows.Count; i++)
             {
                 foundOne = true;
                 Username = Blocks.Rows[i]["Username"].ToString();
                 TimePerformed = DateTime.Parse(Blocks.Rows[i]["TimePerformed"].ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-                BlockUsed = Block.Name((byte)Blocks.Rows[i]["Type"]).ToString();
-                Deleted = (bool)Blocks.Rows[i]["Deleted"];
+                Server.s.Log(Blocks.Rows[i]["Type"].ToString());
+                BlockUsed = Block.Name(Convert.ToByte(Blocks.Rows[i]["Type"])).ToString();
+                Deleted = Convert.ToBoolean(Blocks.Rows[i]["Deleted"]);
 
                 if (!Deleted)
                     Player.SendMessage(p, "&3Created by " + Server.FindColor(Username.Trim()) + Username.Trim() + Server.DefaultColor + ", using &3" + BlockUsed);

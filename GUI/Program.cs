@@ -279,7 +279,8 @@ namespace MCForge_.Gui
                 if (wait) { if (!Server.checkUpdates) return; Thread.Sleep(10000); }
                 try
                 {
-                    if (Client.DownloadString(Program.CurrentVersionFile) != Server.Version)
+                    Version availableUpdateVersion = new Version(Client.DownloadString(Program.CurrentVersionFile));
+                    if (availableUpdateVersion > Server.Version)
                     {
                         if (Server.autoupdate == true || p != null)
                         {
@@ -428,9 +429,17 @@ namespace MCForge_.Gui
                 int vers = int.Parse(verscheck.Split('.')[0]);
                 if (oldrevision) { filelocation = (Program.ArchivePath + Server.selectedrevision + ".exe"); }
                 if (!oldrevision) { filelocation = (DLLLocation); }
+                try
+                {
+                    if (File.Exists("MCLawl.new"))
+                        File.Delete("MCLawl.new");
+                    if (File.Exists("Changelog.txt"))
+                        File.Delete("Changelog.txt");
+                }
+                catch { }
                 WebClient Client = new WebClient();
                 Client.DownloadFile(filelocation, "MCLawl.new");
-                Client.DownloadFile(Program.ChangelogLocation, "extra/Changelog.txt");
+                Client.DownloadFile(Program.ChangelogLocation, "Changelog.txt");
 
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale

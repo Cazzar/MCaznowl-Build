@@ -28,7 +28,7 @@ namespace MCForge
     {
         public override string name { get { return "zombiegame"; } }
         public override string shortcut { get { return "zg"; } }
-        public override string type { get { return "other"; } }
+        public override string type { get { return "game"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
@@ -488,7 +488,7 @@ namespace MCForge
             Player.GlobalMessage(playersString);
             players.ForEach(delegate(Player winners)
             {
-                if (!winners.CheckIfInsideBlock(winners))
+                if (!winners.CheckIfInsideBlock())
                 {
                     Player.GlobalDie(winners, false);
                     Player.GlobalSpawn(winners, winners.pos[0], winners.pos[1], winners.pos[2], winners.rot[0], winners.rot[1], false);

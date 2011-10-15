@@ -75,6 +75,7 @@ namespace MCForge
                     Gui.Window.thisWindow.UpdatePlayerMapCombo();
                     Gui.Window.thisWindow.UnloadedlistUpdate();
                     Gui.Window.thisWindow.UpdateMapList("'");
+                    
                 }
                 catch { }
                 return;

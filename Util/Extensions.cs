@@ -124,9 +124,10 @@ namespace MCForge
             }
             return String.Empty;
         }
-        public static string MinecraftFilter(this string str)
+        public static string MCCharFilter(this string str)
         {
             // Allowed chars are any ASCII char between 20h/32 and 7Dh/125 inclusive, except for 26h/38 (&) and 60h/96 (`)
+            if (String.IsNullOrEmpty(str)) return str;
             StringBuilder sb = new StringBuilder();
             foreach (char b in Encoding.ASCII.GetBytes(str))
             {

@@ -163,6 +163,7 @@ namespace MCForge.Gui
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.lblGlobalChatColor = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
@@ -249,6 +250,7 @@ namespace MCForge.Gui
             this.txtMain = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.chkRestart = new System.Windows.Forms.CheckBox();
             this.chkMono = new System.Windows.Forms.CheckBox();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
@@ -288,6 +290,7 @@ namespace MCForge.Gui
             this.label56 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.groupBox20 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.label54 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.lsAddMap = new System.Windows.Forms.Button();
@@ -314,7 +317,6 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -904,7 +906,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(78, 23);
+            this.chkVerify.Size = new System.Drawing.Size(79, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -1030,7 +1032,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -1375,7 +1377,7 @@ namespace MCForge.Gui
             // 
             this.cmbGrieferStoneType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGrieferStoneType.FormattingEnabled = true;
-            this.cmbGrieferStoneType.Location = new System.Drawing.Point(119, 136);
+            this.cmbGrieferStoneType.Location = new System.Drawing.Point(110, 138);
             this.cmbGrieferStoneType.Name = "cmbGrieferStoneType";
             this.cmbGrieferStoneType.Size = new System.Drawing.Size(94, 21);
             this.cmbGrieferStoneType.TabIndex = 13;
@@ -1385,7 +1387,7 @@ namespace MCForge.Gui
             // 
             this.chkGrieferStoneBan.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkGrieferStoneBan.AutoSize = true;
-            this.chkGrieferStoneBan.Location = new System.Drawing.Point(219, 135);
+            this.chkGrieferStoneBan.Location = new System.Drawing.Point(210, 138);
             this.chkGrieferStoneBan.Name = "chkGrieferStoneBan";
             this.chkGrieferStoneBan.Size = new System.Drawing.Size(127, 23);
             this.chkGrieferStoneBan.TabIndex = 43;
@@ -1405,7 +1407,7 @@ namespace MCForge.Gui
             // 
             this.cmbGrieferStoneRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGrieferStoneRank.FormattingEnabled = true;
-            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(157, 111);
+            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(148, 113);
             this.cmbGrieferStoneRank.Name = "cmbGrieferStoneRank";
             this.cmbGrieferStoneRank.Size = new System.Drawing.Size(87, 21);
             this.cmbGrieferStoneRank.TabIndex = 45;
@@ -1697,6 +1699,17 @@ namespace MCForge.Gui
             this.tabPage4.Size = new System.Drawing.Size(488, 509);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
+            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(241, 109);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(103, 23);
+            this.button3.TabIndex = 42;
+            this.button3.Text = "Edit WoM Direct";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox19
             // 
@@ -1741,6 +1754,7 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.button3);
             this.groupBox13.Controls.Add(this.cmbGrieferStoneRank);
             this.groupBox13.Controls.Add(this.label48);
             this.groupBox13.Controls.Add(this.chkGrieferStoneBan);
@@ -1769,7 +1783,7 @@ namespace MCForge.Gui
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(15, 114);
+            this.label48.Location = new System.Drawing.Point(6, 114);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(140, 13);
             this.label48.TabIndex = 44;
@@ -1778,7 +1792,7 @@ namespace MCForge.Gui
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(15, 139);
+            this.label47.Location = new System.Drawing.Point(6, 139);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(98, 13);
             this.label47.TabIndex = 42;
@@ -2612,13 +2626,25 @@ namespace MCForge.Gui
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Advanced Configuration";
             // 
+            // chkWomDirect
+            // 
+            this.chkWomDirect.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkWomDirect.AutoSize = true;
+            this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
+            this.chkWomDirect.Name = "chkWomDirect";
+            this.chkWomDirect.Size = new System.Drawing.Size(110, 23);
+            this.chkWomDirect.TabIndex = 25;
+            this.chkWomDirect.Text = "Enable WoM Direct";
+            this.chkWomDirect.UseVisualStyleBackColor = true;
+            this.chkWomDirect.CheckedChanged += new System.EventHandler(this.chkWomDirect_CheckedChanged);
+            // 
             // chkRestart
             // 
             this.chkRestart.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(92, 23);
+            this.chkRestart.Size = new System.Drawing.Size(90, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -2629,7 +2655,7 @@ namespace MCForge.Gui
             this.chkMono.AutoSize = true;
             this.chkMono.Location = new System.Drawing.Point(16, 80);
             this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(106, 23);
+            this.chkMono.Size = new System.Drawing.Size(110, 23);
             this.chkMono.TabIndex = 4;
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
@@ -2640,7 +2666,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(152, 22);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -3034,6 +3060,7 @@ namespace MCForge.Gui
             // 
             // groupBox20
             // 
+            this.groupBox20.Controls.Add(this.button2);
             this.groupBox20.Controls.Add(this.label54);
             this.groupBox20.Controls.Add(this.label53);
             this.groupBox20.Controls.Add(this.lsAddMap);
@@ -3046,6 +3073,16 @@ namespace MCForge.Gui
             this.groupBox20.TabIndex = 1;
             this.groupBox20.TabStop = false;
             this.groupBox20.Text = "Maps";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(102, 157);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Get Maps";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label54
             // 
@@ -3319,17 +3356,6 @@ namespace MCForge.Gui
             this.label38.Size = new System.Drawing.Size(33, 39);
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
-            // 
-            // chkWomDirect
-            // 
-            this.chkWomDirect.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkWomDirect.AutoSize = true;
-            this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
-            this.chkWomDirect.Name = "chkWomDirect";
-            this.chkWomDirect.Size = new System.Drawing.Size(107, 23);
-            this.chkWomDirect.TabIndex = 25;
-            this.chkWomDirect.Text = "Enable WoM Direct";
-            this.chkWomDirect.UseVisualStyleBackColor = true;
             // 
             // PropertyWindow
             // 
@@ -3706,5 +3732,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.ComboBox cmbGrieferStoneRank;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.CheckBox chkWomDirect;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

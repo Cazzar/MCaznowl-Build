@@ -47,10 +47,11 @@ namespace MCForge
                     case "forest":
                     case "desert":
                     case "space":
+                    case "rainbow":
                         break;
 
                     default:
-                        Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space"); return;
+                        Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space, and rainbow"); return;
                 }
 
                 string name = parameters[0].ToLower();
@@ -77,7 +78,7 @@ namespace MCForge
                 if (!Player.ValidName(name)) { Player.SendMessage(p, "Invalid name!"); return; }
                 if (System.IO.File.Exists("levels/" + name + ".lvl")) { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
 
-                try
+                /*try
                 {
                     if (p != null)
                     if (p.group.Permission < LevelPermission.Admin)
@@ -92,13 +93,16 @@ namespace MCForge
                 catch 
                 { 
                     Player.SendMessage(p, "An error occured"); 
-                }
+                }*/
 
                 // create a new level...
                 try
                 {
                     using (Level lvl = new Level(name, x, y, z, parameters[4], seed, useSeed))
-						lvl.Save(true); //... and save it.
+                    {
+                        lvl.Save(true); //... and save it.
+                        lvl.Dispose(); // Then take out the garbage.
+                    }
                 }
                 finally
                 {
@@ -106,6 +110,7 @@ namespace MCForge
                     GC.WaitForPendingFinalizers();
                 }
                 Player.GlobalMessage("Level \"" + name + "\" created" + (useSeed ? " with seed \"" + parameters[5] + "\"" : "")); // The player needs some form of confirmation.
+               
             }
             else
                 Help(p);
@@ -115,7 +120,7 @@ namespace MCForge
             Player.SendMessage(p, "/newlvl - creates a new level.");
             Player.SendMessage(p, "/newlvl mapname 128 64 128 type seed");
             Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024"); //Update this to add more?
-            Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
+            Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space, and rainbow");
             Player.SendMessage(p, "The seed is optional, and controls how the level is generated.");
             Player.SendMessage(p, "If the seed is the same, the level will be the same.");
             Player.SendMessage(p, "The seed does not do anything on flat and pixel type maps.");

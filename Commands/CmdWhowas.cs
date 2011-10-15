@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 //using MySql.Data.MySqlClient;
-//using MySql.Data.Types;
+//using SData.Types;
 
 namespace MCForge
 {
@@ -47,11 +47,11 @@ namespace MCForge
 
             string FoundRank = Group.findPlayer(message.ToLower());
 
-            DataTable playerDb = MySQL.fillData("SELECT * FROM Players WHERE Name='" + message + "'");
+            DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT * FROM Players WHERE Name='" + message + "'") : SQLite.fillData("SELECT * FROM Players WHERE Name='" + message + "'");
             if (playerDb.Rows.Count == 0) { Player.SendMessage(p, Group.Find(FoundRank).color + message + Server.DefaultColor + " has the rank of " + Group.Find(FoundRank).color + FoundRank); return; }
 
             Player.SendMessage(p, Group.Find(FoundRank).color + playerDb.Rows[0]["Title"] + " " + message + Server.DefaultColor + " has :");
-            Player.SendMessage(p, "> > the rank of \"" + Group.Find(FoundRank).color + FoundRank);
+            Player.SendMessage(p, "> > the rank of " + Group.Find(FoundRank).color + FoundRank);
             try
             {
                 if (!Group.Find("Nobody").commands.Contains("pay") && !Group.Find("Nobody").commands.Contains("give") && !Group.Find("Nobody").commands.Contains("take")) Player.SendMessage(p, "> > &a" + playerDb.Rows[0]["Money"] + Server.DefaultColor + " " + Server.moneys);

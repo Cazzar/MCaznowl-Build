@@ -289,12 +289,12 @@ namespace MCForge
 
         public static void Autoload()
         {
-            if (!File.Exists("text/cmdautoload.txt"))
+            if (!File.Exists("text/cmdautoloadVB.txt"))
             {
-                File.Create("text/cmdautoload.txt");
+                File.Create("text/cmdautoloadVB.txt");
                 return;
             }
-            string[] autocmds = File.ReadAllLines("text/cmdautoload.txt");
+            string[] autocmds = File.ReadAllLines("text/cmdautoloadVB.txt");
             foreach (string cmd in autocmds)
             {
                 if (cmd == "")
@@ -308,7 +308,7 @@ namespace MCForge
                     error = null;
                     continue;
                 }
-                Server.s.Log("AUTOLOAD: Loaded " + cmd.ToLower() + ".dll");
+                Server.s.Log("AUTOLOAD: Loaded [VB] " + cmd.ToLower() + ".dll");
             }
         }
 

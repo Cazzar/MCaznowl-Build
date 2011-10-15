@@ -43,6 +43,10 @@ namespace MCForge
                     return p.cancelcommand;
                 case PlayerEvents.PlayerMove:
                     return p.cancelmove;
+                case PlayerEvents.MYSQLSave:
+                    return p.cancelmysql;
+                case PlayerEvents.PlayerRankChange:
+                    return Group.cancelrank;
                 default:
                     return false;
             }
@@ -57,7 +61,31 @@ namespace MCForge
             switch (e)
             {
                 case LevelEvents.LevelUnload:
+                    l.cancelunload = true;
                     break;
+                case LevelEvents.LevelSave:
+                    l.cancelsave1 = true;
+                    break;
+
+            }
+        }
+        /// <summary>
+        /// Check to see if a level event is canceled
+        /// </summary>
+        /// <param name="e">The event you want to check</param>
+        /// <param name="l">The level to check the event on</param>
+        /// <returns></returns>
+        public static bool IsLevelEventCancel(LevelEvents e, Level l)
+        {
+            switch (e)
+            {
+                case LevelEvents.LevelUnload:
+                    return l.cancelunload;
+                case LevelEvents.LevelSave:
+                    return l.cancelsave1;
+                default:
+                    return false;
+
             }
         }
         /// <summary>
@@ -74,6 +102,23 @@ namespace MCForge
                 case GlobalLevelEvents.LevelSave:
                     Level.cancelsave = true;
                     break;
+            }
+        }
+        /// <summary>
+        /// Check to see if global level event is canceled
+        /// </summary>
+        /// <param name="e">The event to check</param>
+        /// <returns></returns>
+        public static bool IsGlobalLevelEventCanceled(GlobalLevelEvents e)
+        {
+            switch (e)
+            {
+                case GlobalLevelEvents.LevelLoad:
+                    return Level.cancelload;
+                case GlobalLevelEvents.LevelSave:
+                    return Level.cancelsave;
+                default:
+                    return false;
             }
         }
         /// <summary>
@@ -97,6 +142,12 @@ namespace MCForge
                     break;
                 case PlayerEvents.PlayerMove:
                     p.cancelmove = true;
+                    break;
+                case PlayerEvents.MYSQLSave:
+                    p.cancelmysql = true;
+                    break;
+                case PlayerEvents.PlayerRankChange:
+                    Group.cancelrank = true;
                     break;
             }
         }

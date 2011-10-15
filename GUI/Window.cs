@@ -36,8 +36,9 @@ namespace MCForge.Gui
 {
     public partial class Window : Form
     {
-        Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
-                                "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
+        // What is this???
+        /*Regex regex = new Regex(@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." +
+                                "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");*/
 
         // for cross thread use
         delegate void StringCallback(string s);
@@ -564,11 +565,6 @@ namespace MCForge.Gui
 
         //void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
 
-        private void txtHost_TextChanged(object sender, EventArgs e)
-        {
-            if (txtHost.Text != "") Server.ZallState = txtHost.Text;
-        }
-
         private void btnProperties_Click_1(object sender, EventArgs e)
         {
             if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
@@ -891,6 +887,7 @@ namespace MCForge.Gui
                     }
                 }
             }
+            tabControl1.Update();
         }
 
         private void Restart_Click(object sender, EventArgs e)
