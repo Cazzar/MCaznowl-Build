@@ -17,6 +17,8 @@ namespace MCForge {
 
         public override void Use(Player p, string message) {
             switch (message) {
+                case "":
+                    break;
                 case "restart":
                 case "update":
                 case "shutdown":
@@ -97,6 +99,8 @@ namespace MCForge {
                     break;
                 default:
                     Player.SendMessage(p, "/server " + message + " is not currently implemented.");
+                    goto case "help";
+                case "help":
                     Help(p);
                     break;
             }
@@ -187,7 +191,7 @@ namespace MCForge {
             Server.level = "main";
             Server.errlog = "error.log";
 
-            Server.console = false;
+            //Server.console = false;
             Server.reportBack = true;
 
             Server.irc = false;
@@ -231,25 +235,25 @@ namespace MCForge {
 
             Server.checkUpdates = true;
 
-            Server.useMySQL = true;
+            Server.useMySQL = false;
             Server.MySQLHost = "127.0.0.1";
             Server.MySQLPort = "3306";
             Server.MySQLUsername = "root";
             Server.MySQLPassword = "password";
             Server.MySQLDatabaseName = "MCZallDB";
-            Server.MySQLPooling = true;
+            Server.DatabasePooling = true;
 
             Server.DefaultColor = "&e";
             Server.IRCColour = "&5";
 
             Server.UseGlobalChat = true;
-            Server.GlobalChatNick = "MCF" + new Random().Next(Int32.MaxValue);
+            Server.GlobalChatNick = "MCF" + new Random().Next();
             Server.GlobalChatColor = "&6";
 
 
             Server.afkminutes = 10;
             Server.afkkick = 45;
-            Server.RemotePort = 1337;
+            //Server.RemotePort = 1337;
 
             Server.defaultRank = "guest";
 
@@ -318,7 +322,9 @@ namespace MCForge {
 
             // Create the Package
             if (withDB) {
-                SaveDataBase("SQL.sql");
+                SaveMySQLDataBase("SQL.sql");
+            } else {
+                SaveSQLiteDatabase("SQL.sql");
             }
 
             Server.s.Log("Creating package...");
@@ -356,7 +362,7 @@ namespace MCForge {
 
         private static void SaveDataBase(string filename) {
             using (StreamWriter sql = new StreamWriter(File.Create(filename))) {
-                MySQL.CopyDatabase(sql);
+                Database.CopyDatabase(sql);
             }
         }
 

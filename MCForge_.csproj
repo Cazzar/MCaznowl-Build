@@ -85,6 +85,8 @@
   <ItemGroup>
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdServer.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdAgree.cs" />
@@ -228,6 +230,7 @@
       <DependentUpon>WoM.cs</DependentUpon>
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
+    <Compile Include="Interface1.cs" />
     <Compile Include="LavaSurvival.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />

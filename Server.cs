@@ -212,7 +212,7 @@ public static event OnServerError ServerError = null;
         public static string level = "main";
         public static string errlog = "error.log";
 
-        public static bool console = false;
+//        public static bool console = false; // never used
         public static bool reportBack = true;
 
         public static bool irc = false;
@@ -268,13 +268,13 @@ public static event OnServerError ServerError = null;
         public static string IRCColour = "&5";
 
         public static bool UseGlobalChat = true;
-        public static string GlobalChatNick = "MCF" + new Random().Next(Int32.MaxValue);
+        public static string GlobalChatNick = "MCF" + new Random().Next();
         public static string GlobalChatColor = "&6";
 
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
-        public static int RemotePort = 1337;
+        //public static int RemotePort = 1337; // Never used
 
         public static string defaultRank = "guest";
 

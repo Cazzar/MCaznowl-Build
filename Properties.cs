@@ -221,9 +221,9 @@ namespace MCForge
                                     Server.backupLocation = value;
                                 break;
 
-                            case "console-only":
-                                Server.console = (value.ToLower() == "true") ? true : false;
-                                break;
+                            //case "console-only": // Never used
+                            //    Server.console = (value.ToLower() == "true") ? true : false;
+                            //    break;
 
                             case "physicsrestart":
                                 Server.physicsRestart = (value.ToLower() == "true") ? true : false;

@@ -33,71 +33,12 @@ namespace MCForge
 
         public static void executeQuery(string queryString)
         {
-            int totalCount = 0;
-            if (Server.useMySQL)
-                return;
-        retry: try
-            {
-                using (var conn = new SQLiteConnection(connString))
-                {
-                    conn.Open();
-                    using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                totalCount++;
-                if (totalCount > 10)
-                {
-                    File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                    Server.ErrorLog(e);
-                }
-                else
-                {
-                    goto retry;
-                }
-            }
+            Database.executeQuery(queryString);
         }
 
         public static DataTable fillData(string queryString, bool skipError = false)
         {
-            int totalCount = 0;
-            using (DataTable toReturn = new DataTable("toReturn"))
-            {
-                if (Server.useMySQL)
-                    return toReturn;
-            retry: try
-                {
-                    using (var conn = new SQLiteConnection(connString))
-                    {
-                        conn.Open();
-                        using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn))
-                        {
-                            da.Fill(toReturn);
-                        }
-                        conn.Close();
-                    }
-                }
-                catch (Exception e)
-                {
-                    totalCount++;
-                    if (totalCount > 10)
-                    {
-                        if (!skipError)
-                        {
-                            File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                            Server.ErrorLog(e);
-                        }
-                    }
-                    else
-                        goto retry;
-                }
-                return toReturn;
-            }
+            return Database.fillData(queryString, skipError);
         }
     }
 }

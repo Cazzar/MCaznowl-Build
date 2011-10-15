@@ -1,84 +1,15 @@
-/*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
-	
-	Dual-licensed under the	Educational Community License, Version 2.0 and
-	the GNU General Public License, Version 3 (the "Licenses"); you may
-	not use this file except in compliance with the Licenses. You may
-	obtain a copy of the Licenses at
-	
-	http://www.osedu.org/licenses/ECL-2.0
-	http://www.gnu.org/licenses/gpl-3.0.html
-	
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the Licenses are distributed on an "AS IS"
-	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-	or implied. See the Licenses for the specific language governing
-	permissions and limitations under the Licenses.
-*/
-using System;
-using System.Data;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Data;
 using MySql.Data.MySqlClient;
-using MySql.Data.Types;
-//using System.Data.SQLite;
+using System.Data.SQLite;
 
-namespace MCForge
-{
-    public static class MySQL
-    {
-		
-        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
-        public static void executeQuery(string queryString, bool createDB = false)
-        {
-			int totalCount = 0;
-            if (!Server.useMySQL)
-                return;
-    retry:  try
-            {
-                using (var conn = new MySqlConnection(connString))
-                {
-                    conn.Open();
-                    if (!createDB)
-                    {
-                        conn.ChangeDatabase(Server.MySQLDatabaseName);
-                    }
-					using (MySqlCommand cmd = new MySqlCommand(queryString, conn))
-					{
-						cmd.ExecuteNonQuery();
-						conn.Close();
-					}
-                }
-            }
-            catch (Exception e)
-            {
-                if (!createDB)
-                {
-                    totalCount++;
-                    if (totalCount > 10)
-                    {
-                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                        Server.ErrorLog(e);
-                    }
-                    else
-                    {
-                        goto retry;
-                    }
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-        }
 
-        public static DataTable fillData(string queryString, bool skipError = false)
-        {
-            return Database.fillData(queryString, skipError);
-        }
-
+namespace MCForge {
+    class Database {
         public static void CopyDatabase(StreamWriter sql) {
             //We technically know all tables in the DB...  But since this is MySQL, we can also get them all with a MySQL command
             //So we show the tables, and store the result.
@@ -87,17 +18,17 @@ namespace MCForge
             //Important note:  This does NOT account for foreign keys, BLOB's etc.  It only works for what we actually put in the db.
 
             sql.WriteLine("-- MCForge SQL Database Dump");
-            sql.WriteLine("-- version 0.5");
+            sql.WriteLine("-- version 1.0");
             sql.WriteLine("-- http://www.mcforge.net");
             sql.WriteLine("--");
             sql.WriteLine("-- Host: {0}", Server.MySQLHost);
             sql.WriteLine("-- Generation Time: {0} at {1}", DateTime.Now.Date, DateTime.Now.TimeOfDay);
-            sql.WriteLine("-- MCForge Version: {0}",  Server.Version);
+            sql.WriteLine("-- MCForge Version: {0}", Server.Version);
             sql.WriteLine();
             //Extra stuff goes here
             sql.WriteLine();
             //database here
-            using (DataTable sqlTables = fillData("SHOW TABLES")) {
+            using (List<String> sqlTables = (Database.getTables())) {
 
                 foreach (DataRow sqlTablesRow in sqlTables.Rows) {
                     string tableName = sqlTablesRow.Field<string>(0);
@@ -108,26 +39,26 @@ namespace MCForge
                     sql.WriteLine("-- Table structure for table `{0}`", tableName);
                     sql.WriteLine("--");
                     sql.WriteLine();
-                    sql.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (",tableName);
+                    sql.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (", tableName);
                     List<string[]> tableSchema = new List<string[]>();
                     string[] rowParams;
-                    using (DataTable tableRowSchema = fillData("DESCRIBE " + tableName)) {
+                    using (DataTable tableRowSchema = Database.fillData("DESCRIBE " + tableName)) {
                         rowParams = new string[tableRowSchema.Columns.Count];
                         string pri = "";
                         foreach (DataRow row in tableRowSchema.Rows) {
                             //Save the info contained to file
-                            List<string> tmp = new List<string>(); 
+                            List<string> tmp = new List<string>();
                             for (int col = 0; col < tableRowSchema.Columns.Count; col++) {
                                 tmp.Add(row.Field<string>(col));
                             }// end:for(col)
                             rowParams = tmp.ToArray<string>();
-                            rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT " ) + "NULL";
+                            rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT ") + "NULL";
                             sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + ",", rowParams);
                             pri += (rowParams[3].ToLower().Equals("pri") ? rowParams[0] + ";" : "");
                             tableSchema.Add(rowParams);
                         }// end:foreach(DataRow row)
                         if (!pri.Equals("")) {
-                            string[] tmp = pri.Substring(0, pri.Length-1).Split(';');
+                            string[] tmp = pri.Substring(0, pri.Length - 1).Split(';');
                             sql.Write("PRIMARY KEY (`");
                             foreach (string prim in tmp) {
                                 sql.Write(prim);
@@ -137,7 +68,7 @@ namespace MCForge
                     }
                     sql.WriteLine(");");
                     sql.WriteLine();
-                    using (DataTable tableRowData = fillData("SELECT * FROM  " + tableName)) {
+                    using (DataTable tableRowData = Database.fillData("SELECT * FROM  " + tableName)) {
                         if (tableRowData.Rows.Count > 0) {
                             sql.WriteLine("--");
                             sql.WriteLine("-- Dumping data for table `{0}`", tableName);
@@ -192,13 +123,94 @@ namespace MCForge
                     }
                 }// end:foreach(DataRow sqlTablesRow)
             }
+        }
+
+        private static List<string> getTables() {
+            List<string> tableNames = new List<string>();
+            using (DataTable tables = fillData((Server.useMySQL ? "SHOW TABLES" : "SELECT * FROM sqlite_master"))) {
+                foreach (DataRow row in tables.Rows) {
+                    string tableName = row.Field<string>((Server.useMySQL ? 0 : 1));
+                    tableNames.Add(tableName);
+                }
+            }
+            return tableNames;
         }// end:CopyDatabase()
 
-        internal static void fillDatabase(Stream stream) {
-            foreach (string line in new StreamReader(stream).ReadToEnd().Split('\n')) {
-                executeQuery(line);
+        public static void executeQuery(string queryString, bool createDB = false) {
+            int totalCount = 0;
+            retry: try {
+                if (Server.useMySQL) {
+                    using (var conn = new MySqlConnection(MySQL.connString)) {
+                        conn.Open();
+                        if (!createDB) {
+                            conn.ChangeDatabase(Server.MySQLDatabaseName);
+                        }
+                        using (MySqlCommand cmd = new MySqlCommand(queryString, conn)) {
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                    }
+
+                } else {
+                    using (var conn = new SQLiteConnection(SQLite.connString)) {
+                        conn.Open();
+                        using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn)) {
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                if (!createDB || !Server.useMySQL) {
+                    totalCount++;
+                    if (totalCount > 10) {
+                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
+                        Server.ErrorLog(e);
+                    } else {
+                        goto retry;
+                    }
+                } else {
+                    throw e;
+                }
             }
         }
+
+        public static DataTable fillData(string queryString, bool skipError = false) {
+            int totalCount = 0;
+            using (DataTable toReturn = new DataTable("toReturn")) {
+            retry: try {
+                    if (Server.useMySQL) {
+                        using (var conn = new MySqlConnection(MySQL.connString)) {
+                            conn.Open();
+                            conn.ChangeDatabase(Server.MySQLDatabaseName);
+                            using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
+                                da.Fill(toReturn);
+                            }
+                            conn.Close();
+                        }
+                    } else {
+                        using (var conn = new SQLiteConnection(SQLite.connString)) {
+                            conn.Open();
+                            using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn)) {
+                                da.Fill(toReturn);
+                            }
+                            conn.Close();
+                        }
+                    }
+                } catch (Exception e) {
+                    totalCount++;
+                    if (totalCount > 10) {
+                        if (!skipError) {
+                            File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
+                            Server.ErrorLog(e);
+                        }
+                    } else
+                        goto retry;
+                }
+
+                return toReturn;
+            }
+        }
+
     }
 }
-
