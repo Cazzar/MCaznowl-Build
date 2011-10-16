@@ -58,9 +58,9 @@ namespace MCForge.Commands
 
                 if (split[0] == "all")
                 {
-                    if (p.group.Permission < LevelPermission.Operator)
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                     {
-                        Player.SendMessage(p, "You must be at least " + LevelPermission.Operator + " to send the changelog to all players.");
+                        Player.SendMessage(p, "You must be at least " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + " to send the changelog to all players.");
                         return;
                     }
                     for (int k = 0; k < strArray.Length; k++)

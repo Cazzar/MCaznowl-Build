@@ -41,9 +41,9 @@ namespace MCForge
                 Player.SendMessage(p, "Place a block where you would like to check for zones.");
                 return;
             }
-            else if (p.group.Permission < LevelPermission.Operator)
+            else if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1))
             {
-                Player.SendMessage(p, "Reserved for OP+");
+                Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+");
                 return;
             }
 
@@ -74,9 +74,9 @@ namespace MCForge
 
             if (message.ToLower() == "del all")
             {
-                if (p.group.Permission < LevelPermission.Admin)
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2))
                 {
-                    Player.SendMessage(p, "Only a SuperOP may delete all zones at once");
+                    Player.SendMessage(p, "Only a " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+ may delete all zones at once");
                     return;
                 }
                 else
@@ -95,9 +95,9 @@ namespace MCForge
             }
 
 
-            if (p.group.Permission < LevelPermission.Operator)
+            if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 3))
             {
-                Player.SendMessage(p, "Setting zones is reserved for OP+"); return;
+                Player.SendMessage(p, "Setting zones is reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name); return;
             }
 
             if (Group.Find(message.Split(' ')[1]) != null)

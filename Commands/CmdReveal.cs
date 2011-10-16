@@ -35,7 +35,7 @@ namespace MCForge
 
             if (message.ToLower() == "all")
             {
-                if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Reserved for OP+"); return; }
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+"); return; }
 
                 foreach (Player who in Player.players)
                 {

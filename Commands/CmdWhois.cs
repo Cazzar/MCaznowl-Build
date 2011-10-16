@@ -53,7 +53,7 @@ namespace MCForge
                 Player.SendMessage(p, "> > " + Awards.awardAmount(who.name) + " awards");
 
                 bool skip = false;
-                if (p != null) if (p.group.Permission <= LevelPermission.AdvBuilder) skip = true;
+                if (p != null) if ((int)p.group.Permission <= CommandOtherPerms.GetPerm(this)) skip = true;
                 if (!skip)
                     {
                         string givenIP;

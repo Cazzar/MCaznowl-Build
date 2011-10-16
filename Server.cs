@@ -324,6 +324,7 @@ public static byte maxGuests = 10;
         }
         public void Start()
         {
+           
             shuttingDown = false;
             Log("Starting Server");
             {//dl restarter stuff
@@ -471,6 +472,7 @@ public static byte maxGuests = 10;
             Awards.Load();
             Economy.Load();
             Warp.LOAD();
+            CommandOtherPerms.Load();
 
             if (File.Exists("text/emotelist.txt"))
             {

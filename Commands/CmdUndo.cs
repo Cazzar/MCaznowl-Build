@@ -74,7 +74,7 @@ namespace MCForge {
             if (who != null) {
                 if (p != null) {
                     if (who.group.Permission > p.group.Permission && who != p) { Player.SendMessage(p, "Cannot undo a user of higher or equal rank"); return; }
-                    if (who != p && p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP+ may undo other people's actions"); return; }
+                    if (who != p && (int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "Only an " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+ may undo other people's actions"); return; }
                 }
 
                 for (CurrentPos = who.UndoBuffer.Count - 1; CurrentPos >= 0; --CurrentPos) {
@@ -105,7 +105,7 @@ namespace MCForge {
                 }
                 return;
             } else if (undoPhysics) {
-                if (p.group.Permission < LevelPermission.AdvBuilder) { Player.SendMessage(p, "Reserved for Adv+"); return; }
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
 
                 Command.all.Find("physics").Use(p, "0");
                 Level.UndoPos uP;
@@ -149,7 +149,8 @@ namespace MCForge {
                 Player.SendMessage(null, "Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
             } else { // Here, who == null, meaning the user specified is offline
                 if (p != null) {
-                    if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Reserved for OP+"); return; }
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
+                    // ^^^ is using the same as the 1st other permission for the this command because the only difference is that this is for offline players so it might aswell be the same!!
                 }
 
                 bool FoundUser = false;
