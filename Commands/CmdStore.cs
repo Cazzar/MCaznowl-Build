@@ -83,7 +83,7 @@ namespace MCForge
                             }
                         );
 
-                        if (p.group.Permission >= LevelPermission.Operator || result.name == p.name)
+                        if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this) || result.name == p.name)
                         {
                             if (File.Exists("extra/copy/" + message + ".copy"))
                             {
@@ -111,7 +111,7 @@ namespace MCForge
                         }
                         else
                         {
-                            Player.SendMessage(p, "You must be an operator or file owner to delete a save.");
+                            Player.SendMessage(p, "You must be an " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ or file owner to delete a save.");
                             return;
                         }
                     }
@@ -129,7 +129,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/store <filename> - Stores your copied item to the server as <filename>.");
-            Player.SendMessage(p, "/store delete <filename> - Deletes saved copy file.  Only Op+ and file creator may delete.");
+            Player.SendMessage(p, "/store delete <filename> - Deletes saved copy file.  Only " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ and file creator may delete.");
             return;
         }
     }

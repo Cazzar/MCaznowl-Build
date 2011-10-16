@@ -33,7 +33,7 @@ namespace MCForge
         public CmdPatrol() { }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/patrol - Teleports you to a random guest.");
+            Player.SendMessage(p, "/patrol - Teleports you to a random " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + " or lower");
         }
 
         public override void Use(Player p, string message)
@@ -51,7 +51,7 @@ namespace MCForge
             List<string> getpatrol = new List<string>();
             foreach (Player pl in Player.players)
             {
-                if (pl.group.Permission == LevelPermission.Guest)
+                if ((int)pl.group.Permission <= CommandOtherPerms.GetPerm(this))
                 {
                     getpatrol.Add(pl.name);
                 }

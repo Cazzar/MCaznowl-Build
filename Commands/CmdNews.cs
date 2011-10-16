@@ -42,7 +42,7 @@ namespace MCForge
             else
             {
                 string[] split = message.Split(' ');
-                if (split[0] == "all") { if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "You must be at least " + LevelPermission.Operator + " to send this to all players."); return; } for (int k = 0; k < strArray.Length; k++) { Player.GlobalMessage(strArray[k]); } return; }
+                if (split[0] == "all") { if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "You must be at least " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + " to send this to all players."); return; } for (int k = 0; k < strArray.Length; k++) { Player.GlobalMessage(strArray[k]); } return; }
                 else
                 {
                     Player player = Player.Find(split[0]);
