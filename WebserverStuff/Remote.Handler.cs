@@ -42,6 +42,20 @@ namespace MCForge.Remote
                    return;
 
            }
+           if (m[0] == '#')
+           {
+               m = m.Remove(0, 1);
+               Player.GlobalMessageOps("%fto Ops [%2Remote%f] " + m);
+               return;
+
+           }
+           if (m[0] == '~')
+           {
+               m = m.Remove(0, 1);
+               Player.GlobalMessageAdmins("%fto Admins [%2Remote%f] ");
+               return;
+
+           }
 
            Server.s.Log("[Remote]: " + m);
            Player.GlobalMessage(c.navy + "[Remote]: " + c.white + m);

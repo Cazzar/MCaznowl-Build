@@ -230,8 +230,6 @@
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
-    <Compile Include="Levels\Seasons\Season.cs" />
-    <Compile Include="Levels\Seasons\Seasons_Engine.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
