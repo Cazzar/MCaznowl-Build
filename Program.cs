@@ -34,6 +34,7 @@ namespace Starter
             }
         }
         static int tries = 0;
+        static bool needsToRestart = false;
         //Console.ReadLine() is ignored while Starter is set as Windows Application in properties. (At least on Windows)
         static void Main(string[] args)
         {
@@ -50,30 +51,42 @@ namespace Starter
             }
             else if (File.Exists("MCForge_.dll"))
             {
-                openServer(args);
+
+                //Crash issue fixed by re-executing the exe to properly load MCForge_.dll.
+                if (!needsToRestart)
+                    openServer(args);
+                else
+                    System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
             }
             else
             {
+                needsToRestart = true;
                 tries++;
                 Console.WriteLine("This is try number " + tries);
                 Console.WriteLine("You do not have the required DLL!");
                 Console.WriteLine("I'll download it for you. Just wait.");
                 Console.WriteLine("Downloading from " + DLLLocation);
-
-                WebClient Client = new WebClient();
-                Client.DownloadFile(DLLLocation, "MCForge_.dll");
-                Client.Dispose();
-
-                Console.WriteLine("Finished downloading! Let's try this again, shall we.");
-                for (int i = 0; i < 5; i++)
+                try
                 {
-                    Thread.Sleep(100);
-                    Console.Write(".");
+                    WebClient Client = new WebClient();
+                    Client.DownloadFile(DLLLocation, "MCForge_.dll");
+                    Client.Dispose();
+                    Console.WriteLine("Finished downloading! Let's try this again, shall we.");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Thread.Sleep(100);
+                        Console.Write(".");
+                    }
+                    Console.WriteLine("Go!");
+                    Console.WriteLine();
+                    Main(args);
                 }
-                Console.WriteLine("Go!");
-                Console.WriteLine();
-                //Crash issue fixed by re-executing the exe to properly load MCForge_.dll.
-                System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                catch
+                {
+                    tries = 5;
+                    Console.WriteLine("\nAn error occured while attempting to download MCForge_.dll\n");
+                    Main(args);
+                }
             }
         }
         static void openServer(string[] args)
