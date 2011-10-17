@@ -1429,7 +1429,7 @@ namespace MCForge.Gui
             this.lsNudLives.Name = "lsNudLives";
             this.lsNudLives.Size = new System.Drawing.Size(95, 21);
             this.lsNudLives.TabIndex = 10;
-            this.toolTip.SetToolTip(this.lsNudLives, "THe number of times a player can die before being out of the round. Set to 0 for " +
+            this.toolTip.SetToolTip(this.lsNudLives, "The number of times a player can die before being out of the round. Set to 0 for " +
                     "unlimited.");
             this.lsNudLives.Value = new decimal(new int[] {
             1,
