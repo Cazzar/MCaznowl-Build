@@ -370,8 +370,8 @@ namespace MCForge
         {
             if (lifeNum < 1) return;
             string name = p.name.ToLower();
-            if (deaths.ContainsKey(name))
-                deaths.Add(name, lifeNum);
+            if (!deaths.ContainsKey(name))
+                deaths.Add(name, 0);
             deaths[name]++;
             if (!silent && IsPlayerDead(p))
             {
@@ -382,7 +382,7 @@ namespace MCForge
         public bool IsPlayerDead(Player p)
         {
             string name = p.name.ToLower();
-            if (lifeNum < 1 || deaths.ContainsKey(name))
+            if (lifeNum < 1 || !deaths.ContainsKey(name))
                 return false;
             return (deaths[name] >= lifeNum);
         }

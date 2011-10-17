@@ -12,8 +12,11 @@ v5.3.0.0
 - Added some default position settings for Lava Survival.
 - Added a shortcut /fz for /freeze.
 - Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
+- Added a lives system to Lava Survival, so players actually have to worry about killer lava/water. You can set the number of lives in the properties.
+- Added Global Chat to the chat tab in the GUI.
 - Added commands:
 	- /nyan - 100% self-explanatory!
+	- /warp - For the new warp system!
 - Removed commands:
 	- /drop - Old CTF command, not needed.
 	- /team - Old CTF command, not needed.

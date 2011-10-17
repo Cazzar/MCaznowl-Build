@@ -63,7 +63,7 @@ namespace MCForge
                             Player.SendMessage(p, "There is already an active Lava Survival game.");
                             return;
                         case 2:
-                            Player.SendMessage(p, "You must at least 3 configured maps to play Lava Survival.");
+                            Player.SendMessage(p, "You must have at least 3 configured maps to play Lava Survival.");
                             return;
                         case 3:
                             Player.SendMessage(p, "The specified map doesn't exist.");

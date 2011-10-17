@@ -1879,6 +1879,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             lsChkStartOnStartup.Checked = Server.lava.startOnStartup;
             lsChkSendAFKMain.Checked = Server.lava.sendAfkMain;
             lsNudVoteCount.Value = Server.lava.voteCount;
+            lsNudLives.Value = MathHelper.Clamp((decimal)Server.lava.lifeNum, 0, 1000);
             lsNudVoteTime.Value = (decimal)MathHelper.Clamp(Server.lava.voteTime, 1, 1000);
         }
 
@@ -1890,6 +1891,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             Server.lava.sendAfkMain = lsChkSendAFKMain.Checked;
             Server.lava.voteCount = (byte)lsNudVoteCount.Value;
             Server.lava.voteTime = (double)lsNudVoteTime.Value;
+            Server.lava.lifeNum = (int)lsNudLives.Value;
             Server.lava.SaveSettings();
         }
 

@@ -1828,8 +1828,7 @@ namespace MCForge
                         if (!Server.lava.IsPlayerDead(this))
                         {
                             Server.lava.KillPlayer(this);
-                            if (!Server.lava.IsPlayerDead(this))
-                                Command.all.Find("spawn").Use(this, "");
+                            Command.all.Find("spawn").Use(this, "");
                         }
                     }
                     else
@@ -1839,7 +1838,7 @@ namespace MCForge
                     }
 
                     if (Server.deathcount)
-                        if (overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
+                        if (overallDeath > 0 && overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
                 }
                 lastDeath = DateTime.Now;
 
