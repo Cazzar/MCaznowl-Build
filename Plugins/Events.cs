@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 
 namespace MCForge
-
+{
     public enum ServerEvents
     {
     	//TODO

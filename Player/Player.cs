@@ -427,8 +427,6 @@ namespace MCForge
                     catch { }
                     if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
-                    try { Waypoint.Load(this); if (Waypoints.Count >= 1) { this.SendMessage("Loaded Waypoints"); } }
-                    catch { }
                 };
 
                 afkTimer.Elapsed += delegate
@@ -1031,6 +1029,16 @@ namespace MCForge
                         this.SendMessage("&cPlease complete admin verification with &a/pass [Password]!");
                     }
                 }
+            }
+            try
+            {
+                Waypoint.Load(this);
+                //if (Waypoints.Count > 0) { this.SendMessage("Loaded " + Waypoints.Count + " waypoints!"); }
+            }
+            catch (Exception ex)
+            {
+                SendMessage("Error loading waypoints!");
+                Server.ErrorLog(ex);
             }
             Server.s.Log(name + " [" + ip + "] has joined the server.");
            
