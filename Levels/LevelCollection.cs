@@ -230,14 +230,7 @@ namespace MCForge
             {
                 if (File.Exists("text/autoload.txt"))
                 {
-                    if (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()));
                 }
                 return false;
             };
