@@ -594,6 +594,17 @@ namespace MCForge.Gui
                                     txtSQLHost.Text = "127.0.0.1";
                                 }
                                 break;
+                            case "sqlport":
+                                try
+                                {
+                                    int.Parse(value);
+                                    txtSQLPort.Text = value;
+                                }
+                                catch
+                                {
+                                    txtSQLPort.Text = "3306";
+                                }
+                                break;
                             case "mute-on-spam":
                                 chkSpamControl.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -804,7 +815,7 @@ namespace MCForge.Gui
                     w.WriteLine("#MySQL information");
                     w.WriteLine("UseMySQL = " + chkUseSQL.Checked.ToString().ToLower());
                     w.WriteLine("Host = " + txtSQLHost.Text);
-                    w.WriteLine("SQLPort = " + Server.MySQLPort);
+                    w.WriteLine("SQLPort = " + txtSQLPort.Text);
                     w.WriteLine("Username = " + txtSQLUsername.Text);
                     w.WriteLine("Password = " + txtSQLPassword.Text);
                     w.WriteLine("DatabaseName = " + txtSQLDatabase.Text);

@@ -317,6 +317,8 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label70 = new System.Windows.Forms.Label();
+            this.txtSQLPort = new System.Windows.Forms.TextBox();
             this.lsNudLives = new System.Windows.Forms.NumericUpDown();
             this.label69 = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
@@ -2122,6 +2124,8 @@ namespace MCForge.Gui
             // 
             // grpSQL
             // 
+            this.grpSQL.Controls.Add(this.txtSQLPort);
+            this.grpSQL.Controls.Add(this.label70);
             this.grpSQL.Controls.Add(this.linkLabel1);
             this.grpSQL.Controls.Add(this.txtSQLHost);
             this.grpSQL.Controls.Add(this.label43);
@@ -3390,6 +3394,22 @@ namespace MCForge.Gui
             this.label69.TabIndex = 11;
             this.label69.Text = "Lives:";
             // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.Location = new System.Drawing.Point(156, 131);
+            this.label70.Name = "label69";
+            this.label70.Size = new System.Drawing.Size(30, 13);
+            this.label70.TabIndex = 31;
+            this.label70.Text = "Port:";
+            // 
+            // txtSQLPort
+            // 
+            this.txtSQLPort.Location = new System.Drawing.Point(192, 128);
+            this.txtSQLPort.Name = "txtSQLPort";
+            this.txtSQLPort.Size = new System.Drawing.Size(77, 21);
+            this.txtSQLPort.TabIndex = 32;
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3770,5 +3790,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.NumericUpDown lsNudLives;
         private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.TextBox txtSQLPort;
+        private System.Windows.Forms.Label label70;
     }
 }
