@@ -97,7 +97,7 @@ namespace MCForge
             }
             else if (par0 == "create" || par0 == "make")
             {
-                if (p.group.Permission >= LevelPermission.AdvBuilder)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
                 {
                     if (Server.Chatrooms.Contains(par1))
                     {
@@ -119,7 +119,7 @@ namespace MCForge
             }
             else if (par0 == "delete" || par0 == "remove")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 3))
                 {
                     if (Server.Chatrooms.Contains(par1))
                     {
@@ -152,7 +152,7 @@ namespace MCForge
                         return;
                     }
                 }
-                if (p.group.Permission >= LevelPermission.AdvBuilder)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
                     if (Server.Chatrooms.Contains(par1))
                     {
@@ -197,7 +197,7 @@ namespace MCForge
             }
             else if (par0 == "spy")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 4))
                 {
                     if (Server.Chatrooms.Contains(par1))
                     {
@@ -235,64 +235,80 @@ namespace MCForge
             }
             else if (par0 == "forcejoin") //[player] [room]
             {
-                Player pl = Player.Find(par1);
-                if (pl == null)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 5))
                 {
-                    Player.SendMessage(p, "Sorry, '" + par1 + "' isn't a player");
-                    return;
-                }
-                if (!Server.Chatrooms.Contains(par2))
-                {
-                    Player.SendMessage(p, "Sorry, '" + par2 + " isn't a room");
-                    return;
-                }
-                if (pl.group.Permission >= p.group.Permission)
-                {
-                    Player.SendMessage(p, "Sorry, You can't do that to someone of higher or equal rank");
-                    return;
+                    Player pl = Player.Find(par1);
+                    if (pl == null)
+                    {
+                        Player.SendMessage(p, "Sorry, '" + par1 + "' isn't a player");
+                        return;
+                    }
+                    if (!Server.Chatrooms.Contains(par2))
+                    {
+                        Player.SendMessage(p, "Sorry, '" + par2 + " isn't a room");
+                        return;
+                    }
+                    if (pl.group.Permission >= p.group.Permission)
+                    {
+                        Player.SendMessage(p, "Sorry, You can't do that to someone of higher or equal rank");
+                        return;
+                    }
+                    else
+                    {
+                        if (Server.Chatrooms.Contains(par2))
+                        {
+                            if (pl.spyChatRooms.Contains(par2))
+                            {
+                                Player.SendMessage(pl, "The chat room '" + par2 + "' has been removed from your spying list because you are force joining the room '" + par2 + "'");
+                                pl.spyChatRooms.Remove(par2);
+                            }
+                            Player.SendMessage(pl, "You've been forced to join the chat room '" + par2 + "'");
+                            Player.ChatRoom(pl, pl.color + pl.name + Server.DefaultColor + " has force joined your chat room", false, par2);
+                            pl.Chatroom = par2;
+                            Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " has been forced to join the chatroom '" + par2 + "' by you");
+                            return;
+                        }
+                    }
                 }
                 else
                 {
-                    if (Server.Chatrooms.Contains(par2))
-                    {
-                        if (pl.spyChatRooms.Contains(par2))
-                        {
-                            Player.SendMessage(pl, "The chat room '" + par2 + "' has been removed from your spying list because you are force joining the room '" + par2 + "'");
-                            pl.spyChatRooms.Remove(par2);
-                        }
-                        Player.SendMessage(pl, "You've been forced to join the chat room '" + par2 + "'");
-                        Player.ChatRoom(pl, pl.color + pl.name + Server.DefaultColor + " has force joined your chat room", false, par2);
-                        pl.Chatroom = par2;
-                        Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " has been forced to join the chatroom '" + par2 + "' by you");
-                        return;
-                    }
+                    Player.SendMessage(p, "Sorry, You aren't a high enough rank to do that");
+                    return;
                 }
             }
             else if (par0 == "kick" || par0 == "forceleave")
             {
-                Player pl = Player.Find(par1);
-                if (pl == null)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 6))
                 {
-                    Player.SendMessage(p, "Sorry, '" + par1 + "' isn't a player");
-                    return;
-                }
-                if (pl.group.Permission >= p.group.Permission)
-                {
-                    Player.SendMessage(p, "Sorry, You can't do that to someone of higher or equal rank");
-                    return;
+                    Player pl = Player.Find(par1);
+                    if (pl == null)
+                    {
+                        Player.SendMessage(p, "Sorry, '" + par1 + "' isn't a player");
+                        return;
+                    }
+                    if (pl.group.Permission >= p.group.Permission)
+                    {
+                        Player.SendMessage(p, "Sorry, You can't do that to someone of higher or equal rank");
+                        return;
+                    }
+                    else
+                    {
+                        Player.SendMessage(pl, "You've been kicked from the chat room '" + pl.Chatroom + "'");
+                        Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " has been kicked from the chat room '" + pl.Chatroom + "'");
+                        Player.ChatRoom(pl, pl.color + pl.name + Server.DefaultColor + " has been kicked from your chat room", false, pl.Chatroom);
+                        pl.Chatroom = null;
+                    }
                 }
                 else
                 {
-                    Player.SendMessage(pl, "You've been kicked from the chat room '" + pl.Chatroom + "'");
-                    Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " has been kicked from the chat room '" + pl.Chatroom + "'");
-                    Player.ChatRoom(pl, pl.color + pl.name + Server.DefaultColor + " has been kicked from your chat room", false, pl.Chatroom);
-                    pl.Chatroom = null;
+                    Player.SendMessage(p, "Sorry, You aren't a high enough rank to do that");
+                    return;
                 }
             }
             else if (par0 == "globalmessage" || par0 == "global" || par0 == "all")
             {
                 string globalmessage = message.Replace(par0 + " ", "");
-                if (p.group.Permission >= LevelPermission.AdvBuilder)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 7))
                 {
                     Player.GlobalChatRoom(p, globalmessage, true);
                     return;
@@ -342,29 +358,44 @@ namespace MCForge
             Player.SendMessage(p, "/chatroom [room] - gives you details about the room");
             Player.SendMessage(p, "/chatroom join [room] - joins a room");
             Player.SendMessage(p, "/chatroom leave [room] - leaves a room");
-            if (p.group.Permission >= LevelPermission.AdvBuilder)
             {
-                Player.SendMessage(p, "/chatroom create [room] - creates a new room");
-                if (p.group.Permission < LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
                 {
-                    Player.SendMessage(p, "/chatroom delete [room] - deletes a room if all people have left");
+                    Player.SendMessage(p, "/chatroom create [room] - creates a new room");
                 }
-                else
                 {
-                    Player.SendMessage(p, "/chatroom delete [room] - deletes a room");
+                    if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 3))
+                    {
+                        Player.SendMessage(p, "/chatroom delete [room] - deletes a room");
+                    }
+                    else if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
+                    {
+                        Player.SendMessage(p, "/chatroom delete [room] - deletes a room if all people have left");
+                    }
+                    
                 }
-            }
-            if (p.group.Permission >= LevelPermission.Operator)
-            {
-
-                Player.SendMessage(p, "/chatroom spy [room] - spy on a chatroom");
-                Player.SendMessage(p, "/chatroom forcejoin [player] [room] - forces a player to join a room");
-                Player.SendMessage(p, "/chatroom kick [player] - kicks the player from their current room");
-                Player.SendMessage(p, "/chatroom globalmessage [message] - sends a global message to all rooms");
-            }
-            else
-            {
-                Player.SendMessage(p, "/chatroom globalmessage [message] - sends a global message to all rooms (limited to 1 every 30 seconds)");
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 4))
+                {
+                    Player.SendMessage(p, "/chatroom spy [room] - spy on a chatroom");
+                }
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 5))
+                {
+                    Player.SendMessage(p, "/chatroom forcejoin [player] [room] - forces a player to join a room");
+                }
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 6))
+                {
+                    Player.SendMessage(p, "/chatroom kick [player] - kicks the player from their current room");
+                }
+                {
+                    if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 7))
+                    {
+                        Player.SendMessage(p, "/chatroom globalmessage [message] - sends a global message to all rooms");
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "/chatroom globalmessage [message] - sends a global message to all rooms (limited to 1 every 30 seconds)");
+                    }
+                }
             }
         }
     }

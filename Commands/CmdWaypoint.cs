@@ -40,7 +40,7 @@ namespace MCForge
                 par1 = command[1];
             }
             catch { }
-            if (par0.ToLower() == "create" || par0.ToLower() == "new" || par0.ToLower() == "save")
+            if (par0.ToLower() == "create" || par0.ToLower() == "new" || par0.ToLower() == "add")
             {
                 if (!Player.Waypoint.Exists(par1, p))
                 {
@@ -55,7 +55,6 @@ namespace MCForge
                 if (Player.Waypoint.Exists(par1, p))
                 {
                     Player.Waypoint.Goto(par1, p);
-                    Player.SendMessage(p, "Sent you to waypoint");
                     return;
                 }
                 else { Player.SendMessage(p, "That waypoint doesn't exist"); return; }
@@ -85,7 +84,10 @@ namespace MCForge
                 Player.SendMessage(p, "Waypoints:");
                 foreach(Player.Waypoint.WP wp in p.Waypoints)
                 {
-                    Player.SendMessage(p, wp.name + ":" + wp.level);
+                    if (Level.Find(wp.lvlname) != null)
+                    {
+                        Player.SendMessage(p, wp.name + ":" + wp.lvlname);
+                    }
                 }
                 return;
             }

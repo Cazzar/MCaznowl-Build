@@ -60,35 +60,35 @@ namespace MCForge
                     Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
                     return;
                 }
-                if (p.group.Permission > LevelPermission.AdvBuilder)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
                 {
                     p.BlockAction = 14; Player.SendMessage(p, "TNT (Big) mode is now &aON" + Server.DefaultColor + ".");
                 }
                 else
                 {
-                    Player.SendMessage(p, "This mode is reserved for OPs");
+                    Player.SendMessage(p, "This mode is reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+");
                 }
             }
             else if (message.ToLower() == "allow")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
                     p.allowTnt = true;
                     Player.SendMessage(p, "&cTnt usage has now been enabled!");
                     return;
                 }
-                Player.SendMessage(p, "You must be OP+ to use this command.");
+                Player.SendMessage(p, "You must be " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+ to use this command.");
                 return;
             }
             else if (message.ToLower() == "disallow")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
                     p.allowTnt = false;
                     Player.SendMessage(p, "&cTnt usage has now been disabled!");
                     return;
                 }
-                Player.SendMessage(p, "You must be OP+ to use this command.");
+                Player.SendMessage(p, "You must be " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+ to use this command.");
                 return;
             }
             else if (message.ToLower() == "nuke")
@@ -98,13 +98,13 @@ namespace MCForge
                     Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
                     return;
                 }
-                if (p.group.Permission > LevelPermission.AdvBuilder)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 3))
                 {
                     p.BlockAction = 15; Player.SendMessage(p, "TNT (Nuke) mode is now &aON" + Server.DefaultColor + ".");
                 }
                 else
                 {
-                    Player.SendMessage(p, "This mode is reserved for OPs");
+                    Player.SendMessage(p, "This mode is reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name + "+");
                 }
             }
             else
@@ -117,8 +117,8 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/tnt [small/big/nuke] - Creates exploding TNT (with Physics 3).");
-            Player.SendMessage(p, "Big and Nuke TNT is reserved for OP+.");
-            if (p.group.Permission >= LevelPermission.Operator)
+            Player.SendMessage(p, "Big and Nuke TNT is reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name + "+");
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
             {
                 Player.SendMessage(p, "/tnt allow - Allows the use of tnt server-wide.");
                 Player.SendMessage(p, "/tnt disallow - Disallows the use of tnt server-wide.");

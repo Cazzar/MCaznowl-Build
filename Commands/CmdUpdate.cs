@@ -32,8 +32,8 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (p == null || p.group.Permission > LevelPermission.AdvBuilder) MCForge_.Gui.Program.UpdateCheck(false, p);
-            else Player.SendMessage(p, "Ask an Operator to do it!");
+            if (p == null || p.group.Permission > defaultRank) MCForge_.Gui.Program.UpdateCheck(false, p);
+            else Player.SendMessage(p, "Ask an " + Group.findPerm(defaultRank).name + "+ to do it!");
         }
         public override void Help(Player p)
         {
