@@ -27,8 +27,6 @@ namespace MCForge
         PlayerCommand,
         PlayerChat,
         BlockChange,
-        LevelLoad,
-        LevelSave,
         PlayerMove,
         MYSQLSave,
         PlayerRankChange
