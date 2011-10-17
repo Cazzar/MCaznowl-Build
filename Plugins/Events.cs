@@ -21,7 +21,16 @@ using System.Linq;
 using System.Text;
 
 namespace MCForge
-{
+
+    public enum ServerEvents
+    {
+    	//TODO
+    	//Make these do things
+    	ServerLog,
+    	ServerOpLog,
+    	ServerAdminLog,
+    	ConsoleCommand
+    }
     public enum PlayerEvents
     {
         PlayerCommand,
