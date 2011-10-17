@@ -2110,6 +2110,30 @@ namespace MCForge.Gui
             levelcommand("map", " growtrees");
         }
 
+        private void txtGlobalInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
+                catch (Exception ex) { Server.ErrorLog(ex); }
+                txtGlobalInput.Clear();
+            }
+        }
+
+        public void LogGlobalChat(string message)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    txtGlobalLog.AppendTextAndScroll(message);
+                }));
+                return;
+            }
+            txtGlobalLog.AppendTextAndScroll(message);
+        }
+
 
 
 
