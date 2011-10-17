@@ -1934,7 +1934,7 @@ MessageBox.Show("Text Box Cleared!!");
 
                 if (useList)
                 {
-                    lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+                    lsMapUse.Items.AddRange(Server.lava.Maps.ToArray());
                     try { if (useIndex > -1) lsMapUse.SelectedIndex = useIndex; }
                     catch { }
                 }

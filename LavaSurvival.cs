@@ -28,7 +28,7 @@ namespace MCForge
         // Private variables
         private string propsPath = "properties/lavasurvival/";
         private List<string> maps, voted;
-        private Dictionary<string, int> votes;
+        private Dictionary<string, int> votes, deaths;
         private Random rand = new Random();
         private Timer announceTimer, voteTimer, transferTimer;
         private DateTime startTime;
@@ -42,6 +42,7 @@ namespace MCForge
         // Settings
         public bool startOnStartup, sendAfkMain;
         public byte voteCount;
+        public int lifeNum;
         public double voteTime;
         public LevelPermission setupRank, controlRank;
 
@@ -51,6 +52,7 @@ namespace MCForge
             maps = new List<string>();
             voted = new List<string>();
             votes = new Dictionary<string, int>();
+            deaths = new Dictionary<string, int>();
             announceTimer = new Timer(60000);
             announceTimer.AutoReset = true;
             announceTimer.Elapsed += delegate
@@ -62,6 +64,7 @@ namespace MCForge
             sendAfkMain = true;
             voteCount = 2;
             voteTime = 2;
+            lifeNum = 3;
             setupRank = LevelPermission.Admin;
             controlRank = LevelPermission.Operator;
             LoadSettings();
@@ -83,6 +86,7 @@ namespace MCForge
             if (maps.Count < 3) return 2; // Not enough maps
             if (!String.IsNullOrEmpty(mapName) && !HasMap(mapName)) return 3; // Map doesn't exist
 
+            deaths.Clear();
             active = true;
             Server.s.Log("[Lava Survival] Game started.");
             try { LoadMap(String.IsNullOrEmpty(mapName) ? maps[rand.Next(maps.Count)] : mapName); }
@@ -97,6 +101,7 @@ namespace MCForge
             roundActive = false;
             voteActive = false;
             flooded = false;
+            deaths.Clear();
             if (announceTimer.Enabled) announceTimer.Stop();
             try { mapData.Dispose(); }
             catch { }
@@ -115,6 +120,7 @@ namespace MCForge
 
             try
             {
+                deaths.Clear();
                 mapData.roundTimer.Elapsed += delegate { EndRound(); };
                 mapData.floodTimer.Elapsed += delegate { DoFlood(); };
                 mapData.roundTimer.Start();
@@ -360,6 +366,26 @@ namespace MCForge
         {
             return p.level == map;
         }
+        public void KillPlayer(Player p, bool silent = false)
+        {
+            if (lifeNum < 1) return;
+            string name = p.name.ToLower();
+            if (deaths.ContainsKey(name))
+                deaths.Add(name, lifeNum);
+            deaths[name]++;
+            if (!silent && IsPlayerDead(p))
+            {
+                Player.SendMessage(p, "&4You ran out of lives, and are out of the round!");
+                Player.SendMessage(p, "&4You can still watch, but you cannot build.");
+            }
+        }
+        public bool IsPlayerDead(Player p)
+        {
+            string name = p.name.ToLower();
+            if (lifeNum < 1 || deaths.ContainsKey(name))
+                return false;
+            return (deaths[name] >= lifeNum);
+        }
 
         public MapData GenerateMapData(MapSettings settings)
         {
@@ -402,6 +428,9 @@ namespace MCForge
                             case "vote-time":
                                 voteTime = double.Parse(value);
                                 break;
+                            case "lives":
+                                lifeNum = int.Parse(value);
+                                break;
                             case "setup-rank":
                                 if (Group.Find(value.ToLower()) != null)
                                     setupRank = Group.Find(value.ToLower()).Permission;
@@ -430,6 +459,7 @@ namespace MCForge
                 SW.WriteLine("send-afk-to-main = " + sendAfkMain.ToString().ToLower());
                 SW.WriteLine("vote-count = " + voteCount.ToString());
                 SW.WriteLine("vote-time = " + voteTime.ToString());
+                SW.WriteLine("lives = " + lifeNum.ToString());
                 SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower());
                 SW.WriteLine("control-rank = " + Level.PermissionToName(controlRank).ToLower());
                 SW.WriteLine("maps = " + maps.Concatenate(","));
@@ -564,23 +594,29 @@ namespace MCForge
             return false;
         }
 
-        // Getters/Setters
-        public string GetVoteString()
+        // Accessors
+        public string VoteString
         {
-            if (votes.Count > 0)
+            get
             {
-                StringBuilder sb = new StringBuilder();
-                foreach (KeyValuePair<string, int> kvp in votes)
-                    sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
-                sb.Remove(0, 4);
-                return sb.ToString();
+                if (votes.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (KeyValuePair<string, int> kvp in votes)
+                        sb.AppendFormat("{0}, &5{1}", Server.DefaultColor, kvp.Key.Capitalize());
+                    sb.Remove(0, 4);
+                    return sb.ToString();
+                }
+                return String.Empty;
             }
-            return String.Empty;
         }
 
-        public List<string> GetMaps()
+        public List<string> Maps
         {
-            return maps;
+            get
+            {
+                return new List<string>(maps);
+            }
         }
 
         // Internal classes

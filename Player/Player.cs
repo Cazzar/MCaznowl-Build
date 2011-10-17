@@ -1166,6 +1166,13 @@ namespace MCForge
                 }
             }
 
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+            {
+                SendMessage("You are out of the round, and cannot build.");
+                SendBlockchange(x, y, z, b);
+                return;
+            }
+
             Level.BlockPos bP;
             bP.name = name;
             bP.TimePerformed = DateTime.Now;
@@ -1753,6 +1760,8 @@ namespace MCForge
                 OnDeath(this, b);
             if (PlayerDeath != null)
                 PlayerDeath(this, b);
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+                return;
             if (lastDeath.AddSeconds(2) < DateTime.Now)
             {
 
@@ -1802,6 +1811,15 @@ namespace MCForge
                     {
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
+                    }
+                    else if (Server.lava.active && Server.lava.HasPlayer(this))
+                    {
+                        if (!Server.lava.IsPlayerDead(this))
+                        {
+                            Server.lava.KillPlayer(this);
+                            if (!Server.lava.IsPlayerDead(this))
+                                Command.all.Find("spawn").Use(this, "");
+                        }
                     }
                     else
                     {
