@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Data;
 using System.Collections.Generic;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -92,12 +93,19 @@ namespace MCForge
                 }
                 catch { }
 
-                if (Server.useMySQL == true)
-                {
-                    MySQL.executeQuery("RENAME TABLE `Block" + foundLevel.name.ToLower() + "` TO `Block" + newName.ToLower() +
-                        "`, `Portals" + foundLevel.name.ToLower() + "` TO `Portals" + newName.ToLower() +
-                        "`, `Messages" + foundLevel.name.ToLower() + "` TO Messages" + newName.ToLower() +
-                        ", `Zone" + foundLevel.name.ToLower() + "` TO `Zone" + newName.ToLower() + "`");
+                if (Server.useMySQL)
+                    Database.executeQuery(String.Format("RENAME TABLE `Block{0}` TO `Block{1}`, " +
+                                                                     "`Portals{0}` TO `Portals{1}`, " +
+                                                                     "`Messages{0}` TO `Messages{1}`, " +
+                                                                     "`Zone{0}` TO `Zone{1}`", foundLevel.name.ToLower(), newName.ToLower()));
+                else {
+                    using (DatabaseTransactionHelper helper = SQLiteTransactionHelper.Create()) { // ensures that it's either all work, or none work.
+                        helper.Execute(String.Format("ALTER TABLE Block{0} RENAME TO Block{1}", foundLevel.name.ToLower(), newName.ToLower()));
+                        helper.Execute(String.Format("ALTER TABLE Portals{0} RENAME TO Portals{1}", foundLevel.name.ToLower(), newName.ToLower()));
+                        helper.Execute(String.Format("ALTER TABLE Messages{0} RENAME TO Messages{1}", foundLevel.name.ToLower(), newName.ToLower()));
+                        helper.Execute(String.Format("ALTER TABLE Zone{0} RENAME TO Zone{1}", foundLevel.name.ToLower(), newName.ToLower()));
+                        helper.Commit();
+                    }
                 }
                 try { Command.all.Find("load").Use(p, newName); }
                 catch { }

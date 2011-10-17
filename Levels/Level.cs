@@ -21,6 +21,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Data;
 using System.Threading;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -291,29 +292,13 @@ namespace MCForge
             blockCache = new List<BlockPos>();
 
             string template = "INSERT INTO `Block" + name + "` (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
-            if (Server.useMySQL)
-            {
-                using (var transaction = MySQLTransactionHelper.Create(MySQL.connString))
-                {
-                    foreach (BlockPos bP in tempCache)
-                    {
-                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, bP.deleted));
-                    }
-                    transaction.Commit();
+            DatabaseTransactionHelper transaction = DatabaseTransactionHelper.Create();
+            using (transaction) {
+                foreach (BlockPos bP in tempCache) {
+                    int deleted = bP.deleted ? 0 : 1;
+                    transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
                 }
-            }
-            else
-            {
-                template = "INSERT INTO Block" + name + " (Username, TimePerformed, X, Y, Z, type, deleted) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6})";
-                using (var transaction = SQLiteTransactionHelper.Create(SQLite.connString))
-                {
-                    foreach (BlockPos bP in tempCache)
-                    {
-                        int deleted = bP.deleted ? 0 : 1;
-                        transaction.Execute(String.Format(template, bP.name, bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x, (int)bP.y, (int)bP.z, bP.type, deleted));
-                    }
-                    transaction.Commit();
-                }
+                transaction.Commit();
             }
             tempCache.Clear();
         }
@@ -404,7 +389,7 @@ namespace MCForge
                                 if (p.zoneDel)
                                 {
                                     //DB
-                                    if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'"); else SQLite.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'");
+                                    Database.executeQuery("DELETE FROM `Zone" + p.level.name + "` WHERE Owner='" + Zn.Owner + "' AND SmallX='" + Zn.smallX + "' AND SMALLY='" + Zn.smallY + "' AND SMALLZ='" + Zn.smallZ + "' AND BIGX='" + Zn.bigX + "' AND BIGY='" + Zn.bigY + "' AND BIGZ='" + Zn.bigZ + "'");
                                     toDel.Add(Zn);
 
                                     p.SendBlockchange(x, y, z, b);
@@ -824,20 +809,11 @@ namespace MCForge
                     return null;
                 }
             }
-            if (Server.useMySQL)
-            {
-                MySQL.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted BOOL)");
-                MySQL.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
-                MySQL.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
-                MySQL.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
-            }
-            else
-            {
-                SQLite.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted INT)");
-                SQLite.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
-                SQLite.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
-                SQLite.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
-            }
+            //DB
+            Database.executeQuery("CREATE TABLE if not exists `Block" + givenName + "` (Username CHAR(20), TimePerformed DATETIME, X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Type TINYINT UNSIGNED, Deleted " + (Server.useMySQL ? "BOOL" : "INT") + ")");
+            Database.executeQuery("CREATE TABLE if not exists `Portals" + givenName + "` (EntryX SMALLINT UNSIGNED, EntryY SMALLINT UNSIGNED, EntryZ SMALLINT UNSIGNED, ExitMap CHAR(20), ExitX SMALLINT UNSIGNED, ExitY SMALLINT UNSIGNED, ExitZ SMALLINT UNSIGNED)");
+            Database.executeQuery("CREATE TABLE if not exists `Messages" + givenName + "` (X SMALLINT UNSIGNED, Y SMALLINT UNSIGNED, Z SMALLINT UNSIGNED, Message CHAR(255));");
+            Database.executeQuery("CREATE TABLE if not exists `Zone" + givenName + "` (SmallX SMALLINT UNSIGNED, SmallY SMALLINT UNSIGNED, SmallZ SMALLINT UNSIGNED, BigX SMALLINT UNSIGNED, BigY SMALLINT UNSIGNED, BigZ SMALLINT UNSIGNED, Owner VARCHAR(20));");
             
             string path = "levels/" + givenName + ".lvl";
             if (File.Exists(path))
@@ -904,21 +880,21 @@ namespace MCForge
 
 					level.backedup = true;
 
-					DataTable ZoneDB = MySQL.fillData("SELECT * FROM `Zone" + givenName + "`");
+                    using (DataTable ZoneDB = Database.fillData("SELECT * FROM `Zone" + givenName + "`")) {
 
-					Zone Zn;
-					for (int i = 0; i < ZoneDB.Rows.Count; ++i)
-					{
-						Zn.smallX = (ushort)ZoneDB.Rows[i]["SmallX"];
-						Zn.smallY = (ushort)ZoneDB.Rows[i]["SmallY"];
-						Zn.smallZ = (ushort)ZoneDB.Rows[i]["SmallZ"];
-						Zn.bigX = (ushort)ZoneDB.Rows[i]["BigX"];
-						Zn.bigY = (ushort)ZoneDB.Rows[i]["BigY"];
-						Zn.bigZ = (ushort)ZoneDB.Rows[i]["BigZ"];
-						Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
-						level.ZoneList.Add(Zn);
-					}
-					ZoneDB.Dispose();
+                        Zone Zn;
+                        for (int i = 0; i < ZoneDB.Rows.Count; ++i)
+                        {
+                            Zn.smallX = (ushort)ZoneDB.Rows[i]["SmallX"];
+                            Zn.smallY = (ushort)ZoneDB.Rows[i]["SmallY"];
+                            Zn.smallZ = (ushort)ZoneDB.Rows[i]["SmallZ"];
+                            Zn.bigX = (ushort)ZoneDB.Rows[i]["BigX"];
+                            Zn.bigY = (ushort)ZoneDB.Rows[i]["BigY"];
+                            Zn.bigZ = (ushort)ZoneDB.Rows[i]["BigZ"];
+                            Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
+                            level.ZoneList.Add(Zn);
+                        }
+                    }
 
 					level.jailx = (ushort)(level.spawnx * 32); level.jaily = (ushort)(level.spawny * 32); level.jailz = (ushort)(level.spawnz * 32);
 					level.jailrotx = level.rotx; level.jailroty = level.roty;
@@ -927,23 +903,23 @@ namespace MCForge
 
 					try
 					{
-						DataTable foundDB = MySQL.fillData("SELECT * FROM `Portals" + givenName + "`");
+						DataTable foundDB = Database.fillData("SELECT * FROM `Portals" + givenName + "`");
 
 						for (int i = 0; i < foundDB.Rows.Count; ++i)
 						{
 							if (!Block.portal(level.GetTile((ushort)foundDB.Rows[i]["EntryX"], (ushort)foundDB.Rows[i]["EntryY"], (ushort)foundDB.Rows[i]["EntryZ"])))
 							{
-                                if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]); else SQLite.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]);
+                                Database.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]);
 							}
 						}
 
-                        foundDB = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Messages" + givenName + "`") : SQLite.fillData("SELECT * FROM `Messages" + givenName + "`");
+                        foundDB = Database.fillData("SELECT * FROM `Messages" + givenName + "`");
 
 						for (int i = 0; i < foundDB.Rows.Count; ++i)
 						{
 							if (!Block.mb(level.GetTile((ushort)foundDB.Rows[i]["X"], (ushort)foundDB.Rows[i]["Y"], (ushort)foundDB.Rows[i]["Z"])))
 							{
-                                if (Server.useMySQL) MySQL.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]); else SQLite.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]);
+                                Database.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]);
 							}
 						}
 						foundDB.Dispose();

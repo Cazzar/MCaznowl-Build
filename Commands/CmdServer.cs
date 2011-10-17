@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 using System.IO.Packaging;
+using MCForge.SQL;
 
 namespace MCForge {
     class CmdServer : Command {
@@ -17,7 +18,8 @@ namespace MCForge {
 
         public override void Use(Player p, string message) {
             switch (message) {
-                case "":
+                case "": // To prevent '/server' from causing an error message
+                    Help(p);
                     break;
                 case "restart":
                 case "update":
@@ -68,16 +70,16 @@ namespace MCForge {
                 case "backup":
                     goto case "backup all";
                 case "backup all":
-                    // Important to backup database as well, if MySQL is enabled.
+                    // Backup Everything.
                     //   Create SQL statements for this.  The SQL will assume the settings for the current configuration are correct.
                     //   This means we use the currently defined port, database, user, password, and pooling.
                     // Also important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
-                    Save(Server.useMySQL);
+                    Save(true);
                     break;
                 case "backup db":
-                    // Important to backup database as well, if MySQL is enabled.
+                    // Backup database only.
                     //   Create SQL statements for this.  The SQL will assume the settings for the current configuration are correct.
                     //   This means we use the currently defined port, database, user, password, and pooling.
                     // Also important to save everything to a .zip file (Though we can rename the extention.)
@@ -86,23 +88,21 @@ namespace MCForge {
                     Save(false, true);
                     break;
                 case "backup allbutdb":
-                    // Important to backup database as well, if MySQL is enabled.
-                    //   Create SQL statements for this.  The SQL will assume the settings for the current configuration are correct.
-                    //   This means we use the currently defined port, database, user, password, and pooling.
-                    // Also important to save everything to a .zip file (Though we can rename the extention.)
+                    // Important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
                     Save(false);
                     break;
                 case "restore":
                     ExtractPackage();
+
                     break;
                 default:
                     Player.SendMessage(p, "/server " + message + " is not currently implemented.");
-                    goto case "help";
-                case "help":
-                    Help(p);
-                    break;
+                    goto case "";
+                //case "help":
+                //    Help(p);
+                //    break;
             }
         }
 
@@ -322,9 +322,7 @@ namespace MCForge {
 
             // Create the Package
             if (withDB) {
-                SaveMySQLDataBase("SQL.sql");
-            } else {
-                SaveSQLiteDatabase("SQL.sql");
+                SaveDatabase("SQL.sql");
             }
 
             Server.s.Log("Creating package...");
@@ -351,7 +349,7 @@ namespace MCForge {
                             }// end:using(fileStream) - Close and dispose fileStream.
                         }
                     }// end:foreach(Uri loc)
-                } else {
+                } else if (withDB) { // If we don't want to back up database, we don't do this part.
                     ZipPackagePart packagePart =
                                 (ZipPackagePart)package.CreatePart(new Uri("/SQL.sql", UriKind.Relative), "");
                     CopyStream(File.OpenRead("SQL.sql"), packagePart.GetStream());
@@ -360,7 +358,7 @@ namespace MCForge {
             Server.s.Log("Server backed up!");
         }// end:CreatePackage()
 
-        private static void SaveDataBase(string filename) {
+        private static void SaveDatabase(string filename) {
             using (StreamWriter sql = new StreamWriter(File.Create(filename))) {
                 Database.CopyDatabase(sql);
             }
@@ -408,6 +406,9 @@ namespace MCForge {
                     } catch {
                         Directory.CreateDirectory("./" + item.Uri.ToString().Substring(0, item.Uri.ToString().LastIndexOfAny("\\/".ToCharArray())));
                         CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
+                    }
+                    if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
+                        Database.fillDatabase(item.GetStream());
                     }
                 }
             }

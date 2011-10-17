@@ -7,72 +7,87 @@ using System.Data.SQLite;
 
 namespace MCForge
 {
-    class SQLiteTransactionHelper : IDisposable
+    namespace SQL 
     {
-        private SQLiteConnection connection = null;
-        private SQLiteTransaction transaction = null;
-
-        private SQLiteTransactionHelper(string connString)
+        class SQLiteTransactionHelper : DatabaseTransactionHelper
         {
+            private SQLiteConnection connection = null;
+            private SQLiteTransaction transaction = null;
 
-            connection = new SQLiteConnection(connString);
-            connection.Open();
-            //connection.ChangeDatabase(Server.MySQLDatabaseName);
+            //in SQLiteTransactionHelper() {
+            //    this(SQLite.connString);
+            //}
 
-            transaction = connection.BeginTransaction();
-        }
-
-        public static SQLiteTransactionHelper Create(string connString)
-        {
-            try
-            {
-                return new SQLiteTransactionHelper(connString);
+            private SQLiteTransactionHelper() {
+                init(SQLite.connString);
             }
-            catch (Exception ex)
-            {
-                Server.ErrorLog(ex);
-                return null;
-            }
-        }
 
-        public void Execute(string query)
-        {
-            using (SQLiteCommand cmd = new SQLiteCommand(query, connection, transaction))
+            private SQLiteTransactionHelper(string connString)
             {
-                cmd.ExecuteNonQuery();
+                init(connString);
             }
-        }
 
-        public void Commit()
-        {
-            try
-            {
-                transaction.Commit();
+            private void init(string connString) {
+
+                connection = new SQLiteConnection(connString);
+                connection.Open();
+                //connection.ChangeDatabase(Server.MySQLDatabaseName);
+
+                transaction = connection.BeginTransaction();
             }
-            catch (Exception ex)
+
+            public static DatabaseTransactionHelper Create(string connString)
             {
-                Server.ErrorLog(ex);
                 try
                 {
-                    transaction.Rollback();
+                    return new SQLiteTransactionHelper(connString);
                 }
-                catch (Exception ex2)
+                catch (Exception ex)
                 {
-                    Server.ErrorLog(ex2);
+                    Server.ErrorLog(ex);
+                    return null;
                 }
             }
-            finally
-            {
-                connection.Close();
-            }
-        }
 
-        public void Dispose()
-        {
-            transaction.Dispose();
-            connection.Dispose();
-            transaction = null;
-            connection = null;
+            public override void Execute(string query)
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(query, connection, transaction))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            public override void Commit()
+            {
+                try
+                {
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    Server.ErrorLog(ex);
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        Server.ErrorLog(ex2);
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            public override void Dispose()
+            {
+                transaction.Dispose();
+                connection.Dispose();
+                transaction = null;
+                connection = null;
+            }
         }
     }
 }

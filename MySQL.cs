@@ -27,176 +27,44 @@ using MySql.Data.Types;
 
 namespace MCForge
 {
-    public static class MySQL
+    namespace SQL
     {
-		
-        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
-        public static void executeQuery(string queryString, bool createDB = false)
+        public static class MySQL //: Database //Extending for future improvement (Making it object oriented later)
         {
-			int totalCount = 0;
-            if (!Server.useMySQL)
-                return;
-    retry:  try
+		
+            public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
+            public static void executeQuery(string queryString, bool createDB = false)
             {
-                using (var conn = new MySqlConnection(connString))
-                {
+                Database.executeQuery(queryString, createDB);
+            }
+
+            public static DataTable fillData(string queryString, bool skipError = false)
+            {
+                return Database.fillData(queryString, skipError);
+            }
+
+            internal static void execute(string queryString, bool createDB = false) {
+                using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
-                    if (!createDB)
-                    {
+                    if (!createDB) {
                         conn.ChangeDatabase(Server.MySQLDatabaseName);
                     }
-					using (MySqlCommand cmd = new MySqlCommand(queryString, conn))
-					{
-						cmd.ExecuteNonQuery();
-						conn.Close();
-					}
-                }
-            }
-            catch (Exception e)
-            {
-                if (!createDB)
-                {
-                    totalCount++;
-                    if (totalCount > 10)
-                    {
-                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                        Server.ErrorLog(e);
-                    }
-                    else
-                    {
-                        goto retry;
+                    using (MySqlCommand cmd = new MySqlCommand(queryString, conn)) {
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
                     }
                 }
-                else
-                {
-                    throw e;
+            }
+
+            internal static void fill(string queryString, DataTable toReturn) {
+                using (var conn = new MySqlConnection(MySQL.connString)) {
+                    conn.Open();
+                    conn.ChangeDatabase(Server.MySQLDatabaseName);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
+                        da.Fill(toReturn);
+                    }
+                    conn.Close();
                 }
-            }
-        }
-
-        public static DataTable fillData(string queryString, bool skipError = false)
-        {
-            return Database.fillData(queryString, skipError);
-        }
-
-        public static void CopyDatabase(StreamWriter sql) {
-            //We technically know all tables in the DB...  But since this is MySQL, we can also get them all with a MySQL command
-            //So we show the tables, and store the result.
-            //Also output information data (Same format as phpMyAdmin's dump)
-
-            //Important note:  This does NOT account for foreign keys, BLOB's etc.  It only works for what we actually put in the db.
-
-            sql.WriteLine("-- MCForge SQL Database Dump");
-            sql.WriteLine("-- version 0.5");
-            sql.WriteLine("-- http://www.mcforge.net");
-            sql.WriteLine("--");
-            sql.WriteLine("-- Host: {0}", Server.MySQLHost);
-            sql.WriteLine("-- Generation Time: {0} at {1}", DateTime.Now.Date, DateTime.Now.TimeOfDay);
-            sql.WriteLine("-- MCForge Version: {0}",  Server.Version);
-            sql.WriteLine();
-            //Extra stuff goes here
-            sql.WriteLine();
-            //database here
-            using (DataTable sqlTables = fillData("SHOW TABLES")) {
-
-                foreach (DataRow sqlTablesRow in sqlTables.Rows) {
-                    string tableName = sqlTablesRow.Field<string>(0);
-                    //For each table, we iterate through all rows, (and save them)
-                    sql.WriteLine("-- --------------------------------------------------------");
-                    sql.WriteLine();
-                    sql.WriteLine("--");
-                    sql.WriteLine("-- Table structure for table `{0}`", tableName);
-                    sql.WriteLine("--");
-                    sql.WriteLine();
-                    sql.WriteLine("CREATE TABLE IF NOT EXISTS `{0}` (",tableName);
-                    List<string[]> tableSchema = new List<string[]>();
-                    string[] rowParams;
-                    using (DataTable tableRowSchema = fillData("DESCRIBE " + tableName)) {
-                        rowParams = new string[tableRowSchema.Columns.Count];
-                        string pri = "";
-                        foreach (DataRow row in tableRowSchema.Rows) {
-                            //Save the info contained to file
-                            List<string> tmp = new List<string>(); 
-                            for (int col = 0; col < tableRowSchema.Columns.Count; col++) {
-                                tmp.Add(row.Field<string>(col));
-                            }// end:for(col)
-                            rowParams = tmp.ToArray<string>();
-                            rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT " ) + "NULL";
-                            sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + ",", rowParams);
-                            pri += (rowParams[3].ToLower().Equals("pri") ? rowParams[0] + ";" : "");
-                            tableSchema.Add(rowParams);
-                        }// end:foreach(DataRow row)
-                        if (!pri.Equals("")) {
-                            string[] tmp = pri.Substring(0, pri.Length-1).Split(';');
-                            sql.Write("PRIMARY KEY (`");
-                            foreach (string prim in tmp) {
-                                sql.Write(prim);
-                                sql.Write("`" + (tmp.ElementAt<string>(tmp.Count() - 1).Equals(prim) ? ")" : ", `"));
-                            }
-                        }
-                    }
-                    sql.WriteLine(");");
-                    sql.WriteLine();
-                    using (DataTable tableRowData = fillData("SELECT * FROM  " + tableName)) {
-                        if (tableRowData.Rows.Count > 0) {
-                            sql.WriteLine("--");
-                            sql.WriteLine("-- Dumping data for table `{0}`", tableName);
-                            sql.WriteLine("--");
-                            sql.WriteLine();
-                            sql.Write("INSERT INTO `{0}` (`", tableName);
-                            foreach (string[] rParams in tableSchema) {
-                                sql.Write(rParams[0]);
-                                sql.Write((tableSchema.ElementAt<string[]>(tableSchema.Count() - 1).Equals(rParams) ? "`) VALUES" : "`, `"));
-                            }
-                            List<DataColumn> allCols = new List<DataColumn>();
-                            foreach (DataColumn col in tableRowData.Columns) {
-                                allCols.Add(col);
-                            }
-                            foreach (DataRow row in tableRowData.Rows) {
-                                //Save the info contained to file
-                                sql.WriteLine();
-                                sql.Write("(");
-                                for (int col = 0; col < row.ItemArray.Length; col++) {
-                                    //The values themselves can be integers or strings, or null
-                                    Type eleType = allCols[col].DataType;
-                                    if (row.IsNull(col)) {
-                                        sql.Write("NULL");
-
-                                    } else if (eleType.Name.Equals("DateTime")) { // special format
-                                        DateTime dt = row.Field<DateTime>(col);
-                                        sql.Write("'{0}-{1}-{2} {3}:{4}:{5}'", new object[] { dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second });
-
-                                        //} else if (eleType.Name.Equals("Boolean")) {
-                                        //    sql.Write(row.Field<Boolean>(col).ToString());
-
-                                    } else if (eleType.Name.Equals("String")) { // Requires ''
-                                        sql.Write("'{0}'", row.Field<string>(col));
-
-                                    } else {
-                                        sql.Write(row.Field<Object>(col)); // We assume all other data is left as-is
-                                        //This includes numbers, and booleans.  (As well as objects, but we don't save them into the database)
-
-                                    }
-                                    sql.Write((col < row.ItemArray.Length - 1 ? ", " : "),"));
-                                }// end:for(col)
-
-                            }// end:foreach(DataRow row)
-                            sql.Flush();
-
-                            sql.BaseStream.Seek(-1, SeekOrigin.Current);
-                            sql.WriteLine(";");
-                        } else {
-                            sql.WriteLine("-- No data in table `{0}`!", tableName);
-                        }
-                        sql.WriteLine();
-                    }
-                }// end:foreach(DataRow sqlTablesRow)
-            }
-        }// end:CopyDatabase()
-
-        internal static void fillDatabase(Stream stream) {
-            foreach (string line in new StreamReader(stream).ReadToEnd().Split('\n')) {
-                executeQuery(line);
             }
         }
     }

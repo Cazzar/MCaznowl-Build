@@ -72,13 +72,12 @@ namespace MCForge.Gui
                 grpIRC.BackColor = Color.White;
             }
 
-            if (Server.useMySQL == false)
+            if (Server.useMySQL) {
+                grpSQL.BackColor = Color.White;
+            }
+            else
             {
                 grpSQL.BackColor = Color.LightGray;
-            }
-            if (Server.useMySQL == true)
-            {
-                grpSQL.BackColor = Color.White;
             }
 
             string opchatperm = "";

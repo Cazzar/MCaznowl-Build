@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -307,7 +308,7 @@ namespace MCForge
             bluebase.block = Block.blue;
             Server.s.Log("[Auto_CTF] Running...");
             started = true;
-            MySQL.executeQuery("CREATE TABLE if not exists CTF (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), Points MEDIUMINT UNSIGNED, Captures MEDIUMINT UNSIGNED, tags MEDIUMINT UNSIGNED, PRIMARY KEY (ID));");
+            Database.executeQuery("CREATE TABLE if not exists CTF (ID INTEGER NOT NULL AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT, Name VARCHAR(20), Points MEDIUMINT UNSIGNED, Captures MEDIUMINT UNSIGNED, tags MEDIUMINT UNSIGNED, PRIMARY KEY (ID));");
         }
         string Vote()
         {
@@ -384,7 +385,7 @@ namespace MCForge
                ", tags=" + d.tag +
                "' WHERE Name='" + d.p.name + "'";
                 d.hasflag = false;
-                MySQL.executeQuery(commandString);
+                Database.executeQuery(commandString);
             });
             nextmap = Vote();
             Player.GlobalMessageLevel(mainlevel, "Starting a new game!");

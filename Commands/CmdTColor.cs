@@ -17,6 +17,7 @@
 */
 
 using System;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -47,7 +48,7 @@ namespace MCForge
             {
                 who.titlecolor = "";
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " had their title color removed.", false);
-                MySQL.executeQuery("UPDATE Players SET title_color = '' WHERE Name = '" + who.name + "'");
+                Database.executeQuery("UPDATE Players SET title_color = '' WHERE Name = '" + who.name + "'");
                 who.SetPrefix();
                 return;
             }
@@ -58,7 +59,7 @@ namespace MCForge
                 else if (color == who.titlecolor) { Player.SendMessage(p, who.name + " already has that title color."); return; }
                 else
                 {
-                    MySQL.executeQuery("UPDATE Players SET title_color = '" + c.Name(color) + "' WHERE Name = '" + who.name + "'");
+                    Database.executeQuery("UPDATE Players SET title_color = '" + c.Name(color) + "' WHERE Name = '" + who.name + "'");
                     Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " had their title color changed to " + color + c.Name(color) + Server.DefaultColor + ".", false);
                     who.titlecolor = color;
                     who.SetPrefix();
