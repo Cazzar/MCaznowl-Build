@@ -76,8 +76,7 @@ namespace MCForge.Remote
                 }
                 catch (Exception e)
                 {
-                    Server.s.Log(e.Message);
-                    Server.s.Log(e.StackTrace);
+                    Server.ErrorLog(e);
                 }
             }
         }
@@ -123,8 +122,9 @@ namespace MCForge.Remote
                 {
                     case 11: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 12: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
-                    case 13: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 13: length = 1; break;
                     case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 15: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 25: length = 1; break;
                     default:
                         Server.s.Log("unhandled message id " + msg);
@@ -147,6 +147,7 @@ namespace MCForge.Remote
                         case 12: HandleMobileChat(message); break;
                         case 13: HandleMobileRequest(message); break;
                         case 14: HandleMobileSettingsChange(message); break;
+                        case 15: HandleMobileCommand(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -162,6 +163,27 @@ namespace MCForge.Remote
                 Server.s.Log(e.StackTrace);
             }
             return buffer;
+        }
+
+        private void HandleMobileCommand(byte[] message)
+        {
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
+            string mass = Encoding.UTF8.GetString(message, 2, length);
+           
+            string[] splitted = mass.Split('_');
+            string ident = splitted[0];
+            mass = mass.Replace(ident, "");
+            mass = mass.Remove(0, 1);
+
+            foreach (char c in mass)
+            {
+                if (c == '_')
+                {
+                    mass = mass.Replace(c, ' ');
+                }
+
+            }
+            Command.all.Find(ident).Use(null, mass);
         }
 
         private void HandleMobileSettingsChange(byte[] message)
@@ -196,7 +218,6 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string mass = Encoding.UTF8.GetString(message, 2, length);
-            Server.s.Log(mass);
             try
             {
                 if (mass.StartsWith(KEY_SERVER_NAME))
@@ -235,7 +256,7 @@ namespace MCForge.Remote
                 if (mass.StartsWith(KEY_MAIN_NAME))
                 {
                     mass = mass.Replace(KEY_MAIN_NAME, "");
-                    Server.level = mass; Properties.Save("properties/server.properties");
+                    if (Player.ValidName(mass)) Server.level = mass; Properties.Save("properties/server.properties");
                     return;
                 }
                 //---------------------------------IRC--------------------------------//
@@ -358,8 +379,34 @@ namespace MCForge.Remote
         }
         private void HandleMobileRequest(byte[] message)
         {
-            //throw new NotImplementedException();
+            //All = 1
+            //Players = 2
+            //Settings = 3
+            //Maps = 4
+            //Groups = 5
+            //Files = 6
+            switch (message[0])
+            {
+                case 1:
+                    startUp();
+                    break;
+                case 2:
+                    sendPlayers();
+                    break;
+                case 3:
+                    sendSettings();
+                    break;
+                case 4:
+                    sendMaps();
+                    break;
+                case 5:
+                    sendGroups();
+                    break;
+                default: return;
+            }
         }
+
+
         private void HandleMobileChat(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
@@ -384,6 +431,7 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string msg = Encoding.UTF8.GetString(message, 2, length);
+            byte[] bs = new byte[1];
             //Server.s.Log(msg);
             if (msg.StartsWith(version))  //TODO: make a better checker
             {
@@ -393,8 +441,8 @@ namespace MCForge.Remote
             else
             {
 
-
-                SendData("VERSION");
+                bs[0] = 3;
+                SendData(11, bs);
                 Server.s.Log("[Remote] A remote tried to connect with a different version.");
             }
 
@@ -402,8 +450,8 @@ namespace MCForge.Remote
             if (HandleLogin(msg))
             {
 
-
-                SendData("ACCEPTED");
+                bs[0] = 1;
+                SendData(11, bs);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
                 startUp();
                 LoggedIn = true;
@@ -411,8 +459,8 @@ namespace MCForge.Remote
             }
             else
             {
-
-                SendData("FAIL");
+                bs[0] = 2;
+                SendData(11, bs);
                 Server.s.Log("[Remote] A Remote with incorrect information attempted to join.");
             }
         }
@@ -497,16 +545,15 @@ namespace MCForge.Remote
         public void SendData(byte[] send)
         {
             if (socket == null || !socket.Connected) return;
-
             try
             {
-                socket.Send(send);
-                //Server.s.Log("SENT MESSAGES");
-                send = null;
+
+                socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                buffer = null;
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
-                send = null;
+                buffer = null;
                 Disconnect();
             }
 
@@ -532,17 +579,17 @@ namespace MCForge.Remote
 
         internal void startUp()
         {
-            //sendGroups();
-            sendPlayers();
             sendMaps();
             sendSettings();
+            sendGroups();
+            sendPlayers();
+
         }
         internal void sendPlayers()
         {
             StringBuilder builder = new StringBuilder();
             foreach (Player p in Player.players)
             {
-                //builder.Append(p.name).Append(",").Append(p.level.name).Append(",").Append(p.group.name);  later
                 addPlayer(p);
                 System.Threading.Thread.Sleep(100);
             }
@@ -575,6 +622,7 @@ namespace MCForge.Remote
             const string RECIEVED_MISC_DOLLAR = "MISC_DOLLAR: ";
             const string RECIEVED_MISC_SUPEROPRANK = "MISC_SUPEROPRANK: ";
             const string RECIEVED_MISC_PARSEEMOTE = "MISC_PARSEEMOTE: ";
+
 
             SendData(0x08, RECIEVED_ADMINS_JOIN + Server.adminsjoinsilent.ToString().ToLower());
             SendData(0x08, RECIEVED_MAIN_NAME + Server.mainLevel.name.ToString());
@@ -655,15 +703,15 @@ namespace MCForge.Remote
         {
             foreach (Group g in Group.GroupList)
             {
-                //SendData(0x07, g.name + "," +g.color + "," g.
+                SendData(0x07, g.color +","+g.name);
             }
         }
         void s_OnOp(string message)
         {
             Player p = null;
-           
-            message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
-            message = message.Replace("(OPs): ", "");    //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+
+            message = message.Remove(0, 11);
+            message = message.Replace("(OPs): ", "");
             string[] secondSplit = message.Split(':');
             string getname = message.Substring(0, secondSplit[0].Length);
             p = Player.Find(getname);
@@ -689,16 +737,16 @@ namespace MCForge.Remote
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
-         
+
         }
         void s_OnAdmin(string message)
         {
             Player p = null;
-           
-            message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
+
+            message = message.Remove(0, 11);
             message = message.Replace("(Admins): ", "");    //(xx:yy:zz){2}headdetect{1}:<nsdfs>
             string[] secondSplit = message.Split(':');
-            string getname =  message.Substring(0, secondSplit[0].Length);
+            string getname = message.Substring(0, secondSplit[0].Length);
             p = Player.Find(getname);
             if (p == null)
             {
@@ -722,47 +770,45 @@ namespace MCForge.Remote
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
-           
+
         }
         void s_OnLog(string message)
         {
 
             Player p = null;
 
-            
-               //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+
+            //(xx:yy:zz){2}headdetect{1}:<nsdfs>
             if (message.IndexOf(">") > -1)
             {
-                message = message.Replace(DateTime.Now.ToString("(HH:mm:ss) "), "");
+                message = message.Remove(0, 11);
                 string[] secondSplit = message.Split('>');
                 string getname = message.Substring(1, secondSplit[0].Length - 1);
                 p = Player.Find(getname);
-                Player.GlobalMessage(getname);
             }
-            
-                if (p == null)
-                {
-                    string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                    buffed[0] = (byte)1;
-                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+            if (p == null)
+            {
+                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)1;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-                    SendData(0x05, buffed);
-                    System.Threading.Thread.Sleep(100);
-                }
-                else
-                {
-                    string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
-                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                    buffed[0] = (byte)1;
-                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+            else
+            {
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)1;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-                    SendData(0x05, buffed);
-                    System.Threading.Thread.Sleep(100);
-                }
-            
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+
 
         }
         void Player_PlayerConnect(Player p)

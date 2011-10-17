@@ -228,14 +228,18 @@ namespace MCForge
 
             del = delegate(Level l)
             {
-                if (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()))
+                if (File.Exists("text/autoload.txt"))
                 {
-                    return true;
+                    if (File.ReadAllLines("text/autoload.txt").Contains(l.name) || File.ReadAllLines("text/autoload.txt").Contains(l.name.ToLower()))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             };
             props.Add(new LevelMethodDescriptor("Autoload", del, typeof(bool)));
 
