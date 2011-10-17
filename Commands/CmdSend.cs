@@ -38,19 +38,31 @@ namespace MCForge
 
             Player who = Player.Find(message.Split(' ')[0]);
 
-            string whoTo;
+            string whoTo, fromname;
             if (who != null) whoTo = who.name;
             else whoTo = message.Split(' ')[0];
+            if (p != null) fromname = p.name;
+            else fromname = "Console";
 
             message = message.Substring(message.IndexOf(' ') + 1);
 
             //DB
-            MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
-            MySQL.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + p.name + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", "\\'") + "')");
+            if (Server.useMySQL)
+            {
+                if (message.Length > 255) { Player.SendMessage(p, "Message was too long. The text below has been trimmed."); Player.SendMessage(p, message.Substring(256)); message = message.Remove(256); }
+                MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
+                MySQL.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", "\\'") + "')");
+            }
+            else
+            {
+                SQLite.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom TEXT, TimeSent DATETIME, Contents TEXT);");
+                Server.s.Log(message.Replace("'", "\\'"));
+                SQLite.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", "''") + "')");
+            }
             //DB
 
             Player.SendMessage(p, "Message sent to &5" + whoTo + ".");
-            if (who != null) who.SendMessage("Message recieved from &5" + p.name + Server.DefaultColor + ".");
+            if (who != null) who.SendMessage("Message recieved from &5" + fromname + Server.DefaultColor + ".");
         }
         public override void Help(Player p)
         {
