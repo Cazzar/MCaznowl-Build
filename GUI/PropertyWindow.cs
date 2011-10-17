@@ -569,7 +569,7 @@ namespace MCForge.Gui
                                 chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "admin-verification":
-                                 chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
+                                chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "usemysql":
                                 chkUseSQL.Checked = (value.ToLower() == "true") ? true : false;
@@ -1058,12 +1058,17 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             }
         }
 
-        private void txtMaxUndo_TextChanged(object sender, EventArgs e) {
-            if (txtMaxUndo.Text != "") {
+        private void txtMaxUndo_TextChanged(object sender, EventArgs e)
+        {
+            if (txtMaxUndo.Text != "")
+            {
                 long foundMax;
-                try {
+                try
+                {
                     foundMax = long.Parse(txtMaxUndo.Text);
-                } catch {
+                }
+                catch
+                {
                     txtMaxUndo.Text = txtMaxUndo.Text.Remove(txtMaxUndo.Text.Length - 1);
                     return;
                 }
@@ -1284,38 +1289,39 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     listener = null;
                 }
 
-               
 
-               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     using (Stream stream = response.GetResponseStream())
                     {
-                        using (StreamReader reader = new StreamReader(stream)){
-
-
-
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            if (line == "") { continue; }
-                            
-                            if (line == "open")
-                            {
-                                ChkPortResult.Text = "Port Open!";
-                                ChkPortResult.BackColor = Color.Lime;
-                                MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
-                                return;
-                            }
 
-                        MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                        ChkPortResult.Text = "Port Not Open";
-                        ChkPortResult.BackColor = Color.Red;
-                        
-                        
-                        }
+
+
+                            string line;
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                if (line == "") { continue; }
+
+                                if (line == "open")
+                                {
+                                    ChkPortResult.Text = "Port Open!";
+                                    ChkPortResult.BackColor = Color.Lime;
+                                    MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
+                                    return;
+                                }
+
+                                MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
+                                ChkPortResult.Text = "Port Not Open";
+                                ChkPortResult.BackColor = Color.Red;
+
+
+                            }
 
                         }
                     }
@@ -1343,28 +1349,28 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void CrtCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
-             if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
-             {
-                 MessageBox.Show("Sorry, That command already exists!!");
-             }
-             else
-             {
-             Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
-MessageBox.Show("Command Created!!");
-             }
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command!!");
-}
+            if (CustCmdtxtBox.Text != null)
+            {
+                if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
+                {
+                    MessageBox.Show("Sorry, That command already exists!!");
+                }
+                else
+                {
+                    Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
+                    MessageBox.Show("Command Created!!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command!!");
+            }
         }
 
         private void CompileCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 if (File.Exists("extra/commands/dll/Cmd" + CustCmdtxtBox.Text + ".dll"))
                 {
                     MessageBox.Show("Sorry, That command already exists!!");
@@ -1372,13 +1378,13 @@ if (CustCmdtxtBox.Text != null)
                 else
                 {
                     Command.all.Find("compile").Use(null, CustCmdtxtBox.Text);
-MessageBox.Show("Command Compiled!!");
+                    MessageBox.Show("Command Compiled!!");
                 }
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command!!");
-}
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command!!");
+            }
         }
 
         private void LoadCustCmd_Click(object sender, EventArgs e)
@@ -1388,8 +1394,8 @@ MessageBox.Show("You didnt specify a name for the command!!");
 
         private void LoadIntoTxtBox_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 if (!File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
                 {
                     MessageBox.Show("Sorry, That command doesn't exist yet - click Create Custom Command Above to create it.");
@@ -1398,33 +1404,33 @@ if (CustCmdtxtBox.Text != null)
                 {
                     CustCmdTxtBox2.Text = null;
                     CustCmdTxtBox2.Text = File.ReadAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs");
-}
+                }
             }
-else
-{
-MessageBox.Show("You didnt specify a name for the command to be loaded!!");
-}
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command to be loaded!!");
+            }
         }
 
         private void SaveCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", null);
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", CustCmdTxtBox2.Text);
                 CustCmdTxtBox2.Text = null;
                 MessageBox.Show("Saved Succesfully!!");
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command to be saved as!!");
-}
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command to be saved as!!");
+            }
         }
 
         private void ClrCustCmdTxtBox_Click(object sender, EventArgs e)
         {
             CustCmdTxtBox2.Text = null;
-MessageBox.Show("Text Box Cleared!!");
+            MessageBox.Show("Text Box Cleared!!");
         }
 
         private void CancelCustCmdTxtBox_Click(object sender, EventArgs e)
@@ -1977,7 +1983,7 @@ MessageBox.Show("Text Box Cleared!!");
                 settings.blockFlood = new LavaSurvival.Pos((ushort)(level.width / 2), (ushort)(level.depth - 1), (ushort)(level.height / 2));
                 settings.blockLayer = new LavaSurvival.Pos(0, (ushort)(level.depth / 2), 0);
                 ushort x = (ushort)(level.width / 2), y = (ushort)(level.depth / 2), z = (ushort)(level.height / 2);
-                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3),(ushort)(y + 4), (ushort)(z + 3)) };
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3), (ushort)(y + 4), (ushort)(z + 3)) };
                 Server.lava.SaveMapSettings(settings);
 
                 level.motd = "Lava Survival: " + level.name.Capitalize();

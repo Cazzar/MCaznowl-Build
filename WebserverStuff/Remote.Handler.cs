@@ -11,15 +11,15 @@ namespace MCForge.Remote
        {
            string[] splitted = message.Split(':');
 
-           if (splitted[0] == "head" && splitted[1] == "lols")
-           { username = splitted[0]; password = splitted[1];  return true; }
+           if (splitted[0] == RemoteServer.username && splitted[1] == RemoteServer.password)
+               return true;
            else
 
-           return false;
+               return false;
        }
        public void RemoteChat(string m)
        {
-           if (m[0] == '/') //in future maybe use config defined character
+           if (m[0] == '/')
            {
                m = m.Remove(0,1);
                string[] args = m.Split(' ');
@@ -42,30 +42,25 @@ namespace MCForge.Remote
                    return;
 
            }
+           if (m[0] == '#')
+           {
+               m = m.Remove(0, 1);
+               Player.GlobalMessageOps("%fto Ops [%2Remote%f] " + m);
+               return;
+
+           }
+           if (m[0] == '~')
+           {
+               m = m.Remove(0, 1);
+               Player.GlobalMessageAdmins("%fto Admins [%2Remote%f] ");
+               return;
+
+           }
 
            Server.s.Log("[Remote]: " + m);
            Player.GlobalMessage(c.navy + "[Remote]: " + c.white + m);
            return ;
        }
 
-       /*public void RemoteCommand(string cmd, params string[] args)
-       {
-           Command command = Command.all.Find(cmd);
-           if (command == null)
-           {
-               Server.s.Log("Unrecognized command: " + cmd);
-               return;
-           }
-
-           if (command.ConsoleUseable)
-           {
-               command.Use(remotePlayer, args);
-               return;
-           }
-           else
-           {
-               Server.ServerLogger.Log(LogLevel.Info, cmd + " command not useable in the console.");
-               return;
-           }*/
        }
     }

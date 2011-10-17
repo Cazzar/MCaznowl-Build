@@ -50,7 +50,7 @@ namespace MCForge
             Player who = null;
             if (message != "")
             {
-                if (p.group.Permission <= LevelPermission.Guest)
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                 { Player.SendMessage(p, "You cant send the FAQ to another player!"); return; }
                 who = Player.Find(message);
             }

@@ -27,6 +27,12 @@ namespace MCForge
 {
     public class GlobalChatBot
     {
+        public delegate void LogHandler(string message);
+        public event LogHandler OnNewGlobalMessage;
+
+        public delegate void KickHandler(string reason);
+        public event KickHandler OnGlobalKicked;
+
         private Connection connection;
         private string server, channel, nick;
         private bool reset = false;
@@ -85,7 +91,10 @@ namespace MCForge
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
-
+            if (OnNewGlobalMessage != null)
+            {
+                OnNewGlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+            }
             Server.s.Log(">[Global] " + user.Nick + ": " + message);
             Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
@@ -112,6 +121,7 @@ namespace MCForge
             if (kickee.Trim().ToLower() == nick.ToLower())
             {
                 Server.s.Log("Kicked from Global Chat: " + reason);
+                if (OnGlobalKicked != null) OnGlobalKicked(reason);
                 Server.s.Log("Attempting to rejoin...");
                 connection.Sender.Join(channel);
             }

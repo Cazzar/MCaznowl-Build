@@ -191,6 +191,7 @@
     <Compile Include="Commands\CmdUnlock.cs" />
     <Compile Include="Commands\CmdVote.cs" />
     <Compile Include="Commands\CmdVoteResults.cs" />
+    <Compile Include="Commands\CmdWarp.cs" />
     <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Commands\CmdPCreate.cs" />
     <Compile Include="Commands\CmdPLoad.cs" />
     <Compile Include="Commands\CmdPUnload.cs" />
+    <Compile Include="Commands\CommandOtherPerms.cs" />
     <Compile Include="CTF\Auto_CTF.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
@@ -232,9 +234,7 @@
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
-    <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />
-    <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="Plugins\Plugin_Simpile.cs" />
     <Compile Include="ScriptingVB.cs" />
@@ -445,8 +445,10 @@
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="Warp.cs" />
     <Compile Include="WebserverStuff\Remote.cs" />
     <Compile Include="WebserverStuff\Remote.Handler.cs" />
+    <Compile Include="WebserverStuff\RemoteProperties.cs" />
     <Compile Include="WebserverStuff\WebServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
