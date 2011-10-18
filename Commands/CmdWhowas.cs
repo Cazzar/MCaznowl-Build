@@ -93,7 +93,7 @@ namespace MCForge
         }
         public string TotalTime(string time)
         {
-            return "time spent on server: " + time.Split(' ')[0] + " Days, " + who.time.Split(' ')[1] + " Hours, " + time.Split(' ')[2] + " Minutes, " + time.Split(' ')[3] + " Seconds.";
+            return "time spent on server: " + time.Split(' ')[0] + " Days, " + time.Split(' ')[1] + " Hours, " + time.Split(' ')[2] + " Minutes, " + time.Split(' ')[3] + " Seconds.";
         }
     }
 }
