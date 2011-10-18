@@ -84,9 +84,20 @@ namespace MCForge
             if (message.IndexOf('.') == -1) { Player.SendMessage(p, "Not a valid ip!"); return; }
             if (p != null) if (p.ip == message) { Player.SendMessage(p, "You shouldn't be able to use this command..."); return; }
             if (!Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " doesn't seem to be banned..."); return; }
-            Player.GlobalMessage(message + " got &8unip-banned" + Server.DefaultColor + "!");
             Server.bannedIP.Remove(message); Server.bannedIP.Save("banned-ip.txt", false);
-            Server.s.Log("IP-UNBANNED: " + message.ToLower());
+
+            if (p != null)
+            {
+                Server.IRC.Say(message.ToLower() + " was un-ip-banned by " + p.name + ".");
+                Server.s.Log("UNIP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
+                Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
+            }
+            else
+            {
+                Server.IRC.Say(message.ToLower() + " was un-ip-banned by console.");
+                Server.s.Log("UNIP-BANNED: " + message.ToLower() + " by console.");
+                Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by console.");
+            }
         }
         public override void Help(Player p)
         {
