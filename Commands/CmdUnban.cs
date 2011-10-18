@@ -120,19 +120,15 @@ namespace MCForge
                 {
                     if (p != null)
                     {
-                        Server.tempBans.Remove(tban);
-                        Player.GlobalMessage(message + " has had their temporary ban lifted by " + p.color + p.name + Server.DefaultColor + ".");
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
                         Server.s.Log("UNBANNED: by " + p.name);
                         Server.IRC.Say(message + " was unbanned by " + p.name + ".");
-                        return;
                     }
                     else
                     {
-                        Server.tempBans.Remove(tban);
-                        Player.GlobalMessage(message + " has had their temporary ban lifted by console.");
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by console.");
                         Server.s.Log("UNBANNED: by console");
                         Server.IRC.Say(message + " was unbanned by console.");
-                        return;
                     }
                     who.group = Group.standard; who.color = who.group.color; Player.GlobalDie(who, false);
                     Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
