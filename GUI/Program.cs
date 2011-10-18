@@ -172,6 +172,7 @@ namespace MCForge_.Gui
 
             try
             {
+                if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; return; }
                 Command cmd = Command.all.Find(sentCmd);
                 if (cmd != null)
                 {

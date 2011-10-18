@@ -52,6 +52,28 @@ namespace MCForge
             }
         }
         /// <summary>
+        /// Cancel a server event
+        /// </summary>
+        /// <param name="e">The event you want to cancel</param>
+        public static void CancelServerEvent(ServerEvents e)
+        {
+            switch (e)
+            {
+                case ServerEvents.ConsoleCommand:
+                    Server.cancelcommand = true;
+                    break;
+                case ServerEvents.ServerAdminLog:
+                    Server.canceladmin = true;
+                    break;
+                case ServerEvents.ServerLog:
+                    Server.cancellog = true;
+                    break;
+                case ServerEvents.ServerOpLog:
+                    Server.canceloplog = true;
+                    break;
+            }
+        }
+        /// <summary>
         /// Cancel Level event
         /// </summary>
         /// <param name="e">The event to cancel</param>
