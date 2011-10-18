@@ -7,13 +7,12 @@ namespace MCForge
 {
     class WOMBeat : Beat
     {
-        public string URL { get { return "https://direct.worldofminecraft.com/hb.php"; } }
+        public string URL { get { return "http://direct.worldofminecraft.com/hb.php"; } }
         public string Parameters { get; set; }
         public bool Log { get { return false; } }
-        //https://direct.worldofminecraft.com/server.php?ip=24.34.160.117&port=25566&salt=SERVER_SALT_HERE&alt=GamezGalaxy+Lavasurvival&desc=One+of+a+kind+Lavasurvival%21+www.gamezgalaxy.com&flags=%5BLavaSurvival%5D
         public static bool SetSettings(string IP, string Port, string Name, string Disc, string flags)
         {
-            string url = "https://direct.worldofminecraft.com/server.php";
+            string url = "http://direct.worldofminecraft.com/server.php";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
             string flag = "&flags=%5B" + flags + "%5D";
             if (flags.StartsWith("["))
