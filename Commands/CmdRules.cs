@@ -47,7 +47,7 @@ namespace MCForge
             Player who = null;
             if (message != "")
             {
-                if (p != null || p.group.Permission <= LevelPermission.Guest)
+                if (p != null || (int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                 {
                     Player.SendMessage(p, "You cant send /rules to another player!");
                     return;

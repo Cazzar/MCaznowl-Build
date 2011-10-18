@@ -23,7 +23,8 @@ namespace MCForge
                 
             Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message);
             Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + (Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
-            Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message);
+            try { Gui.Window.thisWindow.LogGlobalChat("< " + (p != null ? p.name + ": " : "Console: ") + message); }
+            catch { Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message); }
         }
         public override void Help(Player p)
         {

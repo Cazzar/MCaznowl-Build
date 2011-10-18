@@ -141,6 +141,7 @@ namespace MCForge
                     FailedLoadingWarpsList.Clear();
                 }
                 catch { Server.s.Log("Saving failed loading warps failed!"); }
+                SW.Dispose();
             }
         }
 
@@ -188,6 +189,7 @@ namespace MCForge
                     {
                         SAVE();
                     }
+                    SR.Dispose();
                 }
             }
         }

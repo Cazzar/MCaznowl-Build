@@ -135,6 +135,7 @@ namespace MCForge.Gui
             this.chkGrieferStoneBan = new System.Windows.Forms.CheckBox();
             this.txtGrieferStone = new System.Windows.Forms.TextBox();
             this.cmbGrieferStoneRank = new System.Windows.Forms.ComboBox();
+            this.lsNudLives = new System.Windows.Forms.NumericUpDown();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -163,12 +164,12 @@ namespace MCForge.Gui
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.lblGlobalChatColor = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.chkGlobalChat = new System.Windows.Forms.CheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.label48 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.chkShowEmptyRanks = new System.Windows.Forms.CheckBox();
@@ -204,6 +205,8 @@ namespace MCForge.Gui
             this.chkProfanityFilter = new System.Windows.Forms.CheckBox();
             this.tabIRC = new System.Windows.Forms.TabPage();
             this.grpSQL = new System.Windows.Forms.GroupBox();
+            this.txtSQLPort = new System.Windows.Forms.TextBox();
+            this.label70 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.txtSQLHost = new System.Windows.Forms.TextBox();
             this.label43 = new System.Windows.Forms.Label();
@@ -285,6 +288,7 @@ namespace MCForge.Gui
             this.label59 = new System.Windows.Forms.Label();
             this.label58 = new System.Windows.Forms.Label();
             this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.label69 = new System.Windows.Forms.Label();
             this.label68 = new System.Windows.Forms.Label();
             this.label57 = new System.Windows.Forms.Label();
             this.label56 = new System.Windows.Forms.Label();
@@ -334,6 +338,7 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudRoundTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudFloodTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLives)).BeginInit();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -1207,7 +1212,7 @@ namespace MCForge.Gui
             // 
             this.lsCmbSetupRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.lsCmbSetupRank.FormattingEnabled = true;
-            this.lsCmbSetupRank.Location = new System.Drawing.Point(71, 133);
+            this.lsCmbSetupRank.Location = new System.Drawing.Point(71, 160);
             this.lsCmbSetupRank.Name = "lsCmbSetupRank";
             this.lsCmbSetupRank.Size = new System.Drawing.Size(95, 21);
             this.lsCmbSetupRank.TabIndex = 7;
@@ -1367,7 +1372,7 @@ namespace MCForge.Gui
             // 
             this.lsCmbControlRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.lsCmbControlRank.FormattingEnabled = true;
-            this.lsCmbControlRank.Location = new System.Drawing.Point(84, 160);
+            this.lsCmbControlRank.Location = new System.Drawing.Point(84, 187);
             this.lsCmbControlRank.Name = "lsCmbControlRank";
             this.lsCmbControlRank.Size = new System.Drawing.Size(82, 21);
             this.lsCmbControlRank.TabIndex = 9;
@@ -1407,11 +1412,30 @@ namespace MCForge.Gui
             // 
             this.cmbGrieferStoneRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGrieferStoneRank.FormattingEnabled = true;
-            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(148, 113);
+            this.cmbGrieferStoneRank.Location = new System.Drawing.Point(148, 112);
             this.cmbGrieferStoneRank.Name = "cmbGrieferStoneRank";
             this.cmbGrieferStoneRank.Size = new System.Drawing.Size(87, 21);
             this.cmbGrieferStoneRank.TabIndex = 45;
             this.toolTip.SetToolTip(this.cmbGrieferStoneRank, "The maximum rank that griefer_stone will kick or ban.");
+            // 
+            // lsNudLives
+            // 
+            this.lsNudLives.Location = new System.Drawing.Point(71, 133);
+            this.lsNudLives.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.lsNudLives.Name = "lsNudLives";
+            this.lsNudLives.Size = new System.Drawing.Size(95, 21);
+            this.lsNudLives.TabIndex = 10;
+            this.toolTip.SetToolTip(this.lsNudLives, "The number of times a player can die before being out of the round. Set to 0 for " +
+                    "unlimited.");
+            this.lsNudLives.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // tabPage5
             // 
@@ -1701,16 +1725,6 @@ namespace MCForge.Gui
             this.tabPage4.Text = "Misc";
             this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(241, 109);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 23);
-            this.button3.TabIndex = 42;
-            this.button3.Text = "Edit WoM Direct";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // groupBox19
             // 
             this.groupBox19.Controls.Add(this.cmbGlobalChatColor);
@@ -1780,10 +1794,20 @@ namespace MCForge.Gui
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Extra";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(241, 111);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(103, 23);
+            this.button3.TabIndex = 42;
+            this.button3.Text = "Edit WoM Direct";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(6, 114);
+            this.label48.Location = new System.Drawing.Point(6, 115);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(140, 13);
             this.label48.TabIndex = 44;
@@ -1792,7 +1816,7 @@ namespace MCForge.Gui
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(6, 139);
+            this.label47.Location = new System.Drawing.Point(6, 140);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(98, 13);
             this.label47.TabIndex = 42;
@@ -2119,6 +2143,8 @@ namespace MCForge.Gui
             // 
             // grpSQL
             // 
+            this.grpSQL.Controls.Add(this.txtSQLPort);
+            this.grpSQL.Controls.Add(this.label70);
             this.grpSQL.Controls.Add(this.linkLabel1);
             this.grpSQL.Controls.Add(this.txtSQLHost);
             this.grpSQL.Controls.Add(this.label43);
@@ -2134,6 +2160,22 @@ namespace MCForge.Gui
             this.grpSQL.TabIndex = 29;
             this.grpSQL.TabStop = false;
             this.grpSQL.Text = "MySQL";
+            // 
+            // txtSQLPort
+            // 
+            this.txtSQLPort.Location = new System.Drawing.Point(192, 128);
+            this.txtSQLPort.Name = "txtSQLPort";
+            this.txtSQLPort.Size = new System.Drawing.Size(77, 21);
+            this.txtSQLPort.TabIndex = 32;
+            // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.Location = new System.Drawing.Point(156, 131);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(30, 13);
+            this.label70.TabIndex = 31;
+            this.label70.Text = "Port:";
             // 
             // linkLabel1
             // 
@@ -2825,7 +2867,7 @@ namespace MCForge.Gui
             this.groupBox23.Controls.Add(this.lsBtnEndRound);
             this.groupBox23.Controls.Add(this.lsBtnStopGame);
             this.groupBox23.Controls.Add(this.lsBtnStartGame);
-            this.groupBox23.Location = new System.Drawing.Point(291, 199);
+            this.groupBox23.Location = new System.Drawing.Point(291, 226);
             this.groupBox23.Name = "groupBox23";
             this.groupBox23.Size = new System.Drawing.Size(171, 165);
             this.groupBox23.TabIndex = 4;
@@ -3004,6 +3046,8 @@ namespace MCForge.Gui
             // 
             // groupBox21
             // 
+            this.groupBox21.Controls.Add(this.label69);
+            this.groupBox21.Controls.Add(this.lsNudLives);
             this.groupBox21.Controls.Add(this.lsCmbControlRank);
             this.groupBox21.Controls.Add(this.label68);
             this.groupBox21.Controls.Add(this.lsCmbSetupRank);
@@ -3016,15 +3060,24 @@ namespace MCForge.Gui
             this.groupBox21.Controls.Add(this.lsChkStartOnStartup);
             this.groupBox21.Location = new System.Drawing.Point(291, 6);
             this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(172, 186);
+            this.groupBox21.Size = new System.Drawing.Size(172, 214);
             this.groupBox21.TabIndex = 2;
             this.groupBox21.TabStop = false;
             this.groupBox21.Text = "Settings";
             // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Location = new System.Drawing.Point(8, 136);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(34, 13);
+            this.label69.TabIndex = 11;
+            this.label69.Text = "Lives:";
+            // 
             // label68
             // 
             this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(8, 164);
+            this.label68.Location = new System.Drawing.Point(8, 191);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(70, 13);
             this.label68.TabIndex = 8;
@@ -3033,7 +3086,7 @@ namespace MCForge.Gui
             // label57
             // 
             this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(8, 137);
+            this.label57.Location = new System.Drawing.Point(8, 164);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(62, 13);
             this.label57.TabIndex = 6;
@@ -3392,6 +3445,7 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.lsNudLayerTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudRoundTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudFloodTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lsNudLives)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -3734,5 +3788,9 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkWomDirect;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.NumericUpDown lsNudLives;
+        private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.TextBox txtSQLPort;
+        private System.Windows.Forms.Label label70;
     }
 }

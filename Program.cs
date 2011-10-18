@@ -19,6 +19,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Starter
 {
@@ -32,11 +33,12 @@ namespace Starter
                 return "http://www.mcforge.net/MCForge_.dll";
             }
         }
-
+        static int tries = 0;
+        static bool needsToRestart = false;
+        //Console.ReadLine() is ignored while Starter is set as Windows Application in properties. (At least on Windows)
         static void Main(string[] args)
         {
-            int tries = 0;
-    retry:
+            Environment.CurrentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             if (tries > 4)
             {
                 Console.WriteLine("I'm afraid I can't download the file for some reason!");
@@ -45,39 +47,48 @@ namespace Starter
                 Console.WriteLine("If you have any issues, get the files from the www.mcforge.net download page and try again.");
                 Console.WriteLine("Press any key to close me...");
                 Console.ReadLine();
-                goto exit;
+                Console.WriteLine("Bye!");
             }
-
-            if (File.Exists("MCForge_.dll"))
+            else if (File.Exists("MCForge_.dll"))
             {
-                openServer(args);
+
+                //Crash issue fixed by re-executing the exe to properly load MCForge_.dll.
+                if (!needsToRestart)
+                    openServer(args);
+                else
+                    System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
             }
             else
             {
+                needsToRestart = true;
                 tries++;
                 Console.WriteLine("This is try number " + tries);
                 Console.WriteLine("You do not have the required DLL!");
                 Console.WriteLine("I'll download it for you. Just wait.");
                 Console.WriteLine("Downloading from " + DLLLocation);
-
-                WebClient Client = new WebClient();
-                Client.DownloadFile(DLLLocation, "MCForge_.dll");
-                Client.Dispose();
-
-                Console.WriteLine("Finished downloading! Let's try this again, shall we.");
-                for (int i = 0; i < 5; i++)
+                try
                 {
-                    Thread.Sleep(100);
-                    Console.Write(".");
+                    WebClient Client = new WebClient();
+                    Client.DownloadFile(DLLLocation, "MCForge_.dll");
+                    Client.Dispose();
+                    Console.WriteLine("Finished downloading! Let's try this again, shall we.");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Thread.Sleep(100);
+                        Console.Write(".");
+                    }
+                    Console.WriteLine("Go!");
+                    Console.WriteLine();
+                    Main(args);
                 }
-                Console.WriteLine("Go!");
-                Console.WriteLine();
-
-                goto retry;
+                catch
+                {
+                    tries = 5;
+                    Console.WriteLine("\nAn error occured while attempting to download MCForge_.dll\n");
+                    Main(args);
+                }
             }
-exit:   Console.WriteLine("Bye!");
         }
-
         static void openServer(string[] args)
         {
             MCForge_.Gui.Program.Main(args);

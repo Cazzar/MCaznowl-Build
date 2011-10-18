@@ -57,7 +57,7 @@ namespace MCForge
 
             if (par0 == "create" || par0 == "add" || par0 == "c" || par0 == "a")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
                 {
                     if (par1 == null) { Player.SendMessage(p, "You didn't specify a name for the warp!"); return; }
                     if (Warp.WarpExists(par1)) { Player.SendMessage(p, "Warp has already been created!!"); return; }
@@ -78,12 +78,12 @@ namespace MCForge
                         }
                     }
                 }
-                else { Player.SendMessage(p, "You can't use that because you aren't an admin!"); return; }
+                else { Player.SendMessage(p, "You can't use that because you aren't a" + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
             }
 
             if (par0 == "delete" || par0 == "remove" || par0 == "d" || par0 == "r")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
                     if (par1 == null) { Player.SendMessage(p, "You didn't specify a warp to delete!"); return; }
                     if (!Warp.WarpExists(par1)) { Player.SendMessage(p, "Warp doesn't exist!!"); return; }
@@ -103,12 +103,12 @@ namespace MCForge
                         }
                     }
                 }
-                else { Player.SendMessage(p, "You can't use that because you aren't an admin!"); return; }
+                else { Player.SendMessage(p, "You can't use that because you aren't a" + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
             }
 
             if (par0 == "move" || par0 == "change" || par0 == "edit" || par0 == "m" || par0 == "e")
             {
-                if (p.group.Permission >= LevelPermission.Operator)
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 3))
                 {
                     if (par1 == null) { Player.SendMessage(p, "You didn't specify a warp to be moved!"); return; }
                     if (!Warp.WarpExists(par1)) { Player.SendMessage(p, "Warp doesn't exist!!"); return; }
@@ -129,7 +129,7 @@ namespace MCForge
                         }
                     }
                 }
-                else { Player.SendMessage(p, "You can't use that because you aren't an admin!"); return; }
+                else { Player.SendMessage(p, "You can't use that because you aren't a " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name + "+"); return; }
             }
 
             else
@@ -167,10 +167,16 @@ namespace MCForge
         {
             Player.SendMessage(p, "/warp [name] - warp to that warp");
             Player.SendMessage(p, "/warp list - list all the warps");
-            if (p.group.Permission >= LevelPermission.Operator)
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
             {
                 Player.SendMessage(p, "/warp create [name] <player> - create a warp, if a <player> is given, it will be created where they are");
+            }
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
+            {
                 Player.SendMessage(p, "/warp delete [name] - delete a warp");
+            }
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 3))
+            {
                 Player.SendMessage(p, "/warp move [name] <player> - move a warp, if a <player> is given, it will be created where they are");
             }
         }

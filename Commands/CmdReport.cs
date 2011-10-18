@@ -53,9 +53,9 @@ namespace MCForge
             }
             if (number == 1)
             {
-                if (p.group.Permission < LevelPermission.Operator)
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                 {
-                    Player.SendMessage(p, "You need to be an operator to do that!");
+                    Player.SendMessage(p, "You need to be a " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ to do that!");
                     return;
                 }
                 if (message.ToLower() == "check")
@@ -97,9 +97,9 @@ namespace MCForge
                 string msg2 = message.Substring(pos + 1).ToLower();
                 if (msg1.ToLower() == "view")
                 {
-                    if (p.group.Permission < LevelPermission.Operator)
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                     {
-                        Player.SendMessage(p, "You need to be an operator to do that!");
+                        Player.SendMessage(p, "You need to be a " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ to do that!");
                         return;
                     }
                     if (!File.Exists("extra/reported/" + msg2 + ".txt"))
@@ -113,9 +113,9 @@ namespace MCForge
                 }
                 if (msg1.ToLower() == "delete")
                 {
-                    if (p.group.Permission < LevelPermission.Operator)
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                     {
-                        Player.SendMessage(p, "You need to be an operator to do that!");
+                        Player.SendMessage(p, "You need to be a " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ to do that!");
                         return;
                     }
                     if (!File.Exists("extra/reported/" + msg2 + ".txt"))
@@ -165,7 +165,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/report [Player] [Reason] - Reports the specified player for the reason/");
-            if (p.group.Permission >= LevelPermission.Operator)
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this))
             {
                 Player.SendMessage(p, "/report check - Checks the reported list!");
                 Player.SendMessage(p, "/report view [Player] - View the report on the specified player");

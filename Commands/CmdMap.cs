@@ -80,7 +80,7 @@ namespace MCForge
             }
 
             if (p != null)
-                if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Setting map options is reserved to OP+"); return; }
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Setting map options is reserved to " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+"); return; }
 
             string foundStart;
             if (message.IndexOf(' ') == -1) foundStart = message.ToLower();

@@ -98,7 +98,7 @@ public static event OnServerError ServerError = null;
         public static PlayerList muted;
         public static PlayerList ignored;
         
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -324,6 +324,7 @@ public static byte maxGuests = 10;
         }
         public void Start()
         {
+           
             shuttingDown = false;
             Log("Starting Server");
             {//dl restarter stuff
@@ -414,6 +415,7 @@ public static byte maxGuests = 10;
             if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
             if (!Directory.Exists("extra/copy/")) { Directory.CreateDirectory("extra/copy/"); }
             if (!Directory.Exists("extra/copyBackup/")) { Directory.CreateDirectory("extra/copyBackup/"); }
+            if (!Directory.Exists("extra/Waypoints")) { Directory.CreateDirectory("extra/Waypoints"); }
 
             try
             {
@@ -470,6 +472,7 @@ public static byte maxGuests = 10;
             Awards.Load();
             Economy.Load();
             Warp.LOAD();
+            CommandOtherPerms.Load();
 
             if (File.Exists("text/emotelist.txt"))
             {
