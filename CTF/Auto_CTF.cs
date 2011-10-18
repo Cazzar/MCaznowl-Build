@@ -308,7 +308,7 @@ namespace MCForge
             bluebase.block = Block.blue;
             Server.s.Log("[Auto_CTF] Running...");
             started = true;
-            Database.executeQuery("CREATE TABLE if not exists CTF (ID INTEGER NOT NULL AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT, Name VARCHAR(20), Points MEDIUMINT UNSIGNED, Captures MEDIUMINT UNSIGNED, tags MEDIUMINT UNSIGNED, PRIMARY KEY (ID));");
+            Database.executeQuery("CREATE TABLE if not exists CTF (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), Points MEDIUMINT UNSIGNED, Captures MEDIUMINT UNSIGNED, tags MEDIUMINT UNSIGNED" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
         }
         string Vote()
         {

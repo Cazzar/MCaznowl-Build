@@ -30,6 +30,10 @@ namespace MCForge
                 transaction = connection.BeginTransaction();
             }
 
+            public static DatabaseTransactionHelper Create() {
+                return Create(MySQL.connString);
+            }
+
             public static DatabaseTransactionHelper Create(string connString)
             {
                 try
@@ -45,10 +49,14 @@ namespace MCForge
 
             public override void Execute(string query)
             {
-			    using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
-			    {
-				    cmd.ExecuteNonQuery();
-			    }
+                try {
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction)) {
+                        cmd.ExecuteNonQuery();
+                    }
+                } catch (Exception e) {
+                    System.IO.File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
+                    Server.ErrorLog(e);
+                }
             }
 
             public override void Commit()

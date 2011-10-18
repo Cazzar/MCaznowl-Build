@@ -54,8 +54,8 @@ namespace MCForge {
                                 }// end:for(col)
                                 rowParams = tmp.ToArray<string>();
                                 rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT ") + "NULL";
-                                sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + ",", rowParams);
                                 pri += (rowParams[3].ToLower().Equals("pri") ? rowParams[0] + ";" : "");
+                                sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + (pri.Equals("") && row == tableRowSchema.Rows[tableRowSchema.Rows.Count - 1] ? "" : ","), rowParams);
                                 tableSchema.Add(rowParams);
                             }// end:foreach(DataRow row)
                         }
@@ -64,9 +64,12 @@ namespace MCForge {
                             sql.Write("PRIMARY KEY (`");
                             foreach (string prim in tmp) {
                                 sql.Write(prim);
-                                sql.Write("`" + (tmp.ElementAt<string>(tmp.Count() - 1).Equals(prim) ? ")" : ", `"));
+                                sql.Write("`" + (tmp[tmp.Count() - 1].Equals(prim) ? ")" : ", `"));
                             }
-                        }
+                        } /*else {
+                            sql.Flush();
+                            sql.BaseStream.Seek(-3, SeekOrigin.Current);
+                        }*/
                         sql.WriteLine(");");
                     } else {
                         using (DataTable tableSQL = Database.fillData("SELECT sql FROM" +
@@ -78,14 +81,11 @@ namespace MCForge {
                             //just print out the data in the table.
                             foreach (DataRow row in tableSQL.Rows) {
                                 string tableSQLString = row.Field<string>(0);
-                                sql.WriteLine(tableSQLString.Replace(" " + tableName, " `" + tableName + "`").Replace("CREATE TABLE `" + tableName + "`", "CREATE TABLE IF NOT EXISTS `" + tableName + "`"));
+                                sql.WriteLine(tableSQLString.Replace(" " + tableName, " `" + tableName + "`").Replace("CREATE TABLE `" + tableName + "`", "CREATE TABLE IF NOT EXISTS `" + tableName + "`") + ";");
                                 //We parse this ourselves to find the actual types.
                                 tableSchema = getSchema(tableSQLString);
 
                             }
-                        }
-                        using (DataTable tableRowSchema = Database.fillData("")) {
-
                         }
                     }
                     sql.WriteLine();
@@ -118,8 +118,8 @@ namespace MCForge {
                                         DateTime dt = row.Field<DateTime>(col);
                                         sql.Write("'{0}-{1}-{2} {3}:{4}:{5}'", new object[] { dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second });
 
-                                        //} else if (eleType.Name.Equals("Boolean")) {
-                                        //    sql.Write(row.Field<Boolean>(col).ToString());
+                                    } else if (eleType.Name.Equals("Boolean")) {
+                                        sql.Write(row.Field<Boolean>(col) ? "1" : "0");
 
                                     } else if (eleType.Name.Equals("String")) { // Requires ''
                                         sql.Write("'{0}'", row.Field<string>(col));
@@ -235,11 +235,60 @@ namespace MCForge {
                 //Delete old
                 List<string> tables = getTables();
                 foreach (string name in tables) {
-                    executeQuery(String.Format("DROP TABLE {0}", name));
+                    executeQuery(String.Format("DROP TABLE `{0}`", name));
                 }
                 //Make new
                 string script = new StreamReader(stream).ReadToEnd();
-                executeQuery(script);
+                string[] cmds = script.Split(';');
+                StringBuilder sb = new StringBuilder();
+
+                using (DatabaseTransactionHelper helper = DatabaseTransactionHelper.Create()) {
+
+                    foreach (string cmd in cmds) {
+                        String newCmd = cmd.Trim(" \r\n\t".ToCharArray());
+                        int index = newCmd.ToUpper().IndexOf("CREATE TABLE");
+                        if (index > -1) {
+                            newCmd = newCmd.Remove(0, index);
+                            //Do we have a primary key?
+                            try {
+                                if (Server.useMySQL) {
+                                    int priIndex = newCmd.ToUpper().IndexOf(" PRIMARY KEY AUTOINCREMENT");
+                                    int priCount = " PRIMARY KEY AUTOINCREMENT".Length;
+                                    int attIdx = newCmd.Substring(0, newCmd.Substring(0, priIndex - 1).LastIndexOfAny("` \n".ToCharArray())).LastIndexOfAny("` \n".ToCharArray()) + 1;
+                                    int attIdxEnd = newCmd.IndexOfAny("` \n".ToCharArray(), attIdx) - 1;
+                                    string attName = newCmd.Substring(attIdx, attIdxEnd - attIdx + 1).Trim(' ', '\n', '`', '\r');
+                                    //For speed, we just delete this, and add it to the attribute name, then delete the auto_increment clause.
+                                    newCmd = newCmd.Remove(priIndex, priCount);
+                                    newCmd = newCmd.Insert(newCmd.LastIndexOf(")"), ", PRIMARY KEY (`" + attName + "`)");
+                                    newCmd = newCmd.Insert(newCmd.IndexOf(',', priIndex), " AUTO_INCREMENT");
+
+                                } else {
+                                    int priIndex = newCmd.ToUpper().IndexOf(", PRIMARY KEY");
+                                    int priIndexEnd = newCmd.ToUpper().IndexOf(')', priIndex);
+                                    int attIdx = newCmd.IndexOf("(", priIndex) + 1;
+                                    int attIdxEnd = priIndexEnd - 1;
+                                    string attName = newCmd.Substring(attIdx, attIdxEnd - attIdx + 1);
+                                    //For speed, we just delete this, and add it to the attribute name, then delete the auto_increment clause.
+                                    newCmd = newCmd.Remove(priIndex, priIndexEnd - priIndex + 1);
+                                    newCmd = newCmd.Insert(newCmd.IndexOf(attName) + attName.Length, " PRIMARY KEY AUTOINCREMENT");
+                                    newCmd = newCmd.Replace(" auto_increment", "").Replace(" AUTO_INCREMENT", "").Replace("True", "1").Replace("False", "0");
+                                }
+                            } catch (ArgumentOutOfRangeException) { } // If we don't, just ignore it.
+                        }
+                        //Run the command in the transaction.
+                        helper.Execute(newCmd.Replace(" unsigned", "").Replace(" UNSIGNED", "") + ";");
+//                        sb.Append(newCmd).Append(";\n");
+                    }
+                    helper.Commit();
+
+
+
+                }
+                //Not sure if order matters.
+                //AUTO_INCREMENT is changed to AUTOINCREMENT for MySQL -> SQLite
+                //AUTOINCREMENT is changed to AUTO_INCREMENT for SQLite -> MySQL
+                // All we should have in the script file is CREATE TABLE and INSERT INTO commands.
+                //executeQuery(sb.ToString().Replace(" unsigned", "").Replace(" UNSIGNED", ""));
             }
         }
     }

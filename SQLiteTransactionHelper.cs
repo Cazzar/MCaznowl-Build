@@ -36,8 +36,11 @@ namespace MCForge
                 transaction = connection.BeginTransaction();
             }
 
-            public static DatabaseTransactionHelper Create(string connString)
-            {
+            public static DatabaseTransactionHelper Create() {
+                return Create(SQLite.connString);
+            }
+
+            public static DatabaseTransactionHelper Create(string connString) {
                 try
                 {
                     return new SQLiteTransactionHelper(connString);
@@ -51,9 +54,13 @@ namespace MCForge
 
             public override void Execute(string query)
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(query, connection, transaction))
-                {
-                    cmd.ExecuteNonQuery();
+                try {
+                    using (SQLiteCommand cmd = new SQLiteCommand(query, connection, transaction)) {
+                        cmd.ExecuteNonQuery();
+                    }
+                } catch (Exception e) {
+                    System.IO.File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
+                    Server.ErrorLog(e);
                 }
             }
 

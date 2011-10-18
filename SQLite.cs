@@ -30,8 +30,9 @@ namespace MCForge
     {
         public static class SQLite //: Database //Extending for future improvement (Making it object oriented later).
         {
-            public static string connString = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling =" + Server.DatabasePooling +"; Max Pool Size =1000;";
+            private static string connStringFormat = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling ={0}; Max Pool Size =1000;";
 
+            public static string connString { get { return String.Format(connStringFormat, Server.DatabasePooling); } }
 
             public static void executeQuery(string queryString)
             {

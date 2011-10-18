@@ -1888,9 +1888,11 @@ MessageBox.Show("Text Box Cleared!!");
                     FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        name = file.Name.Replace(".lvl", "");
-                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                            lsMapNoUse.Items.Add(name);
+                        try {
+                            name = file.Name.Replace(".lvl", "");
+                            if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                                lsMapNoUse.Items.Add(name);
+                        } catch (NullReferenceException) { }
                     }
                     try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
                     catch { }

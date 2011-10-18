@@ -95,7 +95,7 @@ namespace MCForge {
                     break;
                 case "restore":
                     ExtractPackage();
-
+                    Player.SendMessage(p, "Server restored.  Restart is required to see all changes.");
                     break;
                 default:
                     Player.SendMessage(p, "/server " + message + " is not currently implemented.");
@@ -351,7 +351,7 @@ namespace MCForge {
                     }// end:foreach(Uri loc)
                 } else if (withDB) { // If we don't want to back up database, we don't do this part.
                     ZipPackagePart packagePart =
-                                (ZipPackagePart)package.CreatePart(new Uri("/SQL.sql", UriKind.Relative), "");
+                                (ZipPackagePart)package.CreatePart(new Uri("/SQL.sql", UriKind.Relative), "", CompressionOption.Normal);
                     CopyStream(File.OpenRead("SQL.sql"), packagePart.GetStream());
                 }// end:if(withFiles)
             }// end:using (Package package) - Close and dispose package.
@@ -398,14 +398,21 @@ namespace MCForge {
         }// end:CopyStream()
 
         private static void ExtractPackage() {
+            int errors = 0;
             using (ZipPackage zip = (ZipPackage)ZipPackage.Open(File.OpenRead("MCForge.zip"))) {
                 PackagePartCollection pc = zip.GetParts();
                 foreach (ZipPackagePart item in pc) {
                     try {
                         CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
                     } catch {
-                        Directory.CreateDirectory("./" + item.Uri.ToString().Substring(0, item.Uri.ToString().LastIndexOfAny("\\/".ToCharArray())));
-                        CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
+                        try {
+                            Directory.CreateDirectory("./" + item.Uri.ToString().Substring(0, item.Uri.ToString().LastIndexOfAny("\\/".ToCharArray())));
+                            CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
+                        } catch (IOException e) {
+                            Server.ErrorLog(e);
+                            Server.s.Log("Caught Error.  See log for more details.  Will continue with rest of files.");
+                            errors++;
+                        }
                     }
                     if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
                         Database.fillDatabase(item.GetStream());

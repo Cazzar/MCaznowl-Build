@@ -31,8 +31,9 @@ namespace MCForge
     {
         public static class MySQL //: Database //Extending for future improvement (Making it object oriented later)
         {
-		
-            public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
+            private static string connStringFormat = "Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}";
+
+            public static string connString { get { return String.Format(connStringFormat, Server.MySQLHost, Server.MySQLPort, Server.MySQLUsername, Server.MySQLPassword, Server.DatabasePooling); } }
             public static void executeQuery(string queryString, bool createDB = false)
             {
                 Database.executeQuery(queryString, createDB);
@@ -57,7 +58,7 @@ namespace MCForge
             }
 
             internal static void fill(string queryString, DataTable toReturn) {
-                using (var conn = new MySqlConnection(MySQL.connString)) {
+                using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
                     conn.ChangeDatabase(Server.MySQLDatabaseName);
                     using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
