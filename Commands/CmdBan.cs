@@ -72,7 +72,7 @@ namespace MCForge
                     }
                     Group foundGroup = Group.findPlayerGroup(message);
 
-                    if (foundGroup.Permission >= LevelPermission.Operator)
+                    if ((int)foundGroup.Permission >= CommandOtherPerms.GetPerm(this))
                     {
                         Player.SendMessage(p, "You can't ban a " + foundGroup.name + "!");
                         return;
@@ -120,7 +120,7 @@ namespace MCForge
                         }
                         return;
                     }
-                    if (who.group.Permission >= LevelPermission.Operator)
+                    if ((int)who.group.Permission >= CommandOtherPerms.GetPerm(this))
                     {
                         Player.SendMessage(p, "You can't ban a " + who.group.name + "!");
                         return;
