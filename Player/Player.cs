@@ -1953,7 +1953,23 @@ namespace MCForge
                         //IRCBot.Say(this.name + " is no longer AFK");
                     }
                 }
-
+                //  This will allow people to type
+                //  //Command
+                //  and in chat it will appear as
+                //  /Command
+                //  Suggested by McMrCat
+                if (text[1] == '/' && text[0] == '/')
+                {
+                    text = text.Remove(0, 1);
+                    goto hello;
+                }
+                //This will make / = /repeat
+                //For lazy people :P
+                if (text == "/")
+                {
+                    HandleCommand("repeat", "");
+                    return;
+                }
                 if (text[0] == '/' || text[0] == '!')
                 {
                     text = text.Remove(0, 1);
@@ -1969,7 +1985,7 @@ namespace MCForge
                     HandleCommand(cmd, msg);
                     return;
                 }
-
+                hello:
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
 
