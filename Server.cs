@@ -106,7 +106,7 @@ namespace MCForge
         public static PlayerList ircControllers;
         public static PlayerList muted;
         public static PlayerList ignored;
-        
+        // The MCForge Developer List
         public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani", "wouto1997"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
