@@ -108,7 +108,8 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/warn - Warns a player.");
+            Player.SendMessage(p, "/warn <player> - Warns a player.");
+            Player.SendMessage(p, "Player will get kicked after 3 warnings.");
         }
     }
 }
