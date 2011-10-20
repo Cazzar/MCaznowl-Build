@@ -48,9 +48,23 @@ namespace MCForge
                     {
                         if (tban.name.ToLower() == message.ToLower())
                         {
-                            Server.tempBans.Remove(tban);
-                            Player.GlobalMessage(message + " has had their temporary ban lifted.");
-                            return;
+                            if (p != null)
+                            {
+                                Server.tempBans.Remove(tban);
+                                Player.GlobalMessage(message + " has had their temporary ban lifted by "+ p.color + p.name + Server.DefaultColor + ".");
+                                Server.s.Log("UNBANNED: by " + p.name);
+                                Server.IRC.Say(message + " was unbanned by " + p.name + ".");
+                                return;
+                            }
+                            else
+                            {
+                                Server.tempBans.Remove(tban);
+                                Player.GlobalMessage(message + " has had their temporary ban lifted by console.");
+                                Server.s.Log("UNBANNED: by console");
+                                Server.IRC.Say(message + " was unbanned by console.");
+                                return;
+                            }
+
                         }
                     }
                     Player.SendMessage(p, "Player is not banned.");
@@ -58,7 +72,18 @@ namespace MCForge
                 }
                 if (Group.findPlayerGroup(message) == Group.findPerm(LevelPermission.Banned))
                 {
-                    Player.GlobalMessage(message + " &8(banned)" + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!");
+                    if (p != null)
+                    {
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
+                        Server.s.Log("UNBANNED: by " + p.name);
+                        Server.IRC.Say(message + " was unbanned by " + p.name + ".");
+                    }
+                    else
+                    {
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by console.");
+                        Server.s.Log("UNBANNED: by console");
+                        Server.IRC.Say(message + " was unbanned by console.");
+                    }
                     Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
                 }
             }
@@ -70,9 +95,22 @@ namespace MCForge
                     {
                         if (tban.name == who.name)
                         {
-                            Server.tempBans.Remove(tban);
-                            Player.GlobalMessage(who.color + who.prefix + who.name + Server.DefaultColor + "has had their temporary ban lifted.");
-                            return;
+                            if (p != null)
+                            {
+                                Server.tempBans.Remove(tban);
+                                Player.GlobalMessage(message + " has had their temporary ban lifted by " + p.color + p.name + Server.DefaultColor + ".");
+                                Server.s.Log("UNBANNED: by " + p.name);
+                                Server.IRC.Say(message + " was unbanned by " + p.name + ".");
+                                return;
+                            }
+                            else
+                            {
+                                Server.tempBans.Remove(tban);
+                                Player.GlobalMessage(message + " has had their temporary ban lifted by console.");
+                                Server.s.Log("UNBANNED: by console");
+                                Server.IRC.Say(message + " was unbanned by console.");
+                                return;
+                            }
                         }
                     }
                     Player.SendMessage(p, "Player is not banned.");
@@ -80,7 +118,18 @@ namespace MCForge
                 }
                 if (Group.findPlayerGroup(message) == Group.findPerm(LevelPermission.Banned))
                 {
-                    Player.GlobalChat(who, who.color + who.prefix + who.name + Server.DefaultColor + " is now " + Group.standard.color + Group.standard.name + Server.DefaultColor + "!", false);
+                    if (p != null)
+                    {
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
+                        Server.s.Log("UNBANNED: by " + p.name);
+                        Server.IRC.Say(message + " was unbanned by " + p.name + ".");
+                    }
+                    else
+                    {
+                        Player.GlobalMessage(message + " was &8(unbanned)" + Server.DefaultColor + " by console.");
+                        Server.s.Log("UNBANNED: by console");
+                        Server.IRC.Say(message + " was unbanned by console.");
+                    }
                     who.group = Group.standard; who.color = who.group.color; Player.GlobalDie(who, false);
                     Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
                     Group.findPerm(LevelPermission.Banned).playerList.Remove(message);

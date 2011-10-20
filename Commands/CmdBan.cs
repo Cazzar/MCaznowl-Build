@@ -39,12 +39,13 @@ namespace MCForge
                 {
                     message = message.Remove(0, 1).Trim();
                     stealth = true;
-                    Server.s.Log("Stealth Ban Attempted");
+                    Server.s.Log("Stealth Ban Attempted by " + p.name);
                 }
                 else if (message[0] == '@')
                 {
                     totalBan = true;
                     message = message.Remove(0, 1).Trim();
+                    Server.s.Log("Total Ban Attempted by " + p.name);
                 }
 
                 Player who = Player.Find(message);
@@ -70,7 +71,7 @@ namespace MCForge
                         return;
                     }
                     Group foundGroup = Group.findPlayerGroup(message);
-                    
+
                     if ((int)foundGroup.Permission >= CommandOtherPerms.GetPerm(this))
                     {
                         Player.SendMessage(p, "You can't ban a " + foundGroup.name + "!");
@@ -89,8 +90,14 @@ namespace MCForge
 
                     foundGroup.playerList.Remove(message);
                     foundGroup.playerList.Save();
-
-                    Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    if (p != null)
+                    {
+                        Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
+                    }
+                    else
+                    {
+                        Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by console.");
+                    }
                     Group.findPerm(LevelPermission.Banned).playerList.Add(message);
                 }
                 else
@@ -132,9 +139,16 @@ namespace MCForge
                     who.group.playerList.Remove(message);
                     who.group.playerList.Save();
 
-                    if (stealth) Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " is now STEALTH &8banned" + Server.DefaultColor + "!");
-                    else Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
-
+                    if (p != null)
+                    {
+                        if (stealth) Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " was STEALTH &8banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + "!");
+                        else Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + "!");
+                    }
+                    else
+                    {
+                        if (stealth) Player.GlobalMessageOps(who.color + who.name + Server.DefaultColor + " was STEALTH &8banned" + Server.DefaultColor + " by console.");
+                        else Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by console.");
+                    }
                     who.group = Group.findPerm(LevelPermission.Banned);
                     who.color = who.group.color;
                     Player.GlobalDie(who, false);
@@ -143,9 +157,16 @@ namespace MCForge
                 }
                 Group.findPerm(LevelPermission.Banned).playerList.Save();
 
-                //IRCBot.Say(message + " was banned.");
-                Server.IRC.Say(message + " was banned.");
-                Server.s.Log("BANNED: " + message.ToLower());
+                if (p != null)
+                {
+                    Server.IRC.Say(message + " was banned by " + p.name + ".");
+                    Server.s.Log("BANNED: " + message.ToLower() + " by " + p.name);
+                }
+                else
+                {
+                    Server.IRC.Say(message + " was banned by console.");
+                    Server.s.Log("BANNED: " + message.ToLower() + " by console.");
+                }
 
                 if (totalBan == true)
                 {
