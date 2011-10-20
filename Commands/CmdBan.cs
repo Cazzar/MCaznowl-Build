@@ -87,7 +87,7 @@ namespace MCForge
                         Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
                         return;
                     }
-
+                    string oldgroup = foundGroup.name.ToString();
                     foundGroup.playerList.Remove(message);
                     foundGroup.playerList.Save();
                     if (p != null)
@@ -99,6 +99,7 @@ namespace MCForge
                         Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by console.");
                     }
                     Group.findPerm(LevelPermission.Banned).playerList.Add(message);
+                    Ban.Banplayer(p, who, "derp", stealth, oldgroup);
                 }
                 else
                 {

@@ -25,7 +25,6 @@ namespace MCForge
 {
     public static class Ban
     {
-        public static string stealthn, reason, datetime, oldrank, player;
         public static void Banplayer(Player p, Player who, string reason, bool stealth, string oldrank)
         {
             // Getting date and time.
@@ -36,11 +35,13 @@ namespace MCForge
             string hour = DateTime.Now.Hour.ToString();
             string minute = DateTime.Now.Minute.ToString();
             // Creating date + time string that looks nice to read:
-            datetime = dayname + " " + daynumber + " " + month + " " + year + ", at " + hour + ":" + minute;
+            string datetime = dayname + " " + daynumber + " " + month + " " + year + ", at " + hour + ":" + minute;
             // checking if p = player or console
+            string player;
             if (p == null) player = "Console";
             else player = p.name;
             // Checking stealth
+            string stealthn;
             if (stealth) stealthn = "true";
             else stealthn = "false";
             Write(player, who, reason, stealthn, datetime, oldrank);
@@ -52,7 +53,7 @@ namespace MCForge
             File.CreateText(filepath).Close();
 
             TextWriter tw = new StreamWriter(filepath);
-            tw.WriteLine("banned-by=" + player);
+            tw.WriteLine("banned-by=" + pl);
             tw.WriteLine("reason=" + reason);
             tw.WriteLine("timedate=" + datetime);
             tw.WriteLine("oldrank=" + oldrank);
