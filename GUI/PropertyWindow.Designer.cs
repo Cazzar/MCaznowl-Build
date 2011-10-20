@@ -229,10 +229,16 @@ namespace MCForge.Gui
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
+            this.updateTimeNumeric = new System.Windows.Forms.NumericUpDown();
+            this.label71 = new System.Windows.Forms.Label();
+            this.notifyInGameUpdate = new System.Windows.Forms.CheckBox();
+            this.autoUpdate = new System.Windows.Forms.CheckBox();
+            this.chkUpdates = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.txtServerOwner = new System.Windows.Forms.TextBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.editTxtsBt = new System.Windows.Forms.Button();
+            this.forceUpdateBtn = new System.Windows.Forms.Button();
             this.label30 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -253,10 +259,10 @@ namespace MCForge.Gui
             this.txtMain = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.editTxtsBt = new System.Windows.Forms.Button();
             this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.chkRestart = new System.Windows.Forms.CheckBox();
             this.chkMono = new System.Windows.Forms.CheckBox();
-            this.chkUpdates = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -352,6 +358,8 @@ namespace MCForge.Gui
             this.grpSQL.SuspendLayout();
             this.grpIRC.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.updateTimeNumeric)).BeginInit();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -1723,7 +1731,6 @@ namespace MCForge.Gui
             this.tabPage4.Size = new System.Drawing.Size(488, 509);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
-            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
             // groupBox19
             // 
@@ -2384,6 +2391,7 @@ namespace MCForge.Gui
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.groupBox17);
             this.tabPage1.Controls.Add(this.groupBox8);
             this.tabPage1.Controls.Add(this.groupBox7);
             this.tabPage1.Controls.Add(this.groupBox6);
@@ -2400,6 +2408,79 @@ namespace MCForge.Gui
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Server";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.updateTimeNumeric);
+            this.groupBox17.Controls.Add(this.label71);
+            this.groupBox17.Controls.Add(this.notifyInGameUpdate);
+            this.groupBox17.Controls.Add(this.autoUpdate);
+            this.groupBox17.Controls.Add(this.chkUpdates);
+            this.groupBox17.Location = new System.Drawing.Point(370, 131);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(112, 130);
+            this.groupBox17.TabIndex = 44;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "Update Settings";
+            // 
+            // updateTimeNumeric
+            // 
+            this.updateTimeNumeric.Location = new System.Drawing.Point(55, 106);
+            this.updateTimeNumeric.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.updateTimeNumeric.Name = "updateTimeNumeric";
+            this.updateTimeNumeric.Size = new System.Drawing.Size(39, 21);
+            this.updateTimeNumeric.TabIndex = 29;
+            this.updateTimeNumeric.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.Location = new System.Drawing.Point(6, 108);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(49, 13);
+            this.label71.TabIndex = 5;
+            this.label71.Text = "Seconds:";
+            // 
+            // notifyInGameUpdate
+            // 
+            this.notifyInGameUpdate.Appearance = System.Windows.Forms.Appearance.Button;
+            this.notifyInGameUpdate.AutoSize = true;
+            this.notifyInGameUpdate.Location = new System.Drawing.Point(5, 78);
+            this.notifyInGameUpdate.Name = "notifyInGameUpdate";
+            this.notifyInGameUpdate.Size = new System.Drawing.Size(87, 23);
+            this.notifyInGameUpdate.TabIndex = 7;
+            this.notifyInGameUpdate.Text = "Notify In-Game";
+            this.notifyInGameUpdate.UseVisualStyleBackColor = true;
+            // 
+            // autoUpdate
+            // 
+            this.autoUpdate.Appearance = System.Windows.Forms.Appearance.Button;
+            this.autoUpdate.AutoSize = true;
+            this.autoUpdate.Location = new System.Drawing.Point(6, 49);
+            this.autoUpdate.Name = "autoUpdate";
+            this.autoUpdate.Size = new System.Drawing.Size(77, 23);
+            this.autoUpdate.TabIndex = 6;
+            this.autoUpdate.Text = "Auto Update";
+            this.autoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // chkUpdates
+            // 
+            this.chkUpdates.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkUpdates.AutoSize = true;
+            this.chkUpdates.Location = new System.Drawing.Point(5, 20);
+            this.chkUpdates.Name = "chkUpdates";
+            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
+            this.chkUpdates.TabIndex = 4;
+            this.chkUpdates.Text = "Check for updates";
+            this.chkUpdates.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
@@ -2420,27 +2501,27 @@ namespace MCForge.Gui
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.editTxtsBt);
+            this.groupBox7.Controls.Add(this.forceUpdateBtn);
             this.groupBox7.Controls.Add(this.label30);
             this.groupBox7.Controls.Add(this.txtHost);
             this.groupBox7.Location = new System.Drawing.Point(329, 392);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(145, 104);
+            this.groupBox7.Size = new System.Drawing.Size(153, 104);
             this.groupBox7.TabIndex = 36;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Extra";
             // 
-            // editTxtsBt
+            // forceUpdateBtn
             // 
-            this.editTxtsBt.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.editTxtsBt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editTxtsBt.Location = new System.Drawing.Point(17, 73);
-            this.editTxtsBt.Name = "editTxtsBt";
-            this.editTxtsBt.Size = new System.Drawing.Size(80, 23);
-            this.editTxtsBt.TabIndex = 35;
-            this.editTxtsBt.Text = "Edit Text Files";
-            this.editTxtsBt.UseVisualStyleBackColor = true;
-            this.editTxtsBt.Click += new System.EventHandler(this.editTxtsBt_Click_1);
+            this.forceUpdateBtn.AutoSize = true;
+            this.forceUpdateBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.forceUpdateBtn.Location = new System.Drawing.Point(17, 70);
+            this.forceUpdateBtn.Name = "forceUpdateBtn";
+            this.forceUpdateBtn.Size = new System.Drawing.Size(80, 23);
+            this.forceUpdateBtn.TabIndex = 6;
+            this.forceUpdateBtn.Text = "Force update";
+            this.forceUpdateBtn.UseVisualStyleBackColor = true;
+            this.forceUpdateBtn.Click += new System.EventHandler(this.forceUpdateBtn_Click);
             // 
             // label30
             // 
@@ -2469,9 +2550,9 @@ namespace MCForge.Gui
             this.groupBox6.Controls.Add(this.label10);
             this.groupBox6.Controls.Add(this.cmbDefaultColour);
             this.groupBox6.Controls.Add(this.lblDefault);
-            this.groupBox6.Location = new System.Drawing.Point(9, 131);
+            this.groupBox6.Location = new System.Drawing.Point(6, 131);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(215, 130);
+            this.groupBox6.Size = new System.Drawing.Size(218, 130);
             this.groupBox6.TabIndex = 46;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Players";
@@ -2566,9 +2647,9 @@ namespace MCForge.Gui
             this.groupBox5.Controls.Add(this.label37);
             this.groupBox5.Controls.Add(this.chkAdminsJoinSilent);
             this.groupBox5.Controls.Add(this.chkTpToHigherRanks);
-            this.groupBox5.Location = new System.Drawing.Point(10, 392);
+            this.groupBox5.Location = new System.Drawing.Point(6, 392);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(313, 104);
+            this.groupBox5.Size = new System.Drawing.Size(317, 104);
             this.groupBox5.TabIndex = 45;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Ranks";
@@ -2621,7 +2702,7 @@ namespace MCForge.Gui
             this.groupBox4.Controls.Add(this.txtMaps);
             this.groupBox4.Location = new System.Drawing.Point(284, 271);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(190, 115);
+            this.groupBox4.Size = new System.Drawing.Size(198, 115);
             this.groupBox4.TabIndex = 44;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Level Settings";
@@ -2654,19 +2735,31 @@ namespace MCForge.Gui
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.editTxtsBt);
             this.groupBox2.Controls.Add(this.chkWomDirect);
             this.groupBox2.Controls.Add(this.chkRestart);
             this.groupBox2.Controls.Add(this.chkPublic);
             this.groupBox2.Controls.Add(this.chkVerify);
             this.groupBox2.Controls.Add(this.chkMono);
             this.groupBox2.Controls.Add(this.chkLogBeat);
-            this.groupBox2.Controls.Add(this.chkUpdates);
-            this.groupBox2.Location = new System.Drawing.Point(8, 271);
+            this.groupBox2.Location = new System.Drawing.Point(6, 271);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(270, 115);
+            this.groupBox2.Size = new System.Drawing.Size(272, 115);
             this.groupBox2.TabIndex = 42;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Advanced Configuration";
+            // 
+            // editTxtsBt
+            // 
+            this.editTxtsBt.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.editTxtsBt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editTxtsBt.Location = new System.Drawing.Point(152, 22);
+            this.editTxtsBt.Name = "editTxtsBt";
+            this.editTxtsBt.Size = new System.Drawing.Size(80, 23);
+            this.editTxtsBt.TabIndex = 35;
+            this.editTxtsBt.Text = "Edit Text Files";
+            this.editTxtsBt.UseVisualStyleBackColor = true;
+            this.editTxtsBt.Click += new System.EventHandler(this.editTxtsBt_Click_1);
             // 
             // chkWomDirect
             // 
@@ -2702,17 +2795,6 @@ namespace MCForge.Gui
             this.chkMono.Text = "Using Mono/Linux?";
             this.chkMono.UseVisualStyleBackColor = true;
             // 
-            // chkUpdates
-            // 
-            this.chkUpdates.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkUpdates.AutoSize = true;
-            this.chkUpdates.Location = new System.Drawing.Point(152, 22);
-            this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
-            this.chkUpdates.TabIndex = 4;
-            this.chkUpdates.Text = "Check for updates";
-            this.chkUpdates.UseVisualStyleBackColor = true;
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.ChkTunnels);
@@ -2736,7 +2818,7 @@ namespace MCForge.Gui
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(392, 166);
+            this.pictureBox1.Location = new System.Drawing.Point(417, 35);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(68, 68);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -2754,7 +2836,7 @@ namespace MCForge.Gui
             this.groupBox1.Controls.Add(this.txtPort);
             this.groupBox1.Controls.Add(this.ChkPort);
             this.groupBox1.Controls.Add(this.ChkPortResult);
-            this.groupBox1.Location = new System.Drawing.Point(8, 6);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(410, 124);
             this.groupBox1.TabIndex = 41;
@@ -3471,6 +3553,9 @@ namespace MCForge.Gui
             this.grpIRC.ResumeLayout(false);
             this.grpIRC.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.groupBox17.ResumeLayout(false);
+            this.groupBox17.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.updateTimeNumeric)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -3792,5 +3877,11 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label69;
         private System.Windows.Forms.TextBox txtSQLPort;
         private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.GroupBox groupBox17;
+        private System.Windows.Forms.CheckBox autoUpdate;
+        private System.Windows.Forms.NumericUpDown updateTimeNumeric;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.CheckBox notifyInGameUpdate;
+        private System.Windows.Forms.Button forceUpdateBtn;
     }
 }

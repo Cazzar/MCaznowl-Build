@@ -20,6 +20,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Reflection;
 
 namespace Starter
 {
@@ -35,10 +37,19 @@ namespace Starter
         }
         static int tries = 0;
         static bool needsToRestart = false;
+        static string parent = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
         //Console.ReadLine() is ignored while Starter is set as Windows Application in properties. (At least on Windows)
         static void Main(string[] args)
         {
-            Environment.CurrentDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            try
+            {
+                if (File.Exists("Updater.exe"))
+                    File.Delete("Updater.exe");
+                if (File.Exists("MCForge_.dll.backup"))
+                    File.Delete("MCForge_.dll.backup");
+            }
+            catch { }
             if (tries > 4)
             {
                 Console.WriteLine("I'm afraid I can't download the file for some reason!");
@@ -46,6 +57,7 @@ namespace Starter
                 Console.WriteLine("Place it inside my folder, near me, and restart me.");
                 Console.WriteLine("If you have any issues, get the files from the www.mcforge.net download page and try again.");
                 Console.WriteLine("Press any key to close me...");
+                MessageBox.Show("Unable to download MCForge_.dll.  Please download it manually at " + DLLLocation + ", place it in the same folder as this executable, and restart this application", "Required DLL Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Console.ReadLine();
                 Console.WriteLine("Bye!");
             }
@@ -56,7 +68,7 @@ namespace Starter
                 if (!needsToRestart)
                     openServer(args);
                 else
-                    System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    System.Diagnostics.Process.Start(parent);
             }
             else
             {

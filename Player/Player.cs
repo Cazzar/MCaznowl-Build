@@ -532,11 +532,11 @@ namespace MCForge
                 p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 p.Disconnect();
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
@@ -2520,7 +2520,7 @@ namespace MCForge
                     Disconnect();
                 else goto retry;
             }*/
-            catch (SocketException e)
+            catch (SocketException)
             {
                 buffer = null;
                 Disconnect();
@@ -3575,7 +3575,7 @@ namespace MCForge
                 Server.s.Log("Socket was shutdown for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to shutdown socket for " + this.name ?? this.ip, e);
@@ -3590,7 +3590,7 @@ namespace MCForge
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
@@ -3734,7 +3734,7 @@ namespace MCForge
                     {
                         left.Add(this.name.ToLower(), this.ip);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //Server.ErrorLog(e);
                     }

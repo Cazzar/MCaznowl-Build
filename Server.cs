@@ -327,45 +327,62 @@ public static byte maxGuests = 10;
            
             shuttingDown = false;
             Log("Starting Server");
-            {//dl restarter stuff
-                if (!File.Exists("Restarter.exe"))
+            {
+                try
                 {
-                    Log("Restarter.exe doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.exe"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
-                        }
-                        if (File.Exists("Restarter.exe"))
-                        {
-                            Log("Restarter.exe download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.exe failed, please try again later");
+                        File.Delete("Restarter.exe");
                     }
                 }
-                if (!File.Exists("Restarter.pdb"))
+                catch { }
+                try
                 {
-                    Log("Restarter.pdb doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.pdb"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
-                        }
-                        if (File.Exists("Restarter.pdb"))
-                        {
-                            Log("Restarter.pdb download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.pdb failed, please try again later");
+                        File.Delete("Restarter.pdb");
                     }
                 }
+                catch { }
+                //dl restarter stuff [Restarter is no longer needed]
+                //if (!File.Exists("Restarter.exe"))
+                //{
+                //    Log("Restarter.exe doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                //        }
+                //        if (File.Exists("Restarter.exe"))
+                //        {
+                //            Log("Restarter.exe download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.exe failed, please try again later");
+                //    }
+                //}
+                //if (!File.Exists("Restarter.pdb"))
+                //{
+                //    Log("Restarter.pdb doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                //        }
+                //        if (File.Exists("Restarter.pdb"))
+                //        {
+                //            Log("Restarter.pdb download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.pdb failed, please try again later");
+                //    }
+                //}
                 if (!File.Exists("MySql.Data.dll"))
                 {
                     Log("MySql.Data.dll doesn't exist, Downloading");
@@ -463,7 +480,7 @@ public static byte maxGuests = 10;
                 }
             }
 
-            Properties.Load("properties/server.properties");
+            SrvProperties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Group.InitAll();
             Command.InitAll();
@@ -505,7 +522,7 @@ public static byte maxGuests = 10;
                 //    Server.s.Log("MySQL settings have not been set! Many features will not be available if MySQL is not enabled");
                 //  //  Server.ErrorLog(e);
                 //}
-                catch (Exception e)
+                catch (Exception)
                 {
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
   //         Server.ErrorLog(e);
@@ -948,7 +965,7 @@ processThread.Start();
                     listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     if (p != null)
                         p.Disconnect();

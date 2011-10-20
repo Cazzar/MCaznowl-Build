@@ -591,7 +591,7 @@ namespace MCForge
                     SW.WriteLine("GrowTrees = " + level.growTrees.ToString());
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Server.s.Log("Failed to save level properties!");
             }

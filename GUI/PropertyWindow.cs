@@ -496,14 +496,22 @@ namespace MCForge.Gui
                                 try { txtafk.Text = Convert.ToInt16(value).ToString(); }
                                 catch { txtafk.Text = "10"; }
                                 break;
-
                             case "afk-kick":
                                 try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); }
                                 catch { txtAFKKick.Text = "45"; }
                                 break;
-
                             case "check-updates":
                                 chkUpdates.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "auto-update":
+                                autoUpdate.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "in-game-update-notify":
+                                notifyInGameUpdate.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "update-countdown":
+                                try { updateTimeNumeric.Value = Convert.ToDecimal(Convert.ToInt32(value)); }
+                                catch { updateTimeNumeric.Value = 10; }
                                 break;
                             case "autoload":
                                 chkAutoload.Checked = (value.ToLower() == "true") ? true : false;
@@ -782,6 +790,10 @@ namespace MCForge.Gui
                     w.WriteLine("deathcount = " + chkDeath.Checked.ToString().ToLower());
                     w.WriteLine("afk-minutes = " + txtafk.Text);
                     w.WriteLine("afk-kick = " + txtAFKKick.Text);
+                    w.WriteLine("check-updates = " + chkUpdates.Checked.ToString().ToLower());
+                    w.WriteLine("auto-update = " + autoUpdate.Checked.ToString().ToLower());
+                    w.WriteLine("in-game-update-notify = " + notifyInGameUpdate.Checked.ToString().ToLower());
+                    w.WriteLine("update-countdown = " + updateTimeNumeric.Value.ToString().ToLower());
                     w.WriteLine("parse-emotes = " + chkSmile.Checked.ToString().ToLower());
                     w.WriteLine("dollar-before-dollar = " + chk17Dollar.Checked.ToString().ToLower());
                     w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
@@ -875,7 +887,7 @@ namespace MCForge.Gui
                 w.Close();
                 w.Dispose();
             }
-            catch
+            catch (Exception)
             {
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
@@ -930,7 +942,7 @@ namespace MCForge.Gui
             try { SaveLavaSettings(); }
             catch { Server.s.Log("Error saving Lava Survival settings!"); }
 
-            Properties.Load("properties/server.properties", true);
+            SrvProperties.Load("properties/server.properties", true);
             GrpCommands.fillRanks();
 
             // Trigger profanity filter reload
@@ -2107,17 +2119,6 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
-
-        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             new GUI.WoM().Show();
@@ -2127,6 +2128,20 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
         {
             button3.Enabled = chkWomDirect.Checked;
         }
-    }
 
+        private void forceUpdateBtn_Click(object sender, EventArgs e)
+        {
+            forceUpdateBtn.Enabled = false;
+            if (MessageBox.Show("Would you like to force update MCForge now?", "Force Update", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                saveStuff();
+                MCForge_.Gui.Program.PerformUpdate();
+                Dispose();
+            }
+            else
+            {
+                forceUpdateBtn.Enabled = true;
+            }
+        }
+    }
 }

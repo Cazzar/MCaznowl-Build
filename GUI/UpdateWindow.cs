@@ -137,12 +137,7 @@ namespace MCForge.Gui
 
         private void cmdUpdate_Click(object sender, EventArgs e)
         {
-            if (Server.selectedrevision != "")
-            {
-                MCForge_.Gui.Program.PerformUpdate(true);
-                
-            }
-            else { MCForge_.Gui.Program.PerformUpdate(false); }
+            MCForge_.Gui.Program.PerformUpdate();
       /*      if (!Program.CurrentUpdate)
                 Program.UpdateCheck();
             else
