@@ -39,15 +39,24 @@ namespace MCForge
 {
     public class Server
     {
+        public static bool cancelcommand = false;
+        public static bool canceladmin = false;
+        public static bool cancellog = false;
+        public static bool canceloplog = false;
         public static string apppath = Application.StartupPath;
-        public delegate void LogHandler(string message);
-public delegate void OnServerError(Exception error);
-public static event OnServerError ServerError = null;
+        public delegate void OnConsoleCommand(string cmd, string message);
+        public static event OnConsoleCommand ConsoleCommand;
+        public delegate void OnServerError(Exception error);
+        public static event OnServerError ServerError = null;
+        public delegate void OnServerLog(string message);
+        public static event OnServerLog ServerLog;
+        public static event OnServerLog ServerAdminLog;
+        public static event OnServerLog ServerOpLog;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
         public delegate void VoidHandler();
-
+        public delegate void LogHandler(string message);
         public event LogHandler OnLog;
         public event LogHandler OnSystem;
         public event LogHandler OnCommand;
@@ -97,8 +106,8 @@ public static event OnServerError ServerError = null;
         public static PlayerList ircControllers;
         public static PlayerList muted;
         public static PlayerList ignored;
-        
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani"});
+        // The MCForge Developer List
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani", "wouto1997"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -322,6 +331,14 @@ public static byte maxGuests = 10;
             ml = new MainLoop("server");
             Server.s = this;
         }
+        //True = cancel event
+        //Fale = dont cacnel event
+        public static bool Check(string cmd, string message)
+        {
+            if (ConsoleCommand != null)
+                ConsoleCommand(cmd, message);
+            return cancelcommand;
+        }
         public void Start()
         {
            
@@ -400,6 +417,25 @@ public static byte maxGuests = 10;
                     catch
                     {
                         Log("Downloading MySql.Data.dll failed, please try again later");
+                    }
+                }
+                if (!File.Exists("System.Data.SQLite.dll"))
+                {
+                    Log("System.Data.SQLite.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/System.Data.SQLite.dll", "System.Data.SQLite.dll");
+                        }
+                        if (File.Exists("System.Data.SQLite.dll"))
+                        {
+                            Log("System.Data.SQLite.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading System.Data.SQLite.dll failed, please try again later");
                     }
                 }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
@@ -1029,6 +1065,15 @@ processThread.Start();
 
         public void Log(string message, bool systemMsg = false)
         {
+            if (ServerLog != null)
+            {
+                ServerLog(message);
+                if (cancellog)
+                {
+                    cancellog = false;
+                    return;
+                }
+            }
             if (OnLog != null)
             {
                 if (!systemMsg)
@@ -1046,6 +1091,15 @@ processThread.Start();
 
         public void OpLog(string message, bool systemMsg = false)
         {
+            if (ServerOpLog != null)
+            {
+                OpLog(message);
+                if (canceloplog)
+                {
+                    canceloplog = false;
+                    return;
+                }
+            }
             if (OnOp != null)
             {
                 if (!systemMsg)
@@ -1063,6 +1117,15 @@ processThread.Start();
 
         public void AdminLog(string message, bool systemMsg = false)
         {
+            if (ServerAdminLog != null)
+            {
+                ServerAdminLog(message);
+                if (canceladmin)
+                {
+                    canceladmin = false;
+                    return;
+                }
+            }
             if (OnAdmin != null)
             {
                 if (!systemMsg)
