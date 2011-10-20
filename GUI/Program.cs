@@ -437,6 +437,14 @@ namespace MCForge_.Gui
                         File.Delete("MCForge_.update");
                     if (File.Exists("MCForge.update"))
                         File.Delete("MCForge.update");
+                    if (File.Exists("Update.bat"))
+                        File.Delete("Update.bat");
+                    if (File.Exists("Update_generated.bat"))
+                        File.Delete("Update_generated.bat");
+                    if (File.Exists("Update.sh"))
+                        File.Delete("Update.sh");
+                    if (File.Exists("Update_generated.sh"))
+                        File.Delete("Update_generated.sh");
                 }
                 catch { }
                 WebClient Client = new WebClient();
