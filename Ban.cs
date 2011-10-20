@@ -10,9 +10,9 @@ namespace MCForge
     {
         public void Getban(Player p, Player who, string reason, bool stealth)
         {
-            if (File.Exists(who.name + ".txt"))
+            if (File.Exists("" + who.name + ".txt"))
             {
-
+                
             }
         }
     }
