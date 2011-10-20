@@ -537,9 +537,9 @@ namespace MCForge.Gui
                             case "money-name":
                                 txtMoneys.Text = value;
                                 break;
-                            case "mono":
+                            /*case "mono":
                                 chkMono.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                                break;*/
                             case "restart-on-error":
                                 chkRestart.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -837,9 +837,9 @@ namespace MCForge.Gui
                     w.WriteLine("defaultColor = " + cmbDefaultColour.Items[cmbDefaultColour.SelectedIndex].ToString());
                     w.WriteLine("irc-color = " + cmbIRCColour.Items[cmbIRCColour.SelectedIndex].ToString());
                     w.WriteLine();
-                    w.WriteLine("#Running on mono?");
+                    /*w.WriteLine("#Running on mono?");
                     w.WriteLine("mono = " + chkMono.Checked.ToString().ToLower());
-                    w.WriteLine();
+                    w.WriteLine();*/
                     w.WriteLine("#Custom Messages");
                     w.WriteLine("custom-ban = " + chkBanMessage.Checked.ToString().ToLower());
                     w.WriteLine("custom-ban-message = " + txtBanMessage.Text);

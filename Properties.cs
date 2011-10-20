@@ -419,10 +419,10 @@ namespace MCForge
                             case "money-name":
                                 if (value != "") Server.moneys = value;
                                 break;
-                            case "mono":
+                            /*case "mono":
                                 try { Server.mono = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
-                                break;
+                                break;*/
                             case "restart-on-error":
                                 try { Server.restartOnError = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
@@ -742,9 +742,9 @@ namespace MCForge
             w.WriteLine("defaultColor = " + Server.DefaultColor);
             w.WriteLine("irc-color = " + Server.IRCColour);
             w.WriteLine();
-            w.WriteLine("#Running on mono?");
+            /*w.WriteLine("#Running on mono?");
             w.WriteLine("mono = " + Server.mono);
-            w.WriteLine();
+            w.WriteLine();*/
             w.WriteLine("#Custom Messages");
             w.WriteLine("custom-ban = " + Server.customBan.ToString().ToLower());
             w.WriteLine("custom-ban-message = " + Server.customBanMessage);
