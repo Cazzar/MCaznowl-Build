@@ -402,6 +402,25 @@ public static byte maxGuests = 10;
                         Log("Downloading MySql.Data.dll failed, please try again later");
                     }
                 }
+                if (!File.Exists("System.Data.SQLite.dll"))
+                {
+                    Log("System.Data.SQLite.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/System.Data.SQLite.dll", "System.Data.SQLite.dll");
+                        }
+                        if (File.Exists("System.Data.SQLite.dll"))
+                        {
+                            Log("System.Data.SQLite.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading System.Data.SQLite.dll failed, please try again later");
+                    }
+                }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
                 {
                     Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
