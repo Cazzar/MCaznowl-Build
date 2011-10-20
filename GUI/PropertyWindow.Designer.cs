@@ -262,7 +262,6 @@ namespace MCForge.Gui
             this.editTxtsBt = new System.Windows.Forms.Button();
             this.chkWomDirect = new System.Windows.Forms.CheckBox();
             this.chkRestart = new System.Windows.Forms.CheckBox();
-            this.chkMono = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -919,7 +918,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(79, 23);
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -1043,9 +1042,9 @@ namespace MCForge.Gui
             // 
             this.chkLogBeat.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkLogBeat.AutoSize = true;
-            this.chkLogBeat.Location = new System.Drawing.Point(128, 80);
+            this.chkLogBeat.Location = new System.Drawing.Point(16, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -2740,7 +2739,6 @@ namespace MCForge.Gui
             this.groupBox2.Controls.Add(this.chkRestart);
             this.groupBox2.Controls.Add(this.chkPublic);
             this.groupBox2.Controls.Add(this.chkVerify);
-            this.groupBox2.Controls.Add(this.chkMono);
             this.groupBox2.Controls.Add(this.chkLogBeat);
             this.groupBox2.Location = new System.Drawing.Point(6, 271);
             this.groupBox2.Name = "groupBox2";
@@ -2767,7 +2765,7 @@ namespace MCForge.Gui
             this.chkWomDirect.AutoSize = true;
             this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
             this.chkWomDirect.Name = "chkWomDirect";
-            this.chkWomDirect.Size = new System.Drawing.Size(110, 23);
+            this.chkWomDirect.Size = new System.Drawing.Size(107, 23);
             this.chkWomDirect.TabIndex = 25;
             this.chkWomDirect.Text = "Enable WoM Direct";
             this.chkWomDirect.UseVisualStyleBackColor = true;
@@ -2779,21 +2777,10 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(90, 23);
+            this.chkRestart.Size = new System.Drawing.Size(92, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
-            // 
-            // chkMono
-            // 
-            this.chkMono.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkMono.AutoSize = true;
-            this.chkMono.Location = new System.Drawing.Point(16, 80);
-            this.chkMono.Name = "chkMono";
-            this.chkMono.Size = new System.Drawing.Size(110, 23);
-            this.chkMono.TabIndex = 4;
-            this.chkMono.Text = "Using Mono/Linux?";
-            this.chkMono.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -3713,7 +3700,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label lblDefault;
         private System.Windows.Forms.ComboBox cmbDefaultColour;
-        private System.Windows.Forms.CheckBox chkMono;
         private System.Windows.Forms.CheckBox chkRestart;
         private System.Windows.Forms.CheckBox chkPublic;
         private System.Windows.Forms.CheckBox chkAutoload;
