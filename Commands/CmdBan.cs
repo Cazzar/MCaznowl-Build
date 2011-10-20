@@ -135,7 +135,7 @@ namespace MCForge
                         Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
                         return;
                     }
-
+                    string oldgroup = who.group.name.ToString();
                     who.group.playerList.Remove(message);
                     who.group.playerList.Save();
 
@@ -154,6 +154,7 @@ namespace MCForge
                     Player.GlobalDie(who, false);
                     Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
                     Group.findPerm(LevelPermission.Banned).playerList.Add(who.name);
+                    Ban.Banplayer(p, who, "derp", stealth, oldgroup);
                 }
                 Group.findPerm(LevelPermission.Banned).playerList.Save();
 
