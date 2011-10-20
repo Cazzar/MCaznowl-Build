@@ -11,3 +11,6 @@
 #OS garbage
 [Tt]humbs.db
 *.DS_STORE
+/Updater/bin
+/Updater/obj
+*.lnk
