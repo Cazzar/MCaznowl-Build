@@ -1958,7 +1958,7 @@ namespace MCForge
                 //  and in chat it will appear as
                 //  /Command
                 //  Suggested by McMrCat
-                if (text[1] == '/' && text[0] == '/')
+                if (text.StartsWith("//"))
                 {
                     text = text.Remove(0, 1);
                     goto hello;
