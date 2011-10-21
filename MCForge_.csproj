@@ -144,6 +144,7 @@
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdReferee.cs" />
+    <Compile Include="Commands\CmdRemote.cs" />
     <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
