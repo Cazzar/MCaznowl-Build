@@ -85,6 +85,9 @@ namespace MCForge
                         Server.IRC.Say(message + " was unbanned by console.");
                     }
                     Group.findPerm(LevelPermission.Banned).playerList.Remove(message);
+                    if (Ban.Deleteban(message))
+                        Player.SendMessage(p, "deleted ban information about " + message + ".");
+                    else Player.SendMessage(p, "no info found about " + message + ".");
                 }
             }
             else

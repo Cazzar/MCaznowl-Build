@@ -96,5 +96,11 @@ namespace MCForge
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
         }
+        public static bool Deleteban(string name)
+        {
+            string path = "text/bans/" + name + ".txt";
+            if (File.Exists(path)) { File.Delete(path); return true; }
+            else { return false; }
+        }
     }
 }
