@@ -99,7 +99,7 @@ namespace MCForge
                         Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by console.");
                     }
                     Group.findPerm(LevelPermission.Banned).playerList.Add(message);
-                    Ban.Banplayer(p, message, "derp", stealth, oldgroup);
+                    Ban.Banplayer(p, message, "-", stealth, oldgroup);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace MCForge
                     Player.GlobalDie(who, false);
                     Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
                     Group.findPerm(LevelPermission.Banned).playerList.Add(who.name);
-                    Ban.Banplayer(p, who.name, "derp", stealth, oldgroup);
+                    Ban.Banplayer(p, who.name, "-", stealth, oldgroup);
                 }
                 Group.findPerm(LevelPermission.Banned).playerList.Save();
 
