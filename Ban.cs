@@ -60,19 +60,20 @@ namespace MCForge
             tw.WriteLine("stealth=" + stealthstr);
             tw.Close();
         }
-        public static bool Isbanned(Player who)
+        public static bool Isbanned(string who)
         {
-            if (!File.Exists("text/bans/" + who.name + ".txt")) return false;
-            else return true;
+            if (File.Exists("text/bans/" + who + ".txt")) return true;
+            else return false;
         }
-        public static string[] Getbandata(Player who)
+        public static string[] Getbandata(string who)
         {
             string bannedby = "", reason = "", timedate = "", oldrank = "", stealth = "";
-            foreach (string line in File.ReadAllLines("text/bans/" + who.name + ".txt"))
+            foreach (string line in File.ReadAllLines("text/bans/" + who + ".txt"))
             {
                 string key = line.Split('=')[0].Trim();
                 string value = "";
                 if (line.IndexOf('=') >= 0) value = line.Substring(line.IndexOf('=') + 1).Trim();
+                if (value == "") value = "unknown";
                 switch (key.ToLower())
                 {
                     case "banned-by":

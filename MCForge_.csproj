@@ -91,6 +91,7 @@
     <Compile Include="Commands\CmdAka.cs" />
     <Compile Include="Commands\CmdAlive.cs" />
     <Compile Include="Commands\CmdAllowGuns.cs" />
+    <Compile Include="Commands\CmdBaninfo.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
