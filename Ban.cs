@@ -46,17 +46,17 @@ namespace MCForge
             else stealthn = "false";
             Write(player, who, reason, stealthn, datetime, oldrank);
         }
-        public static void Write(string pl, string who, string reason, string stealthstr, string datetime, string oldrank)
+        public static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)
         {
-            string filepath = "text/bans/" + who + ".txt";
+            string filepath = "text/bans/" + whol + ".txt";
             if (File.Exists(filepath)) File.Delete(filepath);
             File.CreateText(filepath).Close();
 
             TextWriter tw = new StreamWriter(filepath);
             tw.WriteLine("banned-by=" + pl);
-            tw.WriteLine("reason=" + reason);
-            tw.WriteLine("timedate=" + datetime);
-            tw.WriteLine("oldrank=" + oldrank);
+            tw.WriteLine("reason=" + reasonl);
+            tw.WriteLine("timedate=" + datetimel);
+            tw.WriteLine("oldrank=" + oldrankl);
             tw.WriteLine("stealth=" + stealthstr);
             tw.Close();
         }
