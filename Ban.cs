@@ -25,7 +25,7 @@ namespace MCForge
 {
     public static class Ban
     {
-        public static void Banplayer(Player p, Player who, string reason, bool stealth, string oldrank)
+        public static void Banplayer(Player p, string who, string reason, bool stealth, string oldrank)
         {
             // Getting date and time.
             string dayname = DateTime.Now.DayOfWeek.ToString();
@@ -46,9 +46,9 @@ namespace MCForge
             else stealthn = "false";
             Write(player, who, reason, stealthn, datetime, oldrank);
         }
-        public static void Write(string pl, Player who, string reason, string stealthstr, string datetime, string oldrank)
+        public static void Write(string pl, string who, string reason, string stealthstr, string datetime, string oldrank)
         {
-            string filepath = "text/bans/" + who.name + ".txt";
+            string filepath = "text/bans/" + who + ".txt";
             if (File.Exists(filepath)) File.Delete(filepath);
             File.CreateText(filepath).Close();
 
@@ -59,6 +59,41 @@ namespace MCForge
             tw.WriteLine("oldrank=" + oldrank);
             tw.WriteLine("stealth=" + stealthstr);
             tw.Close();
+        }
+        public static bool Isbanned(Player who)
+        {
+            if (!File.Exists("text/bans/" + who.name + ".txt")) return false;
+            else return true;
+        }
+        public static string[] Getbandata(Player who)
+        {
+            string bannedby = "", reason = "", timedate = "", oldrank = "", stealth = "";
+            foreach (string line in File.ReadAllLines("text/bans/" + who.name + ".txt"))
+            {
+                string key = line.Split('=')[0].Trim();
+                string value = "";
+                if (line.IndexOf('=') >= 0) value = line.Substring(line.IndexOf('=') + 1).Trim();
+                switch (key.ToLower())
+                {
+                    case "banned-by":
+                        bannedby = value;
+                        break;
+                    case "reason":
+                        reason = value;
+                        break;
+                    case "timedate":
+                        timedate = value;
+                        break;
+                    case "oldrank":
+                        oldrank = value;
+                        break;
+                    case "stealth":
+                        stealth = value;
+                        break;
+                }
+            }
+            string[] end = { bannedby, reason, timedate, oldrank, stealth };
+            return end;
         }
     }
 }
