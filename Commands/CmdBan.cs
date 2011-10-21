@@ -33,7 +33,6 @@ namespace MCForge
             try
             {
                 if (message == "") { Help(p); return; }
-
                 bool stealth = false; bool totalBan = false;
                 if (message[0] == '#')
                 {
@@ -47,7 +46,6 @@ namespace MCForge
                     message = message.Remove(0, 1).Trim();
                     Server.s.Log("Total Ban Attempted by " + p.name);
                 }
-
                 Player who = Player.Find(message);
 
                 if (who == null)
@@ -99,7 +97,7 @@ namespace MCForge
                         Player.GlobalMessage(message + " &f(offline)" + Server.DefaultColor + " was &8banned" + Server.DefaultColor + " by console.");
                     }
                     Group.findPerm(LevelPermission.Banned).playerList.Add(message);
-                    Ban.Banplayer(p, message, "-", stealth, oldgroup);
+                    Ban.Banplayer(p, message, "", stealth, oldgroup);
                 }
                 else
                 {
@@ -180,7 +178,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/ban <player> - Bans a player without kicking him.");
+            Player.SendMessage(p, "/ban <player> [reason] - Bans a player without kicking him.");
             Player.SendMessage(p, "Add # before name to stealth ban.");
             Player.SendMessage(p, "Add @ before name to total ban.");
         }
