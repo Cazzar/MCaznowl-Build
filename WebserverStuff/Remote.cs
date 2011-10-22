@@ -56,7 +56,7 @@ namespace MCForge.Remote
             byte[] rs = new byte[31]; //{1,2,3,4,5,6,7,8,9,0, (byte)'a',(byte)'b',(byte)'c',(byte)'d',(byte)'e'};
             r.NextBytes(rs);
             return Encoding.UTF8.GetString(rs);
-            
+
         }
         public void Start()
         {
@@ -479,7 +479,7 @@ namespace MCForge.Remote
                 SendData(11, bs);
                 sendHash(key);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
-                //startUp();  -- dont need because phone will request stuff when ready
+                startUp(); // -- dont need because phone will request stuff when ready
                 LoggedIn = true;
                 remotes.Add(this);
             }
@@ -608,18 +608,18 @@ namespace MCForge.Remote
         internal void startUp()
         {
             System.Object lockThis = new System.Object();
-            lock(lockThis)
-    {
-            sendSteps(0);
-            sendMaps();
-            sendSteps(1);
-            sendSettings();
-            sendSteps(2);
-            sendGroups();
-            sendSteps(3);
-            sendPlayers();
-            sendSteps(4);  //cancels it here
-    }
+            lock (lockThis)
+            {
+                sendSteps(0);
+                sendMaps();
+                sendSteps(1);
+                sendSettings();
+                sendSteps(2);
+                sendGroups();
+                sendSteps(3);
+                sendPlayers();
+                sendSteps(4);  //cancels it here
+            }
 
         }
 
@@ -708,17 +708,9 @@ namespace MCForge.Remote
         }
         internal void addPlayer(Player p)
         {
-            if (String.IsNullOrEmpty(p.title))
-            {
-                SendData(0x04, new StringBuilder("ADD:").Append("Default").Append(",").Append(p.name)
-                    .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
-                return;
-            }
-            else
-            {
-                SendData(0x04, new StringBuilder("ADD:").Append(p.title).Append(",").Append(p.name)
-                    .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
-            }
+            SendData(0x04, new StringBuilder("ADD:").Append(p.title).Append(",").Append(p.name)
+                .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
+
         }
         internal void removePlayer(Player p)
         {
@@ -797,7 +789,7 @@ namespace MCForge.Remote
 
             message = message.Remove(0, 11);
             message = message.Replace("(Admins): ", "");
-            
+
             string[] secondSplit = message.Split(':');
             string getname = message.Substring(0, secondSplit[0].Length);
             p = Player.Find(getname);

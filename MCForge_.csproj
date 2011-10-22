@@ -450,7 +450,7 @@
     <Compile Include="WebserverStuff\Remote.cs" />
     <Compile Include="WebserverStuff\Remote.Handler.cs" />
     <Compile Include="WebserverStuff\RemoteProperties.cs" />
-    <Compile Include="WebserverStuff\WebServer.cs" />
+    <Compile Include="WebserverStuff\RemoteServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
