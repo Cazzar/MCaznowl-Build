@@ -27,7 +27,7 @@ namespace MCForge
 {
     public class GlobalChatBot
     {
-        public delegate void LogHandler(string message);
+        public delegate void LogHandler(string nick, string message);
         public event LogHandler OnNewGlobalMessage;
 
         public delegate void KickHandler(string reason);
@@ -93,9 +93,10 @@ namespace MCForge
                 return;
             if (OnNewGlobalMessage != null)
             {
-                OnNewGlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+                OnNewGlobalMessage(user.Nick, message);
             }
-            Server.s.Log(">[Global] " + user.Nick + ": " + message);
+            try { Gui.Window.thisWindow.LogGlobalChat("> " + user.Nick + ": " + message); }
+            catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }
             Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
 

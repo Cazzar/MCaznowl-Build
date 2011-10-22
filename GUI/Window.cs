@@ -98,7 +98,7 @@ namespace MCForge.Gui
             btnProperties.Enabled = false;
             thisWindow = this;
             MaximizeBox = false;
-            this.Text = "<server name here>";
+            this.Text = "Starting MCForge...";
             //this.Icon = new Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("MCLawl.Lawl.ico"));
 
             this.Show();
@@ -613,12 +613,6 @@ namespace MCForge.Gui
             WindowState = FormWindowState.Normal;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            UpdateForm = new UpdateWindow();
-            UpdateForm.Show();
-        }
-
         private void tmrRestart_Tick(object sender, EventArgs e)
         {
             if (Server.autorestart)
@@ -632,13 +626,7 @@ namespace MCForge.Gui
 
                     RemoveNotifyIcon();
                     Server.Exit();
-					using (Process Restarter = new Process())
-					{
-						Restarter.StartInfo.FileName = "Restarter.exe";
-						Restarter.StartInfo.Arguments = "Program.cs";
-
-						Restarter.Start();
-					}
+                    System.Diagnostics.Process.Start(MCForge_.Gui.Program.parent);
                 }
             }
         }
@@ -896,13 +884,7 @@ namespace MCForge.Gui
             {
                 RemoveNotifyIcon();
                 Server.Exit();
-				using (Process Restarter = new Process())
-				{
-					Restarter.StartInfo.FileName = "Restarter.exe";
-					Restarter.StartInfo.Arguments = "Program.cs";
-
-					Restarter.Start();
-				}
+                System.Diagnostics.Process.Start(MCForge_.Gui.Program.parent);
                 Dispose();
             }
 
@@ -2108,6 +2090,30 @@ namespace MCForge.Gui
         private void treeGrowingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             levelcommand("map", " growtrees");
+        }
+
+        private void txtGlobalInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
+                catch (Exception ex) { Server.ErrorLog(ex); }
+                txtGlobalInput.Clear();
+            }
+        }
+
+        public void LogGlobalChat(string message)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    txtGlobalLog.AppendTextAndScroll(message);
+                }));
+                return;
+            }
+            txtGlobalLog.AppendTextAndScroll(message);
         }
 
 

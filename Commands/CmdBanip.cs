@@ -97,7 +97,7 @@ namespace MCForge
             if (message.Equals("127.0.0.1")) { Player.SendMessage(p, "You can't ip-ban the server!"); return; }
             if (message.IndexOf('.') == -1) { Player.SendMessage(p, "Invalid IP!"); return; }
             if (message.Split('.').Length != 4) { Player.SendMessage(p, "Invalid IP!"); return; }
-            if (p != null) { if (p.ip == message) { Player.SendMessage(p, "You can't ip-ban yourself.!"); return; } }
+            if (p != null && p.ip == message) { Player.SendMessage(p, "You can't ip-ban yourself.!"); return; } 
             if (Server.bannedIP.Contains(message)) { Player.SendMessage(p, message + " is already ip-banned."); return; }
 
             // Check if IP belongs to an op+
@@ -142,29 +142,31 @@ namespace MCForge
                             {
                                 Player.SendMessage(p, "You can only ipban IPs used by players with a lower rank.");
                                 Player.SendMessage(p, Server.DefaultColor + opname + "(" + grp.color + grp.name + Server.DefaultColor + ") uses that IP.");
-                                Server.s.Log("Failed to ipban " + message + " - IP is also used by: " + opname + "(" + grp.name + ")");
+                                Server.s.Log(p.name + "failed to ipban " + message + " - IP is also used by: " + opname + "(" + grp.name + ")");
                                 return;
                             }
                         }
                     }
                 }
             }
-            
 
-            Player.GlobalMessage(message + " got &8ip-banned!");
+
+
             if (p != null)
             {
-                //IRCBot.Say("IP-BANNED: " + message.ToLower() + " by " + p.name);
-                Server.IRC.Say("IP-BANNED: " + message.ToLower() + " by " + p.name);
+                Server.IRC.Say(message.ToLower() + " was ip-banned by " + p.name + ".");
+                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
+                Player.GlobalMessage(message + " was &8ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
             }
             else
             {
-                //IRCBot.Say("IP-BANNED: " + message.ToLower() + " by console");
-                Server.IRC.Say("IP-BANNED: " + message.ToLower() + " by console");
+                Server.IRC.Say(message.ToLower() + " was ip-banned by console.");
+                Server.s.Log("IP-BANNED: " + message.ToLower() + " by console.");
+                Player.GlobalMessage(message + " was &8ip-banned" + Server.DefaultColor + " by console.");
             }
             Server.bannedIP.Add(message);
             Server.bannedIP.Save("banned-ip.txt", false);
-            Server.s.Log("IP-BANNED: " + message.ToLower());
+            
             /*
             foreach (Player pl in Player.players) {
                 if (message == pl.ip) { pl.Kick("Kicked by ipban"); }

@@ -37,13 +37,7 @@ namespace MCForge
         {
             if (message != "") { Help(p); return; }
             Server.Exit();
-			using (Process Restarter = new Process())
-			{
-				Restarter.StartInfo.FileName = "Restarter.exe";
-				Restarter.StartInfo.Arguments = "Program.cs";
-
-				Restarter.Start();
-			}
+            System.Diagnostics.Process.Start(MCForge_.Gui.Program.parent);
         }
         public override void Help(Player p)
         {

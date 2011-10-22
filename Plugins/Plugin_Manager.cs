@@ -101,18 +101,18 @@ namespace MCForge
                     Server.s.Log("Plugin: " + ((Plugin)instance).name + " was not loaded, you can load it with /pload");
                 Server.s.Log(((Plugin)instance).welcome);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 Plugin_Simple.Load(pluginname, startup);
             }
-            catch (BadImageFormatException e)
+            catch (BadImageFormatException)
             {
                 Plugin_Simple.Load(pluginname, startup);
             }
             catch (PathTooLongException)
             {
             }
-            catch (FileLoadException e)
+            catch (FileLoadException)
             {
                 Plugin_Simple.Load(pluginname, startup);
             }

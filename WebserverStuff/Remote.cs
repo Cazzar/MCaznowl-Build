@@ -238,94 +238,94 @@ namespace MCForge.Remote
                 {
                     mass = mass.Replace(KEY_SERVER_NAME, "");
                     Server.name = mass;
-                    Properties.Save("properties/server.properties");
+                    SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_ADMINS_JOIN))
                 {
                     mass = mass.Replace(KEY_ADMINS_JOIN, "");
-                    Server.adminsjoinsilent = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.adminsjoinsilent = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_SERVER_MOTD))
                 {
                     mass = mass.Replace(KEY_SERVER_MOTD, "");
-                    Server.motd = mass; Properties.Save("properties/server.properties");
+                    Server.motd = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_SERVER_PORT))
                 {
                     mass = mass.Replace(KEY_SERVER_PORT, "");
-                    Server.port = int.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.port = int.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_SERVER_IS_PUBLIC))
                 {
                     mass = mass.Replace(KEY_SERVER_IS_PUBLIC, "");
                     Server.pub = Boolean.Parse(mass);
-                    Properties.Save("properties/server.properties");
+                    SrvProperties.Save("properties/server.properties");
 
                     return;
                 }
                 if (mass.StartsWith(KEY_MAIN_NAME))
                 {
                     mass = mass.Replace(KEY_MAIN_NAME, "");
-                    if (Player.ValidName(mass)) Server.level = mass; Properties.Save("properties/server.properties");
+                    if (Player.ValidName(mass)) Server.level = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 //---------------------------------IRC--------------------------------//
                 if (mass.StartsWith(KEY_IRC_USE))
                 {
                     mass = mass.Replace(KEY_IRC_USE, "");
-                    Server.irc = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.irc = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_SERVER))
                 {
                     mass = mass.Replace(KEY_IRC_SERVER, "");
-                    Server.ircServer = mass; Properties.Save("properties/server.properties");
+                    Server.ircServer = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_CHANNEL))
                 {
                     mass = mass.Replace(KEY_IRC_CHANNEL, "");
-                    Server.ircChannel = mass; Properties.Save("properties/server.properties");
+                    Server.ircChannel = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_OPCHANNEL))
                 {
                     mass = mass.Replace(KEY_IRC_OPCHANNEL, "");
-                    Server.ircOpChannel = mass; Properties.Save("properties/server.properties");
+                    Server.ircOpChannel = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_NICK))
                 {
                     mass = mass.Replace(KEY_IRC_NICK, "");
-                    Server.ircNick = mass; Properties.Save("properties/server.properties");
+                    Server.ircNick = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_PORT))
                 {
                     mass = mass.Replace(KEY_IRC_PORT, "");
-                    Server.ircPort = int.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.ircPort = int.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_PASS))
                 {
                     mass = mass.Replace(KEY_IRC_PASS, "");
-                    Server.ircPassword = mass; Properties.Save("properties/server.properties");
+                    Server.ircPassword = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_COLOR))
                 {
                     mass = mass.Replace(KEY_IRC_COLOR, "");
-                    Server.IRCColour = mass; Properties.Save("properties/server.properties");
+                    Server.IRCColour = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_IRC_IDENT))
                 {
                     mass = mass.Replace(KEY_IRC_IDENT, "");
-                    Server.ircIdentify = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.ircIdentify = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
 
@@ -333,55 +333,55 @@ namespace MCForge.Remote
                 if (mass.StartsWith(KEY_MISC_PHYSICSRESTART))
                 {
                     mass = mass.Replace(KEY_MISC_PHYSICSRESTART, "");
-                    Server.physicsRestart = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.physicsRestart = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_RPLIMIT))
                 {
                     mass = mass.Replace(KEY_MISC_RPLIMIT, "");
-                    Server.rpLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.rpLimit = int.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_NORMRPLIMIT))
                 {
                     mass = mass.Replace(KEY_MISC_NORMRPLIMIT, "");
-                    Server.rpNormLimit = int.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.rpNormLimit = int.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_GLOBALCHAT))
                 {
                     mass = mass.Replace(KEY_MISC_GLOBALCHAT, "");
-                    Server.UseGlobalChat = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.UseGlobalChat = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_GLOBALCOLOR))
                 {
                     mass = mass.Replace(KEY_MISC_GLOBALCOLOR, "");
-                    Server.GlobalChatColor = mass; Properties.Save("properties/server.properties");
+                    Server.GlobalChatColor = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_GLOBALNAME))
                 {
                     mass = mass.Replace(KEY_MISC_GLOBALNAME, "");
-                    Server.GlobalChatNick = mass; Properties.Save("properties/server.properties");
+                    Server.GlobalChatNick = mass; SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_DOLLAR))
                 {
                     mass = mass.Replace(KEY_MISC_DOLLAR, "");
-                    Server.dollardollardollar = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.dollardollardollar = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_SUPEROPRANK))
                 {
                     mass = mass.Replace(KEY_MISC_SUPEROPRANK, "");
-                    Server.rankSuper = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.rankSuper = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
                 if (mass.StartsWith(KEY_MISC_PARSEEMOTE))
                 {
                     mass = mass.Replace(KEY_MISC_PARSEEMOTE, "");
-                    Server.parseSmiley = Boolean.Parse(mass); Properties.Save("properties/server.properties");
+                    Server.parseSmiley = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
                     return;
                 }
             }
@@ -564,7 +564,7 @@ namespace MCForge.Remote
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                 buffer = null;
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 buffer = null;
                 Disconnect();
@@ -579,7 +579,7 @@ namespace MCForge.Remote
                 socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                 buffer = null;
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 buffer = null;
                 Disconnect();

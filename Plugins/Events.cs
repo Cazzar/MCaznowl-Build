@@ -22,13 +22,20 @@ using System.Text;
 
 namespace MCForge
 {
+    public enum ServerEvents
+    {
+    	//TODO
+    	//Make these do things
+    	ServerLog,
+    	ServerOpLog,
+    	ServerAdminLog,
+    	ConsoleCommand
+    }
     public enum PlayerEvents
     {
         PlayerCommand,
         PlayerChat,
         BlockChange,
-        LevelLoad,
-        LevelSave,
         PlayerMove,
         MYSQLSave,
         PlayerRankChange

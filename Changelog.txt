@@ -1,10 +1,16 @@
 v5.3.0.0
+- Added /baninfo - shows info about someone's ban
+- Fixed /ban and /unban to work with /baninfo
+- Fixed warn help menu.
 - Fixed a massive memory leak with level unloading.
 - Fixed leaving a channel name black in the IRC settings causing a crash.
 - Fixed /spheroid being lopsided with even numbers.
+- Fixed the way the program restarts (should be way better now)
 - Fixed the update checker so it only updates if there actually is an update.
+- Fixed the program crashing after every update
 - Fixed /xban not working at all if the player is offline.
 - Fixed a bug in /ban that allowed a player to ban someone ranked higher than them if the player being banned was below rank permission 80. 
+- Added a new updater (configure it in Properties)
 - Added option for WoM Direct heartbeat.
 - Added the "Notchian" tree generator, use /tree notch.
 - Added command blocks, prepend a / to your /mb message to make it a command block. Example: /mb /cuboid air random
@@ -12,12 +18,18 @@ v5.3.0.0
 - Added some default position settings for Lava Survival.
 - Added a shortcut /fz for /freeze.
 - Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
+- Added a lives system to Lava Survival, so players actually have to worry about killer lava/water. You can set the number of lives in the properties.
+- Added Global Chat to the chat tab in the GUI.
 - Added commands:
 	- /nyan - 100% self-explanatory!
+	- /warp - For the new warp system!
 - Removed commands:
 	- /drop - Old CTF command, not needed.
 	- /team - Old CTF command, not needed.
 - Removed that stupid button next to the command input box.
+- Removed the Updater button and the useless text box next to it
+- Removed Restarter.exe and Restarter.pdb
+- Removed bash and batch files related to Updating (no longer needed)
 - Made improvements to leaf decay, should be more random now.
 - Made it so command and block change errors show the error info in-game.
 - Made it so that /inv will send a message to the user if the target (or themselves) has had invincible mode enabled/disabled.

@@ -427,8 +427,6 @@ namespace MCForge
                     catch { }
                     if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
-                    try { Waypoint.Load(this); if (Waypoints.Count >= 1) { this.SendMessage("Loaded Waypoints"); } }
-                    catch { }
                 };
 
                 afkTimer.Elapsed += delegate
@@ -534,11 +532,11 @@ namespace MCForge
                 p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 p.Disconnect();
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
@@ -1032,6 +1030,16 @@ namespace MCForge
                     }
                 }
             }
+            try
+            {
+                Waypoint.Load(this);
+                //if (Waypoints.Count > 0) { this.SendMessage("Loaded " + Waypoints.Count + " waypoints!"); }
+            }
+            catch (Exception ex)
+            {
+                SendMessage("Error loading waypoints!");
+                Server.ErrorLog(ex);
+            }
             Server.s.Log(name + " [" + ip + "] has joined the server.");
            
             if (Server.notifyOnJoinLeave)
@@ -1166,6 +1174,13 @@ namespace MCForge
                         SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
                     }
                 }
+            }
+
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+            {
+                SendMessage("You are out of the round, and cannot build.");
+                SendBlockchange(x, y, z, b);
+                return;
             }
 
             Level.BlockPos bP;
@@ -1764,6 +1779,8 @@ namespace MCForge
                 OnDeath(this, b);
             if (PlayerDeath != null)
                 PlayerDeath(this, b);
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+                return;
             if (lastDeath.AddSeconds(2) < DateTime.Now)
             {
 
@@ -1814,6 +1831,14 @@ namespace MCForge
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
                     }
+                    else if (Server.lava.active && Server.lava.HasPlayer(this))
+                    {
+                        if (!Server.lava.IsPlayerDead(this))
+                        {
+                            Server.lava.KillPlayer(this);
+                            Command.all.Find("spawn").Use(this, "");
+                        }
+                    }
                     else
                     {
                         Command.all.Find("spawn").Use(this, "");
@@ -1821,7 +1846,7 @@ namespace MCForge
                     }
 
                     if (Server.deathcount)
-                        if (overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
+                        if (overallDeath > 0 && overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
                 }
                 lastDeath = DateTime.Now;
 
@@ -1928,7 +1953,23 @@ namespace MCForge
                         //IRCBot.Say(this.name + " is no longer AFK");
                     }
                 }
-
+                //  This will allow people to type
+                //  //Command
+                //  and in chat it will appear as
+                //  /Command
+                //  Suggested by McMrCat
+                if (text.StartsWith("//"))
+                {
+                    text = text.Remove(0, 1);
+                    goto hello;
+                }
+                //This will make / = /repeat
+                //For lazy people :P
+                if (text == "/")
+                {
+                    HandleCommand("repeat", "");
+                    return;
+                }
                 if (text[0] == '/' || text[0] == '!')
                 {
                     text = text.Remove(0, 1);
@@ -1944,7 +1985,7 @@ namespace MCForge
                     HandleCommand(cmd, msg);
                     return;
                 }
-
+                hello:
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
 
@@ -2495,7 +2536,7 @@ namespace MCForge
                     Disconnect();
                 else goto retry;
             }*/
-            catch (SocketException e)
+            catch (SocketException)
             {
                 buffer = null;
                 Disconnect();
@@ -2572,18 +2613,18 @@ namespace MCForge
 // Begin fix to replace all invalid color codes typed in console or chat with "." 
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)103; ch <= (char)127; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
 		}
 // End fix
             }
@@ -3550,7 +3591,7 @@ namespace MCForge
                 Server.s.Log("Socket was shutdown for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to shutdown socket for " + this.name ?? this.ip, e);
@@ -3565,7 +3606,7 @@ namespace MCForge
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
@@ -3709,7 +3750,7 @@ namespace MCForge
                     {
                         left.Add(this.name.ToLower(), this.ip);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //Server.ErrorLog(e);
                     }

@@ -46,7 +46,7 @@ namespace MCForge
             {
                 cpos.type = Block.Byte(message);
                 cpos.vertical = false;
-                if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
+                if (message.ToLower() != "vertical" && !Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
                 if (cpos.type == Block.Zero)
                 {
                     if (message.ToLower() == "vertical")
