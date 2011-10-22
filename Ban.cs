@@ -51,7 +51,6 @@ namespace MCForge
             string filepath = "text/bans/" + whol + ".txt";
             if (File.Exists(filepath)) File.Delete(filepath);
             File.CreateText(filepath).Close();
-
             TextWriter tw = new StreamWriter(filepath);
             tw.WriteLine("banned-by=" + pl);
             tw.WriteLine("reason=" + reasonl);
