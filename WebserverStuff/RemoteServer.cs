@@ -1,5 +1,5 @@
 ﻿/*
-	Copyright 2011 ForgeCraft team
+	Copyright 2011 MCForge/ForgeCraft team
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -26,11 +26,12 @@ namespace MCForge.Remote
 {
    public class RemoteServer
     {
-        public Socket listen;
+        public static Socket listen;
         public static int port = 5050;
         public static string username = "head";
         public static string password = "lols";
         public static bool enableRemote = true;
+        public static int tries = 0;
         
 
         static bool shutdown = false;
@@ -40,6 +41,7 @@ namespace MCForge.Remote
         public void Start()
         {
             RemoteProperties.Load();
+            
             if (enableRemote)
             {
                 try
@@ -99,6 +101,7 @@ namespace MCForge.Remote
         
         public static void Close()
         {
+            listen.Close();
             shutdown = true;
         }
     }

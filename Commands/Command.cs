@@ -209,6 +209,7 @@ namespace MCForge
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
             all.Add(new CmdReferee());
+            all.Add(new CmdRemote());
             all.Add(new CmdRenameLvl());
             all.Add(new CmdRepeat());
             all.Add(new CmdReplace());

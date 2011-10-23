@@ -48,48 +48,32 @@ namespace MCForge
         }
         public static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)
         {
-            string filepath = "text/bans/" + whol + ".txt";
-            if (File.Exists(filepath)) File.Delete(filepath);
-            File.CreateText(filepath).Close();
-            TextWriter tw = new StreamWriter(filepath);
-            tw.WriteLine("banned-by=" + pl);
-            tw.WriteLine("reason=" + reasonl);
-            tw.WriteLine("timedate=" + datetimel);
-            tw.WriteLine("oldrank=" + oldrankl);
-            tw.WriteLine("stealth=" + stealthstr);
-            tw.Close();
+            if (!File.Exists("text/bans.txt"))
+            {
+                File.CreateText("text/bans.txt").Close();
+            }
+            File.AppendAllText("text/bans.txt", pl + " " + whol + " " + reasonl + " " + stealthstr + " " + datetimel + " " + oldrankl);
         }
         public static bool Isbanned(string who)
         {
-            if (File.Exists("text/bans/" + who + ".txt")) return true;
-            else return false;
+            foreach (string line in File.ReadAllLines("text/bans.txt"))
+            {
+                if (line.Split(' ')[0].Contains(who)) return true;
+            }
+            return false;
         }
         public static string[] Getbandata(string who)
         {
             string bannedby = "", reason = "", timedate = "", oldrank = "", stealth = "";
-            foreach (string line in File.ReadAllLines("text/bans/" + who + ".txt"))
+            foreach (string line in File.ReadAllLines("text/bans.txt"))
             {
-                string key = line.Split('=')[0].Trim();
-                string value = "";
-                if (line.IndexOf('=') >= 0) value = line.Substring(line.IndexOf('=') + 1).Trim();
-                if (value == "") value = "unknown";
-                switch (key.ToLower())
+                if (line.Split(' ')[0] == who)
                 {
-                    case "banned-by":
-                        bannedby = value;
-                        break;
-                    case "reason":
-                        reason = value;
-                        break;
-                    case "timedate":
-                        timedate = value;
-                        break;
-                    case "oldrank":
-                        oldrank = value;
-                        break;
-                    case "stealth":
-                        stealth = value;
-                        break;
+                    bannedby = line.Split(' ')[1];
+                    reason = line.Split(' ')[2];
+                    stealth = line.Split(' ')[3];
+                    timedate = line.Split(' ')[4];
+                    oldrank = line.Split(' ')[5];
                 }
             }
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
@@ -97,9 +81,21 @@ namespace MCForge
         }
         public static bool Deleteban(string name)
         {
-            string path = "text/bans/" + name + ".txt";
-            if (File.Exists(path)) { File.Delete(path); return true; }
-            else { return false; }
+            bool succes = false;
+            string end = "";
+            foreach (string line in File.ReadAllLines("text/bans.txt"))
+            {
+                if (line.Split(' ')[0] != name)
+                {
+                    end = end + line + "\r\n";
+                }
+                if (line.Split(' ')[0] == name)
+                {
+                    succes = true;
+                }
+            }
+            File.WriteAllText("text/bans.txt", end);
+            return succes;
         }
     }
 }

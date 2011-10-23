@@ -212,6 +212,8 @@ namespace MCForge
                 	break;
 
                 case "island":
+                case "hell":
+                case "nether":
                 case "mountains":
                 case "ocean":
                 case "forest":
