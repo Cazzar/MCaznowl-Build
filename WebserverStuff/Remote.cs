@@ -139,6 +139,7 @@ namespace MCForge.Remote
                     case 13: length = 1; break;
                     case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 15: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 16: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 3)); break;
                     case 25: length = 1; break;
                     default:
                         Server.s.Log("unhandled message id " + msg);
@@ -162,6 +163,7 @@ namespace MCForge.Remote
                         case 13: HandleMobileRequest(message); break;
                         case 14: HandleMobileSettingsChange(message); break;
                         case 15: HandleMobileCommand(message); break;
+                        case 16: HandleMobileChangeGroup(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -176,6 +178,65 @@ namespace MCForge.Remote
                 Server.ErrorLog(e);
             }
             return buffer;
+        }
+
+        private void HandleMobileChangeGroup(byte[] message)
+        { 
+            //0 - 2 = length
+            //3 = boolean (delete = true; add = false;)
+            //4+ = name
+            short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
+            byte id = message[2];
+            string messages = Encoding.UTF8.GetString(message, 3, length);
+            messages = this.Decrypt(messages, key);
+            switch (id)
+            {
+                case 1:
+                    string newGroupname = messages.Split('*')[1];
+                    string oldName = messages.Split('*')[0];
+                    Group g = Group.Find(oldName);
+                    if (g != null)
+                    {
+                        g.name = newGroupname;
+                        g.trueName = newGroupname;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 2:
+                    string color = messages.Split('*')[1];
+                    string name = messages.Split('*')[0];
+                    Group ge = Group.Find(name);
+                    if (ge != null)
+                    {
+                        ge.color = color;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 3:
+                    int limit  = int.Parse(messages.Split('*')[1]);
+                    string namee = messages.Split('*')[0];
+                    Group gew = Group.Find(namee);
+                    if (gew != null)
+                    {
+                        gew.maxBlocks = limit;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 4:
+                    int perms  = int.Parse(messages.Split('*')[1]);
+                    string name2 = messages.Split('*')[0];
+                    Group gew2 = Group.Find(name2);
+                    if (gew2 != null)
+                    {
+                        gew2.Permission = (LevelPermission)perms;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 5: //handle Delete
+                case 6: //handle new group
+                default: return;
+            }
+
         }
 
         private void HandleMobileCommand(byte[] message)
@@ -479,7 +540,7 @@ namespace MCForge.Remote
                 SendData(11, bs);
                 sendHash(key);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
-                startUp(); // -- dont need because phone will request stuff when ready
+                //startUp(); // -- dont need because phone will request stuff when ready
                 LoggedIn = true;
                 remotes.Add(this);
             }
@@ -745,7 +806,7 @@ namespace MCForge.Remote
         {
             foreach (Group g in Group.GroupList)
             {
-                SendData(0x07, g.color + "," + g.name);
+                SendData(0x07, g.color + "," + g.name + "," + g.maxBlocks + "," + ((int)g.Permission).ToString());
             }
         }
         void s_OnOp(string message)

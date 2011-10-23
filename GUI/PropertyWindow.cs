@@ -46,7 +46,6 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
-            Icon = Gui.Window.ActiveForm.Icon;
             lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
@@ -138,6 +137,7 @@ namespace MCForge.Gui
             {
                 LoadCommands();
                 LoadBlocks();
+                LoadExtraCmdCmds();
             }
             catch
             {
@@ -188,12 +188,14 @@ namespace MCForge.Gui
         public void LoadRanks()
         {
             txtCmdRanks.Text = "The following ranks are available: \r\n\r\n";
+            txtcmdranks2.Text = "The following ranks are available: \r\n\r\n";
             listRanks.Items.Clear();
             storedRanks.Clear();
             storedRanks.AddRange(Group.GroupList);
             foreach (Group grp in storedRanks)
             {
                 txtCmdRanks.Text += "\t" + grp.name + " (" + (int)grp.Permission + ")\r\n";
+                txtcmdranks2.Text += "\t" + grp.name + " (" + (int)grp.Permission + ")\r\n";
                 listRanks.Items.Add(grp.trueName + " = " + (int)grp.Permission);
             }
             txtBlRanks.Text = txtCmdRanks.Text;
@@ -938,6 +940,7 @@ namespace MCForge.Gui
             Save("properties/server.properties");
             SaveRanks();
             SaveCommands();
+            SaveOldExtraCustomCmdChanges();
             SaveBlocks();
             try { SaveLavaSettings(); }
             catch { Server.s.Log("Error saving Lava Survival settings!"); }
@@ -1953,11 +1956,13 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             if (!useList && !noUseList) return;
             try
             {
-                if (this.InvokeRequired)
-                {
-                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
-                    return;
-                }
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                        return;
+                    }
+                
+                
 
                 int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
                 if (useList) lsMapUse.Items.Clear();
@@ -1983,6 +1988,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     catch { }
                 }
             }
+            catch(ObjectDisposedException) { }  //Y U BE ANNOYING 
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
@@ -2141,6 +2147,50 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             else
             {
                 forceUpdateBtn.Enabled = true;
+            }
+        }
+
+        private int oldnumber;
+        private Command oldcmd;
+        private void listCommandsExtraCmdPerms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveOldExtraCustomCmdChanges();
+            Command cmd = Command.all.Find(listCommandsExtraCmdPerms.SelectedItem.ToString());
+            oldcmd = cmd;
+            extracmdpermnumber.Maximum = CommandOtherPerms.GetMaxNumber(cmd);
+            if (extracmdpermnumber.Maximum == 1) { extracmdpermnumber.ReadOnly = true; }
+            else { extracmdpermnumber.ReadOnly = false; }
+            extracmdpermnumber.Value = 1;
+            extracmdpermdesc.Text = CommandOtherPerms.Find(cmd, 1).Description;
+            extracmdpermperm.Text = CommandOtherPerms.Find(cmd, 1).Permission.ToString();
+            oldnumber = (int)extracmdpermnumber.Value;
+        }
+
+        private void SaveOldExtraCustomCmdChanges()
+        {
+            if (oldcmd != null)
+            {
+                CommandOtherPerms.Edit(CommandOtherPerms.Find(oldcmd, oldnumber), int.Parse(extracmdpermperm.Text));
+                CommandOtherPerms.Save();
+            }
+        }
+
+        private void extracmdpermnumber_ValueChanged(object sender, EventArgs e)
+        {
+            SaveOldExtraCustomCmdChanges();
+            oldnumber = (int)extracmdpermnumber.Value;
+            extracmdpermdesc.Text = CommandOtherPerms.Find(oldcmd, (int)extracmdpermnumber.Value).Description;
+            extracmdpermperm.Text = CommandOtherPerms.Find(oldcmd, (int)extracmdpermnumber.Value).Permission.ToString();
+        }
+        private void LoadExtraCmdCmds()
+        {
+            listCommandsExtraCmdPerms.Items.Clear();
+            foreach (Command cmd in Command.all.commands)
+            {
+                if (CommandOtherPerms.Find(cmd) != null)
+                {
+                    listCommandsExtraCmdPerms.Items.Add(cmd.name);
+                }
             }
         }
     }

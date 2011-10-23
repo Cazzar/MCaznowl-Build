@@ -99,7 +99,7 @@ namespace MCForge.Remote
         }
         
         
-        static void Close()
+        public static void Close()
         {
             listen.Close();
             shutdown = true;
