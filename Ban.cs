@@ -43,7 +43,7 @@ namespace MCForge
             string hour = DateTime.Now.Hour.ToString();
             string minute = DateTime.Now.Minute.ToString();
             // Creating date + time string that looks nice to read:
-            string datetime = dayname + " " + daynumber + " " + month + " " + year + ", at " + hour + ":" + minute;
+            string datetime = dayname + "-" + daynumber + "-" + month + "-" + year + ",-at-" + hour + ":" + minute;
             // checking if p = player or console
             string player;
             if (p == null) player = "Console";
@@ -52,9 +52,10 @@ namespace MCForge
             string stealthn;
             if (stealth) stealthn = "true";
             else stealthn = "false";
+            if (reason == "") reason = "&cnone";
             Write(player, who, reason, stealthn, datetime, oldrank);
         }
-        public static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)
+        static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)
         {
             if (!File.Exists("text/bans.txt"))
             {
@@ -66,7 +67,7 @@ namespace MCForge
         {
             foreach (string line in File.ReadAllLines("text/bans.txt"))
             {
-                if (line.Split(' ')[1].Contains(who)) return true;
+                if (line.Split(' ')[1] == who) return true;
             }
             return false;
         }
@@ -75,7 +76,7 @@ namespace MCForge
             string bannedby = "", reason = "", timedate = "", oldrank = "", stealth = "";
             foreach (string line in File.ReadAllLines("text/bans.txt"))
             {
-                if (line.Split(' ')[0] == who)
+                if (line.Split(' ')[1] == who)
                 {
                     bannedby = line.Split(' ')[0];
                     reason = line.Split(' ')[2];
@@ -84,6 +85,8 @@ namespace MCForge
                     oldrank = line.Split(' ')[5];
                 }
             }
+            Player.SendMessage(Player.Find(null), bannedby + " " + reason + " " +  stealth + " " + timedate + " " + oldrank);
+            timedate = timedate.Replace("-", " ");
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
         }
@@ -93,11 +96,11 @@ namespace MCForge
             string end = "";
             foreach (string line in File.ReadAllLines("text/bans.txt"))
             {
-                if (line.Split(' ')[0] != name)
+                if (line.Split(' ')[1] != name)
                 {
                     end = end + line + "\r\n";
                 }
-                if (line.Split(' ')[0] == name)
+                if (line.Split(' ')[1] == name)
                 {
                     succes = true;
                 }

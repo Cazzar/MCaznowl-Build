@@ -462,6 +462,7 @@ public static byte maxGuests = 10;
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
@@ -955,7 +956,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-
+                TempRankExpiryCheck.TRExpiryCheck();
                 try
                 {
                     if (Server.lava.startOnStartup)
