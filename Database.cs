@@ -19,7 +19,7 @@ namespace MCForge {
                 //Important note:  This does NOT account for foreign keys, BLOB's etc.  It only works for what we actually put in the db.
 
                 sql.WriteLine("-- MCForge SQL Database Dump");
-                sql.WriteLine("-- version 1.0");
+                sql.WriteLine("-- version 1.5");
                 sql.WriteLine("-- http://www.mcforge.net");
                 sql.WriteLine("--");
                 sql.WriteLine("-- Host: {0}", Server.MySQLHost);
@@ -95,16 +95,16 @@ namespace MCForge {
                             sql.WriteLine("-- Dumping data for table `{0}`", tableName);
                             sql.WriteLine("--");
                             sql.WriteLine();
-                            sql.Write("INSERT INTO `{0}` (`", tableName);
-                            foreach (string[] rParams in tableSchema) {
-                                sql.Write(rParams[0]);
-                                sql.Write((tableSchema.ElementAt<string[]>(tableSchema.Count() - 1).Equals(rParams) ? "`) VALUES" : "`, `"));
-                            }
                             List<DataColumn> allCols = new List<DataColumn>();
                             foreach (DataColumn col in tableRowData.Columns) {
                                 allCols.Add(col);
                             }
                             foreach (DataRow row in tableRowData.Rows) { //We rely on the correct datatype being given here.
+                                sql.Write("INSERT INTO `{0}` (`", tableName);
+                                foreach (string[] rParams in tableSchema) {
+                                    sql.Write(rParams[0]);
+                                    sql.Write((tableSchema.ElementAt<string[]>(tableSchema.Count() - 1).Equals(rParams) ? "`) VALUES" : "`, `"));
+                                }
                                 //Save the info contained to file
                                 sql.WriteLine();
                                 sql.Write("(");
@@ -116,7 +116,7 @@ namespace MCForge {
 
                                     } else if (eleType.Name.Equals("DateTime")) { // special format
                                         DateTime dt = row.Field<DateTime>(col);
-                                        sql.Write("'{0}-{1}-{2} {3}:{4}:{5}'", new object[] { dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second });
+                                        sql.Write("'{0:yyyy-MM-dd HH:mm:ss.ffff}'", dt);
 
                                     } else if (eleType.Name.Equals("Boolean")) {
                                         sql.Write(row.Field<Boolean>(col) ? "1" : "0");
@@ -126,22 +126,19 @@ namespace MCForge {
 
                                     } else {
                                         sql.Write(row.Field<Object>(col)); // We assume all other data is left as-is
-                                        //This includes numbers, and booleans.  (As well as objects, but we don't save them into the database)
+                                        //This includes numbers, blobs, etc.  (As well as objects, but we don't save them into the database)
 
                                     }
-                                    sql.Write((col < row.ItemArray.Length - 1 ? ", " : "),"));
+                                    sql.Write((col < row.ItemArray.Length - 1 ? ", " : ");"));
                                 }// end:for(col)
 
                             }// end:foreach(DataRow row)
-                            sql.Flush();
-
-                            sql.BaseStream.Seek(-1, SeekOrigin.Current);
-                            sql.WriteLine(";");
                         } else {
                             sql.WriteLine("-- No data in table `{0}`!", tableName);
                         }
                         sql.WriteLine();
                     }
+
                 }// end:foreach(DataRow sqlTablesRow)
 
             }
@@ -263,14 +260,16 @@ namespace MCForge {
                                     newCmd = newCmd.Insert(newCmd.IndexOf(',', priIndex), " AUTO_INCREMENT");
 
                                 } else {
-                                    int priIndex = newCmd.ToUpper().IndexOf(", PRIMARY KEY");
+                                    int priIndex = newCmd.ToUpper().IndexOf(",\r\nPRIMARY KEY");
                                     int priIndexEnd = newCmd.ToUpper().IndexOf(')', priIndex);
                                     int attIdx = newCmd.IndexOf("(", priIndex) + 1;
                                     int attIdxEnd = priIndexEnd - 1;
                                     string attName = newCmd.Substring(attIdx, attIdxEnd - attIdx + 1);
-                                    //For speed, we just delete this, and add it to the attribute name, then delete the auto_increment clause.
                                     newCmd = newCmd.Remove(priIndex, priIndexEnd - priIndex + 1);
-                                    newCmd = newCmd.Insert(newCmd.IndexOf(attName) + attName.Length, " PRIMARY KEY AUTOINCREMENT");
+                                    int start = newCmd.IndexOf(attName) + attName.Length;
+                                    int end = newCmd.IndexOf(',');
+                                    newCmd = newCmd.Remove(start, end - start);
+                                    newCmd = newCmd.Insert(newCmd.IndexOf(attName) + attName.Length, " INTEGER PRIMARY KEY AUTOINCREMENT");
                                     newCmd = newCmd.Replace(" auto_increment", "").Replace(" AUTO_INCREMENT", "").Replace("True", "1").Replace("False", "0");
                                 }
                             } catch (ArgumentOutOfRangeException) { } // If we don't, just ignore it.

@@ -885,12 +885,12 @@ namespace MCForge
                         Zone Zn;
                         for (int i = 0; i < ZoneDB.Rows.Count; ++i)
                         {
-                            Zn.smallX = (ushort)ZoneDB.Rows[i]["SmallX"];
-                            Zn.smallY = (ushort)ZoneDB.Rows[i]["SmallY"];
-                            Zn.smallZ = (ushort)ZoneDB.Rows[i]["SmallZ"];
-                            Zn.bigX = (ushort)ZoneDB.Rows[i]["BigX"];
-                            Zn.bigY = (ushort)ZoneDB.Rows[i]["BigY"];
-                            Zn.bigZ = (ushort)ZoneDB.Rows[i]["BigZ"];
+                            Zn.smallX = ushort.Parse(ZoneDB.Rows[i]["SmallX"].ToString());
+                            Zn.smallY = ushort.Parse(ZoneDB.Rows[i]["SmallY"].ToString());
+                            Zn.smallZ = ushort.Parse(ZoneDB.Rows[i]["SmallZ"].ToString());
+                            Zn.bigX = ushort.Parse(ZoneDB.Rows[i]["BigX"].ToString());
+                            Zn.bigY = ushort.Parse(ZoneDB.Rows[i]["BigY"].ToString());
+                            Zn.bigZ = ushort.Parse(ZoneDB.Rows[i]["BigZ"].ToString());
                             Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
                             level.ZoneList.Add(Zn);
                         }
@@ -907,7 +907,7 @@ namespace MCForge
 
 						for (int i = 0; i < foundDB.Rows.Count; ++i)
 						{
-							if (!Block.portal(level.GetTile((ushort)foundDB.Rows[i]["EntryX"], (ushort)foundDB.Rows[i]["EntryY"], (ushort)foundDB.Rows[i]["EntryZ"])))
+							if (!Block.portal(level.GetTile(ushort.Parse(foundDB.Rows[i]["EntryX"].ToString()), ushort.Parse(foundDB.Rows[i]["EntryY"].ToString()), ushort.Parse(foundDB.Rows[i]["EntryZ"].ToString()))))
 							{
                                 Database.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" + foundDB.Rows[i]["EntryX"] + " AND EntryY=" + foundDB.Rows[i]["EntryY"] + " AND EntryZ=" + foundDB.Rows[i]["EntryZ"]);
 							}
@@ -917,7 +917,7 @@ namespace MCForge
 
 						for (int i = 0; i < foundDB.Rows.Count; ++i)
 						{
-							if (!Block.mb(level.GetTile((ushort)foundDB.Rows[i]["X"], (ushort)foundDB.Rows[i]["Y"], (ushort)foundDB.Rows[i]["Z"])))
+							if (!Block.mb(level.GetTile(ushort.Parse(foundDB.Rows[i]["X"].ToString()), ushort.Parse(foundDB.Rows[i]["Y"].ToString()), ushort.Parse(foundDB.Rows[i]["Z"].ToString()))))
 							{
                                 Database.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" + foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] + " AND Z=" + foundDB.Rows[i]["Z"]);
 							}

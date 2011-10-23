@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.IO.Packaging;
 using MCForge.SQL;
+using System.Threading;
 
 namespace MCForge {
     class CmdServer : Command {
@@ -76,7 +77,9 @@ namespace MCForge {
                     // Also important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
+                    Player.SendMessage(p, "Server backup (Everything): Started.\n\tPlease wait while backup finishes.");
                     Save(true);
+                    Player.SendMessage(p, "Server backup (Everything): Complete!");
                     break;
                 case "backup db":
                     // Backup database only.
@@ -85,17 +88,21 @@ namespace MCForge {
                     // Also important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
+                    Player.SendMessage(p, "Server backup (Database): Started.\n\tPlease wait while backup finishes.");
                     Save(false, true);
+                    Player.SendMessage(p, "Server backup (Database): Complete!");
                     break;
                 case "backup allbutdb":
                     // Important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
+                    Player.SendMessage(p, "Server backup (Everything but Database): Started.\n\tPlease wait while backup finishes.");
                     Save(false);
+                    Player.SendMessage(p, "Server backup (Everything but Database): Complete!");
                     break;
                 case "restore":
-                    ExtractPackage();
-                    Player.SendMessage(p, "Server restored.  Restart is required to see all changes.");
+                    Thread extract = new Thread(new ParameterizedThreadStart(ExtractPackage));
+                    extract.Start(p);
                     break;
                 default:
                     Player.SendMessage(p, "/server " + message + " is not currently implemented.");
@@ -111,7 +118,13 @@ namespace MCForge {
         }
 
         private void Save(bool withFiles, bool withDB) {
-            CreatePackage("MCForge.zip", withFiles, withDB);
+            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage);
+            Thread doWork = new Thread(new ParameterizedThreadStart(CreatePackage));
+            List<string> param = new List<string>();
+            param.Add("MCForge.zip");
+            param.Add(withFiles.ToString());
+            param.Add(withDB.ToString());
+            doWork.Start(param);
         }
 
         private void setToDefault() { // could do this elsewhere, but will worry about that later.
@@ -314,6 +327,11 @@ namespace MCForge {
             Player.SendMessage(p, "allbutdb - Backup everything BUT the database.");
         }
 
+        private static void CreatePackage(object par) {
+            List<string> param = (List<string>)par;
+            CreatePackage(param[0], bool.Parse(param[1]), bool.Parse(param[2]));
+        }
+
         //  -------------------------- CreatePackage --------------------------
         /// <summary>
         ///   Creates a package zip file containing specified
@@ -322,7 +340,9 @@ namespace MCForge {
 
             // Create the Package
             if (withDB) {
+                Server.s.Log("Saving DB...");
                 SaveDatabase("SQL.sql");
+                Server.s.Log("Saved DB to SQL.sql");
             }
 
             Server.s.Log("Creating package...");
@@ -332,8 +352,9 @@ namespace MCForge {
                     Server.s.Log("Collecting Directory structure...");
                     string currDir = Directory.GetCurrentDirectory() + "\\";
                     List<Uri> partURIs = GetAllFiles(new DirectoryInfo("./"), new Uri(currDir));
-                    Server.s.Log("Done!");
+                    Server.s.Log("Structure complete");
 
+                    Server.s.Log("Saving data...");
                     foreach (Uri loc in partURIs) {
                         if (!Uri.UnescapeDataString(loc.ToString()).Contains(packagePath)) {
 
@@ -349,11 +370,15 @@ namespace MCForge {
                             }// end:using(fileStream) - Close and dispose fileStream.
                         }
                     }// end:foreach(Uri loc)
-                } else if (withDB) { // If we don't want to back up database, we don't do this part.
+                }
+                if (withDB) { // If we don't want to back up database, we don't do this part.
+                    Server.s.Log("Compressing Database...");
                     ZipPackagePart packagePart =
                                 (ZipPackagePart)package.CreatePart(new Uri("/SQL.sql", UriKind.Relative), "", CompressionOption.Normal);
                     CopyStream(File.OpenRead("SQL.sql"), packagePart.GetStream());
+                    Server.s.Log("Database compressed.");
                 }// end:if(withFiles)
+                Server.s.Log("Data saved!");
             }// end:using (Package package) - Close and dispose package.
             Server.s.Log("Server backed up!");
         }// end:CreatePackage()
@@ -397,7 +422,7 @@ namespace MCForge {
                 target.Write(buf, 0, bytesRead);
         }// end:CopyStream()
 
-        private static void ExtractPackage() {
+        private static void ExtractPackage(object p) {
             int errors = 0;
             using (ZipPackage zip = (ZipPackage)ZipPackage.Open(File.OpenRead("MCForge.zip"))) {
                 PackagePartCollection pc = zip.GetParts();
@@ -410,7 +435,7 @@ namespace MCForge {
                             CopyStream(item.GetStream(), File.Create("./" + Uri.UnescapeDataString(item.Uri.ToString())));
                         } catch (IOException e) {
                             Server.ErrorLog(e);
-                            Server.s.Log("Caught Error.  See log for more details.  Will continue with rest of files.");
+                            Server.s.Log("Caught ignoreable Error.  See log for more details.  Will continue with rest of files.");
                             errors++;
                         }
                     }
@@ -419,6 +444,7 @@ namespace MCForge {
                     }
                 }
             }
+            Player.SendMessage((Player)p, "Server restored" + (errors > 0 ? " with errors.  May be a partial restore" : "" ) + ".  Restart is required to see all changes.");
         }
     }
 }

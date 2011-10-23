@@ -61,6 +61,7 @@ namespace MCForge
                 } catch (Exception e) {
                     System.IO.File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
                     Server.ErrorLog(e);
+                    throw e; // Ensures that only one error is thrown (though two will be caught.)
                 }
             }
 

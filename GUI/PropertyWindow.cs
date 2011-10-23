@@ -1868,7 +1868,7 @@ MessageBox.Show("Text Box Cleared!!");
             {
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                    this.Invoke(new MethodInvoker(delegate { try { UpdateLavaMapList(useList, noUseList); } catch { } }));
                     return;
                 }
 
