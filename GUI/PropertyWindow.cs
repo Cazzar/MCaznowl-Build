@@ -1953,11 +1953,13 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             if (!useList && !noUseList) return;
             try
             {
-                if (this.InvokeRequired)
-                {
-                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
-                    return;
-                }
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                        return;
+                    }
+                
+                
 
                 int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
                 if (useList) lsMapUse.Items.Clear();
@@ -1983,6 +1985,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     catch { }
                 }
             }
+            catch(ObjectDisposedException) { }  //Y U BE ANNOYING 
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
