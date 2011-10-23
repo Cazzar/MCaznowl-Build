@@ -54,8 +54,8 @@ namespace MCForge.Gui
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.btnCmdHelp = new System.Windows.Forms.Button();
             this.txtCmdRanks = new System.Windows.Forms.TextBox();
+            this.btnCmdHelp = new System.Windows.Forms.Button();
             this.txtCmdAllow = new System.Windows.Forms.TextBox();
             this.txtCmdLowest = new System.Windows.Forms.TextBox();
             this.txtCmdDisallow = new System.Windows.Forms.TextBox();
@@ -77,6 +77,14 @@ namespace MCForge.Gui
             this.btnCreate = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
             this.CustCmdtxtBox = new System.Windows.Forms.TextBox();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.label74 = new System.Windows.Forms.Label();
+            this.label73 = new System.Windows.Forms.Label();
+            this.extracmdpermnumber = new System.Windows.Forms.NumericUpDown();
+            this.label72 = new System.Windows.Forms.Label();
+            this.extracmdpermdesc = new System.Windows.Forms.TextBox();
+            this.extracmdpermperm = new System.Windows.Forms.TextBox();
+            this.listCommandsExtraCmdPerms = new System.Windows.Forms.ListBox();
             this.label24 = new System.Windows.Forms.Label();
             this.chkHelp = new System.Windows.Forms.CheckBox();
             this.chkPhysicsRest = new System.Windows.Forms.CheckBox();
@@ -327,11 +335,14 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.txtcmdranks2 = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabPage12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extracmdpermnumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudFastLava)).BeginInit();
@@ -446,6 +457,7 @@ namespace MCForge.Gui
             // 
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Location = new System.Drawing.Point(9, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -455,8 +467,8 @@ namespace MCForge.Gui
             // tabPage6
             // 
             this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage6.Controls.Add(this.btnCmdHelp);
             this.tabPage6.Controls.Add(this.txtCmdRanks);
+            this.tabPage6.Controls.Add(this.btnCmdHelp);
             this.tabPage6.Controls.Add(this.txtCmdAllow);
             this.tabPage6.Controls.Add(this.txtCmdLowest);
             this.tabPage6.Controls.Add(this.txtCmdDisallow);
@@ -471,6 +483,15 @@ namespace MCForge.Gui
             this.tabPage6.TabIndex = 0;
             this.tabPage6.Text = "Commands";
             // 
+            // txtCmdRanks
+            // 
+            this.txtCmdRanks.Location = new System.Drawing.Point(9, 109);
+            this.txtCmdRanks.Multiline = true;
+            this.txtCmdRanks.Name = "txtCmdRanks";
+            this.txtCmdRanks.ReadOnly = true;
+            this.txtCmdRanks.Size = new System.Drawing.Size(225, 339);
+            this.txtCmdRanks.TabIndex = 33;
+            // 
             // btnCmdHelp
             // 
             this.btnCmdHelp.Location = new System.Drawing.Point(253, 419);
@@ -480,15 +501,6 @@ namespace MCForge.Gui
             this.btnCmdHelp.Text = "Help information";
             this.btnCmdHelp.UseVisualStyleBackColor = true;
             this.btnCmdHelp.Click += new System.EventHandler(this.btnCmdHelp_Click);
-            // 
-            // txtCmdRanks
-            // 
-            this.txtCmdRanks.Location = new System.Drawing.Point(9, 109);
-            this.txtCmdRanks.Multiline = true;
-            this.txtCmdRanks.Name = "txtCmdRanks";
-            this.txtCmdRanks.ReadOnly = true;
-            this.txtCmdRanks.Size = new System.Drawing.Size(225, 321);
-            this.txtCmdRanks.TabIndex = 33;
             // 
             // txtCmdAllow
             // 
@@ -723,6 +735,99 @@ namespace MCForge.Gui
             this.CustCmdtxtBox.Name = "CustCmdtxtBox";
             this.CustCmdtxtBox.Size = new System.Drawing.Size(217, 18);
             this.CustCmdtxtBox.TabIndex = 27;
+            // 
+            // tabPage12
+            // 
+            this.tabPage12.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage12.Controls.Add(this.txtcmdranks2);
+            this.tabPage12.Controls.Add(this.label74);
+            this.tabPage12.Controls.Add(this.label73);
+            this.tabPage12.Controls.Add(this.extracmdpermnumber);
+            this.tabPage12.Controls.Add(this.label72);
+            this.tabPage12.Controls.Add(this.extracmdpermdesc);
+            this.tabPage12.Controls.Add(this.extracmdpermperm);
+            this.tabPage12.Controls.Add(this.listCommandsExtraCmdPerms);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Size = new System.Drawing.Size(468, 476);
+            this.tabPage12.TabIndex = 2;
+            this.tabPage12.Text = "Additional Command Permissions";
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(6, 70);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(64, 13);
+            this.label74.TabIndex = 45;
+            this.label74.Text = "Description:";
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(3, 18);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(179, 13);
+            this.label73.TabIndex = 44;
+            this.label73.Text = "Command Extra Permission Number:";
+            // 
+            // extracmdpermnumber
+            // 
+            this.extracmdpermnumber.Location = new System.Drawing.Point(188, 16);
+            this.extracmdpermnumber.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.extracmdpermnumber.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.extracmdpermnumber.Name = "extracmdpermnumber";
+            this.extracmdpermnumber.Size = new System.Drawing.Size(120, 21);
+            this.extracmdpermnumber.TabIndex = 43;
+            this.extracmdpermnumber.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.extracmdpermnumber.ValueChanged += new System.EventHandler(this.extracmdpermnumber_ValueChanged);
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Location = new System.Drawing.Point(7, 46);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(63, 13);
+            this.label72.TabIndex = 42;
+            this.label72.Text = "Permission:";
+            // 
+            // extracmdpermdesc
+            // 
+            this.extracmdpermdesc.Location = new System.Drawing.Point(72, 70);
+            this.extracmdpermdesc.Multiline = true;
+            this.extracmdpermdesc.Name = "extracmdpermdesc";
+            this.extracmdpermdesc.ReadOnly = true;
+            this.extracmdpermdesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.extracmdpermdesc.Size = new System.Drawing.Size(241, 113);
+            this.extracmdpermdesc.TabIndex = 41;
+            // 
+            // extracmdpermperm
+            // 
+            this.extracmdpermperm.Location = new System.Drawing.Point(72, 43);
+            this.extracmdpermperm.Name = "extracmdpermperm";
+            this.extracmdpermperm.Size = new System.Drawing.Size(116, 21);
+            this.extracmdpermperm.TabIndex = 40;
+            // 
+            // listCommandsExtraCmdPerms
+            // 
+            this.listCommandsExtraCmdPerms.FormattingEnabled = true;
+            this.listCommandsExtraCmdPerms.Location = new System.Drawing.Point(319, 16);
+            this.listCommandsExtraCmdPerms.Name = "listCommandsExtraCmdPerms";
+            this.listCommandsExtraCmdPerms.Size = new System.Drawing.Size(141, 446);
+            this.listCommandsExtraCmdPerms.TabIndex = 27;
+            this.listCommandsExtraCmdPerms.SelectedIndexChanged += new System.EventHandler(this.listCommandsExtraCmdPerms_SelectedIndexChanged);
             // 
             // label24
             // 
@@ -3480,6 +3585,15 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // txtcmdranks2
+            // 
+            this.txtcmdranks2.Location = new System.Drawing.Point(72, 189);
+            this.txtcmdranks2.Multiline = true;
+            this.txtcmdranks2.Name = "txtcmdranks2";
+            this.txtcmdranks2.ReadOnly = true;
+            this.txtcmdranks2.Size = new System.Drawing.Size(241, 273);
+            this.txtcmdranks2.TabIndex = 46;
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3504,6 +3618,9 @@ namespace MCForge.Gui
             this.tabPage7.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tabPage12.ResumeLayout(false);
+            this.tabPage12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extracmdpermnumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudVoteTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lsNudFastLava)).EndInit();
@@ -3871,5 +3988,14 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label71;
         private System.Windows.Forms.CheckBox notifyInGameUpdate;
         private System.Windows.Forms.Button forceUpdateBtn;
+        private System.Windows.Forms.TabPage tabPage12;
+        private System.Windows.Forms.ListBox listCommandsExtraCmdPerms;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.Label label72;
+        public System.Windows.Forms.NumericUpDown extracmdpermnumber;
+        public System.Windows.Forms.TextBox extracmdpermdesc;
+        public System.Windows.Forms.TextBox extracmdpermperm;
+        private System.Windows.Forms.TextBox txtcmdranks2;
     }
 }
