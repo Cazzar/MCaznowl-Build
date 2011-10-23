@@ -97,7 +97,7 @@ namespace MCForge.Remote
         }
         
         
-        static void Close()
+        public static void Close()
         {
             shutdown = true;
         }

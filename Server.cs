@@ -1020,28 +1020,61 @@ processThread.Start();
             }
         }
 
-        public static void Exit()
+        public static void Exit(bool AutoRestart)
         {
             List<string> players = new List<string>();
             foreach (Player p in Player.players) { p.save(); players.Add(p.name); }
             foreach (string p in players)
             {
-                Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    Player.Find(p).Kick("Server restarted! Rejoin!");
             }
 
             //Player.players.ForEach(delegate(Player p) { p.Kick("Server shutdown. Rejoin in 10 seconds."); });
             Player.connections.ForEach(
             delegate(Player p)
             {
-                p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    p.Kick("Server restarted! Rejoin!");
             }
             );
             Plugin.Unload();
-            shuttingDown = true;
             if (listen != null)
             {
                 listen.Close();
             }
+            try
+            {
+                Remote.RemoteServer.enableRemote = false;
+                Remote.RemoteServer.Close();
+            }
+            catch { }
+            try
+            {
+                if (GlobalChat.IsConnected())
+                {
+                    if (!AutoRestart)
+                        GlobalChat.Disconnect("Server is shutting down.");
+                    else
+                        GlobalChat.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
+            try
+            {
+                if (IRC.IsConnected())
+                {
+                    if (!AutoRestart)
+                        IRC.Disconnect("Server is shutting down.");
+                    else
+                        IRC.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
         }
 
         public static void addLevel(Level level)

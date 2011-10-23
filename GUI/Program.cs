@@ -41,6 +41,7 @@ namespace MCForge_.Gui
         public static bool usingConsole = false;
         public static string parent = Path.GetFileName(Assembly.GetEntryAssembly().Location);
         public static string parentfullpath = Assembly.GetEntryAssembly().Location;
+        public static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private static string CurrentVersionFile = "http://www.mcforge.net/curversion.txt";
         private static string DLLLocation = "http://www.mcforge.net/MCForge_.dll";
         private static string ChangelogLocation = "http://www.mcforge.net/changelog.txt";
@@ -58,10 +59,8 @@ namespace MCForge_.Gui
             Server.ErrorLog(ex);
             Thread.Sleep(500);
 
-            if (!Server.restartOnError)
-                Program.restartMe();
-            else
-                Program.restartMe(false);
+            if (Server.restartOnError)
+                ExitProgram(true);
         }
 
         public static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
@@ -70,10 +69,8 @@ namespace MCForge_.Gui
             Server.ErrorLog(ex);
             Thread.Sleep(500);
 
-            if (!Server.restartOnError)
-                Program.restartMe();
-            else
-                Program.restartMe(false);
+            if (Server.restartOnError)
+                ExitProgram(true);
         }
 
         public static void Main(string[] args)
@@ -477,7 +474,12 @@ namespace MCForge_.Gui
                 catch { }
 
                 File.WriteAllBytes("Updater.exe", MCForge.Properties.Resources.Updater);
-                Process.Start("Updater.exe", parent);
+                if (!usingConsole)
+                    Process.Start("Updater.exe", parent).StartInfo.UseShellExecute = false;
+                else
+                {
+                    Process.Start("Updater.exe");
+                }
                 ExitProgram(false);
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -485,8 +487,10 @@ namespace MCForge_.Gui
 
         static public void ExitProgram(Boolean AutoRestart)
         {
+            Server.restarting = AutoRestart;
+            Server.shuttingDown = true;
             Thread exitThread;
-            Server.Exit();
+            Server.Exit(AutoRestart);
 
             exitThread = new Thread(new ThreadStart(delegate
             {
@@ -497,32 +501,26 @@ namespace MCForge_.Gui
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
+                        Logger.Dispose();
                     }
                 }
                 catch { }
 
-                try
+                if (AutoRestart == true) restartMe();
+                else
                 {
-                    saveAll();
-
-                    if (AutoRestart == true) restartMe();
-                    else Server.process.Kill();
-                }
-                catch
-                {
-                    Server.process.Kill();
+                    saveAll(false);
+                    Environment.Exit(0);
                 }
             })); exitThread.Start();
         }
 
-        static public void restartMe(bool fullRestart = true)
+        static public void restartMe()
         {
             Thread restartThread = new Thread(new ThreadStart(delegate
             {
-                saveAll();
+                saveAll(true);
 
-                Server.shuttingDown = true;
-                Server.restarting = true;
                 try
                 {
                     if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
@@ -535,25 +533,24 @@ namespace MCForge_.Gui
                 catch { }
 
                 if (Server.listen != null) Server.listen.Close();
-                if (!Server.mono || fullRestart)
-                {
-                    Application.Restart();
-                    Server.process.Kill();
-                }
-                else
-                {
-                    Server.s.Start();
-                }
+                Process.Start(parent);
+                Environment.Exit(0);
             }));
             restartThread.Start();
         }
-        static public void saveAll()
+        static public void saveAll(bool restarting)
         {
             try
             {
                 List<Player> kickList = new List<Player>();
                 kickList.AddRange(Player.players);
-                foreach (Player p in kickList) { p.Kick("Server restarted! Rejoin!"); }
+                foreach (Player p in kickList)
+                {
+                    if (restarting)
+                        p.Kick("Server restarted! Rejoin!");
+                    else
+                        p.Kick("Server is shutting down.");
+                }
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
 
@@ -570,7 +567,7 @@ namespace MCForge_.Gui
                     l.saveChanges();
                 }
 
-                if(!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
+                if (!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
         }

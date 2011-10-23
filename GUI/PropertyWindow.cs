@@ -46,7 +46,6 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
-            Icon = Gui.Window.ActiveForm.Icon;
             lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
