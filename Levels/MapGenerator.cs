@@ -53,7 +53,7 @@ namespace MCForge
             try
             {
                 Inuse = true;
-                terrain = new float[Lvl.width * Lvl.height];
+                terrain = new float[Lvl.width * Lvl.height];  //hmm 
                 overlay = new float[Lvl.width * Lvl.height];
 
                 if (!type.Equals("ocean"))
@@ -78,7 +78,7 @@ namespace MCForge
                 Server.s.Log("Creating overlay");
                 GeneratePerlinNoise(overlay, Lvl, "", rand);
 
-                if (!type.Equals("ocean") && type != "desert")
+                if (!type.Equals("ocean") && type != "desert" && !(type == "nether" && type == "hell"))
                 {
                     Server.s.Log("Planning trees");
                     GeneratePerlinNoise(overlay2, Lvl, "", rand);
@@ -93,6 +93,11 @@ namespace MCForge
                 //changes the terrain range based on type, also tree threshold
                 switch (type)
                 {
+                    case "hell":
+                    case"nether":
+                        RangeLow = .3f;
+                        RangeHigh = 2f;
+                        break;
                     case "island":
                         RangeLow = 0.4f;
                         RangeHigh = 0.75f;
@@ -163,6 +168,11 @@ namespace MCForge
                                 {
                                     Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);
                                 }
+                                else if (type == "hell" || type == "nether")
+                                {
+                                    Lvl.skipChange(x, (ushort)(z), y, (rand.Next() % 2 == 1 ? Block.obsidian : Block.door_darkgrey));
+                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava);
+                                }
                                 else
                                 {
                                     if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.grass); }
@@ -172,25 +182,48 @@ namespace MCForge
                             }
                             else
                             {
-                                Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock);    //zoned for above sea level rock floor
+                                if (type == "hell" || type == "nether")
+                                {
+                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava);
+                                }
+                                else
+                                {
+                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock);
+                                }
                             }
                         }
 
                         if (overlay[bb] < 0.25f && type != "desert")    //Zoned for flowers
                         {
-                            int temprand = rand.Next(12);
-
-                            switch (temprand)
+                            if (type == "nether" || type == "hell")
                             {
-                                case 10:
-                                    Lvl.skipChange(x, (ushort)(z + 1), y, Block.redflower);
-                                    break;
-                                case 11:
-                                    Lvl.skipChange(x, (ushort)(z + 1), y, Block.yellowflower);
-                                    break;
-                                default:
-                                    break;
+                                switch (rand.Next(13))
+                                {
+                                    case 9:
+                                    case 10:
+                                    case 11:
+                                    case 12:
+                                        Lvl.skipChange(x, (ushort)(z + 1), y, Block.iron);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
+                            else
+                            {
+                                switch (rand.Next(12))
+                                {
+                                    case 10:
+                                        Lvl.skipChange(x, (ushort)(z + 1), y, Block.redflower);
+                                        break;
+                                    case 11:
+                                        Lvl.skipChange(x, (ushort)(z + 1), y, Block.yellowflower);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                           
                         }
 
                         if (!type.Equals("ocean"))
@@ -205,10 +238,13 @@ namespace MCForge
                                         {
                                             if (!TreeCheck(Lvl, x, z, y, TreeDist))
                                             {
-                                                if (type == "desert")
-                                                    AddCactus(Lvl, x, (ushort)(z + 1), y, rand);
-                                                else
-                                                    AddTree(Lvl, x, (ushort)(z + 1), y, rand);
+                                                if (type != "hell" || type != "nether")
+                                                {
+                                                    if (type == "desert")
+                                                        AddCactus(Lvl, x, (ushort)(z + 1), y, rand);
+                                                    else
+                                                        AddTree(Lvl, x, (ushort)(z + 1), y, rand);
+                                                }
                                             }
                                         }
                                     }

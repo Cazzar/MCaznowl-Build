@@ -39,15 +39,24 @@ namespace MCForge
 {
     public class Server
     {
+        public static bool cancelcommand = false;
+        public static bool canceladmin = false;
+        public static bool cancellog = false;
+        public static bool canceloplog = false;
         public static string apppath = Application.StartupPath;
-        public delegate void LogHandler(string message);
-public delegate void OnServerError(Exception error);
-public static event OnServerError ServerError = null;
+        public delegate void OnConsoleCommand(string cmd, string message);
+        public static event OnConsoleCommand ConsoleCommand;
+        public delegate void OnServerError(Exception error);
+        public static event OnServerError ServerError = null;
+        public delegate void OnServerLog(string message);
+        public static event OnServerLog ServerLog;
+        public static event OnServerLog ServerAdminLog;
+        public static event OnServerLog ServerOpLog;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
         public delegate void VoidHandler();
-
+        public delegate void LogHandler(string message);
         public event LogHandler OnLog;
         public event LogHandler OnSystem;
         public event LogHandler OnCommand;
@@ -97,8 +106,8 @@ public static event OnServerError ServerError = null;
         public static PlayerList ircControllers;
         public static PlayerList muted;
         public static PlayerList ignored;
-        
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur"});
+        // The MCForge Developer List
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani", "wouto1997"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -294,9 +303,10 @@ public static event OnServerError ServerError = null;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
         public static bool logbeat = false;
         public static bool adminsjoinsilent = false;
-        public static bool mono = false;
+        public static bool mono { get { return (Type.GetType("Mono.Runtime") != null); } }
         public static string server_owner = "Notch";
         public static bool WomDirect = false;
+        public static bool UseSeasons = false;
 
         public static bool flipHead = false;
 
@@ -322,49 +332,75 @@ public static event OnServerError ServerError = null;
             ml = new MainLoop("server");
             Server.s = this;
         }
+        //True = cancel event
+        //Fale = dont cacnel event
+        public static bool Check(string cmd, string message)
+        {
+            if (ConsoleCommand != null)
+                ConsoleCommand(cmd, message);
+            return cancelcommand;
+        }
         public void Start()
         {
+           
             shuttingDown = false;
             Log("Starting Server");
-            {//dl restarter stuff
-                if (!File.Exists("Restarter.exe"))
+            {
+                try
                 {
-                    Log("Restarter.exe doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.exe"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
-                        }
-                        if (File.Exists("Restarter.exe"))
-                        {
-                            Log("Restarter.exe download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.exe failed, please try again later");
+                        File.Delete("Restarter.exe");
                     }
                 }
-                if (!File.Exists("Restarter.pdb"))
+                catch { }
+                try
                 {
-                    Log("Restarter.pdb doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.pdb"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
-                        }
-                        if (File.Exists("Restarter.pdb"))
-                        {
-                            Log("Restarter.pdb download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.pdb failed, please try again later");
+                        File.Delete("Restarter.pdb");
                     }
                 }
+                catch { }
+                //dl restarter stuff [Restarter is no longer needed]
+                //if (!File.Exists("Restarter.exe"))
+                //{
+                //    Log("Restarter.exe doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                //        }
+                //        if (File.Exists("Restarter.exe"))
+                //        {
+                //            Log("Restarter.exe download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.exe failed, please try again later");
+                //    }
+                //}
+                //if (!File.Exists("Restarter.pdb"))
+                //{
+                //    Log("Restarter.pdb doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                //        }
+                //        if (File.Exists("Restarter.pdb"))
+                //        {
+                //            Log("Restarter.pdb download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.pdb failed, please try again later");
+                //    }
+                //}
                 if (!File.Exists("MySql.Data.dll"))
                 {
                     Log("MySql.Data.dll doesn't exist, Downloading");
@@ -382,6 +418,25 @@ public static event OnServerError ServerError = null;
                     catch
                     {
                         Log("Downloading MySql.Data.dll failed, please try again later");
+                    }
+                }
+                if (!File.Exists("System.Data.SQLite.dll"))
+                {
+                    Log("System.Data.SQLite.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/System.Data.SQLite.dll", "System.Data.SQLite.dll");
+                        }
+                        if (File.Exists("System.Data.SQLite.dll"))
+                        {
+                            Log("System.Data.SQLite.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading System.Data.SQLite.dll failed, please try again later");
                     }
                 }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
@@ -409,12 +464,14 @@ public static event OnServerError ServerError = null;
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
             if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
             if (!Directory.Exists("extra/copy/")) { Directory.CreateDirectory("extra/copy/"); }
             if (!Directory.Exists("extra/copyBackup/")) { Directory.CreateDirectory("extra/copyBackup/"); }
+            if (!Directory.Exists("extra/Waypoints")) { Directory.CreateDirectory("extra/Waypoints"); }
 
             try
             {
@@ -498,7 +555,6 @@ public static event OnServerError ServerError = null;
                 {
                     Server.ErrorLog(e);
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
-  //         Server.ErrorLog(e);
                     //process.Kill();
                     return;
                 }
@@ -569,22 +625,18 @@ public static event OnServerError ServerError = null;
                             else
                             {
                                 Log("mainlevel not found");
-                                mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                                mainLevel.permissionvisit = LevelPermission.Guest;
-                                mainLevel.permissionbuild = LevelPermission.Guest;
+                                mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                                 mainLevel.Save();
+                                Level.CreateLeveldb(Server.level);
                             }
                         }
                     }
                     else
                     {
                         Log("mainlevel not found");
-                        mainLevel = new Level(Server.level, 128, 64, 128, "flat");
-
-                        mainLevel.permissionvisit = LevelPermission.Guest;
-                        mainLevel.permissionbuild = LevelPermission.Guest;
+                        mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                         mainLevel.Save();
+                        Level.CreateLeveldb(Server.level);
                     }
 
                     addLevel(mainLevel);
@@ -700,14 +752,12 @@ public static event OnServerError ServerError = null;
                     return;
                 }
             });
-            /*ml.Queue(delegate
+            ml.Queue(delegate
             {
-                Log("Creating listening socket on port " + 5050 + " for remote console...");          
                 Remote.RemoteServer webServer;
+                Remote.RemoteProperties.Load();
                 (webServer = new Remote.RemoteServer()).Start();
-                
-                
-            });*/
+            });
             
             ml.Queue(delegate
             {
@@ -900,7 +950,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-
+                TempRankExpiryCheck.TRExpiryCheck();
                 try
                 {
                     if (Server.lava.startOnStartup)
@@ -917,7 +967,7 @@ processThread.Start();
         }
 
         public static void LoadAllSettings() {
-            Properties.Load("properties/server.properties");
+            SrvProperties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Group.InitAll();
             Command.InitAll();
@@ -925,7 +975,8 @@ processThread.Start();
             Block.SetBlocks();
             Awards.Load();
             Economy.Load();
-
+            Warp.LOAD();
+            CommandOtherPerms.Load();
             ProfanityFilter.Init();
         }
         
@@ -959,7 +1010,7 @@ processThread.Start();
                     listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     if (p != null)
                         p.Disconnect();
@@ -977,28 +1028,61 @@ processThread.Start();
             }
         }
 
-        public static void Exit()
+        public static void Exit(bool AutoRestart)
         {
             List<string> players = new List<string>();
             foreach (Player p in Player.players) { p.save(); players.Add(p.name); }
             foreach (string p in players)
             {
-                Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    Player.Find(p).Kick("Server restarted! Rejoin!");
             }
 
             //Player.players.ForEach(delegate(Player p) { p.Kick("Server shutdown. Rejoin in 10 seconds."); });
             Player.connections.ForEach(
             delegate(Player p)
             {
-                p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    p.Kick("Server restarted! Rejoin!");
             }
             );
             Plugin.Unload();
-            shuttingDown = true;
             if (listen != null)
             {
                 listen.Close();
             }
+            try
+            {
+                Remote.RemoteServer.enableRemote = false;
+                Remote.RemoteServer.Close();
+            }
+            catch { }
+            try
+            {
+                if (GlobalChat.IsConnected())
+                {
+                    if (!AutoRestart)
+                        GlobalChat.Disconnect("Server is shutting down.");
+                    else
+                        GlobalChat.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
+            try
+            {
+                if (IRC.IsConnected())
+                {
+                    if (!AutoRestart)
+                        IRC.Disconnect("Server is shutting down.");
+                    else
+                        IRC.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
         }
 
         public static void addLevel(Level level)
@@ -1023,6 +1107,15 @@ processThread.Start();
 
         public void Log(string message, bool systemMsg = false)
         {
+            if (ServerLog != null)
+            {
+                ServerLog(message);
+                if (cancellog)
+                {
+                    cancellog = false;
+                    return;
+                }
+            }
             if (OnLog != null)
             {
                 if (!systemMsg)
@@ -1040,6 +1133,15 @@ processThread.Start();
 
         public void OpLog(string message, bool systemMsg = false)
         {
+            if (ServerOpLog != null)
+            {
+                OpLog(message);
+                if (canceloplog)
+                {
+                    canceloplog = false;
+                    return;
+                }
+            }
             if (OnOp != null)
             {
                 if (!systemMsg)
@@ -1057,6 +1159,15 @@ processThread.Start();
 
         public void AdminLog(string message, bool systemMsg = false)
         {
+            if (ServerAdminLog != null)
+            {
+                ServerAdminLog(message);
+                if (canceladmin)
+                {
+                    canceladmin = false;
+                    return;
+                }
+            }
             if (OnAdmin != null)
             {
                 if (!systemMsg)

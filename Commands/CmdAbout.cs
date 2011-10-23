@@ -72,7 +72,7 @@ namespace MCForge
                 foundOne = true;
                 Username = Blocks.Rows[i]["Username"].ToString();
                 TimePerformed = DateTime.Parse(Blocks.Rows[i]["TimePerformed"].ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-                Server.s.Log(Blocks.Rows[i]["Type"].ToString());
+                //Server.s.Log(Blocks.Rows[i]["Type"].ToString());
                 BlockUsed = Block.Name(Convert.ToByte(Blocks.Rows[i]["Type"])).ToString();
                 Deleted = Convert.ToBoolean(Blocks.Rows[i]["Deleted"]);
 

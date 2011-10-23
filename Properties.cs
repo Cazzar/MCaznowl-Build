@@ -22,7 +22,7 @@ using System.Text;
 
 namespace MCForge
 {
-    public static class Properties
+    public static class SrvProperties
     {
         public static void Load(string givenPath, bool skipsalt = false)
         {
@@ -368,6 +368,16 @@ namespace MCForge
                                 try { Server.autonotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
+                            case "auto-update":
+                                Server.autoupdate = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "in-game-update-notify":
+                                Server.notifyPlayers = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "update-countdown":
+                                try { Server.restartcountdown = Convert.ToInt32(value).ToString(); }
+                                catch { Server.restartcountdown = "10"; }
+                                break;
                             case "autoload":
                                 try { Server.AutoLoad = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
@@ -409,10 +419,10 @@ namespace MCForge
                             case "money-name":
                                 if (value != "") Server.moneys = value;
                                 break;
-                            case "mono":
+                            /*case "mono":
                                 try { Server.mono = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
-                                break;
+                                break;*/
                             case "restart-on-error":
                                 try { Server.restartOnError = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
@@ -568,7 +578,7 @@ namespace MCForge
             } return true;
         }
 
-        static void Save(string givenPath)
+       public static void Save(string givenPath)
         {
             try
             {
@@ -671,6 +681,9 @@ namespace MCForge
             w.WriteLine("max-maps = " + Server.maps.ToString());
             w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
             w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
+            w.WriteLine("auto-update = " + Server.autoupdate.ToString().ToLower());
+            w.WriteLine("in-game-update-notify = " + Server.notifyPlayers.ToString().ToLower());
+            w.WriteLine("update-countdown = " + Server.restartcountdown.ToString().ToLower());
             w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
             w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
             w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
@@ -739,9 +752,9 @@ namespace MCForge
             w.WriteLine("defaultColor = " + Server.DefaultColor);
             w.WriteLine("irc-color = " + Server.IRCColour);
             w.WriteLine();
-            w.WriteLine("#Running on mono?");
+            /*w.WriteLine("#Running on mono?");
             w.WriteLine("mono = " + Server.mono);
-            w.WriteLine();
+            w.WriteLine();*/
             w.WriteLine("#Custom Messages");
             w.WriteLine("custom-ban = " + Server.customBan.ToString().ToLower());
             w.WriteLine("custom-ban-message = " + Server.customBanMessage);

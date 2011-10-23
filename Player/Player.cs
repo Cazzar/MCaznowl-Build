@@ -540,11 +540,11 @@ namespace MCForge
                 p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 p.Disconnect();
             }
-            catch (ObjectDisposedException e)
+            catch (ObjectDisposedException)
             {
                 // Player is no longer connected, socket was closed
                 // Mark this as disconnected and remove them from active connection list
@@ -1038,6 +1038,16 @@ namespace MCForge
                     }
                 }
             }
+            try
+            {
+                Waypoint.Load(this);
+                //if (Waypoints.Count > 0) { this.SendMessage("Loaded " + Waypoints.Count + " waypoints!"); }
+            }
+            catch (Exception ex)
+            {
+                SendMessage("Error loading waypoints!");
+                Server.ErrorLog(ex);
+            }
             Server.s.Log(name + " [" + ip + "] has joined the server.");
            
             if (Server.notifyOnJoinLeave)
@@ -1172,6 +1182,13 @@ namespace MCForge
                         SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
                     }
                 }
+            }
+
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+            {
+                SendMessage("You are out of the round, and cannot build.");
+                SendBlockchange(x, y, z, b);
+                return;
             }
 
             Level.BlockPos bP;
@@ -1479,8 +1496,13 @@ namespace MCForge
 
                         if (192 <= rot[1] && rot[1] <= 196 || 60 <= rot[1] && rot[1] <= 64) { newX = 0; newZ = 0; }
 
-                        level.Blockchange((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2), Block.rockethead);
-                        level.Blockchange((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ), Block.fire);
+                        byte b1 = level.GetTile((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2));
+                        byte b2 = level.GetTile((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ));
+                        if (b1 == Block.air && b2 == Block.air && level.CheckClear((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2)) && level.CheckClear((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ)))
+                        {
+                            level.Blockchange((ushort)(x + newX * 2), (ushort)(y + newY * 2), (ushort)(z + newZ * 2), Block.rockethead);
+                            level.Blockchange((ushort)(x + newX), (ushort)(y + newY), (ushort)(z + newZ), Block.fire);
+                        }
                     }
                     break;
                 case Block.firework:
@@ -1492,9 +1514,13 @@ namespace MCForge
                     if (level.physics != 0)
                     {
                         mx = rand.Next(0, 2); mz = rand.Next(0, 2);
-
-                        level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1), Block.firework);
-                        level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1), Block.lavastill, false, "wait 1 dissipate 100");
+                        byte b1 = level.GetTile((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1));
+                        byte b2 = level.GetTile((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1));
+                        if (b1 == Block.air && b2 == Block.air && level.CheckClear((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1)) && level.CheckClear((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1)))
+                        {
+                            level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 2), (ushort)(z + mz - 1), Block.firework);
+                            level.Blockchange((ushort)(x + mx - 1), (ushort)(y + 1), (ushort)(z + mz - 1), Block.lavastill, false, "wait 1 dissipate 100");
+                        }
                     } SendBlockchange(x, y, z, b);
 
                     break;
@@ -1761,6 +1787,8 @@ namespace MCForge
                 OnDeath(this, b);
             if (PlayerDeath != null)
                 PlayerDeath(this, b);
+            if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
+                return;
             if (lastDeath.AddSeconds(2) < DateTime.Now)
             {
 
@@ -1811,6 +1839,14 @@ namespace MCForge
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
                     }
+                    else if (Server.lava.active && Server.lava.HasPlayer(this))
+                    {
+                        if (!Server.lava.IsPlayerDead(this))
+                        {
+                            Server.lava.KillPlayer(this);
+                            Command.all.Find("spawn").Use(this, "");
+                        }
+                    }
                     else
                     {
                         Command.all.Find("spawn").Use(this, "");
@@ -1818,7 +1854,7 @@ namespace MCForge
                     }
 
                     if (Server.deathcount)
-                        if (overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
+                        if (overallDeath > 0 && overallDeath % 10 == 0) GlobalChat(this, this.color + this.prefix + this.name + Server.DefaultColor + " has died &3" + overallDeath + " times", false);
                 }
                 lastDeath = DateTime.Now;
 
@@ -1925,7 +1961,23 @@ namespace MCForge
                         //IRCBot.Say(this.name + " is no longer AFK");
                     }
                 }
-
+                //  This will allow people to type
+                //  //Command
+                //  and in chat it will appear as
+                //  /Command
+                //  Suggested by McMrCat
+                if (text.StartsWith("//"))
+                {
+                    text = text.Remove(0, 1);
+                    goto hello;
+                }
+                //This will make / = /repeat
+                //For lazy people :P
+                if (text == "/")
+                {
+                    HandleCommand("repeat", "");
+                    return;
+                }
                 if (text[0] == '/' || text[0] == '!')
                 {
                     text = text.Remove(0, 1);
@@ -1941,7 +1993,7 @@ namespace MCForge
                     HandleCommand(cmd, msg);
                     return;
                 }
-
+                hello:
                 // People who are muted can't speak or vote
                 if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
 
@@ -2058,7 +2110,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '#') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
+                    GlobalMessageOps("To Ops &f<" + color + name + "&f> " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
@@ -2072,7 +2124,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);
+                    GlobalMessageAdmins("To Admins &f<" + color + name + "&f> " + newtext);  //to make it easy on remote
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
@@ -2243,7 +2295,7 @@ namespace MCForge
                 if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
                 if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
                 if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
-                //DO NOT REMOVE THE TWO COMMANDS BELOW, /PONY AND /RAINBOWDASHISCOOLERTHANYOU. -EricKilla
+                //DO NOT REMOVE THE TWO COMMANDS BELOW, /PONY AND /RAINBOWDASHLIKESCOOLTHINGS. -EricKilla
                 if (cmd.ToLower() == "pony")
                 {
                     if (ponycount < 2)
@@ -2259,7 +2311,7 @@ namespace MCForge
                         OnBecomeBrony(this);
                     return;
                 }
-                if (cmd.ToLower() == "rainbowdashiscoolerthanyou")
+                if (cmd.ToLower() == "rainbowdashlikescoolthings")
                 {
                     if (rdcount < 2)
                     {
@@ -2492,7 +2544,7 @@ namespace MCForge
                     Disconnect();
                 else goto retry;
             }*/
-            catch (SocketException e)
+            catch (SocketException)
             {
                 buffer = null;
                 Disconnect();
@@ -2569,18 +2621,18 @@ namespace MCForge
 // Begin fix to replace all invalid color codes typed in console or chat with "." 
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)103; ch <= (char)127; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, ".");
-                    sb.Replace("&" + ch, ".");
+                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("&" + ch, String.Empty);
 		}
 // End fix
             }
@@ -3547,7 +3599,7 @@ namespace MCForge
                 Server.s.Log("Socket was shutdown for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to shutdown socket for " + this.name ?? this.ip, e);
@@ -3562,7 +3614,7 @@ namespace MCForge
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
@@ -3706,7 +3758,7 @@ namespace MCForge
                     {
                         left.Add(this.name.ToLower(), this.ip);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //Server.ErrorLog(e);
                     }
@@ -4124,7 +4176,7 @@ namespace MCForge
                 public byte rotx;
                 public byte roty;
                 public string name;
-                public Level level;
+                public string lvlname;
             }
             public static WP Find(string name, Player p)
             {
@@ -4145,15 +4197,22 @@ namespace MCForge
             {
                 if (Exists(waypoint, p))
                 {
+                    
                     WP wp = Find(waypoint, p);
+                    Level lvl = Level.Find(wp.lvlname);
                     if (wp != null)
                     {
-                        if (p.level != wp.level)
+                        if (lvl != null)
                         {
-                            Command.all.Find("goto").Use(p, wp.level.name);
-                            while (p.Loading) { Thread.Sleep(250); }
+                            if (p.level != lvl)
+                            {
+                                Command.all.Find("goto").Use(p, lvl.name);
+                                while (p.Loading) { Thread.Sleep(250); }
+                            }
+                            unchecked { p.SendPos((byte)-1, wp.x, wp.y, wp.z, wp.rotx, wp.roty); }
+                            Player.SendMessage(p, "Sent you to waypoint");
                         }
-                        unchecked { p.SendPos((byte)-1, wp.x, wp.y, wp.z, wp.rotx, wp.roty); }
+                        else { Player.SendMessage(p, "The map that that waypoint is on isn't loaded right now (" + wp.lvlname + ")"); return; }
                     }
                 }
             }
@@ -4168,9 +4227,10 @@ namespace MCForge
                     wp.rotx = p.rot[0];
                     wp.roty = p.rot[1];
                     wp.name = waypoint;
-                    wp.level = p.level;
+                    wp.lvlname = p.level.name;
                 }
                 p.Waypoints.Add(wp);
+                Save();
             }
 
             public static void Update(string waypoint, Player p)
@@ -4184,15 +4244,17 @@ namespace MCForge
                     wp.rotx = p.rot[0];
                     wp.roty = p.rot[1];
                     wp.name = waypoint;
-                    wp.level = p.level;
+                    wp.lvlname = p.level.name;
                 }
                 p.Waypoints.Add(wp);
+                Save();
             }
 
             public static void Remove(string waypoint, Player p)
             {
                 WP wp = Find(waypoint, p);
                 p.Waypoints.Remove(wp);
+                Save();
             }
 
             public static bool Exists(string waypoint, Player p)
@@ -4206,6 +4268,66 @@ namespace MCForge
                     }
                 }
                 return exists;
+            }
+
+            public static void Load(Player p)
+            {
+                if (File.Exists("extra/Waypoints/" + p.name + ".save"))
+                {
+                    using (StreamReader SR = new StreamReader("extra/Waypoints/" + p.name + ".save"))
+                    {
+                        bool failed = false;
+                        string line;
+                        while (SR.EndOfStream == false)
+                        {
+                            line = SR.ReadLine().ToLower().Trim();
+                            if (!line.StartsWith("#") && line.Contains(":"))
+                            {
+                                failed = false;
+                                string[] LINE = line.ToLower().Split(':');
+                                WP wp = new WP();
+                                try
+                                {
+                                    wp.name = LINE[0];
+                                    wp.lvlname = LINE[1];
+                                    wp.x = ushort.Parse(LINE[2]);
+                                    wp.y = ushort.Parse(LINE[3]);
+                                    wp.z = ushort.Parse(LINE[4]);
+                                    wp.rotx = byte.Parse(LINE[5]);
+                                    wp.roty = byte.Parse(LINE[6]);
+                                }
+                                catch
+                                {
+                                    Server.s.Log("Couldn't load a Waypoint!");
+                                    failed = true;
+                                }
+                                if (failed == false)
+                                {
+                                    p.Waypoints.Add(wp);
+                                }
+                            }
+                        }
+                        SR.Dispose();
+                    }
+                }
+            }
+
+            public static void Save()
+            {
+                foreach (Player p in Player.players)
+                {
+                    if (p.Waypoints.Count >= 1)
+                    {
+                        using (StreamWriter SW = new StreamWriter("extra/Waypoints/" + p.name + ".save"))
+                        {
+                            foreach (WP wp in p.Waypoints)
+                            {
+                                SW.WriteLine(wp.name + ":" + wp.lvlname + ":" + wp.x + ":" + wp.y + ":" + wp.z + ":" + wp.rotx + ":" + wp.roty);
+                            }
+                            SW.Dispose();
+                        }
+                    }
+                }
             }
         }
         public bool EnoughMoney(int amount)

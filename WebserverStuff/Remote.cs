@@ -22,6 +22,7 @@ using System.Text;
 using System.Net.Sockets;
 using MCForge;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace MCForge.Remote
 {
@@ -29,9 +30,8 @@ namespace MCForge.Remote
     {
         public static Remote This;
         public string ip;
-        public string username;
-        public string password;
-        
+
+
 
         //public static Remote remote;
         byte[] buffer = new byte[0];
@@ -42,41 +42,60 @@ namespace MCForge.Remote
 
         public Socket socket;
         public static List<Remote> remotes = new List<Remote>();
-        public string version = "1.1";
-
+        public string version = "2.3";
+        private string key;
         public Remote()
         {
             Remote.This = this;
+            key = generateRandChars();
+        }
+
+        private string generateRandChars()
+        {
+            Random r = new Random();
+            byte[] rs = new byte[31]; //{1,2,3,4,5,6,7,8,9,0, (byte)'a',(byte)'b',(byte)'c',(byte)'d',(byte)'e'};
+            r.NextBytes(rs);
+            return Encoding.UTF8.GetString(rs);
+
         }
         public void Start()
         {
+
             if (RemoteServer.enableRemote)
             {
-                try
+                if (RemoteServer.tries < 7)
                 {
+                    try
+                    {
+                        RemoteProperties.Load();
+                        ip = socket.RemoteEndPoint.ToString().Split(':')[0];
+                        Player.GlobalMessage(c.navy + "A Remote has connected to the server");
+                        Server.s.Log("[Remote] connected to the server.");
 
-                    ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                    Player.GlobalMessage(c.navy + "A Remote has connected to the server");
-                    Server.s.Log("[Remote] connected to the server.");
-                    
-                    Server.s.OnLog += new Server.LogHandler(s_OnLog);
-                    Server.s.OnSettingsUpdate +=new Server.VoidHandler(s_OnSettingsUpdate);
-                    Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
-                    Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
-                    Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
-                    Group.OnGroupLoad +=new Group.GroupLoad(GroupChanged);
-                    Group.OnGroupSave +=new Group.GroupSave(GroupChanged);
+                        Server.s.OnLog += new Server.LogHandler(s_OnLog);
+                        Server.s.OnAdmin += new Server.LogHandler(s_OnAdmin);
+                        Server.s.OnOp += new Server.LogHandler(s_OnOp);
+                        Server.s.OnSettingsUpdate += new Server.VoidHandler(s_OnSettingsUpdate);
+                        Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
+                        Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
+                        Level.LevelLoad += new Level.OnLevelLoad(Level_LevelLoad);
+                        Level.LevelUnload += new Level.OnLevelUnload(Remote_LevelUnload);
+                        Group.OnGroupLoad += new Group.GroupLoad(GroupChanged);
+                        Group.OnGroupSave += new Group.GroupSave(GroupChanged);
 
-                    
-                    socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
-                }
-                catch (Exception e)
-                {
-                    Server.s.Log(e.Message);
-                    Server.s.Log(e.StackTrace);
+
+
+                        socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
+                    }
+
+                    catch (Exception e)
+                    {
+                        Server.ErrorLog(e);
+                    }
                 }
             }
         }
+
         static void Receive(IAsyncResult result)
         {
             Remote p = (Remote)result.AsyncState;
@@ -103,8 +122,7 @@ namespace MCForge.Remote
             catch (Exception e)
             {
                 p.Disconnect();
-                Server.s.Log(e.Message);
-                Server.s.Log(e.StackTrace);
+                Server.ErrorLog(e);
             }
         }
 
@@ -114,30 +132,15 @@ namespace MCForge.Remote
             try
             {
                 int length = 0; byte msg = buffer[0];
-                // Get the length of the message by checking the first byte
                 switch (msg)
                 {
-                    case 0: length = 0; LoggedIn = true; break;  //Remote Connection
-                    case 1: length = 4; break;   //version and type
-                    case 2: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break; //Login Info Exchange
-                    case 3: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break;  //Handshake
-                    case 4: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break;  //Chat
-                    //case 0x04: length = 1; break; //Entity Use
-                    //case 0x05: length = 1; break; //respawn
-
-                    //case 0x06: length = 1; break; //OnGround incoming
-                    //case 0x07: length = 33; break; //Pos incoming
-                    //case 0x08: length = 9; break; //???
-                    case 10: length = ((BitConverter.ToInt16(buffer, 1) * 2) + 2); break; //DC
-
                     case 11: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 12: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
-                    case 13: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 13: length = 1; break;
+                    case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 15: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 16: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 3)); break;
                     case 25: length = 1; break;
-
-
-
-
                     default:
                         Server.s.Log("unhandled message id " + msg);
                         Kick();
@@ -155,15 +158,12 @@ namespace MCForge.Remote
 
                     switch (msg)
                     {
-                        case 1: HandleInfo(message); break;    //2 - 5
-                        case 0x02: HandleRemoteLogin(message); break;
-                        case 0x03: HandleRemoteHandshake(message); break;
-                        case 0x04: HandleRemoteChatMessagePacket(message); break;
-
-
                         case 11: HandleMobileLogin(message); break;   //Login 
                         case 12: HandleMobileChat(message); break;
                         case 13: HandleMobileRequest(message); break;
+                        case 14: HandleMobileSettingsChange(message); break;
+                        case 15: HandleMobileCommand(message); break;
+                        case 16: HandleMobileChangeGroup(message); break;
                         case 25: HandleMobileDC(); break;
 
                     }
@@ -175,26 +175,317 @@ namespace MCForge.Remote
             }
             catch (Exception e)
             {
-                Server.s.Log(e.Message);
-                Server.s.Log(e.StackTrace);
+                Server.ErrorLog(e);
             }
             return buffer;
         }
+
+        private void HandleMobileChangeGroup(byte[] message)
+        { 
+            //0 - 2 = length
+            //3 = boolean (delete = true; add = false;)
+            //4+ = name
+            short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
+            byte id = message[2];
+            string messages = Encoding.UTF8.GetString(message, 3, length);
+            messages = this.Decrypt(messages, key);
+            switch (id)
+            {
+                case 1:
+                    string newGroupname = messages.Split('*')[1];
+                    string oldName = messages.Split('*')[0];
+                    Group g = Group.Find(oldName);
+                    if (g != null)
+                    {
+                        g.name = newGroupname;
+                        g.trueName = newGroupname;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 2:
+                    string color = messages.Split('*')[1];
+                    string name = messages.Split('*')[0];
+                    Group ge = Group.Find(name);
+                    if (ge != null)
+                    {
+                        ge.color = color;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 3:
+                    int limit  = int.Parse(messages.Split('*')[1]);
+                    string namee = messages.Split('*')[0];
+                    Group gew = Group.Find(namee);
+                    if (gew != null)
+                    {
+                        gew.maxBlocks = limit;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 4:
+                    int perms  = int.Parse(messages.Split('*')[1]);
+                    string name2 = messages.Split('*')[0];
+                    Group gew2 = Group.Find(name2);
+                    if (gew2 != null)
+                    {
+                        gew2.Permission = (LevelPermission)perms;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 5: //handle Delete
+                case 6: //handle new group
+                default: return;
+            }
+
+        }
+
+        private void HandleMobileCommand(byte[] message)
+        {
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
+            string mass = Encoding.UTF8.GetString(message, 2, length);
+            mass = Decrypt(mass, key);
+            string[] splitted = mass.Split('_');
+            string ident = splitted[0];
+            mass = mass.Replace(ident, "");
+            mass = mass.Remove(0, 1);
+
+            foreach (char c in mass)
+            {
+                if (c == '_')
+                {
+                    mass = mass.Replace(c, ' ');
+                }
+
+            }
+            Command.all.Find(ident).Use(null, mass);
+        }
+
+        private void HandleMobileSettingsChange(byte[] message)
+        {
+
+            const string KEY_SERVER_NAME = "servername:= ";
+            const string KEY_SERVER_MOTD = "servermotd:= ";
+            const string KEY_SERVER_PORT = "serverport:= ";
+            const string KEY_SERVER_IS_PUBLIC = "serverpublic:= ";
+            const string KEY_MAIN_NAME = "servermapname:= ";
+            const string KEY_ADMINS_JOIN = "serveradminjoin:= ";
+
+            const string KEY_IRC_USE = "ircuse:= ";
+            const string KEY_IRC_SERVER = "ircserver:= ";
+            const string KEY_IRC_CHANNEL = "ircchannel:= ";
+            const string KEY_IRC_OPCHANNEL = "ircopchannel:= ";
+            const string KEY_IRC_NICK = "ircnick:= ";
+            const string KEY_IRC_COLOR = "irccolor:= ";
+            const string KEY_IRC_IDENT = "ircident:= ";
+            const string KEY_IRC_PASS = "ircpass:= ";
+            const string KEY_IRC_PORT = "ircport:= ";
+
+            const string KEY_MISC_PHYSICSRESTART = "miscphysicssp:= ";
+            const string KEY_MISC_RPLIMIT = "miscrplimit:= ";
+            const string KEY_MISC_NORMRPLIMIT = "miscnormalrplimit:= ";
+            const string KEY_MISC_GLOBALCHAT = "miscglobalchat:= ";
+            const string KEY_MISC_GLOBALCOLOR = "miscglobalcolor:= ";
+            const string KEY_MISC_GLOBALNAME = "miscglobalnick:= ";
+            const string KEY_MISC_DOLLAR = "miscdollar:= ";
+            const string KEY_MISC_SUPEROPRANK = "miscsuperop:= ";
+            const string KEY_MISC_PARSEEMOTE = "miscparseemote:= ";
+
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
+            string mass = Encoding.UTF8.GetString(message, 2, length);
+            mass = Decrypt(mass, key);
+            try
+            {
+                if (mass.StartsWith(KEY_SERVER_NAME))
+                {
+                    mass = mass.Replace(KEY_SERVER_NAME, "");
+                    Server.name = mass;
+                    SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_ADMINS_JOIN))
+                {
+                    mass = mass.Replace(KEY_ADMINS_JOIN, "");
+                    Server.adminsjoinsilent = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_MOTD))
+                {
+                    mass = mass.Replace(KEY_SERVER_MOTD, "");
+                    Server.motd = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_PORT))
+                {
+                    mass = mass.Replace(KEY_SERVER_PORT, "");
+                    Server.port = int.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_SERVER_IS_PUBLIC))
+                {
+                    mass = mass.Replace(KEY_SERVER_IS_PUBLIC, "");
+                    Server.pub = Boolean.Parse(mass);
+                    SrvProperties.Save("properties/server.properties");
+
+                    return;
+                }
+                if (mass.StartsWith(KEY_MAIN_NAME))
+                {
+                    mass = mass.Replace(KEY_MAIN_NAME, "");
+                    if (Player.ValidName(mass)) Server.level = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                //---------------------------------IRC--------------------------------//
+                if (mass.StartsWith(KEY_IRC_USE))
+                {
+                    mass = mass.Replace(KEY_IRC_USE, "");
+                    Server.irc = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_SERVER))
+                {
+                    mass = mass.Replace(KEY_IRC_SERVER, "");
+                    Server.ircServer = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_CHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_CHANNEL, "");
+                    Server.ircChannel = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_OPCHANNEL))
+                {
+                    mass = mass.Replace(KEY_IRC_OPCHANNEL, "");
+                    Server.ircOpChannel = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_NICK))
+                {
+                    mass = mass.Replace(KEY_IRC_NICK, "");
+                    Server.ircNick = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PORT))
+                {
+                    mass = mass.Replace(KEY_IRC_PORT, "");
+                    Server.ircPort = int.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_PASS))
+                {
+                    mass = mass.Replace(KEY_IRC_PASS, "");
+                    Server.ircPassword = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_COLOR))
+                {
+                    mass = mass.Replace(KEY_IRC_COLOR, "");
+                    Server.IRCColour = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_IRC_IDENT))
+                {
+                    mass = mass.Replace(KEY_IRC_IDENT, "");
+                    Server.ircIdentify = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+
+                //------------------MISC-----------------------------------------------//
+                if (mass.StartsWith(KEY_MISC_PHYSICSRESTART))
+                {
+                    mass = mass.Replace(KEY_MISC_PHYSICSRESTART, "");
+                    Server.physicsRestart = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_RPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_RPLIMIT, "");
+                    Server.rpLimit = int.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_NORMRPLIMIT))
+                {
+                    mass = mass.Replace(KEY_MISC_NORMRPLIMIT, "");
+                    Server.rpNormLimit = int.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCHAT))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCHAT, "");
+                    Server.UseGlobalChat = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALCOLOR))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALCOLOR, "");
+                    Server.GlobalChatColor = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_GLOBALNAME))
+                {
+                    mass = mass.Replace(KEY_MISC_GLOBALNAME, "");
+                    Server.GlobalChatNick = mass; SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_DOLLAR))
+                {
+                    mass = mass.Replace(KEY_MISC_DOLLAR, "");
+                    Server.dollardollardollar = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_SUPEROPRANK))
+                {
+                    mass = mass.Replace(KEY_MISC_SUPEROPRANK, "");
+                    Server.rankSuper = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+                if (mass.StartsWith(KEY_MISC_PARSEEMOTE))
+                {
+                    mass = mass.Replace(KEY_MISC_PARSEEMOTE, "");
+                    Server.parseSmiley = Boolean.Parse(mass); SrvProperties.Save("properties/server.properties");
+                    return;
+                }
+            }
+            catch (FormatException)
+            {
+                Server.s.Log("Remote sent invalid setting");
+            }
+
+        }
         private void HandleMobileRequest(byte[] message)
         {
-            //throw new NotImplementedException();
+            //All = 1
+            //Players = 2
+            //Settings = 3
+            //Maps = 4
+            //Groups = 5
+            switch (message[0])
+            {
+                case 1:
+                    startUp();
+                    break;
+                case 2:
+                    sendPlayers();
+                    break;
+                case 3:
+                    sendSettings();
+                    break;
+                case 4:
+                    sendMaps();
+                    break;
+                case 5:
+                    sendGroups();
+                    break;
+                default: return;
+            }
         }
+
+
         private void HandleMobileChat(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string m = Encoding.UTF8.GetString(message, 2, length);
-
-            if (m.Length > 119)
-            {
-
-                Kick();
-                return;
-            }
+            m = this.Decrypt(m, key);
             foreach (char ch in m)
             {
                 if (ch < 32 || ch >= 127)
@@ -215,94 +506,57 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string msg = Encoding.UTF8.GetString(message, 2, length);
+            msg = this.Decrypt(msg, "FORGEREMOTETIVITY");
+            byte[] bs = new byte[1];
             //Server.s.Log(msg);
-            if (msg.StartsWith("2.3: "))  //TODO: make a better checker
+            if (msg.StartsWith(version))  //TODO: make a better checker
             {
-                msg = msg.Replace("2.3: ", "");
-
+                msg = msg.Replace(version + ": ", "");
             }
             else
             {
 
-
-                SendData("VERSION");
+                bs[0] = 3;
+                SendData(11, bs);
                 Server.s.Log("[Remote] A remote tried to connect with a different version.");
             }
-
+            if (RemoteServer.tries >= 3)
+            {
+                bs[0] = 4;
+                SendData(11, bs);
+                Server.s.Log("[Remote] A remote tried to connect with exceeding incorrect credentials");
+            }
+            if (RemoteServer.tries == 6)
+            {
+                bs[0] = 5;
+                SendData(11, bs);
+                Server.s.Log("[Remote] Remote was locked from the console, type \"/remote tryreset\" to reset the try count");
+            }
 
             if (HandleLogin(msg))
             {
 
-
-                SendData("ACCEPTED");
+                bs[0] = 1;
+                SendData(11, bs);
+                sendHash(key);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
-                startUp();
+                //startUp(); // -- dont need because phone will request stuff when ready
                 LoggedIn = true;
                 remotes.Add(this);
             }
             else
             {
-
-                SendData("FAIL");
+                bs[0] = 2;
+                SendData(11, bs);
                 Server.s.Log("[Remote] A Remote with incorrect information attempted to join.");
+                RemoteServer.tries++;
             }
         }
-        private void HandleInfo(byte[] message)
-        {
-            short type = BitConverter.ToInt16(message, 0);
-            short version = BitConverter.ToInt16(message, 2);
-
-            switch (type)
-            {
-                case 1: Server.s.Log("Desktop remote has joined"); break;
-                case 2: Server.s.Log("Mobile Remote has joined"); break;
-                default: Server.s.Log("Unknown type of remote has attempted to join"); Kick(); return;
-            }
-            //if (version != this.version)
-            //Kick("You have a different version");
-        }
-        private void HandleRemoteDCPacket(byte[] message)
-        {
-            Server.s.Log("DC");
-        }
-        private void HandleRemoteChatMessagePacket(byte[] message)
-        {
-            Server.s.Log("REMOTE TRY TO TALK");
-        }
-        private void HandleRemoteHandshake(byte[] message)
-        {
-            Server.s.Log("REMOTE REQUEST DATA");
-        }
-        private void HandleRemoteLogin(byte[] message)
-        {
-
-            short length = BitConverter.ToInt16(message, 0);
-            if (length > 32) { Kick(); return; }
-            string Info = Encoding.BigEndianUnicode.GetString(message, 2, (length * 2));
-
-            string[] seperate = Info.Split(':');  //need a better way of sending and getting passwords
-            string password = seperate[1];
-            username = seperate[0];
-
-
-
-
-
-
-
-
-        }
-        private void HandleRemoteJoin(byte[] message)
-        {
-            Server.s.Log("Remote Has Joined");
-        }
-#endregion
+        #endregion
 
         public void Kick()
         {
             if (disconnected) return;
-
-
             disconnected = true;
             if (LoggedIn)
             {
@@ -312,37 +566,22 @@ namespace MCForge.Remote
 
             try
             {
-
-
                 SendData(0x03);
                 Server.s.Log("[Remote] has been kicked from the server!");
-
-
             }
             catch { }
-
-
             this.Dispose();
         }
         public void Disconnect()
         {
             if (disconnected) return;
             disconnected = true;
-
-
-            if (LoggedIn)
-                Player.GlobalMessage("%5[Remote] %fhas disconnected.");
-            Server.s.Log("[Remote] has disconnected");
+            if (LoggedIn) Player.GlobalMessage("%5[Remote] %fhas disconnected."); Server.s.Log("[Remote] has disconnected");
             LoggedIn = false;
-
-
-
             this.Dispose();
         }
         public void Dispose()
         {
-            //SaveAttributes();
-
             if (socket != null && socket.Connected)
             {
                 try { socket.Close(); }
@@ -356,6 +595,7 @@ namespace MCForge.Remote
         public void SendData(int id) { SendData(id, new byte[0]); }
         public void SendData(int id, string p)
         {
+            p = Encrypt(p, key);
             byte[] bytes = new byte[(p.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
@@ -373,14 +613,16 @@ namespace MCForge.Remote
         public void SendData(int id, byte[] send)
         {
             if (socket == null || !socket.Connected) return;
-
             byte[] buffer = new byte[send.Length + 1];
             buffer[0] = (byte)id;
-            send.CopyTo(buffer, 1);
-
+            for (int i = 0; i < send.Length; i++)
+            {
+                buffer[i + 1] = send[i];
+            }
             try
             {
-                socket.Send(buffer);
+
+                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                 buffer = null;
             }
             catch (SocketException)
@@ -392,16 +634,15 @@ namespace MCForge.Remote
         public void SendData(byte[] send)
         {
             if (socket == null || !socket.Connected) return;
-
             try
             {
-                socket.Send(send);
-                //Server.s.Log("SENT MESSAGES");
-                send = null;
+
+                socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                buffer = null;
             }
             catch (SocketException)
             {
-                send = null;
+                buffer = null;
                 Disconnect();
             }
 
@@ -423,52 +664,78 @@ namespace MCForge.Remote
                 Server.s.Log("Packet " + id + " had no DATA!");
             }
         }
-#endregion
+        #endregion
+
         internal void startUp()
         {
-            sendPlayers();
-            sendSettings();
-            //sendGroups();
+            System.Object lockThis = new System.Object();
+            lock (lockThis)
+            {
+                sendSteps(0);
+                sendMaps();
+                sendSteps(1);
+                sendSettings();
+                sendSteps(2);
+                sendGroups();
+                sendSteps(3);
+                sendPlayers();
+                sendSteps(4);  //cancels it here
+            }
+
+        }
+
+        private void sendHash(string key)
+        {
+            byte[] biscut = new byte[(key.Length * 2) + 2];
+            util.EndianBitConverter.Big.GetBytes((short)key.Length).CopyTo(biscut, 0);
+            Encoding.BigEndianUnicode.GetBytes(key).CopyTo(biscut, 2);
+            SendData(0x02, biscut);
+        }
+
+        private void sendSteps(short b)
+        {
+            byte[] sdd = new byte[2];
+            util.BigEndianBitConverter.Big.GetBytes(b).CopyTo(sdd, 0);
+            SendData(0x09, sdd);
         }
         internal void sendPlayers()
         {
             StringBuilder builder = new StringBuilder();
             foreach (Player p in Player.players)
             {
-                //builder.Append(p.name).Append(",").Append(p.level.name).Append(",").Append(p.group.name);  later
                 addPlayer(p);
                 System.Threading.Thread.Sleep(100);
             }
-          
-
         }
         internal void sendSettings()
         {
-            const string RECIEVED_SERVER_NAME = "SRVR_NAME: "; 
-		    const string RECIEVED_SERVER_MOTD = "SRVR_MOTD: "; 
-		    const string RECIEVED_SERVER_PORT = "SRVR_PORT: "; 
-		    const string RECIEVED_SERVER_IS_PUBLIC = "SRVR_PUBLIC: ";
-		    const string RECIEVED_MAIN_NAME = "SRVR_MAIN_NAME: ";
+            const string RECIEVED_SERVER_NAME = "SRVR_NAME: ";
+            const string RECIEVED_SERVER_MOTD = "SRVR_MOTD: ";
+            const string RECIEVED_SERVER_PORT = "SRVR_PORT: ";
+            const string RECIEVED_SERVER_IS_PUBLIC = "SRVR_PUBLIC: ";
+            const string RECIEVED_MAIN_NAME = "SRVR_MAIN_NAME: ";
             const string RECIEVED_ADMINS_JOIN = "SRVR_ADMINS_JOIN: ";
 
             const string RECIEVED_IRC_USE = "IRC_USE: ";
-		    const string RECIEVED_IRC_CHANNEL = "IRC_CHANNEL: ";
-		    const string RECIEVED_IRC_OPCHANNEL = "IRC_OPCHANNEL: ";
-		    const string RECIEVED_IRC_NICK = "IRC_NICK: ";
-		    const string RECIEVED_IRC_COLOR = "IRC_COLOR: ";
-		    const string RECIEVED_IRC_IDENT= "IRC_IDENT: ";
-		    const string RECIEVED_IRC_PASS = "IRC_PASS: ";
-		    const string RECIEVED_IRC_PORT = "IRC_PORT: ";
+            const string RECIEVED_IRC_SERVER = "IRC_SERVER: ";
+            const string RECIEVED_IRC_CHANNEL = "IRC_CHANNEL: ";
+            const string RECIEVED_IRC_OPCHANNEL = "IRC_OPCHANNEL: ";
+            const string RECIEVED_IRC_NICK = "IRC_NICK: ";
+            const string RECIEVED_IRC_COLOR = "IRC_COLOR: ";
+            const string RECIEVED_IRC_IDENT = "IRC_IDENT: ";
+            const string RECIEVED_IRC_PASS = "IRC_PASS: ";
+            const string RECIEVED_IRC_PORT = "IRC_PORT: ";
 
-		    const string RECIEVED_MISC_PHYSICSRESTART = "MISC_PHYSICSRESTART: ";
-		    const string RECIEVED_MISC_RPLIMIT = "MISC_RPLIMIT: ";
-		    const string RECIEVED_MISC_NORMRPLIMIT = "MISC_NORMRPLIMIT: ";
-		    const string RECIEVED_MISC_GLOBALCHAT = "MISC_GLOBALCHAT: ";
-		    const string RECIEVED_MISC_GLOBALCOLOR = "MISC_GLOBALCOLOR: ";
-		    const string RECIEVED_MISC_GLOBALNAME = "MISC_GLOBALNAME: ";
-		    const string RECIEVED_MISC_DOLLAR = "MISC_DOLLAR: ";
-		    const string RECIEVED_MISC_SUPEROPRANK = "MISC_SUPEROPRANK: ";
-		    const string RECIEVED_MISC_PARSEEMOTE = "MISC_PARSEEMOTE: ";
+            const string RECIEVED_MISC_PHYSICSRESTART = "MISC_PHYSICSRESTART: ";
+            const string RECIEVED_MISC_RPLIMIT = "MISC_RPLIMIT: ";
+            const string RECIEVED_MISC_NORMRPLIMIT = "MISC_NORMRPLIMIT: ";
+            const string RECIEVED_MISC_GLOBALCHAT = "MISC_GLOBALCHAT: ";
+            const string RECIEVED_MISC_GLOBALCOLOR = "MISC_GLOBALCOLOR: ";
+            const string RECIEVED_MISC_GLOBALNAME = "MISC_GLOBALNAME: ";
+            const string RECIEVED_MISC_DOLLAR = "MISC_DOLLAR: ";
+            const string RECIEVED_MISC_SUPEROPRANK = "MISC_SUPEROPRANK: ";
+            const string RECIEVED_MISC_PARSEEMOTE = "MISC_PARSEEMOTE: ";
+
 
             SendData(0x08, RECIEVED_ADMINS_JOIN + Server.adminsjoinsilent.ToString().ToLower());
             SendData(0x08, RECIEVED_MAIN_NAME + Server.mainLevel.name.ToString());
@@ -478,6 +745,7 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_SERVER_NAME + Server.name.ToString());
 
             SendData(0x08, RECIEVED_IRC_USE + Server.irc.ToString().ToLower());
+            SendData(0x08, RECIEVED_IRC_SERVER + Server.ircServer);
             SendData(0x08, RECIEVED_IRC_CHANNEL + Server.ircChannel);
             SendData(0x08, RECIEVED_IRC_OPCHANNEL + Server.ircOpChannel);
             SendData(0x08, RECIEVED_IRC_NICK + Server.ircNick);
@@ -487,40 +755,31 @@ namespace MCForge.Remote
             SendData(0x08, RECIEVED_IRC_PORT + Server.ircPort);
 
             SendData(0x08, RECIEVED_MISC_PHYSICSRESTART + Server.physicsRestart.ToString().ToLower());
-            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit);
-            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit);
+            SendData(0x08, RECIEVED_MISC_RPLIMIT + Server.rpLimit.ToString());
+            SendData(0x08, RECIEVED_MISC_NORMRPLIMIT + Server.rpNormLimit.ToString());
             SendData(0x08, RECIEVED_MISC_GLOBALCHAT + Server.UseGlobalChat.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_GLOBALCOLOR + Server.GlobalChatColor);
             SendData(0x08, RECIEVED_MISC_GLOBALNAME + Server.GlobalChatNick);
             SendData(0x08, RECIEVED_MISC_DOLLAR + Server.dollardollardollar.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_SUPEROPRANK + Server.rankSuper.ToString().ToLower());
             SendData(0x08, RECIEVED_MISC_PARSEEMOTE + Server.parseSmiley.ToString().ToLower());
+            SendData(0x08, "Done_!*");
 
+            return;
         }
         internal void addPlayer(Player p)
         {
-            if (p.title.Equals(null))
-            {
-                SendData(0x04, new StringBuilder("ADD:").Append(p.color).Append(",").Append(p.group.name)
-                    .Append(",").Append(p.name).Append(",").Append("Default").ToString());
-                return;
-            }
-            else
-            {
-                SendData(0x04, new StringBuilder("ADD:")
-                    .Append(p.color).Append(",").Append(p.group.name)
-                    .Append(",").Append(p.name).Append(",")
-                    .Append(p.title).ToString());
-            }
+            SendData(0x04, new StringBuilder("ADD:").Append(p.title).Append(",").Append(p.name)
+                .Append(",").Append(p.group.name).Append(",").Append(p.color).ToString());
+
         }
         internal void removePlayer(Player p)
         {
-            SendData(0x04, "DELETE:" + p.name); 
+            SendData(0x04, "DELETE:" + p.name);
         }
+        List<string> levels = new List<string>(Server.levels.Count);
         internal void sendMaps()
         {
-
-            List<string> levels = new List<string>(Server.levels.Count);
             levels.Clear();
             try
             {
@@ -528,63 +787,139 @@ namespace MCForge.Remote
                 FileInfo[] fi = di.GetFiles("*.lvl");
                 foreach (Level l in Server.levels) { levels.Add(l.name.ToLower()); }
 
-                    foreach (FileInfo file in fi)
+                foreach (FileInfo file in fi)
+                {
+                    if (!levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
                     {
-                        if (!levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
-                        {
-                            SendData(0x06, "UN_" + file.Name.Replace(".lvl", ""));
-                        }
+                        SendData(0x06, "UN_" + file.Name.Replace(".lvl", ""));
                     }
-
-                    Server.levels.ForEach(delegate(Level l) { SendData(0x06, "LO_" + l.name); });
                 }
-               
-            catch (Exception e) { Server.ErrorLog(e);}
-            
+
+                Server.levels.ForEach(delegate(Level l) { SendData(0x06, "LO_" + l.name); });
+
+            }
+
+            catch (Exception e) { Server.ErrorLog(e); }
+
         }
         internal void sendGroups()
         {
-            foreach(Group g in Group.GroupList)
+            foreach (Group g in Group.GroupList)
             {
-                //SendData(0x07, g.name + "," +g.color + "," g.
-            } 
+                SendData(0x07, g.color + "," + g.name + "," + g.maxBlocks + "," + ((int)g.Permission).ToString());
+            }
+        }
+        void s_OnOp(string message)
+        {
+            Player p = null;
+
+            message = message.Remove(0, 11);
+            message = message.Replace("(OPs): ", "");
+            string[] secondSplit = message.Split(':');
+            string getname = message.Substring(0, secondSplit[0].Length);
+            p = Player.Find(getname);
+            if (p == null)
+            {
+                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)2;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+            else
+            {
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)2;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+
+        }
+        void s_OnAdmin(string message)
+        {
+            Player p = null;
+
+            message = message.Remove(0, 11);
+            message = message.Replace("(Admins): ", "");
+
+            string[] secondSplit = message.Split(':');
+            string getname = message.Substring(0, secondSplit[0].Length);
+            p = Player.Find(getname);
+            if (p == null)
+            {
+                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)4;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+            else
+            {
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)4;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+
         }
         void s_OnLog(string message)
         {
-            
+
             Player p = null;
 
-                //Player.GlobalMessage(message);
-                int id = message.IndexOf('>');
-                if (id > 0)
-                {
-                    string getname = null;
-                    Player.GlobalMessage(id.ToString());
-                    if (id % 2 == 0)
-                    {
-                        getname = message.Substring(12, (id / 2) - 1);
-                    }
-                    else if (id % 2 == 1)
-                    {
-                        getname = message.Substring(12, (id / 2) + 1);
-                    }
 
-                   // Player.GlobalMessage(getname);
-                    p = Player.Find(getname);
-                }
+            //(xx:yy:zz){2}headdetect{1}:<nsdfs>
+            if (message.IndexOf(">") > -1)
+            {
+                message = message.Remove(0, 11);
+                string[] secondSplit = message.Split('>');
+                string getname = message.Substring(1, secondSplit[0].Length - 1);
+                p = Player.Find(getname);
+            }
+            if (p == null)
+            {
+                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)1;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-                if (p == null)
-                {
-                    //Player.GlobalMessage(message);
-                    SendData(0x05, new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString());
-                    System.Threading.Thread.Sleep(100);
-                }
-                else
-                {
-                    SendData(0x05, new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString());
-                    System.Threading.Thread.Sleep(100);
-                }
-                
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+            else
+            {
+                string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+                messaged = Encrypt(messaged, key);
+                byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                buffed[0] = (byte)1;
+                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+
+                SendData(0x05, buffed);
+                System.Threading.Thread.Sleep(100);
+            }
+
+
         }
         void Player_PlayerConnect(Player p)
         {
@@ -596,14 +931,13 @@ namespace MCForge.Remote
         }
         void Level_LevelLoad(string l)
         {
-            sendMaps();
-            Level lo = Level.Find(l);
-            if (lo != null) lo.LevelUnload +=new Level.OnLevelUnload(Remote_LevelUnload);
-            
+            //Server.s.Log("WAS " + l + " LOADED?");
+            SendData(0x06, "LO_" + l);
         }
         void Remote_LevelUnload(Level l)
         {
-            sendMaps();
+            SendData(0x06, "UN_" + l.name);
+            //Server.s.Log("WAS " + l.name + " LOADED?");
         }
         void s_OnSettingsUpdate()
         {
@@ -613,6 +947,54 @@ namespace MCForge.Remote
         {
             sendGroups();
         }
+
+
+        string Decrypt(string textToDecrypt, string key)
+        {
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            rijndaelCipher.Mode = CipherMode.CBC;
+            rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+            rijndaelCipher.KeySize = 0x80;
+            rijndaelCipher.BlockSize = 0x80;
+            byte[] encryptedData = Convert.FromBase64String(textToDecrypt);
+            byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+            byte[] keyBytes = new byte[0x10];
+            int len = pwdBytes.Length;
+            if (len > keyBytes.Length)
+            {
+                len = keyBytes.Length;
+            }
+            Array.Copy(pwdBytes, keyBytes, len);
+            rijndaelCipher.Key = keyBytes;
+            rijndaelCipher.IV = keyBytes;
+            byte[] plainText = rijndaelCipher.CreateDecryptor().TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+            return Encoding.UTF8.GetString(plainText);
+        }
+
+        string Encrypt(string textToEncrypt, string key)
+        {
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            rijndaelCipher.Mode = CipherMode.CBC;
+            rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+            rijndaelCipher.KeySize = 0x80;
+            rijndaelCipher.BlockSize = 0x80;
+            byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+            byte[] keyBytes = new byte[0x10];
+            int len = pwdBytes.Length;
+            if (len > keyBytes.Length)
+            {
+                len = keyBytes.Length;
+            }
+            Array.Copy(pwdBytes, keyBytes, len);
+            rijndaelCipher.Key = keyBytes;
+            rijndaelCipher.IV = keyBytes;
+            ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
+            byte[] plainText = Encoding.UTF8.GetBytes(textToEncrypt);
+            return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
+        }
+
 
     }
 }

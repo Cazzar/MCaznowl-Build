@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSaver.cs" />
+    <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
@@ -94,12 +95,17 @@
     <Compile Include="Commands\CmdAka.cs" />
     <Compile Include="Commands\CmdAlive.cs" />
     <Compile Include="Commands\CmdAllowGuns.cs" />
+    <Compile Include="Commands\CmdAscend.cs" />
+    <Compile Include="Commands\CmdBaninfo.cs" />
+    <Compile Include="Commands\CmdBanlist.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
     <Compile Include="Commands\CmdChain.cs" />
     <Compile Include="Commands\CmdChangeLog.cs" />
     <Compile Include="Commands\CmdChatRoom.cs" />
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
+    <Compile Include="Commands\CmdCTF.cs" />
+    <Compile Include="Commands\CmdDelTempRank.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
@@ -147,6 +153,7 @@
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdReferee.cs" />
+    <Compile Include="Commands\CmdRemote.cs" />
     <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
@@ -175,6 +182,9 @@
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
     <Compile Include="Commands\CmdKill.cs" />
+    <Compile Include="Commands\CmdTempRank.cs" />
+    <Compile Include="Commands\CmdTempRankInfo.cs" />
+    <Compile Include="Commands\CmdTempRankList.cs" />
     <Compile Include="Commands\CmdTopTen.cs" />
     <Compile Include="Commands\CmdTpZone.cs" />
     <Compile Include="Commands\CmdFlipHeads.cs" />
@@ -194,6 +204,7 @@
     <Compile Include="Commands\CmdUnlock.cs" />
     <Compile Include="Commands\CmdVote.cs" />
     <Compile Include="Commands\CmdVoteResults.cs" />
+    <Compile Include="Commands\CmdWarp.cs" />
     <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
@@ -207,6 +218,7 @@
     <Compile Include="Commands\CmdPCreate.cs" />
     <Compile Include="Commands\CmdPLoad.cs" />
     <Compile Include="Commands\CmdPUnload.cs" />
+    <Compile Include="Commands\CommandOtherPerms.cs" />
     <Compile Include="CTF\Auto_CTF.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
@@ -235,12 +247,16 @@
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
-    <Compile Include="Plugins\Config.Type.cs" />
     <Compile Include="Plugins\Events.cs" />
-    <Compile Include="Plugins\Config.cs" />
     <Compile Include="Plugins\Plugin_Manager.cs" />
     <Compile Include="Plugins\Plugin_Simpile.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScriptingVB.cs" />
+    <Compile Include="TempRankExpiryCheck.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />
@@ -448,9 +464,11 @@
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="Warp.cs" />
     <Compile Include="WebserverStuff\Remote.cs" />
     <Compile Include="WebserverStuff\Remote.Handler.cs" />
-    <Compile Include="WebserverStuff\WebServer.cs" />
+    <Compile Include="WebserverStuff\RemoteProperties.cs" />
+    <Compile Include="WebserverStuff\RemoteServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
@@ -471,6 +489,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\WoM.resx">
       <DependentUpon>WoM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -504,6 +526,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Release\Updater.exe" />
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -514,12 +537,6 @@
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
     <Content Include="mcpony.png" />
-    <Content Include="Restarter.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Restarter.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

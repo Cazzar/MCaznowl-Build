@@ -31,48 +31,72 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
-            int number = message.Split(' ').Length;
-            if (number > 2 || number < 1) { Help(p); return; }
-            if (number == 1)
+            if (p != null)
             {
-                LevelPermission Perm = Level.PermissionFromName(message);
-                if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
-                if (p.level.permissionvisit > p.group.Permission) {
-					Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
-					return;
-				}
-                p.level.permissionvisit = Perm;
-                Level.SaveSettings(p.level);
-                Server.s.Log(p.level.name + " visit permission changed to " + message + ".");
-                Player.GlobalMessageLevel(p.level, "visit permission changed to " + message + ".");
+                if (message == "") { Help(p); return; }
+                int number = message.Split(' ').Length;
+                if (number > 2 || number < 1) { Help(p); return; }
+                if (number == 1)
+                {
+                    LevelPermission Perm = Level.PermissionFromName(message);
+                    if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
+                    if (p.level.permissionvisit > p.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
+                        return;
+                    }
+                    p.level.permissionvisit = Perm;
+                    Level.SaveSettings(p.level);
+                    Server.s.Log(p.level.name + " visit permission changed to " + message + ".");
+                    Player.GlobalMessageLevel(p.level, "visit permission changed to " + message + ".");
+                }
+                else
+                {
+                    int pos = message.IndexOf(' ');
+                    string t = message.Substring(0, pos).ToLower();
+                    string s = message.Substring(pos + 1).ToLower();
+                    LevelPermission Perm = Level.PermissionFromName(s);
+                    if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
+
+                    Level level = Level.Find(t);
+                    if (level.permissionvisit > p.group.Permission)
+                    {
+                        Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
+                        return;
+                    }
+                    if (level != null)
+                    {
+                        level.permissionvisit = Perm;
+                        Level.SaveSettings(level);
+                        Server.s.Log(level.name + " visit permission changed to " + s + ".");
+                        Player.GlobalMessageLevel(level, "visit permission changed to " + s + ".");
+                        if (p != null)
+                            if (p.level != level) { Player.SendMessage(p, "visit permission changed to " + s + " on " + level.name + "."); }
+                        return;
+                    }
+                    else
+                        Player.SendMessage(p, "There is no level \"" + s + "\" loaded.");
+                }
             }
             else
             {
-                int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
-                LevelPermission Perm = Level.PermissionFromName(s);
-                if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
+                string[] args = message.Split(' ');
 
-                Level level = Level.Find(t);
-                if (level.permissionvisit > p.group.Permission)
-                {
-                    Player.SendMessage(p, "You cannot change the pervisit of a level with a pervisit higher than your rank.");
-                    return;
-                }
+                LevelPermission Perm = Level.PermissionFromName(args[1]);
+                if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
+                Level level = Level.Find(args[0]);
                 if (level != null)
                 {
                     level.permissionvisit = Perm;
                     Level.SaveSettings(level);
-                    Server.s.Log(level.name + " visit permission changed to " + s + ".");
-                    Player.GlobalMessageLevel(level, "visit permission changed to " + s + ".");
+                    Server.s.Log(level.name + " visit permission changed to " + args[1] + ".");
+                    Player.GlobalMessageLevel(level, "visit permission changed to " + args[1] + ".");
                     if (p != null)
-                        if (p.level != level) { Player.SendMessage(p, "visit permission changed to " + s + " on " + level.name + "."); }
+                        if (p.level != level) { Player.SendMessage(p, "visit permission changed to " + args[1] + " on " + level.name + "."); }
                     return;
                 }
                 else
-                    Player.SendMessage(p, "There is no level \"" + s + "\" loaded.");
+                    Server.s.Log("There is no level \"" + args[1] + "\" loaded.");
             }
         }
         public override void Help(Player p)

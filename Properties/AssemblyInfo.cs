@@ -48,7 +48,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// This system is to be followed in every update for easy referencing at later dates
+// This system is to be followed in every update for easy referencing at later dates.
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
