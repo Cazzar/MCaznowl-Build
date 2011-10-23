@@ -86,6 +86,7 @@ namespace MCForge
             all.Add(new CmdCuboid());
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
+            all.Add(new CmdDelTempRank());
             all.Add(new CmdDemote());
             all.Add(new CmdDevs());
             all.Add(new CmdDisagree());
@@ -251,6 +252,9 @@ namespace MCForge
             all.Add(new CmdTake());
             all.Add(new CmdTColor());
             all.Add(new CmdTempBan());
+            all.Add(new CmdTempRank());
+            all.Add(new CmdTempRankInfo());
+            all.Add(new CmdTempRankList());
             all.Add(new CmdText());
             all.Add(new CmdTime());
             all.Add(new CmdTimer());
