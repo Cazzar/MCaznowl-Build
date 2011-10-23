@@ -178,7 +178,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/ban <player> [reason] - Bans a player without kicking him.");
+            Player.SendMessage(p, "/ban <player> - Bans a player without kicking him.");
             Player.SendMessage(p, "Add # before name to stealth ban.");
             Player.SendMessage(p, "Add @ before name to total ban.");
         }
