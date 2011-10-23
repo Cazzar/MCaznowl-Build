@@ -85,7 +85,6 @@ namespace MCForge
                     oldrank = line.Split(' ')[5];
                 }
             }
-            Player.SendMessage(Player.Find(null), bannedby + " " + reason + " " +  stealth + " " + timedate + " " + oldrank);
             timedate = timedate.Replace("-", " ");
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
