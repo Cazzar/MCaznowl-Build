@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 

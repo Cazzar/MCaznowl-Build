@@ -71,13 +71,12 @@ namespace MCForge.Gui
                 grpIRC.BackColor = Color.White;
             }
 
-            if (Server.useMySQL == false)
+            if (Server.useMySQL) {
+                grpSQL.BackColor = Color.White;
+            }
+            else
             {
                 grpSQL.BackColor = Color.LightGray;
-            }
-            if (Server.useMySQL == true)
-            {
-                grpSQL.BackColor = Color.White;
             }
 
             string opchatperm = "";
@@ -427,11 +426,12 @@ namespace MCForge.Gui
 
                             case "defaultcolor":
                                 color = c.Parse(value);
+
                                 if (color == "")
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(value)); break;
+                                cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(color)); break;
 
                             case "irc-color":
                                 color = c.Parse(value);
@@ -439,7 +439,7 @@ namespace MCForge.Gui
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(value)); break;
+                                cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(color)); break;
                             case "default-rank":
                                 try
                                 {
@@ -656,7 +656,7 @@ namespace MCForge.Gui
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(value)); break;
+                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(color)); break;
 
                             case "griefer-stone-tempban":
                                 chkGrieferStoneBan.Checked = (value.ToLower() == "true") ? true : false;
@@ -696,203 +696,143 @@ namespace MCForge.Gui
         {
             try
             {
-                StreamWriter w = new StreamWriter(File.Create(givenPath));
-                if (givenPath.IndexOf("server") != -1)
-                {
-                    w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
-                    w.WriteLine("# server-name\t=\tThe name which displays on minecraft.net");
-                    w.WriteLine("# motd\t=\tThe message which displays when a player connects");
-                    w.WriteLine("# port\t=\tThe port to operate from");
-                    w.WriteLine("# console-only\t=\tRun without a GUI (useful for Linux servers with mono)");
-                    w.WriteLine("# verify-names\t=\tVerify the validity of names");
-                    w.WriteLine("# public\t=\tSet to true to appear in the public server list");
-                    w.WriteLine("# max-players\t=\tThe maximum number of connections");
-                    w.WriteLine("# max-guests\t=\tThe maximum number of guests allowed");
-                    w.WriteLine("# max-maps\t=\tThe maximum number of maps loaded at once");
-                    w.WriteLine("# world-chat\t=\tSet to true to enable world chat");
-                    w.WriteLine("# guest-goto\t=\tSet to true to give guests goto and levels commands");
-                    w.WriteLine("# irc\t=\tSet to true to enable the IRC bot");
-                    w.WriteLine("# irc-nick\t=\tThe name of the IRC bot");
-                    w.WriteLine("# irc-server\t=\tThe server to connect to");
-                    w.WriteLine("# irc-channel\t=\tThe channel to join");
-                    w.WriteLine("# irc-opchannel\t=\tThe channel to join (posts OpChat)");
-                    w.WriteLine("# irc-port\t=\tThe port to use to connect");
-                    w.WriteLine("# irc-identify\t=(true/false)\tDo you want the IRC bot to Identify itself with nickserv. Note: You will need to register it's name with nickserv manually.");
-                    w.WriteLine("# irc-password\t=\tThe password you want to use if you're identifying with nickserv");
-                    w.WriteLine("# anti-tunnels\t=\tStops people digging below max-depth");
-                    w.WriteLine("# max-depth\t=\tThe maximum allowed depth to dig down");
-                    w.WriteLine("# backup-time\t=\tThe number of seconds between automatic backups");
-                    w.WriteLine("# overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
-                    w.WriteLine("# use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players. Default false.");
-                    w.WriteLine("# force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation. Default false.");
-                    w.WriteLine("# profanity-filter\t=\tReplace certain bad words in the chat. Default false.");
-                    w.WriteLine("# notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server. Default false.");
-                    w.WriteLine("# allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
-                    w.WriteLine("# agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
-                    w.WriteLine("# adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
-                    w.WriteLine("# admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
-                    w.WriteLine("# server-owner\t=\tThe minecraft name, of the owner of the server.");
-                    w.WriteLine("# zombie-on-server-start\t=\tStarts Zombie Survival when server is started.");
-                    w.WriteLine("# no-respawning-during-zombie\t=\tDisables respawning (Pressing R) while Zombie is on.");
-                    w.WriteLine("# no-level-saving-during-zombie\t=\tDisables level saving while Zombie Survival is activated.");
-                    w.WriteLine("# no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
-                    w.WriteLine("# zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
-                    w.WriteLine();
-                    w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
-                    w.WriteLine("# Host\t=\tThe host name for the database (usually 127.0.0.1)");
-                    w.WriteLine("# SQLPort\t=\tPort number to be used for MySQL. Unless you manually changed the port, leave this alone. Default 3306.");
-                    w.WriteLine("# Username\t=\tThe username you used to create the database (usually root)");
-                    w.WriteLine("# Password\t=\tThe password set while making the database");
-                    w.WriteLine("# DatabaseName\t=\tThe name of the database stored (Default = MCZall)");
-                    w.WriteLine();
-                    w.WriteLine("# defaultColor\t=\tThe color code of the default messages (Default = &e)");
-                    w.WriteLine("# ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
-                    w.WriteLine();
-                    w.WriteLine("# admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
-                    w.WriteLine("# verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
-                    w.WriteLine();
-                    w.WriteLine("# mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
-                    w.WriteLine("# spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
-                    w.WriteLine("# spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
-                    w.WriteLine();
-                    w.WriteLine("# Server options");
-                    w.WriteLine("server-name = " + txtName.Text);
-                    w.WriteLine("motd = " + txtMOTD.Text);
-                    w.WriteLine("port = " + txtPort.Text);
-                    w.WriteLine("verify-names = " + chkVerify.Checked.ToString().ToLower());
-                    w.WriteLine("public = " + chkPublic.Checked.ToString().ToLower());
-                    w.WriteLine("max-players = " + numPlayers.Value.ToString());
-                    w.WriteLine("max-guests = " + numGuests.Value.ToString());
-                    w.WriteLine("max-maps = " + txtMaps.Text);
-                    w.WriteLine("world-chat = " + chkWorld.Checked.ToString().ToLower());
-                    w.WriteLine("check-updates = " + chkUpdates.Checked.ToString().ToLower());
-                    w.WriteLine("autoload = " + chkAutoload.Checked.ToString().ToLower());
-                    w.WriteLine("auto-restart = " + chkRestartTime.Checked.ToString().ToLower());
-                    w.WriteLine("restarttime = " + txtRestartTime.Text);
-                    w.WriteLine("restart-on-error = " + chkRestart.Checked);
-                    if (Player.ValidName(txtMain.Text)) w.WriteLine("main-name = " + txtMain.Text);
-                    else w.WriteLine("main-name = main");
-                    w.WriteLine();
-                    w.WriteLine("# irc bot options");
-                    w.WriteLine("irc = " + chkIRC.Checked.ToString());
-                    w.WriteLine("irc-nick = " + txtNick.Text);
-                    w.WriteLine("irc-server = " + txtIRCServer.Text);
-                    w.WriteLine("irc-channel = " + txtChannel.Text);
-                    w.WriteLine("irc-opchannel = " + txtOpChannel.Text);
-                    w.WriteLine("irc-port = " + txtIRCPort.Text);
-                    w.WriteLine("irc-identify = " + chkIrcId.Checked.ToString().ToLower());
-                    w.WriteLine("irc-password = " + txtIrcId.Text);
-                    w.WriteLine();
-                    w.WriteLine("# other options");
-                    w.WriteLine("anti-tunnels = " + ChkTunnels.Checked.ToString().ToLower());
-                    w.WriteLine("max-depth = " + txtDepth.Text);
-                    w.WriteLine("rplimit = " + txtRP.Text);
-                    w.WriteLine("physicsrestart = " + chkPhysicsRest.Checked.ToString().ToLower());
-                    w.WriteLine("old-help = " + chkHelp.Checked.ToString().ToLower());
-                    w.WriteLine("deathcount = " + chkDeath.Checked.ToString().ToLower());
-                    w.WriteLine("afk-minutes = " + txtafk.Text);
-                    w.WriteLine("afk-kick = " + txtAFKKick.Text);
-                    w.WriteLine("check-updates = " + chkUpdates.Checked.ToString().ToLower());
-                    w.WriteLine("auto-update = " + autoUpdate.Checked.ToString().ToLower());
-                    w.WriteLine("in-game-update-notify = " + notifyInGameUpdate.Checked.ToString().ToLower());
-                    w.WriteLine("update-countdown = " + updateTimeNumeric.Value.ToString().ToLower());
-                    w.WriteLine("parse-emotes = " + chkSmile.Checked.ToString().ToLower());
-                    w.WriteLine("dollar-before-dollar = " + chk17Dollar.Checked.ToString().ToLower());
-                    w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
-                    w.WriteLine("money-name = " + txtMoneys.Text);
-                    w.WriteLine("opchat-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbOpChat.Items[cmbOpChat.SelectedIndex].ToString()).Permission).ToString());
-                    w.WriteLine("adminchat-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbAdminChat.Items[cmbAdminChat.SelectedIndex].ToString()).Permission).ToString());
-                    w.WriteLine("admins-join-silent = " + chkAdminsJoinSilent.Checked.ToString().ToLower());
-                    w.WriteLine("log-heartbeat = " + chkLogBeat.Checked.ToString().ToLower());
-                    w.WriteLine("force-cuboid = " + chkForceCuboid.Checked.ToString().ToLower());
-                    w.WriteLine("profanity-filter = " + chkProfanityFilter.Checked.ToString().ToLower());
-                    w.WriteLine("notify-on-join-leave = " + chkNotifyOnJoinLeave.Checked.ToString().ToLower());
-                    w.WriteLine("repeat-messages = " + chkRepeatMessages.Checked.ToString());
-                    w.WriteLine("host-state = " + txtHost.Text.ToString());
-                    w.WriteLine("agree-to-rules-on-entry = " + chkAgreeToRules.Checked.ToString().ToLower());
-                    w.WriteLine("kick-on-hackrank = " + hackrank_kick.Checked.ToString().ToLower());
-                    w.WriteLine("hackrank-kick-time = " + hackrank_kick_time.Text);
-                    w.WriteLine("ignore-ops = " + chkIgnoreGlobal.Checked.ToString().ToLower());
-                    w.WriteLine("zombie-on-server-start = " + chkZombieOnServerStart.Checked.ToString().ToLower());
-                    w.WriteLine("no-respawning-during-zombie = " + chkNoRespawnDuringZombie.Checked.ToString().ToLower());
-                    w.WriteLine("no-level-saving-during-zombie = " + chkNoLevelSavingDuringZombie.Checked.ToString().ToLower());
-                    w.WriteLine("no-pillaring-during-zombie = " + chkNoPillaringDuringZombie.Checked.ToString().ToLower());
-                    w.WriteLine("zombie-name-while-infected = " + ZombieName.Text);
-                    w.WriteLine();
-                    w.WriteLine("# backup options");
-                    w.WriteLine("backup-time = " + txtBackup.Text);
-                    w.WriteLine("backup-location = " + txtBackupLocation.Text);
-                    w.WriteLine();
-                    w.WriteLine("#Error logging");
-                    w.WriteLine("report-back = " + Server.reportBack.ToString().ToLower());
-                    w.WriteLine();
-                    w.WriteLine("#MySQL information");
-                    w.WriteLine("UseMySQL = " + chkUseSQL.Checked.ToString().ToLower());
-                    w.WriteLine("Host = " + txtSQLHost.Text);
-                    w.WriteLine("SQLPort = " + txtSQLPort.Text);
-                    w.WriteLine("Username = " + txtSQLUsername.Text);
-                    w.WriteLine("Password = " + txtSQLPassword.Text);
-                    w.WriteLine("DatabaseName = " + txtSQLDatabase.Text);
-                    w.WriteLine("Pooling = " + Server.DatabasePooling);
-                    w.WriteLine();
-                    w.WriteLine("#Colors");
-                    w.WriteLine("defaultColor = " + cmbDefaultColour.Items[cmbDefaultColour.SelectedIndex].ToString());
-                    w.WriteLine("irc-color = " + cmbIRCColour.Items[cmbIRCColour.SelectedIndex].ToString());
-                    w.WriteLine();
-                    /*w.WriteLine("#Running on mono?");
-                    w.WriteLine("mono = " + chkMono.Checked.ToString().ToLower());
-                    w.WriteLine();*/
-                    w.WriteLine("#Custom Messages");
-                    w.WriteLine("custom-ban = " + chkBanMessage.Checked.ToString().ToLower());
-                    w.WriteLine("custom-ban-message = " + txtBanMessage.Text);
-                    w.WriteLine("custom-shutdown = " + chkShutdown.Checked.ToString().ToLower());
-                    w.WriteLine("custom-shutdown-message = " + txtShutdown.Text);
-                    w.WriteLine("custom-griefer-stone = " + chkGrieferStone.Checked.ToString().ToLower());
-                    w.WriteLine("custom-griefer-stone-message = " + txtGrieferStone.Text);
-                    w.WriteLine("allow-tp-to-higher-ranks = " + chkTpToHigherRanks.Checked.ToString().ToLower());
-                    w.WriteLine("server-owner = " + txtServerOwner.Text);
-                    w.WriteLine();
-                    w.WriteLine("cheapmessage = " + chkCheap.Checked.ToString().ToLower());
-                    w.WriteLine("cheap-message-given = " + txtCheap.Text);
-                    w.WriteLine("rank-super = " + chkrankSuper.Checked.ToString().ToLower());
-                    w.WriteLine("default-rank = " + cmbDefaultRank.Items[cmbDefaultRank.SelectedIndex].ToString());
-                    w.WriteLine();
-                    w.WriteLine("#Admin Verification");
-                    w.WriteLine("admin-verification = " + chkEnableVerification.Checked.ToString().ToLower());
-                    w.WriteLine("verify-admin-perm = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbVerificationRank.Items[cmbVerificationRank.SelectedIndex].ToString()).Permission).ToString());
-                    w.WriteLine();
-                    w.WriteLine("#Spam Control");
-                    w.WriteLine("mute-on-spam = " + chkSpamControl.Checked.ToString().ToLower());
-                    w.WriteLine("spam-messages = " + numSpamMessages.Value.ToString());
-                    w.WriteLine("spam-mute-time = " + numSpamMute.Value.ToString());
-                    w.WriteLine();
-                    w.WriteLine("#Show Empty Ranks in /players");
-                    w.WriteLine("show-empty-ranks = " + chkShowEmptyRanks.Checked.ToString().ToLower());
-                    w.WriteLine();
-                    w.WriteLine("#Global Chat Settings");
-                    w.WriteLine("global-chat-enabled = " + chkGlobalChat.Checked.ToString().ToLower());
-                    w.WriteLine("global-chat-nick = " + txtGlobalChatNick.Text);
-                    w.WriteLine("global-chat-color = " + cmbGlobalChatColor.Items[cmbGlobalChatColor.SelectedIndex].ToString());
-                    w.WriteLine();
-                    w.WriteLine("#Griefer_stone Settings");
-                    w.WriteLine("griefer-stone-tempban = " + chkGrieferStoneBan.Checked.ToString().ToLower());
-                    w.WriteLine("griefer-stone-type = " + cmbGrieferStoneType.Items[cmbGrieferStoneType.SelectedIndex].ToString());
-                    w.WriteLine("griefer-stone-rank = " + ((sbyte)Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.Items[cmbGrieferStoneRank.SelectedIndex].ToString()).Permission).ToString());
-                    w.WriteLine();
-                    w.WriteLine("#WoM Direct thingy");
-                    w.WriteLine("wom-direct = " + chkWomDirect.Checked.ToString().ToLower());
-                    w.WriteLine("wom-serveralt = " + Server.Server_ALT);
-                    w.WriteLine("wom-serverdis = " + Server.Server_Disc);
-                    w.WriteLine("wom-serverflag = " + Server.Server_Flag);
+                using (StreamWriter w = new StreamWriter(File.Create(givenPath))) {
+                    if (givenPath.IndexOf("server") != -1) {
+                        saveAll(); // saves everything to the server variables
+                        SrvProperties.SaveProps(w); // When we have this, why define it again?
+                    }
                 }
-                w.Flush();
-                w.Close();
-                w.Dispose();
             }
             catch (Exception)
             {
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
+        }
+
+        private void saveAll() {
+
+            Server.name = txtName.Text;
+            Server.motd = txtMOTD.Text;
+            Server.port = int.Parse(txtPort.Text);
+            Server.verify = chkVerify.Checked;
+            Server.pub = chkPublic.Checked;
+            Server.players = (byte)numPlayers.Value;
+            Server.maxGuests = (byte)numGuests.Value;
+            Server.maps = byte.Parse(txtMaps.Text);
+            Server.worldChat = chkWorld.Checked;
+            Server.autonotify = chkNotifyOnJoinLeave.Checked;
+            Server.AutoLoad = chkAutoload.Checked;
+            Server.autorestart = chkRestartTime.Checked;
+            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
+            Server.restartOnError = chkRestart.Checked;
+            Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main");
+            Server.irc = chkIRC.Checked;
+            Server.ircNick = txtNick.Text;
+            Server.ircServer = txtIRCServer.Text;
+            Server.ircChannel = txtChannel.Text;
+            Server.ircOpChannel = txtOpChannel.Text;
+            Server.ircPort = int.Parse(txtIRCPort.Text);
+            Server.ircIdentify = chkIrcId.Checked;
+            Server.ircPassword = txtIrcId.Text;
+
+
+            Server.antiTunnel = ChkTunnels.Checked;
+            Server.maxDepth = byte.Parse(txtDepth.Text);
+            Server.rpLimit = int.Parse(txtRP.Text);
+            Server.rpNormLimit = int.Parse(txtRP.Text);
+            Server.physicsRestart = chkPhysicsRest.Checked;
+            Server.oldHelp = chkHelp.Checked;
+            Server.deathcount = chkDeath.Checked;
+            Server.afkminutes = int.Parse(txtafk.Text);
+            Server.afkkick = int.Parse(txtAFKKick.Text);
+            Server.parseSmiley = chkSmile.Checked;
+            Server.dollardollardollar = chk17Dollar.Checked;
+            //Server.useWhitelist = ; //We don't have a setting for this?
+            Server.moneys = txtMoneys.Text;
+            Server.opchatperm = (Group.GroupList.Find(grp => grp.name == cmbOpChat.SelectedItem.ToString()).Permission);
+            Server.adminchatperm = (Group.GroupList.Find(grp => grp.name == cmbAdminChat.SelectedItem.ToString()).Permission);
+            Server.logbeat = chkLogBeat.Checked;
+            Server.forceCuboid = chkForceCuboid.Checked;
+            Server.profanityFilter = chkProfanityFilter.Checked;
+            Server.notifyOnJoinLeave = chkNotifyOnJoinLeave.Checked;
+            Server.repeatMessage = chkRepeatMessages.Checked;
+            Server.ZallState = txtHost.Text;
+            Server.agreetorulesonentry = chkAgreeToRules.Checked;
+            Server.adminsjoinsilent = chkAdminsJoinSilent.Checked;
+            Server.server_owner = txtServerOwner.Text;
+            Server.startZombieModeOnStartup = chkZombieOnServerStart.Checked;
+            Server.noRespawn = chkNoRespawnDuringZombie.Checked;
+            Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
+            Server.noPillaring = chkNoPillaringDuringZombie.Checked;
+            Server.ZombieName = ZombieName.Text;
+
+
+            Server.backupInterval = int.Parse(txtBackup.Text);
+            Server.backupLocation = txtBackupLocation.Text;
+
+
+            //Server.reportBack = ;  //No setting for this?
+
+            Server.useMySQL = chkUseSQL.Checked;
+            Server.MySQLHost = txtSQLHost.Text;
+            //Server.MySQLPort = ; // No setting for this?
+            Server.MySQLUsername = txtSQLUsername.Text;
+            Server.MySQLPassword = txtSQLPassword.Text;
+            Server.MySQLDatabaseName = txtSQLDatabase.Text;
+            //Server.MySQLPooling = ; // No setting for this?
+
+
+            Server.DefaultColor = cmbDefaultColour.SelectedItem.ToString();
+            Server.IRCColour = cmbIRCColour.SelectedItem.ToString();
+
+
+            //Server.mono = chkMono.Checked;
+
+
+            Server.customBan = chkBanMessage.Checked;
+            Server.customBanMessage = txtBanMessage.Text;
+            Server.customShutdown = chkShutdown.Checked;
+            Server.customShutdownMessage = txtShutdown.Text;
+            Server.customGrieferStone = chkGrieferStone.Checked;
+            Server.customGrieferStoneMessage = txtGrieferStone.Text;
+            Server.higherranktp = chkTpToHigherRanks.Checked;
+            Server.globalignoreops = chkIgnoreGlobal.Checked; // Wasn't in previous setting-saver
+
+            Server.checkUpdates = chkUpdates.Checked;
+
+            Server.cheapMessage = chkCheap.Checked;
+            Server.cheapMessageGiven = txtCheap.Text;
+            Server.rankSuper = chkrankSuper.Checked;
+            Server.defaultRank = cmbDefaultRank.SelectedItem.ToString();
+
+            Server.hackrank_kick = hackrank_kick.Checked;
+            Server.hackrank_kick_time = int.Parse(hackrank_kick_time.Text);
+
+
+            Server.verifyadmins = chkVerify.Checked;
+            Server.verifyadminsrank = (Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission);
+
+            Server.checkspam = chkSpamControl.Checked;
+            Server.spamcounter = (int)numSpamMessages.Value;
+            Server.mutespamtime = (int)numSpamMute.Value;
+            Server.spamcountreset = (int)numCountReset.Value;
+
+            Server.showEmptyRanks = chkShowEmptyRanks.Checked;
+
+            Server.UseGlobalChat = chkGlobalChat.Checked;
+            Server.GlobalChatNick = txtGlobalChatNick.Text;
+            Server.GlobalChatColor = cmbGlobalChatColor.SelectedItem.ToString();
+
+            Server.grieferStoneBan = chkGrieferStoneBan.Checked;
+            Server.grieferStoneType = Block.Byte(cmbGrieferStoneType.SelectedItem.ToString());
+            Server.grieferStoneRank = (Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.SelectedItem.ToString()).Permission);
+
+            Server.WomDirect = chkWomDirect.Checked;
+            //Server.Server_ALT = ;
+            //Server.Server_Disc = ;
+            //Server.Server_Flag = ;
+
+
         }
 
         private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)
@@ -945,7 +885,7 @@ namespace MCForge.Gui
             try { SaveLavaSettings(); }
             catch { Server.s.Log("Error saving Lava Survival settings!"); }
 
-            SrvProperties.Load("properties/server.properties", true);
+            SrvProperties.Load("properties/server.properties", true); // loads when saving?
             GrpCommands.fillRanks();
 
             // Trigger profanity filter reload
@@ -975,20 +915,19 @@ namespace MCForge.Gui
 
         private void chkPhysicsRest_CheckedChanged(object sender, EventArgs e)
         {
-
         }
 
         private void chkGC_CheckedChanged(object sender, EventArgs e)
         {
-
         }
+
         private void chkIRC_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkIRC.Checked.ToString().ToLower() == "false")
+            if (!chkIRC.Checked)
             {
                 grpIRC.BackColor = Color.LightGray;
             }
-            if (chkIRC.Checked.ToString().ToLower() == "true")
+            else
             {
                 grpIRC.BackColor = Color.White;
             }
@@ -1955,13 +1894,11 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             if (!useList && !noUseList) return;
             try
             {
-                    if (this.InvokeRequired)
-                    {
-                        this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
-                        return;
-                    }
-                
-                
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(delegate { try { UpdateLavaMapList(useList, noUseList); } catch { } }));
+                    return;
+                }
 
                 int useIndex = lsMapUse.SelectedIndex, noUseIndex = lsMapNoUse.SelectedIndex;
                 if (useList) lsMapUse.Items.Clear();
@@ -1979,9 +1916,11 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        name = file.Name.Replace(".lvl", "");
-                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                            lsMapNoUse.Items.Add(name);
+                        try {
+                            name = file.Name.Replace(".lvl", "");
+                            if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                                lsMapNoUse.Items.Add(name);
+                        } catch (NullReferenceException) { }
                     }
                     try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
                     catch { }
@@ -2107,6 +2046,10 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 Server.lava.SaveMapSettings(settings);
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void numCountReset_ValueChanged(object sender, EventArgs e) {
+
         }
 
         private void button2_Click(object sender, EventArgs e)

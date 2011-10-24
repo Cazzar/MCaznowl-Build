@@ -237,6 +237,7 @@ namespace MCForge
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
             all.Add(new CmdServerReport());
+            all.Add(new CmdServer());
             all.Add(new CmdSetPass());
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
