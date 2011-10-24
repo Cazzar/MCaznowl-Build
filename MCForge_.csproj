@@ -215,6 +215,7 @@
     <Compile Include="Commands\CmdPUnload.cs" />
     <Compile Include="Commands\CommandOtherPerms.cs" />
     <Compile Include="CTF\Auto_CTF.cs" />
+    <Compile Include="Edit.cs" />
     <Compile Include="GlobalChatBot.cs" />
     <Compile Include="CountdownGame.cs" />
     <Compile Include="Economy.cs" />

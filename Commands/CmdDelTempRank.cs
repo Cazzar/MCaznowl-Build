@@ -42,13 +42,6 @@ namespace MCForge
                 goto end;
             }
             string alltempranks = "";
-           foreach (string line in File.ReadAllLines("text/tempranks.txt"))
-           {
-               if (!line.Contains(message)) 
-               {
-                   alltempranks = alltempranks + line + Environment.NewLine;
-               }
-           }
            Player who = Player.Find(message);
            foreach (string line in File.ReadAllLines("text/tempranks.txt"))
            {
@@ -60,6 +53,10 @@ namespace MCForge
                    Command.all.Find("setrank").Use(null, who.name + " " + newgroup.name);
                    Player.SendMessage(p, "&eTemporary rank of &a" + message + "&e has been unassigned");
                    Player.SendMessage(who, "&eYour temporary rank has been unassigned");
+               }
+               if (!line.Contains(message))
+               {
+                   alltempranks = alltempranks + line + "\r\n";
                }
            }
            File.WriteAllText("text/tempranks.txt", alltempranks);
