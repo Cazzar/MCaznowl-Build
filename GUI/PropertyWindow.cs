@@ -699,7 +699,7 @@ namespace MCForge.Gui
                 using (StreamWriter w = new StreamWriter(File.Create(givenPath))) {
                     if (givenPath.IndexOf("server") != -1) {
                         saveAll(); // saves everything to the server variables
-                        Properties.SaveProps(w); // When we have this, why define it again?
+                        SrvProperties.SaveProps(w); // When we have this, why define it again?
                     }
                 }
             }
@@ -786,7 +786,7 @@ namespace MCForge.Gui
             Server.IRCColour = cmbIRCColour.SelectedItem.ToString();
 
 
-            Server.mono = chkMono.Checked;
+            //Server.mono = chkMono.Checked;
 
 
             Server.customBan = chkBanMessage.Checked;

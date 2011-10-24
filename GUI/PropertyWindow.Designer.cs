@@ -4015,7 +4015,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.NumericUpDown lsNudLives;
-        private System.Windows.Forms.Label label69;
         private System.Windows.Forms.TextBox txtSQLPort;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.GroupBox groupBox17;

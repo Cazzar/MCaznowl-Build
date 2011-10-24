@@ -285,7 +285,7 @@ namespace MCForge {
             Server.adminchatperm = LevelPermission.Admin;
             Server.logbeat = false;
             Server.adminsjoinsilent = false;
-            Server.mono = false;
+            //Server.mono = false;
             Server.server_owner = "Notch";
             Server.WomDirect = false;
 

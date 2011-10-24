@@ -88,14 +88,12 @@
     <Compile Include="Block.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdServer.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdAgree.cs" />
     <Compile Include="Commands\CmdAka.cs" />
     <Compile Include="Commands\CmdAlive.cs" />
     <Compile Include="Commands\CmdAllowGuns.cs" />
-    <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBaninfo.cs" />
     <Compile Include="Commands\CmdBanlist.cs" />
     <Compile Include="Commands\CmdCalculate.cs" />
