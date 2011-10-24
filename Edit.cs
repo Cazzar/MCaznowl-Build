@@ -9,6 +9,18 @@ namespace MCForge
     public class Edit
     {
         /// <summary>
+        /// Replaces a line in a textfile
+        /// </summary>
+        /// <param name="path">Path of textfile</param>
+        /// <param name="search">the string to search for (to get the line)</param>
+        /// <param name="oldstring">The string to get replaced.</param>
+        /// <param name="newstring">The string to replace the oldstring</param>
+        /// <returns></returns>
+        public bool Replace(string path, string search, string oldstring, string newstring)
+        {
+            Replace(path, 0, search, 0, oldstring, newstring);
+        }
+        /// <summary>
         /// Replaces a value in a line in a textfile
         /// </summary>
         /// <param name="path">Path of textfile</param>
