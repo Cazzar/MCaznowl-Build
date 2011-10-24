@@ -2110,7 +2110,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '#') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageOps("To Ops &f<" + color + name + "&f> " + newtext);
+                    GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
@@ -2124,7 +2124,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageAdmins("To Admins &f<" + color + name + "&f> " + newtext);  //to make it easy on remote
+                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);  //to make it easy on remote
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
