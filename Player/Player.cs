@@ -27,6 +27,7 @@ using System.Security.Cryptography;
 using System.Data;
 using System.Linq;
 using System.Text;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -159,7 +160,6 @@ namespace MCForge
 
         public bool voice = false;
         public string voicestring = "";
-        public int consecutivemessages = 0;
 
         public int grieferStoneWarn = 0;
 
@@ -245,9 +245,11 @@ namespace MCForge
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
-        public static int spamChatCount = 3;
-        public static int spamChatTimer = 4;
-        Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
+        public int consecutivemessages = 0;
+        private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset*1000);
+        //public static int spamChatCount = 3;
+        //public static int spamChatTimer = 4;
+        //Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
 
         // CmdVoteKick
         public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
@@ -463,6 +465,12 @@ namespace MCForge
                         }
                     }
                 };
+                resetSpamCount.Elapsed += delegate {
+                    if (consecutivemessages > 0)
+                        consecutivemessages = 0;
+                };
+                resetSpamCount.Start();
+
                 if (Server.afkminutes > 0) afkTimer.Start();
 
                 connections.Add(this);
@@ -2033,10 +2041,10 @@ namespace MCForge
 
                 if (Server.checkspam == true)
                 {
-                    if (consecutivemessages == 0)
-                    {
-                        consecutivemessages++;
-                    }
+                    //if (consecutivemessages == 0)
+                    //{
+                    //    consecutivemessages++;
+                    //}
                     if (Player.lastMSG == this.name)
                     {
                         consecutivemessages++;
@@ -3859,7 +3867,7 @@ namespace MCForge
             RedoBuffer.Clear();
             UndoBuffer.Clear();
             spamBlockLog.Clear();
-            spamChatLog.Clear();
+            //spamChatLog.Clear();
             spyChatRooms.Clear();
             /*try
             {

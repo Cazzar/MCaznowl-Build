@@ -86,6 +86,9 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="DatabaseTransactionHelper.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="Commands\CmdServer.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdAgree.cs" />
     <Compile Include="Commands\CmdAka.cs" />

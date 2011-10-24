@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -34,6 +33,7 @@ using System.Security.Cryptography;
 //using MySql.Data.Types;
 
 using MonoTorrent.Client;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -199,20 +199,21 @@ namespace MCForge
         public static string name = "[MCForge] Default";
         public static string motd = "Welcome!";
         public static byte players = 12;
-//for the limiting no. of guests:
-public static byte maxGuests = 10;
+        //for the limiting no. of guests:
+        public static byte maxGuests = 10;
 
         public static byte maps = 5;
         public static int port = 25565;
         public static bool pub = true;
         public static bool verify = true;
         public static bool worldChat = true;
-        public static bool guestGoto = false;
+//        public static bool guestGoto = false;
 
         //Spam Prevention
         public static bool checkspam = false;
         public static int spamcounter = 8;
         public static int mutespamtime = 60;
+        public static int spamcountreset = 5;
 
         public static string ZallState = "Alive";
 
@@ -221,11 +222,11 @@ public static byte maxGuests = 10;
         public static string level = "main";
         public static string errlog = "error.log";
 
-        public static bool console = false;
+//        public static bool console = false; // never used
         public static bool reportBack = true;
 
         public static bool irc = false;
-        public static bool safemode = false;
+//        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
@@ -277,13 +278,13 @@ public static byte maxGuests = 10;
         public static string IRCColour = "&5";
 
         public static bool UseGlobalChat = true;
-        public static string GlobalChatNick = "MCF" + new Random().Next(Int32.MaxValue);
+        public static string GlobalChatNick = "MCF" + new Random().Next();
         public static string GlobalChatColor = "&6";
 
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
-        public static int RemotePort = 1337;
+        //public static int RemotePort = 1337; // Never used
 
         public static string defaultRank = "guest";
 
@@ -460,6 +461,7 @@ public static byte maxGuests = 10;
                 }
             }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
@@ -504,7 +506,7 @@ public static byte maxGuests = 10;
             }
             else
             {
-                Log("custom$s.txt does not exist, creating");
+                s.Log("custom$s.txt does not exist, creating");
                 using (StreamWriter SW = File.CreateText("text/custom$s.txt"))
                 {
                     SW.WriteLine("// This is used to create custom $s");
@@ -517,16 +519,7 @@ public static byte maxGuests = 10;
                 }
             }
 
-            SrvProperties.Load("properties/server.properties");
-            Updater.Load("properties/update.properties");
-            Group.InitAll();
-            Command.InitAll();
-            GrpCommands.fillRanks();
-            Block.SetBlocks();
-            Awards.Load();
-            Economy.Load();
-            Warp.LOAD();
-            CommandOtherPerms.Load();
+            LoadAllSettings();
 
             if (File.Exists("text/emotelist.txt"))
             {
@@ -540,7 +533,6 @@ public static byte maxGuests = 10;
                 File.Create("text/emotelist.txt").Dispose();
             }
 
-            ProfanityFilter.Init();
 
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
@@ -552,54 +544,56 @@ public static byte maxGuests = 10;
             {//MYSQL stuff
                 try
                 {
-                    MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
+                    Database.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true); // works in both now, SQLite simply ignores this.
                 }
                 //catch (MySql.Data.MySqlClient.MySqlException e)
                 //{
                 //    Server.s.Log("MySQL settings have not been set! Many features will not be available if MySQL is not enabled");
                 //  //  Server.ErrorLog(e);
                 //}
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Server.ErrorLog(e);
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
-  //         Server.ErrorLog(e);
                     //process.Kill();
                     return;
                 }
-                if (useMySQL) MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-                else SQLite.executeQuery("CREATE TABLE if not exists Players (ID INTEGER PRIMARY KEY AUTOINCREMENT not null, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6));");
+                Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
                 
-                // Check if the color column exists.
-                DataTable colorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'") : SQLite.fillData("SELECT color FROM Players");
+                // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
+                if (Server.useMySQL) {
+                    // Check if the color column exists.
+                    DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
-                if (colorExists.Rows.Count == 0)
-                {
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
-                    //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    if (colorExists.Rows.Count == 0)
+                    {
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                        //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    }
+                    colorExists.Dispose();
+
+                    // Check if the title color column exists.
+                    DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
+
+                    if (tcolorExists.Rows.Count == 0)
+                    {
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                        // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                    }
+                    tcolorExists.Dispose();
+
+                    DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
+
+                    if (timespent.Rows.Count == 0)
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
+                    timespent.Dispose();
+
+                    DataTable totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
+
+                    if (totalCuboided.Rows.Count == 0)
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
+                    totalCuboided.Dispose();
                 }
-                colorExists.Dispose();
-
-                // Check if the title color column exists.
-                DataTable tcolorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'") : SQLite.fillData("SELECT title_color FROM Players");
-
-                if (tcolorExists.Rows.Count == 0)
-                {
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
-                   // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
-                }
-                tcolorExists.Dispose();
-
-                DataTable timespent = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'") : SQLite.fillData("SELECT TimeSpent FROM Players");
-
-                if (timespent.Rows.Count == 0)
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
-                timespent.Dispose();
-
-                DataTable totalCuboided = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'") : SQLite.fillData("SELECT totalCuboided FROM Players");
-
-                if (totalCuboided.Rows.Count == 0)
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
-                totalCuboided.Dispose();
             }
 
             if (levels != null)
@@ -970,6 +964,20 @@ processThread.Start();
                 catch (Exception e) { Server.ErrorLog(e); }
 
             });
+        }
+
+        public static void LoadAllSettings() {
+            SrvProperties.Load("properties/server.properties");
+            Updater.Load("properties/update.properties");
+            Group.InitAll();
+            Command.InitAll();
+            GrpCommands.fillRanks();
+            Block.SetBlocks();
+            Awards.Load();
+            Economy.Load();
+            Warp.LOAD();
+            CommandOtherPerms.Load();
+            ProfanityFilter.Init();
         }
         
         public static bool Setup()

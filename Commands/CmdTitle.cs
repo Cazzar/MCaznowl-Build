@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -49,7 +50,7 @@ namespace MCForge
                 who.SetPrefix();
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " had their title removed.", false);
                 query = "UPDATE Players SET Title = '' WHERE Name = '" + who.name + "'";
-                MySQL.executeQuery(query);
+                Database.executeQuery(query);
                 return;
             }
 
@@ -80,7 +81,7 @@ namespace MCForge
             {
                 query = "UPDATE Players SET Title = '" + newTitle.Replace("'", "\'") + "' WHERE Name = '" + who.name + "'";
             }
-            MySQL.executeQuery(query);
+            Database.executeQuery(query);
             who.title = newTitle;
             who.SetPrefix();
         }

@@ -355,8 +355,7 @@ namespace MCForge_.Gui
                     {
                         Player.SendMessage(p, "No update found!");
                     }
-                }
-                catch { Server.s.Log("No web server found to update on."); }
+                } catch { try { Server.s.Log("No web server found to update on."); } catch { } }
                 Client.Dispose();
                 CurrentUpdate = false;
             })); updateThread.Start();
