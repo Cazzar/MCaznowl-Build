@@ -439,10 +439,13 @@ namespace MCForge.Gui
         private void Window_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            if (Server.restarting == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (Server.shuttingDown == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
-                MCForge_.Gui.Program.ExitProgram(false);
+                if (!Server.shuttingDown)
+                {
+                    MCForge_.Gui.Program.ExitProgram(false);
+                }
             }
             else
             {
@@ -546,6 +549,7 @@ namespace MCForge.Gui
         {
             if (MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
+                RemoveNotifyIcon();
                 MCForge_.Gui.Program.ExitProgram(false);
             }
         }
@@ -586,7 +590,6 @@ namespace MCForge.Gui
 
         public static bool prevLoaded = false;
         Form PropertyForm;
-        Form UpdateForm;
 
         /*private void gBChat_Enter(object sender, EventArgs e)
         {
@@ -625,8 +628,7 @@ namespace MCForge.Gui
                     Server.s.Log("The server will now begin auto restart procedures.");
 
                     RemoveNotifyIcon();
-                    Server.Exit();
-                    System.Diagnostics.Process.Start(MCForge_.Gui.Program.parent);
+                    MCForge_.Gui.Program.ExitProgram(true);
                 }
             }
         }
@@ -883,9 +885,7 @@ namespace MCForge.Gui
             if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 RemoveNotifyIcon();
-                Server.Exit();
-                System.Diagnostics.Process.Start(MCForge_.Gui.Program.parent);
-                Dispose();
+                MCForge_.Gui.Program.ExitProgram(true);
             }
 
         }

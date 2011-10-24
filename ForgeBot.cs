@@ -80,7 +80,7 @@ namespace MCForge
             if (!Server.irc) return;
             reset = true;
             retries = 0;
-            Disconnect("Bot resetting...");
+            Disconnect("IRC Bot resetting...");
             Connect();
         }
         void Listener_OnJoin(UserInfo user, string channel)
@@ -219,7 +219,7 @@ namespace MCForge
         }
         public void Connect()
         {
-            if (!Server.irc) return;
+            if (!Server.irc || Server.shuttingDown) return;
 
             /*new Thread(new ThreadStart(delegate
             {
@@ -239,7 +239,7 @@ namespace MCForge
                 Server.ErrorLog(e);
             }
         }
-        void Disconnect(string message = "Disconnecting")
+        public void Disconnect(string message)
         {
             if (Server.irc && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from IRC!"); }
         }

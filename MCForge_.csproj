@@ -100,6 +100,7 @@
     <Compile Include="Commands\CmdCompload.cs" />
     <Compile Include="Commands\CmdCountdown.cs" />
     <Compile Include="Commands\CmdCTF.cs" />
+    <Compile Include="Commands\CmdDelTempRank.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
     <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
@@ -176,6 +177,9 @@
     <Compile Include="Commands\CmdTempBan.cs" />
     <Compile Include="Commands\CmdSlap.cs" />
     <Compile Include="Commands\CmdKill.cs" />
+    <Compile Include="Commands\CmdTempRank.cs" />
+    <Compile Include="Commands\CmdTempRankInfo.cs" />
+    <Compile Include="Commands\CmdTempRankList.cs" />
     <Compile Include="Commands\CmdTopTen.cs" />
     <Compile Include="Commands\CmdTpZone.cs" />
     <Compile Include="Commands\CmdFlipHeads.cs" />
@@ -247,6 +251,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ScriptingVB.cs" />
+    <Compile Include="Checktimer.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />

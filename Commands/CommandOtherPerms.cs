@@ -97,6 +97,19 @@ namespace MCForge
             list.Add(otpe);
         }
 
+        public static int GetMaxNumber(Command cmd)
+        {
+            int i = 1;
+            bool stop = false;
+            while (stop == false)
+            {
+                OtherPerms op = Find(cmd, i);
+                if (op == null) { stop = true; }
+                else { i++; }
+            }
+            return (i - 1);
+        }
+
         public static void Save()
         {
             using (StreamWriter SW = new StreamWriter("properties/ExtraCommandPermissions.properties"))

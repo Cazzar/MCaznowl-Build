@@ -131,13 +131,12 @@ namespace MCForge
 
         public void Connect()
         {
-            if (!Server.UseGlobalChat) return;
-
+            if (!Server.UseGlobalChat || Server.shuttingDown) return;
             try { connection.Connect(); }
             catch { }
         }
 
-        void Disconnect(string message = "Disconnecting")
+        public void Disconnect(string message)
         {
             if (Server.UseGlobalChat && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from Global Chat!"); }
         }

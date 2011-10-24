@@ -17,10 +17,8 @@ namespace Updater
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(globalException);
             if (args.Length < 1)
             {
-                Console.WriteLine("Updater was started incorrectly.  Press any key to exit.");
-                MessageBox.Show("Updater was started incorrectly.", "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.ReadLine();
-                Environment.Exit(0);
+                string[] defaultname = new string[] { "MCForge.exe" };
+                Main(defaultname);
             }
             else
             {

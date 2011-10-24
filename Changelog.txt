@@ -1,6 +1,7 @@
 v5.3.0.0
-- Added /baninfo - shows info about someone's ban
-- Fixed /ban and /unban to work with /baninfo
+- Added tempranks.
+- Added /baninfo - shows info about someone's ban.
+- Fixed /ban and /unban to work with /baninfo.
 - Fixed warn help menu.
 - Fixed a massive memory leak with level unloading.
 - Fixed leaving a channel name black in the IRC settings causing a crash.
@@ -43,6 +44,7 @@ v5.3.0.0
 - Fixed fireworks leaving blocks behind
 - Fixed an error where /rankmsg wouldn't send the whole message, only the first word.
 - Waypoints are now saved
+- Hard-Coded command permissions are now editable (GUI and a seperate .properties file)
 
 v5.2.0.0
 - Fixed the server-breaking freeze bug that happened when a player lagged (NOT logged) out.
