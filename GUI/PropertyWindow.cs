@@ -1055,7 +1055,6 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void btnAddRank_Click(object sender, EventArgs e)
         {
-            Random rand = new Random();
             Group newGroup = new Group((LevelPermission)5, 600, 30, "CHANGEME", '1', "CHANGEME.txt");
             storedRanks.Add(newGroup);
             listRanks.Items.Add(newGroup.trueName + " = " + (int)newGroup.Permission);

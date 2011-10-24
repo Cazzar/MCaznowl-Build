@@ -254,7 +254,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ScriptingVB.cs" />
-    <Compile Include="TempRankExpiryCheck.cs" />
+    <Compile Include="Checktimer.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />

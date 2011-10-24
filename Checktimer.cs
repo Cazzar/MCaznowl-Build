@@ -5,13 +5,36 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Threading;
 using System.Timers;
 using MCForge;
+using System.Threading;
 
 
-public static class TempRankExpiryCheck
+public static class Checktimer
 {
+    static System.Timers.Timer t;
+    public static void StartTimer()
+    {
+    t = new System.Timers.Timer();
+    t.AutoReset = false;
+    t.Elapsed += new System.Timers.ElapsedEventHandler(t_Elapsed);
+    t.Interval = GetInterval();
+    t.Start();
+    }
+    static double GetInterval()
+    {
+        DateTime now = DateTime.Now;
+        return ((60 - now.Second) * 1000 - now.Millisecond);
+    }
+
+    static void t_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        t.Interval = GetInterval();
+        t.Start();
+
+        // Voids to be executed every minute:
+        TRExpiryCheck();
+    }
 	public static void TRExpiryCheck()
 	{
         foreach (Player p in Player.players)
@@ -47,7 +70,5 @@ public static class TempRankExpiryCheck
 
             }
         }
-        Thread.Sleep(60000);
-        TRExpiryCheck();
 	}
 }
