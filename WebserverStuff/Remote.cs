@@ -198,6 +198,7 @@ namespace MCForge.Remote
                     if (g != null)
                     {
                         g.name = newGroupname;
+                        g.fileName = newGroupname + ".txt";  //Dont ask
                         g.trueName = newGroupname;
                         Group.saveGroups(Group.GroupList);
                     }
@@ -232,10 +233,23 @@ namespace MCForge.Remote
                         Group.saveGroups(Group.GroupList);
                     }
                     break;
-                case 5: //handle Delete
-                case 6: //handle new group
+                case 5:
+                    string bondPAUSEJamesBond = messages.Split('*')[0];
+                    Group grewp = Group.Find(bondPAUSEJamesBond);
+                    if (grewp != null) Group.GroupList.Remove(grewp); Group.saveGroups(Group.GroupList);
+                    break;
+                case 6:
+                    string[] fuckThePolice = messages.Split('*');
+                    if (fuckThePolice.Length == 4)
+                    {
+                        Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, fuckThePolice[0], fuckThePolice[1].Substring(1, 2).ToCharArray()[0], "NEWRANK.txt");
+                        Group.GroupList.Add(newGroup);
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
                 default: return;
             }
+            Group.InitAll();
 
         }
 
