@@ -18,7 +18,7 @@ namespace MCForge
         /// <returns></returns>
         public bool Replace(string path, string search, string oldstring, string newstring)
         {
-            Replace(path, 0, search, 0, oldstring, newstring);
+            return Replace(path, 0, search, 0, oldstring, newstring);
         }
         /// <summary>
         /// Replaces a value in a line in a textfile
