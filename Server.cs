@@ -956,7 +956,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-                TempRankExpiryCheck.TRExpiryCheck();
+                Checktimer.StartTimer();
                 try
                 {
                     if (Server.lava.startOnStartup)
