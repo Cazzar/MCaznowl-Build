@@ -45,7 +45,10 @@ namespace MCForge
             Add(Command.all.Find("countdown"), (int)LevelPermission.Operator, "The lowest rank that can send the rules to everybody", 1);
             Add(Command.all.Find("countdown"), (int)LevelPermission.Operator, "The lowest rank that can setup countdown (download, start, restart, enable, disable, cancel)", 2);
             Add(Command.all.Find("botset"), (int)LevelPermission.Operator, "The lowest rank that can set the bot to killer");
-
+            Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use cones with /draw", 1);
+            Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use pyramids with /draw", 2);
+            Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use spheres with /draw", 3);
+            Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use volcanos with /draw", 4);
 
         }
 
