@@ -102,7 +102,7 @@ namespace MCForge {
                 return;
             } else if (undoPhysics) {
                 if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
-                if (p.group.CanExecute(Command.all.Find("physics"))) { Player.SendMessage(p, "You can only undo physics if you can use them."); return; }
+                if (!p.group.CanExecute(Command.all.Find("physics"))) { Player.SendMessage(p, "You can only undo physics if you can use them."); return; }
 
                 Command.all.Find("physics").Use(p, "0");
                 Level.UndoPos uP;

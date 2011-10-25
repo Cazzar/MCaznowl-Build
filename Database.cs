@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+	Copyright 2011 MCForge
+		
+	Dual-licensed under the	Educational Community License, Version 2.0 and
+	the GNU General Public License, Version 3 (the "Licenses"); you may
+	not use this file except in compliance with the Licenses. You may
+	obtain a copy of the Licenses at
+	
+	http://www.opensource.org/licenses/ecl2.php
+	http://www.gnu.org/licenses/gpl-3.0.html
+	
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the Licenses are distributed on an "AS IS"
+	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+	or implied. See the Licenses for the specific language governing
+	permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -100,6 +117,7 @@ namespace MCForge {
                                 allCols.Add(col);
                             }
                             foreach (DataRow row in tableRowData.Rows) { //We rely on the correct datatype being given here.
+                                sql.WriteLine();
                                 sql.Write("INSERT INTO `{0}` (`", tableName);
                                 foreach (string[] rParams in tableSchema) {
                                     sql.Write(rParams[0]);
@@ -154,11 +172,11 @@ namespace MCForge {
                 string[] column = tableSQLString.Split(',');
                 foreach (string col in column) {
                     if (!col.ToUpper().StartsWith("PRIMARY KEY")) {
-                        string[] split = col.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        string[] split = col.TrimStart('\n', '\r', '\t').Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         //Just to make it the same as the MySQL schema.
-                        schema.Add(new string[] { split[0], split[1],
-                                              ( split.Count() > 2 ? (split[2].ToUpper() == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
-                                              ( split.Count() > 2 ? (split[split.Count() - 2].ToUpper() == "PRIMARY" && split[split.Count() - 1].ToUpper() == "KEY" ? "PRI" : "") : ""),
+                        schema.Add(new string[] { split[0].Trim('`'), split[1].Trim('\t', '`'),
+                                              ( split.Count() > 2 ? (split[2].Trim('\t', '`').ToUpper() == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
+                                              ( split.Count() > 2 ? (split[split.Count() - 2].Trim('\t', '`').ToUpper() == "PRIMARY" && split[split.Count() - 1].Trim('\t', '`').ToUpper() == "KEY" ? "PRI" : "") : ""),
                                               "NULL",
                                               (split.Contains("AUTO_INCREMENT") || split.Contains("AUTOINCREMENT") ? "AUTO_INCREMENT" : "")});
                     }
