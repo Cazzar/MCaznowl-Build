@@ -115,6 +115,10 @@ namespace MCForge {
                     Save(false, p);
                     break;
                 case "restore":
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
+                        p.SendMessage("Sorry.  You must be the defined Server Owner or Console to restore the server.");
+                        return;
+                    }
                     Thread extract = new Thread(new ParameterizedThreadStart(ExtractPackage));
                     extract.Start(p);
                     break;
@@ -456,6 +460,8 @@ namespace MCForge {
                         }
                     }
                     if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
+                        // Before we restore the DB, make sure we're restoring it to the right place.
+                        Command.all.Find("server").Use(null, "reload"); //Reload, as console
                         Database.fillDatabase(item.GetStream());
                     }
                 }
