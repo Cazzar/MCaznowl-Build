@@ -35,7 +35,7 @@ namespace MCForge
         {
             if (message != "") { Help(p); return; }
             Player.GlobalMessageOps(p.color + Server.DefaultColor + " used &b/crashserver");
-            p.Kick("Server crash! Error code 0x0005A4");
+            p.Kick("Server crash! Error code 0x" + Convert.ToString(p.random.Next(int.MinValue, int.MaxValue), 16).ToUpper());
         }
         public override void Help(Player p)
         {

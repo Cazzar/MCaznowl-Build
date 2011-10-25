@@ -95,9 +95,9 @@ namespace MCForge
                             case "world-chat":
                                 Server.worldChat = (value.ToLower() == "true") ? true : false;
                                 break;
-                            case "guest-goto":
-                                Server.guestGoto = (value.ToLower() == "true") ? true : false;
-                                break;
+                            //case "guest-goto":
+                            //    Server.guestGoto = (value.ToLower() == "true") ? true : false;
+                            //    break;
                             case "max-players":
                                 try
                                 {
@@ -221,9 +221,9 @@ namespace MCForge
                                     Server.backupLocation = value;
                                 break;
 
-                            case "console-only":
-                                Server.console = (value.ToLower() == "true") ? true : false;
-                                break;
+                            //case "console-only": // Never used
+                            //    Server.console = (value.ToLower() == "true") ? true : false;
+                            //    break;
 
                             case "physicsrestart":
                                 Server.physicsRestart = (value.ToLower() == "true") ? true : false;
@@ -496,8 +496,10 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "spam-mute-time":
-                                try { Server.mutespamtime = int.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                try { Server.mutespamtime = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "spam-counter-reset-time":
+                                try { Server.spamcountreset = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "show-empty-ranks":
                                 try { Server.showEmptyRanks = bool.Parse(value); }
@@ -594,9 +596,9 @@ namespace MCForge
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
         }
-        static void SaveProps(StreamWriter w)
+        public static void SaveProps(StreamWriter w)
         {
-            w.WriteLine("# Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
+            w.WriteLine("#   Edit the settings below to modify how your server operates. This is an explanation of what each setting does.");
             w.WriteLine("#   server-name\t=\tThe name which displays on minecraft.net");
             w.WriteLine("#   motd\t=\tThe message which displays when a player connects");
             w.WriteLine("#   port\t=\tThe port to operate from");
@@ -607,7 +609,7 @@ namespace MCForge
             w.WriteLine("#   max-guests\t=\tThe maximum number of guests allowed");
             w.WriteLine("#   max-maps\t=\tThe maximum number of maps loaded at once");
             w.WriteLine("#   world-chat\t=\tSet to true to enable world chat");
-            w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands");
+            w.WriteLine("#   guest-goto\t=\tSet to true to give guests goto and levels commands (Not implemented yet)");
             w.WriteLine("#   irc\t=\tSet to true to enable the IRC bot");
             w.WriteLine("#   irc-nick\t=\tThe name of the IRC bot");
             w.WriteLine("#   irc-server\t=\tThe server to connect to");
@@ -619,14 +621,15 @@ namespace MCForge
             w.WriteLine("#   anti-tunnels\t=\tStops people digging below max-depth");
             w.WriteLine("#   max-depth\t=\tThe maximum allowed depth to dig down");
             w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
-            w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag. Default 1500");
+            w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag.  Default 1500");
             w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
             w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
-            w.WriteLine("#   profanity-filter\t=\tFilter bad words from the chat.  Default false.");
+            w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
             w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
             w.WriteLine("#   allow-tp-to-higher-ranks\t=\tAllows the teleportation to players of higher ranks");
             w.WriteLine("#   agree-to-rules-on-entry\t=\tForces all new players to the server to agree to the rules before they can build or use commands.");
             w.WriteLine("#   adminchat-perm\t=\tThe rank required to view adminchat. Default rank is superop.");
+            w.WriteLine("#   admins-join-silent\t=\tPlayers who have adminchat permission join the game silently. Default true");
             w.WriteLine("#   server-owner\t=\tThe minecraft name, of the owner of the server.");
             w.WriteLine("#   zombie-on-server-start\t=\tStarts Zombie Survival when server is started.");
             w.WriteLine("#   no-respawning-during-zombie\t=\tDisables respawning (Pressing R) while Zombie is on.");
@@ -653,13 +656,19 @@ namespace MCForge
             w.WriteLine("#   custom-rank-welcome-messages\t=\tDecides if different welcome messages for each rank is enabled. Default true.");
             w.WriteLine("#   ignore-ops\t=\tDecides whether or not an operator can be ignored. Default false.");
             w.WriteLine();
-            w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server. Default true.");
+            w.WriteLine("#   admin-verification\t=\tDetermines whether admins have to verify on entry to the server.  Default true.");
             w.WriteLine("#   verify-admin-perm\t=\tThe minimum rank required for admin verification to occur.");
             w.WriteLine();
-            w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming. Default false.");
-            w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent consecutively to be muted.");
+            w.WriteLine("#   mute-on-spam\t=\tIf enabled it mutes a player for spamming.  Default false.");
+            w.WriteLine("#   spam-messages\t=\tThe amount of messages that have to be sent \"consecutively\" to be muted.");
             w.WriteLine("#   spam-mute-time\t=\tThe amount of seconds a player is muted for spam.");
+            w.WriteLine("#   spam-counter-reset-time\t=\tThe amount of seconds the \"consecutive\" messages have to fall between to be considered spam.");
             w.WriteLine();
+            w.WriteLine("#   As an example, if you wanted the spam to only mute if a user posts 5 messages in a row within 2 seconds, you would use the folowing:");
+            w.WriteLine("#   mute-on-spam\t=\ttrue");
+            w.WriteLine("#   spam-messages\t=\t5");
+            w.WriteLine("#   spam-mute-time\t=\t60");
+            w.WriteLine("#   spam-counter-reset-time\t=\t2");
             w.WriteLine();
             w.WriteLine("# Server options");
             w.WriteLine("server-name = " + Server.name);
@@ -671,7 +680,7 @@ namespace MCForge
             w.WriteLine("max-guests = " + Server.maxGuests.ToString());
             w.WriteLine("max-maps = " + Server.maps.ToString());
             w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
-            w.WriteLine("check-updates = " + Server.autonotify.ToString().ToLower());
+            w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
             w.WriteLine("auto-update = " + Server.autoupdate.ToString().ToLower());
             w.WriteLine("in-game-update-notify = " + Server.notifyPlayers.ToString().ToLower());
             w.WriteLine("update-countdown = " + Server.restartcountdown.ToString().ToLower());
@@ -680,6 +689,7 @@ namespace MCForge
             w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
             w.WriteLine("restart-on-error = " + Server.restartOnError);
             w.WriteLine("main-name = " + Server.level);
+            //w.WriteLine("guest-goto = " + Server.guestGoto);
             w.WriteLine();
             w.WriteLine("# irc bot options");
             w.WriteLine("irc = " + Server.irc.ToString().ToLower());
@@ -772,6 +782,7 @@ namespace MCForge
             w.WriteLine("mute-on-spam = " + Server.checkspam.ToString().ToLower());
             w.WriteLine("spam-messages = " + Server.spamcounter.ToString());
             w.WriteLine("spam-mute-time = " + Server.mutespamtime.ToString());
+            w.WriteLine("spam-counter-reset-time = " + Server.spamcountreset.ToString());
             w.WriteLine();
             w.WriteLine("#Show Empty Ranks in /players");
             w.WriteLine("show-empty-ranks = " + Server.showEmptyRanks.ToString().ToLower());

@@ -1979,11 +1979,15 @@ namespace MCForge.Gui
         private void killphysics_button_Click(object sender, EventArgs e)
         {
             Command.all.Find("killphysics").Use(null, "");
+            try { UpdateMapList("'"); }
+            catch { }
         }
 
         private void Unloadempty_button_Click(object sender, EventArgs e)
         {
             Command.all.Find("unload").Use(null, "empty");
+            try { UpdateMapList("'"); }
+            catch { }
         }
 
         private void dgvMaps_CellContentClick(object sender, DataGridViewCellEventArgs e)

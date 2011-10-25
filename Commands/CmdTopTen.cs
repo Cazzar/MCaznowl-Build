@@ -17,6 +17,7 @@
 */
 using System;
 using System.Data;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -35,7 +36,7 @@ namespace MCForge
 
             if (String.Compare(message, "1", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, totallogin FROM Players order by totallogin desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, totallogin FROM Players order by totallogin desc limit 10");
 
                 Player.SendMessage(p, "TOP TEN NUMBER OF LOGINS:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -47,7 +48,7 @@ namespace MCForge
             }
             if (String.Compare(message, "2", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, totaldeaths FROM Players order by totaldeaths desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, totaldeaths FROM Players order by totaldeaths desc limit 10");
 
                 Player.SendMessage(p, "TOP TEN NUMBER OF DEATHS:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -59,7 +60,7 @@ namespace MCForge
             }
             if (String.Compare(message, "3", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, money FROM Players order by money desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, money FROM Players order by money desc limit 10");
 
                 Player.SendMessage(p, "TOP TEN AMOUNTS OF MONEY:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -71,7 +72,7 @@ namespace MCForge
             }
             if (String.Compare(message, "4", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, firstlogin FROM Players order by firstlogin asc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, firstlogin FROM Players order by firstlogin asc limit 10");
 
                 Player.SendMessage(p, "FIRST PLAYERS:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -83,7 +84,7 @@ namespace MCForge
             }
             if (String.Compare(message, "5", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, lastlogin  FROM Players order by lastlogin desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, lastlogin  FROM Players order by lastlogin desc limit 10");
 
                 Player.SendMessage(p, "MOST RECENT PLAYERS:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -95,7 +96,7 @@ namespace MCForge
             }
             if (String.Compare(message, "6", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, totalblocks FROM Players order by totalblocks desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, totalblocks FROM Players order by totalblocks desc limit 10");
 
                 Player.SendMessage(p, "TOP TEN NUMBER OF BLOCKS MODIFIED:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
@@ -107,7 +108,7 @@ namespace MCForge
             }
             if (String.Compare(message, "7", true) == 0)
             {
-                DataTable playerDb = MySQL.fillData("SELECT distinct name, totalkicked FROM Players order by totalkicked desc limit 10");
+                DataTable playerDb = Database.fillData("SELECT distinct name, totalkicked FROM Players order by totalkicked desc limit 10");
 
                 Player.SendMessage(p, "TOP TEN NUMBER OF KICKS:");
                 for (int i = 0; i < playerDb.Rows.Count; i++)
