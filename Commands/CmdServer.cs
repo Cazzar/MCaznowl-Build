@@ -459,14 +459,14 @@ namespace MCForge {
                             errors++;
                         }
                     }
+                    // To make life easier, we reload settings now, to maker it less likely to need restart
+                    Command.all.Find("server").Use(null, "reload"); //Reload, as console
                     if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
-                        // Before we restore the DB, make sure we're restoring it to the right place.
-                        Command.all.Find("server").Use(null, "reload"); //Reload, as console
                         Database.fillDatabase(item.GetStream());
                     }
                 }
             }
-            Player.SendMessage((Player)p, "Server restored" + (errors > 0 ? " with errors.  May be a partial restore" : "" ) + ".  Restart is required to see all changes.");
+            Player.SendMessage((Player)p, "Server restored" + (errors > 0 ? " with errors.  May be a partial restore" : "" ) + ".  Restart is reccommended, though not required.");
         }
     }
 }
