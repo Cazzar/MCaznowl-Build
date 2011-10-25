@@ -90,11 +90,12 @@ namespace MCForge
         public const byte door_darkgrey_air = (byte)67;
         public const byte door_lightgrey_air = (byte)68;
         public const byte door_white_air = (byte)69;
+
+        public const byte flagbase = (byte)70;
+
         //Seasons
         public const byte fallsnow = (byte)71;
         public const byte snow = (byte)72;
-
-        public const byte flagbase = (byte)70;
 
         public const byte door_cobblestone = (byte)80;
         public const byte door_cobblestone_air = (byte)81;
