@@ -341,6 +341,14 @@ namespace MCForge
             }
             return null;
         }
+        public static Group findPermInt(int Perm)
+        {
+            foreach (Group grp in GroupList)
+            {
+                if ((int)grp.Permission == Perm) return grp;
+            }
+            return null;
+        }
 
         public static string findPlayer(string playerName)
         {

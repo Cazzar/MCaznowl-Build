@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using MySql.Data.MySqlClient;
+using MCForge.SQL;
 
 namespace MCForge.Commands
 {
@@ -43,7 +44,7 @@ namespace MCForge.Commands
             switch (par0)
             {
                 case "setup":
-                    if (p.group.Permission >= LevelPermission.Operator)
+                    if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this))
                     {
                         switch (par1)
                         {
@@ -562,7 +563,7 @@ namespace MCForge.Commands
                            return;
 
                        case "setup":
-                           if (p.group.Permission >= LevelPermission.Operator)
+                           if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this))
                            {
                                 Player.SendMessage(p, "Use '/eco setup' to setup the economy system");
                                Player.SendMessage(p, "Use '/eco setup [title/color] [price]' to setup the prices");
@@ -594,7 +595,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "/eco buy <title/color/rank/map> [title/color/mappreset] [custommapname] - to buy");
             Player.SendMessage(p, "/eco stats [player] - view stats about yourself or [player]");
             Player.SendMessage(p, "/eco info <title/color/rank/map> - view information about buying");
-            if (p.group.Permission >= LevelPermission.Operator)
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this))
             {
                 Player.SendMessage(p, "/eco setup - to setup economy");
                 Player.SendMessage(p, "/eco help [buy/stats/info/setup] - get more specific help");

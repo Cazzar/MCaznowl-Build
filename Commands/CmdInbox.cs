@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -36,7 +37,7 @@ namespace MCForge
         {
             try
             {
-                if (Server.useMySQL) MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));"); else SQLite.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
+                if (Server.useMySQL) MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));"); else SQLite.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom TEXT, TimeSent DATETIME, Contents TEXT);");
                 if (message == "")
                 {
                     DataTable Inbox = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Inbox" + p.name + "` ORDER BY TimeSent") : SQLite.fillData("SELECT * FROM `Inbox" + p.name + "` ORDER BY TimeSent");
@@ -73,7 +74,7 @@ namespace MCForge
 
                     string queryString;
                     if (FoundRecord == -1)
-                        queryString = "TRUNCATE TABLE `Inbox" + p.name + "`";
+                        queryString = Server.useMySQL ? "TRUNCATE TABLE `Inbox" + p.name + "`" : "DELETE FROM `Inbox" + p.name + "`"; 
                     else
                         queryString = "DELETE FROM `Inbox" + p.name + "` WHERE PlayerFrom='" + Inbox.Rows[FoundRecord]["PlayerFrom"] + "' AND TimeSent='" + Convert.ToDateTime(Inbox.Rows[FoundRecord]["TimeSent"]).ToString("yyyy-MM-dd HH:mm:ss") + "'";
 

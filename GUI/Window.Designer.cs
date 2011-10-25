@@ -127,7 +127,6 @@ namespace MCForge.Gui
             this.Unloadempty_button = new System.Windows.Forms.Button();
             this.killphysics_button = new System.Windows.Forms.Button();
             this.button_saveall = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
             this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
@@ -254,6 +253,10 @@ namespace MCForge.Gui
             this.NameTxtPlayersTab = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.Chat = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.txtGlobalLog = new MCForge.Gui.AutoScrollTextBox();
+            this.txtGlobalInput = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label32 = new System.Windows.Forms.Label();
             this.txtAdminLog = new MCForge.Gui.AutoScrollTextBox();
@@ -286,6 +289,7 @@ namespace MCForge.Gui
             this.tabPage7.SuspendLayout();
             this.panel4.SuspendLayout();
             this.Chat.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -660,7 +664,7 @@ namespace MCForge.Gui
             // 
             this.btnProperties.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnProperties.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProperties.Location = new System.Drawing.Point(435, 5);
+            this.btnProperties.Location = new System.Drawing.Point(441, 5);
             this.btnProperties.Name = "btnProperties";
             this.btnProperties.Size = new System.Drawing.Size(80, 23);
             this.btnProperties.TabIndex = 34;
@@ -684,7 +688,7 @@ namespace MCForge.Gui
             // 
             this.Restart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Restart.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Restart.Location = new System.Drawing.Point(521, 5);
+            this.Restart.Location = new System.Drawing.Point(524, 5);
             this.Restart.Name = "Restart";
             this.Restart.Size = new System.Drawing.Size(88, 23);
             this.Restart.TabIndex = 36;
@@ -808,7 +812,6 @@ namespace MCForge.Gui
             this.tabPage1.Controls.Add(this.Unloadempty_button);
             this.tabPage1.Controls.Add(this.killphysics_button);
             this.tabPage1.Controls.Add(this.button_saveall);
-            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.gBCommands);
             this.tabPage1.Controls.Add(this.dgvMaps);
             this.tabPage1.Controls.Add(this.gBChat);
@@ -860,18 +863,6 @@ namespace MCForge.Gui
             this.button_saveall.Text = "Save All";
             this.button_saveall.UseVisualStyleBackColor = true;
             this.button_saveall.Click += new System.EventHandler(this.button_saveall_Click);
-            // 
-            // button1
-            // 
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(447, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 23);
-            this.button1.TabIndex = 36;
-            this.button1.Text = "Updater";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // gBCommands
             // 
@@ -986,13 +977,13 @@ namespace MCForge.Gui
             this.dgvPlayers.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvPlayers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPlayers.ContextMenuStrip = this.playerStrip;
-            this.dgvPlayers.Location = new System.Drawing.Point(447, 34);
+            this.dgvPlayers.Location = new System.Drawing.Point(447, 7);
             this.dgvPlayers.MultiSelect = false;
             this.dgvPlayers.Name = "dgvPlayers";
             this.dgvPlayers.ReadOnly = true;
             this.dgvPlayers.RowHeadersVisible = false;
             this.dgvPlayers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPlayers.Size = new System.Drawing.Size(246, 223);
+            this.dgvPlayers.Size = new System.Drawing.Size(246, 250);
             this.dgvPlayers.TabIndex = 37;
             this.dgvPlayers.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvPlayers_RowPrePaint);
             // 
@@ -2217,6 +2208,7 @@ namespace MCForge.Gui
             // 
             // Chat
             // 
+            this.Chat.Controls.Add(this.groupBox3);
             this.Chat.Controls.Add(this.groupBox2);
             this.Chat.Controls.Add(this.groupBox1);
             this.Chat.Location = new System.Drawing.Point(4, 22);
@@ -2227,15 +2219,59 @@ namespace MCForge.Gui
             this.Chat.Text = "Chat";
             this.Chat.UseVisualStyleBackColor = true;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label40);
+            this.groupBox3.Controls.Add(this.txtGlobalLog);
+            this.groupBox3.Controls.Add(this.txtGlobalInput);
+            this.groupBox3.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Location = new System.Drawing.Point(8, 327);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(683, 155);
+            this.groupBox3.TabIndex = 37;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Global Chat";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(7, 131);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(61, 13);
+            this.label40.TabIndex = 32;
+            this.label40.Text = "GlobalChat:";
+            // 
+            // txtGlobalLog
+            // 
+            this.txtGlobalLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtGlobalLog.Cursor = System.Windows.Forms.Cursors.Default;
+            this.txtGlobalLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGlobalLog.Location = new System.Drawing.Point(6, 20);
+            this.txtGlobalLog.Multiline = true;
+            this.txtGlobalLog.Name = "txtGlobalLog";
+            this.txtGlobalLog.ReadOnly = true;
+            this.txtGlobalLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtGlobalLog.Size = new System.Drawing.Size(671, 102);
+            this.txtGlobalLog.TabIndex = 2;
+            // 
+            // txtGlobalInput
+            // 
+            this.txtGlobalInput.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGlobalInput.Location = new System.Drawing.Point(74, 128);
+            this.txtGlobalInput.Name = "txtGlobalInput";
+            this.txtGlobalInput.Size = new System.Drawing.Size(585, 21);
+            this.txtGlobalInput.TabIndex = 28;
+            this.txtGlobalInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtGlobalInput_KeyDown);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label32);
             this.groupBox2.Controls.Add(this.txtAdminLog);
             this.groupBox2.Controls.Add(this.txtAdminInput);
             this.groupBox2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(8, 247);
+            this.groupBox2.Location = new System.Drawing.Point(8, 166);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(683, 237);
+            this.groupBox2.Size = new System.Drawing.Size(683, 155);
             this.groupBox2.TabIndex = 36;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Admin Chat";
@@ -2243,7 +2279,7 @@ namespace MCForge.Gui
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(7, 213);
+            this.label32.Location = new System.Drawing.Point(7, 131);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(62, 13);
             this.label32.TabIndex = 32;
@@ -2259,13 +2295,13 @@ namespace MCForge.Gui
             this.txtAdminLog.Name = "txtAdminLog";
             this.txtAdminLog.ReadOnly = true;
             this.txtAdminLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtAdminLog.Size = new System.Drawing.Size(671, 186);
+            this.txtAdminLog.Size = new System.Drawing.Size(671, 102);
             this.txtAdminLog.TabIndex = 2;
             // 
             // txtAdminInput
             // 
             this.txtAdminInput.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAdminInput.Location = new System.Drawing.Point(75, 210);
+            this.txtAdminInput.Location = new System.Drawing.Point(75, 128);
             this.txtAdminInput.Name = "txtAdminInput";
             this.txtAdminInput.Size = new System.Drawing.Size(584, 21);
             this.txtAdminInput.TabIndex = 28;
@@ -2279,7 +2315,7 @@ namespace MCForge.Gui
             this.groupBox1.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(8, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(683, 237);
+            this.groupBox1.Size = new System.Drawing.Size(683, 155);
             this.groupBox1.TabIndex = 35;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Op Chat";
@@ -2287,7 +2323,7 @@ namespace MCForge.Gui
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(7, 213);
+            this.label33.Location = new System.Drawing.Point(7, 131);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(44, 13);
             this.label33.TabIndex = 31;
@@ -2296,7 +2332,7 @@ namespace MCForge.Gui
             // txtOpInput
             // 
             this.txtOpInput.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOpInput.Location = new System.Drawing.Point(57, 210);
+            this.txtOpInput.Location = new System.Drawing.Point(57, 128);
             this.txtOpInput.Name = "txtOpInput";
             this.txtOpInput.Size = new System.Drawing.Size(602, 21);
             this.txtOpInput.TabIndex = 30;
@@ -2307,12 +2343,12 @@ namespace MCForge.Gui
             this.txtOpLog.BackColor = System.Drawing.SystemColors.Window;
             this.txtOpLog.Cursor = System.Windows.Forms.Cursors.Default;
             this.txtOpLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOpLog.Location = new System.Drawing.Point(6, 20);
+            this.txtOpLog.Location = new System.Drawing.Point(6, 26);
             this.txtOpLog.Multiline = true;
             this.txtOpLog.Name = "txtOpLog";
             this.txtOpLog.ReadOnly = true;
             this.txtOpLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOpLog.Size = new System.Drawing.Size(672, 186);
+            this.txtOpLog.Size = new System.Drawing.Size(664, 96);
             this.txtOpLog.TabIndex = 29;
             // 
             // Window
@@ -2365,6 +2401,8 @@ namespace MCForge.Gui
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.Chat.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -2407,7 +2445,6 @@ namespace MCForge.Gui
         private TabPage tabPage4;
         private TextBox txtSystem;
         private TabPage tabPage1;
-        private Button button1;
         private GroupBox gBCommands;
         private AutoScrollTextBox txtCommandsUsed;
         private DataGridView dgvMaps;
@@ -2574,5 +2611,9 @@ namespace MCForge.Gui
         private ToolStripMenuItem loadingToolStripMenuItem;
         private ToolStripMenuItem miscToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
+        private GroupBox groupBox3;
+        private Label label40;
+        private AutoScrollTextBox txtGlobalLog;
+        private TextBox txtGlobalInput;
     }
 }

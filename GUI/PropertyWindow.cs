@@ -46,7 +46,6 @@ namespace MCForge.Gui
 
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
-            Icon = Gui.Window.ActiveForm.Icon;
             lavaMapBrowser = new LavaMapBrowser();
 
             Object[] colors = new Object[16];
@@ -72,13 +71,12 @@ namespace MCForge.Gui
                 grpIRC.BackColor = Color.White;
             }
 
-            if (Server.useMySQL == false)
+            if (Server.useMySQL) {
+                grpSQL.BackColor = Color.White;
+            }
+            else
             {
                 grpSQL.BackColor = Color.LightGray;
-            }
-            if (Server.useMySQL == true)
-            {
-                grpSQL.BackColor = Color.White;
             }
 
             string opchatperm = "";
@@ -138,6 +136,7 @@ namespace MCForge.Gui
             {
                 LoadCommands();
                 LoadBlocks();
+                LoadExtraCmdCmds();
             }
             catch
             {
@@ -188,12 +187,14 @@ namespace MCForge.Gui
         public void LoadRanks()
         {
             txtCmdRanks.Text = "The following ranks are available: \r\n\r\n";
+            txtcmdranks2.Text = "The following ranks are available: \r\n\r\n";
             listRanks.Items.Clear();
             storedRanks.Clear();
             storedRanks.AddRange(Group.GroupList);
             foreach (Group grp in storedRanks)
             {
                 txtCmdRanks.Text += "\t" + grp.name + " (" + (int)grp.Permission + ")\r\n";
+                txtcmdranks2.Text += "\t" + grp.name + " (" + (int)grp.Permission + ")\r\n";
                 listRanks.Items.Add(grp.trueName + " = " + (int)grp.Permission);
             }
             txtBlRanks.Text = txtCmdRanks.Text;
@@ -425,11 +426,12 @@ namespace MCForge.Gui
 
                             case "defaultcolor":
                                 color = c.Parse(value);
+
                                 if (color == "")
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(value)); break;
+                                cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(color)); break;
 
                             case "irc-color":
                                 color = c.Parse(value);
@@ -437,7 +439,7 @@ namespace MCForge.Gui
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(value)); break;
+                                cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(color)); break;
                             case "default-rank":
                                 try
                                 {
@@ -496,14 +498,22 @@ namespace MCForge.Gui
                                 try { txtafk.Text = Convert.ToInt16(value).ToString(); }
                                 catch { txtafk.Text = "10"; }
                                 break;
-
                             case "afk-kick":
                                 try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); }
                                 catch { txtAFKKick.Text = "45"; }
                                 break;
-
                             case "check-updates":
                                 chkUpdates.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "auto-update":
+                                autoUpdate.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "in-game-update-notify":
+                                notifyInGameUpdate.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "update-countdown":
+                                try { updateTimeNumeric.Value = Convert.ToDecimal(Convert.ToInt32(value)); }
+                                catch { updateTimeNumeric.Value = 10; }
                                 break;
                             case "autoload":
                                 chkAutoload.Checked = (value.ToLower() == "true") ? true : false;
@@ -529,9 +539,9 @@ namespace MCForge.Gui
                             case "money-name":
                                 txtMoneys.Text = value;
                                 break;
-                            case "mono":
+                            /*case "mono":
                                 chkMono.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                                break;*/
                             case "restart-on-error":
                                 chkRestart.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -569,7 +579,7 @@ namespace MCForge.Gui
                                 chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "admin-verification":
-                                 chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
+                                chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "usemysql":
                                 chkUseSQL.Checked = (value.ToLower() == "true") ? true : false;
@@ -592,6 +602,17 @@ namespace MCForge.Gui
                                 catch
                                 {
                                     txtSQLHost.Text = "127.0.0.1";
+                                }
+                                break;
+                            case "sqlport":
+                                try
+                                {
+                                    int.Parse(value);
+                                    txtSQLPort.Text = value;
+                                }
+                                catch
+                                {
+                                    txtSQLPort.Text = "3306";
                                 }
                                 break;
                             case "mute-on-spam":
@@ -635,7 +656,7 @@ namespace MCForge.Gui
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(value)); break;
+                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(color)); break;
 
                             case "griefer-stone-tempban":
                                 chkGrieferStoneBan.Checked = (value.ToLower() == "true") ? true : false;
@@ -677,15 +698,141 @@ namespace MCForge.Gui
             {
                 using (StreamWriter w = new StreamWriter(File.Create(givenPath))) {
                     if (givenPath.IndexOf("server") != -1) {
-                        Properties.SaveProps(w);
+                        saveAll(); // saves everything to the server variables
+                        SrvProperties.SaveProps(w); // When we have this, why define it again?
                     }
-                    w.Flush();
                 }
             }
-            catch
+            catch (Exception)
             {
                 Server.s.Log("SAVE FAILED! " + givenPath);
             }
+        }
+
+        private void saveAll() {
+
+            Server.name = txtName.Text;
+            Server.motd = txtMOTD.Text;
+            Server.port = int.Parse(txtPort.Text);
+            Server.verify = chkVerify.Checked;
+            Server.pub = chkPublic.Checked;
+            Server.players = (byte)numPlayers.Value;
+            Server.maxGuests = (byte)numGuests.Value;
+            Server.maps = byte.Parse(txtMaps.Text);
+            Server.worldChat = chkWorld.Checked;
+            Server.autonotify = chkNotifyOnJoinLeave.Checked;
+            Server.AutoLoad = chkAutoload.Checked;
+            Server.autorestart = chkRestartTime.Checked;
+            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
+            Server.restartOnError = chkRestart.Checked;
+            Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main");
+            Server.irc = chkIRC.Checked;
+            Server.ircNick = txtNick.Text;
+            Server.ircServer = txtIRCServer.Text;
+            Server.ircChannel = txtChannel.Text;
+            Server.ircOpChannel = txtOpChannel.Text;
+            Server.ircPort = int.Parse(txtIRCPort.Text);
+            Server.ircIdentify = chkIrcId.Checked;
+            Server.ircPassword = txtIrcId.Text;
+
+
+            Server.antiTunnel = ChkTunnels.Checked;
+            Server.maxDepth = byte.Parse(txtDepth.Text);
+            Server.rpLimit = int.Parse(txtRP.Text);
+            Server.rpNormLimit = int.Parse(txtRP.Text);
+            Server.physicsRestart = chkPhysicsRest.Checked;
+            Server.oldHelp = chkHelp.Checked;
+            Server.deathcount = chkDeath.Checked;
+            Server.afkminutes = int.Parse(txtafk.Text);
+            Server.afkkick = int.Parse(txtAFKKick.Text);
+            Server.parseSmiley = chkSmile.Checked;
+            Server.dollardollardollar = chk17Dollar.Checked;
+            //Server.useWhitelist = ; //We don't have a setting for this?
+            Server.moneys = txtMoneys.Text;
+            Server.opchatperm = (Group.GroupList.Find(grp => grp.name == cmbOpChat.SelectedItem.ToString()).Permission);
+            Server.adminchatperm = (Group.GroupList.Find(grp => grp.name == cmbAdminChat.SelectedItem.ToString()).Permission);
+            Server.logbeat = chkLogBeat.Checked;
+            Server.forceCuboid = chkForceCuboid.Checked;
+            Server.profanityFilter = chkProfanityFilter.Checked;
+            Server.notifyOnJoinLeave = chkNotifyOnJoinLeave.Checked;
+            Server.repeatMessage = chkRepeatMessages.Checked;
+            Server.ZallState = txtHost.Text;
+            Server.agreetorulesonentry = chkAgreeToRules.Checked;
+            Server.adminsjoinsilent = chkAdminsJoinSilent.Checked;
+            Server.server_owner = txtServerOwner.Text;
+            Server.startZombieModeOnStartup = chkZombieOnServerStart.Checked;
+            Server.noRespawn = chkNoRespawnDuringZombie.Checked;
+            Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
+            Server.noPillaring = chkNoPillaringDuringZombie.Checked;
+            Server.ZombieName = ZombieName.Text;
+
+
+            Server.backupInterval = int.Parse(txtBackup.Text);
+            Server.backupLocation = txtBackupLocation.Text;
+
+
+            //Server.reportBack = ;  //No setting for this?
+
+            Server.useMySQL = chkUseSQL.Checked;
+            Server.MySQLHost = txtSQLHost.Text;
+            //Server.MySQLPort = ; // No setting for this?
+            Server.MySQLUsername = txtSQLUsername.Text;
+            Server.MySQLPassword = txtSQLPassword.Text;
+            Server.MySQLDatabaseName = txtSQLDatabase.Text;
+            //Server.MySQLPooling = ; // No setting for this?
+
+
+            Server.DefaultColor = cmbDefaultColour.SelectedItem.ToString();
+            Server.IRCColour = cmbIRCColour.SelectedItem.ToString();
+
+
+            //Server.mono = chkMono.Checked;
+
+
+            Server.customBan = chkBanMessage.Checked;
+            Server.customBanMessage = txtBanMessage.Text;
+            Server.customShutdown = chkShutdown.Checked;
+            Server.customShutdownMessage = txtShutdown.Text;
+            Server.customGrieferStone = chkGrieferStone.Checked;
+            Server.customGrieferStoneMessage = txtGrieferStone.Text;
+            Server.higherranktp = chkTpToHigherRanks.Checked;
+            Server.globalignoreops = chkIgnoreGlobal.Checked; // Wasn't in previous setting-saver
+
+            Server.checkUpdates = chkUpdates.Checked;
+
+            Server.cheapMessage = chkCheap.Checked;
+            Server.cheapMessageGiven = txtCheap.Text;
+            Server.rankSuper = chkrankSuper.Checked;
+            Server.defaultRank = cmbDefaultRank.SelectedItem.ToString();
+
+            Server.hackrank_kick = hackrank_kick.Checked;
+            Server.hackrank_kick_time = int.Parse(hackrank_kick_time.Text);
+
+
+            Server.verifyadmins = chkVerify.Checked;
+            Server.verifyadminsrank = (Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission);
+
+            Server.checkspam = chkSpamControl.Checked;
+            Server.spamcounter = (int)numSpamMessages.Value;
+            Server.mutespamtime = (int)numSpamMute.Value;
+            Server.spamcountreset = (int)numCountReset.Value;
+
+            Server.showEmptyRanks = chkShowEmptyRanks.Checked;
+
+            Server.UseGlobalChat = chkGlobalChat.Checked;
+            Server.GlobalChatNick = txtGlobalChatNick.Text;
+            Server.GlobalChatColor = cmbGlobalChatColor.SelectedItem.ToString();
+
+            Server.grieferStoneBan = chkGrieferStoneBan.Checked;
+            Server.grieferStoneType = Block.Byte(cmbGrieferStoneType.SelectedItem.ToString());
+            Server.grieferStoneRank = (Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.SelectedItem.ToString()).Permission);
+
+            Server.WomDirect = chkWomDirect.Checked;
+            //Server.Server_ALT = ;
+            //Server.Server_Disc = ;
+            //Server.Server_Flag = ;
+
+
         }
 
         private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)
@@ -733,11 +880,12 @@ namespace MCForge.Gui
             Save("properties/server.properties");
             SaveRanks();
             SaveCommands();
+            SaveOldExtraCustomCmdChanges();
             SaveBlocks();
             try { SaveLavaSettings(); }
             catch { Server.s.Log("Error saving Lava Survival settings!"); }
 
-            Properties.Load("properties/server.properties", true);
+            SrvProperties.Load("properties/server.properties", true); // loads when saving?
             GrpCommands.fillRanks();
 
             // Trigger profanity filter reload
@@ -767,20 +915,19 @@ namespace MCForge.Gui
 
         private void chkPhysicsRest_CheckedChanged(object sender, EventArgs e)
         {
-
         }
 
         private void chkGC_CheckedChanged(object sender, EventArgs e)
         {
-
         }
+
         private void chkIRC_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkIRC.Checked.ToString().ToLower() == "false")
+            if (!chkIRC.Checked)
             {
                 grpIRC.BackColor = Color.LightGray;
             }
-            if (chkIRC.Checked.ToString().ToLower() == "true")
+            else
             {
                 grpIRC.BackColor = Color.White;
             }
@@ -876,12 +1023,17 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             }
         }
 
-        private void txtMaxUndo_TextChanged(object sender, EventArgs e) {
-            if (txtMaxUndo.Text != "") {
+        private void txtMaxUndo_TextChanged(object sender, EventArgs e)
+        {
+            if (txtMaxUndo.Text != "")
+            {
                 long foundMax;
-                try {
+                try
+                {
                     foundMax = long.Parse(txtMaxUndo.Text);
-                } catch {
+                }
+                catch
+                {
                     txtMaxUndo.Text = txtMaxUndo.Text.Remove(txtMaxUndo.Text.Length - 1);
                     return;
                 }
@@ -903,7 +1055,6 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void btnAddRank_Click(object sender, EventArgs e)
         {
-            Random rand = new Random();
             Group newGroup = new Group((LevelPermission)5, 600, 30, "CHANGEME", '1', "CHANGEME.txt");
             storedRanks.Add(newGroup);
             listRanks.Items.Add(newGroup.trueName + " = " + (int)newGroup.Permission);
@@ -1102,38 +1253,39 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     listener = null;
                 }
 
-               
 
-               HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     using (Stream stream = response.GetResponseStream())
                     {
-                        using (StreamReader reader = new StreamReader(stream)){
-
-
-
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            if (line == "") { continue; }
-                            
-                            if (line == "open")
-                            {
-                                ChkPortResult.Text = "Port Open!";
-                                ChkPortResult.BackColor = Color.Lime;
-                                MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
-                                return;
-                            }
 
-                        MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                        ChkPortResult.Text = "Port Not Open";
-                        ChkPortResult.BackColor = Color.Red;
-                        
-                        
-                        }
+
+
+                            string line;
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                if (line == "") { continue; }
+
+                                if (line == "open")
+                                {
+                                    ChkPortResult.Text = "Port Open!";
+                                    ChkPortResult.BackColor = Color.Lime;
+                                    MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
+                                    return;
+                                }
+
+                                MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
+                                ChkPortResult.Text = "Port Not Open";
+                                ChkPortResult.BackColor = Color.Red;
+
+
+                            }
 
                         }
                     }
@@ -1161,28 +1313,28 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void CrtCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
-             if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
-             {
-                 MessageBox.Show("Sorry, That command already exists!!");
-             }
-             else
-             {
-             Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
-MessageBox.Show("Command Created!!");
-             }
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command!!");
-}
+            if (CustCmdtxtBox.Text != null)
+            {
+                if (File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
+                {
+                    MessageBox.Show("Sorry, That command already exists!!");
+                }
+                else
+                {
+                    Command.all.Find("cmdcreate").Use(null, CustCmdtxtBox.Text);
+                    MessageBox.Show("Command Created!!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command!!");
+            }
         }
 
         private void CompileCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 if (File.Exists("extra/commands/dll/Cmd" + CustCmdtxtBox.Text + ".dll"))
                 {
                     MessageBox.Show("Sorry, That command already exists!!");
@@ -1190,13 +1342,13 @@ if (CustCmdtxtBox.Text != null)
                 else
                 {
                     Command.all.Find("compile").Use(null, CustCmdtxtBox.Text);
-MessageBox.Show("Command Compiled!!");
+                    MessageBox.Show("Command Compiled!!");
                 }
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command!!");
-}
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command!!");
+            }
         }
 
         private void LoadCustCmd_Click(object sender, EventArgs e)
@@ -1206,8 +1358,8 @@ MessageBox.Show("You didnt specify a name for the command!!");
 
         private void LoadIntoTxtBox_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 if (!File.Exists("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs"))
                 {
                     MessageBox.Show("Sorry, That command doesn't exist yet - click Create Custom Command Above to create it.");
@@ -1216,33 +1368,33 @@ if (CustCmdtxtBox.Text != null)
                 {
                     CustCmdTxtBox2.Text = null;
                     CustCmdTxtBox2.Text = File.ReadAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs");
-}
+                }
             }
-else
-{
-MessageBox.Show("You didnt specify a name for the command to be loaded!!");
-}
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command to be loaded!!");
+            }
         }
 
         private void SaveCustCmd_Click(object sender, EventArgs e)
         {
-if (CustCmdtxtBox.Text != null)
-{
+            if (CustCmdtxtBox.Text != null)
+            {
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", null);
                 File.WriteAllText("extra/commands/source/Cmd" + CustCmdtxtBox.Text + ".cs", CustCmdTxtBox2.Text);
                 CustCmdTxtBox2.Text = null;
                 MessageBox.Show("Saved Succesfully!!");
-}
-else
-{
-MessageBox.Show("You didnt specify a name for the command to be saved as!!");
-}
+            }
+            else
+            {
+                MessageBox.Show("You didnt specify a name for the command to be saved as!!");
+            }
         }
 
         private void ClrCustCmdTxtBox_Click(object sender, EventArgs e)
         {
             CustCmdTxtBox2.Text = null;
-MessageBox.Show("Text Box Cleared!!");
+            MessageBox.Show("Text Box Cleared!!");
         }
 
         private void CancelCustCmdTxtBox_Click(object sender, EventArgs e)
@@ -1691,6 +1843,7 @@ MessageBox.Show("Text Box Cleared!!");
             lsChkStartOnStartup.Checked = Server.lava.startOnStartup;
             lsChkSendAFKMain.Checked = Server.lava.sendAfkMain;
             lsNudVoteCount.Value = Server.lava.voteCount;
+            lsNudLives.Value = MathHelper.Clamp((decimal)Server.lava.lifeNum, 0, 1000);
             lsNudVoteTime.Value = (decimal)MathHelper.Clamp(Server.lava.voteTime, 1, 1000);
         }
 
@@ -1702,6 +1855,7 @@ MessageBox.Show("Text Box Cleared!!");
             Server.lava.sendAfkMain = lsChkSendAFKMain.Checked;
             Server.lava.voteCount = (byte)lsNudVoteCount.Value;
             Server.lava.voteTime = (double)lsNudVoteTime.Value;
+            Server.lava.lifeNum = (int)lsNudLives.Value;
             Server.lava.SaveSettings();
         }
 
@@ -1742,7 +1896,7 @@ MessageBox.Show("Text Box Cleared!!");
             {
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(new MethodInvoker(delegate { UpdateLavaMapList(useList, noUseList); }));
+                    this.Invoke(new MethodInvoker(delegate { try { UpdateLavaMapList(useList, noUseList); } catch { } }));
                     return;
                 }
 
@@ -1752,7 +1906,7 @@ MessageBox.Show("Text Box Cleared!!");
 
                 if (useList)
                 {
-                    lsMapUse.Items.AddRange(Server.lava.GetMaps().ToArray());
+                    lsMapUse.Items.AddRange(Server.lava.Maps.ToArray());
                     try { if (useIndex > -1) lsMapUse.SelectedIndex = useIndex; }
                     catch { }
                 }
@@ -1762,14 +1916,17 @@ MessageBox.Show("Text Box Cleared!!");
                     FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        name = file.Name.Replace(".lvl", "");
-                        if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
-                            lsMapNoUse.Items.Add(name);
+                        try {
+                            name = file.Name.Replace(".lvl", "");
+                            if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
+                                lsMapNoUse.Items.Add(name);
+                        } catch (NullReferenceException) { }
                     }
                     try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
                     catch { }
                 }
             }
+            catch(ObjectDisposedException) { }  //Y U BE ANNOYING 
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
@@ -1795,7 +1952,7 @@ MessageBox.Show("Text Box Cleared!!");
                 settings.blockFlood = new LavaSurvival.Pos((ushort)(level.width / 2), (ushort)(level.depth - 1), (ushort)(level.height / 2));
                 settings.blockLayer = new LavaSurvival.Pos(0, (ushort)(level.depth / 2), 0);
                 ushort x = (ushort)(level.width / 2), y = (ushort)(level.depth / 2), z = (ushort)(level.height / 2);
-                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3),(ushort)(y + 4), (ushort)(z + 3)) };
+                settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos((ushort)(x - 3), y, (ushort)(z - 3)), new LavaSurvival.Pos((ushort)(x + 3), (ushort)(y + 4), (ushort)(z + 3)) };
                 Server.lava.SaveMapSettings(settings);
 
                 level.motd = "Lava Survival: " + level.name.Capitalize();
@@ -1891,6 +2048,10 @@ MessageBox.Show("Text Box Cleared!!");
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
+        private void numCountReset_ValueChanged(object sender, EventArgs e) {
+
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             try
@@ -1906,17 +2067,6 @@ MessageBox.Show("Text Box Cleared!!");
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
-
-        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabPage4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             new GUI.WoM().Show();
@@ -1926,6 +2076,64 @@ MessageBox.Show("Text Box Cleared!!");
         {
             button3.Enabled = chkWomDirect.Checked;
         }
-    }
 
+        private void forceUpdateBtn_Click(object sender, EventArgs e)
+        {
+            forceUpdateBtn.Enabled = false;
+            if (MessageBox.Show("Would you like to force update MCForge now?", "Force Update", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                saveStuff();
+                MCForge_.Gui.Program.PerformUpdate();
+                Dispose();
+            }
+            else
+            {
+                forceUpdateBtn.Enabled = true;
+            }
+        }
+
+        private int oldnumber;
+        private Command oldcmd;
+        private void listCommandsExtraCmdPerms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveOldExtraCustomCmdChanges();
+            Command cmd = Command.all.Find(listCommandsExtraCmdPerms.SelectedItem.ToString());
+            oldcmd = cmd;
+            extracmdpermnumber.Maximum = CommandOtherPerms.GetMaxNumber(cmd);
+            if (extracmdpermnumber.Maximum == 1) { extracmdpermnumber.ReadOnly = true; }
+            else { extracmdpermnumber.ReadOnly = false; }
+            extracmdpermnumber.Value = 1;
+            extracmdpermdesc.Text = CommandOtherPerms.Find(cmd, 1).Description;
+            extracmdpermperm.Text = CommandOtherPerms.Find(cmd, 1).Permission.ToString();
+            oldnumber = (int)extracmdpermnumber.Value;
+        }
+
+        private void SaveOldExtraCustomCmdChanges()
+        {
+            if (oldcmd != null)
+            {
+                CommandOtherPerms.Edit(CommandOtherPerms.Find(oldcmd, oldnumber), int.Parse(extracmdpermperm.Text));
+                CommandOtherPerms.Save();
+            }
+        }
+
+        private void extracmdpermnumber_ValueChanged(object sender, EventArgs e)
+        {
+            SaveOldExtraCustomCmdChanges();
+            oldnumber = (int)extracmdpermnumber.Value;
+            extracmdpermdesc.Text = CommandOtherPerms.Find(oldcmd, (int)extracmdpermnumber.Value).Description;
+            extracmdpermperm.Text = CommandOtherPerms.Find(oldcmd, (int)extracmdpermnumber.Value).Permission.ToString();
+        }
+        private void LoadExtraCmdCmds()
+        {
+            listCommandsExtraCmdPerms.Items.Clear();
+            foreach (Command cmd in Command.all.commands)
+            {
+                if (CommandOtherPerms.Find(cmd) != null)
+                {
+                    listCommandsExtraCmdPerms.Items.Add(cmd.name);
+                }
+            }
+        }
+    }
 }

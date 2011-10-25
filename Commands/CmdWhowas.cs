@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using SData.Types;
 
@@ -60,12 +61,13 @@ namespace MCForge
             Player.SendMessage(p, "> > &cdied &a" + playerDb.Rows[0]["TotalDeaths"] + Server.DefaultColor + " times");
             Player.SendMessage(p, "> > &bmodified &a" + playerDb.Rows[0]["totalBlocks"] + " &eblocks.");
             Player.SendMessage(p, "> > was last seen on &a" + playerDb.Rows[0]["LastLogin"]);
+            Player.SendMessage(p, "> > " + TotalTime(playerDb.Rows[0]["TimeSpent"].ToString()));
             Player.SendMessage(p, "> > first logged into the server on &a" + playerDb.Rows[0]["FirstLogin"]);
             Player.SendMessage(p, "> > logged in &a" + playerDb.Rows[0]["totalLogin"] + Server.DefaultColor + " times, &c" + playerDb.Rows[0]["totalKicked"] + Server.DefaultColor + " of which ended in a kick.");
             Player.SendMessage(p, "> > " + Awards.awardAmount(message) + " awards");
 
             bool skip = false;
-            if (p != null) if (p.group.Permission <= LevelPermission.AdvBuilder) skip = true;
+            if (p != null) if ((int)p.group.Permission <= CommandOtherPerms.GetPerm(this)) skip = true;
 
             if (!skip)
             {
@@ -89,6 +91,10 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/whowas <name> - Displays information about someone who left.");
+        }
+        public string TotalTime(string time)
+        {
+            return "time spent on server: " + time.Split(' ')[0] + " Days, " + time.Split(' ')[1] + " Hours, " + time.Split(' ')[2] + " Minutes, " + time.Split(' ')[3] + " Seconds.";
         }
     }
 }

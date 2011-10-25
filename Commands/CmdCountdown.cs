@@ -205,7 +205,7 @@ namespace MCForge
 
                 else if (par1 == "send")
                 {
-                    if (p.group.Permission >= LevelPermission.Operator)
+                    if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
                     {
                         if (par2 == "all")
                         {
@@ -262,17 +262,17 @@ namespace MCForge
                 }
             }
 
-            else if (p.group.Permission >= LevelPermission.Operator)
+            else if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
             {
                 if (par0 == "download")
                 {
                     try
                     {
-						using (WebClient WEB = new WebClient())
-						{
-							WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
-							Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
-						}
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://db.tt/R0x1MFS", "levels/countdown.lvl");
+                            Player.SendMessage(p, "Downloaded map, now loading map and sending you to it.");
+                        }
                     }
                     catch
                     {
@@ -503,26 +503,30 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
+            p.SendMessage("/cd - Command shortcut.");
             p.SendMessage("/countdown join - join the game");
             p.SendMessage("/countdown leave - leave the game");
             p.SendMessage("/countdown goto - goto the countdown map");
             p.SendMessage("/countdown players - view players currently playing");
-            p.SendMessage("/cd - Command shortcut.");
-            if (p.group.Permission < LevelPermission.Operator)
             {
-                p.SendMessage("/countdown rules - the rules of countdown");
-            }
-            else
-            {
-                p.SendMessage("The following commands are OP and above only!!");
-                p.SendMessage("/countdown rules <send> <all/map/player> - the rules of countdown. with send: all to send to all, map to send to map and have a players name to send to a player");
-                p.SendMessage("/countdown download - download the countdown map");
-                p.SendMessage("/countdown enable - enable the game");
-                p.SendMessage("/countdown disable - disable the game");
-                p.SendMessage("/countdown cancel - cancels a game");
-                p.SendMessage("/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
-                p.SendMessage("/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
-                p.SendMessage("/countdown tutorial - a tutorial on how to setup countdown");
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+                {
+                    p.SendMessage("/countdown rules <send> <all/map/player> - the rules of countdown. with send: all to send to all, map to send to map and have a players name to send to a player");
+                }
+                else
+                {
+                    p.SendMessage("/countdown rules - view the rules of countdown");
+                }
+                if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
+                {
+                    p.SendMessage("/countdown download - download the countdown map");
+                    p.SendMessage("/countdown enable - enable the game");
+                    p.SendMessage("/countdown disable - disable the game");
+                    p.SendMessage("/countdown cancel - cancels a game");
+                    p.SendMessage("/countdown start [speed] [mode] - start the game, speeds are 'slow', 'normal', 'fast', 'extreme' and 'ultimate', modes are 'normal' and 'freeze'");
+                    p.SendMessage("/countdown reset [all/map] - reset the whole game (all) or only the map (map)");
+                    p.SendMessage("/countdown tutorial - a tutorial on how to setup countdown");
+                }
             }
         }
     }

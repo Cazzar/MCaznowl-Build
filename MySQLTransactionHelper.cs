@@ -6,72 +6,90 @@ using MySql.Data.MySqlClient;
 
 namespace MCForge
 {
-    class MySQLTransactionHelper : IDisposable
+    namespace SQL
     {
-        private MySqlConnection connection = null;
-        private MySqlTransaction transaction = null;
-
-        private MySQLTransactionHelper(string connString)
+        class MySQLTransactionHelper : DatabaseTransactionHelper
         {
+            private MySqlConnection connection = null;
+            private MySqlTransaction transaction = null;
 
-            connection = new MySqlConnection(connString);
-            connection.Open();
-            connection.ChangeDatabase(Server.MySQLDatabaseName);
-
-            transaction = connection.BeginTransaction();
-        }
-
-        public static MySQLTransactionHelper Create(string connString)
-        {
-            try
-            {
-                return new MySQLTransactionHelper(connString);
+            public MySQLTransactionHelper(){
+                init(MySQL.connString);
             }
-            catch (Exception ex)
-            {
-                Server.ErrorLog(ex);
-                return null;
-            }
-        }
 
-        public void Execute(string query)
-        {
-			using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
-			{
-				cmd.ExecuteNonQuery();
-			}
-        }
-
-        public void Commit()
-        {
-            try
+            public MySQLTransactionHelper(string connString)
             {
-                transaction.Commit();
+                init(connString);
             }
-            catch (Exception ex)
+
+            private void init(string connString) {
+                connection = new MySqlConnection(connString);
+                connection.Open();
+                connection.ChangeDatabase(Server.MySQLDatabaseName);
+
+                transaction = connection.BeginTransaction();
+            }
+
+            public static DatabaseTransactionHelper Create() {
+                return Create(MySQL.connString);
+            }
+
+            public static DatabaseTransactionHelper Create(string connString)
             {
-                Server.ErrorLog(ex);
                 try
                 {
-                    transaction.Rollback();
+                    return new MySQLTransactionHelper(connString);
                 }
-                catch (Exception ex2)
+                catch (Exception ex)
                 {
-                    Server.ErrorLog(ex2);
+                    Server.ErrorLog(ex);
+                    return null;
                 }
             }
-            finally
-            {
-                connection.Close();
-            }
-        }
 
-        public void Dispose()
-        {
-            transaction.Dispose();
-            connection.Dispose();
-            transaction = null;
-            connection = null;
+            public override void Execute(string query)
+            {
+                try {
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction)) {
+                        cmd.ExecuteNonQuery();
+                    }
+                } catch (Exception e) {
+                    System.IO.File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
+                    Server.ErrorLog(e);
+                }
+            }
+
+            public override void Commit()
+            {
+                try
+                {
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    Server.ErrorLog(ex);
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        Server.ErrorLog(ex2);
+                    }
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            public override void Dispose()
+            {
+                transaction.Dispose();
+                connection.Dispose();
+                transaction = null;
+                connection = null;
+            }
         }
     }
 }

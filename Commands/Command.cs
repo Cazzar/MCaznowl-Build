@@ -47,11 +47,14 @@ namespace MCForge
             all.Add(new CmdAka());
             all.Add(new CmdAlive());
             all.Add(new CmdAgree());
+            //all.Add(new CmdAscend());
             all.Add(new CmdAward());
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
             all.Add(new CmdBan());
+            all.Add(new CmdBaninfo());
             all.Add(new CmdBanip());
+            all.Add(new CmdBanlist());
             all.Add(new CmdBind());
             all.Add(new CmdBlocks());
             all.Add(new CmdBlockSet());
@@ -84,6 +87,7 @@ namespace MCForge
             all.Add(new CmdCuboid());
             all.Add(new CmdDelete());
             all.Add(new CmdDeleteLvl());
+            all.Add(new CmdDelTempRank());
             all.Add(new CmdDemote());
             all.Add(new CmdDevs());
             all.Add(new CmdDisagree());
@@ -207,6 +211,7 @@ namespace MCForge
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
             all.Add(new CmdReferee());
+            all.Add(new CmdRemote());
             all.Add(new CmdRenameLvl());
             all.Add(new CmdRepeat());
             all.Add(new CmdReplace());
@@ -232,6 +237,7 @@ namespace MCForge
             all.Add(new CmdSend());
             all.Add(new CmdSendCmd());
             all.Add(new CmdServerReport());
+            all.Add(new CmdServer());
             all.Add(new CmdSetPass());
             all.Add(new CmdSetRank());
             all.Add(new CmdSetspawn());
@@ -248,6 +254,9 @@ namespace MCForge
             all.Add(new CmdTake());
             all.Add(new CmdTColor());
             all.Add(new CmdTempBan());
+            all.Add(new CmdTempRank());
+            all.Add(new CmdTempRankInfo());
+            all.Add(new CmdTempRankList());
             all.Add(new CmdText());
             all.Add(new CmdTime());
             all.Add(new CmdTimer());

@@ -26,77 +26,42 @@ using System.Data.SQLite;
 
 namespace MCForge
 {
-    class SQLite
+    namespace SQL
     {
-        public static string connString = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling =" + Server.DatabasePooling +"; Max Pool Size =1000;";
-
-
-        public static void executeQuery(string queryString)
+        public static class SQLite //: Database //Extending for future improvement (Making it object oriented later).
         {
-            int totalCount = 0;
-            if (Server.useMySQL)
-                return;
-        retry: try
+            private static string connStringFormat = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling ={0}; Max Pool Size =1000;";
+
+            public static string connString { get { return String.Format(connStringFormat, Server.DatabasePooling); } }
+
+            public static void executeQuery(string queryString)
             {
-                using (var conn = new SQLiteConnection(connString))
-                {
+                Database.executeQuery(queryString);
+            }
+
+            public static DataTable fillData(string queryString, bool skipError = false)
+            {
+                return Database.fillData(queryString, skipError);
+            }
+
+            internal static void execute(string queryString) {
+                using (var conn = new SQLiteConnection(SQLite.connString)) {
                     conn.Open();
-                    using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn))
-                    {
+                    using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn)) {
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                 }
             }
-            catch (Exception e)
-            {
-                totalCount++;
-                if (totalCount > 10)
-                {
-                    File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                    Server.ErrorLog(e);
-                }
-                else
-                {
-                    goto retry;
-                }
-            }
-        }
 
-        public static DataTable fillData(string queryString, bool skipError = false)
-        {
-            int totalCount = 0;
-            using (DataTable toReturn = new DataTable("toReturn"))
-            {
-                if (Server.useMySQL)
-                    return toReturn;
-            retry: try
-                {
-                    using (var conn = new SQLiteConnection(connString))
-                    {
-                        conn.Open();
-                        using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn))
-                        {
-                            da.Fill(toReturn);
-                        }
-                        conn.Close();
+            internal static void fill(string queryString, DataTable toReturn) {
+                using (var conn = new SQLiteConnection(SQLite.connString)) {
+                    conn.Open();
+                    using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn)) {
+                        da.Fill(toReturn);
                     }
+                    conn.Close();
                 }
-                catch (Exception e)
-                {
-                    totalCount++;
-                    if (totalCount > 10)
-                    {
-                        if (!skipError)
-                        {
-                            File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                            Server.ErrorLog(e);
-                        }
-                    }
-                    else
-                        goto retry;
-                }
-                return toReturn;
             }
         }
     }

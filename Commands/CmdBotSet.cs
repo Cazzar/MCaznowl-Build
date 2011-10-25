@@ -68,7 +68,7 @@ namespace MCForge
                 }
                 else if (foundPath == "kill")
                 {
-                    if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP may toggle killer instinct."); return; }
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Only a " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ may toggle killer instinct."); return; }
                     Pb.kill = !Pb.kill;
                     if (p != null) Player.GlobalChatLevel(p, Pb.color + Pb.name + Server.DefaultColor + "'s kill instinct: " + Pb.kill, false);
                     Server.s.Log(Pb.name + "'s kill instinct: " + Pb.kill);

@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
@@ -34,20 +33,30 @@ using System.Security.Cryptography;
 //using MySql.Data.Types;
 
 using MonoTorrent.Client;
+using MCForge.SQL;
 
 namespace MCForge
 {
     public class Server
     {
+        public static bool cancelcommand = false;
+        public static bool canceladmin = false;
+        public static bool cancellog = false;
+        public static bool canceloplog = false;
         public static string apppath = Application.StartupPath;
-        public delegate void LogHandler(string message);
-public delegate void OnServerError(Exception error);
-public static event OnServerError ServerError = null;
+        public delegate void OnConsoleCommand(string cmd, string message);
+        public static event OnConsoleCommand ConsoleCommand;
+        public delegate void OnServerError(Exception error);
+        public static event OnServerError ServerError = null;
+        public delegate void OnServerLog(string message);
+        public static event OnServerLog ServerLog;
+        public static event OnServerLog ServerAdminLog;
+        public static event OnServerLog ServerOpLog;
         public delegate void HeartBeatHandler();
         public delegate void MessageEventHandler(string message);
         public delegate void PlayerListHandler(List<Player> playerList);
         public delegate void VoidHandler();
-
+        public delegate void LogHandler(string message);
         public event LogHandler OnLog;
         public event LogHandler OnSystem;
         public event LogHandler OnCommand;
@@ -97,8 +106,8 @@ public static event OnServerError ServerError = null;
         public static PlayerList ircControllers;
         public static PlayerList muted;
         public static PlayerList ignored;
-        
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur"});
+        // The MCForge Developer List
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "copyboy", "nerketur", "anthonyani", "wouto1997"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -190,20 +199,21 @@ public static event OnServerError ServerError = null;
         public static string name = "[MCForge] Default";
         public static string motd = "Welcome!";
         public static byte players = 12;
-//for the limiting no. of guests:
-public static byte maxGuests = 10;
+        //for the limiting no. of guests:
+        public static byte maxGuests = 10;
 
         public static byte maps = 5;
         public static int port = 25565;
         public static bool pub = true;
         public static bool verify = true;
         public static bool worldChat = true;
-        public static bool guestGoto = false;
+//        public static bool guestGoto = false;
 
         //Spam Prevention
         public static bool checkspam = false;
         public static int spamcounter = 8;
         public static int mutespamtime = 60;
+        public static int spamcountreset = 5;
 
         public static string ZallState = "Alive";
 
@@ -212,11 +222,11 @@ public static byte maxGuests = 10;
         public static string level = "main";
         public static string errlog = "error.log";
 
-        public static bool console = false;
+//        public static bool console = false; // never used
         public static bool reportBack = true;
 
         public static bool irc = false;
-        public static bool safemode = false;
+//        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
@@ -268,13 +278,13 @@ public static byte maxGuests = 10;
         public static string IRCColour = "&5";
 
         public static bool UseGlobalChat = true;
-        public static string GlobalChatNick = "MCF" + new Random().Next(Int32.MaxValue);
+        public static string GlobalChatNick = "MCF" + new Random().Next();
         public static string GlobalChatColor = "&6";
 
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
-        public static int RemotePort = 1337;
+        //public static int RemotePort = 1337; // Never used
 
         public static string defaultRank = "guest";
 
@@ -293,7 +303,7 @@ public static byte maxGuests = 10;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
         public static bool logbeat = false;
         public static bool adminsjoinsilent = false;
-        public static bool mono = false;
+        public static bool mono { get { return (Type.GetType("Mono.Runtime") != null); } }
         public static string server_owner = "Notch";
         public static bool WomDirect = false;
         public static bool UseSeasons = false;
@@ -322,49 +332,75 @@ public static byte maxGuests = 10;
             ml = new MainLoop("server");
             Server.s = this;
         }
+        //True = cancel event
+        //Fale = dont cacnel event
+        public static bool Check(string cmd, string message)
+        {
+            if (ConsoleCommand != null)
+                ConsoleCommand(cmd, message);
+            return cancelcommand;
+        }
         public void Start()
         {
+           
             shuttingDown = false;
             Log("Starting Server");
-            {//dl restarter stuff
-                if (!File.Exists("Restarter.exe"))
+            {
+                try
                 {
-                    Log("Restarter.exe doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.exe"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
-                        }
-                        if (File.Exists("Restarter.exe"))
-                        {
-                            Log("Restarter.exe download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.exe failed, please try again later");
+                        File.Delete("Restarter.exe");
                     }
                 }
-                if (!File.Exists("Restarter.pdb"))
+                catch { }
+                try
                 {
-                    Log("Restarter.pdb doesn't exist, Downloading");
-                    try
+                    if (File.Exists("Restarter.pdb"))
                     {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
-                        }
-                        if (File.Exists("Restarter.pdb"))
-                        {
-                            Log("Restarter.pdb download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Restarter.pdb failed, please try again later");
+                        File.Delete("Restarter.pdb");
                     }
                 }
+                catch { }
+                //dl restarter stuff [Restarter is no longer needed]
+                //if (!File.Exists("Restarter.exe"))
+                //{
+                //    Log("Restarter.exe doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
+                //        }
+                //        if (File.Exists("Restarter.exe"))
+                //        {
+                //            Log("Restarter.exe download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.exe failed, please try again later");
+                //    }
+                //}
+                //if (!File.Exists("Restarter.pdb"))
+                //{
+                //    Log("Restarter.pdb doesn't exist, Downloading");
+                //    try
+                //    {
+                //        using (WebClient WEB = new WebClient())
+                //        {
+                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
+                //        }
+                //        if (File.Exists("Restarter.pdb"))
+                //        {
+                //            Log("Restarter.pdb download succesful!");
+                //        }
+                //    }
+                //    catch
+                //    {
+                //        Log("Downloading Restarter.pdb failed, please try again later");
+                //    }
+                //}
                 if (!File.Exists("MySql.Data.dll"))
                 {
                     Log("MySql.Data.dll doesn't exist, Downloading");
@@ -382,6 +418,25 @@ public static byte maxGuests = 10;
                     catch
                     {
                         Log("Downloading MySql.Data.dll failed, please try again later");
+                    }
+                }
+                if (!File.Exists("System.Data.SQLite.dll"))
+                {
+                    Log("System.Data.SQLite.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://mcforge.net/uploads/System.Data.SQLite.dll", "System.Data.SQLite.dll");
+                        }
+                        if (File.Exists("System.Data.SQLite.dll"))
+                        {
+                            Log("System.Data.SQLite.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading System.Data.SQLite.dll failed, please try again later");
                     }
                 }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
@@ -406,14 +461,17 @@ public static byte maxGuests = 10;
                 }
             }
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
             if (!Directory.Exists("extra/undoPrevious")) Directory.CreateDirectory("extra/undoPrevious");
             if (!Directory.Exists("extra/copy/")) { Directory.CreateDirectory("extra/copy/"); }
             if (!Directory.Exists("extra/copyBackup/")) { Directory.CreateDirectory("extra/copyBackup/"); }
+            if (!Directory.Exists("extra/Waypoints")) { Directory.CreateDirectory("extra/Waypoints"); }
 
             try
             {
@@ -448,7 +506,7 @@ public static byte maxGuests = 10;
             }
             else
             {
-                Log("custom$s.txt does not exist, creating");
+                s.Log("custom$s.txt does not exist, creating");
                 using (StreamWriter SW = File.CreateText("text/custom$s.txt"))
                 {
                     SW.WriteLine("// This is used to create custom $s");
@@ -461,15 +519,7 @@ public static byte maxGuests = 10;
                 }
             }
 
-            Properties.Load("properties/server.properties");
-            Updater.Load("properties/update.properties");
-            Group.InitAll();
-            Command.InitAll();
-            GrpCommands.fillRanks();
-            Block.SetBlocks();
-            Awards.Load();
-            Economy.Load();
-            Warp.LOAD();
+            LoadAllSettings();
 
             if (File.Exists("text/emotelist.txt"))
             {
@@ -483,7 +533,6 @@ public static byte maxGuests = 10;
                 File.Create("text/emotelist.txt").Dispose();
             }
 
-            ProfanityFilter.Init();
 
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
@@ -495,7 +544,7 @@ public static byte maxGuests = 10;
             {//MYSQL stuff
                 try
                 {
-                    MySQL.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true);
+                    Database.executeQuery("CREATE DATABASE if not exists `" + MySQLDatabaseName + "`", true); // works in both now, SQLite simply ignores this.
                 }
                 //catch (MySql.Data.MySqlClient.MySqlException e)
                 //{
@@ -504,45 +553,47 @@ public static byte maxGuests = 10;
                 //}
                 catch (Exception e)
                 {
+                    Server.ErrorLog(e);
                     Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
-  //         Server.ErrorLog(e);
                     //process.Kill();
                     return;
                 }
-                if (useMySQL) MySQL.executeQuery("CREATE TABLE if not exists Players (ID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6), PRIMARY KEY (ID));");
-                else SQLite.executeQuery("CREATE TABLE if not exists Players (ID INTEGER PRIMARY KEY AUTOINCREMENT not null, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6));");
+                Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
                 
-                // Check if the color column exists.
-                DataTable colorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'") : SQLite.fillData("SELECT color FROM Players");
+                // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
+                if (Server.useMySQL) {
+                    // Check if the color column exists.
+                    DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
-                if (colorExists.Rows.Count == 0)
-                {
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
-                    //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    if (colorExists.Rows.Count == 0)
+                    {
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                        //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN color VARCHAR(6) AFTER totalKicked");
+                    }
+                    colorExists.Dispose();
+
+                    // Check if the title color column exists.
+                    DataTable tcolorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'");
+
+                    if (tcolorExists.Rows.Count == 0)
+                    {
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                        // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
+                    }
+                    tcolorExists.Dispose();
+
+                    DataTable timespent = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'");
+
+                    if (timespent.Rows.Count == 0)
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
+                    timespent.Dispose();
+
+                    DataTable totalCuboided = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'");
+
+                    if (totalCuboided.Rows.Count == 0)
+                        MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
+                    totalCuboided.Dispose();
                 }
-                colorExists.Dispose();
-
-                // Check if the title color column exists.
-                DataTable tcolorExists = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='title_color'") : SQLite.fillData("SELECT title_color FROM Players");
-
-                if (tcolorExists.Rows.Count == 0)
-                {
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
-                   // else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN title_color VARCHAR(6) AFTER color");
-                }
-                tcolorExists.Dispose();
-
-                DataTable timespent = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='TimeSpent'") : SQLite.fillData("SELECT TimeSpent FROM Players");
-
-                if (timespent.Rows.Count == 0)
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN TimeSpent VARCHAR(20) AFTER totalKicked");
-                timespent.Dispose();
-
-                DataTable totalCuboided = useMySQL ? MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='totalCuboided'") : SQLite.fillData("SELECT totalCuboided FROM Players");
-
-                if (totalCuboided.Rows.Count == 0)
-                    if (useMySQL) MySQL.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks"); //else SQLite.executeQuery("ALTER TABLE Players ADD COLUMN totalCuboided BIGINT AFTER totalBlocks");
-                totalCuboided.Dispose();
             }
 
             if (levels != null)
@@ -899,7 +950,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
-
+                Checktimer.StartTimer();
                 try
                 {
                     if (Server.lava.startOnStartup)
@@ -913,6 +964,20 @@ processThread.Start();
                 catch (Exception e) { Server.ErrorLog(e); }
 
             });
+        }
+
+        public static void LoadAllSettings() {
+            SrvProperties.Load("properties/server.properties");
+            Updater.Load("properties/update.properties");
+            Group.InitAll();
+            Command.InitAll();
+            GrpCommands.fillRanks();
+            Block.SetBlocks();
+            Awards.Load();
+            Economy.Load();
+            Warp.LOAD();
+            CommandOtherPerms.Load();
+            ProfanityFilter.Init();
         }
         
         public static bool Setup()
@@ -945,7 +1010,7 @@ processThread.Start();
                     listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     if (p != null)
                         p.Disconnect();
@@ -963,28 +1028,61 @@ processThread.Start();
             }
         }
 
-        public static void Exit()
+        public static void Exit(bool AutoRestart)
         {
             List<string> players = new List<string>();
             foreach (Player p in Player.players) { p.save(); players.Add(p.name); }
             foreach (string p in players)
             {
-                Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    Player.Find(p).Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    Player.Find(p).Kick("Server restarted! Rejoin!");
             }
 
             //Player.players.ForEach(delegate(Player p) { p.Kick("Server shutdown. Rejoin in 10 seconds."); });
             Player.connections.ForEach(
             delegate(Player p)
             {
-                p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                if (!AutoRestart)
+                    p.Kick(Server.customShutdown ? Server.customShutdownMessage : "Server shutdown. Rejoin in 10 seconds.");
+                else
+                    p.Kick("Server restarted! Rejoin!");
             }
             );
             Plugin.Unload();
-            shuttingDown = true;
             if (listen != null)
             {
                 listen.Close();
             }
+            try
+            {
+                Remote.RemoteServer.enableRemote = false;
+                Remote.RemoteServer.Close();
+            }
+            catch { }
+            try
+            {
+                if (GlobalChat.IsConnected())
+                {
+                    if (!AutoRestart)
+                        GlobalChat.Disconnect("Server is shutting down.");
+                    else
+                        GlobalChat.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
+            try
+            {
+                if (IRC.IsConnected())
+                {
+                    if (!AutoRestart)
+                        IRC.Disconnect("Server is shutting down.");
+                    else
+                        IRC.Disconnect("Server is restarting.");
+                }
+            }
+            catch { }
         }
 
         public static void addLevel(Level level)
@@ -1009,6 +1107,15 @@ processThread.Start();
 
         public void Log(string message, bool systemMsg = false)
         {
+            if (ServerLog != null)
+            {
+                ServerLog(message);
+                if (cancellog)
+                {
+                    cancellog = false;
+                    return;
+                }
+            }
             if (OnLog != null)
             {
                 if (!systemMsg)
@@ -1026,6 +1133,15 @@ processThread.Start();
 
         public void OpLog(string message, bool systemMsg = false)
         {
+            if (ServerOpLog != null)
+            {
+                OpLog(message);
+                if (canceloplog)
+                {
+                    canceloplog = false;
+                    return;
+                }
+            }
             if (OnOp != null)
             {
                 if (!systemMsg)
@@ -1043,6 +1159,15 @@ processThread.Start();
 
         public void AdminLog(string message, bool systemMsg = false)
         {
+            if (ServerAdminLog != null)
+            {
+                ServerAdminLog(message);
+                if (canceladmin)
+                {
+                    canceladmin = false;
+                    return;
+                }
+            }
             if (OnAdmin != null)
             {
                 if (!systemMsg)

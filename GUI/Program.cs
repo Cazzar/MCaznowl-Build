@@ -31,6 +31,7 @@ using System.Drawing;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Reflection;
 using MCForge;
 
 namespace MCForge_.Gui
@@ -38,13 +39,15 @@ namespace MCForge_.Gui
     public static class Program
     {
         public static bool usingConsole = false;
-
+        public static string parent = Path.GetFileName(Assembly.GetEntryAssembly().Location);
+        public static string parentfullpath = Assembly.GetEntryAssembly().Location;
+        public static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         private static string CurrentVersionFile = "http://www.mcforge.net/curversion.txt";
         private static string DLLLocation = "http://www.mcforge.net/MCForge_.dll";
         private static string ChangelogLocation = "http://www.mcforge.net/changelog.txt";
+        private static string EXELocation = "http://www.mcforge.net/MCForge.exe";
         //private static string RevisionList = "http://www.mcforge.net/revs.txt";
         //private static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
-        private static string ArchivePath = "http://www.mcforge.net/archives/exe/";
 
         [DllImport("kernel32")]
         public static extern IntPtr GetConsoleWindow();
@@ -56,10 +59,8 @@ namespace MCForge_.Gui
             Server.ErrorLog(ex);
             Thread.Sleep(500);
 
-            if (!Server.restartOnError)
-                Program.restartMe();
-            else
-                Program.restartMe(false);
+            if (Server.restartOnError)
+                ExitProgram(true);
         }
 
         public static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
@@ -68,10 +69,8 @@ namespace MCForge_.Gui
             Server.ErrorLog(ex);
             Thread.Sleep(500);
 
-            if (!Server.restartOnError)
-                Program.restartMe();
-            else
-                Program.restartMe(false);
+            if (Server.restartOnError)
+                ExitProgram(true);
         }
 
         public static void Main(string[] args)
@@ -85,7 +84,6 @@ namespace MCForge_.Gui
                             pr.Kill();
                 }
             }
-
             PidgeonLogger.Init();
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Program.GlobalExHandler);
             Application.ThreadException += new ThreadExceptionEventHandler(Program.ThreadExHandler);
@@ -172,6 +170,7 @@ namespace MCForge_.Gui
 
             try
             {
+                if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; return; }
                 Command cmd = Command.all.Find(sentCmd);
                 if (cmd != null)
                 {
@@ -280,13 +279,13 @@ namespace MCForge_.Gui
                 try
                 {
                     Version availableUpdateVersion = new Version(Client.DownloadString(Program.CurrentVersionFile));
-                    if (availableUpdateVersion > Server.Version)
+                    if (availableUpdateVersion > Server.Version || availableUpdateVersion > AssemblyName.GetAssemblyName(parent).Version)
                     {
                         if (Server.autoupdate == true || p != null)
                         {
                             if (Server.autonotify == true || p != null)
                             {
-                                if (p != null) Server.restartcountdown = "20";
+                                //if (p != null) Server.restartcountdown = "20";  This is set by the user.  Why change it?
                                 Player.GlobalMessage("Update found. Prepare for restart in &f" + Server.restartcountdown + Server.DefaultColor + " seconds.");
                                 Server.s.Log("Update found. Prepare for restart in " + Server.restartcountdown + " seconds.");
                                 double nxtTime = Convert.ToDouble(Server.restartcountdown);
@@ -308,7 +307,7 @@ namespace MCForge_.Gui
                                             Server.s.Log("---UPDATING SERVER---");
                                             countDown.Stop();
                                             countDown.Dispose();
-                                            PerformUpdate(false);
+                                            PerformUpdate();
                                         }
                                     }
                                     else
@@ -322,7 +321,7 @@ namespace MCForge_.Gui
                             }
                             else
                             {
-                                PerformUpdate(false);
+                                PerformUpdate();
                             }
 
                         }
@@ -335,7 +334,7 @@ namespace MCForge_.Gui
                                     msgOpen = true;
                                     if (MessageBox.Show("New version found. Would you like to update?", "Update?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                     {
-                                        PerformUpdate(false);
+                                        PerformUpdate();
                                     }
                                     msgOpen = false;
                                 }
@@ -347,6 +346,7 @@ namespace MCForge_.Gui
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("An update was found!");
                                 Console.WriteLine("Update using the file at " + DLLLocation + " and placing it over the top of your current MCForge_.dll!");
+                                Console.WriteLine("Also update using the file at " + EXELocation + " and placing it over the top of your current MCForge.exe");
                                 Console.ForegroundColor = prevColor;
                             }
                         }
@@ -355,91 +355,98 @@ namespace MCForge_.Gui
                     {
                         Player.SendMessage(p, "No update found!");
                     }
-                }
-                catch { Server.s.Log("No web server found to update on."); }
+                } catch { try { Server.s.Log("No web server found to update on."); } catch { } }
                 Client.Dispose();
                 CurrentUpdate = false;
             })); updateThread.Start();
         }
 
-        public static void PerformUpdate(bool oldrevision)
+        public static void PerformUpdate()
         {
             try
             {
-                StreamWriter SW;
-                if (!Server.mono)
-                {
-                    if (!File.Exists("Update.bat"))
-                        SW = new StreamWriter(File.Create("Update.bat"));
-                    else
-                    {
-                        if (File.ReadAllLines("Update.bat")[0] != "::Version 3")
-                        {
-                            SW = new StreamWriter(File.Create("Update.bat"));
-                        }
-                        else
-                        {
-                            SW = new StreamWriter(File.Create("Update_generated.bat"));
-                        }
-                    }
-                    SW.WriteLine("::Version 3");
-                    SW.WriteLine("TASKKILL /pid %2 /F");
-                    SW.WriteLine("if exist MCForge_.dll.backup (erase MCForge_.dll.backup)");
-                    SW.WriteLine("if exist MCForge_.dll (rename MCForge_.dll MCForge_.dll.backup)");
-                    SW.WriteLine("if exist MCForge.new (rename MCForge.new MCForge_.dll)");
-                    SW.WriteLine("start MCForge.exe");
-                }
-                else
-                {
-                    if (!File.Exists("Update.sh"))
-                        SW = new StreamWriter(File.Create("Update.sh"));
-                    else
-                    {
-                        if (File.ReadAllLines("Update.sh")[0] != "#Version 2")
-                        {
-                            SW = new StreamWriter(File.Create("Update.sh"));
-                        }
-                        else
-                        {
-                            SW = new StreamWriter(File.Create("Update_generated.sh"));
-                        }
-                    }
-                    SW.WriteLine("#Version 2");
-                    SW.WriteLine("#!/bin/bash");
-                    SW.WriteLine("kill $2");
-                    SW.WriteLine("rm MCForge_.dll.backup");
-                    SW.WriteLine("mv MCForge_.dll MCForge.dll_.backup");
-                    SW.WriteLine("wget " + DLLLocation);
-                    SW.WriteLine("mono MCForge.exe");
-                }
+                //StreamWriter SW;
+                //if (!Server.mono)
+                //{
+                //    if (!File.Exists("Update.bat"))
+                //        SW = new StreamWriter(File.Create("Update.bat"));
+                //    else
+                //    {
+                //        if (File.ReadAllLines("Update.bat")[0] != "::Version 3")
+                //        {
+                //            SW = new StreamWriter(File.Create("Update.bat"));
+                //        }
+                //        else
+                //        {
+                //            SW = new StreamWriter(File.Create("Update_generated.bat"));
+                //        }
+                //    }
+                //    SW.WriteLine("::Version 3");
+                //    SW.WriteLine("TASKKILL /pid %2 /F");
+                //    SW.WriteLine("if exist MCForge_.dll.backup (erase MCForge_.dll.backup)");
+                //    SW.WriteLine("if exist MCForge_.dll (rename MCForge_.dll MCForge_.dll.backup)");
+                //    SW.WriteLine("if exist MCForge.new (rename MCForge.new MCForge_.dll)");
+                //    SW.WriteLine("start MCForge.exe");
+                //}
+                //else
+                //{
+                //    if (!File.Exists("Update.sh"))
+                //        SW = new StreamWriter(File.Create("Update.sh"));
+                //    else
+                //    {
+                //        if (File.ReadAllLines("Update.sh")[0] != "#Version 2")
+                //        {
+                //            SW = new StreamWriter(File.Create("Update.sh"));
+                //        }
+                //        else
+                //        {
+                //            SW = new StreamWriter(File.Create("Update_generated.sh"));
+                //        }
+                //    }
+                //    SW.WriteLine("#Version 2");
+                //    SW.WriteLine("#!/bin/bash");
+                //    SW.WriteLine("kill $2");
+                //    SW.WriteLine("rm MCForge_.dll.backup");
+                //    SW.WriteLine("mv MCForge_.dll MCForge.dll_.backup");
+                //    SW.WriteLine("wget " + DLLLocation);
+                //    SW.WriteLine("mono MCForge.exe");
+                //}
 
-                SW.Flush(); SW.Close(); SW.Dispose();
+                //SW.Flush(); SW.Close(); SW.Dispose();
 
-                string filelocation = "";
-                string verscheck = "";
-                Process proc = Process.GetCurrentProcess();
-                string assemblyname = proc.ProcessName + ".exe";
-                if (!oldrevision)
-                {
-                    WebClient client = new WebClient();
-                    Server.selectedrevision = client.DownloadString(Program.CurrentVersionFile);
-                    client.Dispose();
-                }
-                verscheck = Server.selectedrevision.TrimStart('r');
-                int vers = int.Parse(verscheck.Split('.')[0]);
-                if (oldrevision) { filelocation = (Program.ArchivePath + Server.selectedrevision + ".exe"); }
-                if (!oldrevision) { filelocation = (DLLLocation); }
+                //Process proc = Process.GetCurrentProcess();
+                //string assemblyname = proc.ProcessName + ".exe";
+
+                //WebClient client = new WebClient();
+                //Server.selectedrevision = client.DownloadString(Program.CurrentVersionFile);
+                //client.Dispose();
+
+                //string verscheck = Server.selectedrevision.TrimStart('r');
+                //int vers = int.Parse(verscheck.Split('.')[0]);
                 try
                 {
                     if (File.Exists("MCLawl.new"))
                         File.Delete("MCLawl.new");
                     if (File.Exists("Changelog.txt"))
                         File.Delete("Changelog.txt");
+                    if (File.Exists("MCForge_.update"))
+                        File.Delete("MCForge_.update");
+                    if (File.Exists("MCForge.update"))
+                        File.Delete("MCForge.update");
+                    if (File.Exists("Update.bat"))
+                        File.Delete("Update.bat");
+                    if (File.Exists("Update_generated.bat"))
+                        File.Delete("Update_generated.bat");
+                    if (File.Exists("Update.sh"))
+                        File.Delete("Update.sh");
+                    if (File.Exists("Update_generated.sh"))
+                        File.Delete("Update_generated.sh");
                 }
                 catch { }
                 WebClient Client = new WebClient();
-                Client.DownloadFile(filelocation, "MCLawl.new");
-                Client.DownloadFile(Program.ChangelogLocation, "Changelog.txt");
+                Client.DownloadFile(DLLLocation, "MCForge_.update");
+                Client.DownloadFile(EXELocation, "MCForge.update");
+                Client.DownloadFile(ChangelogLocation, "Changelog.txt");
 
                 // Its possible there are no levels or players loaded yet
                 // Only save them if they exist, otherwise we fail-whale
@@ -451,9 +458,9 @@ namespace MCForge_.Gui
                 if (Player.players != null && Player.players.Any())
                     foreach (Player pl in Player.players) pl.save();
 
-                string fileName;
-                if (!Server.mono) fileName = "Update.bat";
-                else fileName = "Update.sh";
+                //string fileName;
+                //if (!Server.mono) fileName = "Update.bat";
+                //else fileName = "Update.sh";
 
                 try
                 {
@@ -465,16 +472,24 @@ namespace MCForge_.Gui
                 }
                 catch { }
 
-                Process p = Process.Start(fileName, "main " + System.Diagnostics.Process.GetCurrentProcess().Id.ToString());
-                p.WaitForExit();
+                File.WriteAllBytes("Updater.exe", MCForge.Properties.Resources.Updater);
+                if (!usingConsole)
+                    Process.Start("Updater.exe", parent).StartInfo.UseShellExecute = false;
+                else
+                {
+                    Process.Start("Updater.exe");
+                }
+                ExitProgram(false);
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
 
         static public void ExitProgram(Boolean AutoRestart)
         {
+            Server.restarting = AutoRestart;
+            Server.shuttingDown = true;
             Thread exitThread;
-            Server.Exit();
+            Server.Exit(AutoRestart);
 
             exitThread = new Thread(new ThreadStart(delegate
             {
@@ -485,32 +500,26 @@ namespace MCForge_.Gui
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
+                        Logger.Dispose();
                     }
                 }
                 catch { }
 
-                try
+                if (AutoRestart == true) restartMe();
+                else
                 {
-                    saveAll();
-
-                    if (AutoRestart == true) restartMe();
-                    else Server.process.Kill();
-                }
-                catch
-                {
-                    Server.process.Kill();
+                    saveAll(false);
+                    Environment.Exit(0);
                 }
             })); exitThread.Start();
         }
 
-        static public void restartMe(bool fullRestart = true)
+        static public void restartMe()
         {
             Thread restartThread = new Thread(new ThreadStart(delegate
             {
-                saveAll();
+                saveAll(true);
 
-                Server.shuttingDown = true;
-                Server.restarting = true;
                 try
                 {
                     if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
@@ -523,25 +532,24 @@ namespace MCForge_.Gui
                 catch { }
 
                 if (Server.listen != null) Server.listen.Close();
-                if (!Server.mono || fullRestart)
-                {
-                    Application.Restart();
-                    Server.process.Kill();
-                }
-                else
-                {
-                    Server.s.Start();
-                }
+                Process.Start(parent);
+                Environment.Exit(0);
             }));
             restartThread.Start();
         }
-        static public void saveAll()
+        static public void saveAll(bool restarting)
         {
             try
             {
                 List<Player> kickList = new List<Player>();
                 kickList.AddRange(Player.players);
-                foreach (Player p in kickList) { p.Kick("Server restarted! Rejoin!"); }
+                foreach (Player p in kickList)
+                {
+                    if (restarting)
+                        p.Kick("Server restarted! Rejoin!");
+                    else
+                        p.Kick("Server is shutting down.");
+                }
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
 
@@ -558,7 +566,7 @@ namespace MCForge_.Gui
                     l.saveChanges();
                 }
 
-                if(!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
+                if (!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
         }

@@ -70,7 +70,7 @@ namespace MCForge {
             if (who != null) {
                 if (p != null) {
                     if (who.group.Permission > p.group.Permission && who != p) { Player.SendMessage(p, "Cannot undo a user of higher or equal rank"); return; }
-                    //if (who != p && p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Only an OP+ may undo other people's actions"); return; }
+                    if (who != p && (int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "Only an " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+ may undo other people's actions"); return; }
                 }
 
                 for (CurrentPos = who.UndoBuffer.Count - 1; CurrentPos >= 0; --CurrentPos) {
@@ -101,6 +101,7 @@ namespace MCForge {
                 }
                 return;
             } else if (undoPhysics) {
+                if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
                 if (p.group.CanExecute(Command.all.Find("physics"))) { Player.SendMessage(p, "You can only undo physics if you can use them."); return; }
 
                 Command.all.Find("physics").Use(p, "0");
@@ -144,10 +145,10 @@ namespace MCForge {
                 // Also notify console
                 Player.SendMessage(null, "Physics were undone &b" + seconds + Server.DefaultColor + " seconds");
             } else { // Here, who == null, meaning the user specified is offline
-                //if (p != null) {
-                //    if (p.group.Permission < LevelPermission.Operator) { Player.SendMessage(p, "Reserved for OP+"); return; }
-                //}
-                //We assume anyone can undo offline users as well.  Of course, only if they can use the command at all.
+                if (p != null) {
+                    if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
+                    // ^^^ is using the same as the 1st other permission for the this command because the only difference is that this is for offline players so it might aswell be the same!!
+                }
 
                 bool FoundUser = false;
 
