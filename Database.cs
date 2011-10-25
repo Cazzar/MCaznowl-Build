@@ -100,6 +100,7 @@ namespace MCForge {
                                 allCols.Add(col);
                             }
                             foreach (DataRow row in tableRowData.Rows) { //We rely on the correct datatype being given here.
+                                sql.WriteLine();
                                 sql.Write("INSERT INTO `{0}` (`", tableName);
                                 foreach (string[] rParams in tableSchema) {
                                     sql.Write(rParams[0]);
@@ -154,11 +155,11 @@ namespace MCForge {
                 string[] column = tableSQLString.Split(',');
                 foreach (string col in column) {
                     if (!col.ToUpper().StartsWith("PRIMARY KEY")) {
-                        string[] split = col.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        string[] split = col.TrimStart('\n', '\r', '\t').Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         //Just to make it the same as the MySQL schema.
-                        schema.Add(new string[] { split[0], split[1],
-                                              ( split.Count() > 2 ? (split[2].ToUpper() == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
-                                              ( split.Count() > 2 ? (split[split.Count() - 2].ToUpper() == "PRIMARY" && split[split.Count() - 1].ToUpper() == "KEY" ? "PRI" : "") : ""),
+                        schema.Add(new string[] { split[0].Trim('`'), split[1].Trim('\t', '`'),
+                                              ( split.Count() > 2 ? (split[2].Trim('\t', '`').ToUpper() == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
+                                              ( split.Count() > 2 ? (split[split.Count() - 2].Trim('\t', '`').ToUpper() == "PRIMARY" && split[split.Count() - 1].Trim('\t', '`').ToUpper() == "KEY" ? "PRI" : "") : ""),
                                               "NULL",
                                               (split.Contains("AUTO_INCREMENT") || split.Contains("AUTOINCREMENT") ? "AUTO_INCREMENT" : "")});
                     }
