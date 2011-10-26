@@ -97,6 +97,8 @@ namespace MCForge
         public const byte fallsnow = (byte)71;
         public const byte snow = (byte)72;
 
+        public const byte fastdeathlava = (byte)73;
+
         public const byte door_cobblestone = (byte)80;
         public const byte door_cobblestone_air = (byte)81;
         public const byte door_red = (byte)83;
@@ -473,6 +475,7 @@ namespace MCForge
                     case deathair:
                     case activedeathwater:
                     case activedeathlava:
+                    case fastdeathlava:
                     case fire:
 
                     case smalltnt:
@@ -883,6 +886,7 @@ namespace MCForge
                 case Block.deathair:
                 case activedeathlava:
                 case activedeathwater:
+                case fastdeathlava:
 
                 case Block.magma:
                 case Block.geyser:
@@ -1240,6 +1244,7 @@ namespace MCForge
                 case 70: return "flagbase";
                 case 71: return "fallsnow";
                 case 72: return "snow";
+                case 73: return "fast_hot_lava";
                 case 100: return "op_glass";
                 case 101: return "opsidian";              //TODO Add command or just use bind?
                 case 102: return "op_brick";              //TODO
@@ -1505,6 +1510,8 @@ namespace MCForge
                 case "obsidian": return 49;
                 case "fallsnow": return 71;
                 case "snow": return 72;
+                case "fhl":
+                case "fast_hot_lava": return 73;
                 case "op_glass": return 100;
                 case "opsidian": return 101;              //TODO Add command or just use bind?
                 case "op_brick": return 102;              //TODO
@@ -1757,8 +1764,8 @@ namespace MCForge
                 case 103: return (byte)1; //Op_stone
                 case 104: return (byte)4; //Op_cobblestone
                 case 105: return (byte)0; //Op_air - Must be cuboided / replaced
-                case 106: return Block.waterstill; //Op_water
-                case 107: return Block.lavastill; //Op_lava
+                case 106: return waterstill; //Op_water
+                case 107: return lavastill; //Op_lava
 
                 case 108: return Server.grieferStoneType; //Griefer_stone
                 case 109: return (byte)19; //Lava_sponge
@@ -1871,6 +1878,7 @@ namespace MCForge
                 case Block.deathair: return (byte)0;
                 case activedeathwater: return water;
                 case activedeathlava: return lava;
+                case fastdeathlava: return lava;
 
                 case Block.magma: return Block.lava;
                 case Block.geyser: return Block.water;
