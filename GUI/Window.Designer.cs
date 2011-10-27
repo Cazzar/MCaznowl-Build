@@ -1584,7 +1584,8 @@ namespace MCForge.Gui
             "Pixel",
             "Desert",
             "Space",
-            "Rainbow"});
+            "Rainbow",
+            "Hell"});
             this.maptypecombo.Location = new System.Drawing.Point(45, 115);
             this.maptypecombo.Name = "maptypecombo";
             this.maptypecombo.Size = new System.Drawing.Size(84, 21);
