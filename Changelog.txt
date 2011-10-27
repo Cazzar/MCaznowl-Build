@@ -1,4 +1,6 @@
 v5.3.0.0
+- Added /pumpkin
+- Updated developer list.
 - Added tempranks.
 - Added /baninfo - shows info about someone's ban.
 - Fixed /ban and /unban to work with /baninfo.

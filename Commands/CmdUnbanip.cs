@@ -90,13 +90,13 @@ namespace MCForge
             if (p != null)
             {
                 Server.IRC.Say(message.ToLower() + " was un-ip-banned by " + p.name + ".");
-                Server.s.Log("UNIP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
+                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
                 Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
             }
             else
             {
                 Server.IRC.Say(message.ToLower() + " was un-ip-banned by console.");
-                Server.s.Log("UNIP-BANNED: " + message.ToLower() + " by console.");
+                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by console.");
                 Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by console.");
             }
         }
