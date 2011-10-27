@@ -21,6 +21,9 @@ v5.3.0.0
 - Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
 - Added a lives system to Lava Survival, so players actually have to worry about killer lava/water. You can set the number of lives in the properties.
 - Added Global Chat to the chat tab in the GUI.
+- Added blocks:
+	- fast_hot_lava - Like lava_fast, but it kills you.
+	- All colours are now represented in doors (door_orange, door_cyan, door_pink, etc.)
 - Added commands:
 	- /nyan - 100% self-explanatory!
 	- /warp - For the new warp system!
@@ -36,10 +39,8 @@ v5.3.0.0
 - Made it so that /inv will send a message to the user if the target (or themselves) has had invincible mode enabled/disabled.
 - Made it so you can use /inv on another person from console. 
 - Disabled color codes in Global Chat, it's just too risky with the exploits.
-- Added Suppot for SQLite3 (part done)
+- Added Suppot for SQLite3
 - Added new help category, 'game'
-- New doors
-	- All colours are now represented (/door_orange, /door_cyan, /door_pink etc.)
 - Added warps (/warp)
 - Fixed fireworks leaving blocks behind
 - Fixed an error where /rankmsg wouldn't send the whole message, only the first word.

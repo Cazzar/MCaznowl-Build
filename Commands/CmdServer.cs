@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+	Copyright 2011 MCForge
+		
+	Dual-licensed under the	Educational Community License, Version 2.0 and
+	the GNU General Public License, Version 3 (the "Licenses"); you may
+	not use this file except in compliance with the Licenses. You may
+	obtain a copy of the Licenses at
+	
+	http://www.opensource.org/licenses/ecl2.php
+	http://www.gnu.org/licenses/gpl-3.0.html
+	
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the Licenses are distributed on an "AS IS"
+	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+	or implied. See the Licenses for the specific language governing
+	permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,8 +95,7 @@ namespace MCForge {
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
                     Player.SendMessage(p, "Server backup (Everything): Started.\n\tPlease wait while backup finishes.");
-                    Save(true);
-                    Player.SendMessage(p, "Server backup (Everything): Complete!");
+                    Save(true, p);
                     break;
                 case "backup db":
                     // Backup database only.
@@ -89,18 +105,20 @@ namespace MCForge {
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
                     Player.SendMessage(p, "Server backup (Database): Started.\n\tPlease wait while backup finishes.");
-                    Save(false, true);
-                    Player.SendMessage(p, "Server backup (Database): Complete!");
+                    Save(false, true, p);
                     break;
                 case "backup allbutdb":
                     // Important to save everything to a .zip file (Though we can rename the extention.)
                     // When backing up, one option is to save all non-main program files.
                     //    This means all folders, and files in these folders.
                     Player.SendMessage(p, "Server backup (Everything but Database): Started.\n\tPlease wait while backup finishes.");
-                    Save(false);
-                    Player.SendMessage(p, "Server backup (Everything but Database): Complete!");
+                    Save(false, p);
                     break;
                 case "restore":
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
+                        p.SendMessage("Sorry.  You must be the defined Server Owner or Console to restore the server.");
+                        return;
+                    }
                     Thread extract = new Thread(new ParameterizedThreadStart(ExtractPackage));
                     extract.Start(p);
                     break;
@@ -113,17 +131,18 @@ namespace MCForge {
             }
         }
 
-        private void Save(bool withDB) {
-            Save(true, withDB);
+        private void Save(bool withDB, Player p) {
+            Save(true, withDB, p);
         }
 
-        private void Save(bool withFiles, bool withDB) {
+        private void Save(bool withFiles, bool withDB, Player p) {
             ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage);
             Thread doWork = new Thread(new ParameterizedThreadStart(CreatePackage));
-            List<string> param = new List<string>();
+            List<object> param = new List<object>();
             param.Add("MCForge.zip");
-            param.Add(withFiles.ToString());
-            param.Add(withDB.ToString());
+            param.Add(withFiles);
+            param.Add(withDB);
+            param.Add(p);
             doWork.Start(param);
         }
 
@@ -328,15 +347,15 @@ namespace MCForge {
         }
 
         private static void CreatePackage(object par) {
-            List<string> param = (List<string>)par;
-            CreatePackage(param[0], bool.Parse(param[1]), bool.Parse(param[2]));
+            List<object> param = (List<object>)par;
+            CreatePackage((string)param[0], (bool)param[1], (bool)param[2], (Player)param[3]);
         }
 
         //  -------------------------- CreatePackage --------------------------
         /// <summary>
         ///   Creates a package zip file containing specified
         ///   content and resource files.</summary>
-        private static void CreatePackage(string packagePath, bool withFiles, bool withDB) {
+        private static void CreatePackage(string packagePath, bool withFiles, bool withDB, Player p) {
 
             // Create the Package
             if (withDB) {
@@ -380,6 +399,7 @@ namespace MCForge {
                 }// end:if(withFiles)
                 Server.s.Log("Data saved!");
             }// end:using (Package package) - Close and dispose package.
+            Player.SendMessage(p, "Server backup (" + (withFiles ? "Everything" + (withDB ? "" : " but Database") : "Database" ) + "): Complete!");
             Server.s.Log("Server backed up!");
         }// end:CreatePackage()
 
@@ -439,12 +459,14 @@ namespace MCForge {
                             errors++;
                         }
                     }
+                    // To make life easier, we reload settings now, to maker it less likely to need restart
+                    Command.all.Find("server").Use(null, "reload"); //Reload, as console
                     if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
                         Database.fillDatabase(item.GetStream());
                     }
                 }
             }
-            Player.SendMessage((Player)p, "Server restored" + (errors > 0 ? " with errors.  May be a partial restore" : "" ) + ".  Restart is required to see all changes.");
+            Player.SendMessage((Player)p, "Server restored" + (errors > 0 ? " with errors.  May be a partial restore" : "" ) + ".  Restart is reccommended, though not required.");
         }
     }
 }

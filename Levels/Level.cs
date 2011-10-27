@@ -2169,6 +2169,7 @@ namespace MCForge
                                         break;
 
                                     case Block.lava_fast:         //lava_fast
+                                    case Block.fastdeathlava:
                                         //initialy checks if block is valid
                                         if (randomFlow)
                                         {
@@ -2176,11 +2177,11 @@ namespace MCForge
                                             {
                                                 if (!liquids.ContainsKey(C.b)) liquids.Add(C.b, new bool[5]);
 
-                                                if (!liquids[C.b][0] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast); liquids[C.b][0] = true; }
-                                                if (!liquids[C.b][1] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast); liquids[C.b][1] = true; }
-                                                if (!liquids[C.b][2] && rand.Next(4) == 0) { PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast); liquids[C.b][2] = true; }
-                                                if (!liquids[C.b][3] && rand.Next(4) == 0) { PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast); liquids[C.b][3] = true; }
-                                                if (!liquids[C.b][4] && rand.Next(4) == 0) { PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast); liquids[C.b][4] = true; }
+                                                if (!liquids[C.b][0] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]); liquids[C.b][0] = true; }
+                                                if (!liquids[C.b][1] && rand.Next(4) == 0) { PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]); liquids[C.b][1] = true; }
+                                                if (!liquids[C.b][2] && rand.Next(4) == 0) { PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]); liquids[C.b][2] = true; }
+                                                if (!liquids[C.b][3] && rand.Next(4) == 0) { PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]); liquids[C.b][3] = true; }
+                                                if (!liquids[C.b][4] && rand.Next(4) == 0) { PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]); liquids[C.b][4] = true; }
 
                                                 if (!liquids[C.b][0] && !PhysLavaCheck(PosToInt((ushort)(x + 1), y, z))) liquids[C.b][0] = true;
                                                 if (!liquids[C.b][1] && !PhysLavaCheck(PosToInt((ushort)(x - 1), y, z))) liquids[C.b][1] = true;
@@ -2206,11 +2207,11 @@ namespace MCForge
                                             if (liquids.ContainsKey(C.b)) liquids.Remove(C.b);
                                             if (!PhysSpongeCheck(C.b, true))
                                             {
-                                                PhysLava(PosToInt((ushort)(x + 1), y, z), Block.lava_fast);
-                                                PhysLava(PosToInt((ushort)(x - 1), y, z), Block.lava_fast);
-                                                PhysLava(PosToInt(x, y, (ushort)(z + 1)), Block.lava_fast);
-                                                PhysLava(PosToInt(x, y, (ushort)(z - 1)), Block.lava_fast);
-                                                PhysLava(PosToInt(x, (ushort)(y - 1), z), Block.lava_fast);
+                                                PhysLava(PosToInt((ushort)(x + 1), y, z), blocks[C.b]);
+                                                PhysLava(PosToInt((ushort)(x - 1), y, z), blocks[C.b]);
+                                                PhysLava(PosToInt(x, y, (ushort)(z + 1)), blocks[C.b]);
+                                                PhysLava(PosToInt(x, y, (ushort)(z - 1)), blocks[C.b]);
+                                                PhysLava(PosToInt(x, (ushort)(y - 1), z), blocks[C.b]);
                                             }
                                             else
                                                 AddUpdate(C.b, Block.air);  //was placed near sponge
