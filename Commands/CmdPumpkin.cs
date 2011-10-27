@@ -33,15 +33,15 @@ namespace MCForge
         {
             if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }
             if (!Directory.Exists("extra/copy"))
-                Directory.CreateDirectory("extra/cpy");
+                Directory.CreateDirectory("extra/copy");
 
-            if (!File.Exists("extra/copy/pumpkin.cpy"))
+            if (!File.Exists("extra/copy/pumpkin.copy"))
             {
                 Player.SendMessage(p, "Pumpkin copy doesn't exist. Downloading...");
                 try
                 {
                     using (WebClient WEB = new WebClient())
-                        WEB.DownloadFile("http://download.mcderp.net/pumpkin.cpy", "extra/copy/pumpkin.cpy");
+                        WEB.DownloadFile("http://www.mcforge.net/uploads/copy/pumpkin.copy", "extra/copy/pumpkin.copy");
                 }
                 catch
                 {
@@ -49,11 +49,12 @@ namespace MCForge
                     return;
                 }
             }
-            Command.all.Find("copy").Use(p, "load pumpkin");
+            Command.all.Find("retrieve").Use(p, "pumpkin");
             Command.all.Find("paste").Use(p, "");
             ushort[] loc = p.getLoc(false);
-            ushort loc0 = (ushort)(loc[0] + 1);
-            Command.all.Find("click").Use(p, loc0 + " " + loc[1] + " " + loc[2]);
+            ushort loc0 = (ushort)(loc[0] + 3);
+            ushort loc2 = (ushort)(loc[2] - 8);
+            Command.all.Find("click").Use(p, loc0 + " " + loc[1] + " " + loc2);
         }
         public override void Help(Player p)
         {
