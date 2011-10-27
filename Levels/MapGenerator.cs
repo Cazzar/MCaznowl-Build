@@ -61,12 +61,12 @@ namespace MCForge
 
                 //float dispAux, pd;
                 ushort WaterLevel = (ushort)(Lvl.depth / 2 + 2);
+                ushort LavaLevel = 5;
 
                 if (type.Equals("ocean"))
                 {
                     WaterLevel = (ushort)(Lvl.depth * 0.85f);
                 }
-
                 //Generate the level
                 GenerateFault(terrain, Lvl, type, rand);
 
@@ -78,7 +78,7 @@ namespace MCForge
                 Server.s.Log("Creating overlay");
                 GeneratePerlinNoise(overlay, Lvl, "", rand);
 
-                if (!type.Equals("ocean") && type != "desert" && !(type == "nether" && type == "hell"))
+                if (!type.Equals("ocean") && type != "desert")
                 {
                     Server.s.Log("Planning trees");
                     GeneratePerlinNoise(overlay2, Lvl, "", rand);
@@ -94,9 +94,8 @@ namespace MCForge
                 switch (type)
                 {
                     case "hell":
-                    case"nether":
                         RangeLow = .3f;
-                        RangeHigh = 2f;
+                        RangeHigh = 1.3f;
                         break;
                     case "island":
                         RangeLow = 0.4f;
@@ -141,75 +140,52 @@ namespace MCForge
                     {
                         z = Evaluate(Lvl, Range(terrain[bb], RangeLow, RangeHigh));
                     }
-                    if (z > WaterLevel)
+                    if (type != "hell")
                     {
-                        for (ushort zz = 0; z - zz >= 0; zz++)
+                        #region nonLavaWorld
+                        if (z > WaterLevel)
                         {
-                            if (type == "desert")
+                            for (ushort zz = 0; z - zz >= 0; zz++)
                             {
-                                Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);
-                            }
-                            else if (overlay[bb] < 0.72f)    //If not zoned for rocks or gravel
-                            {
-                                if (type.Equals("island"))      //increase sand height for island
-                                {
-                                    if (z > WaterLevel + 2)
-                                    {
-                                        if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.grass); }      //top layer
-                                        else if (zz < 3) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.dirt); }   //next few
-                                        else { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }               //ten rock it
-                                    }
-                                    else
-                                    {
-                                        Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);                        //SAAAND extra for islands
-                                    }
-                                }
-                                else if (type == "desert")
+                                if (type == "desert")
                                 {
                                     Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);
                                 }
-                                else if (type == "hell" || type == "nether")
+                                else if (overlay[bb] < 0.72f)    //If not zoned for rocks or gravel
                                 {
-                                    Lvl.skipChange(x, (ushort)(z), y, (rand.Next() % 2 == 1 ? Block.obsidian : Block.door_darkgrey));
-                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava);
+                                    if (type.Equals("island"))      //increase sand height for island
+                                    {
+                                        if (z > WaterLevel + 2)
+                                        {
+                                            if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.grass); }      //top layer
+                                            else if (zz < 3) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.dirt); }   //next few
+                                            else { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }               //ten rock it
+                                        }
+                                        else
+                                        {
+                                            Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);                        //SAAAND extra for islands
+                                        }
+                                    }
+                                    else if (type == "desert")
+                                    {
+                                        Lvl.skipChange(x, (ushort)(z - zz), y, Block.sand);
+                                    }
+                                    else
+                                    {
+                                        if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.grass); }
+                                        else if (zz < 3) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.dirt); }
+                                        else { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }
+                                    }
                                 }
                                 else
                                 {
-                                    if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.grass); }
-                                    else if (zz < 3) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.dirt); }
-                                    else { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }
-                                }
-                            }
-                            else
-                            {
-                                if (type == "hell" || type == "nether")
-                                {
-                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava);
-                                }
-                                else
-                                {
-                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock);
-                                }
-                            }
-                        }
 
-                        if (overlay[bb] < 0.25f && type != "desert")    //Zoned for flowers
-                        {
-                            if (type == "nether" || type == "hell")
-                            {
-                                switch (rand.Next(13))
-                                {
-                                    case 9:
-                                    case 10:
-                                    case 11:
-                                    case 12:
-                                        Lvl.skipChange(x, (ushort)(z + 1), y, Block.iron);
-                                        break;
-                                    default:
-                                        break;
+                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock);
+
                                 }
                             }
-                            else
+
+                            if (overlay[bb] < 0.25f && type != "desert")    //Zoned for flowers
                             {
                                 switch (rand.Next(12))
                                 {
@@ -223,22 +199,20 @@ namespace MCForge
                                         break;
                                 }
                             }
-                           
-                        }
 
-                        if (!type.Equals("ocean"))
-                        {
-                            if (overlay[bb] < 0.65f && overlay2[bb] < TreeDens)
+
+
+                            if (!type.Equals("ocean"))
                             {
-                                if (Lvl.GetTile(x, (ushort)(z + 1), y) == Block.air)
+                                if (overlay[bb] < 0.65f && overlay2[bb] < TreeDens)
                                 {
-                                    if (Lvl.GetTile(x, z, y) == Block.grass || type == "desert")
+                                    if (Lvl.GetTile(x, (ushort)(z + 1), y) == Block.air)
                                     {
-                                        if (rand.Next(13) == 0)
+                                        if (Lvl.GetTile(x, z, y) == Block.grass || type == "desert")
                                         {
-                                            if (!TreeCheck(Lvl, x, z, y, TreeDist))
+                                            if (rand.Next(13) == 0)
                                             {
-                                                if (type != "hell" || type != "nether")
+                                                if (!TreeCheck(Lvl, x, z, y, TreeDist))
                                                 {
                                                     if (type == "desert")
                                                         AddCactus(Lvl, x, (ushort)(z + 1), y, rand);
@@ -251,34 +225,103 @@ namespace MCForge
                                 }
                             }
                         }
-
-                    }
-                    else    //Must be on/under the water line then
-                    {
-                        for (ushort zz = 0; WaterLevel - zz >= 0; zz++)
+                        else    //Must be on/under the water line then
                         {
-                            if (WaterLevel - zz > z)
-                            { Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.water); }    //better fill the water aboce me
-                            else if (WaterLevel - zz > z - 3)
+                            for (ushort zz = 0; WaterLevel - zz >= 0; zz++)
                             {
-                                if (overlay[bb] < 0.75f)
+
+                                if (WaterLevel - zz > z)
+                                { Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.water); }    //better fill the water aboce me
+                                else if (WaterLevel - zz > z - 3)
                                 {
-                                    Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.sand);   //sand top
+                                    if (overlay[bb] < 0.75f)
+                                    {
+                                        Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.sand);   //sand top
+                                    }
+                                    else
+                                    {
+                                        Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.gravel);  //zoned for gravel
+                                    }
                                 }
                                 else
                                 {
-                                    Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.gravel);  //zoned for gravel
+                                    Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.rock);
                                 }
                             }
-                            else
-                            { 
-                                Lvl.skipChange(x, (ushort)(WaterLevel - zz), y, Block.rock); 
+
+                        }
+                        #endregion
+                    }
+                    else //all of lava world generation
+                    {
+                       
+                        if (z > LavaLevel)
+                        {
+                            for (ushort zz = 0; z - zz >= 0; zz++)
+                            {
+                                if (z > (LavaLevel - 1))
+                                {
+                                    if (zz == 0) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }      //top layer
+                                    else if (zz < 3) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock); }
+                                    else if (zz < 2) { Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava); }//next few
+                                    else { Lvl.skipChange(x, (ushort)(z - zz), y, Block.obsidian); }
+                                }
+                                else
+                                {
+                                    Lvl.skipChange(x, (ushort)(z - zz), y, Block.lava);                       
+                                }
+                                if (overlay[bb] < 0.3f) 
+                                {
+                                    switch (rand.Next(13))
+                                    {
+                                        case 9:
+                                        case 10:
+                                        case 11:
+                                        case 12:
+                                            Lvl.skipChange(x, (ushort)(z + 1), y, Block.lava); //change to lava when time
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                // if (zz == z) Lvl.skipChange(x, (ushort)(z - zz), y, Block.opsidian);
+                                Lvl.skipChange(x, (ushort)(z), y, (rand.Next(100) % 3 == 1 ? Block.darkgrey : Block.obsidian));
+
                             }
                         }
+
+                        else
+                        {
+                            for (ushort zz = 0; LavaLevel - zz >= 0; zz++)
+                            {
+
+                                if (LavaLevel - zz > z - 1)
+                                { /*if (Lvl.GetTile(x, z, y) == Block.air)*/ Lvl.skipChange(x, (ushort)(LavaLevel - zz), y, Block.lava); }    //better fill the water aboce me
+                                else if (LavaLevel - zz > z - 3)
+                                {
+                                    if (overlay[bb] < .9f)
+                                    {
+                                        if (zz < z) Lvl.skipChange(x, (ushort)(z - zz), (ushort)(y), Block.lava);
+                                        else Lvl.skipChange(x, (ushort)(z - zz), y, Block.rock);
+                                    }
+                                    else
+                                    {
+                                        Lvl.skipChange(x, (ushort)(LavaLevel - zz), (ushort)(y - 5), Block.lava);  //killer lava
+                                    }
+                                }
+                                else
+                                {
+                                    Lvl.skipChange(x, (ushort)(LavaLevel - zz), y, Block.stone); //and just make the rest cobblestone
+                                }
+                            }
+                        }
+
+                        
                     }
                 }
-
                 Server.s.Log("Total time was " + (DateTime.Now - startTime).TotalSeconds.ToString() + " seconds.");
+
+
             }
             catch (Exception e)
             {
@@ -313,6 +356,11 @@ namespace MCForge
             {
                 DispMax = 0.02f;
                 startheight = 0.6f;
+            }
+            else if (type.Equals("hell"))
+            {
+                DispMax = 0.02f;
+                startheight = 0.04f;
             }
             else if (type.Equals("overlay"))
             {
@@ -660,7 +708,8 @@ namespace MCForge
             byte height = (byte)Rand.Next(3, 6);
             ushort yy;
 
-            for (yy = 0; yy <= height; yy++) {
+            for (yy = 0; yy <= height; yy++)
+            {
                 if (overwrite || Lvl.GetTile(z, (ushort)(y + yy), z) == Block.air)
                     if (blockChange)
                         if (p == null) Lvl.Blockchange(x, (ushort)(y + yy), z, Block.green);

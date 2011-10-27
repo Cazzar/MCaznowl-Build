@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -47,18 +48,11 @@ namespace MCForge
             message = message.Substring(message.IndexOf(' ') + 1);
 
             //DB
-            if (Server.useMySQL)
-            {
-                if (message.Length > 255) { Player.SendMessage(p, "Message was too long. The text below has been trimmed."); Player.SendMessage(p, message.Substring(256)); message = message.Remove(256); }
-                MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
-                MySQL.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", "\\'") + "')");
-            }
-            else
-            {
-                SQLite.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom TEXT, TimeSent DATETIME, Contents TEXT);");
-                Server.s.Log(message.Replace("'", "\\'"));
-                SQLite.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", "''") + "')");
-            }
+            if (message.Length > 255 && Server.useMySQL) { Player.SendMessage(p, "Message was too long. The text below has been trimmed."); Player.SendMessage(p, message.Substring(256)); message = message.Remove(256); }
+                Database.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
+                if (!Server.useMySQL)
+                    Server.s.Log(message.Replace("'", "\\'"));
+                Database.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", (Server.useMySQL ? "\\'" : "''")) + "')");
             //DB
 
             Player.SendMessage(p, "Message sent to &5" + whoTo + ".");

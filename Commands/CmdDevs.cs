@@ -46,7 +46,7 @@ namespace MCForge
                 }
             }
             devlist = devlist.Remove(devlist.Length - 2);
-            Player.SendMessage(p, "&9MCForge Development Team: " + Server.DefaultColor + devlist);
+            Player.SendMessage(p, "&9MCForge Development Team: " + Server.DefaultColor + devlist + "&e.");
         }
 
         public override void Help(Player p)

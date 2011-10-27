@@ -27,90 +27,46 @@ using MySql.Data.Types;
 
 namespace MCForge
 {
-    public static class MySQL
+    namespace SQL
     {
-		
-        public static string connString = "Data Source=" + Server.MySQLHost + ";Port=" + Server.MySQLPort + ";User ID=" + Server.MySQLUsername + ";Password=" + Server.MySQLPassword + ";Pooling=" + Server.DatabasePooling;
-        public static void executeQuery(string queryString, bool createDB = false)
+        public static class MySQL //: Database //Extending for future improvement (Making it object oriented later)
         {
-			int totalCount = 0;
-            if (!Server.useMySQL)
-                return;
-    retry:  try
+            private static string connStringFormat = "Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}";
+
+            public static string connString { get { return String.Format(connStringFormat, Server.MySQLHost, Server.MySQLPort, Server.MySQLUsername, Server.MySQLPassword, Server.DatabasePooling); } }
+            public static void executeQuery(string queryString, bool createDB = false)
             {
-                using (var conn = new MySqlConnection(connString))
-                {
+                Database.executeQuery(queryString, createDB);
+            }
+
+            public static DataTable fillData(string queryString, bool skipError = false)
+            {
+                return Database.fillData(queryString, skipError);
+            }
+
+            internal static void execute(string queryString, bool createDB = false) {
+                using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
-                    if (!createDB)
-                    {
+                    if (!createDB) {
                         conn.ChangeDatabase(Server.MySQLDatabaseName);
                     }
-					using (MySqlCommand cmd = new MySqlCommand(queryString, conn))
-					{
-						cmd.ExecuteNonQuery();
-						conn.Close();
-					}
-                }
-            }
-            catch (Exception e)
-            {
-                if (!createDB)
-                {
-                    totalCount++;
-                    if (totalCount > 10)
-                    {
-                        File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-                        Server.ErrorLog(e);
-                    }
-                    else
-                    {
-                        goto retry;
+                    using (MySqlCommand cmd = new MySqlCommand(queryString, conn)) {
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
                     }
                 }
-                else
-                {
-                    throw e;
+            }
+
+            internal static void fill(string queryString, DataTable toReturn) {
+                using (var conn = new MySqlConnection(connString)) {
+                    conn.Open();
+                    conn.ChangeDatabase(Server.MySQLDatabaseName);
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
+                        da.Fill(toReturn);
+                    }
+                    conn.Close();
                 }
             }
-        }
-
-        public static DataTable fillData(string queryString, bool skipError = false)
-        {
-			int totalCount = 0;
-			using (DataTable toReturn = new DataTable("toReturn"))
-			{
-				if (!Server.useMySQL)
-					return toReturn;
-			retry: try
-				{
-					using (var conn = new MySqlConnection(connString))
-					{
-						conn.Open();
-						conn.ChangeDatabase(Server.MySQLDatabaseName);
-						using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn))
-						{
-							da.Fill(toReturn);
-						}
-						conn.Close();
-					}
-				}
-				catch (Exception e)
-				{
-					totalCount++;
-					if (totalCount > 10)
-					{
-						if (!skipError)
-						{
-							File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
-							Server.ErrorLog(e);
-						}
-					}
-					else
-						goto retry;
-				}
-
-				return toReturn;
-			}
         }
     }
 }

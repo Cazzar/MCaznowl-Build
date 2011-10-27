@@ -375,6 +375,11 @@ namespace MCForge
             deaths[name]++;
             if (!silent && IsPlayerDead(p))
             {
+                Player.players.ForEach(delegate(Player pl)
+                {
+                    if (pl != p && HasPlayer(pl))
+                        Player.SendMessage(pl, pl.color + pl.name + " &4ran out of lives, and is out of the round!");
+                });
                 Player.SendMessage(p, "&4You ran out of lives, and are out of the round!");
                 Player.SendMessage(p, "&4You can still watch, but you cannot build.");
             }
@@ -394,8 +399,8 @@ namespace MCForge
             data.destroy = rand.Next(1, 101) <= settings.destroy;
             data.water = rand.Next(1, 101) <= settings.water;
             data.layer = rand.Next(1, 101) <= settings.layer;
-            data.fast = rand.Next(1, 101) <= settings.fast && !data.killer && !data.water;
-            data.block = data.water ? (data.killer ? Block.activedeathwater : Block.water) : (data.fast ? Block.lava_fast : (data.killer ? Block.activedeathlava : Block.lava));
+            data.fast = rand.Next(1, 101) <= settings.fast && !data.water;
+            data.block = data.water ? (data.killer ? Block.activedeathwater : Block.water) : (data.fast ? (data.killer ? Block.fastdeathlava : Block.lava_fast) : (data.killer ? Block.activedeathlava : Block.lava));
             return data;
         }
 
@@ -633,15 +638,15 @@ namespace MCForge
             {
                 this.name = name;
                 fast = 0;
-                killer = 0;
+                killer = 100;
                 destroy = 0;
                 water = 0;
                 layer = 0;
                 layerHeight = 3;
                 layerCount = 10;
                 layerInterval = 2;
-                roundTime = 30;
-                floodTime = 10;
+                roundTime = 15;
+                floodTime = 5;
                 blockFlood = new Pos();
                 blockLayer = new Pos();
                 safeZone = new Pos[] { new Pos(), new Pos() };

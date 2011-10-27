@@ -27,6 +27,7 @@ using System.Security.Cryptography;
 using System.Data;
 using System.Linq;
 using System.Text;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -159,7 +160,6 @@ namespace MCForge
 
         public bool voice = false;
         public string voicestring = "";
-        public int consecutivemessages = 0;
 
         public int grieferStoneWarn = 0;
 
@@ -245,9 +245,11 @@ namespace MCForge
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
-        public static int spamChatCount = 3;
-        public static int spamChatTimer = 4;
-        Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
+        public int consecutivemessages = 0;
+        private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset*1000);
+        //public static int spamChatCount = 3;
+        //public static int spamChatTimer = 4;
+        //Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
 
         // CmdVoteKick
         public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
@@ -463,6 +465,12 @@ namespace MCForge
                         }
                     }
                 };
+                resetSpamCount.Elapsed += delegate {
+                    if (consecutivemessages > 0)
+                        consecutivemessages = 0;
+                };
+                resetSpamCount.Start();
+
                 if (Server.afkminutes > 0) afkTimer.Start();
 
                 connections.Add(this);
@@ -1794,7 +1802,8 @@ namespace MCForge
                         case Block.deathwater:
                         case Block.activedeathwater: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " stepped in &dcold water and froze.", false); break;
                         case Block.deathlava:
-                        case Block.activedeathlava: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " stood in &cmagma and melted.", false); break;
+                        case Block.activedeathlava:
+                        case Block.fastdeathlava: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " stood in &cmagma and melted.", false); break;
                         case Block.magma: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " was hit by &cflowing magma and melted.", false); break;
                         case Block.geyser: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " was hit by &cboiling water and melted.", false); break;
                         case Block.birdkill: GlobalChatLevel(this, this.color + this.prefix + this.name + Server.DefaultColor + " was hit by a &cphoenix and burnt.", false); break;
@@ -2033,10 +2042,10 @@ namespace MCForge
 
                 if (Server.checkspam == true)
                 {
-                    if (consecutivemessages == 0)
-                    {
-                        consecutivemessages++;
-                    }
+                    //if (consecutivemessages == 0)
+                    //{
+                    //    consecutivemessages++;
+                    //}
                     if (Player.lastMSG == this.name)
                     {
                         consecutivemessages++;
@@ -2102,7 +2111,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '#') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageOps("To Ops &f<" + color + name + "&f> " + newtext);
+                    GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
@@ -2116,7 +2125,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageAdmins("To Admins &f<" + color + name + "&f> " + newtext);  //to make it easy on remote
+                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);  //to make it easy on remote
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
@@ -3859,7 +3868,7 @@ namespace MCForge
             RedoBuffer.Clear();
             UndoBuffer.Clear();
             spamBlockLog.Clear();
-            spamChatLog.Clear();
+            //spamChatLog.Clear();
             spyChatRooms.Clear();
             /*try
             {

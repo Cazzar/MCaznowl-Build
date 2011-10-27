@@ -125,11 +125,14 @@ namespace MCForge
                     totalTriesStream = 0;
 
                     beat.Prepare();
+                    if (beat.GetType() == typeof(MinecraftBeat))    
+                        File.WriteAllText("text/heartbeaturl.txt", beat.URL + "?" + beat.Parameters);
 
                     // Set all the request settings
                     //Server.s.Log(beat.Parameters);
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
+                    request.UserAgent = "Opera/9.23 (Nintendo Wii; U; ; 1038-58; Wii Internet Channel/1.0; en)"; // LOLOLOLOLOLOL
                     request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
                     byte[] formData = Encoding.ASCII.GetBytes(beat.Parameters);
                     request.ContentLength = formData.Length;

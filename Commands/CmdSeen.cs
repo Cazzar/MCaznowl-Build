@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using MCForge.SQL;
 
 namespace MCForge
 {
@@ -42,14 +43,11 @@ namespace MCForge
                 return;
             }
 
-            DataTable playerDb = MySQL.fillData("SELECT * FROM Players WHERE Name='" + message + "'");
-            if (playerDb.Rows != null && playerDb.Rows.Count > 0)
-            {
-                Player.SendMessage(p, message + " was last seen: " + playerDb.Rows[0]["LastLogin"]);
-            }
-            else
-            {
-                Player.SendMessage(p, "Unable to find player");
+            using (DataTable playerDb = Database.fillData("SELECT * FROM Players WHERE Name='" + message + "'")) {
+                if (playerDb.Rows != null && playerDb.Rows.Count > 0)
+                    Player.SendMessage(p, message + " was last seen: " + playerDb.Rows[0]["LastLogin"]);
+                else
+                    Player.SendMessage(p, "Unable to find player");
             }
 
         }

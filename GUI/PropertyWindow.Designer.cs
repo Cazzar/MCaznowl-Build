@@ -78,6 +78,7 @@ namespace MCForge.Gui
             this.label33 = new System.Windows.Forms.Label();
             this.CustCmdtxtBox = new System.Windows.Forms.TextBox();
             this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.txtcmdranks2 = new System.Windows.Forms.TextBox();
             this.label74 = new System.Windows.Forms.Label();
             this.label73 = new System.Windows.Forms.Label();
             this.extracmdpermnumber = new System.Windows.Forms.NumericUpDown();
@@ -325,6 +326,7 @@ namespace MCForge.Gui
             this.chkZombieOnServerStart = new System.Windows.Forms.CheckBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.numCountReset = new System.Windows.Forms.NumericUpDown();
             this.numSpamMute = new System.Windows.Forms.NumericUpDown();
             this.label45 = new System.Windows.Forms.Label();
             this.numSpamMessages = new System.Windows.Forms.NumericUpDown();
@@ -335,7 +337,7 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.txtcmdranks2 = new System.Windows.Forms.TextBox();
+            this.label75 = new System.Windows.Forms.Label();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -394,6 +396,7 @@ namespace MCForge.Gui
             this.groupBox16.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).BeginInit();
             this.groupBox14.SuspendLayout();
@@ -752,6 +755,15 @@ namespace MCForge.Gui
             this.tabPage12.Size = new System.Drawing.Size(468, 476);
             this.tabPage12.TabIndex = 2;
             this.tabPage12.Text = "Additional Command Permissions";
+            // 
+            // txtcmdranks2
+            // 
+            this.txtcmdranks2.Location = new System.Drawing.Point(72, 189);
+            this.txtcmdranks2.Multiline = true;
+            this.txtcmdranks2.Name = "txtcmdranks2";
+            this.txtcmdranks2.ReadOnly = true;
+            this.txtcmdranks2.Size = new System.Drawing.Size(241, 273);
+            this.txtcmdranks2.TabIndex = 46;
             // 
             // label74
             // 
@@ -3221,7 +3233,7 @@ namespace MCForge.Gui
             // 
             // groupBox21
             // 
-            this.groupBox21.Controls.Add(this.label69);
+            this.groupBox21.Controls.Add(this.label75);
             this.groupBox21.Controls.Add(this.lsNudLives);
             this.groupBox21.Controls.Add(this.lsCmbControlRank);
             this.groupBox21.Controls.Add(this.label68);
@@ -3243,11 +3255,11 @@ namespace MCForge.Gui
             // label69
             // 
             this.label69.AutoSize = true;
-            this.label69.Location = new System.Drawing.Point(8, 136);
+            this.label69.Location = new System.Drawing.Point(15, 145);
             this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(34, 13);
-            this.label69.TabIndex = 11;
-            this.label69.Text = "Lives:";
+            this.label69.Size = new System.Drawing.Size(149, 13);
+            this.label69.TabIndex = 33;
+            this.label69.Text = "Counter Reset Time (seconds):";
             // 
             // label68
             // 
@@ -3468,6 +3480,8 @@ namespace MCForge.Gui
             // 
             // groupBox15
             // 
+            this.groupBox15.Controls.Add(this.numCountReset);
+            this.groupBox15.Controls.Add(this.label69);
             this.groupBox15.Controls.Add(this.numSpamMute);
             this.groupBox15.Controls.Add(this.label45);
             this.groupBox15.Controls.Add(this.numSpamMessages);
@@ -3475,10 +3489,29 @@ namespace MCForge.Gui
             this.groupBox15.Controls.Add(this.chkSpamControl);
             this.groupBox15.Location = new System.Drawing.Point(225, 18);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(248, 146);
+            this.groupBox15.Size = new System.Drawing.Size(248, 189);
             this.groupBox15.TabIndex = 1;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Spam Control";
+            // 
+            // numCountReset
+            // 
+            this.numCountReset.Location = new System.Drawing.Point(170, 143);
+            this.numCountReset.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.numCountReset.Name = "numCountReset";
+            this.numCountReset.Size = new System.Drawing.Size(60, 21);
+            this.numCountReset.TabIndex = 34;
+            this.numCountReset.Tag = "The number of seconds before the message counter is reset.";
+            this.numCountReset.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numCountReset.ValueChanged += new System.EventHandler(this.numCountReset_ValueChanged);
             // 
             // numSpamMute
             // 
@@ -3585,14 +3618,14 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
-            // txtcmdranks2
+            // label75
             // 
-            this.txtcmdranks2.Location = new System.Drawing.Point(72, 189);
-            this.txtcmdranks2.Multiline = true;
-            this.txtcmdranks2.Name = "txtcmdranks2";
-            this.txtcmdranks2.ReadOnly = true;
-            this.txtcmdranks2.Size = new System.Drawing.Size(241, 273);
-            this.txtcmdranks2.TabIndex = 46;
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(8, 136);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(34, 13);
+            this.label75.TabIndex = 11;
+            this.label75.Text = "Lives:";
             // 
             // PropertyWindow
             // 
@@ -3698,6 +3731,7 @@ namespace MCForge.Gui
             this.tabPage8.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).EndInit();
             this.groupBox14.ResumeLayout(false);
@@ -3975,11 +4009,12 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkGrieferStoneBan;
         private System.Windows.Forms.ComboBox cmbGrieferStoneRank;
         private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.NumericUpDown numCountReset;
+        private System.Windows.Forms.Label label69;
         private System.Windows.Forms.CheckBox chkWomDirect;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.NumericUpDown lsNudLives;
-        private System.Windows.Forms.Label label69;
         private System.Windows.Forms.TextBox txtSQLPort;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.GroupBox groupBox17;
@@ -3997,5 +4032,6 @@ namespace MCForge.Gui
         public System.Windows.Forms.TextBox extracmdpermdesc;
         public System.Windows.Forms.TextBox extracmdpermperm;
         private System.Windows.Forms.TextBox txtcmdranks2;
+        private System.Windows.Forms.Label label75;
     }
 }
