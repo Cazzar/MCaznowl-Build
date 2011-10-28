@@ -156,7 +156,7 @@ namespace MCForge
             if (p != null)
             {
                 Server.IRC.Say(message.ToLower() + " was ip-banned by " + p.name + ".");
-                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
+                Server.s.Log("IP-BANNED: " + message.ToLower() + " by " + p.name + ".");
                 Player.GlobalMessage(message + " was &8ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
             }
             else

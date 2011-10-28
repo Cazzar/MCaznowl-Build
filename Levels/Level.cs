@@ -212,9 +212,31 @@ namespace MCForge
 
                 	break;
 
-                case "island":
+               
                 case "hell":
-                case "nether":
+                    Random random2 = useSeed ? new Random(seed) : new Random();
+                    for (x = 0; x < width; ++x)
+                        for (z = 0; z < height; ++z)
+                            for (y = 0; y < depth; ++y)
+                                if (y == 0)
+                                    SetTile(x, y, z, 7);
+                                else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 0 || y == depth - 1)
+                                    SetTile(x, y, z, Block.obsidian);
+                                else if (x == 1 || x == width - 2 || z == 1 || z == height -2 )
+                                {
+                                    if (random2.Next(1000) == 7)
+                                    {
+                                       // z = (z > 1 && z < height - 4) ? (ushort)random2.Next(z, z + 4) : z;
+                                        for (int i = 1; i < (height - y); ++i)
+                                        {
+                                            SetTile(x, (ushort)(y + i), z, Block.lava);
+                                        }
+                                    }
+                                }
+
+                    Server.MapGen.GenerateMap(this, type, seed, useSeed);
+                    break;
+                case "island":
                 case "mountains":
                 case "ocean":
                 case "forest":

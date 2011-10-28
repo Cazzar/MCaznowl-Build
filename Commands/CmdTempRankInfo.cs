@@ -53,6 +53,7 @@ namespace MCForge
                 {
                     string temprank = line3.Split(' ')[1];
                     string oldrank = line3.Split(' ')[2];
+                    string tempranker = line3.Split(' ')[9];
                     int period = Convert.ToInt32(line3.Split(' ')[3]);
                     int minutes = Convert.ToInt32(line3.Split(' ')[4]);
                     int hours = Convert.ToInt32(line3.Split(' ')[5]);
@@ -66,6 +67,7 @@ namespace MCForge
                     Player.SendMessage(p, "&aOld Rank: " + oldrank);
                     Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString());
                     Player.SendMessage(p, "&aDate of expiry: " + tocheck.ToString());
+                    Player.SendMessage(p, "&aTempranked by: " + tempranker.ToString());
                 }
             }
 

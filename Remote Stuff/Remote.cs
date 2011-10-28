@@ -139,7 +139,7 @@ namespace MCForge.Remote
                     case 13: length = 1; break;
                     case 14: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
                     case 15: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
-                    case 16: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 2)); break;
+                    case 16: length = ((util.EndianBitConverter.Big.ToInt16(buffer, 1) + 3)); break;
                     case 25: length = 1; break;
                     default:
                         Server.s.Log("unhandled message id " + msg);
@@ -186,19 +186,69 @@ namespace MCForge.Remote
             byte id = message[2];
             string messages = Encoding.UTF8.GetString(message, 3, length);
             messages = this.Decrypt(messages, key);
+            switch (id)
+            {
+                case 1:
+                    string newGroupname = messages.Split('*')[1];
+                    string oldName = messages.Split('*')[0];
+                    Group g = Group.Find(oldName);
+                    if (g != null)
+                    {
+                        g.name = newGroupname;
+                        g.fileName = newGroupname + ".txt";  //Dont ask
+                        g.trueName = newGroupname;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 2:
+                    string color = messages.Split('*')[1];
+                    string name = messages.Split('*')[0];
+                    Group ge = Group.Find(name);
+                    if (ge != null)
+                    {
+                        ge.color = color;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 3:
+                    int limit = int.Parse(messages.Split('*')[1]);
+                    string namee = messages.Split('*')[0];
+                    Group gew = Group.Find(namee);
+                    if (gew != null)
+                    {
+                        gew.maxBlocks = limit;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 4:
+                    int perms = int.Parse(messages.Split('*')[1]);
+                    string name2 = messages.Split('*')[0];
+                    Group gew2 = Group.Find(name2);
+                    if (gew2 != null)
+                    {
+                        gew2.Permission = (LevelPermission)perms;
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                case 5:
+                    string bondPAUSEJamesBond = messages.Split('*')[0];
+                    Group grewp = Group.Find(bondPAUSEJamesBond);
+                    if (grewp != null) Group.GroupList.Remove(grewp); Group.saveGroups(Group.GroupList);
+                    break;
+                case 6:
+                    string[] fuckThePolice = messages.Split('*');
+                    if (fuckThePolice.Length == 4)
+                    {
+                        Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, 
+                            fuckThePolice[0], fuckThePolice[1][1], "NEWRANK" + int.Parse(fuckThePolice[3]).ToString() + ".txt");
 
-            //if (messages != "&*&*&")
-            //{
-            //    string[] fuckThePolice = messages.Split('*');
-            //    Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, fuckThePolice[0], fuckThePolice[1][1], fuckThePolice[0] + ".txt");
-            //    Group.GroupList.Add(newGroup);
-
-            //    Group.InitAll();
-            //}
-            //else
-            //{
-            //    Group.GroupList.Clear();
-            //}
+                        Group.GroupList.Add(newGroup);
+                        Group.saveGroups(Group.GroupList);
+                    }
+                    break;
+                default: return;
+            }
+            Group.InitAll();
 
         }
 
@@ -767,10 +817,14 @@ namespace MCForge.Remote
         }
         internal void sendGroups()
         {
+            SendData(0x07, "*");
             foreach (Group g in Group.GroupList)
             {
+                if (g.Permission == LevelPermission.Nobody || g.name == "nobody" || g.trueName == "nobody") break;
+                else
                 SendData(0x07, g.color + "," + g.name + "," + g.maxBlocks + "," + ((int)g.Permission).ToString());
             }
+            SendData(0x07, "~" +(Group.GroupList.Count - 1).ToString());
             
         }
         void s_OnOp(string message)
