@@ -464,10 +464,10 @@
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
     <Compile Include="Warp.cs" />
-    <Compile Include="WebserverStuff\Remote.cs" />
-    <Compile Include="WebserverStuff\Remote.Handler.cs" />
-    <Compile Include="WebserverStuff\RemoteProperties.cs" />
-    <Compile Include="WebserverStuff\RemoteServer.cs" />
+    <Compile Include="Remote Stuff\Remote.cs" />
+    <Compile Include="Remote Stuff\Remote.Handler.cs" />
+    <Compile Include="Remote Stuff\RemoteProperties.cs" />
+    <Compile Include="Remote Stuff\RemoteServer.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
