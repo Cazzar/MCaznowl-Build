@@ -239,7 +239,9 @@ namespace MCForge.Remote
                     string[] fuckThePolice = messages.Split('*');
                     if (fuckThePolice.Length == 4)
                     {
-                        Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, fuckThePolice[0], fuckThePolice[1][1], "NEWRANK.txt");
+                        Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, 
+                            fuckThePolice[0], fuckThePolice[1][1], "NEWRANK" + int.Parse(fuckThePolice[3]).ToString() + ".txt");
+
                         Group.GroupList.Add(newGroup);
                         Group.saveGroups(Group.GroupList);
                     }
