@@ -379,6 +379,18 @@ namespace MCForge
                                 try { Server.afkkick = Convert.ToInt32(value); }
                                 catch { Server.s.Log("irc-port invalid! setting to default."); }
                                 break;
+                            case "afk-kick-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.afkkickperm = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ".  Using default."); break; }
+                                break;
                             case "check-updates":
                                 try { Server.autonotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
@@ -481,6 +493,10 @@ namespace MCForge
                             case "zombie-name-while-infected":
                                 if (value != "")
                                     Server.ZombieName = value;
+                                break;
+                            case "guest-limit-notify":
+                                try { Server.guestLimitNotify = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "ignore-ops":
                                 try { Server.globalignoreops = bool.Parse(value); }
@@ -726,6 +742,7 @@ namespace MCForge
             w.WriteLine("deathcount = " + Server.deathcount.ToString().ToLower());
             w.WriteLine("afk-minutes = " + Server.afkminutes.ToString());
             w.WriteLine("afk-kick = " + Server.afkkick.ToString());
+            w.WriteLine("afk-kick-perm = " + ((sbyte)Server.afkkickperm).ToString());
             w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString().ToLower());
             w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString().ToLower());
             w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
@@ -746,6 +763,7 @@ namespace MCForge
             w.WriteLine("no-level-saving-during-zombie = " + Server.noLevelSaving);
             w.WriteLine("no-pillaring-during-zombie = " + Server.noPillaring);
             w.WriteLine("zombie-name-while-infected = " + Server.ZombieName);
+            w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
             w.WriteLine();
             w.WriteLine("# backup options");
             w.WriteLine("backup-time = " + Server.backupInterval.ToString());
