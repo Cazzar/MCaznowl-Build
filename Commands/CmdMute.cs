@@ -37,23 +37,37 @@ namespace MCForge
                 if (Server.muted.Contains(message))
                 {
                     Server.muted.Remove(message);
-                    Player.GlobalMessage(message + Server.DefaultColor + " is not online but they have been &bun-muted");
+                    Player.GlobalMessage(message + Server.DefaultColor + " is not online but is now &bun-muted");
                     Server.muted.Save("muted.txt");
                     return;
                 }
                 Player.SendMessage(p, "The player entered is not online.");
                 return;
             }
+            if (who == p)
+            {
+                if (p.muted)
+                {
+                    p.muted = false;
+                    Player.SendMessage(p, "you &bun-muted" + Server.DefaultColor + " yourself!");
+                }
+                else
+                {
+                    Player.SendMessage(p, "You cannot mute yourself!");
+                }
+                return;
+            }
             if (who.muted)
             {
                 who.muted = false;
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &bun-muted", false);
+                Server.muted.Save("muted.txt");
             }
             else
             {
                 if (p != null)
                 {
-                    if (who != p) if (who.group.Permission > p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher rank."); return; }
+                    if (who != p) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher or equal rank."); return; }
                 }
                 who.muted = true;
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &8muted", false);

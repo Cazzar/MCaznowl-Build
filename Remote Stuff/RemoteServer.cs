@@ -82,7 +82,7 @@ namespace MCForge.Remote
                 catch (SocketException)
                 {
                     if (p != null)
-                        p.Disconnect();
+                        p.push();
                     if (!begin)
                         listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
@@ -91,7 +91,7 @@ namespace MCForge.Remote
                     Server.s.Log(e.Message);
                     Server.s.Log(e.StackTrace);
                     if (p != null)
-                        p.Disconnect();
+                        p.push();
                     if (!begin)
                         listen.BeginAccept(new AsyncCallback(Accept), null);
                 }

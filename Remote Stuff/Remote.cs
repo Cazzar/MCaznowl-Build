@@ -34,26 +34,26 @@ namespace MCForge.Remote
 
 
         //public static Remote remote;
-        byte[] buffer = new byte[0];
-        byte[] tempbuffer = new byte[0xFF];
+        byte[] _bu = new byte[0];
+        byte[] _tbu = new byte[0xFF];
 
-        bool disconnected = false;
+        bool upcast = false;
         public bool LoggedIn { get; protected set; }
 
         public Socket socket;
         public static List<Remote> remotes = new List<Remote>();
-        public string version = "2.3";
-        private string key;
+        public string _ver = "2.3";
+        private string _gend;
         public Remote()
         {
             Remote.This = this;
-            key = generateRandChars();
+            _gend = generateRandChars();
         }
 
         private string generateRandChars()
         {
             Random r = new Random();
-            byte[] rs = new byte[31]; //{1,2,3,4,5,6,7,8,9,0, (byte)'a',(byte)'b',(byte)'c',(byte)'d',(byte)'e'};
+            byte[] rs = new byte[31];
             r.NextBytes(rs);
             return Encoding.UTF8.GetString(rs);
 
@@ -85,7 +85,7 @@ namespace MCForge.Remote
 
 
 
-                        socket.BeginReceive(tempbuffer, 0, tempbuffer.Length, SocketFlags.None, new AsyncCallback(Receive), this);
+                        socket.BeginReceive(_tbu, 0, _tbu.Length, SocketFlags.None, new AsyncCallback(Receive), this);
                     }
 
                     catch (Exception e)
@@ -99,29 +99,29 @@ namespace MCForge.Remote
         static void Receive(IAsyncResult result)
         {
             Remote p = (Remote)result.AsyncState;
-            if (p.disconnected || p.socket == null)
+            if (p.upcast || p.socket == null)
                 return;
             try
             {
                 int length = p.socket.EndReceive(result);
-                if (length == 0) { p.Disconnect(); return; }
+                if (length == 0) { p.push(); return; }
 
-                byte[] b = new byte[p.buffer.Length + length];
-                Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
-                Buffer.BlockCopy(p.tempbuffer, 0, b, p.buffer.Length, length);
+                byte[] b = new byte[p._bu.Length + length];
+                Buffer.BlockCopy(p._bu, 0, b, 0, p._bu.Length);
+                Buffer.BlockCopy(p._tbu, 0, b, p._bu.Length, length);
 
-                p.buffer = p.HandleMessage(b);
-                p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
+                p._bu = p.HandleMessage(b);
+                p.socket.BeginReceive(p._tbu, 0, p._tbu.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
             catch (SocketException)
             {
-                p.Disconnect();
+                p.push();
             }
 
             catch (Exception e)
             {
-                p.Disconnect();
+                p.push();
                 Server.ErrorLog(e);
             }
         }
@@ -129,6 +129,7 @@ namespace MCForge.Remote
         #region HandleMessages
         byte[] HandleMessage(byte[] buffer)
         {
+            if (OnRemoteRecieveData != null) OnRemoteRecieveData(this, (short)buffer.Length);
             try
             {
                 int length = 0; byte msg = buffer[0];
@@ -164,7 +165,7 @@ namespace MCForge.Remote
                         case 14: HandleMobileSettingsChange(message); break;
                         case 15: HandleMobileCommand(message); break;
                         case 16: HandleMobileChangeGroup(message); break;
-                        case 25: HandleMobileDC(); break;
+                        case 25: pushF(); break;
 
                     }
                     if (buffer.Length > 0)
@@ -185,7 +186,7 @@ namespace MCForge.Remote
             short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
             byte id = message[2];
             string messages = Encoding.UTF8.GetString(message, 3, length);
-            messages = this.Decrypt(messages, key);
+            messages = this.Decrypt(messages, _gend);
             switch (id)
             {
                 case 1:
@@ -236,11 +237,11 @@ namespace MCForge.Remote
                     if (grewp != null) Group.GroupList.Remove(grewp); Group.saveGroups(Group.GroupList);
                     break;
                 case 6:
-                    string[] fuckThePolice = messages.Split('*');
-                    if (fuckThePolice.Length == 4)
+                    string[] stringers = messages.Split('*');
+                    if (stringers.Length == 4)
                     {
-                        Group newGroup = new Group(((LevelPermission)int.Parse(fuckThePolice[3])), int.Parse(fuckThePolice[2]), 0, 
-                            fuckThePolice[0], fuckThePolice[1][1], "NEWRANK" + int.Parse(fuckThePolice[3]).ToString() + ".txt");
+                        Group newGroup = new Group(((LevelPermission)int.Parse(stringers[3])), int.Parse(stringers[2]), 0, 
+                            stringers[0], stringers[1][1], "NEWRANK" + int.Parse(stringers[3]).ToString() + ".txt");
 
                         Group.GroupList.Add(newGroup);
                         Group.saveGroups(Group.GroupList);
@@ -256,7 +257,7 @@ namespace MCForge.Remote
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string mass = Encoding.UTF8.GetString(message, 2, length);
-            mass = Decrypt(mass, key);
+            mass = Decrypt(mass, _gend);
             string[] splitted = mass.Split('_');
             string ident = splitted[0];
             mass = mass.Replace(ident, "");
@@ -305,7 +306,7 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string mass = Encoding.UTF8.GetString(message, 2, length);
-            mass = Decrypt(mass, key);
+            mass = Decrypt(mass, _gend);
             try
             {
                 if (mass.StartsWith(KEY_SERVER_NAME))
@@ -498,7 +499,7 @@ namespace MCForge.Remote
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string m = Encoding.UTF8.GetString(message, 2, length);
-            m = this.Decrypt(m, key);
+            m = this.Decrypt(m, _gend);
             foreach (char ch in m)
             {
                 if (ch < 32 || ch >= 127)
@@ -510,9 +511,9 @@ namespace MCForge.Remote
             RemoteChat(m);
 
         }
-        private void HandleMobileDC()
+        private void pushF()
         {
-            Disconnect();
+            push();
         }
         private void HandleMobileLogin(byte[] message)
         {
@@ -522,9 +523,9 @@ namespace MCForge.Remote
             msg = this.Decrypt(msg, "FORGEREMOTETIVITY");
             byte[] bs = new byte[1];
             //Server.s.Log(msg);
-            if (msg.StartsWith(version))  //TODO: make a better checker
+            if (msg.StartsWith(_ver))  //TODO: make a better checker
             {
-                msg = msg.Replace(version + ": ", "");
+                msg = msg.Replace(_ver + ": ", "");
             }
             else
             {
@@ -550,8 +551,9 @@ namespace MCForge.Remote
             {
 
                 bs[0] = 1;
+                if (OnRemoteLogin != null) OnRemoteLogin(this);
                 SendData(11, bs);
-                sendHash(key);
+                _genH(_gend);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
                 //startUp(); // -- dont need because phone will request stuff when ready
                 LoggedIn = true;
@@ -569,8 +571,8 @@ namespace MCForge.Remote
 
         public void Kick()
         {
-            if (disconnected) return;
-            disconnected = true;
+            if (upcast) return;
+            upcast = true;
             if (LoggedIn)
             {
                 Player.GlobalMessage("%5[Remote] %fhas been kicked from the server!");
@@ -580,18 +582,28 @@ namespace MCForge.Remote
             try
             {
                 SendData(0x03);
+                push(true);
                 Server.s.Log("[Remote] has been kicked from the server!");
             }
             catch { }
+            if (OnRemoteKick != null) OnRemoteKick(this);
             this.Dispose();
         }
-        public void Disconnect()
+        public void push(bool val)
         {
-            if (disconnected) return;
-            disconnected = true;
-            if (LoggedIn) Player.GlobalMessage("%5[Remote] %fhas disconnected."); Server.s.Log("[Remote] has disconnected");
-            LoggedIn = false;
-            this.Dispose();
+            
+                if (upcast) return;
+                upcast = true;
+                if (LoggedIn) Player.GlobalMessage("%5[Remote] %f" + (val ? " has been kicked from server!" : "has disconnected.")); Server.s.Log("[Remote]" + (val ? " has been kicked from server!" : "has disconnected."));
+                LoggedIn = false;
+                if (OnRemoteDisconnect != null) OnRemoteDisconnect(this);
+                this.Dispose();
+            
+
+        }
+        public void push()
+        {
+            push(false);
         }
         public void Dispose()
         {
@@ -608,7 +620,7 @@ namespace MCForge.Remote
         public void SendData(int id) { SendData(id, new byte[0]); }
         public void SendData(int id, string p)
         {
-            p = Encrypt(p, key);
+            p = Encrypt(p, _gend);
             byte[] bytes = new byte[(p.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
@@ -620,7 +632,6 @@ namespace MCForge.Remote
             byte[] bytes = new byte[(p.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
-            // Server.s.Log(p);
             SendData(bytes);
         }
         public void SendData(int id, byte[] send)
@@ -636,12 +647,13 @@ namespace MCForge.Remote
             {
 
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                if (OnRemoteSendData != null) OnRemoteSendData(this, (short)(id + send.Length));
                 buffer = null;
             }
             catch (SocketException)
             {
                 buffer = null;
-                Disconnect();
+                push();
             }
         }
         public void SendData(byte[] send)
@@ -651,12 +663,12 @@ namespace MCForge.Remote
             {
 
                 socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
-                buffer = null;
+                _bu = null;
             }
             catch (SocketException)
             {
-                buffer = null;
-                Disconnect();
+                _bu = null;
+                push();
             }
 
         }
@@ -697,7 +709,7 @@ namespace MCForge.Remote
 
         }
 
-        private void sendHash(string key)
+        private void _genH(string key)
         {
             byte[] biscut = new byte[(key.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)key.Length).CopyTo(biscut, 0);
@@ -839,27 +851,28 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)2;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteOpLog != null) OnRemoteOpLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)2;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteOpLog != null) OnRemoteOpLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
+            
 
         }
         void s_OnAdmin(string message)
@@ -875,24 +888,24 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)4;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteAdminLog != null) OnRemoteAdminLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)4;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteAdminLog != null) OnRemoteAdminLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
@@ -915,24 +928,24 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)1;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteLog != null) OnRemoteLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
-                messaged = Encrypt(messaged, key);
+                messaged = Encrypt(messaged, _gend);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)1;
                 Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                if (OnRemoteLog != null) OnRemoteLog(this, p, messaged);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
