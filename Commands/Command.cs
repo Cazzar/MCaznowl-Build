@@ -279,6 +279,7 @@ namespace MCForge
             all.Add(new CmdUpdate());
             all.Add(new CmdView());
             all.Add(new CmdViewRanks());
+            all.Add(new CmdVIP());
             all.Add(new CmdVoice());
             all.Add(new CmdVote());
             all.Add(new CmdVoteKick());
