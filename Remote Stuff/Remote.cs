@@ -53,7 +53,7 @@ namespace MCForge.Remote
         private string generateRandChars()
         {
             Random r = new Random();
-            byte[] rs = new byte[31]; //{1,2,3,4,5,6,7,8,9,0, (byte)'a',(byte)'b',(byte)'c',(byte)'d',(byte)'e'};
+            byte[] rs = new byte[31];
             r.NextBytes(rs);
             return Encoding.UTF8.GetString(rs);
 
