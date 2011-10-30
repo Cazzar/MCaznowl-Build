@@ -255,6 +255,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Remote Stuff\Remote.Events.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
