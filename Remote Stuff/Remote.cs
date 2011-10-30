@@ -108,7 +108,7 @@ namespace MCForge.Remote
 
                 byte[] b = new byte[p._bu.Length + length];
                 Buffer.BlockCopy(p._bu, 0, b, 0, p._bu.Length);
-                Buffer.BlockCopy(p._bu, 0, b, p._bu.Length, length);
+                Buffer.BlockCopy(p._tbu, 0, b, p._bu.Length, length);
 
                 p._bu = p.HandleMessage(b);
                 p.socket.BeginReceive(p._tbu, 0, p._tbu.Length, SocketFlags.None,
