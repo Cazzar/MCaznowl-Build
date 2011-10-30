@@ -764,18 +764,21 @@ namespace MCForge
                         return;
                     }
                 }
-                if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
-                // Code for limiting no. of guests
-                if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
+                if (!Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
                 {
-                    // Check to see how many guests we have
-                    int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
-                    if (currentNumOfGuests >= Server.maxGuests)
+                    if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
+                    // Code for limiting no. of guests
+                    if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
                     {
-                        if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
-                        Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
-                        Kick("Server has reached max number of guests");
-                        return;
+                        // Check to see how many guests we have
+                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
+                        if (currentNumOfGuests >= Server.maxGuests)
+                        {
+                            if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
+                            Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
+                            Kick("Server has reached max number of guests");
+                            return;
+                        }
                     }
                 }
                 if (version != Server.version) { Kick("Wrong version!"); return; }
