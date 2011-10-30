@@ -83,6 +83,7 @@ namespace MCForge.Gui
             string adminchatperm = "";
             string verifyadminsperm = "";
             string grieferstonerank = "";
+            string afkkickrank = "";
             foreach (Group grp in Group.GroupList)
             {
                 cmbDefaultRank.Items.Add(grp.name);
@@ -92,6 +93,7 @@ namespace MCForge.Gui
                 lsCmbSetupRank.Items.Add(grp.name);
                 lsCmbControlRank.Items.Add(grp.name);
                 cmbGrieferStoneRank.Items.Add(grp.name);
+                cmbAFKKickPerm.Items.Add(grp.name);
                 if (grp.Permission == Server.opchatperm)
                 {
                     opchatperm = grp.name;
@@ -107,6 +109,10 @@ namespace MCForge.Gui
                 if (grp.Permission == Server.grieferStoneRank)
                 {
                     grieferstonerank = grp.name;
+                }
+                if (grp.Permission == Server.afkkickperm)
+                {
+                    afkkickrank = grp.name;
                 }
             }
             listPasswords.Items.Clear();
@@ -125,6 +131,7 @@ namespace MCForge.Gui
             cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
             cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
             cmbGrieferStoneRank.SelectedIndex = (grieferstonerank != "") ? cmbGrieferStoneRank.Items.IndexOf(grieferstonerank) : 1;
+            cmbAFKKickPerm.SelectedIndex = (afkkickrank != "") ? cmbAFKKickPerm.Items.IndexOf(afkkickrank) : 1;
 
             for (byte b = 1; b < 50; b++)
                 cmbGrieferStoneType.Items.Add(Block.Name(b));
@@ -575,6 +582,9 @@ namespace MCForge.Gui
                             case "zombie-name-while-infected":
                                 ZombieName.Text = value;
                                 break;
+                            case "guest-limit-notify":
+                                chkGuestLimitNotify.Checked = (value.ToLower() == "true");
+                                break;
                             case "ignore-ops":
                                 chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -745,6 +755,7 @@ namespace MCForge.Gui
             Server.deathcount = chkDeath.Checked;
             Server.afkminutes = int.Parse(txtafk.Text);
             Server.afkkick = int.Parse(txtAFKKick.Text);
+            Server.afkkickperm = (Group.GroupList.Find(grp => grp.name == cmbAFKKickPerm.SelectedItem.ToString()).Permission);
             Server.parseSmiley = chkSmile.Checked;
             Server.dollardollardollar = chk17Dollar.Checked;
             //Server.useWhitelist = ; //We don't have a setting for this?
@@ -765,6 +776,7 @@ namespace MCForge.Gui
             Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
             Server.noPillaring = chkNoPillaringDuringZombie.Checked;
             Server.ZombieName = ZombieName.Text;
+            Server.guestLimitNotify = chkGuestLimitNotify.Checked;
 
 
             Server.backupInterval = int.Parse(txtBackup.Text);
@@ -775,7 +787,7 @@ namespace MCForge.Gui
 
             Server.useMySQL = chkUseSQL.Checked;
             Server.MySQLHost = txtSQLHost.Text;
-            //Server.MySQLPort = ; // No setting for this?
+            Server.MySQLPort = txtSQLPort.Text;
             Server.MySQLUsername = txtSQLUsername.Text;
             Server.MySQLPassword = txtSQLPassword.Text;
             Server.MySQLDatabaseName = txtSQLDatabase.Text;
