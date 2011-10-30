@@ -91,21 +91,17 @@ namespace MCForge
         }
         public static bool Deleteban(string name)
         {
-            bool succes = false;
-            string end = "";
+            bool success = false;
+            StringBuilder sb = new StringBuilder();
             foreach (string line in File.ReadAllLines("text/bans.txt"))
             {
                 if (line.Split(' ')[1] != name)
-                {
-                    end = end + line + "\r\n";
-                }
-                if (line.Split(' ')[1] == name)
-                {
-                    succes = true;
-                }
+                    sb.Append(line + "\r\n");
+                else
+                    success = true;
             }
-            File.WriteAllText("text/bans.txt", end);
-            return succes;
+            File.WriteAllText("text/bans.txt", sb.ToString());
+            return success;
         }
     }
 }
