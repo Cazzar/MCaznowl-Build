@@ -126,7 +126,7 @@ namespace MCForge
 
                     beat.Prepare();
                     if (beat.GetType() == typeof(MinecraftBeat))    
-                        File.WriteAllText("text/heartbeaturl.txt", beat.URL + "?" + beat.Parameters);
+                        File.WriteAllText("text/heartbeaturl.txt", beat.URL + "?" + beat.Parameters, Encoding.UTF8);
 
                     // Set all the request settings
                     //Server.s.Log(beat.Parameters);

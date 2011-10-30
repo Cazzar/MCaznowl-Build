@@ -189,7 +189,7 @@ namespace MCForge
 
         // OmniBan
         public static OmniBan omniban;
-        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 10);
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 20);
 
         //Settings
         #region Server Settings
@@ -284,6 +284,7 @@ namespace MCForge
 
         public static int afkminutes = 10;
         public static int afkkick = 45;
+        public static LevelPermission afkkickperm = LevelPermission.AdvBuilder;
         //public static int RemotePort = 1337; // Never used
 
         public static string defaultRank = "guest";
@@ -307,6 +308,7 @@ namespace MCForge
         public static string server_owner = "Notch";
         public static bool WomDirect = false;
         public static bool UseSeasons = false;
+        public static bool guestLimitNotify = false;
 
         public static bool flipHead = false;
 

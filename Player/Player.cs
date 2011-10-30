@@ -772,7 +772,7 @@ namespace MCForge
                     int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
                     if (currentNumOfGuests >= Server.maxGuests)
                     {
-                        GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
+                        if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
                         Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
                         Kick("Server has reached max number of guests");
                         return;
