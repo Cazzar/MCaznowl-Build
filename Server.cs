@@ -107,7 +107,7 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "jordanneil23", "501st_commander", "fenderrock87", "edh649", "philipdenseje", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "bizarrecake", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster"});
+        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -160,29 +160,34 @@ namespace MCForge
         public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
         //Zombie
-        public static bool queLevel = false;
-        public static bool queZombie = false;
-        public static int PlayedRounds = 0;
-        public static bool infection = false;
-        public static string nextZombie = "";
-        public static string nextLevel = "";
-        public static int YesVotes = 0;
-        public static int NoVotes = 0;
-        public static bool voting = false;
-        public static bool votingforlevel = false;
-        public static int YesLevelVotes = 0;
-        public static int NoLevelVotes = 0;
-        public static string lastPlayerToInfect = "";
-        public static string lastLevelVote1 = "";
-        public static string lastLevelVote2 = "";
-        public static int infectCombo = 0;
-        public static int count = 0;
+        public static ZombieGame zombie;
         public static bool ZombieModeOn = false;
         public static bool startZombieModeOnStartup = false;
         public static bool noRespawn = true;
         public static bool noLevelSaving = true;
         public static bool noPillaring = true;
         public static string ZombieName = "";
+        public static int gameStatus = 0; //0 = not started, 1 = always on, 2 = one time, 3 = certain amount of rounds, 4 = stop game next round
+        public static bool queLevel = false;
+        public static bool queZombie = false;
+        public static string nextZombie = "";
+        public static string nextLevel = "";
+        public static bool zombieRound = false;
+        public static string lastPlayerToInfect = "";
+        public static int infectCombo = 0;
+        public static int YesVotes = 0;
+        public static int NoVotes = 0;
+        public static bool voting = false;
+        public static bool votingforlevel = false;
+        public static int Level1Vote = 0;
+        public static int Level2Vote = 0;
+        public static int Level3Vote = 0;
+        public static bool ChangeLevels = true;
+        public static bool UseLevelList = false;
+        public static bool ZombieOnlyServer = true;
+        public static List<String> LevelList = new List<String>();
+        public static string lastLevelVote1 = "";
+        public static string lastLevelVote2 = "";
 
         // Lava Survival
         public static LavaSurvival lava;
@@ -538,6 +543,8 @@ namespace MCForge
 
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
+
+            zombie = new ZombieGame();
 
             // OmniBan
             omniban = new OmniBan();
@@ -957,8 +964,8 @@ processThread.Start();
                 {
                     if (Server.lava.startOnStartup)
                         Server.lava.Start();
-                    else if (startZombieModeOnStartup)
-                        Command.all.Find("zombiegame").Use(null, String.Empty);
+                    if (Server.startZombieModeOnStartup)
+                        Server.zombie.StartGame(1, 0);
                     //This doesnt use the main map
                     if (Server.UseCTF)
                         ctf = new Auto_CTF();

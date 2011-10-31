@@ -222,14 +222,13 @@ namespace MCForge
                                     SetTile(x, y, z, 7);
                                 else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 0 || y == depth - 1)
                                     SetTile(x, y, z, Block.obsidian);
-                                else if (x == 1 || x == width - 2 || z == 1 || z == height -2 )
+                                else if (x == 1 || x == width - 2 || z == 1 || z == height - 2)
                                 {
                                     if (random2.Next(1000) == 7)
                                     {
-                                       // z = (z > 1 && z < height - 4) ? (ushort)random2.Next(z, z + 4) : z;
-                                        for (int i = 1; i < (height - y); ++i)
+                                        for (int i = 1; i < (depth - y); ++i)
                                         {
-                                            SetTile(x, (ushort)(y + i), z, Block.lava);
+                                            SetTile(x, (ushort)(depth - i), z, Block.lava);
                                         }
                                     }
                                 }
@@ -338,12 +337,7 @@ namespace MCForge
             if (blocks == null) return Block.Zero;
             //if (PosToInt(x, y, z) >= blocks.Length) { return null; }
             //Avoid internal overflow
-            if (x < 0) { return Block.Zero; }
-            if (x >= width) { return Block.Zero; }
-            if (y < 0) { return Block.Zero; }
-            if (y >= depth) { return Block.Zero; }
-            if (z < 0) { return Block.Zero; }
-            if (z >= height) { return Block.Zero; }
+            if (!InBound(x, y, z)) return Block.Zero;
             return blocks[PosToInt(x, y, z)];
         }
         public byte GetTile(int b)
@@ -355,8 +349,16 @@ namespace MCForge
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
             if (blocks == null) return;
-            blocks[x + width * z + width * height * y] = type;
+            if (!InBound(x, y, z)) return;
+            blocks[PosToInt(x, y, z)] = type;
             //blockchanges[x + width * z + width * height * y] = pName;
+        }
+
+        public bool InBound(ushort x, ushort y, ushort z)
+        {
+            if (x < 0 || y < 0 || z < 0 || x >= width || y >= depth || z >= height)
+                return false;
+            return true;
         }
 
         public static Level Find(string levelName)

@@ -36,13 +36,9 @@ namespace MCForge
             ushort z = (ushort)((0.5 + p.level.spawnz) * 32);
             if (!p.referee)
             {
-                if (Server.infection && !CmdZombieGame.infect.Contains(p))
+                if (!p.infected && Server.zombie.GameInProgess())
                 {
-                    CmdZombieGame.infect.Add(p);
-                    CmdZombieGame.players.Remove(p);
-                    p.color = c.red;
-                    Player.GlobalDie(p, false);
-                    Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
+                    Server.zombie.InfectPlayer(p);
                 }
             }
             unchecked

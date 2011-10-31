@@ -85,6 +85,7 @@ namespace MCForge
                     oldrank = line.Split(' ')[5];
                 }
             }
+            reason = reason.Replace("~", " ");
             timedate = timedate.Replace("-", " ");
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
@@ -102,6 +103,25 @@ namespace MCForge
             }
             File.WriteAllText("text/bans.txt", sb.ToString());
             return success;
+        }
+        public static string Editreason(string who, string reason)
+        {
+            if (Isbanned(who))
+            {
+                foreach (string line in File.ReadAllLines("text/bans.txt"))
+                {
+                    if (line.Split(' ')[1] == who)
+                    {
+                        line.Replace(line.Split(' ')[2], reason);
+                        return "";
+                    }
+                }
+                return "Couldn't find baninfo about this player!";
+            }
+            else
+            {
+                return "This player isn't banned!";
+            }
         }
     }
 }

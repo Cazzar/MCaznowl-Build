@@ -86,7 +86,6 @@ namespace MCForge {
                     Player.SendMessage(p, "Settings reloaded!  You may need to restart the server, however.");
                     break;
                 case "backup":
-                    goto case "backup all";
                 case "backup all":
                     // Backup Everything.
                     //   Create SQL statements for this.  The SQL will assume the settings for the current configuration are correct.
@@ -168,30 +167,16 @@ namespace MCForge {
             Server.voteKickVotesNeeded = 0;
 
             //Zombie
-            Server.queLevel = false;
-            Server.queZombie = false;
-            Server.PlayedRounds = 0;
-            Server.infection = false;
-            Server.nextZombie = "";
-            Server.nextLevel = "";
-            Server.YesVotes = 0;
-            Server.NoVotes = 0;
-            Server.voting = false;
-            Server.votingforlevel = false;
-            Server.YesLevelVotes = 0;
-            Server.NoLevelVotes = 0;
-            Server.lastPlayerToInfect = "";
-            Server.lastLevelVote1 = "";
-            Server.lastLevelVote2 = "";
-            Server.infectCombo = 0;
-            Server.count = 0;
             Server.ZombieModeOn = false;
             Server.startZombieModeOnStartup = false;
             Server.noRespawn = true;
             Server.noLevelSaving = true;
             Server.noPillaring = true;
             Server.ZombieName = "";
-
+            Server.ChangeLevels = false;
+            Server.LevelList.Clear();
+            Server.ZombieOnlyServer = false;
+            Server.UseLevelList = true;
             //Settings
             #region Server Settings
             Server.salt = "";

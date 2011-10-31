@@ -39,18 +39,19 @@ public static class Checktimer
         DateTime now = DateTime.Now;
         return ((60 - now.Second) * 1000 - now.Millisecond);
     }
-
+    /// <summary>
+    /// Put methods to make them execute every 60 seconds
+    /// </summary>
+    /// <param name="sender">For the timer</param>
+    /// <param name="e">For the timer</param>
     static void t_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
     {
         t.Interval = GetInterval();
         t.Start();
 
-        // Voids to be executed every minute:
+        // methods to be executed every 60 seconds!:
         TRExpiryCheck();
     }
-    /// <summary>
-    /// Put tasks to repeat in this void
-    /// </summary>
 	public static void TRExpiryCheck()
 	{
         foreach (Player p in Player.players)
