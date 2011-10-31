@@ -71,7 +71,8 @@ namespace MCForge.Gui
                 grpIRC.BackColor = Color.White;
             }
 
-            if (Server.useMySQL) {
+            if (Server.useMySQL)
+            {
                 grpSQL.BackColor = Color.White;
             }
             else
@@ -706,8 +707,10 @@ namespace MCForge.Gui
         {
             try
             {
-                using (StreamWriter w = new StreamWriter(File.Create(givenPath))) {
-                    if (givenPath.IndexOf("server") != -1) {
+                using (StreamWriter w = new StreamWriter(File.Create(givenPath)))
+                {
+                    if (givenPath.IndexOf("server") != -1)
+                    {
                         saveAll(); // saves everything to the server variables
                         SrvProperties.SaveProps(w); // When we have this, why define it again?
                     }
@@ -719,7 +722,8 @@ namespace MCForge.Gui
             }
         }
 
-        private void saveAll() {
+        private void saveAll()
+        {
 
             Server.name = txtName.Text;
             Server.motd = txtMOTD.Text;
@@ -733,7 +737,8 @@ namespace MCForge.Gui
             Server.autonotify = chkNotifyOnJoinLeave.Checked;
             Server.AutoLoad = chkAutoload.Checked;
             Server.autorestart = chkRestartTime.Checked;
-            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
+            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); }
+            catch { } // ignore bad values
             Server.restartOnError = chkRestart.Checked;
             Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main");
             Server.irc = chkIRC.Checked;
@@ -1244,84 +1249,63 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void ChkPort_Click(object sender, EventArgs e)
         {
-            ChkPortResult.Text = "Testing Port!";
+
+            ChkPortResult.Text = "Testing Port...";
             ChkPortResult.BackColor = SystemColors.Control;
+            string response;
 
-            int nPort = 0;
-            nPort = Int32.Parse(txtPort.Text);
+            Thread checkThread = new Thread(new ThreadStart(delegate
+             {
+                 int nPort = 0;
+                 nPort = Int32.Parse(txtPort.Text);
+                 try
+                 {
+                    
+                     using (WebClient WEB = new WebClient())
+                     {
+                         response = WEB.DownloadString("http://www.mcforge.net/ports.php?port=" + nPort);
+                     }
+                     if (response == "open")
+                     {
+                         setTextColorAndBack("Port Open!", Color.Lime);
+                         return;
+                     }
+                     else if (response == "closed")
+                     {
+                         setTextColorAndBack("Port Closed", Color.Red);
+                         return;
 
-            TcpListener listener = null;
-            try
-            {
-                // Try to open the port. If it fails, the port is probably open already.
-                try
-                {
-                    listener = new TcpListener(IPAddress.Any, (int)nPort);
-                    listener.Start();
-                }
-                catch
-                {
-                    // Port is probably open already by the server, so let's just continue :)
-                    listener = null;
-                }
+                     }
+                     else
+                     {
+                         setTextColorAndBack("An Error has occured", Color.Yellow);
+                         return;
+                     }
+                 }
+                 catch
+                 {
+                     setTextColorAndBack("An Error has occured", Color.Yellow);
+                     return;
+                 }
 
-
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://headdetect.tk/port.php?port=" + nPort);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    using (Stream stream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-
-
-
-                            string line;
-                            while ((line = reader.ReadLine()) != null)
-                            {
-                                if (line == "") { continue; }
-
-                                if (line == "open")
-                                {
-                                    ChkPortResult.Text = "Port Open!";
-                                    ChkPortResult.BackColor = Color.Lime;
-                                    MessageBox.Show("Port " + nPort + " is open!", "Port check successful");
-                                    return;
-                                }
-
-                                MessageBox.Show("Port " + nPort + " seems to be closed. You may need to set up port forwarding.", "Port check failed");
-                                ChkPortResult.Text = "Port Not Open";
-                                ChkPortResult.BackColor = Color.Red;
-
-
-                            }
-
-                        }
-                    }
-                }
-                else { MessageBox.Show("Could Not connect to site, try again later."); }
-
-
-            }
-            catch (Exception ex)
-            {
-                ChkPortResult.Text = "Testing Port Failed!";
-                ChkPortResult.BackColor = Color.Red;
-                MessageBox.Show("Could not start listening on port " + nPort + ". Another program may be using the port.", "Port check failed");
-                MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.StackTrace);
-            }
-            finally
-            {
-                if (listener != null)
-                {
-                    listener.Stop();
-                }
-            }
-
+             }));
+            checkThread.Start();
         }
+        delegate void SetTextColorCallback(string text, Color color);
+        private void setTextColorAndBack(string text, Color color)
+        {
+            if (this.ChkPortResult.InvokeRequired)
+            {
+                SetTextColorCallback d = new SetTextColorCallback(setTextColorAndBack);
+                this.Invoke(d, new object[] { text, color});
+            }
+            else
+            {
+                this.ChkPortResult.Text = text;
+                this.ChkPortResult.BackColor = color;
+            }
+        }
+
 
         private void CrtCustCmd_Click(object sender, EventArgs e)
         {
@@ -1928,17 +1912,19 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        try {
+                        try
+                        {
                             name = file.Name.Replace(".lvl", "");
                             if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
                                 lsMapNoUse.Items.Add(name);
-                        } catch (NullReferenceException) { }
+                        }
+                        catch (NullReferenceException) { }
                     }
                     try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
                     catch { }
                 }
             }
-            catch(ObjectDisposedException) { }  //Y U BE ANNOYING 
+            catch (ObjectDisposedException) { }  //Y U BE ANNOYING 
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
@@ -2060,7 +2046,8 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
-        private void numCountReset_ValueChanged(object sender, EventArgs e) {
+        private void numCountReset_ValueChanged(object sender, EventArgs e)
+        {
 
         }
 
