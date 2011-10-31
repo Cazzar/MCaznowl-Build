@@ -222,14 +222,13 @@ namespace MCForge
                                     SetTile(x, y, z, 7);
                                 else if (x == 0 || x == width - 1 || z == 0 || z == height - 1 || y == 0 || y == depth - 1)
                                     SetTile(x, y, z, Block.obsidian);
-                                else if (x == 1 || x == width - 2 || z == 1 || z == height -2 )
+                                else if (x == 1 || x == width - 2 || z == 1 || z == height - 2)
                                 {
                                     if (random2.Next(1000) == 7)
                                     {
-                                       // z = (z > 1 && z < height - 4) ? (ushort)random2.Next(z, z + 4) : z;
-                                        for (int i = 1; i < (height - y); ++i)
+                                        for (int i = 1; i < (depth - y); ++i)
                                         {
-                                            SetTile(x, (ushort)(y + i), z, Block.lava);
+                                            SetTile(x, (ushort)(depth - i), z, Block.lava);
                                         }
                                     }
                                 }
