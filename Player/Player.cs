@@ -176,7 +176,6 @@ namespace MCForge
 
         //Zombie
         public bool referee = false;
-        public string Original = "";
         public int blockCount = 50;
         public bool voted = false;
         public int blocksStacked = 0;
@@ -187,9 +186,8 @@ namespace MCForge
         public bool infected = false;
         public bool aka = false;
         public bool flipHead = true;
-        public int playersInfected = 1;
+        public int playersInfected = 0;
         public int NoClipcount = 0;
-
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
@@ -453,7 +451,7 @@ namespace MCForge
 
                         if (afkCount > Server.afkminutes * 30)
                         {
-                        	if (this != null && !this.name.Equals(""))
+                            if (name.Equals(""))
                         	{
                             		Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
                                     if (AFK != null)
@@ -766,6 +764,7 @@ namespace MCForge
                 }
                 if (!Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
                 {
+                    // Check to see how many guests we have
                     if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
                     // Code for limiting no. of guests
                     if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
@@ -1056,16 +1055,7 @@ namespace MCForge
             if (Server.notifyOnJoinLeave)
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
-            }
-            this.Original = this.name;
-            if (Server.infection == true)
-            {
-                CmdZombieGame.infect.Add(this);
-                CmdZombieGame.players.Remove(this);
-                this.color = c.red;
-                Player.GlobalSpawn(this, this.pos[0], this.pos[1], this.pos[2], this.rot[0], this.rot[1], false);
-            }
-            
+            }           
         }
 
         public void SetPrefix()
@@ -1109,7 +1099,7 @@ namespace MCForge
                         }
                         if (blocksStacked == 4)
                         {
-                            Command.all.Find("kick").Use(null, Original + " No pillaring allowed!");
+                            Command.all.Find("kick").Use(null, name + " No pillaring allowed!");
                         }
                     }
                 }
@@ -3055,8 +3045,9 @@ namespace MCForge
                         from.voted = true;
                         return;
                     }
-                    else
+                    else if (!from.voice)
                     {
+                        from.SendMessage("Chat moderation is on while voting is on!");
                         return;
                     }
                 }
@@ -3069,8 +3060,9 @@ namespace MCForge
                         from.voted = true;
                         return;
                     }
-                    else
+                    else if (!from.voice)
                     {
+                        from.SendMessage("Chat moderation is on while voting is on!");
                         return;
                     }
                 }
@@ -3082,13 +3074,14 @@ namespace MCForge
                 {
                     if (!from.voted)
                     {
-                        Server.YesLevelVotes++;
+                        Server.Level1Vote++;
                         SendMessage(from, c.red + "Thanks For Voting!");
                         from.voted = true;
                         return;
                     }
-                    else
+                    else if (!from.voice)
                     {
+                        from.SendMessage("Chat moderation is on while voting is on!");
                         return;
                     }
                 }
@@ -3096,15 +3089,36 @@ namespace MCForge
                 {
                     if (!from.voted)
                     {
-                        Server.NoLevelVotes++;
+                        Server.Level2Vote++;
                         SendMessage(from, c.red + "Thanks For Voting!");
                         from.voted = true;
                         return;
                     }
-                    else
+                    else if (!from.voice)
                     {
+                        from.SendMessage("Chat moderation is on while voting is on!");
                         return;
                     }
+                }
+                else if (message.ToLower() == "3" || message.ToLower() == "random" || message.ToLower() == "rand")
+                {
+                    if (!from.voted)
+                    {
+                        Server.Level3Vote++;
+                        SendMessage(from, c.red + "Thanks For Voting!");
+                        from.voted = true;
+                        return;
+                    }
+                    else if (!from.voice)
+                    {
+                        from.SendMessage("Chat moderation is on while voting is on!");
+                        return;
+                    }
+                }
+                else if (!from.voice)
+                {
+                    from.SendMessage("Chat moderation is on while voting is on!");
+                    return;
                 }
             }
 
@@ -3640,18 +3654,6 @@ namespace MCForge
                 disconnected = true;
                 return;
             }
-            Server.count = 1;
-
-            if (CmdZombieGame.players.Contains(this))
-            {
-                this.color = this.group.color;
-                CmdZombieGame.players.Remove(this);
-            }
-            else if (CmdZombieGame.infect.Contains(this))
-            {
-                this.color = this.group.color;
-                CmdZombieGame.infect.Remove(this);
-            }
 
             try
             {
@@ -3796,22 +3798,6 @@ namespace MCForge
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
-                }
-
-                if (Server.infection == true)
-                {
-                    int infectCount = 0;
-                    CmdZombieGame.infect.ForEach(delegate(Player player)
-                    {
-                        infectCount = infectCount + 1;
-                    });
-
-                    if (infectCount <= 1 && Server.count == 1)
-                    {
-                        CmdZombieGame.InfectedPlayerDC();
-                    }
-                    Server.count++;
-                    return;
                 }
 
             }

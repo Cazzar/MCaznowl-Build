@@ -299,6 +299,7 @@ namespace MCForge
 			all.Add(new CmdXmute());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
+            all.Add(new CmdZTime());
             all.Add(new CmdZombieGame());
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());

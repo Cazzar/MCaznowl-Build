@@ -19,6 +19,8 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MCForge
 {
@@ -61,7 +63,6 @@ namespace MCForge
                             sb.Append((char)oneChar[0]);
                         }
                     }
-
                     Server.salt = sb.ToString();
                 }
             }
@@ -494,6 +495,30 @@ namespace MCForge
                                 if (value != "")
                                     Server.ZombieName = value;
                                 break;
+                            case "enable-changing-levels":
+                                try { Server.ChangeLevels = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "zombie-survival-only-server":
+                                try { Server.ZombieOnlyServer = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "use-level-list":
+                                try { Server.UseLevelList = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "zombie-level-list":
+                                if (value != "")
+                                {
+
+                                    string input = value.Replace(" ", "").ToString();
+                                        int itndex = input.IndexOf("#");
+                                    if (itndex > 0)
+                                        input = input.Substring(0, itndex);
+
+                                    Server.LevelList = input.Split(',').ToList<string>();
+                                }
+                                break;
                             case "guest-limit-notify":
                                 try { Server.guestLimitNotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -667,6 +692,10 @@ namespace MCForge
             w.WriteLine("#   no-level-saving-during-zombie\t=\tDisables level saving while Zombie Survival is activated.");
             w.WriteLine("#   no-pillaring-during-zombie\t=\tDisables pillaring while Zombie Survival is activated.");
             w.WriteLine("#   zombie-name-while-infected\t=\tSets the zombies name while actived if there is a value.");
+            w.WriteLine("#   enable-changing-levels\t=\tAfter a Zombie Survival round has finished, will change the level it is running on.");
+            w.WriteLine("#   zombie-survival-only-server\t=\tiEXPERIMENTAL! Makes the server only for Zombie Survival (etc. changes main level)");
+            w.WriteLine("#   use-level-list\t=\tOnly gets levels for changing levels in Zombie Survival from zombie-level-list.");
+            w.WriteLine("#   zombie-level-list\t=\tList of levels for changing levels (Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine();
             w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
@@ -763,6 +792,11 @@ namespace MCForge
             w.WriteLine("no-level-saving-during-zombie = " + Server.noLevelSaving);
             w.WriteLine("no-pillaring-during-zombie = " + Server.noPillaring);
             w.WriteLine("zombie-name-while-infected = " + Server.ZombieName);
+            w.WriteLine("enable-changing-levels = " + Server.ChangeLevels);
+            w.WriteLine("zombie-survival-only-server = " + Server.ZombieOnlyServer);
+            w.WriteLine("use-level-list = " + Server.UseLevelList);
+            string dogCsv = string.Join(",", Server.LevelList.ToArray());
+            w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
             w.WriteLine();
             w.WriteLine("# backup options");

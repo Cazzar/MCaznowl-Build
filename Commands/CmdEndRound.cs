@@ -15,9 +15,9 @@ namespace MCForge
         {
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
-            if (Server.infection)
+            if (Server.zombie.GameInProgess())
             {
-                CmdZombieGame.IEndRound();
+                Server.zombie.HandOutRewards();
             }
         }
         public override void Help(Player p)

@@ -49,7 +49,7 @@ namespace MCForge
                 if (p.muted)
                 {
                     p.muted = false;
-                    Player.SendMessage(p, "you &bun-muted" + Server.DefaultColor + " yourself!");
+                    Player.SendMessage(p, "You &bun-muted" + Server.DefaultColor + " yourself!");
                 }
                 else
                 {

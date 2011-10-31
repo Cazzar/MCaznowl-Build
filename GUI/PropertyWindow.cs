@@ -71,8 +71,7 @@ namespace MCForge.Gui
                 grpIRC.BackColor = Color.White;
             }
 
-            if (Server.useMySQL)
-            {
+            if (Server.useMySQL) {
                 grpSQL.BackColor = Color.White;
             }
             else
@@ -583,6 +582,25 @@ namespace MCForge.Gui
                             case "zombie-name-while-infected":
                                 ZombieName.Text = value;
                                 break;
+                            case "enable-changing-levels":
+                                chkEnableChangingLevels.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "zombie-survival-only-server":
+                                chkZombieOnlyServer.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "use-level-list":
+                                chkUseLevelList.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "zombie-level-list":
+                                if (value != "")
+                                {
+                                    string input = value.Replace(" ", "").ToString();
+                                        int itndex = input.IndexOf("#");
+                                    if (itndex > 0)
+                                        input = input.Substring(0, itndex);
+                                    levelList.Text = input;
+                                }
+                                break;
                             case "guest-limit-notify":
                                 chkGuestLimitNotify.Checked = (value.ToLower() == "true");
                                 break;
@@ -707,10 +725,8 @@ namespace MCForge.Gui
         {
             try
             {
-                using (StreamWriter w = new StreamWriter(File.Create(givenPath)))
-                {
-                    if (givenPath.IndexOf("server") != -1)
-                    {
+                using (StreamWriter w = new StreamWriter(File.Create(givenPath))) {
+                    if (givenPath.IndexOf("server") != -1) {
                         saveAll(); // saves everything to the server variables
                         SrvProperties.SaveProps(w); // When we have this, why define it again?
                     }
@@ -722,13 +738,12 @@ namespace MCForge.Gui
             }
         }
 
-        private void saveAll()
-        {
+        private void saveAll() {
 
             Server.name = txtName.Text;
             Server.motd = txtMOTD.Text;
             Server.port = int.Parse(txtPort.Text);
-            Server.verify = chkVerify.Checked;
+            Server.verify = chkEnableVerification.Checked;
             Server.pub = chkPublic.Checked;
             Server.players = (byte)numPlayers.Value;
             Server.maxGuests = (byte)numGuests.Value;
@@ -737,8 +752,7 @@ namespace MCForge.Gui
             Server.autonotify = chkNotifyOnJoinLeave.Checked;
             Server.AutoLoad = chkAutoload.Checked;
             Server.autorestart = chkRestartTime.Checked;
-            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); }
-            catch { } // ignore bad values
+            try { Server.restarttime = DateTime.Parse(txtRestartTime.Text); } catch {} // ignore bad values
             Server.restartOnError = chkRestart.Checked;
             Server.level = (Player.ValidName(txtMain.Text) ? txtMain.Text : "main");
             Server.irc = chkIRC.Checked;
@@ -760,7 +774,6 @@ namespace MCForge.Gui
             Server.deathcount = chkDeath.Checked;
             Server.afkminutes = int.Parse(txtafk.Text);
             Server.afkkick = int.Parse(txtAFKKick.Text);
-            Server.afkkickperm = (Group.GroupList.Find(grp => grp.name == cmbAFKKickPerm.SelectedItem.ToString()).Permission);
             Server.parseSmiley = chkSmile.Checked;
             Server.dollardollardollar = chk17Dollar.Checked;
             //Server.useWhitelist = ; //We don't have a setting for this?
@@ -781,6 +794,17 @@ namespace MCForge.Gui
             Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
             Server.noPillaring = chkNoPillaringDuringZombie.Checked;
             Server.ZombieName = ZombieName.Text;
+            Server.ChangeLevels = chkEnableChangingLevels.Checked;
+
+            string input = levelList.Text.Replace(" ", "").ToString();
+            int itndex = input.IndexOf("#");
+            if (itndex > 0)
+                input = input.Substring(0, itndex);
+
+            Server.LevelList = input.Split(',').ToList<string>();
+
+            Server.ZombieOnlyServer = chkZombieOnlyServer.Checked;
+            Server.UseLevelList = chkUseLevelList.Checked;
             Server.guestLimitNotify = chkGuestLimitNotify.Checked;
 
 
@@ -826,7 +850,7 @@ namespace MCForge.Gui
             Server.hackrank_kick_time = int.Parse(hackrank_kick_time.Text);
 
 
-            Server.verifyadmins = chkEnableVerification.Checked;
+            Server.verifyadmins = chkVerify.Checked;
             Server.verifyadminsrank = (Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission);
 
             Server.checkspam = chkSpamControl.Checked;
@@ -1255,40 +1279,40 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             string response;
 
             Thread checkThread = new Thread(new ThreadStart(delegate
-             {
-                 int nPort = 0;
-                 nPort = Int32.Parse(txtPort.Text);
-                 try
-                 {
-                    
-                     using (WebClient WEB = new WebClient())
-                     {
-                         response = WEB.DownloadString("http://www.mcforge.net/ports.php?port=" + nPort);
-                     }
-                     if (response == "open")
-                     {
-                         setTextColorAndBack("Port Open!", Color.Lime);
-                         return;
-                     }
-                     else if (response == "closed")
-                     {
-                         setTextColorAndBack("Port Closed", Color.Red);
-                         return;
+            {
+                int nPort = 0;
+                nPort = Int32.Parse(txtPort.Text);
+                try
+                {
 
-                     }
-                     else
-                     {
-                         setTextColorAndBack("An Error has occured", Color.Yellow);
-                         return;
-                     }
-                 }
-                 catch
-                 {
-                     setTextColorAndBack("An Error has occured", Color.Yellow);
-                     return;
-                 }
+                    using (WebClient WEB = new WebClient())
+                    {
+                        response = WEB.DownloadString("http://www.mcforge.net/ports.php?port=" + nPort);
+                    }
+                    if (response == "open")
+                    {
+                        setTextColorAndBack("Port Open!", Color.Lime);
+                        return;
+                    }
+                    else if (response == "closed")
+                    {
+                        setTextColorAndBack("Port Closed", Color.Red);
+                        return;
 
-             }));
+                    }
+                    else
+                    {
+                        setTextColorAndBack("An Error has occured", Color.Yellow);
+                        return;
+                    }
+                }
+                catch
+                {
+                    setTextColorAndBack("An Error has occured", Color.Yellow);
+                    return;
+                }
+
+            }));
             checkThread.Start();
         }
         delegate void SetTextColorCallback(string text, Color color);
@@ -1297,7 +1321,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             if (this.ChkPortResult.InvokeRequired)
             {
                 SetTextColorCallback d = new SetTextColorCallback(setTextColorAndBack);
-                this.Invoke(d, new object[] { text, color});
+                this.Invoke(d, new object[] { text, color });
             }
             else
             {
@@ -1912,19 +1936,17 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     FileInfo[] fi = new DirectoryInfo("levels/").GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        try
-                        {
+                        try {
                             name = file.Name.Replace(".lvl", "");
                             if (name.ToLower() != Server.mainLevel.name && !Server.lava.HasMap(name))
                                 lsMapNoUse.Items.Add(name);
-                        }
-                        catch (NullReferenceException) { }
+                        } catch (NullReferenceException) { }
                     }
                     try { if (noUseIndex > -1) lsMapNoUse.SelectedIndex = noUseIndex; }
                     catch { }
                 }
             }
-            catch (ObjectDisposedException) { }  //Y U BE ANNOYING 
+            catch(ObjectDisposedException) { }  //Y U BE ANNOYING 
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
@@ -2046,8 +2068,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
-        private void numCountReset_ValueChanged(object sender, EventArgs e)
-        {
+        private void numCountReset_ValueChanged(object sender, EventArgs e) {
 
         }
 
