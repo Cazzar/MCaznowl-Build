@@ -26,6 +26,7 @@ namespace MCForge
 {
     public class ForgeBot
     {
+        public static readonly string ColorSignal = "\x03";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
@@ -65,10 +66,28 @@ namespace MCForge
                     banCmd.Add(line);
             }
         }
-        public void Say(string message, bool opchat = false)
+        public void Say(string message, bool opchat = false, bool color = true)
         {
             if (Server.irc && IsConnected())
-                connection.Sender.PublicMessage(opchat ? opchannel : channel, message);
+            {
+                StringBuilder sb = new StringBuilder(message);
+
+                if (color)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        sb.Replace("%" + i, ColorSignal + c.MCtoIRC("&" + i));
+                        sb.Replace("&" + i, ColorSignal + c.MCtoIRC("&" + i));
+                    }
+                    for (char ch = 'a'; ch <= 'f'; ch++)
+                    {
+                        sb.Replace("%" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                        sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                    }
+                }
+
+                connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
+            }
         }
         public void Pm(string user, string message)
         {
@@ -146,19 +165,24 @@ namespace MCForge
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
 
-		message = message.MCCharFilter();
-		if (Player.MessageHasBadColorCodes(null, message))
-			return;
-		if (channel == opchannel)
-		{
-			Server.s.Log(String.Format("(OPs): [IRC] {0}: {1}", user.Nick, message));
-			Player.GlobalMessageOps(String.Format("To Ops &f-{0}[IRC] {1}&f- {2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
-		}
-		else
-		{
-			Server.s.Log(String.Format("[IRC] {0}: {1}", user.Nick, message));
-			Player.GlobalMessage(String.Format("{0}[IRC] {1}: &f{2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
-		}
+            for (byte i = 10; i < 16; i++)
+                message = message.Replace(ColorSignal + i, c.IRCtoMC(i));
+            for (byte i = 0; i < 10; i++)
+                message = message.Replace(ColorSignal + i, c.IRCtoMC(i));
+
+            message = message.MCCharFilter();
+            if (Player.MessageHasBadColorCodes(null, message))
+                return;
+		    if (channel == opchannel)
+		    {
+			    Server.s.Log(String.Format("(OPs): [IRC] {0}: {1}", user.Nick, message));
+			    Player.GlobalMessageOps(String.Format("To Ops &f-{0}[IRC] {1}&f- {2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+		    }
+		    else
+		    {
+			    Server.s.Log(String.Format("[IRC] {0}: {1}", user.Nick, message));
+			    Player.GlobalMessage(String.Format("{0}[IRC] {1}: &f{2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+		    }
         }
 
         void Listener_OnRegistered()
@@ -215,7 +239,7 @@ namespace MCForge
         void Player_PlayerChat(Player p, string message)
         {
             if (Server.irc && IsConnected())
-                connection.Sender.PublicMessage(p.opchat ? opchannel : channel, p.name + ": " + message);
+                Say(p.color + p.name + "&f: " + message, p.opchat);
         }
         public void Connect()
         {
