@@ -357,7 +357,9 @@ namespace MCForge
 
         public bool InBound(ushort x, ushort y, ushort z)
         {
-            return (x < 0 || y < 0 || z < 0 || x >= width || y >= depth || z >= height);
+            if (x < 0 || y < 0 || z < 0 || x >= width || y >= depth || z >= height)
+                return false;
+            return true;
         }
 
         public static Level Find(string levelName)
