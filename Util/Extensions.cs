@@ -131,7 +131,7 @@ namespace MCForge
             StringBuilder sb = new StringBuilder();
             foreach (char b in Encoding.ASCII.GetBytes(str))
             {
-                if (b != 96 && b >= 32 && b <= 125)
+                if (b != 38 && b != 96 && b >= 32 && b <= 125)
                     sb.Append(b);
                 else
                     sb.Append("*");

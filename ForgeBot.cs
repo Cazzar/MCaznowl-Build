@@ -85,7 +85,7 @@ namespace MCForge
                         sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
                     }
                 }
-
+                
                 connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
             }
         }
@@ -166,9 +166,9 @@ namespace MCForge
             // Allowed chars are any ASCII char between 20h/32 and 7Ah/122 inclusive, except for 26h/38 (&) and 60h/96 (`)
 
             for (byte i = 10; i < 16; i++)
-                message = message.Replace(ColorSignal + i, c.IRCtoMC(i));
+                message = message.Replace(ColorSignal + i, c.IRCtoMC(i).Replace('&', '%'));
             for (byte i = 0; i < 10; i++)
-                message = message.Replace(ColorSignal + i, c.IRCtoMC(i));
+                message = message.Replace(ColorSignal + i, c.IRCtoMC(i).Replace('&', '%'));
 
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
@@ -239,7 +239,7 @@ namespace MCForge
         void Player_PlayerChat(Player p, string message)
         {
             if (Server.irc && IsConnected())
-                Say(p.color + p.name + "&f: " + message, p.opchat);
+                Say(p.color + p.prefix + p.name + ": &f" + message, p.opchat);
         }
         public void Connect()
         {

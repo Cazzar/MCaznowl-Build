@@ -2200,6 +2200,10 @@ namespace MCForge
                     }
                     Server.s.Log("<" + name + "> " + newtext);
                     //IRCBot.Say("<" + name + "> " + newtext);
+                    if (OnChat != null)
+                        OnChat(this, text);
+                    if (PlayerChat != null)
+                        PlayerChat(this, text);
                     return;
                 }
                 Server.s.Log("<" + name + "> " + text);
