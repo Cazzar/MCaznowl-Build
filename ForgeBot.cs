@@ -61,9 +61,23 @@ namespace MCForge
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
 
                 // Load banned commands list
-                if (!File.Exists("text/ircbancmd.txt")) File.Create("text/ircbancmd.txt").Dispose();
-                foreach (string line in File.ReadAllLines("text/ircbancmd.txt"))
-                    banCmd.Add(line);
+                if (File.Exists("text/ircbancmd.txt")) // Backwards compatibility
+                {
+                    using (StreamWriter sw = File.CreateText("text/irccmdblacklist.txt"))
+                    {
+                        sw.WriteLine("#Here you can put commands that cannot be used from the IRC bot.");
+                        sw.WriteLine("#Lines starting with \"#\" are ignored.");
+                        foreach (string line in File.ReadAllLines("text/ircbancmd.txt"))
+                            sw.WriteLine(line);
+                    }
+                    File.Delete("text/ircbancmd.txt");
+                }
+                else
+                {
+                    if (!File.Exists("text/irccmdblacklist.txt")) File.WriteAllLines("text/irccmdblacklist.txt", new String[] { "#Here you can put commands that cannot be used from the IRC bot.", "#Lines starting with \"#\" are ignored." });
+                    foreach (string line in File.ReadAllLines("text/irccmdblacklist.txt"))
+                        if (line[0] != '#') banCmd.Add(line);
+                }
             }
         }
         public void Say(string message, bool opchat = false, bool color = true)
