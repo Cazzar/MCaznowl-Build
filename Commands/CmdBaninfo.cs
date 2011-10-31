@@ -43,8 +43,7 @@ namespace MCForge
                     // usefull to know :-)
                     Player.SendMessage(p, "&9User: &e" + message);
                     Player.SendMessage(p, "&9Banned by: &e" + data[0]);
-                    //Player.SendMessage(p, "&9Reason: &e" + data[1]);
-                    //uncomment when  reason is done in /ban
+                    Player.SendMessage(p, "&9Reason: &e" + data[1]);
                     Player.SendMessage(p, "&9Date and time: &e" + data[2]);
                     Player.SendMessage(p, "&9Old rank: &e" + data[3]);
                     string stealth; if (data[4] == "true") stealth = "&aYes"; else stealth = "&cNo";

@@ -86,8 +86,10 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
+    <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Commands\CmdServer.cs" />
@@ -256,7 +258,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Remote Stuff\Remote.Events.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />
@@ -472,6 +473,7 @@
     <Compile Include="Remote Stuff\Remote.Handler.cs" />
     <Compile Include="Remote Stuff\RemoteProperties.cs" />
     <Compile Include="Remote Stuff\RemoteServer.cs" />
+    <Compile Include="ZombieGame.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
@@ -527,6 +529,7 @@
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="Remote Stuff\Remote.Events.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Release\Updater.exe" />

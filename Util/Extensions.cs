@@ -136,7 +136,7 @@ namespace MCForge
                 else
                     sb.Append("*");
             }
-            return sb.ToString().Trim();
+            return sb.ToString();
         }
     }
 }

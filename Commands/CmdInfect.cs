@@ -15,7 +15,7 @@ namespace MCForge
         {
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
-            if (CmdZombieGame.infect.Contains(who))
+            if (who.infected)
             {
                 p.SendMessage("Player cannot be infected!");
             }
@@ -23,14 +23,10 @@ namespace MCForge
             {
                 if (!who.referee)
                 {
-                    if (Server.infection)
+                    if (Server.zombie.GameInProgess())
                     {
-                        CmdZombieGame.infect.Add(who);
-                        CmdZombieGame.players.Remove(who);
-                        who.color = c.red;
+                        Server.zombie.InfectPlayer(who);
                         Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " just got Infected!");
-                        Player.GlobalDie(who, false);
-                        Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
                     }
                 }
             }

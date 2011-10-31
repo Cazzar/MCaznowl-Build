@@ -52,6 +52,7 @@ namespace MCForge
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
             all.Add(new CmdBan());
+            all.Add(new CmdBanEdit());
             all.Add(new CmdBaninfo());
             all.Add(new CmdBanip());
             all.Add(new CmdBanlist());
@@ -299,6 +300,7 @@ namespace MCForge
 			all.Add(new CmdXmute());
             all.Add(new CmdXspawn());
             all.Add(new CmdXundo());
+            all.Add(new CmdZTime());
             all.Add(new CmdZombieGame());
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());

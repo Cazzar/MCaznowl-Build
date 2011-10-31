@@ -2,8 +2,7 @@ v5.3.0.0
 - Added /pumpkin
 - Updated developer list.
 - Added tempranks.
-- Added /baninfo - shows info about someone's ban.
-- Fixed /ban and /unban to work with /baninfo.
+- More ban options and info.
 - Fixed warn help menu.
 - Fixed a massive memory leak with level unloading.
 - Fixed leaving a channel name black in the IRC settings causing a crash.
@@ -13,8 +12,15 @@ v5.3.0.0
 - Fixed the program crashing after every update
 - Fixed /xban not working at all if the player is offline.
 - Fixed a bug in /ban that allowed a player to ban someone ranked higher than them if the player being banned was below rank permission 80. 
+- Fixed Port Checker.
+- Fixed fireworks leaving blocks behind
+- Fixed an error where /rankmsg wouldn't send the whole message, only the first word.
+- Added ban reasons.
 - Added a new updater (configure it in Properties)
 - Added option for WoM Direct heartbeat.
+- Added suppot for SQLite, which means MySQL isn't required anymore. You can still use MySQL.
+- Added new help category "games"
+- Added warps (/warp)
 - Added the "Notchian" tree generator, use /tree notch.
 - Added command blocks, prepend a / to your /mb message to make it a command block. Example: /mb /cuboid air random
 - Added a Lava Survival map browser, so you can download maps from within the software.
@@ -23,6 +29,7 @@ v5.3.0.0
 - Added new, better CTF and removed the old one. It's pretty much ready to go right out-of-the-box, just type /ctf.
 - Added a lives system to Lava Survival, so players actually have to worry about killer lava/water. You can set the number of lives in the properties.
 - Added Global Chat to the chat tab in the GUI.
+- Added color codes to IRC.
 - Added blocks:
 	- fast_hot_lava - Like lava_fast, but it kills you.
 	- All colours are now represented in doors (door_orange, door_cyan, door_pink, etc.)
@@ -41,13 +48,9 @@ v5.3.0.0
 - Made it so that /inv will send a message to the user if the target (or themselves) has had invincible mode enabled/disabled.
 - Made it so you can use /inv on another person from console. 
 - Disabled color codes in Global Chat, it's just too risky with the exploits.
-- Added Suppot for SQLite3
-- Added new help category, 'game'
-- Added warps (/warp)
-- Fixed fireworks leaving blocks behind
-- Fixed an error where /rankmsg wouldn't send the whole message, only the first word.
 - Waypoints are now saved
 - Hard-Coded command permissions are now editable (GUI and a seperate .properties file)
+- Revamped Zombie Survival Mode, more friendly to servers that want to run it on certain levels, freebuild + zombie servers, etc.
 
 v5.2.0.0
 - Fixed the server-breaking freeze bug that happened when a player lagged (NOT logged) out.

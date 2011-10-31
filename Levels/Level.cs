@@ -337,12 +337,7 @@ namespace MCForge
             if (blocks == null) return Block.Zero;
             //if (PosToInt(x, y, z) >= blocks.Length) { return null; }
             //Avoid internal overflow
-            if (x < 0) { return Block.Zero; }
-            if (x >= width) { return Block.Zero; }
-            if (y < 0) { return Block.Zero; }
-            if (y >= depth) { return Block.Zero; }
-            if (z < 0) { return Block.Zero; }
-            if (z >= height) { return Block.Zero; }
+            if (!InBound(x, y, z)) return Block.Zero;
             return blocks[PosToInt(x, y, z)];
         }
         public byte GetTile(int b)
@@ -354,8 +349,16 @@ namespace MCForge
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
             if (blocks == null) return;
-            blocks[x + width * z + width * height * y] = type;
+            if (!InBound(x, y, z)) return;
+            blocks[PosToInt(x, y, z)] = type;
             //blockchanges[x + width * z + width * height * y] = pName;
+        }
+
+        public bool InBound(ushort x, ushort y, ushort z)
+        {
+            if (x < 0 || y < 0 || z < 0 || x >= width || y >= depth || z >= height)
+                return false;
+            return true;
         }
 
         public static Level Find(string levelName)
