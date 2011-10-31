@@ -1,6 +1,7 @@
-﻿/*
-	Copyright 2010 MCLawl Team - Written by Valek (Modified for use with MCForge)
- 
+/*
+	Copyright 2010 MCLawl Team - 
+Created by Snowl (David D.) and Cazzar (Cayde D.)
+
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
 	not use this file except in compliance with the Licenses. You may
@@ -86,8 +87,8 @@ namespace MCForge
             {
                 if (Server.zombie.ZombieStatus() == 0) { Player.SendMessage(p, "There is no Zombie Survival game currently in progress."); return; }
                 Server.s.Log("Zombie Survival ended forcefully by " + p.name);
-                Server.gameStatus = 0;
                 Server.zombie.aliveCount = 0;
+                Server.gameStatus = 0; Server.gameStatus = 0; Server.zombie.limitRounds = 0; Server.zombie.initialChangeLevel = false; Server.ZombieModeOn = false; Server.zombieRound = false;
             }
         }
         public override void Help(Player p)

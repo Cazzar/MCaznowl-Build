@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+	Copyright 2010 MCLawl Team - 
+    Created by Snowl (David D.) and Cazzar (Cayde D.)
+
+	Dual-licensed under the	Educational Community License, Version 2.0 and
+	the GNU General Public License, Version 3 (the "Licenses"); you may
+	not use this file except in compliance with the Licenses. You may
+	obtain a copy of the Licenses at
+	
+	http://www.osedu.org/licenses/ECL-2.0
+	http://www.gnu.org/licenses/gpl-3.0.html
+	
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the Licenses are distributed on an "AS IS"
+	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+	or implied. See the Licenses for the specific language governing
+	permissions and limitations under the Licenses.
+*/
+
+
+using System;
 using System.Collections;
 using System.Collections.Generic; 
 using System.Linq;
@@ -18,6 +38,8 @@ namespace MCForge
         public string currentZombieLevel = "";
         public static System.Timers.Timer timer;
         public static System.Timers.Timer timer2;
+        public bool initialChangeLevel = false;
+        public string currentLevelName = "";
         public static List<Player> alive = new List<Player>();
         public static List<Player> infectd = new List<Player>();
         string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "", "transplanted " };
@@ -36,6 +58,7 @@ namespace MCForge
             Server.ZombieModeOn = true;
             Server.gameStatus = status;
             Server.zombieRound = false;
+            initialChangeLevel = false;
             limitRounds = amount + 1;
             amountOfRounds = 0;
             //SET ALL THE VARIABLES?!?
@@ -49,6 +72,13 @@ namespace MCForge
         {
             if (Server.gameStatus == 0) return;
             bool cutVariable = true;
+
+            if (initialChangeLevel == false)
+            {
+                ChangeLevel();
+                initialChangeLevel = true;
+            }
+
             while (cutVariable == true)
             {
                 int gameStatus = Server.gameStatus;
@@ -60,21 +90,21 @@ namespace MCForge
                 else if (gameStatus == 2) { MainGame(); if (Server.ChangeLevels) ChangeLevel(); cutVariable = false; Server.gameStatus = 0; return; }
                 else if (gameStatus == 3)
                 {
-                    if (limitRounds == amountOfRounds) { cutVariable = false; Server.gameStatus = 0; limitRounds = 0; return; }
+                    if (limitRounds == amountOfRounds) { cutVariable = false; Server.gameStatus = 0; limitRounds = 0; initialChangeLevel = false; Server.ZombieModeOn = false; Server.zombieRound = false; return; }
                     else { MainGame(); if (Server.ChangeLevels) ChangeLevel(); }
                 }
                 else if (gameStatus == 4)
-                { cutVariable = false; Server.gameStatus = 0; return; }
+                { cutVariable = false; Server.gameStatus = 0; Server.gameStatus = 0; limitRounds = 0; initialChangeLevel = false; Server.ZombieModeOn = false; Server.zombieRound = false; return; }
             }
         }
 
         private void MainGame()
         {
             if (Server.gameStatus == 0) return;
-    GoBack: //Player.GlobalMessage("%4Round Start:%f 2:00");
-            //Thread.Sleep(60000); if (!Server.ZombieModeOn) { return; }
-            //Player.GlobalMessage("%4Round Start:%f 1:00");
-            //Thread.Sleep(55000); if (!Server.ZombieModeOn) { return; }
+    GoBack: Player.GlobalMessage("%4Round Start:%f 2:00");
+            Thread.Sleep(60000); if (!Server.ZombieModeOn) { return; }
+            Player.GlobalMessage("%4Round Start:%f 1:00");
+            Thread.Sleep(55000); if (!Server.ZombieModeOn) { return; }
             Server.s.Log(Convert.ToString(Server.ChangeLevels) + " " + Convert.ToString(Server.ZombieOnlyServer) + " " + Convert.ToString(Server.UseLevelList) + " " + string.Join(",", Server.LevelList.ToArray()));
             Player.GlobalMessage("%4Round Start:%f 5...");
             Thread.Sleep(1000); if (!Server.ZombieModeOn) { return; }
@@ -96,9 +126,12 @@ namespace MCForge
                 }
                 else
                 {
-                    playere.color = playere.group.color;
-                    players.Add(playere);
-                    playerscountminusref++;
+                    if (playere.level.name == currentLevelName)
+                    {
+                        playere.color = playere.group.color;
+                        players.Add(playere);
+                        playerscountminusref++;
+                    }
                 }
             }
             if (playerscountminusref < 2)
@@ -107,6 +140,7 @@ namespace MCForge
                 goto GoBack;
             }
 
+            theEnd:
             Random random = new Random();
             int firstinfect = random.Next(players.Count());
             Player player = null;
@@ -114,6 +148,9 @@ namespace MCForge
                 player = Player.Find(Server.nextZombie);
             else
                 player = players[firstinfect];
+
+            if (player.level.name != currentLevelName) goto theEnd;
+
             Player.GlobalMessage(player.color + player.name + Server.DefaultColor + " started the infection!");
             player.infected = true;
             player.color = c.red;
@@ -160,7 +197,7 @@ namespace MCForge
                             {
                                 if (player2.pos[2] / 32 == player1.pos[2] / 32 || player2.pos[2] / 32 == player1.pos[2] / 32 + 1 || player2.pos[2] / 32 == player1.pos[2] / 32 - 1)
                                 {
-                                    if (!player2.infected && player1.infected && !player2.referee && !player1.referee && player1 != player2)
+                                    if (!player2.infected && player1.infected && !player2.referee && !player1.referee && player1 != player2 && player1.level.name == currentLevelName && player2.level.name == currentLevelName)
                                     {
                                         player2.infected = true;
                                         infectd.Add(player2);
@@ -247,28 +284,37 @@ namespace MCForge
             {
                 foreach (Player winners in Player.players)
                 {
-                    winners.blockCount = 50;
-                    winners.color = winners.group.color;
-                    winners.infected = false;
-                    winners.infectThisRound = 0;
-                    playersString += winners.group.color + winners.name + c.white + ", ";
+                    if (winners.level.name == currentLevelName)
+                    {
+                        winners.blockCount = 50;
+                        winners.infected = false;
+                        winners.infectThisRound = 0;
+                        if (winners.level.name == currentLevelName)
+                        {
+                            winners.color = winners.group.color;
+                            playersString += winners.group.color + winners.name + c.white + ", ";
+                        }
+                    }
                 }
             }
             else
             {
                 alive.ForEach(delegate(Player winners)
                 {
-                    winners.blockCount = 50;
-                    winners.color = winners.group.color;
-                    winners.infected = false;
-                    winners.infectThisRound = 0;
-                    playersString += winners.group.color + winners.name + c.white + ", ";
+                        winners.blockCount = 50;
+                        winners.infected = false;
+                        winners.infectThisRound = 0;
+                    if (winners.level.name == currentLevelName)
+                    {
+                        winners.color = winners.group.color;
+                        playersString += winners.group.color + winners.name + c.white + ", ";
+                    }
                 });
             }
             Player.GlobalMessage(playersString);
             foreach (Player winners in Player.players)
             {
-                if (!winners.CheckIfInsideBlock() && aliveCount == 0)
+                if (!winners.CheckIfInsideBlock() && aliveCount == 0 && winners.level.name == currentLevelName)
                 {
                     Player.GlobalDie(winners, false);
                     Player.GlobalSpawn(winners, winners.pos[0], winners.pos[1], winners.pos[2], winners.rot[0], winners.rot[1], false);
@@ -287,7 +333,7 @@ namespace MCForge
                     winners.playersInfected = 0;
                     winners.money = winners.money + randomInt;
                 }
-                else if (!winners.CheckIfInsideBlock() && (aliveCount == 1 && !winners.infected))
+                else if (!winners.CheckIfInsideBlock() && (aliveCount == 1 && !winners.infected) && winners.level.name == currentLevelName)
                 {
                     Player.GlobalDie(winners, false);
                     Player.GlobalSpawn(winners, winners.pos[0], winners.pos[1], winners.pos[2], winners.rot[0], winners.rot[1], false);
@@ -299,7 +345,7 @@ namespace MCForge
                     winners.playersInfected = 0;
                     winners.money = winners.money + randomInt;
                 }
-                else
+                else if (winners.level.name == currentLevelName)
                 {
                     winners.SendMessage("You may not hide inside a block! No " + Server.moneys + " for you!");
                 }
@@ -308,10 +354,13 @@ namespace MCForge
             foreach (Player player in Player.players)
             {
                 player.infected = false;
-                if (player.referee)
+                if (player.level.name == currentLevelName)
                 {
-                    player.SendMessage("You gained one " + Server.moneys + " because you're a ref. Would you like a medal as well?");
-                    player.money++;
+                    if (player.referee)
+                    {
+                        player.SendMessage("You gained one " + Server.moneys + " because you're a ref. Would you like a medal as well?");
+                        player.money++;
+                    }
                 }
             }
             return;
@@ -365,12 +414,25 @@ namespace MCForge
                     else
                         selectedLevel2 = level2;
 
-                    Server.votingforlevel = true;
+                    Server.s.Log("test2");
+
                     Server.Level1Vote = 0; Server.Level2Vote = 0; Server.Level3Vote = 0;
                     Server.lastLevelVote1 = selectedLevel1; Server.lastLevelVote2 = selectedLevel2;
-                    Player.GlobalMessage(" " + c.black + "Level Vote: " + Server.DefaultColor + selectedLevel1 + ", " + selectedLevel2 + " or random " + "(" + c.lime + "1" + Server.DefaultColor + "/" + c.red + "2" + Server.DefaultColor + "/" + c.blue + "3" + Server.DefaultColor + ")");
-                    System.Threading.Thread.Sleep(15000);
-                    Server.votingforlevel = false;
+
+                    if (Server.gameStatus == 4 || Server.gameStatus == 0) { return; }
+
+                    if (initialChangeLevel == true)
+                    {
+                        Server.votingforlevel = true;
+                        Player.GlobalMessage(" " + c.black + "Level Vote: " + Server.DefaultColor + selectedLevel1 + ", " + selectedLevel2 + " or random " + "(" + c.lime + "1" + Server.DefaultColor + "/" + c.red + "2" + Server.DefaultColor + "/" + c.blue + "3" + Server.DefaultColor + ")");
+                        System.Threading.Thread.Sleep(15000);
+                        Server.votingforlevel = false;
+                    }
+                    else { Server.Level1Vote = 1; Server.Level2Vote = 0; Server.Level3Vote = 0; }
+
+                    Server.s.Log(selectedLevel1 + " " + selectedLevel2);
+
+                    if (Server.gameStatus == 4 || Server.gameStatus == 0) { return; }
 
                     if (Server.Level1Vote >= Server.Level2Vote)
                     {
@@ -403,7 +465,7 @@ namespace MCForge
 
         //Main Game Finishes Here - support functions after this
 
-        public static void InfectedPlayerDC()
+        public void InfectedPlayerDC()
         {
             if (Server.gameStatus == 0) return;
             //This is for when the first zombie disconnects
@@ -411,7 +473,7 @@ namespace MCForge
             if ((Server.gameStatus != 0 && Server.zombieRound) && infectd.Count <= 0)
             {
                 int firstinfect = random.Next(alive.Count);
-                while (alive[firstinfect].referee == true)
+                while (alive[firstinfect].referee == true || alive[firstinfect].level.name == Server.zombie.currentLevelName)
                 {
                     if (firstinfect == alive.Count)
                     {
@@ -432,7 +494,7 @@ namespace MCForge
             return;
         }
 
-        public static bool InfectedPlayerLogin(Player p)
+        public bool InfectedPlayerLogin(Player p)
         {
             if (Server.gameStatus == 0) return false;
             p.SendMessage("You have joined in the middle of a round. You are now infected!");
@@ -478,6 +540,7 @@ namespace MCForge
         public void ChangeLevel(string LevelName, bool changeMainLevel)
         {
             String next = LevelName;
+            currentLevelName = next;
             Server.queLevel = false;
             Server.nextLevel = "";
             Command.all.Find("load").Use(null, next.ToLower() + " 0");
@@ -489,7 +552,7 @@ namespace MCForge
                 Server.mainLevel = Level.Find(next.ToLower());
                 Player.players.ForEach(delegate(Player player)
                 {
-                    if (player.level.name != next)
+                    if (player.level.name != next && player.level.name == currentLevelName)
                     {
                         player.SendMessage("Going to the next map!");
                         Command.all.Find("goto").Use(player, next);
@@ -508,6 +571,11 @@ namespace MCForge
         public void ChangeTime(object sender, ElapsedEventArgs e)
         {
             amountOfMilliseconds = amountOfMilliseconds - 10;
+        }
+
+        public bool IsInZombieGameLevel(Player p)
+        {
+            return p.level.name == currentLevelName;
         }
 
     }

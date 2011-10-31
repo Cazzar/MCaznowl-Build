@@ -47,7 +47,7 @@ namespace MCForge
                         ZombieGame.alive.Remove(p);
                     }
                     catch { }
-                    ZombieGame.InfectedPlayerDC();
+                    Server.zombie.InfectedPlayerDC();
                 }
                 else
                 {
