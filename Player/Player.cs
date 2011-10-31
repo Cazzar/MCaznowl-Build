@@ -1058,11 +1058,6 @@ namespace MCForge
             }
 
             if (Server.zombie.ZombieStatus() != 0) { Player.SendMessage(this, "There is a Zombie Survival game currently in-progress! Join it by typing /g " + Server.zombie.currentLevelName); }
-
-            if (Server.ZombieOnlyServer)
-            {
-                Command.all.Find("goto").Use(this, Server.zombie.currentZombieLevel);
-            }
         }
 
         public void SetPrefix()

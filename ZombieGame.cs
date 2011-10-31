@@ -161,13 +161,12 @@ namespace MCForge
             int amountOfMinutes = random.Next(5, 12);
             Player.GlobalMessage("The round will last for " + amountOfMinutes + " minutes!");
             amountOfMilliseconds = (60000 * amountOfMinutes);
-            timer = new System.Timers.Timer(amountOfMilliseconds);
 
+            timer = new System.Timers.Timer(amountOfMilliseconds);
             timer.Elapsed += new ElapsedEventHandler(EndRound);
             timer.Enabled = true;
 
-            timer2 = new System.Timers.Timer(1);
-
+            timer2 = new System.Timers.Timer(1); ///Ztime timer
             timer2.Elapsed += new ElapsedEventHandler(ChangeTime);
             timer2.Enabled = true;
 
@@ -393,16 +392,20 @@ namespace MCForge
 
                 LevelChoice:
                     Random r = new Random();
-                    int x = r.Next(0, al.Count);
-                    int x2 = r.Next(0, al.Count);
+                    int x = 0;
+                    int x2 = 1;
                     string level = ""; string level2 = "";
                     if (!Server.UseLevelList)
                     {
+                        x = r.Next(0, al.Count);
+                        x2 = r.Next(0, al.Count);
                         level = al[x].ToString();
                         level2 = al[x2].ToString();
                     }
                     else
                     {
+                        x = r.Next(0, Server.LevelList.Count());
+                        x2 = r.Next(0, Server.LevelList.Count());
                         level = Server.LevelList[x].ToString();
                         level2 = Server.LevelList[x2].ToString();
                     }
@@ -413,8 +416,6 @@ namespace MCForge
                     else if (selectedLevel1 == "") { selectedLevel1 = level; goto LevelChoice; }
                     else
                         selectedLevel2 = level2;
-
-                    Server.s.Log("test2");
 
                     Server.Level1Vote = 0; Server.Level2Vote = 0; Server.Level3Vote = 0;
                     Server.lastLevelVote1 = selectedLevel1; Server.lastLevelVote2 = selectedLevel2;
@@ -429,8 +430,6 @@ namespace MCForge
                         Server.votingforlevel = false;
                     }
                     else { Server.Level1Vote = 1; Server.Level2Vote = 0; Server.Level3Vote = 0; }
-
-                    Server.s.Log(selectedLevel1 + " " + selectedLevel2);
 
                     if (Server.gameStatus == 4 || Server.gameStatus == 0) { return; }
 
