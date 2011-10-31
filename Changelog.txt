@@ -2,8 +2,7 @@ v5.3.0.0
 - Added /pumpkin
 - Updated developer list.
 - Added tempranks.
-- Added /baninfo - shows info about someone's ban.
-- Fixed /ban and /unban to work with /baninfo.
+- More ban options and info.
 - Fixed warn help menu.
 - Fixed a massive memory leak with level unloading.
 - Fixed leaving a channel name black in the IRC settings causing a crash.

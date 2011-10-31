@@ -36,8 +36,8 @@ namespace MCForge
             string temp;
             foreach (string dev in Server.devs)
             {
-                if (dev == "copyboy")
-                    devlist += dev + ", ";
+                if (dev == "bemacized")
+                    devlist += "BeMacized" + ", ";
                 else
                 {
                     temp = dev.Substring(0, 1);
