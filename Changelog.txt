@@ -1,4 +1,5 @@
 v5.3.0.0
+
 - Fixed Port Checker.
 - Added /pumpkin
 - Updated developer list.
@@ -49,6 +50,9 @@ v5.3.0.0
 - Fixed an error where /rankmsg wouldn't send the whole message, only the first word.
 - Waypoints are now saved
 - Hard-Coded command permissions are now editable (GUI and a seperate .properties file)
+- Added ban reasons
+
+- Revamped Zombie Survival Mode, more friendly to servers that want to run it on certain levels, freebuild + zombie servers, etc.
 
 v5.2.0.0
 - Fixed the server-breaking freeze bug that happened when a player lagged (NOT logged) out.

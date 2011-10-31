@@ -19,38 +19,31 @@ using System;
 
 namespace MCForge
 {
-    public class CmdSpawn : Command
+    public class CmdZTime : Command
     {
-        public override string name { get { return "spawn"; } }
-        public override string shortcut { get { return ""; } }
-        public override string type { get { return "other"; } }
+        public override string name { get { return "ztime"; } }
+        public override string shortcut { get { return "zt"; } }
+        public override string type { get { return "information"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public CmdSpawn() { }
+        public CmdZTime() { }
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
-            ushort x = (ushort)((0.5 + p.level.spawnx) * 32);
-            ushort y = (ushort)((1 + p.level.spawny) * 32);
-            ushort z = (ushort)((0.5 + p.level.spawnz) * 32);
-            if (!p.referee)
-            {
-                if (!p.infected && Server.zombie.GameInProgess())
-                {
-                    Server.zombie.InfectPlayer(p);
-                }
-            }
-            unchecked
-            {
-                p.SendPos((byte)-1, x, y, z,
-                            p.level.rotx,
-                            p.level.roty);
-            }
+            if (Server.zombie.ZombieStatus() == 0) { Player.SendMessage(p, "There is no Zombie Survival game currently in progress."); return; }
+            if (!Server.zombieRound) { p.SendMessage("The current zombie round hasn't started yet!"); return; }
+
+            TimeSpan t = TimeSpan.FromMilliseconds(Server.zombie.amountOfMilliseconds);
+
+            string time = string.Format("{0:D2} minutes, {1:D2} seconds",
+                                    t.Minutes,
+                                    t.Seconds);
+            message = time + " remaining for the current round!";
+            Player.SendMessage(p, message);
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/spawn - Teleports yourself to the spawn location.");
+            Player.SendMessage(p, "/ztime - Shows the current zombie survival round time left.");
         }
     }
 }

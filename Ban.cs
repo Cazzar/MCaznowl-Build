@@ -85,6 +85,7 @@ namespace MCForge
                     oldrank = line.Split(' ')[5];
                 }
             }
+            reason = reason.Replace("~", " ");
             timedate = timedate.Replace("-", " ");
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
