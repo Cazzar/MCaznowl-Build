@@ -52,6 +52,7 @@ namespace MCForge
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
             all.Add(new CmdBan());
+            all.Add(new CmdBanEdit());
             all.Add(new CmdBaninfo());
             all.Add(new CmdBanip());
             all.Add(new CmdBanlist());
