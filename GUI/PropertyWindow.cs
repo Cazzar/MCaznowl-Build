@@ -743,7 +743,7 @@ namespace MCForge.Gui
             Server.name = txtName.Text;
             Server.motd = txtMOTD.Text;
             Server.port = int.Parse(txtPort.Text);
-            Server.verify = chkEnableVerification.Checked;
+            Server.verify = chkVerify.Checked;
             Server.pub = chkPublic.Checked;
             Server.players = (byte)numPlayers.Value;
             Server.maxGuests = (byte)numGuests.Value;
@@ -850,7 +850,7 @@ namespace MCForge.Gui
             Server.hackrank_kick_time = int.Parse(hackrank_kick_time.Text);
 
 
-            Server.verifyadmins = chkVerify.Checked;
+            Server.verifyadmins = chkEnableVerification.Checked;
             Server.verifyadminsrank = (Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission);
 
             Server.checkspam = chkSpamControl.Checked;
