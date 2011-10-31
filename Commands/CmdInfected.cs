@@ -15,17 +15,19 @@ namespace MCForge
         {
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
-            if (CmdZombieGame.infect.Count == 0)
+            if (ZombieGame.infectd.Count == 0)
             {
                 Player.SendMessage(p, "No one is infected");
             }
             else
             {
                 Player.SendMessage(p, "Players who are " + c.red + "infected " + c.yellow + "are:");
-                CmdZombieGame.infect.ForEach(delegate(Player player)
+                string playerstring = "";
+                ZombieGame.infectd.ForEach(delegate(Player player)
                 {
-                    Player.SendMessage(p, player.name);
+                    playerstring = playerstring + c.red + player.name + Server.DefaultColor + ", ";
                 });
+                Player.SendMessage(p, playerstring);
             }
         }
         public override void Help(Player p)

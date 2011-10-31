@@ -32,17 +32,19 @@ namespace MCForge
         {
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
-            if (CmdZombieGame.players.Count == 0)
+            if (ZombieGame.alive.Count == 0)
             {
                 Player.SendMessage(p, "No one is alive.");
             }
             else
             {
                 Player.SendMessage(p, "Players who are " + c.green + "alive " + c.yellow + "are:");
-                CmdZombieGame.players.ForEach(delegate(Player player)
+                string playerstring = "";
+                ZombieGame.alive.ForEach(delegate(Player player)
                 {
-                    Player.SendMessage(p, player.name);
+                    playerstring = playerstring + player.group.color + player.name + Server.DefaultColor + ", ";
                 });
+                Player.SendMessage(p, playerstring);
             }
         }
         public override void Help(Player p)

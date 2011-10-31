@@ -168,30 +168,16 @@ namespace MCForge {
             Server.voteKickVotesNeeded = 0;
 
             //Zombie
-            Server.queLevel = false;
-            Server.queZombie = false;
-            Server.PlayedRounds = 0;
-            Server.infection = false;
-            Server.nextZombie = "";
-            Server.nextLevel = "";
-            Server.YesVotes = 0;
-            Server.NoVotes = 0;
-            Server.voting = false;
-            Server.votingforlevel = false;
-            Server.YesLevelVotes = 0;
-            Server.NoLevelVotes = 0;
-            Server.lastPlayerToInfect = "";
-            Server.lastLevelVote1 = "";
-            Server.lastLevelVote2 = "";
-            Server.infectCombo = 0;
-            Server.count = 0;
             Server.ZombieModeOn = false;
             Server.startZombieModeOnStartup = false;
             Server.noRespawn = true;
             Server.noLevelSaving = true;
             Server.noPillaring = true;
             Server.ZombieName = "";
-
+            Server.ChangeLevels = false;
+            Server.LevelList.Clear();
+            Server.ZombieOnlyServer = false;
+            Server.UseLevelList = true;
             //Settings
             #region Server Settings
             Server.salt = "";

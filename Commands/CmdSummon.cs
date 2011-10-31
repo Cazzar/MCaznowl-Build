@@ -33,7 +33,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message == "") { Help(p); return; }
-            if (p == null) {Player.SendMessage(p, "You cannot use this command from the console"); return;}
+            if (p == null) { Player.SendMessage(p, "You cannot use this command from the console"); return; }
             if (message.ToLower() == "all")
             {
                 try
@@ -54,12 +54,13 @@ namespace MCForge
                 Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " summoned everyone!");
                 return;
             }
+
             Player who = Player.Find(message);
             if (who == null || who.hidden) { Player.SendMessage(p, "There is no player \"" + message + "\"!"); return; }
             if (p.group.Permission < who.group.Permission)
             {
-            	Player.SendMessage(p, "You cannot summon someone ranked higher than you!"); 
-            	return; 
+                Player.SendMessage(p, "You cannot summon someone ranked higher than you!");
+                return;
             }
             if (p.level != who.level)
             {
