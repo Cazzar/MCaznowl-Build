@@ -101,6 +101,20 @@ namespace MCForge
                                     Player.SendMessage(p, "Choices: " + Server.lava.VoteString);
                                 }
                             }
+
+                            if (Server.zombie.GameInProgess())
+                            {
+                                if (p.level.name == Server.zombie.currentLevelName)
+                                    Server.zombie.InfectedPlayerLogin(p);
+                            }
+
+                            if (p.level.name != Server.zombie.currentLevelName)
+                            {
+                                if(ZombieGame.alive.Contains(p))
+                                ZombieGame.alive.Remove(p);
+                                if (ZombieGame.infectd.Contains(p))
+                                ZombieGame.infectd.Remove(p);
+                            }
                         }
                         else Player.SendMessage(p, "The level " + message + " is locked.");
                     }
