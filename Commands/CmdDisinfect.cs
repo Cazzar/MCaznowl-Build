@@ -15,7 +15,7 @@ namespace MCForge
         {
             Player who = null;
             if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
-            if (CmdZombieGame.players.Contains(who))
+            if (!who.infected || !Server.zombie.GameInProgess())
             {
                 p.SendMessage("Cannot disinfect player");
             }
@@ -23,18 +23,11 @@ namespace MCForge
             {
                 if (!who.referee)
                 {
-                    int leftMinute = CmdZombieGame.timeMinute - DateTime.Now.Minute + 7;
-                    if (leftMinute != 0)
+                    int leftMinute = (int)((Server.zombie.amountOfMilliseconds / (1000 * 60)) % 60);
+                    if (leftMinute > 1)
                     {
-                        if (Server.infection)
-                        {
-                            CmdZombieGame.infect.Remove(who);
-                            CmdZombieGame.players.Add(who);
-                            who.color = who.group.color;
-                            Player.GlobalMessage(who.color + who.name + Server.DefaultColor + " just got disinfected!");
-                            Player.GlobalDie(who, false);
-                            Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
-                        }
+                        Server.zombie.DisinfectPlayer(who);
+                        Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " just got Disnfected!");
                     }
                 }
             }

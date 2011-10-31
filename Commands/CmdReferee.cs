@@ -20,23 +20,16 @@ namespace MCForge
                 LevelPermission perm = Group.findPlayerGroup(name).Permission;
                 Player.GlobalDie(p, false);
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is no longer a referee", false);
-                if (Server.infection)
+                if (Server.zombie.GameInProgess())
                 {
-                    Player.GlobalDie(p, false);
-                    Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                    if (!CmdZombieGame.infect.Contains(p) || CmdZombieGame.players.Contains(p))
-                    {
-                        CmdZombieGame.infect.Add(p);
-                        CmdZombieGame.players.Remove(p);
-                    }
-                    p.color = c.red;
+                    Server.zombie.InfectPlayer(p);
                 }
                 else
                 {
                     Player.GlobalDie(p, false);
                     Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
-                    CmdZombieGame.infect.Remove(p);
-                    CmdZombieGame.players.Add(p);
+                    ZombieGame.infectd.Remove(p);
+                    ZombieGame.alive.Add(p);
                     p.color = p.group.color;
                 }
             }
@@ -45,21 +38,21 @@ namespace MCForge
                 p.referee = true;
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is now a referee", false);
                 Player.GlobalDie(p, false);
-                if (Server.infection)
+                if (Server.zombie.GameInProgess())
                 {
                     p.color = p.group.color;
                     try
                     {
-                        CmdZombieGame.infect.Remove(p);
-                        CmdZombieGame.players.Remove(p);
+                        ZombieGame.infectd.Remove(p);
+                        ZombieGame.alive.Remove(p);
                     }
                     catch { }
-                    CmdZombieGame.InfectedPlayerDC();
+                    ZombieGame.InfectedPlayerDC();
                 }
                 else
                 {
-                    CmdZombieGame.infect.Remove(p);
-                    CmdZombieGame.players.Remove(p);
+                    ZombieGame.infectd.Remove(p);
+                    ZombieGame.alive.Remove(p);
                     p.color = p.group.color;
                 }
             }
