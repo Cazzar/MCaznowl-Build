@@ -99,7 +99,7 @@ namespace MCForge
                 newRank.playerList.Save();
 
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + "'s rank was set to " + newRank.color + newRank.name, false);
-                if (newRank.Permission >= who.group.Permission || msgGave != "Congratulations!")
+                if (newRank.Permission >= who.group.Permission || (newRank.Permission <= who.group.Permission && msgGave != "Congratulations!"))
                 {
                     Player.GlobalChat(who, "&6" + msgGave, false);
                 }
