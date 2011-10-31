@@ -321,6 +321,12 @@ namespace MCForge.Gui
             this.lsMapUse = new System.Windows.Forms.ListBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.levelList = new System.Windows.Forms.TextBox();
+            this.label78 = new System.Windows.Forms.Label();
+            this.label77 = new System.Windows.Forms.Label();
+            this.chkEnableChangingLevels = new System.Windows.Forms.CheckBox();
+            this.chkZombieOnlyServer = new System.Windows.Forms.CheckBox();
+            this.chkUseLevelList = new System.Windows.Forms.CheckBox();
             this.chkNoPillaringDuringZombie = new System.Windows.Forms.CheckBox();
             this.ZombieName = new System.Windows.Forms.TextBox();
             this.label46 = new System.Windows.Forms.Label();
@@ -341,12 +347,6 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.chkUseLevelList = new System.Windows.Forms.CheckBox();
-            this.chkZombieOnlyServer = new System.Windows.Forms.CheckBox();
-            this.chkEnableChangingLevels = new System.Windows.Forms.CheckBox();
-            this.label77 = new System.Windows.Forms.Label();
-            this.label78 = new System.Windows.Forms.Label();
-            this.levelList = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -2906,6 +2906,7 @@ namespace MCForge.Gui
             this.button3.TabIndex = 43;
             this.button3.Text = "Edit WoM Direct Options";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // editTxtsBt
             // 
@@ -3453,6 +3454,65 @@ namespace MCForge.Gui
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Zombie Survival";
             // 
+            // levelList
+            // 
+            this.levelList.Location = new System.Drawing.Point(8, 351);
+            this.levelList.Name = "levelList";
+            this.levelList.Size = new System.Drawing.Size(120, 21);
+            this.levelList.TabIndex = 12;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(0, 335);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(133, 13);
+            this.label78.TabIndex = 11;
+            this.label78.Text = "Must be comma seperated";
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(38, 320);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(51, 13);
+            this.label77.TabIndex = 10;
+            this.label77.Text = "Level List";
+            // 
+            // chkEnableChangingLevels
+            // 
+            this.chkEnableChangingLevels.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkEnableChangingLevels.AutoSize = true;
+            this.chkEnableChangingLevels.Location = new System.Drawing.Point(5, 223);
+            this.chkEnableChangingLevels.Name = "chkEnableChangingLevels";
+            this.chkEnableChangingLevels.Size = new System.Drawing.Size(126, 23);
+            this.chkEnableChangingLevels.TabIndex = 9;
+            this.chkEnableChangingLevels.Text = "Enable Changing Levels";
+            this.chkEnableChangingLevels.UseVisualStyleBackColor = true;
+            // 
+            // chkZombieOnlyServer
+            // 
+            this.chkZombieOnlyServer.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkZombieOnlyServer.AutoSize = true;
+            this.chkZombieOnlyServer.Location = new System.Drawing.Point(6, 253);
+            this.chkZombieOnlyServer.Name = "chkZombieOnlyServer";
+            this.chkZombieOnlyServer.Size = new System.Drawing.Size(122, 36);
+            this.chkZombieOnlyServer.TabIndex = 8;
+            this.chkZombieOnlyServer.Text = "Zombie Only \r\nServer (Experimental!)";
+            this.chkZombieOnlyServer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkZombieOnlyServer.UseVisualStyleBackColor = true;
+            // 
+            // chkUseLevelList
+            // 
+            this.chkUseLevelList.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkUseLevelList.AutoSize = true;
+            this.chkUseLevelList.Location = new System.Drawing.Point(25, 293);
+            this.chkUseLevelList.Name = "chkUseLevelList";
+            this.chkUseLevelList.Size = new System.Drawing.Size(81, 23);
+            this.chkUseLevelList.TabIndex = 7;
+            this.chkUseLevelList.Text = "Use Level List";
+            this.chkUseLevelList.UseVisualStyleBackColor = true;
+            // 
             // chkNoPillaringDuringZombie
             // 
             this.chkNoPillaringDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
@@ -3675,65 +3735,6 @@ namespace MCForge.Gui
             this.label38.Size = new System.Drawing.Size(33, 39);
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
-            // 
-            // chkUseLevelList
-            // 
-            this.chkUseLevelList.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkUseLevelList.AutoSize = true;
-            this.chkUseLevelList.Location = new System.Drawing.Point(25, 293);
-            this.chkUseLevelList.Name = "chkUseLevelList";
-            this.chkUseLevelList.Size = new System.Drawing.Size(81, 23);
-            this.chkUseLevelList.TabIndex = 7;
-            this.chkUseLevelList.Text = "Use Level List";
-            this.chkUseLevelList.UseVisualStyleBackColor = true;
-            // 
-            // chkZombieOnlyServer
-            // 
-            this.chkZombieOnlyServer.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkZombieOnlyServer.AutoSize = true;
-            this.chkZombieOnlyServer.Location = new System.Drawing.Point(6, 253);
-            this.chkZombieOnlyServer.Name = "chkZombieOnlyServer";
-            this.chkZombieOnlyServer.Size = new System.Drawing.Size(122, 36);
-            this.chkZombieOnlyServer.TabIndex = 8;
-            this.chkZombieOnlyServer.Text = "Zombie Only \r\nServer (Experimental!)";
-            this.chkZombieOnlyServer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkZombieOnlyServer.UseVisualStyleBackColor = true;
-            // 
-            // chkEnableChangingLevels
-            // 
-            this.chkEnableChangingLevels.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkEnableChangingLevels.AutoSize = true;
-            this.chkEnableChangingLevels.Location = new System.Drawing.Point(5, 223);
-            this.chkEnableChangingLevels.Name = "chkEnableChangingLevels";
-            this.chkEnableChangingLevels.Size = new System.Drawing.Size(126, 23);
-            this.chkEnableChangingLevels.TabIndex = 9;
-            this.chkEnableChangingLevels.Text = "Enable Changing Levels";
-            this.chkEnableChangingLevels.UseVisualStyleBackColor = true;
-            // 
-            // label77
-            // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(38, 320);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(51, 13);
-            this.label77.TabIndex = 10;
-            this.label77.Text = "Level List";
-            // 
-            // label78
-            // 
-            this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(0, 335);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(133, 13);
-            this.label78.TabIndex = 11;
-            this.label78.Text = "Must be comma seperated";
-            // 
-            // levelList
-            // 
-            this.levelList.Location = new System.Drawing.Point(8, 351);
-            this.levelList.Name = "levelList";
-            this.levelList.Size = new System.Drawing.Size(120, 21);
-            this.levelList.TabIndex = 12;
             // 
             // PropertyWindow
             // 
