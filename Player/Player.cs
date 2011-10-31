@@ -438,7 +438,7 @@ namespace MCForge
                     if (Server.afkset.Contains(name))
                     {
                         afkCount = 0;
-                        if (Server.afkkick > 0 && group.Permission < LevelPermission.Operator)
+                        if (Server.afkkick > 0 && group.Permission < Server.afkkickperm)
                             if (afkStart.AddMinutes(Server.afkkick) < DateTime.Now)
                                 Kick("Auto-kick, AFK for " + Server.afkkick + " minutes");
                         if ((oldpos[0] != pos[0] || oldpos[1] != pos[1] || oldpos[2] != pos[2]) && (oldrot[0] != rot[0] || oldrot[1] != rot[1]))
@@ -453,7 +453,7 @@ namespace MCForge
 
                         if (afkCount > Server.afkminutes * 30)
                         {
-                        	if (this != null && !this.name.Equals(""))
+                        	if (name.Equals(""))
                         	{
                             		Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
                                     if (AFK != null)
@@ -764,18 +764,21 @@ namespace MCForge
                         return;
                     }
                 }
-                if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
-                // Code for limiting no. of guests
-                if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
+                if (!Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
                 {
-                    // Check to see how many guests we have
-                    int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
-                    if (currentNumOfGuests >= Server.maxGuests)
+                    if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
+                    // Code for limiting no. of guests
+                    if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
                     {
-                        if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
-                        Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
-                        Kick("Server has reached max number of guests");
-                        return;
+                        // Check to see how many guests we have
+                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
+                        if (currentNumOfGuests >= Server.maxGuests)
+                        {
+                            if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
+                            Server.s.Log("Guest " + this.name + " couldn't log in - too many guests.");
+                            Kick("Server has reached max number of guests");
+                            return;
+                        }
                     }
                 }
                 if (version != Server.version) { Kick("Wrong version!"); return; }

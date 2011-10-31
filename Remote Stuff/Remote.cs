@@ -108,7 +108,7 @@ namespace MCForge.Remote
 
                 byte[] b = new byte[p._bu.Length + length];
                 Buffer.BlockCopy(p._bu, 0, b, 0, p._bu.Length);
-                Buffer.BlockCopy(p._bu, 0, b, p._bu.Length, length);
+                Buffer.BlockCopy(p._tbu, 0, b, p._bu.Length, length);
 
                 p._bu = p.HandleMessage(b);
                 p.socket.BeginReceive(p._tbu, 0, p._tbu.Length, SocketFlags.None,
@@ -182,7 +182,7 @@ namespace MCForge.Remote
         }
 
         private void HandleMobileChangeGroup(byte[] message)
-        { 
+        {
             short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
             byte id = message[2];
             string messages = Encoding.UTF8.GetString(message, 3, length);
@@ -240,7 +240,7 @@ namespace MCForge.Remote
                     string[] stringers = messages.Split('*');
                     if (stringers.Length == 4)
                     {
-                        Group newGroup = new Group(((LevelPermission)int.Parse(stringers[3])), int.Parse(stringers[2]), 0, 
+                        Group newGroup = new Group(((LevelPermission)int.Parse(stringers[3])), int.Parse(stringers[2]), 0,
                             stringers[0], stringers[1][1], "NEWRANK" + int.Parse(stringers[3]).ToString() + ".txt");
 
                         Group.GroupList.Add(newGroup);
@@ -256,22 +256,17 @@ namespace MCForge.Remote
         private void HandleMobileCommand(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
-            string mass = Encoding.UTF8.GetString(message, 2, length);
-            mass = Decrypt(mass, _gend);
-            string[] splitted = mass.Split('_');
-            string ident = splitted[0];
-            mass = mass.Replace(ident, "");
-            mass = mass.Remove(0, 1);
-
-            foreach (char c in mass)
+            string m = Encoding.UTF8.GetString(message, 2, length);
+            m = this.Decrypt(m, _gend);
+            foreach (char ch in m)
             {
-                if (c == '_')
+                if (ch < 32 || ch >= 127)
                 {
-                    mass = mass.Replace(c, ' ');
+                    Kick();
+                    return;
                 }
-
             }
-            Command.all.Find(ident).Use(null, mass);
+            RemoteChat(m);
         }
 
         private void HandleMobileSettingsChange(byte[] message)
@@ -494,7 +489,6 @@ namespace MCForge.Remote
             }
         }
 
-
         private void HandleMobileChat(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
@@ -591,14 +585,14 @@ namespace MCForge.Remote
         }
         public void push(bool val)
         {
-            
-                if (upcast) return;
-                upcast = true;
-                if (LoggedIn) Player.GlobalMessage("%5[Remote] %f" + (val ? " has been kicked from server!" : "has disconnected.")); Server.s.Log("[Remote]" + (val ? " has been kicked from server!" : "has disconnected."));
-                LoggedIn = false;
-                if (OnRemoteDisconnect != null) OnRemoteDisconnect(this);
-                this.Dispose();
-            
+
+            if (upcast) return;
+            upcast = true;
+            if (LoggedIn) Player.GlobalMessage("%5[Remote] %f" + (val ? " has been kicked from server!" : "has disconnected.")); Server.s.Log("[Remote]" + (val ? " has been kicked from server!" : "has disconnected."));
+            LoggedIn = false;
+            if (OnRemoteDisconnect != null) OnRemoteDisconnect(this);
+            this.Dispose();
+
 
         }
         public void push()
@@ -834,10 +828,10 @@ namespace MCForge.Remote
             {
                 if (g.Permission == LevelPermission.Nobody || g.name == "nobody" || g.trueName == "nobody") break;
                 else
-                SendData(0x07, g.color + "," + g.name + "," + g.maxBlocks + "," + ((int)g.Permission).ToString());
+                    SendData(0x07, g.color + "," + g.name + "," + g.maxBlocks + "," + ((int)g.Permission).ToString());
             }
-            SendData(0x07, "~" +(Group.GroupList.Count - 1).ToString());
-            
+            SendData(0x07, "~" + (Group.GroupList.Count - 1).ToString());
+
         }
         void s_OnOp(string message)
         {
@@ -872,7 +866,7 @@ namespace MCForge.Remote
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             }
-            
+
 
         }
         void s_OnAdmin(string message)

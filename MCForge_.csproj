@@ -87,6 +87,7 @@
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
+    <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Commands\CmdServer.cs" />
@@ -465,6 +466,7 @@
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Util\SCOGenerator.cs" />
     <Compile Include="Util\Serializer.cs" />
+    <Compile Include="VIP.cs" />
     <Compile Include="Warp.cs" />
     <Compile Include="Remote Stuff\Remote.cs" />
     <Compile Include="Remote Stuff\Remote.Handler.cs" />
