@@ -1,6 +1,4 @@
 v5.3.0.0
-- Added /pumpkin
-- Updated developer list.
 - Added tempranks.
 - More ban options and info.
 - Fixed warn help menu.
@@ -36,6 +34,15 @@ v5.3.0.0
 - Added commands:
 	- /nyan - 100% self-explanatory!
 	- /warp - For the new warp system!
+	- /vip - Lets you set people who can join the server regardless of the player limit.
+	- /pumpkin - Does what it says on the tin.
+	- /temprank - Sets a temporary rank for the specified player.
+	- /temprankinfo - Lists the info of the temporary rank of the given player.
+	- /tempranklist - Lists every user with a temporary rank.
+	- /server - Restart, backup and more!
+- Added level types:
+	- rainbow - 20% cooler than other level types.
+	- hell - Do we really need to explain this?
 - Removed commands:
 	- /drop - Old CTF command, not needed.
 	- /team - Old CTF command, not needed.
