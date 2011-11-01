@@ -472,6 +472,7 @@ namespace MCForge
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");

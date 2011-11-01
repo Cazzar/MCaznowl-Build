@@ -305,6 +305,7 @@ namespace MCForge
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());
             all.Add(new CmdZz());
+            all.Add(new CmdRankInfo());
             core.commands = new List<Command>(all.commands);
 
             Scripting.Autoload();
