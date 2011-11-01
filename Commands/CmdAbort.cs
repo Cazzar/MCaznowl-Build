@@ -1,5 +1,3 @@
-//testing for cat
-//test from computer
 /*
 	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
