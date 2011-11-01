@@ -33,10 +33,17 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message == "") { Help(p); return; }
-            message = message.Replace("%", "&"); // Alow colors in global messages
+
+            for (int i = 0; i < 10; i++)
+                message = message.Replace("%" + i, "&" + i);
+            for (char c = 'a'; c <= 'f'; c++)
+                message = message.Replace("%" + c, "&" + c);
             Player.GlobalMessage(message);
-            message = message.Replace("&", ""); // converts the MC color codes to IRC. Doesn't seem to work with multiple colors
-            //IRCBot.Say(message);
+
+            for (int i = 0; i < 10; i++)
+                message = message.Replace("&" + i, "");
+            for (char c = 'a'; c <= 'f'; c++)
+                message = message.Replace("&" + c, "");
             Server.IRC.Say(message);
         }
         public override void Help(Player p)
