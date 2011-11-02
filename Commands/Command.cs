@@ -47,7 +47,7 @@ namespace MCForge
             all.Add(new CmdAka());
             all.Add(new CmdAlive());
             all.Add(new CmdAgree());
-            //all.Add(new CmdAscend());
+            all.Add(new CmdAscend());
             all.Add(new CmdAward());
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
