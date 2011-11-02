@@ -210,8 +210,8 @@ namespace MCForge
             all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
-            all.Add(new CmdRankInfo());
             all.Add(new CmdRankMsg());
+            all.Add(new CmdRankInfo());
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
             all.Add(new CmdReferee());
@@ -306,8 +306,7 @@ namespace MCForge
             all.Add(new CmdZombieGame());
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());
-            all.Add(new CmdZz());
-            
+            all.Add(new CmdZz());          
            
             core.commands = new List<Command>(all.commands);
 

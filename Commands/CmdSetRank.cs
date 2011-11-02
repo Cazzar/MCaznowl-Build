@@ -36,6 +36,7 @@ namespace MCForge
             Player who = Player.Find(split[0]);
             Group newRank = Group.Find(split[1]);
             string msgGave = "";
+
             string oldgroupstr = "";
             if (who != null)
             {
