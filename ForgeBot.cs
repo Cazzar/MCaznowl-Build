@@ -253,7 +253,7 @@ namespace MCForge
         void Player_PlayerChat(Player p, string message)
         {
             if (Server.irc && IsConnected())
-                Say(p.color + p.prefix + p.name + ": &0" + message, p.opchat);
+                Say(p.name + ": " + message, p.opchat);
         }
         public void Connect()
         {
