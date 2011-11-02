@@ -210,8 +210,8 @@ namespace MCForge
             all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
-            all.Add(new CmdRankMsg());
             all.Add(new CmdRankInfo());
+            all.Add(new CmdRankMsg());            
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
             all.Add(new CmdReferee());

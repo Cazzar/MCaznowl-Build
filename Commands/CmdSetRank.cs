@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+
 namespace MCForge
 {
     public class CmdSetRank : Command
