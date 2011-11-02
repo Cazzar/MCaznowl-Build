@@ -425,6 +425,9 @@ namespace MCForge
                             case "use-whitelist":
                                 Server.useWhitelist = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "premium-only":
+                                Server.PremiumPlayersOnly = (value.ToLower() == "true") ? true : false;
+                                break;
                             case "allow-tp-to-higher-ranks":
                                 Server.higherranktp = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -679,6 +682,7 @@ namespace MCForge
             w.WriteLine("#   backup-time\t=\tThe number of seconds between automatic backups");
             w.WriteLine("#   overload\t=\tThe higher this is, the longer the physics is allowed to lag.  Default 1500");
             w.WriteLine("#   use-whitelist\t=\tSwitch to allow use of a whitelist to override IP bans for certain players.  Default false.");
+            w.WriteLine("#   premium-only\t=\tOnly allow premium players (paid for minecraft) to access the server. Default false.");
             w.WriteLine("#   force-cuboid\t=\tRun cuboid until the limit is hit, instead of canceling the whole operation.  Default false.");
             w.WriteLine("#   profanity-filter\t=\tReplace certain bad words in the chat.  Default false.");
             w.WriteLine("#   notify-on-join-leave\t=\tShow a balloon popup in tray notification area when a player joins/leaves the server.  Default false.");
@@ -775,6 +779,7 @@ namespace MCForge
             w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString().ToLower());
             w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString().ToLower());
             w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
+            w.WriteLine("premium-only = " + Server.PremiumPlayersOnly.ToString().ToLower());
             w.WriteLine("money-name = " + Server.moneys);
             w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
             w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString());

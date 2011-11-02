@@ -78,7 +78,7 @@ namespace MCForge
                 {
                     reason = "&c-";
                 }
-                reason = reason.Replace(" ", "~");
+                reason = reason.Replace(" ", "%20");
                 Player who = Player.Find(message);
 
                 if (who == null)
