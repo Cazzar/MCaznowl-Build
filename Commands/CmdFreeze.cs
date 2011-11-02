@@ -40,12 +40,12 @@ namespace MCForge
             if (!who.frozen)
             {
                 who.frozen = true;
-                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &bfrozen.", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &bfrozen" + Server.DefaultColor + "by" + p.color + p.name + Server.DefaultColor + ".", false);
             }
             else
             {
                 who.frozen = false;
-                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &adefrosted.", false);
+                Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &adefrosted" + Server.DefaultColor + "by" + p.color + p.name + Server.DefaultColor + ".", false);
             }
         }
         public override void Help(Player p)
