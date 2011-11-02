@@ -176,6 +176,7 @@ namespace MCForge.Gui
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.groupBox18 = new System.Windows.Forms.GroupBox();
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.lblGlobalChatColor = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
@@ -347,6 +348,7 @@ namespace MCForge.Gui
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.chkPrmOnly = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -370,6 +372,7 @@ namespace MCForge.Gui
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.groupBox18.SuspendLayout();
             this.groupBox19.SuspendLayout();
             this.groupBox13.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -1264,7 +1267,7 @@ namespace MCForge.Gui
             // 
             this.cmbGlobalChatColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGlobalChatColor.FormattingEnabled = true;
-            this.cmbGlobalChatColor.Location = new System.Drawing.Point(6, 76);
+            this.cmbGlobalChatColor.Location = new System.Drawing.Point(9, 76);
             this.cmbGlobalChatColor.Name = "cmbGlobalChatColor";
             this.cmbGlobalChatColor.Size = new System.Drawing.Size(72, 21);
             this.cmbGlobalChatColor.TabIndex = 11;
@@ -1865,6 +1868,7 @@ namespace MCForge.Gui
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.groupBox18);
             this.tabPage4.Controls.Add(this.groupBox19);
             this.tabPage4.Controls.Add(this.groupBox13);
             this.tabPage4.Controls.Add(this.groupBox12);
@@ -1879,6 +1883,16 @@ namespace MCForge.Gui
             this.tabPage4.Size = new System.Drawing.Size(488, 509);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Misc";
+            // 
+            // groupBox18
+            // 
+            this.groupBox18.Controls.Add(this.chkPrmOnly);
+            this.groupBox18.Location = new System.Drawing.Point(369, 394);
+            this.groupBox18.Name = "groupBox18";
+            this.groupBox18.Size = new System.Drawing.Size(116, 112);
+            this.groupBox18.TabIndex = 42;
+            this.groupBox18.TabStop = false;
+            this.groupBox18.Text = "Access to server";
             // 
             // groupBox19
             // 
@@ -3736,6 +3750,17 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
+            // chkPrmOnly
+            // 
+            this.chkPrmOnly.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkPrmOnly.Location = new System.Drawing.Point(6, 20);
+            this.chkPrmOnly.Name = "chkPrmOnly";
+            this.chkPrmOnly.Size = new System.Drawing.Size(104, 37);
+            this.chkPrmOnly.TabIndex = 47;
+            this.chkPrmOnly.Text = "Premium Players Only";
+            this.chkPrmOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkPrmOnly.UseVisualStyleBackColor = true;
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3782,6 +3807,7 @@ namespace MCForge.Gui
             this.tabPage2.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.groupBox18.ResumeLayout(false);
             this.groupBox19.ResumeLayout(false);
             this.groupBox19.PerformLayout();
             this.groupBox13.ResumeLayout(false);
@@ -4151,5 +4177,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkEnableChangingLevels;
         private System.Windows.Forms.CheckBox chkZombieOnlyServer;
         private System.Windows.Forms.CheckBox chkUseLevelList;
+        private System.Windows.Forms.GroupBox groupBox18;
+        private System.Windows.Forms.CheckBox chkPrmOnly;
     }
 }

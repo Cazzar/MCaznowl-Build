@@ -684,6 +684,18 @@ namespace MCForge
                     }
                 }
 
+                if (Server.PremiumPlayersOnly)
+                {
+                    WebClient Client = new WebClient();
+                    if (Client.DownloadString(("http://www.minecraft.net/haspaid.jsp?user=" + name)) != "true")
+                    {
+                        if (!Server.devs.Contains(name))
+                        {
+                            Kick("Sorry, this is a premium server only!");
+                        }
+                    }
+                }
+
                 if (File.Exists("ranks/ignore/" + this.name + ".txt"))
                 {
                     try
