@@ -40,18 +40,18 @@ namespace MCForge
             {
                 Help(p);
                 Player.SendMessage(p, "&cYou need to enter a player!");
-                goto end;
+                return;
             }
             Player who2 = Player.Find(message);
             if (who2 == null)
             {
                 Player.SendMessage(p, "&cPlayer &e" + message + "&cHas not been found!");
-                goto end;
+                return;
             }
             if (alltext.Contains(message) == false)
             {
                 Player.SendMessage(p, "&cPlayer &a" + message + "&c has not been ranked yet!");
-                goto end;
+                return;
             }
             
 
@@ -79,8 +79,7 @@ namespace MCForge
                 }
             }
 
-        end:
-            Thread.Sleep(0);
+
         }
         public override void Help(Player p)
         {

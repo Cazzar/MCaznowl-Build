@@ -210,6 +210,7 @@ namespace MCForge
             all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
+            all.Add(new CmdRankInfo());
             all.Add(new CmdRankMsg());
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
@@ -306,8 +307,8 @@ namespace MCForge
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());
             all.Add(new CmdZz());
-            //all.Add(new CmdRankInfo());
-            // CmdRankInfo not found + put in alphabetical order
+            
+           
             core.commands = new List<Command>(all.commands);
 
             Scripting.Autoload();

@@ -36,8 +36,16 @@ namespace MCForge
             Player who = Player.Find(split[0]);
             Group newRank = Group.Find(split[1]);
             string msgGave = "";
-            string oldgroupstr = who.group.name;
-
+            string oldgroupstr = "";
+            if (who != null)
+            {
+                oldgroupstr = who.group.name;
+            }
+            else
+            {
+                Group hey = Group.findPlayerGroup(split[0]);
+                oldgroupstr = hey.name;
+            }
             if (message.Split(' ').Length > 2) msgGave = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1)); else msgGave = "Congratulations!";
 
             if (newRank == null) { Player.SendMessage(p, "Could not find specified rank."); return; }
