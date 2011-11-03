@@ -51,7 +51,7 @@ namespace MCForge
         public static bool storeHelp = false;
         public static string storedHelp = "";
 
-        Socket socket;
+        public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
@@ -565,6 +565,10 @@ namespace MCForge
                 // Get the length of the message by checking the first byte
                 switch (msg)
                 {
+                    //For wom
+                    case (byte)'G':
+                        
+                        return new byte[0];
                     case 0:
                         length = 130;
                         break; // login
@@ -3967,7 +3971,7 @@ namespace MCForge
             }
             return (byte)1;
         }
-        static byte[] StringFormat(string str, int size)
+        public static byte[] StringFormat(string str, int size)
         {
             byte[] bytes = new byte[size];
             bytes = enc.GetBytes(str.PadRight(size).Substring(0, size));
