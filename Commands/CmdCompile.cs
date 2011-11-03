@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.IO;
 
 namespace MCForge
 {
@@ -38,47 +39,61 @@ namespace MCForge
 
             if (param.Length == 1)
             {
-                try
+                if (File.Exists("extra/commands/source/Cmd" + message + ".cs"))
                 {
-                    success = Scripting.Compile(message);
-                }
-                catch (Exception e)
-                {
-                    Server.ErrorLog(e);
-                    Player.SendMessage(p, "An exception was thrown during compilation.");
+                    try
+                    {
+                        success = Scripting.Compile(message);
+                    }
+                    catch (Exception e)
+                    {
+                        Server.ErrorLog(e);
+                        Player.SendMessage(p, "An exception was thrown during compilation.");
+                        return;
+                    }
+                    if (success)
+                    {
+                        Player.SendMessage(p, "Compiled successfully.");
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                    }
                     return;
-                }
-                if (success)
-                {
-                    Player.SendMessage(p, "Compiled successfully.");
                 }
                 else
                 {
-                    Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                    Player.SendMessage(p, "file &9Cmd" + message + ".cs " + Server.DefaultColor + "not found!");
                 }
-                return;
             }
             if (param[1] == "vb")
             {
-                try
+                if (File.Exists("extra/commands/source/Cmd" + message + ".vb"))
                 {
-                    success = ScriptingVB.Compile(name);
-                }
-                catch (Exception e)
-                {
-                    Server.ErrorLog(e);
-                    Player.SendMessage(p, "An exception was thrown during compilation.");
+                    try
+                    {
+                        success = ScriptingVB.Compile(name);
+                    }
+                    catch (Exception e)
+                    {
+                        Server.ErrorLog(e);
+                        Player.SendMessage(p, "An exception was thrown during compilation.");
+                        return;
+                    }
+                    if (success)
+                    {
+                        Player.SendMessage(p, "Compiled successfully.");
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                    }
                     return;
-                }
-                if (success)
-                {
-                    Player.SendMessage(p, "Compiled successfully.");
                 }
                 else
                 {
-                    Player.SendMessage(p, "Compilation error.  Please check compile.log for more information.");
+                    Player.SendMessage(p, "file &9Cmd" + message + ".vb " + Server.DefaultColor + "not found!");
                 }
-                return;
             }
 
         }
@@ -87,7 +102,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/compile <class name> - Compiles a command class file into a DLL.");
             Player.SendMessage(p, "/compile <class name> vb - Compiles a command class (that was written in visual basic) file into a DLL.");
-
+            Player.SendMessage(p, "class name: &9Cmd&e<class name>&9.cs");
         }
     }
 }

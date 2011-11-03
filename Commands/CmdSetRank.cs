@@ -17,6 +17,8 @@
 */
 
 using System;
+using System.IO;
+
 namespace MCForge
 {
     public class CmdSetRank : Command
@@ -36,6 +38,16 @@ namespace MCForge
             Group newRank = Group.Find(split[1]);
             string msgGave = "";
 
+            string oldgroupstr = "";
+            if (who != null)
+            {
+                oldgroupstr = who.group.name;
+            }
+            else
+            {
+                Group hey = Group.findPlayerGroup(split[0]);
+                oldgroupstr = hey.name;
+            }
             if (message.Split(' ').Length > 2) msgGave = message.Substring(message.IndexOf(' ', message.IndexOf(' ') + 1)); else msgGave = "Congratulations!";
 
             if (newRank == null) { Player.SendMessage(p, "Could not find specified rank."); return; }
@@ -99,10 +111,7 @@ namespace MCForge
                 newRank.playerList.Save();
 
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + "'s rank was set to " + newRank.color + newRank.name, false);
-                //if (newRank.Permission >= who.group.Permission || (newRank.Permission <= who.group.Permission && msgGave != "Congratulations!"))
-                //{
-                    Player.GlobalChat(who, "&6" + msgGave, false);
-                //}
+                Player.GlobalChat(who, "&6" + msgGave, false);
 
                 who.group = newRank;
                 who.color = who.group.color;
@@ -110,7 +119,49 @@ namespace MCForge
 
                 who.SendMessage("You are now ranked " + newRank.color + newRank.name + Server.DefaultColor + ", type /help for your new set of commands.");
                 who.SendUserType(Block.canPlace(who.group.Permission, Block.blackrock));
-                
+
+                Boolean tryer = true;
+                string year = DateTime.Now.Year.ToString();
+                string month = DateTime.Now.Month.ToString();
+                string day = DateTime.Now.Day.ToString();
+                string hour = DateTime.Now.Hour.ToString();
+                string minute = DateTime.Now.Minute.ToString();
+                string assigner;
+                if (p == null)
+                {
+                    assigner = "Console";
+                }
+                else
+                {
+                    assigner = p.name;
+                }
+                string allrankinfos = "";
+                foreach (string line in File.ReadAllLines("text/rankinfo.txt"))
+                {
+                    if (!line.Contains(split[0]))
+                    {
+                        allrankinfos = allrankinfos + line + "\r\n";
+                    }
+                }
+                File.WriteAllText("text/rankinfo.txt", allrankinfos);
+                try
+                {
+                    StreamWriter sw;
+                    sw = File.AppendText("text/rankinfo.txt");
+                    sw.WriteLine(who.name + " " + assigner + " " + minute + " " + hour + " " + day + " " + month + " " + year + " " + split[1] + " " + oldgroupstr);
+                    sw.Close();
+                }
+                catch
+                {
+                    tryer = false;
+                }
+
+                if (!tryer)
+                {
+                    Player.SendMessage(p, "&cAn error occurred!");
+                }
+
+
                 Player.GlobalSpawn(who, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1], false);
             }
         }

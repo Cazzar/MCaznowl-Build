@@ -47,7 +47,7 @@ namespace MCForge
             all.Add(new CmdAka());
             all.Add(new CmdAlive());
             all.Add(new CmdAgree());
-            //all.Add(new CmdAscend());
+            all.Add(new CmdAscend());
             all.Add(new CmdAward());
             all.Add(new CmdAwards());
             all.Add(new CmdAwardMod());
@@ -92,6 +92,7 @@ namespace MCForge
             all.Add(new CmdDemote());
             all.Add(new CmdDevs());
             all.Add(new CmdDisagree());
+            all.Add(new CmdDescend());
             all.Add(new CmdDisInfect());
             all.Add(new CmdDraw());
             all.Add(new CmdDrill());
@@ -209,7 +210,8 @@ namespace MCForge
             all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
             all.Add(new CmdRainbow());
-            all.Add(new CmdRankMsg());
+            all.Add(new CmdRankInfo());
+            all.Add(new CmdRankMsg());            
             all.Add(new CmdRedo());
             all.Add(new CmdReload());
             all.Add(new CmdReferee());
@@ -304,7 +306,8 @@ namespace MCForge
             all.Add(new CmdZombieGame());
             all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());
-            all.Add(new CmdZz());
+            all.Add(new CmdZz());          
+           
             core.commands = new List<Command>(all.commands);
 
             Scripting.Autoload();

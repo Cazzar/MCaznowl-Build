@@ -263,6 +263,7 @@ namespace MCForge
         public static bool oldHelp = false;
         public static bool parseSmiley = true;
         public static bool useWhitelist = false;
+        public static bool PremiumPlayersOnly = false;
         public static bool forceCuboid = false;
         public static bool profanityFilter = false;
         public static bool notifyOnJoinLeave = false;
@@ -472,6 +473,18 @@ namespace MCForge
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
+            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
+            else
+            {
+                string bantext = File.ReadAllText("text/bans.txt");
+                if (!bantext.Contains("%20") && bantext != "")
+                {
+                    bantext = bantext.Replace("~", "%20");
+                    bantext = bantext.Replace("-", "%20");
+                    File.WriteAllText("text/bans.txt", bantext);
+                }
+            }
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");

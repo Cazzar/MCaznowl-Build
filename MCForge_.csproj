@@ -86,8 +86,11 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
+    <Compile Include="Commands\CmdDescend.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
+    <Compile Include="Commands\CmdRankInfo.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />

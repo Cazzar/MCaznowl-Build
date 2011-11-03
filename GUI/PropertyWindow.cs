@@ -702,6 +702,9 @@ namespace MCForge.Gui
                             case "wom-direct":
                                 chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "premium-only":
+                                chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                         }
                     }
                 }
@@ -872,7 +875,7 @@ namespace MCForge.Gui
             //Server.Server_ALT = ;
             //Server.Server_Disc = ;
             //Server.Server_Flag = ;
-
+            Server.PremiumPlayersOnly = chkPrmOnly.Checked;
 
         }
 

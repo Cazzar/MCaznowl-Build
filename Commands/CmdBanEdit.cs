@@ -32,9 +32,13 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message.Split(' ').Length < 2) { Help(p); return; }
+            if (message.Split(' ')[1].Length == 1)
+            {
+                Help(p); return;
+            }
             string username = message.Split(' ')[0];
             string creason = message;
-            string reason = creason.Remove(0, username.Length + 1).Replace(" ", "~");
+            string reason = creason.Remove(0, username.Length + 1).Replace(" ", "%20");
             string errormessage = Ban.Editreason(username, reason);
             if (errormessage != "")
             {
@@ -42,7 +46,7 @@ namespace MCForge
             }
             else
             {
-                Player.SendMessage(p, "Succesfully edited baninfo about &0" + username + Server.DefaultColor + " to: &2" + reason.Replace("~", " "));
+                Player.SendMessage(p, "Succesfully edited baninfo about &0" + username + Server.DefaultColor + " to: &2" + reason.Replace("%20", " "));
             }
         }
         public override void Help(Player p)
