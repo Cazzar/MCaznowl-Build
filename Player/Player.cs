@@ -684,14 +684,21 @@ namespace MCForge
                     }
                 }
 
-                if (Server.PremiumPlayersOnly)
+                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower()))
                 {
-                    WebClient Client = new WebClient();
-                    if (Client.DownloadString(("http://www.minecraft.net/haspaid.jsp?user=" + name)) != "true")
+                    using (WebClient Client = new WebClient())
                     {
-                        if (!Server.devs.Contains(name))
+                        int tries = 0;
+                        while (tries++ < 3)
                         {
-                            Kick("Sorry, this is a premium server only!");
+                            try
+                            {
+                                bool haspaid = Convert.ToBoolean(Client.DownloadString("http://www.minecraft.net/haspaid.jsp?user=" + name));
+                                if (!haspaid)
+                                    Kick("Sorry, this is a premium server only!");
+                                break;
+                            }
+                            catch { }
                         }
                     }
                 }
