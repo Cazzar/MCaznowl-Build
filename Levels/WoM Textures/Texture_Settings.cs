@@ -8,10 +8,11 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace MCForge.Levels.WoM_Textures
+namespace MCForge
 {
     public class Texture_Settings
     {
+        public bool enabled = false;
         NetworkStream n;
         private string terrainid = "";
         private string edgeid = "";
@@ -32,7 +33,7 @@ namespace MCForge.Levels.WoM_Textures
         public void SendDetail(Player p, string text = "")
         {
             byte[] buffer = new byte[65];
-            if (p.level == l)
+            if (p.level == l && p.UsingWom)
             {
                 if (text == "")
                 {
@@ -57,7 +58,7 @@ namespace MCForge.Levels.WoM_Textures
             byte[] buffer = new byte[65];
             Player.players.ForEach(delegate(Player p)
             {
-                if (p.level == l)
+                if (p.level == l && p.UsingWom)
                 {
                     if (text == "")
                     {
@@ -88,6 +89,7 @@ namespace MCForge.Levels.WoM_Textures
         public void ChangeCloud(string hex) { cloudcolor = ParseHexColor(hex); }
         public void ChangeEdge(byte b) { edgeid = EdgeBlock(b); }
         #endregion
+        #region Enternal Settings
         string EdgeBlock(byte b)
         {
             switch (b)
@@ -161,12 +163,6 @@ namespace MCForge.Levels.WoM_Textures
                     return "";
             }
         }
-        //Retrieve MOTD
-        //Might not be used...
-        public string GetMOTD()
-        {
-            return "";
-        }
         //Create CFG
         public void CreateCFG()
         {
@@ -195,13 +191,15 @@ namespace MCForge.Levels.WoM_Textures
             if (!Directory.Exists("extras/cfg")) Directory.CreateDirectory("extras/cfg");
             File.WriteAllLines("extras/cfg/" + l.name + ".cfg", temp.ToArray());
             temp.Clear();
+            Server.s.Log("CFG File created for " + l.name);
         }
+        #endregion
         #region Thanks FCRAFT
         //All credit for the code below goes to fcraft
         //Thanks fcraft...your awesome :D
         //Modified for use in mcforge
         static readonly Regex HttpFirstLine = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-        void ServeCfg(Player p)
+        public void ServeCfg(Player p)
         {
             NetworkStream stream = new NetworkStream(p.socket);
             using (StreamReader textReader = new StreamReader(stream))
@@ -217,6 +215,8 @@ namespace MCForge.Levels.WoM_Textures
                         Level l = Level.Find(worldName);
                         if (l != null)
                         {
+                            if (!File.Exists("extras/cfg/" + l.name + ".cfg"))
+                                CreateCFG();
                             string cfg = File.ReadAllText("extras/cfg/" + l.name + ".cfg");
                             byte[] content = Encoding.UTF8.GetBytes(cfg);
                             textWriter.WriteLine("HTTP/1.1 200 OK");

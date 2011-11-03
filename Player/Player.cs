@@ -62,6 +62,7 @@ namespace MCForge
 
         public bool megaBoid = false;
         public bool cmdTimer = false;
+        public bool UsingWom = false;
 
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
@@ -567,7 +568,7 @@ namespace MCForge
                 {
                     //For wom
                     case (byte)'G':
-                        
+                        level.textures.ServeCfg(this);
                         return new byte[0];
                     case 0:
                         length = 130;
@@ -1933,6 +1934,7 @@ namespace MCForge
                 if (text.Truncate(6) == "/womid")
                 {
                     Server.s.Log(name + " is using " + text.Substring(7));
+                    UsingWom = true;
                     return;
                 }
 
@@ -2788,7 +2790,8 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 128).CopyTo(buffer, 1); }
+            else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
             if (Block.canPlace(this.group.Permission, Block.blackrock))

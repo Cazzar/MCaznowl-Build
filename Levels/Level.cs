@@ -45,6 +45,7 @@ namespace MCForge
 
     public class Level : IDisposable
     {
+        public Texture_Settings textures;
         public static bool cancelload = false;
         public static bool cancelsave = false;
         public static bool cancelphysics = false;
@@ -251,6 +252,7 @@ namespace MCForge
             spawny = (ushort)(depth * 0.75f);
             spawnz = (ushort)(height / 2);
             rotx = 0; roty = 0;
+            textures = new Texture_Settings(this);
             //season = new SeasonsCore(this);
         }
 
@@ -928,7 +930,7 @@ namespace MCForge
 					gs.Read(blocks, 0, blocks.Length);
 					level.blocks = blocks;
 					gs.Close();
-
+                    level.textures = new Texture_Settings(level);
 					level.backedup = true;
 
                     using (DataTable ZoneDB = Database.fillData("SELECT * FROM `Zone" + givenName + "`")) {
