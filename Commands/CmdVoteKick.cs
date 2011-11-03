@@ -57,7 +57,7 @@ namespace MCForge.Commands
 
             // 1/3rd of the players must vote or nothing happens
             // Keep it at 0 to disable min number of votes
-            Server.voteKickVotesNeeded = (int)(Player.players.Count / 3) + 1;
+            Server.voteKickVotesNeeded = 3; //(int)(Player.players.Count / 3) + 1;
             Server.voteKickInProgress = true;
 
             System.Timers.Timer voteTimer = new System.Timers.Timer(30000);

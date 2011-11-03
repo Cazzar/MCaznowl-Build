@@ -37,14 +37,14 @@ namespace MCForge
             {
                 if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+"); return; }
 
-                foreach (Player who in Player.players)
+                foreach (Player who in Player.players.ToArray())
                 {
                     if (who.level == p.level)
                     {
 
                         who.Loading = true;
-                        foreach (Player pl in Player.players) if (who.level == pl.level && who != pl) who.SendDie(pl.id);
-                        foreach (PlayerBot b in PlayerBot.playerbots) if (who.level == b.level) who.SendDie(b.id);
+                        foreach (Player pl in Player.players.ToArray()) if (who.level == pl.level && who != pl) who.SendDie(pl.id);
+                        foreach (PlayerBot b in PlayerBot.playerbots.ToArray()) if (who.level == b.level) who.SendDie(b.id);
 
                         Player.GlobalDie(who, true);
                         who.SendUserMOTD(); who.SendMap();
@@ -56,11 +56,11 @@ namespace MCForge
                         if (!who.hidden) Player.GlobalSpawn(who, x, y, z, who.level.rotx, who.level.roty, true);
                         else unchecked { who.SendPos((byte)-1, x, y, z, who.level.rotx, who.level.roty); }
 
-                        foreach (Player pl in Player.players)
+                        foreach (Player pl in Player.players.ToArray())
                             if (pl.level == who.level && who != pl && !pl.hidden)
                                 who.SendSpawn(pl.id, pl.color + pl.name, pl.pos[0], pl.pos[1], pl.pos[2], pl.rot[0], pl.rot[1]);
 
-                        foreach (PlayerBot b in PlayerBot.playerbots)
+                        foreach (PlayerBot b in PlayerBot.playerbots.ToArray())
                             if (b.level == who.level)
                                 who.SendSpawn(b.id, b.color + b.name, b.pos[0], b.pos[1], b.pos[2], b.rot[0], b.rot[1]);
 
@@ -104,8 +104,8 @@ namespace MCForge
                 else if (who.group.Permission > p.group.Permission && p != who) { Player.SendMessage(p, "Cannot reload the map of someone higher than you."); return; }
 
                 who.Loading = true;
-                foreach (Player pl in Player.players) if (who.level == pl.level && who != pl) who.SendDie(pl.id);
-                foreach (PlayerBot b in PlayerBot.playerbots) if (who.level == b.level) who.SendDie(b.id);
+                foreach (Player pl in Player.players.ToArray()) if (who.level == pl.level && who != pl) who.SendDie(pl.id);
+                foreach (PlayerBot b in PlayerBot.playerbots.ToArray()) if (who.level == b.level) who.SendDie(b.id);
 
                 Player.GlobalDie(who, true);
                 who.SendUserMOTD(); who.SendMap();
@@ -117,11 +117,11 @@ namespace MCForge
                 if (!who.hidden) Player.GlobalSpawn(who, x, y, z, who.level.rotx, who.level.roty, true);
                 else unchecked { who.SendPos((byte)-1, x, y, z, who.level.rotx, who.level.roty); }
 
-                foreach (Player pl in Player.players)
+                foreach (Player pl in Player.players.ToArray())
                     if (pl.level == who.level && who != pl && !pl.hidden)
                         who.SendSpawn(pl.id, pl.color + pl.name, pl.pos[0], pl.pos[1], pl.pos[2], pl.rot[0], pl.rot[1]);
 
-                foreach (PlayerBot b in PlayerBot.playerbots)
+                foreach (PlayerBot b in PlayerBot.playerbots.ToArray())
                     if (b.level == who.level)
                         who.SendSpawn(b.id, b.color + b.name, b.pos[0], b.pos[1], b.pos[2], b.rot[0], b.rot[1]);
 
