@@ -91,6 +91,9 @@
     <Compile Include="Commands\CmdDescend.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />
+    <Compile Include="Commands\CmdViewClear.cs" />
+    <Compile Include="Commands\CmdViewList.cs" />
+    <Compile Include="Commands\CmdViewNext.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />

@@ -119,6 +119,8 @@ namespace MCForge
 
         public static Level mainLevel;
         public static List<Level> levels;
+        //Viewlist intitialize
+        public static List<string> viewlist = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -984,7 +986,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-
+                
             });
         }
 
