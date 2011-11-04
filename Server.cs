@@ -119,8 +119,8 @@ namespace MCForge
 
         public static Level mainLevel;
         public static List<Level> levels;
-        //Viewlist intitialize
-        public static List<string> viewlist = new List<string>();
+        //reviewlist intitialize
+        public static List<string> reviewlist = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
