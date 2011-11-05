@@ -90,7 +90,8 @@ namespace MCForge
         public int rdcount = 0;
         public bool hasreadrules = false;
 
- 
+        // check what commands are being used much:
+        public bool sendcommanddata = false;
 
         //Pyramid Code
 
@@ -2414,6 +2415,15 @@ namespace MCForge
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
                         }
+                        try
+                        {
+                        	if (sendcommanddata)
+                        	{
+                        		WebClient wc = new WebClient();
+                        		wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + cmd.name);
+                        	}
+                        }
+                        catch {  }
                         this.commThread = new Thread(new ThreadStart(delegate
                         {
                             try
