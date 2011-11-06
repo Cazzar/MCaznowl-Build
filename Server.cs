@@ -234,6 +234,7 @@ namespace MCForge
         public static bool reportBack = true;
 
         public static bool irc = false;
+        public static bool ircColorsEnable = false;
 //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
@@ -308,6 +309,8 @@ namespace MCForge
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static bool customGrieferStone = false;
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
+        public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
+        public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
@@ -318,6 +321,8 @@ namespace MCForge
         public static bool WomDirect = false;
         public static bool UseSeasons = false;
         public static bool guestLimitNotify = false;
+        public static bool guestJoinNotify = true;
+        public static bool guestLeaveNotify = true;
 
         public static bool flipHead = false;
 

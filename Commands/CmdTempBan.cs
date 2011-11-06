@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message == "") { Help(p); return; }
-            if (message.IndexOf(' ') == -1) message = message + " 30";
+            if (message.IndexOf(' ') == -1) message = message + " 60";
 
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player"); return; }
@@ -55,7 +55,7 @@ namespace MCForge
             {
                 minutes = int.Parse(message.Split(' ')[1]);
             } catch { Player.SendMessage(p, "Invalid minutes"); return; }
-            if (minutes > 60) { Player.SendMessage(p, "Cannot ban for more than an hour"); return; }
+            if (minutes > 1440) { Player.SendMessage(p, "Cannot ban for more than a day"); return; }
             if (minutes < 1) { Player.SendMessage(p, "Cannot ban someone for less than a minute"); return; }
             
             Server.TempBan tBan;
@@ -67,7 +67,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/tempban <name> <minutes> - Bans <name> for <minutes>");
-            Player.SendMessage(p, "Max time is 60. Default is 30");
+            Player.SendMessage(p, "Max time is 1440 (1 day). Default is 60");
             Player.SendMessage(p, "Temp bans will reset on server restart");
         }
     }

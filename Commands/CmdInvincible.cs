@@ -65,7 +65,7 @@ namespace MCForge
                 	Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " is no longer invincible.");
                 }
                 
-                if (Server.cheapMessage)
+                if (Server.cheapMessage && !p.hidden)
                     Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has stopped being immortal", false);
             }
             else
@@ -79,7 +79,7 @@ namespace MCForge
             		Player.SendMessage( p, who.color + who.name + Server.DefaultColor + "is now invincible.");
                 }
                 who.invincible = true;
-                if (Server.cheapMessage)
+                if (Server.cheapMessage && !p.hidden)
                     Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " " + Server.cheapMessageGiven, false);
             }
         }
