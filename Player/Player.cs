@@ -2846,9 +2846,10 @@ namespace MCForge
                 SendRaw(4, buffer);
                 Loading = false;
             }
-            catch
+            catch (Exception e)
             {
                 Kick("An error occurred when sending the map data!");
+                Server.ErrorLog(e);
             }
             finally
             {
