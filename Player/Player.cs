@@ -1043,6 +1043,10 @@ namespace MCForge
             }
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
+				if (Server.guestJoinNotify == false && this.group.Permission <= LevelPermission.Guest)
+				{
+					return;
+				}
                 GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 //IRCBot.Say(this.name + " has joined the server.");
             }
@@ -2127,6 +2131,18 @@ namespace MCForge
                         return;
                     }
                 }
+                if (text[0] == '-')
+                {
+                    string newtext = text;
+                    if (text[0] == '-') newtext = text.Remove(0, 1).Trim();
+
+                    GlobalMessage(color + prefix + name + ": &f" + newtext);
+                    Server.s.Log(name + ": " + newtext);
+                    //Server.s.OpLog(name + ": " + newtext);
+                    //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
+                    return;
+                }
                 if (text[0] == '#' || opchat)
                 {
                     string newtext = text;
@@ -2136,7 +2152,7 @@ namespace MCForge
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
-                    Server.s.OpLog("(OPs): " + name + ": " + newtext);
+                    //Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
                     return;
@@ -2150,7 +2166,7 @@ namespace MCForge
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
-                    Server.s.AdminLog("(Admins): " + name + ": " + newtext);
+                    //Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
                     return;
@@ -2526,7 +2542,7 @@ namespace MCForge
                     return;
                 }
             }
-            if (p != null && !p.hidden)
+            if (p != null && !p.hidden || p.hidden && this.group.Permission >= p.group.Permission)
             {
                 Server.s.Log(name + " @" + p.name + ": " + message);
                 SendChat(this, Server.DefaultColor + "[<] " + p.color + p.prefix + p.name + ": &f" + message);
@@ -3780,7 +3796,14 @@ namespace MCForge
                         {
                             File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); }
+						if (!hidden) 
+						{
+							if (Server.guestLeaveNotify == false && this.group.Permission <= LevelPermission.Guest) 
+							{ 
+								return;
+							}
+							GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); 
+						}
                         //IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)

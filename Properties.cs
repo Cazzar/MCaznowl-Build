@@ -167,6 +167,9 @@ namespace MCForge
                             case "irc":
                                 Server.irc = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "irc-colorsenable":
+                                Server.ircColorsEnable = (value.ToLower() == "false") ? true : false;
+                                break;
                             case "irc-server":
                                 Server.ircServer = value;
                                 break;
@@ -358,6 +361,12 @@ namespace MCForge
                             case "custom-griefer-stone-message":
                                 if (value != "") Server.customGrieferStoneMessage = value;
                                 break;
+                            case "custom-promote-message":
+                                if (value != "") Server.customPromoteMessage = value;
+                                break;
+                            case "custom-demote-message":
+                                if (value != "") Server.customDemoteMessage = value;
+                                break;
                             case "rank-super":
                                 try { Server.rankSuper = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
@@ -526,6 +535,14 @@ namespace MCForge
                                 try { Server.guestLimitNotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "guest-join-notify":
+                                try { Server.guestJoinNotify = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "guest-leave-notify":
+                                try { Server.guestLeaveNotify = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                             case "ignore-ops":
                                 try { Server.globalignoreops = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -583,6 +600,11 @@ namespace MCForge
                                 Server.GlobalChatColor = color;
                                 break;
 
+                            case "total-undo":
+                                try { Server.totalUndo = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+
                             case "griefer-stone-tempban":
                                 try { Server.grieferStoneBan = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -620,7 +642,6 @@ namespace MCForge
                             case "send-command-data":
                                 Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
-                                
                         }
                     }
                 }
@@ -704,6 +725,10 @@ namespace MCForge
             w.WriteLine("#   zombie-survival-only-server\t=\tiEXPERIMENTAL! Makes the server only for Zombie Survival (etc. changes main level)");
             w.WriteLine("#   use-level-list\t=\tOnly gets levels for changing levels in Zombie Survival from zombie-level-list.");
             w.WriteLine("#   zombie-level-list\t=\tList of levels for changing levels (Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
+            w.WriteLine("#   total-undo\t=\tTrack changes made by the last X people logged on for undo purposes. Folder is rotated when full, so when set to 200, will actually track around 400.");
+            w.WriteLine("#   guest-limit-notify\t=\tShow -Too Many Guests- message in chat when maxGuests has been reached. Default false");
+            w.WriteLine("#   guest-join-notify\t=\tShows when guests and lower ranks join server in chat and IRC. Default true");
+            w.WriteLine("#   guest-leave-notify\t=\tShows when guests and lower ranks leave server in chat and IRC. Default true");
             w.WriteLine();
             w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
@@ -761,6 +786,7 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("# irc bot options");
             w.WriteLine("irc = " + Server.irc.ToString().ToLower());
+            w.WriteLine("irc-colorsenable = " + Server.ircColorsEnable.ToString().ToLower());
             w.WriteLine("irc-nick = " + Server.ircNick);
             w.WriteLine("irc-server = " + Server.ircServer);
             w.WriteLine("irc-channel = " + Server.ircChannel);
@@ -807,7 +833,10 @@ namespace MCForge
             string dogCsv = string.Join(",", Server.LevelList.ToArray());
             w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
+            w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString().ToLower());
+            w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString().ToLower());
             w.WriteLine("send-command-data = " + Player.sendcommanddata.ToString());
+            w.WriteLine("total-undo = " + Server.totalUndo.ToString());
             w.WriteLine();
             w.WriteLine("# backup options");
             w.WriteLine("backup-time = " + Server.backupInterval.ToString());
@@ -839,6 +868,8 @@ namespace MCForge
             w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
             w.WriteLine("custom-griefer-stone = " + Server.customGrieferStone.ToString().ToLower());
             w.WriteLine("custom-griefer-stone-message = " + Server.customGrieferStoneMessage);
+            w.WriteLine("custom-promote-message = " + Server.customPromoteMessage);
+            w.WriteLine("custom-demote-message = " + Server.customDemoteMessage);
             w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
             w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
             w.WriteLine();
