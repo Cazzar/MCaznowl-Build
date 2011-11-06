@@ -527,6 +527,20 @@ namespace MCForge.Gui
                 {
                     Command.all.Find(sentCmd).Use(null, sentMsg);
                     newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
+                    try
+                    {
+                        if (Player.sendcommanddata)
+                        {
+                            Command commandcmd = Command.all.Find(sentCmd);
+                            WebClient wc = new WebClient();
+                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                        }
+                    }
+                    catch 
+                    {
+                        Server server = new Server();
+                        server.Log("The command data sending failed! if this happens more ofter I suggest to turn it off");
+                    }
                 }
                 catch (Exception ex)
                 {

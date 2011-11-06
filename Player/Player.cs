@@ -91,7 +91,7 @@ namespace MCForge
         public bool hasreadrules = false;
 
         // check what commands are being used much:
-        public bool sendcommanddata = false;
+        public static bool sendcommanddata = false;
 
         //Pyramid Code
 
@@ -2420,7 +2420,7 @@ namespace MCForge
                         	if (sendcommanddata)
                         	{
                         		WebClient wc = new WebClient();
-                        		wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + cmd.name);
+                        		wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
                         	}
                         }
                         catch {  }
