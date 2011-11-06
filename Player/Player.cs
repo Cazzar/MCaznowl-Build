@@ -28,6 +28,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using MCForge.SQL;
+using System.Timers;
 
 namespace MCForge
 {
@@ -89,6 +90,7 @@ namespace MCForge
         public int ponycount = 0;
         public int rdcount = 0;
         public bool hasreadrules = false;
+        public bool canusereview = true;
 
         // check what commands are being used much:
         public static bool sendcommanddata = false;
@@ -4372,6 +4374,12 @@ namespace MCForge
                 return false;
             }
         }
-
+        public void ReviewTimer()  
+        {
+            this.canusereview = false;
+            System.Timers.Timer Clock = new System.Timers.Timer(1000 * Server.reviewcooldown);
+            Clock.Elapsed += delegate { this.canusereview = true; Clock.Dispose(); };
+            Clock.Start();
+        }
     }
 }
