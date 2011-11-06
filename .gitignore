@@ -3,6 +3,8 @@
 #Visual Studio files
 /bin
 /obj
+/Updater/bin
+/Updater/obj
 *.suo
 *.user
 *.[Cc]ache
@@ -11,6 +13,4 @@
 #OS garbage
 [Tt]humbs.db
 *.DS_STORE
-/Updater/bin
-/Updater/obj
 *.lnk

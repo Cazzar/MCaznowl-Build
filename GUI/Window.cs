@@ -441,7 +441,6 @@ namespace MCForge.Gui
 
             if (Server.shuttingDown == true || MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                RemoveNotifyIcon();
                 if (!Server.shuttingDown)
                 {
                     MCForge_.Gui.Program.ExitProgram(false);
@@ -561,11 +560,7 @@ namespace MCForge.Gui
 
         private void btnClose_Click_1(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Really Shutdown the Server? All Connections will break!", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                RemoveNotifyIcon();
-                MCForge_.Gui.Program.ExitProgram(false);
-            }
+            Close();
         }
 
         public void newCommand(string p)
@@ -641,7 +636,6 @@ namespace MCForge.Gui
                     Server.s.Log("The time is now " + DateTime.Now.TimeOfDay);
                     Server.s.Log("The server will now begin auto restart procedures.");
 
-                    RemoveNotifyIcon();
                     MCForge_.Gui.Program.ExitProgram(true);
                 }
             }
@@ -660,12 +654,7 @@ namespace MCForge.Gui
 
         private void shutdownServer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Really Quit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                RemoveNotifyIcon();
-                MCForge_.Gui.Program.ExitProgram(false);
-            }
-
+            Close();
         }
 
         private Player GetSelectedPlayer()
@@ -898,7 +887,6 @@ namespace MCForge.Gui
         {
             if (MessageBox.Show("Are you sure you want to restart?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                RemoveNotifyIcon();
                 MCForge_.Gui.Program.ExitProgram(true);
             }
 
@@ -934,15 +922,6 @@ namespace MCForge.Gui
         private void txtUrl_DoubleClick(object sender, EventArgs e)
         {
             txtUrl.SelectAll();
-        }
-
-        private void RemoveNotifyIcon()
-        {
-            if (notifyIcon1 != null)
-            {
-                notifyIcon1.Visible = false;
-                notifyIcon1.Dispose();
-            }
         }
 
         private void dgvPlayers_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)

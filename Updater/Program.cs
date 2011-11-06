@@ -6,28 +6,54 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading;
+using System.Reflection;
 
 namespace Updater
 {
     class Program
     {
         static int tries = 0;
+        static bool usingConsole = false;
+        static string parent = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+        static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(globalException);
+            try
+            {
+                string[] foundView = File.ReadAllLines("Viewmode.cfg");
+                if (foundView[4].Split(' ')[2].ToLower() == "true")
+                {
+                    usingConsole = true;
+                }
+            }
+            catch { }
             if (args.Length < 1)
             {
-                string[] defaultname = new string[] { "MCForge.exe" };
-                Main(defaultname);
+                Console.WriteLine("Updater was started incorrectly.");
+                MessageBox.Show("Updater was started incorrectly.", "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
             }
             else
             {
                 try
                 {
-                    Console.WriteLine("Waiting for " + args[0] + " to exit...");
-                    while (Process.GetProcessesByName(args[0]).Length > 0)
+                    if (args[0].Contains("securitycheck10934579068013978427893755755270374"))
                     {
-                        //Sit here and do nothing
+                        args[0] = args[0].Replace("securitycheck10934579068013978427893755755270374", "");
+                        if (args[0] == ".exe")
+                            args[0] = "securitycheck10934579068013978427893755755270374.exe";
+                        Console.WriteLine("Waiting for " + args[0] + " to exit...");
+                        while (Process.GetProcessesByName(args[0]).Length > 0)
+                        {
+                            //Sit here and do nothing
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Updater was started incorrectly.");
+                        MessageBox.Show("Updater was started incorrectly.", "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Environment.Exit(0);
                     }
                 }
                 catch (Exception e) { UpdateFailure(e); }
@@ -102,13 +128,19 @@ namespace Updater
                 Console.WriteLine("MCForge successfully updated.  Starting MCForge...");
                 try
                 {
-                    Process.Start(args[0]);
+                    if (!usingConsole)
+                    {
+                        Process.Start(args[0]);
+                    }
+                    else
+                    {
+                        Process.Start("mono", parentfullpathdir + "/" + args[0]);
+                    }
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("Unable to start MCForge.  You will need to start it manually.");
                     MessageBox.Show("Updater has updated MCForge, but was unable to start it.  You will need to start it manually.", "Updater", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Console.ReadLine();
                 }
             }
             catch (Exception e)
@@ -129,14 +161,12 @@ namespace Updater
         {
             Console.WriteLine("Updater is unable to update MCForge.\n\n" + e.ToString() + "\n\nPress any key to exit.");
             MessageBox.Show("Updater is unable to update MCForge.\n\n" + e.ToString(), "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Console.ReadLine();
             Environment.Exit(0);
         }
         static void NoUpdateFiles()
         {
             Console.WriteLine("Updater has no files to update.  Press any key to exit.");
             MessageBox.Show("Updater has no files to update.", "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Console.ReadLine();
             Environment.Exit(0);
         }
         static void globalException(object sender, UnhandledExceptionEventArgs args)
@@ -144,7 +174,6 @@ namespace Updater
             Exception e = (Exception)args.ExceptionObject;
             Console.WriteLine("UnhandledException:\n\n" + e);
             MessageBox.Show("UnhandledException:\n\n" + e, "Updater Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Console.ReadLine();
             Environment.Exit(0);
         }
     }
