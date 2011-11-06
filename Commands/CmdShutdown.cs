@@ -36,7 +36,7 @@ namespace MCForge
             bool shutdown = true;
             string file = "stopShutdown";
             if (File.Exists(file)) { File.Delete(file); }
-            if (message == "") { message = "%4Sever is going to shutdown in " + secTime + " seconds"; }
+            if (message == "") { message = "Sever is going to shutdown in " + secTime + " seconds"; }
             else
             {
                 if (message == "cancel") { File.Create(file).Close(); shutdown = false; message = "Shutdown cancelled"; }
@@ -55,14 +55,15 @@ namespace MCForge
             }
             if (shutdown)
             {
-                Player.GlobalMessage(message);
+                Player.GlobalMessage("%4" + message);
+                Server.s.Log(message);
                 for (int t = secTime; t > 0; t = t - 1)
                 {
-                    if (!File.Exists(file)) { Player.GlobalMessage("%4Server shutdown in " + t + " seconds"); Thread.Sleep(1000); }
-                    else { File.Delete(file); Player.GlobalMessage("Shutdown canceled"); return; }
+                    if (!File.Exists(file)) { Player.GlobalMessage("%4Server shutdown in " + t + " seconds"); Server.s.Log("Server shutdown in " + t + " seconds"); Thread.Sleep(1000); }
+                    else { File.Delete(file); Player.GlobalMessage("Shutdown cancelled"); Server.s.Log("Shutdown cancelled"); return; }
                 }
                 if (!File.Exists(file)) { MCForge_.Gui.Program.ExitProgram(false); return; }
-                else { File.Delete(file); Player.GlobalMessage("Shutdown canceled"); return; }
+                else { File.Delete(file); Player.GlobalMessage("Shutdown cancelled"); Server.s.Log("Shutdown cancelled"); return; }
             }
             return;
         }

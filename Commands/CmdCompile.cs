@@ -68,6 +68,7 @@ namespace MCForge
             }
             if (param[1] == "vb")
             {
+                message = message.Remove(message.Length - 3, 3);
                 if (File.Exists("extra/commands/source/Cmd" + message + ".vb"))
                 {
                     try
