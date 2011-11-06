@@ -705,6 +705,9 @@ namespace MCForge.Gui
                             case "premium-only":
                                 chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "send-command-data":
+                                sndcmddataChk.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
                         }
                     }
                 }
@@ -877,6 +880,7 @@ namespace MCForge.Gui
             //Server.Server_Flag = ;
             Server.PremiumPlayersOnly = chkPrmOnly.Checked;
 
+            Player.sendcommanddata = sndcmddataChk.Checked;
         }
 
         private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)

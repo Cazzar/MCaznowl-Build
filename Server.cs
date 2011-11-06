@@ -100,6 +100,7 @@ namespace MCForge
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
         public static bool UseCTF = false;
+        public static bool ServerSetupFinished = false;
         public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
@@ -119,6 +120,8 @@ namespace MCForge
 
         public static Level mainLevel;
         public static List<Level> levels;
+        //reviewlist intitialize
+        public static List<string> reviewlist = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -972,6 +975,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
+                ServerSetupFinished = true;
                 Checktimer.StartTimer();
                 try
                 {
@@ -984,7 +988,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-
+                
             });
         }
 

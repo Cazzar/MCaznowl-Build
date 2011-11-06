@@ -617,6 +617,10 @@ namespace MCForge
                             case "wom-serverflag":
                                 Server.Server_Flag = value;
                                 break;
+                            case "send-command-data":
+                                Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
+                                break;
+                                
                         }
                     }
                 }
@@ -803,6 +807,7 @@ namespace MCForge
             string dogCsv = string.Join(",", Server.LevelList.ToArray());
             w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
+            w.WriteLine("send-command-data = " + Player.sendcommanddata.ToString());
             w.WriteLine();
             w.WriteLine("# backup options");
             w.WriteLine("backup-time = " + Server.backupInterval.ToString());

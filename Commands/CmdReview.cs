@@ -1,6 +1,6 @@
 ﻿/*
-	Copyright 2011 MCForge
-		
+	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
 	not use this file except in compliance with the Licenses. You may
@@ -17,53 +17,149 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace MCForge
 {
-    public class CmdReview : Command
+    class CmdReview : Command
     {
         public override string name { get { return "review"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "mod"; } }
+        public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdReview() { }
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
-            bool isopson = false;
-            try
+            if (p == null)
             {
-                foreach (Player pl in Player.players)
+                Player.SendMessage(p, "You can't execute this command as Console!");
+                return;
+            } 
+            if (message == "enter" || message == "view" || message == "leave" || message == "clear" || message == "next")
+            {
+                if (message == "enter")
                 {
-                    if (pl.group.Permission >= Server.opchatperm && !pl.hidden)
+                    foreach (string testwho in Server.reviewlist)
                     {
-                        isopson = true;
-                        break; // We're done, break out of this loop
+                        if (testwho == p.name)
+                        {
+                            Player.SendMessage(p, "You already entered the review queue!");
+                            return;
+                        }
+                    }
+                    Server.reviewlist.Add(p.name);
+                    int reviewlistpos = Server.reviewlist.IndexOf(p.name);
+                    Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
+                    return;
+                }
+                if (message == "view")
+                {
+                    if (Server.reviewlist.Count != 0)
+                    {
+                        Player.SendMessage(p, "&9Players in the review queue:");
+                        int viewnumb = 1;
+                        foreach (string golist in Server.reviewlist)
+                        {
+                            Player.SendMessage(p, "&a" + viewnumb.ToString() + ". " + golist);
+                            viewnumb++;
+                        }
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "There are no players in the review queue!");
+                    }
+                }
+                if (message == "leave")
+                {
+                    bool leavetest = false;
+                    foreach (string testwho2 in Server.reviewlist)
+                    {
+                        if (testwho2 == p.name)
+                        {
+                            leavetest = true;
+                        }
+                    }
+                    if (!leavetest)
+                    {
+                        Player.SendMessage(p, "You aren't in the review queue so you can't leave it!");
+                        return;
+                    }
+                    Server.reviewlist.Remove(p.name);
+                    int toallplayerscount = 1;
+                    foreach (string toallplayers in Server.reviewlist)
+                    {
+                        Player tosend = Player.Find(toallplayers);
+                        Player.SendMessage(tosend, "The review queue has changed. Your now on spot " + toallplayerscount.ToString() + ".");
+                        toallplayerscount++;
+                    }
+                    Player.SendMessage(p, "You have left the review queue!");
+                    return;
+                }
+                if (message == "next")
+                {
+                    if (p.group.Permission >= LevelPermission.Operator)
+                    {
+                        if (p == null)
+                        {
+                            Player.SendMessage(p, "You can't execute this command as Console!");
+                            return;
+                        }
+                        string[] user = Server.reviewlist.ToArray();
+                        Player who = Player.Find(user[0]);
+                        if (who == null)
+                        {
+                            Player.SendMessage(p, "Player " + user[0] + " doesn't exist or is offline. " + user[0] + " has been removed from the review queue");
+                            Server.reviewlist.Remove(user[0]);
+                            return;
+                        }
+                        if (who == p)
+                        {
+                            Player.SendMessage(p, "You can't teleport to yourself! You have been removed from the review queue.");
+                            Server.reviewlist.Remove(user[0]);
+                            return;
+                        }
+                        Server.reviewlist.Remove(user[0]);
+                        unchecked { p.SendPos((byte)-1, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1]); }
+                        Player.SendMessage(p, "You have been teleported to " + user[0]);
+                        Player.SendMessage(who, "Your request has been answered by " + p.name + ".");
+                        int toallplayerscount = 0;
+                        foreach (string toallplayers in Server.reviewlist)
+                        {
+                            Player who2 = Player.Find(toallplayers);
+                            Player.SendMessage(who2, "The review queue has been rotated. you now have " + toallplayerscount.ToString() + " players waiting in front of you");
+                            toallplayerscount++;
+                        }
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "&cYou have no permission to use the review queue!");
+                    }
+                }
+                if (message == "clear")
+                {
+                    if (p.group.Permission >= LevelPermission.Operator)
+                    {
+                        Server.reviewlist.Clear();
+                        Player.SendMessage(p, "The review queue has been cleared");
+                        return;
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "&cYou have no permission to clear the Review Queue!");
                     }
                 }
             }
-            catch/* (Exception e)*/
-            {
-                isopson = true;
-            }
-            if (isopson == true)
-            {
-                Player.SendMessage(p, "You requested that operators see your building. They should be coming soon.");
-                Player.GlobalMessageOps(p.color + p.name + "-" + Server.DefaultColor + " requests a review of their building");
-            }
             else
             {
-                Player.SendMessage(p, "There are no operators on to review your build. Please wait for one to come on or come back later.");
+                Help(p);
+                return;
             }
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/review - Requests that ops come and look at your building. Don't abuse this.");
+            Player.SendMessage(p, "/review <enter/view/leave/next/clear> - Lets you enter, view, leave, or clear the reviewlist or teleport you to the next player in the review queue.");
         }
     }
-
 }

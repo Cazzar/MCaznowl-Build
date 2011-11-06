@@ -277,9 +277,9 @@ namespace MCForge
                 Server.ErrorLog(e);
             }
         }
-        public void Disconnect(string message)
+        public void Disconnect(string reason)
         {
-            if (Server.irc && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from IRC!"); }
+            if (Server.irc && IsConnected()) { connection.Disconnect(reason); Server.s.Log("Disconnected from IRC!"); }
         }
         public bool IsConnected()
         {
