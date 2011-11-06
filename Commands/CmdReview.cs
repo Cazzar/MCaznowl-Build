@@ -34,29 +34,45 @@ namespace MCForge
         {
             if (p == null)
             {
-                Player.SendMessage(p, "You can't execute this command as Console!");
-                return;
+                if (message == "clear")
+                {
+                    Server.reviewlist.Clear();
+                    Player.SendMessage(p, "The review queue has been cleared");
+                    return;
+                }
+                else
+                {
+                    Player.SendMessage(p, "You can't execute this command as Console!");
+                    return;
+                }
             } 
             if (message == "enter" || message == "view" || message == "leave" || message == "clear" || message == "next")
             {
                 if (message == "enter")
                 {
-                    Group gr = Group.Find(Server.reviewenter);
-                    LevelPermission lp = gr.Permission;
-                    if (p.group.Permission >= lp)
+                    if (p.canusereview)
                     {
-                    foreach (string testwho in Server.reviewlist)
-                    {
-                        if (testwho == p.name)
+                        Group gr = Group.Find(Server.reviewenter);
+                        LevelPermission lp = gr.Permission;
+                        if (p.group.Permission >= lp)
                         {
-                            Player.SendMessage(p, "You already entered the review queue!");
-                            return;
+                            foreach (string testwho in Server.reviewlist)
+                            {
+                                if (testwho == p.name)
+                                {
+                                    Player.SendMessage(p, "You already entered the review queue!");
+                                    return;
+                                }
+                            }
+                            Server.reviewlist.Add(p.name);
+                            int reviewlistpos = Server.reviewlist.IndexOf(p.name);
+                            Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
+                            p.ReviewTimer();
                         }
                     }
-                    Server.reviewlist.Add(p.name);
-                    int reviewlistpos = Server.reviewlist.IndexOf(p.name);
-                    Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
-                    return;
+                    else
+                    {
+                        Player.SendMessage(p, "You have to wait " + Server.reviewcooldown + " seconds everytime you use this command");
                     }
                 }
                 if (message == "view")

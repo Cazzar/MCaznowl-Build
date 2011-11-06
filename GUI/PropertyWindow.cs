@@ -176,6 +176,7 @@ namespace MCForge.Gui
             {
                 Server.s.Log("Failed to start lava control update timer!");
             }
+            reviewlist_update();
         }
 
         public static bool EditTextOpen = false;
