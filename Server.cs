@@ -123,7 +123,7 @@ namespace MCForge
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
         //reviewoptions intitialize
-        public static int reviewcooldown = 60;
+        public static int reviewcooldown = 600;
         public static string reviewenter = "guest";
         public static string reviewleave = "guest";
         public static string reviewview = "operator";
