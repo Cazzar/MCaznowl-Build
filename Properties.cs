@@ -620,7 +620,32 @@ namespace MCForge
                             case "send-command-data":
                                 Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
-                                
+                            case "view":
+                                Server.reviewview = value.ToLower();
+                                break;
+                            case "enter":
+                                Server.reviewenter = value.ToLower();
+                                break;
+                            case "leave":
+                                Server.reviewleave = value.ToLower();
+                                break;
+                            case "cooldown":
+                                try
+                                {
+                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower());
+                                }
+                                catch
+                                {
+                                    Server.reviewcooldown = 60;
+                                    Server.s.Log("An error occurred reading the review cooldown value");
+                                }
+                                break;
+                            case "clear":
+                                Server.reviewclear = value.ToLower();
+                                break;
+                            case "next":
+                                Server.reviewnext = value.ToLower();
+                                break;
                         }
                     }
                 }
@@ -879,6 +904,14 @@ namespace MCForge
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
+            w.WriteLine("");
+            w.WriteLine("#Review settings");
+            w.WriteLine("view = " + Server.reviewview);
+            w.WriteLine("enter = " + Server.reviewenter);
+            w.WriteLine("leave = " + Server.reviewleave);
+            w.WriteLine("cooldown = " + Server.reviewcooldown.ToString());
+            w.WriteLine("clear = " + Server.reviewclear);
+            w.WriteLine("next = " + Server.reviewnext);
         }
     }
 }

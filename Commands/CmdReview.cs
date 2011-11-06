@@ -41,6 +41,10 @@ namespace MCForge
             {
                 if (message == "enter")
                 {
+                    Group gr = Group.Find(Server.reviewenter);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
+                    {
                     foreach (string testwho in Server.reviewlist)
                     {
                         if (testwho == p.name)
@@ -53,9 +57,14 @@ namespace MCForge
                     int reviewlistpos = Server.reviewlist.IndexOf(p.name);
                     Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
                     return;
+                    }
                 }
                 if (message == "view")
                 {
+                    Group gr = Group.Find(Server.reviewview);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
+                    {
                     if (Server.reviewlist.Count != 0)
                     {
                         Player.SendMessage(p, "&9Players in the review queue:");
@@ -71,8 +80,13 @@ namespace MCForge
                         Player.SendMessage(p, "There are no players in the review queue!");
                     }
                 }
+                }
                 if (message == "leave")
                 {
+                    Group gr = Group.Find(Server.reviewleave);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
+                    {
                     bool leavetest = false;
                     foreach (string testwho2 in Server.reviewlist)
                     {
@@ -97,9 +111,12 @@ namespace MCForge
                     Player.SendMessage(p, "You have left the review queue!");
                     return;
                 }
+                }
                 if (message == "next")
                 {
-                    if (p.group.Permission >= LevelPermission.Operator)
+                   Group gr = Group.Find(Server.reviewnext);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
                     {
                         if (p == null)
                         {
@@ -139,7 +156,9 @@ namespace MCForge
                 }
                 if (message == "clear")
                 {
-                    if (p.group.Permission >= LevelPermission.Operator)
+                    Group gr = Group.Find(Server.reviewclear);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
                     {
                         Server.reviewlist.Clear();
                         Player.SendMessage(p, "The review queue has been cleared");
