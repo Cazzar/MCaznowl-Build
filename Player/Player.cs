@@ -2865,13 +2865,21 @@ namespace MCForge
                 HTNO((short)level.width).CopyTo(buffer, 0);
                 HTNO((short)level.depth).CopyTo(buffer, 2);
                 HTNO((short)level.height).CopyTo(buffer, 4);
-                if (OnSendMap != null)
-                {
-                    OnSendMap(this, buffer);
-                }
                 SendRaw(4, buffer);
                 Loading = false;
             }
+            catch (Exception ex)
+            {
+                Kick("An error occurred when sending the map data!");
+                Server.ErrorLog(ex);            }
+                if (OnSendMap != null)
+                    OnSendMap(this, buffer);
+            }
+            catch (Exception ex)
+            {
+                Command.all.Find("goto").Use(this, Server.mainLevel.name);
+                SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                Server.ErrorLog(ex);
             catch (Exception ex)
             {
                 Kick("An error occurred when sending the map data!");
@@ -2879,7 +2887,7 @@ namespace MCForge
             }
             finally
             {
-                if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
