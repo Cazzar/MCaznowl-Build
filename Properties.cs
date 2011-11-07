@@ -168,7 +168,7 @@ namespace MCForge
                                 Server.irc = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "irc-colorsenable":
-                                Server.ircColorsEnable = (value.ToLower() == "false") ? true : false;
+                                Server.ircColorsEnable = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "irc-server":
                                 Server.ircServer = value;

@@ -51,7 +51,7 @@ namespace MCForge
             }
             if (p.adminpen == true)
             {
-                if (File.Exists("extra/passwords/" + p.name + ".xml"))
+                if (File.Exists("extra/passwords/" + p.name.ToLower() + ".xml"))
                 {
                     Player.SendMessage(p, "&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact &c" + Server.server_owner + Server.DefaultColor + " and they can &creset it!");
                     return;
@@ -137,15 +137,15 @@ namespace MCForge
                 }
                 try
                 {
-                    if (File.Exists("extra/passwords/" + who.name + ".xml"))
+                    if (File.Exists("extra/passwords/" + who.name.ToLower() + ".xml"))
                     {
-                        File.Delete("extra/passwords/" + who.name + ".xml");
+                        File.Delete("extra/passwords/" + who.name.ToLower() + ".xml");
                     }
-                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.name + ".xml"));
+                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.name.ToLower() + ".xml"));
                     SW.WriteLine(outStr);
                     SW.Flush();
                     SW.Close();
-                    File.WriteAllText("extra/passwords/" + who.name + ".xml", outStr);
+                    File.WriteAllText("extra/passwords/" + who.name.ToLower() + ".xml", outStr);
                 }
                 catch
                 {

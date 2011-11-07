@@ -84,10 +84,10 @@ namespace MCForge
                 {
                     if (File.Exists("levels/" + message + ".lvl.backup"))
                     {
-                        if (File.Exists("Levels/" + message + ".lvl"))
+                        if (File.Exists("levels/" + message + ".lvl"))
                         {
                             Server.s.Log("Level file is corrupt. Deleting and replacing with lvl.backup file.");
-                            File.Delete("Levels/" + message + ".lvl");
+                            File.Delete("levels/" + message + ".lvl");
                         }
                         Server.s.Log("Attempting to load backup.");
                         File.Copy("levels/" + message + ".lvl.backup", "levels/" + message + ".lvl", true);

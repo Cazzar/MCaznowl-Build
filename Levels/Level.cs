@@ -593,6 +593,7 @@ namespace MCForge
                     SW.WriteLine("JailY = " + level.jaily.ToString());
                     SW.WriteLine("JailZ = " + level.jailz.ToString());
                     SW.WriteLine("Unload = " + level.unload.ToString());
+                    SW.WriteLine("WorldChat = " + level.worldChat.ToString());
                     SW.WriteLine("PerBuild = " + (Group.Exists(PermissionToName(level.permissionbuild).ToLower()) ? PermissionToName(level.permissionbuild).ToLower() : PermissionToName(LevelPermission.Builder)));
                     SW.WriteLine("PerVisit = " + (Group.Exists(PermissionToName(level.permissionvisit).ToLower()) ? PermissionToName(level.permissionvisit).ToLower() : PermissionToName(LevelPermission.Guest)));
                     SW.WriteLine("PerBuildMax = " + (Group.Exists(PermissionToName(level.perbuildmax).ToLower()) ? PermissionToName(level.perbuildmax).ToLower() : PermissionToName(LevelPermission.Nobody)));
@@ -1013,6 +1014,7 @@ namespace MCForge
 										case "jaily": level.jaily = ushort.Parse(value); break;
 										case "jailz": level.jailz = ushort.Parse(value); break;
 										case "unload": level.unload = bool.Parse(value); break;
+										case "worldchat": level.worldChat = bool.Parse(value); break;
 
 										case "perbuild":
                                             if (PermissionFromName(value) != LevelPermission.Null) level.permissionbuild = PermissionFromName(value);

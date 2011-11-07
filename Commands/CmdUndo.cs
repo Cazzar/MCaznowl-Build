@@ -40,7 +40,7 @@ namespace MCForge {
                     Player.SendMessage(null, "Console doesn't have an undo buffer.");
                     return;
                 } else {
-                    message = p.name + " 30";
+                    message = p.name.ToLower() + " 30";
                 }
             }
 
@@ -159,22 +159,22 @@ namespace MCForge {
                     if (p != null)
                         p.RedoBuffer.Clear();
 
-                    if (Directory.Exists("extra/undo/" + whoName)) {
-                        di = new DirectoryInfo("extra/undo/" + whoName);
+                    if (Directory.Exists("extra/undo/" + whoName.ToLower())) {
+                        di = new DirectoryInfo("extra/undo/" + whoName.ToLower());
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undo/" + whoName + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undo/" + whoName.ToLower() + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;
                     }
 
-                    if (Directory.Exists("extra/undoPrevious/" + whoName))
+                    if (Directory.Exists("extra/undoPrevious/" + whoName.ToLower()))
                     {
-                        di = new DirectoryInfo("extra/undoPrevious/" + whoName);
+                        di = new DirectoryInfo("extra/undoPrevious/" + whoName.ToLower());
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undoPrevious/" + whoName + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undoPrevious/" + whoName.ToLower() + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;

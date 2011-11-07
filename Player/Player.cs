@@ -3898,10 +3898,10 @@ namespace MCForge
                         Directory.CreateDirectory("extra/undo");
                     }
 
-                    if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
-                    di = new DirectoryInfo("extra/undo/" + p.name);
-                    File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                    if (!Directory.Exists("extra/undo/" + p.name.ToLower())) Directory.CreateDirectory("extra/undo/" + p.name.ToLower());
+                    di = new DirectoryInfo("extra/undo/" + p.name.ToLower());
+                    File.Create("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo"))
                     {
                         foreach (UndoPos uP in p.UndoBuffer)
                         {
