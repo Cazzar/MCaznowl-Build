@@ -15,9 +15,9 @@ namespace MCForge.Remote
             //msg = this.Decrypt(msg, "FORGEREMOTETIVITY");
             byte[] bs = new byte[1];
             //Server.s.Log(msg);
-            if (msg.StartsWith(_ver))  //TODO: make a better checker
+            if (msg.StartsWith(protocal.ToString()))  //TODO: make a better checker
             {
-                msg = msg.Replace(_ver + ": ", "");
+                msg = msg.Replace(protocal.ToString() + ": ", "");
             }
             else
             {
