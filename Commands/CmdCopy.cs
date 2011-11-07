@@ -201,6 +201,11 @@ namespace MCForge
         {
             if (message.EndsWith("#"))
             {
+                if (!p.group.CanExecute(Command.all.Find("copysavenet")))
+                {
+                    Player.SendMessage(p, "You are not allowed to save to network locations.");
+                    return;
+                }
                 message = message.Remove(message.Length - 1);
                 byte[] cnt = new byte[p.CopyBuffer.Count * 7];
                 int k = 0;
@@ -264,6 +269,11 @@ namespace MCForge
         {
             if (message.EndsWith("#"))
             {
+                if (!p.group.CanExecute(Command.all.Find("copyloadnet")))
+                {
+                    Player.SendMessage(p, "You are not allowed to load from network locations.");
+                    return;
+                }
                 try
                 {
                     p.CopyBuffer.Clear();
@@ -310,5 +320,47 @@ namespace MCForge
             p.CopyBuffer.Add(pos);
         }
         struct CatchPos { public ushort x, y, z; public int type; public List<byte> ignoreTypes; }
+    }
+
+    public class CmdCopyLoadNet : Command
+    {
+        public override string name { get { return "copyloadnet"; } }
+        public override string shortcut { get { return ""; } }
+        public override string type { get { return "build"; } }
+        public override bool museumUsable { get { return false; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public CmdCopyLoadNet() { }
+
+        public override void Use(Player p, string message)
+        {
+            Command.all.Find("copy").Use(p, "load " + message + "#");
+        }
+
+        public override void Help(Player p)
+        {
+            Player.SendMessage(p, "/copyloadnet - Loads a copy from network location. Example below:");
+            Player.SendMessage(p, "/copyloadnet servername.com/directory/savename.cpy");
+        }
+    }
+
+    public class CmdCopySaveNet : Command
+    {
+        public override string name { get { return "copysavenet"; } }
+        public override string shortcut { get { return ""; } }
+        public override string type { get { return "build"; } }
+        public override bool museumUsable { get { return false; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
+        public CmdCopySaveNet() { }
+
+        public override void Use(Player p, string message)
+        {
+            Command.all.Find("copy").Use(p, "save " + message + "#");
+        }
+
+        public override void Help(Player p)
+        {
+            Player.SendMessage(p, "/copysavenet - Saves a copy to a network location. Example below:");
+            Player.SendMessage(p, "/copysavenet servername.com/directory/");
+        }
     }
 }
