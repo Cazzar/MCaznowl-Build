@@ -262,6 +262,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Remote Stuff\Remote.Desktop.cs" />
+    <Compile Include="Remote Stuff\Remote.Mobile.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
     <Compile Include="Util\BigEndianBitConverter.cs" />

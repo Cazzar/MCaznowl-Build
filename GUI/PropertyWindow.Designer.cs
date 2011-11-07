@@ -148,6 +148,7 @@ namespace MCForge.Gui
             this.lsNudLives = new System.Windows.Forms.NumericUpDown();
             this.cmbAFKKickPerm = new System.Windows.Forms.ComboBox();
             this.chkGuestLimitNotify = new System.Windows.Forms.CheckBox();
+            this.sndcmddataChk = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -349,8 +350,26 @@ namespace MCForge.Gui
             this.listPasswords = new System.Windows.Forms.ListBox();
             this.label39 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.groupBox28 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label84 = new System.Windows.Forms.Label();
+            this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.groupBox26 = new System.Windows.Forms.GroupBox();
+            this.label83 = new System.Windows.Forms.Label();
+            this.label82 = new System.Windows.Forms.Label();
+            this.label81 = new System.Windows.Forms.Label();
+            this.label80 = new System.Windows.Forms.Label();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label79 = new System.Windows.Forms.Label();
+            this.groupBox25 = new System.Windows.Forms.GroupBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.sndcmddataChk = new System.Windows.Forms.CheckBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -415,6 +434,12 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).BeginInit();
             this.groupBox14.SuspendLayout();
+            this.tabPage13.SuspendLayout();
+            this.groupBox28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox27.SuspendLayout();
+            this.groupBox26.SuspendLayout();
+            this.groupBox25.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
@@ -1598,6 +1623,19 @@ namespace MCForge.Gui
             this.chkGuestLimitNotify.Text = "Guest Limit Notify";
             this.toolTip.SetToolTip(this.chkGuestLimitNotify, "Notify in-game if a guest can\'t join due to the guest limit being reached.");
             this.chkGuestLimitNotify.UseVisualStyleBackColor = true;
+            // 
+            // sndcmddataChk
+            // 
+            this.sndcmddataChk.AutoSize = true;
+            this.sndcmddataChk.Location = new System.Drawing.Point(10, 20);
+            this.sndcmddataChk.Name = "sndcmddataChk";
+            this.sndcmddataChk.Size = new System.Drawing.Size(104, 17);
+            this.sndcmddataChk.TabIndex = 0;
+            this.sndcmddataChk.Text = "Send to MCForge";
+            this.toolTip.SetToolTip(this.sndcmddataChk, "When this is turned on, MCForge will send all commands\r\nthat are being used to a " +
+                    "webpage to count how many\r\ntimes commands are being used. No more data is sent\r\n" +
+                    "through this.");
+            this.sndcmddataChk.UseVisualStyleBackColor = true;
             // 
             // tabPage5
             // 
@@ -3088,12 +3126,14 @@ namespace MCForge.Gui
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Controls.Add(this.tabPage5);
             this.tabControl.Controls.Add(this.tabPage8);
+            this.tabControl.Controls.Add(this.tabPage13);
             this.tabControl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.Location = new System.Drawing.Point(0, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(496, 535);
             this.tabControl.TabIndex = 0;
+            this.tabControl.Click += new System.EventHandler(this.tabControl_Click);
             // 
             // tabPage9
             // 
@@ -3775,18 +3815,188 @@ namespace MCForge.Gui
             this.label38.TabIndex = 1;
             this.label38.Text = "Rank:\r\n\r\n\r\n";
             // 
-            // sndcmddataChk
+            // tabPage13
             // 
-            this.sndcmddataChk.AutoSize = true;
-            this.sndcmddataChk.Location = new System.Drawing.Point(10, 20);
-            this.sndcmddataChk.Name = "sndcmddataChk";
-            this.sndcmddataChk.Size = new System.Drawing.Size(104, 17);
-            this.sndcmddataChk.TabIndex = 0;
-            this.sndcmddataChk.Text = "Send to MCForge";
-            this.toolTip.SetToolTip(this.sndcmddataChk, "When this is turned on, MCForge will send all commands\r\nthat are being used to a " +
-                    "webpage to count how many\r\ntimes commands are being used. No more data is sent\r\n" +
-                    "through this.");
-            this.sndcmddataChk.UseVisualStyleBackColor = true;
+            this.tabPage13.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage13.Controls.Add(this.groupBox28);
+            this.tabPage13.Controls.Add(this.groupBox27);
+            this.tabPage13.Controls.Add(this.groupBox26);
+            this.tabPage13.Controls.Add(this.groupBox25);
+            this.tabPage13.Location = new System.Drawing.Point(4, 22);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(488, 509);
+            this.tabPage13.TabIndex = 9;
+            this.tabPage13.Text = "Review";
+            // 
+            // groupBox28
+            // 
+            this.groupBox28.Controls.Add(this.numericUpDown1);
+            this.groupBox28.Controls.Add(this.label84);
+            this.groupBox28.Location = new System.Drawing.Point(154, 235);
+            this.groupBox28.Name = "groupBox28";
+            this.groupBox28.Size = new System.Drawing.Size(328, 51);
+            this.groupBox28.TabIndex = 4;
+            this.groupBox28.TabStop = false;
+            this.groupBox28.Text = "Options";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(202, 19);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 21);
+            this.numericUpDown1.TabIndex = 1;
+            // 
+            // label84
+            // 
+            this.label84.AutoSize = true;
+            this.label84.Location = new System.Drawing.Point(7, 21);
+            this.label84.Name = "label84";
+            this.label84.Size = new System.Drawing.Size(77, 13);
+            this.label84.TabIndex = 0;
+            this.label84.Text = "Cooldown time";
+            // 
+            // groupBox27
+            // 
+            this.groupBox27.Controls.Add(this.button4);
+            this.groupBox27.Location = new System.Drawing.Point(154, 175);
+            this.groupBox27.Name = "groupBox27";
+            this.groupBox27.Size = new System.Drawing.Size(328, 53);
+            this.groupBox27.TabIndex = 3;
+            this.groupBox27.TabStop = false;
+            this.groupBox27.Text = "Actions";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(7, 21);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(315, 23);
+            this.button4.TabIndex = 0;
+            this.button4.Text = "Clear queue";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // groupBox26
+            // 
+            this.groupBox26.Controls.Add(this.label83);
+            this.groupBox26.Controls.Add(this.label82);
+            this.groupBox26.Controls.Add(this.label81);
+            this.groupBox26.Controls.Add(this.label80);
+            this.groupBox26.Controls.Add(this.comboBox5);
+            this.groupBox26.Controls.Add(this.comboBox4);
+            this.groupBox26.Controls.Add(this.comboBox3);
+            this.groupBox26.Controls.Add(this.comboBox2);
+            this.groupBox26.Controls.Add(this.comboBox1);
+            this.groupBox26.Controls.Add(this.label79);
+            this.groupBox26.Location = new System.Drawing.Point(154, 7);
+            this.groupBox26.Name = "groupBox26";
+            this.groupBox26.Size = new System.Drawing.Size(328, 161);
+            this.groupBox26.TabIndex = 2;
+            this.groupBox26.TabStop = false;
+            this.groupBox26.Text = "Permissions";
+            // 
+            // label83
+            // 
+            this.label83.AutoSize = true;
+            this.label83.Location = new System.Drawing.Point(6, 131);
+            this.label83.Name = "label83";
+            this.label83.Size = new System.Drawing.Size(53, 13);
+            this.label83.TabIndex = 9;
+            this.label83.Text = "Goto next";
+            // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(6, 103);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(64, 13);
+            this.label82.TabIndex = 8;
+            this.label82.Text = "Clear queue";
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(6, 75);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(67, 13);
+            this.label81.TabIndex = 7;
+            this.label81.Text = "Leave queue";
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(6, 47);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(64, 13);
+            this.label80.TabIndex = 6;
+            this.label80.Text = "Enter queue";
+            // 
+            // comboBox5
+            // 
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Location = new System.Drawing.Point(178, 131);
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(144, 21);
+            this.comboBox5.TabIndex = 5;
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(178, 103);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(144, 21);
+            this.comboBox4.TabIndex = 4;
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(178, 75);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(144, 21);
+            this.comboBox3.TabIndex = 3;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(178, 47);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(144, 21);
+            this.comboBox2.TabIndex = 2;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(178, 19);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(144, 21);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(6, 22);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(62, 13);
+            this.label79.TabIndex = 0;
+            this.label79.Text = "View queue";
+            // 
+            // groupBox25
+            // 
+            this.groupBox25.Controls.Add(this.listBox1);
+            this.groupBox25.Location = new System.Drawing.Point(6, 6);
+            this.groupBox25.Name = "groupBox25";
+            this.groupBox25.Size = new System.Drawing.Size(141, 497);
+            this.groupBox25.TabIndex = 1;
+            this.groupBox25.TabStop = false;
+            this.groupBox25.Text = "Review Queue";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 20);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(129, 472);
+            this.listBox1.TabIndex = 0;
             // 
             // PropertyWindow
             // 
@@ -3900,6 +4110,14 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.numSpamMessages)).EndInit();
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
+            this.tabPage13.ResumeLayout(false);
+            this.groupBox28.ResumeLayout(false);
+            this.groupBox28.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox27.ResumeLayout(false);
+            this.groupBox26.ResumeLayout(false);
+            this.groupBox26.PerformLayout();
+            this.groupBox25.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -4210,5 +4428,24 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chkPrmOnly;
         private System.Windows.Forms.GroupBox groupBox24;
         private System.Windows.Forms.CheckBox sndcmddataChk;
+        private System.Windows.Forms.TabPage tabPage13;
+        private System.Windows.Forms.GroupBox groupBox25;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.GroupBox groupBox26;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.GroupBox groupBox27;
+        private System.Windows.Forms.Label label83;
+        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox groupBox28;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label84;
     }
 }
