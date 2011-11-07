@@ -2576,7 +2576,8 @@ namespace MCForge
             //Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
 
             /*int tries = 0;
-        retry:*/ try
+        retry:*/
+            try
             {
 
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
@@ -2604,6 +2605,11 @@ namespace MCForge
 #if DEBUG
                 Server.ErrorLog(e);
 #endif
+            }
+            finally
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
         }
 
@@ -2769,7 +2775,6 @@ namespace MCForge
             sb.Replace("(down)", enc.GetString(stored));
 
             message = sb.ToString();
-
             int totalTries = 0;
         retryTag: try
             {
