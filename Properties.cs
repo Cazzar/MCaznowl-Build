@@ -936,6 +936,14 @@ namespace MCForge
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
+            w.WriteLine("");
+            w.WriteLine("#Review settings");
+            w.WriteLine("view = " + Server.reviewview);
+            w.WriteLine("enter = " + Server.reviewenter);
+            w.WriteLine("leave = " + Server.reviewleave);
+            w.WriteLine("cooldown = " + Server.reviewcooldown.ToString());
+            w.WriteLine("clear = " + Server.reviewclear);
+            w.WriteLine("next = " + Server.reviewnext);
         }
     }
 }

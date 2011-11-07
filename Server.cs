@@ -122,6 +122,13 @@ namespace MCForge
         public static List<Level> levels;
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
+        //reviewoptions intitialize
+        public static int reviewcooldown = 600;
+        public static string reviewenter = "guest";
+        public static string reviewleave = "guest";
+        public static string reviewview = "operator";
+        public static string reviewnext = "operator";
+        public static string reviewclear = "operator";
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -493,6 +500,8 @@ namespace MCForge
                     File.WriteAllText("text/bans.txt", bantext);
                 }
             }
+
+
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");

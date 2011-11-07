@@ -34,28 +34,53 @@ namespace MCForge
         {
             if (p == null)
             {
-                Player.SendMessage(p, "You can't execute this command as Console!");
-                return;
+                if (message == "clear")
+                {
+                    Server.reviewlist.Clear();
+                    Player.SendMessage(p, "The review queue has been cleared");
+                    return;
+                }
+                else
+                {
+                    Player.SendMessage(p, "You can't execute this command as Console!");
+                    return;
+                }
             } 
             if (message == "enter" || message == "view" || message == "leave" || message == "clear" || message == "next")
             {
                 if (message == "enter")
                 {
-                    foreach (string testwho in Server.reviewlist)
+                    if (p.canusereview)
                     {
-                        if (testwho == p.name)
+                        Group gr = Group.Find(Server.reviewenter);
+                        LevelPermission lp = gr.Permission;
+                        if (p.group.Permission >= lp)
                         {
-                            Player.SendMessage(p, "You already entered the review queue!");
-                            return;
+                            foreach (string testwho in Server.reviewlist)
+                            {
+                                if (testwho == p.name)
+                                {
+                                    Player.SendMessage(p, "You already entered the review queue!");
+                                    return;
+                                }
+                            }
+                            Server.reviewlist.Add(p.name);
+                            int reviewlistpos = Server.reviewlist.IndexOf(p.name);
+                            Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
+                            p.ReviewTimer();
                         }
                     }
-                    Server.reviewlist.Add(p.name);
-                    int reviewlistpos = Server.reviewlist.IndexOf(p.name);
-                    Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
-                    return;
+                    else
+                    {
+                        Player.SendMessage(p, "You have to wait " + Server.reviewcooldown + " seconds everytime you use this command");
+                    }
                 }
                 if (message == "view")
                 {
+                    Group gr = Group.Find(Server.reviewview);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
+                    {
                     if (Server.reviewlist.Count != 0)
                     {
                         Player.SendMessage(p, "&9Players in the review queue:");
@@ -71,8 +96,13 @@ namespace MCForge
                         Player.SendMessage(p, "There are no players in the review queue!");
                     }
                 }
+                }
                 if (message == "leave")
                 {
+                    Group gr = Group.Find(Server.reviewleave);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
+                    {
                     bool leavetest = false;
                     foreach (string testwho2 in Server.reviewlist)
                     {
@@ -97,9 +127,12 @@ namespace MCForge
                     Player.SendMessage(p, "You have left the review queue!");
                     return;
                 }
+                }
                 if (message == "next")
                 {
-                    if (p.group.Permission >= LevelPermission.Operator)
+                   Group gr = Group.Find(Server.reviewnext);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
                     {
                         if (p == null)
                         {
@@ -139,7 +172,9 @@ namespace MCForge
                 }
                 if (message == "clear")
                 {
-                    if (p.group.Permission >= LevelPermission.Operator)
+                    Group gr = Group.Find(Server.reviewclear);
+                    LevelPermission lp = gr.Permission;
+                    if (p.group.Permission >= lp)
                     {
                         Server.reviewlist.Clear();
                         Player.SendMessage(p, "The review queue has been cleared");
