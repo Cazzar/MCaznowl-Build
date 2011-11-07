@@ -176,6 +176,7 @@ namespace MCForge.Gui
             {
                 Server.s.Log("Failed to start lava control update timer!");
             }
+            reviewlist_update();
         }
 
         public static bool EditTextOpen = false;
@@ -595,7 +596,7 @@ namespace MCForge.Gui
                                 if (value != "")
                                 {
                                     string input = value.Replace(" ", "").ToString();
-                                        int itndex = input.IndexOf("#");
+                                    int itndex = input.IndexOf("#");
                                     if (itndex > 0)
                                         input = input.Substring(0, itndex);
                                     levelList.Text = input;
@@ -702,12 +703,64 @@ namespace MCForge.Gui
                             case "wom-direct":
                                 chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "premium-only":
+                                chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "send-command-data":
+                                sndcmddataChk.Checked = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "view":
+                                Server.reviewview = value.ToLower();
+                                break;
+                            case "enter":
+                                Server.reviewenter = value.ToLower();
+                                break;
+                            case "leave":
+                                Server.reviewleave = value.ToLower();
+                                break;
+                            case "cooldown":
+                                try
+                                {
+                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower());
+                                }
+                                catch
+                                {
+                                    Server.reviewcooldown = 60;
+                                    Server.s.Log("An error occurred reading the review cooldown value");
+                                }
+                                break;
+                            case "clear":
+                                Server.reviewclear = value.ToLower();
+                                break;
+                            case "next":
+                                Server.reviewnext = value.ToLower();
+                                break;
                         }
                     }
                 }
                 //Save(givenPath);
             }
             //else Save(givenPath);
+                Group[] grouplist = Group.GroupList.ToArray();
+                comboBox1.Items.Clear();
+                comboBox2.Items.Clear();
+                comboBox3.Items.Clear();
+                comboBox4.Items.Clear();
+                comboBox5.Items.Clear();
+                foreach (Group g in grouplist)
+                {
+                    comboBox1.Items.Add(g.name);
+                    comboBox2.Items.Add(g.name);
+                    comboBox3.Items.Add(g.name);
+                    comboBox4.Items.Add(g.name);
+                    comboBox5.Items.Add(g.name);
+                }
+                comboBox1.Text = Server.reviewview;
+                comboBox2.Text = Server.reviewenter;
+                comboBox3.Text = Server.reviewleave;
+                comboBox4.Text = Server.reviewclear;
+                comboBox5.Text = Server.reviewnext;
+                numericUpDown1.Value = Server.reviewcooldown;
         }
         public bool ValidString(string str, string allowed)
         {
@@ -872,8 +925,16 @@ namespace MCForge.Gui
             //Server.Server_ALT = ;
             //Server.Server_Disc = ;
             //Server.Server_Flag = ;
+            Server.PremiumPlayersOnly = chkPrmOnly.Checked;
 
-
+            Player.sendcommanddata = sndcmddataChk.Checked;
+            Server.reviewview = comboBox1.SelectedItem.ToString();
+            Server.reviewenter = comboBox2.SelectedItem.ToString();
+            Server.reviewleave = comboBox3.SelectedItem.ToString();
+            Server.reviewclear = comboBox4.SelectedItem.ToString();
+            Server.reviewnext = comboBox5.SelectedItem.ToString();
+            decimal value = numericUpDown1.Value;
+            Server.reviewcooldown = Convert.ToInt32(value);
         }
 
         private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)
@@ -2155,5 +2216,34 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 }
             }
         }
-    }
+
+        private void tabControl_Click(object sender, EventArgs e)
+        {
+            reviewlist_update();
+        }
+        public void reviewlist_update()
+        {
+            int people = 1;
+            listBox1.Items.Clear();
+            listBox1.Items.Add("Players in queue:");
+            listBox1.Items.Add("----------");
+            foreach (string playerinqueue in Server.reviewlist)
+            {
+                
+                listBox1.Items.Add(people.ToString() + ". " + playerinqueue);
+                people++;
+            }
+            people--;
+            listBox1.Items.Add("----------");
+            listBox1.Items.Add(people + " player(s) in queue.");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Command.all.Find("review").Use(null, "clear");
+            MessageBox.Show("Review queue has been cleared!");
+            reviewlist_update();
+        }
+
+       }
 }

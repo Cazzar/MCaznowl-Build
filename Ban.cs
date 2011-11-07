@@ -43,7 +43,7 @@ namespace MCForge
             string hour = DateTime.Now.Hour.ToString();
             string minute = DateTime.Now.Minute.ToString();
             // Creating date + time string that looks nice to read:
-            string datetime = dayname + "-" + daynumber + "-" + month + "-" + year + ",-at-" + hour + ":" + minute;
+            string datetime = dayname + "%20" + daynumber + "%20" + month + "%20" + year + ",%20at%20" + hour + ":" + minute;
             // checking if p = player or console
             string player;
             if (p == null) player = "Console";
@@ -52,7 +52,7 @@ namespace MCForge
             string stealthn;
             if (stealth) stealthn = "true";
             else stealthn = "false";
-            if (reason == "") reason = "&cnone";
+            if (reason == "") reason = "&c-";
             Write(player, who, reason, stealthn, datetime, oldrank);
         }
         static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)
@@ -85,8 +85,6 @@ namespace MCForge
                     oldrank = line.Split(' ')[5];
                 }
             }
-            reason = reason.Replace("~", " ");
-            timedate = timedate.Replace("-", " ");
             string[] end = { bannedby, reason, timedate, oldrank, stealth };
             return end;
         }
@@ -106,17 +104,34 @@ namespace MCForge
         }
         public static string Editreason(string who, string reason)
         {
+            bool found = false;
+            string endproduct = "";
             if (Isbanned(who))
             {
                 foreach (string line in File.ReadAllLines("text/bans.txt"))
                 {
                     if (line.Split(' ')[1] == who)
                     {
-                        line.Replace(line.Split(' ')[2], reason);
-                        return "";
+                        string replacethis = line.Split(' ')[2];
+                        string oldline = line;
+                        string newline = oldline.Replace(replacethis, reason);
+                        endproduct = endproduct + newline + "\r\n";
+                        found = true;
+                    }
+                    else
+                    {
+                        endproduct = endproduct + line + "\r\n";
                     }
                 }
-                return "Couldn't find baninfo about this player!";
+                if (found)
+                {
+                    File.WriteAllText("text/bans.txt", endproduct);
+                    return "";
+                }
+                else
+                {
+                    return "Couldn't find baninfo about this player!";
+                }
             }
             else
             {

@@ -100,6 +100,7 @@ namespace MCForge
         public static bool higherranktp = true;
         public static bool agreetorulesonentry = false;
         public static bool UseCTF = false;
+        public static bool ServerSetupFinished = false;
         public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
@@ -119,6 +120,15 @@ namespace MCForge
 
         public static Level mainLevel;
         public static List<Level> levels;
+        //reviewlist intitialize
+        public static List<string> reviewlist = new List<string>();
+        //reviewoptions intitialize
+        public static int reviewcooldown = 600;
+        public static string reviewenter = "guest";
+        public static string reviewleave = "guest";
+        public static string reviewview = "operator";
+        public static string reviewnext = "operator";
+        public static string reviewclear = "operator";
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -194,7 +204,7 @@ namespace MCForge
 
         // OmniBan
         public static OmniBan omniban;
-        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 20);
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 30);
 
         //Settings
         #region Server Settings
@@ -263,6 +273,7 @@ namespace MCForge
         public static bool oldHelp = false;
         public static bool parseSmiley = true;
         public static bool useWhitelist = false;
+        public static bool PremiumPlayersOnly = false;
         public static bool forceCuboid = false;
         public static bool profanityFilter = false;
         public static bool notifyOnJoinLeave = false;
@@ -472,6 +483,20 @@ namespace MCForge
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
+            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
+            else
+            {
+                string bantext = File.ReadAllText("text/bans.txt");
+                if (!bantext.Contains("%20") && bantext != "")
+                {
+                    bantext = bantext.Replace("~", "%20");
+                    bantext = bantext.Replace("-", "%20");
+                    File.WriteAllText("text/bans.txt", bantext);
+                }
+            }
+
+
 
             if (!Directory.Exists("extra")) Directory.CreateDirectory("extra");
             if (!Directory.Exists("extra/undo")) Directory.CreateDirectory("extra/undo");
@@ -959,6 +984,7 @@ processThread.Start();
                 }
                 catch { }
                 Log("Finished setting up server");
+                ServerSetupFinished = true;
                 Checktimer.StartTimer();
                 try
                 {
@@ -971,7 +997,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-
+                
             });
         }
 

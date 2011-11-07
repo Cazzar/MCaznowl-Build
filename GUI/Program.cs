@@ -176,7 +176,8 @@ namespace MCForge_.Gui
                 {
                     cmd.Use(null, sentMsg);
                     Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                    handleComm(Console.ReadLine());
+                    if (sentCmd.ToLower() != "restart" && sentMsg != String.Empty)
+                        handleComm(Console.ReadLine());
                     return;
                 }
                 else
@@ -474,10 +475,10 @@ namespace MCForge_.Gui
 
                 File.WriteAllBytes("Updater.exe", MCForge.Properties.Resources.Updater);
                 if (!usingConsole)
-                    Process.Start("Updater.exe", parent).StartInfo.UseShellExecute = false;
+                    Process.Start("Updater.exe", "securitycheck10934579068013978427893755755270374" + parent);
                 else
                 {
-                    Process.Start("Updater.exe");
+                    Process.Start("mono", parentfullpathdir + "/Updater.exe securitycheck10934579068013978427893755755270374" + parent);
                 }
                 ExitProgram(false);
             }
@@ -500,43 +501,44 @@ namespace MCForge_.Gui
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
                         MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
-                        Logger.Dispose();
                     }
                 }
                 catch { }
 
-                if (AutoRestart == true) restartMe();
+                if (AutoRestart == true)
+                {
+                    saveAll(true);
+
+                    if (Server.listen != null) Server.listen.Close();
+                    if (!usingConsole)
+                    {
+                        Process.Start(parent);
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        //Process.Start("mono", parentfullpath);
+                        Application.Exit();
+                        Application.Restart();
+                    }
+                }
                 else
                 {
                     saveAll(false);
+                    Application.Exit();
+                    if (usingConsole)
+                    {
+                        Process[] killmono = Process.GetProcessesByName("mono");
+                        foreach (Process p in killmono)
+                        {
+                            p.Kill();
+                        }
+                    }
                     Environment.Exit(0);
                 }
             })); exitThread.Start();
         }
 
-        static public void restartMe()
-        {
-            Thread restartThread = new Thread(new ThreadStart(delegate
-            {
-                saveAll(true);
-
-                try
-                {
-                    if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
-                    {
-                        MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
-                        MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
-                        MCForge.Gui.Window.thisWindow.notifyIcon1.Dispose();
-                    }
-                }
-                catch { }
-
-                if (Server.listen != null) Server.listen.Close();
-                Process.Start(parent);
-                Environment.Exit(0);
-            }));
-            restartThread.Start();
-        }
         static public void saveAll(bool restarting)
         {
             try
@@ -565,8 +567,10 @@ namespace MCForge_.Gui
                     }
                     l.saveChanges();
                 }
-
-                if (!Server.AutoLoad) File.WriteAllText("text/autoload.txt", level);
+                if (Server.ServerSetupFinished && !Server.AutoLoad)
+                {
+                    File.WriteAllText("text/autoload.txt", level);
+                }
             }
             catch (Exception exc) { Server.ErrorLog(exc); }
         }

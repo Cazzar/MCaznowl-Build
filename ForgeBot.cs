@@ -61,9 +61,23 @@ namespace MCForge
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
 
                 // Load banned commands list
-                if (!File.Exists("text/ircbancmd.txt")) File.Create("text/ircbancmd.txt").Dispose();
-                foreach (string line in File.ReadAllLines("text/ircbancmd.txt"))
-                    banCmd.Add(line);
+                if (File.Exists("text/ircbancmd.txt")) // Backwards compatibility
+                {
+                    using (StreamWriter sw = File.CreateText("text/irccmdblacklist.txt"))
+                    {
+                        sw.WriteLine("#Here you can put commands that cannot be used from the IRC bot.");
+                        sw.WriteLine("#Lines starting with \"#\" are ignored.");
+                        foreach (string line in File.ReadAllLines("text/ircbancmd.txt"))
+                            sw.WriteLine(line);
+                    }
+                    File.Delete("text/ircbancmd.txt");
+                }
+                else
+                {
+                    if (!File.Exists("text/irccmdblacklist.txt")) File.WriteAllLines("text/irccmdblacklist.txt", new String[] { "#Here you can put commands that cannot be used from the IRC bot.", "#Lines starting with \"#\" are ignored." });
+                    foreach (string line in File.ReadAllLines("text/irccmdblacklist.txt"))
+                        if (line[0] != '#') banCmd.Add(line);
+                }
             }
         }
         public void Say(string message, bool opchat = false, bool color = true)
@@ -239,7 +253,7 @@ namespace MCForge
         void Player_PlayerChat(Player p, string message)
         {
             if (Server.irc && IsConnected())
-                Say(p.color + p.prefix + p.name + ": &f" + message, p.opchat);
+                Say(p.name + ": " + message, p.opchat);
         }
         public void Connect()
         {
@@ -263,9 +277,9 @@ namespace MCForge
                 Server.ErrorLog(e);
             }
         }
-        public void Disconnect(string message)
+        public void Disconnect(string reason)
         {
-            if (Server.irc && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from IRC!"); }
+            if (Server.irc && IsConnected()) { connection.Disconnect(reason); Server.s.Log("Disconnected from IRC!"); }
         }
         public bool IsConnected()
         {

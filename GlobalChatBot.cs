@@ -136,9 +136,9 @@ namespace MCForge
             catch { }
         }
 
-        public void Disconnect(string message)
+        public void Disconnect(string reason)
         {
-            if (Server.UseGlobalChat && IsConnected()) { connection.Disconnect(message); Server.s.Log("Disconnected from Global Chat!"); }
+            if (Server.UseGlobalChat && IsConnected()) { connection.Disconnect(reason); Server.s.Log("Disconnected from Global Chat!"); }
         }
 
         public bool IsConnected()

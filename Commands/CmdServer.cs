@@ -86,7 +86,6 @@ namespace MCForge {
                     Player.SendMessage(p, "Settings reloaded!  You may need to restart the server, however.");
                     break;
                 case "backup":
-                    goto case "backup all";
                 case "backup all":
                     // Backup Everything.
                     //   Create SQL statements for this.  The SQL will assume the settings for the current configuration are correct.

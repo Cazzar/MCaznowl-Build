@@ -28,6 +28,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using MCForge.SQL;
+using System.Timers;
 
 namespace MCForge
 {
@@ -51,7 +52,7 @@ namespace MCForge
         public static bool storeHelp = false;
         public static string storedHelp = "";
 
-        Socket socket;
+        public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
@@ -62,6 +63,7 @@ namespace MCForge
 
         public bool megaBoid = false;
         public bool cmdTimer = false;
+        public bool UsingWom = false;
 
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
@@ -88,8 +90,10 @@ namespace MCForge
         public int ponycount = 0;
         public int rdcount = 0;
         public bool hasreadrules = false;
+        public bool canusereview = true;
 
- 
+        // check what commands are being used much:
+        public static bool sendcommanddata = false;
 
         //Pyramid Code
 
@@ -565,6 +569,10 @@ namespace MCForge
                 // Get the length of the message by checking the first byte
                 switch (msg)
                 {
+                    //For wom
+                    case (byte)'G':
+                        level.textures.ServeCfg(this);
+                        return new byte[0];
                     case 0:
                         length = 130;
                         break; // login
@@ -681,6 +689,25 @@ namespace MCForge
                             }
                         }
                         ipQuery.Dispose();
+                    }
+                }
+
+                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower()))
+                {
+                    using (WebClient Client = new WebClient())
+                    {
+                        int tries = 0;
+                        while (tries++ < 3)
+                        {
+                            try
+                            {
+                                bool haspaid = Convert.ToBoolean(Client.DownloadString("http://www.minecraft.net/haspaid.jsp?user=" + name));
+                                if (!haspaid)
+                                    Kick("Sorry, this is a premium server only!");
+                                break;
+                            }
+                            catch { }
+                        }
                     }
                 }
 
@@ -1910,6 +1937,7 @@ namespace MCForge
                 if (text.Truncate(6) == "/womid")
                 {
                     Server.s.Log(name + " is using " + text.Substring(7));
+                    UsingWom = true;
                     return;
                 }
 
@@ -2389,6 +2417,15 @@ namespace MCForge
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
                         }
+                        try
+                        {
+                        	if (sendcommanddata)
+                        	{
+                        		WebClient wc = new WebClient();
+                        		wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
+                        	}
+                        }
+                        catch {  }
                         this.commThread = new Thread(new ThreadStart(delegate
                         {
                             try
@@ -2765,7 +2802,8 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 128).CopyTo(buffer, 1); }
+            else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
             if (Block.canPlace(this.group.Permission, Block.blackrock))
@@ -2778,20 +2816,16 @@ namespace MCForge
         public void SendMap()
         {
             if (level.blocks == null) return;
-            bool derp = false;
             try
             {
-                SendRaw(2);
                 byte[] buffer = new byte[level.blocks.Length + 4];
                 BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
-                //ushort xx; ushort yy; ushort z;z
+                //ushort xx; ushort yy; ushort zz;
 
                 for (int i = 0; i < level.blocks.Length; ++i)
-                {
-                    try { buffer[4 + i] = Block.Convert(level.blocks[i]); }
-                    catch { derp = true; break; }
-                }
+                    buffer[4 + i] = Block.Convert(level.blocks[i]);
 
+                SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
                 for (int i = 1; buffer.Length > 0; ++i)
@@ -2813,20 +2847,21 @@ namespace MCForge
                 HTNO((short)level.width).CopyTo(buffer, 0);
                 HTNO((short)level.depth).CopyTo(buffer, 2);
                 HTNO((short)level.height).CopyTo(buffer, 4);
-                if (OnSendMap != null)
-                {
-                    OnSendMap(this, buffer);
-                }
                 SendRaw(4, buffer);
                 Loading = false;
+
+                if (OnSendMap != null)
+                    OnSendMap(this, buffer);
             }
-            catch
+            catch (Exception ex)
             {
-                Kick("An error occurred when sending the map data!");
+                Command.all.Find("goto").Use(this, Server.mainLevel.name);
+                SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                Server.ErrorLog(ex);
             }
             finally
             {
-                if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
@@ -3948,7 +3983,7 @@ namespace MCForge
             }
             return (byte)1;
         }
-        static byte[] StringFormat(string str, int size)
+        public static byte[] StringFormat(string str, int size)
         {
             byte[] bytes = new byte[size];
             bytes = enc.GetBytes(str.PadRight(size).Substring(0, size));
@@ -4339,6 +4374,12 @@ namespace MCForge
                 return false;
             }
         }
-
+        public void ReviewTimer()  
+        {
+            this.canusereview = false;
+            System.Timers.Timer Clock = new System.Timers.Timer(1000 * Server.reviewcooldown);
+            Clock.Elapsed += delegate { this.canusereview = true; Clock.Dispose(); };
+            Clock.Start();
+        }
     }
 }

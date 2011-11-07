@@ -26,7 +26,7 @@ namespace MCForge
     {
         // Don't even try referencing this from Program.cs, you'll break the updater and it will fail miserably.
         public static string RevisionList = "http://www.mcforge.net/revs.txt";
-        public static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";  
+        public static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
         public static string ArchivePath = "http://www.mcforge.net/archives/exe/";
     }
 }

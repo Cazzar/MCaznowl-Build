@@ -86,8 +86,12 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
+    <Compile Include="Commands\CmdDescend.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
+    <Compile Include="Commands\CmdRankInfo.cs" />
+    <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
@@ -165,7 +169,6 @@
     <Compile Include="Commands\CmdRankMsg.cs" />
     <Compile Include="Commands\CmdReload.cs" />
     <Compile Include="Commands\CmdRestoreSelection.cs" />
-    <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdScinema.cs" />
     <Compile Include="Commands\CmdSeen.cs" />
     <Compile Include="Commands\CmdSendCmd.cs" />
@@ -247,6 +250,7 @@
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
+    <Compile Include="Levels\WoM Textures\Texture_Settings.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
