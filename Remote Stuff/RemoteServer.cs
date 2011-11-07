@@ -24,7 +24,7 @@ using System.Threading;
 
 namespace MCForge.Remote
 {
-   public class RemoteServer
+    public class RemoteServer
     {
         public static Socket listen;
         public static int port = 5050;
@@ -32,28 +32,27 @@ namespace MCForge.Remote
         public static string password = "lols";
         public static bool enableRemote = true;
         public static int tries = 0;
-        
+
 
         static bool shutdown = false;
-       
-        
+
+
 
         public void Start()
         {
             RemoteProperties.Load();
-            
+
             if (enableRemote)
             {
                 try
                 {
+
                     IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
                     listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                     listen.Bind(endpoint);
                     listen.Listen((int)SocketOptionName.MaxConnections);
-
-                    listen.BeginAccept(new AsyncCallback(Accept), null);
-
-                   Server.s. Log("Creating listening socket on port " + port + " for remote console...");          
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                    Server.s.Log("Creating listening socket on port " + port + " for remote console...");
                 }
                 catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
                 catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }
@@ -70,19 +69,32 @@ namespace MCForge.Remote
                 {
                     p = new Remote();
 
-                    p.socket = listen.EndAccept(result);
-                    new Thread(new ThreadStart(p.Start)).Start();
+                    if (tries < 7)
+                    {
+                        if (tries < 5)
+                        {
+                            p.socket = listen.EndAccept(result);
+                            new Thread(new ThreadStart(p.Start)).Start();
 
-                    listen.BeginAccept(new AsyncCallback(Accept), null);
-                    begin = true;
+                            listen.BeginAccept(new AsyncCallback(Accept), null);
+                            begin = true;
+                        }
+                        else
+                        {
+                            new Thread(new ThreadStart(delegate
+                            {
+                                Thread.Sleep(600000);
+                                Command.all.Find("remote").Use(null, "resettry");
+                            })).Start();
+                        }
+                    }
 
-                   
 
                 }
                 catch (SocketException)
                 {
                     if (p != null)
-                        p.push();
+                        p.Disconnect();
                     if (!begin)
                         listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
@@ -91,14 +103,14 @@ namespace MCForge.Remote
                     Server.s.Log(e.Message);
                     Server.s.Log(e.StackTrace);
                     if (p != null)
-                        p.push();
+                        p.Disconnect();
                     if (!begin)
                         listen.BeginAccept(new AsyncCallback(Accept), null);
                 }
             }
         }
-        
-        
+
+
         public static void Close()
         {
             listen.Close();

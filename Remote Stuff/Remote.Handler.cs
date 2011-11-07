@@ -72,7 +72,7 @@ namespace MCForge.Remote
 
 
                     string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = Encrypt(messaged, _gend);
+                    messaged = EncryptMobile(messaged, KeyMobile);
                     byte[] buffed = new byte[(messaged.Length * 2) + 3];
                     util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                     buffed[0] = (byte)2;
@@ -91,7 +91,7 @@ namespace MCForge.Remote
 
 
                     string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = Encrypt(messaged, _gend);
+                    messaged = EncryptMobile(messaged, KeyMobile);
                     byte[] buffed = new byte[(messaged.Length * 2) + 3];
                     util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                     buffed[0] = (byte)4;
@@ -110,7 +110,7 @@ namespace MCForge.Remote
 
 
                     string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = Encrypt(messaged, _gend);
+                    messaged = EncryptMobile(messaged, KeyMobile);
                     byte[] buffed = new byte[(messaged.Length * 2) + 3];
                     util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                     buffed[0] = (byte)1;
