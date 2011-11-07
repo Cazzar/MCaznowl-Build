@@ -28,6 +28,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using MCForge.SQL;
+using System.Timers;
 
 namespace MCForge
 {
@@ -89,6 +90,7 @@ namespace MCForge
         public int ponycount = 0;
         public int rdcount = 0;
         public bool hasreadrules = false;
+        public bool canusereview = true;
 
         // check what commands are being used much:
         public static bool sendcommanddata = false;
@@ -2830,20 +2832,15 @@ namespace MCForge
         public void SendMap()
         {
             if (level.blocks == null) return;
-            bool derp = false;
             try
             {
-                SendRaw(2);
                 byte[] buffer = new byte[level.blocks.Length + 4];
                 BitConverter.GetBytes(IPAddress.HostToNetworkOrder(level.blocks.Length)).CopyTo(buffer, 0);
-                //ushort xx; ushort yy; ushort z;z
+                //ushort xx; ushort yy; ushort zz;
 
                 for (int i = 0; i < level.blocks.Length; ++i)
-                {
-                    try { buffer[4 + i] = Block.Convert(level.blocks[i]); }
-                    catch { derp = true; break; }
-                }
-
+                    buffer[4 + i] = Block.Convert(level.blocks[i]);
+                SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
                 for (int i = 1; buffer.Length > 0; ++i)
@@ -2867,11 +2864,7 @@ namespace MCForge
                 HTNO((short)level.height).CopyTo(buffer, 4);
                 SendRaw(4, buffer);
                 Loading = false;
-            }
-            catch (Exception ex)
-            {
-                Kick("An error occurred when sending the map data!");
-                Server.ErrorLog(ex);            }
+
                 if (OnSendMap != null)
                     OnSendMap(this, buffer);
             }
@@ -2879,10 +2872,6 @@ namespace MCForge
             {
                 Command.all.Find("goto").Use(this, Server.mainLevel.name);
                 SendMessage("There was an error sending the map data, you have been sent to the main level.");
-                Server.ErrorLog(ex);
-            catch (Exception ex)
-            {
-                Kick("An error occurred when sending the map data!");
                 Server.ErrorLog(ex);
             }
             finally
@@ -4407,6 +4396,12 @@ namespace MCForge
                 return false;
             }
         }
-
+        public void ReviewTimer()  
+        {
+            this.canusereview = false;
+            System.Timers.Timer Clock = new System.Timers.Timer(1000 * Server.reviewcooldown);
+            Clock.Elapsed += delegate { this.canusereview = true; Clock.Dispose(); };
+            Clock.Start();
+        }
     }
 }
