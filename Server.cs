@@ -652,7 +652,7 @@ namespace MCForge
                         {
                             if (File.Exists("levels/" + Server.level + ".lvl.backup"))
                             {
-                                Log("Attempting to load backup.");
+                                Log("Attempting to load backup of" + Server.level + ".");
                                 File.Copy("levels/" + Server.level + ".lvl.backup", "levels/" + Server.level + ".lvl", true);
                                 mainLevel = Level.Load(Server.level);
                                 if (mainLevel == null)

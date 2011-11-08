@@ -86,15 +86,27 @@ namespace MCForge
                     {
                         if (File.Exists("levels/" + message + ".lvl"))
                         {
-                            Server.s.Log("Level file is corrupt. Deleting and replacing with lvl.backup file.");
+                            Server.s.Log(message + "level file is corrupt. Deleting and replacing with lvl.backup file.");
                             File.Delete("levels/" + message + ".lvl");
                         }
-                        Server.s.Log("Attempting to load backup.");
+                        Server.s.Log("Attempting to load backup of" + message + ".lvl");
                         File.Copy("levels/" + message + ".lvl.backup", "levels/" + message + ".lvl", true);
                         level = Level.Load(message);
                         if (level == null)
                         {
-                            Player.SendMessage(p, "Backup of " + message + " failed.");
+                            Player.SendMessage(p, "Loading backup of " + message + " failed.");
+                            int backupNumber = 1; string backupPath = @Server.backupLocation;
+                            if (Directory.Exists(backupPath + "/" + message))
+                            {
+                                backupNumber = Directory.GetDirectories(backupPath + "/" + name).Length;
+                                Server.s.Log("Attempting to load latest alternate backup of" + message + ".lvl");
+                                File.Copy("levels/" + backupPath + "/" + message + "/" + backupNumber + "/" + message + ".lvl", "levels/" + message + ".lvl", true);
+                                level = Level.Load(message);
+                                if (level == null)
+                                {
+                                    Player.SendMessage(p, "Loading backup number " + backupNumber + " of " + message + " failed as well.");
+                                }
+                            } 
                             return;
                         }
                     }
