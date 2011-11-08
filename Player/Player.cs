@@ -2590,11 +2590,6 @@ namespace MCForge
                 Server.ErrorLog(e);
 #endif
             }
-            finally
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
         }
 
         public static void SendMessage(Player p, string message)
