@@ -28,6 +28,7 @@ namespace MCForge.Remote
     {
         public static Socket listen;
         public static int port = 5050;
+        public static int protocal = 2;
         public static string username = "head";
         public static string password = "lols";
         public static bool enableRemote = true;
