@@ -120,7 +120,7 @@ namespace MCForge_.Gui
 
                     Console.Title = Server.name + " - MCForge " + Server.Version;
                     usingConsole = true;
-                    handleComm(Console.ReadLine());
+                    handleComm();
 
                     //Application.Run();
                 }
@@ -147,56 +147,51 @@ namespace MCForge_.Gui
             catch (Exception e) { Server.ErrorLog(e); return; }
         }
 
-        public static void handleComm(string s)
+        public static void handleComm()
         {
-            string sentCmd = "", sentMsg = "";
+            string s, sentCmd = String.Empty, sentMsg = String.Empty;
+            while (true)
+            {
+                s = Console.ReadLine().Trim(); // Make sure we have no whitespace!
 
-            s = s.Trim(); // Make sure we have no whitespace!
-            if (s.StartsWith("/")) s = s.Remove(0, 1);
-            else goto talk;
-            if (s.IndexOf(' ') != -1)
-            {
-                sentCmd = s.Split(' ')[0];
-                sentMsg = s.Substring(s.IndexOf(' ') + 1);
-            }
-            else if (s != "")
-            {
-                sentCmd = s;
-            }
-            else
-            {
-                goto talk;
-            }
-
-            try
-            {
-                if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; return; }
-                Command cmd = Command.all.Find(sentCmd);
-                if (cmd != null)
+                doComm:
+                if (s.StartsWith("/")) s = s.Remove(0, 1);
+                else goto talk;
+                if (s.IndexOf(' ') != -1)
                 {
-                    cmd.Use(null, sentMsg);
-                    Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                    if (sentCmd.ToLower() != "restart" || sentMsg != String.Empty)
-                        handleComm(Console.ReadLine());
-                    return;
+                    sentCmd = s.Substring(0, s.IndexOf(' '));
+                    sentMsg = s.Substring(s.IndexOf(' ') + 1);
                 }
-                else
-                {
-                    Console.WriteLine("CONSOLE: Unknown command.");
-                    handleComm(Console.ReadLine());
-                    return;
-                }
-            }
-            catch (Exception e)
-            {
-                Server.ErrorLog(e);
-                Console.WriteLine("CONSOLE: Failed command.");
-                handleComm(Console.ReadLine());
-                return;
-            }
+                else if (s != String.Empty) sentCmd = s;
+                else goto talk;
 
-        talk: handleComm("/say " + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]: &f" + s);
-            handleComm(Console.ReadLine());
+                try
+                {
+                    if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; return; }
+                    Command cmd = Command.all.Find(sentCmd);
+                    if (cmd != null)
+                    {
+                        cmd.Use(null, sentMsg);
+                        Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
+                        if (sentCmd.ToLower() != "restart")
+                            continue;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("CONSOLE: Unknown command.");
+                        continue;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Server.ErrorLog(e);
+                    Console.WriteLine("CONSOLE: Failed command.");
+                    continue;
+                }
+
+                talk: s = String.Format("/say {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s); goto doComm;
+            }
         }
         /*
         public static void handleComm(string s)
@@ -528,11 +523,7 @@ namespace MCForge_.Gui
                     Application.Exit();
                     if (usingConsole)
                     {
-                        Process[] killmono = Process.GetProcessesByName("mono");
-                        foreach (Process p in killmono)
-                        {
-                            p.Kill();
-                        }
+                        Process.GetProcessById(Process.GetCurrentProcess().Id).Kill();
                     }
                     Environment.Exit(0);
                 }

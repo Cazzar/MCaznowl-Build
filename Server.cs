@@ -122,13 +122,6 @@ namespace MCForge
         public static List<Level> levels;
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
-        //reviewoptions intitialize
-        public static int reviewcooldown = 600;
-        public static string reviewenter = "guest";
-        public static string reviewleave = "guest";
-        public static string reviewview = "operator";
-        public static string reviewnext = "operator";
-        public static string reviewclear = "operator";
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -345,6 +338,14 @@ namespace MCForge
         public static byte grieferStoneType = 1;
         public static bool grieferStoneBan = true;
         public static LevelPermission grieferStoneRank = LevelPermission.Guest;
+
+        //reviewoptions intitialize
+        public static int reviewcooldown = 600;
+        public static LevelPermission reviewenter = LevelPermission.Guest;
+        public static LevelPermission reviewleave = LevelPermission.Guest;
+        public static LevelPermission reviewview = LevelPermission.Operator;
+        public static LevelPermission reviewnext = LevelPermission.Operator;
+        public static LevelPermission reviewclear = LevelPermission.Operator;
 
         #endregion
 

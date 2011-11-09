@@ -642,31 +642,72 @@ namespace MCForge
                             case "send-command-data":
                                 Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
-                            case "view":
-                                Server.reviewview = value.ToLower();
+                            case "review-view-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.reviewview = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
-                            case "enter":
-                                Server.reviewenter = value.ToLower();
+                            case "review-enter-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.reviewenter = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
-                            case "leave":
-                                Server.reviewleave = value.ToLower();
+                            case "review-leave-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.reviewleave = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
-                            case "cooldown":
+                            case "review-cooldown":
                                 try
                                 {
                                     Server.reviewcooldown = Convert.ToInt32(value.ToLower());
                                 }
-                                catch
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
+                                break;
+                            case "review-clear-perm":
+                                try
                                 {
-                                    Server.reviewcooldown = 60;
-                                    Server.s.Log("An error occurred reading the review cooldown value");
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.reviewclear = (LevelPermission)parsed;
                                 }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
-                            case "clear":
-                                Server.reviewclear = value.ToLower();
-                                break;
-                            case "next":
-                                Server.reviewnext = value.ToLower();
+                            case "review-next-perm":
+                                try
+                                {
+                                    sbyte parsed = sbyte.Parse(value);
+                                    if (parsed < -50 || parsed > 120)
+                                    {
+                                        throw new FormatException();
+                                    }
+                                    Server.reviewnext = (LevelPermission)parsed;
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
                         }
                     }
@@ -938,12 +979,12 @@ namespace MCForge
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
             w.WriteLine("");
             w.WriteLine("#Review settings");
-            w.WriteLine("view = " + Server.reviewview);
-            w.WriteLine("enter = " + Server.reviewenter);
-            w.WriteLine("leave = " + Server.reviewleave);
-            w.WriteLine("cooldown = " + Server.reviewcooldown.ToString());
-            w.WriteLine("clear = " + Server.reviewclear);
-            w.WriteLine("next = " + Server.reviewnext);
+            w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
+            w.WriteLine("review-enter-perm = " + ((sbyte)Server.reviewenter).ToString());
+            w.WriteLine("review-leave-perm = " + ((sbyte)Server.reviewleave).ToString());
+            w.WriteLine("review-cooldown = " + Server.reviewcooldown.ToString());
+            w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
+            w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
         }
     }
 }
