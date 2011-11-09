@@ -2862,10 +2862,8 @@ namespace MCForge
             finally
             {
                 //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
-                DateTime start = DateTime.Now;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-                Server.s.Log((DateTime.Now - start).TotalMilliseconds.ToString());
             }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
