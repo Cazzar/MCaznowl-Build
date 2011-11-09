@@ -2824,7 +2824,7 @@ namespace MCForge
 
                 for (int i = 0; i < level.blocks.Length; ++i)
                     buffer[4 + i] = Block.Convert(level.blocks[i]);
-                throw new Exception();
+                
                 SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
