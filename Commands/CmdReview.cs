@@ -52,7 +52,7 @@ namespace MCForge
                 {
                     if (p.canusereview)
                     {
-                        Group gr = Group.Find(Server.reviewenter);
+                        Group gr = Group.findPerm(Server.reviewenter);
                         LevelPermission lp = gr.Permission;
                         if (p.group.Permission >= lp)
                         {
@@ -77,7 +77,7 @@ namespace MCForge
                 }
                 if (message == "view")
                 {
-                    Group gr = Group.Find(Server.reviewview);
+                    Group gr = Group.findPerm(Server.reviewview);
                     LevelPermission lp = gr.Permission;
                     if (p.group.Permission >= lp)
                     {
@@ -99,7 +99,7 @@ namespace MCForge
                 }
                 if (message == "leave")
                 {
-                    Group gr = Group.Find(Server.reviewleave);
+                    Group gr = Group.findPerm(Server.reviewleave);
                     LevelPermission lp = gr.Permission;
                     if (p.group.Permission >= lp)
                     {
@@ -130,7 +130,7 @@ namespace MCForge
                 }
                 if (message == "next")
                 {
-                   Group gr = Group.Find(Server.reviewnext);
+                    Group gr = Group.findPerm(Server.reviewnext);
                     LevelPermission lp = gr.Permission;
                     if (p.group.Permission >= lp)
                     {
@@ -172,7 +172,7 @@ namespace MCForge
                 }
                 if (message == "clear")
                 {
-                    Group gr = Group.Find(Server.reviewclear);
+                    Group gr = Group.findPerm(Server.reviewclear);
                     LevelPermission lp = gr.Permission;
                     if (p.group.Permission >= lp)
                     {
