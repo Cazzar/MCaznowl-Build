@@ -343,9 +343,9 @@ namespace MCForge.Remote
             msg = this.DecryptMobile(msg, "FORGEREMOTETIVITY");
             byte[] bs = new byte[1];
             //Server.s.Log(msg);
-            if (msg.StartsWith(_ver))  //TODO: make a better checker
+            if (msg.StartsWith(protocal.ToString()))  //TODO: make a better checker
             {
-                msg = msg.Replace(_ver + ": ", "");
+                msg = msg.Replace(protocal.ToString() + ": ", "");
             }
             else
             {
@@ -380,10 +380,13 @@ namespace MCForge.Remote
                 remotes.Add(this);
 
 
-                Server.s.OnLog += new Server.LogHandler(LogChatMobile);
+                Server.s.OnLog += new Server.LogHandler(LogServerMobile);
                 Server.s.OnAdmin += new Server.LogHandler(LogAdminMobile);
                 Server.s.OnOp += new Server.LogHandler(LogOpMobile);
                 Server.s.OnSettingsUpdate += new Server.VoidHandler(SettingsUpdateMobile);
+
+                //Player.PlayerChat +=new Player.OnPlayerChat(Player_PlayerChat);
+                
                 Player.PlayerConnect += new Player.OnPlayerConnect(PlayerConnectMobile);
                 Player.PlayerDisconnect += new Player.OnPlayerDisconnect(PlayerDisconnectMobile);
                 Level.LevelLoad += new Level.OnLevelLoad(LevelLoadMobile);
@@ -600,6 +603,9 @@ namespace MCForge.Remote
 
 
         }
+        
+
+
         void LogAdminMobile(string message)
         {
             Player p = null;
@@ -636,7 +642,7 @@ namespace MCForge.Remote
             }
 
         }
-        void LogChatMobile(string message)
+        void LogServerMobile(string message)
         {
 
             Player p = null;

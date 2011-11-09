@@ -39,7 +39,7 @@ namespace MCForge.Remote
 
         public Socket socket;
         public static List<Remote> remotes = new List<Remote>();
-        public string _ver = "2.3";
+        public int protocal = 2;
         private string KeyMobile;
         public byte remoteType = 4;
         public Remote()
@@ -119,11 +119,9 @@ namespace MCForge.Remote
 
         byte[] HandleMessage(byte[] buffer)
         {
-            // Server.s.Log("THE STUFF SAID: "+ Encoding.UTF8.GetString(buffer, 2, buffer.Length - 3));
-
 
             if (OnRemoteRecieveData != null) OnRemoteRecieveData(this, (short)buffer.Length);
-            //LogPacket(buffer[0], buffer);
+            
             try
             {
                 int length = 0; byte msg = buffer[0];
@@ -201,7 +199,7 @@ namespace MCForge.Remote
             {
                 Player.GlobalMessage("%5[Remote] %f" + (kicked ? " has been kicked from server!" : "has disconnected."));
                 Server.s.Log("[Remote]" + (kicked ? " has been kicked from server!" : "has disconnected."));
-                SendData(0x03);
+                if(kicked)SendData(0x03);
             }
             LoggedIn = false;
 

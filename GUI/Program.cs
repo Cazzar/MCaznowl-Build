@@ -176,7 +176,7 @@ namespace MCForge_.Gui
                 {
                     cmd.Use(null, sentMsg);
                     Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                    if (sentCmd.ToLower() != "restart" && sentMsg != String.Empty)
+                    if (sentCmd.ToLower() != "restart" || sentMsg != String.Empty)
                         handleComm(Console.ReadLine());
                     return;
                 }
@@ -528,11 +528,7 @@ namespace MCForge_.Gui
                     Application.Exit();
                     if (usingConsole)
                     {
-                        Process[] killmono = Process.GetProcessesByName("mono");
-                        foreach (Process p in killmono)
-                        {
-                            p.Kill();
-                        }
+                        Process.GetProcessById(Process.GetCurrentProcess().Id).Kill();
                     }
                     Environment.Exit(0);
                 }
