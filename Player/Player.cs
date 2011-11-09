@@ -525,7 +525,7 @@ namespace MCForge
         #region == INCOMING ==
         static void Receive(IAsyncResult result)
         {
-            //    Server.s.Log(result.AsyncState.ToString());
+            //Server.s.Log(result.AsyncState.ToString());
             Player p = (Player)result.AsyncState;
             if (p.disconnected || p.socket == null)
                 return;
@@ -571,7 +571,7 @@ namespace MCForge
                 {
                     //For wom
                     case (byte)'G':
-                        level.textures.ServeCfg(this);
+                        level.textures.ServeCfg(this, buffer);
                         return new byte[0];
                     case 0:
                         length = 130;
@@ -2818,7 +2818,7 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 128).CopyTo(buffer, 1); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
@@ -2877,8 +2877,10 @@ namespace MCForge
             finally
             {
                 //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                DateTime start = DateTime.Now;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                Server.s.Log((DateTime.Now - start).TotalMilliseconds.ToString());
             }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
