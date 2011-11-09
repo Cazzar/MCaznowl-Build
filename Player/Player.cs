@@ -2824,7 +2824,7 @@ namespace MCForge
 
                 for (int i = 0; i < level.blocks.Length; ++i)
                     buffer[4 + i] = Block.Convert(level.blocks[i]);
-
+                throw new Exception();
                 SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
@@ -2855,8 +2855,13 @@ namespace MCForge
             }
             catch (Exception ex)
             {
-                Command.all.Find("goto").Use(this, Server.mainLevel.name);
-                SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                if (this.level == Server.mainLevel)
+                    Kick("Error sending map data! Please report this to " + (String.IsNullOrEmpty(Server.server_owner) || Server.server_owner == "Notch" ? "the owner" : Server.server_owner) + "!");
+                else
+                {
+                    Command.all.Find("goto").Use(this, Server.mainLevel.name);
+                    SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                }
                 Server.ErrorLog(ex);
             }
             finally
