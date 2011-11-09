@@ -528,11 +528,7 @@ namespace MCForge_.Gui
                     Application.Exit();
                     if (usingConsole)
                     {
-                        Process[] killmono = Process.GetProcessesByName("mono");
-                        foreach (Process p in killmono)
-                        {
-                            p.Kill();
-                        }
+                        Process.GetProcessById(Process.GetCurrentProcess().Id).Kill();
                     }
                     Environment.Exit(0);
                 }
