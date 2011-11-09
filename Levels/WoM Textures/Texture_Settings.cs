@@ -6,14 +6,12 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
-using System.Text;
 
 namespace MCForge
 {
     public class Texture_Settings
     {
         public bool enabled = false;
-        NetworkStream n;
         private string terrainid = "";
         private string edgeid = "";
         private string side = "";
@@ -21,7 +19,7 @@ namespace MCForge
         private int cloudcolor = -1;
         private int fog = -1;
         private int sky = -1;
-        public bool sendwomid = false;
+        public bool sendwomid = true;
         public string servername = Server.name;
         public string MOTD = Server.motd;
         public string detail = "";
@@ -55,30 +53,10 @@ namespace MCForge
         }
         public void GlobalSendDetail(string text = "")
         {
-            byte[] buffer = new byte[65];
             Player.players.ForEach(delegate(Player p)
             {
-                if (p.level == l && p.UsingWom)
-                {
-                    if (text == "")
-                    {
-                        Player.StringFormat(detail, 64).CopyTo(buffer, 1);
-                        p.SendRaw(13, buffer);
-                    }
-                    else if (!text.StartsWith("^"))
-                    {
-                        Player.StringFormat("^detail.user=" + text, 64).CopyTo(buffer, 1);
-                        p.SendRaw(13, buffer);
-                    }
-                    else
-                    {
-                        Player.StringFormat(text, 64).CopyTo(buffer, 1);
-                        p.SendRaw(13, buffer);
-                    }
-                }
-                buffer = new byte[65];
+                SendDetail(p, text);
             });
-            buffer = null;
         }
         #endregion
         #region Change Settings
@@ -89,7 +67,7 @@ namespace MCForge
         public void ChangeCloud(string hex) { cloudcolor = ParseHexColor(hex); }
         public void ChangeEdge(byte b) { edgeid = EdgeBlock(b); }
         #endregion
-        #region Enternal Settings
+        #region Internal Settings
         string EdgeBlock(byte b)
         {
             switch (b)
@@ -187,7 +165,7 @@ namespace MCForge
                 temp.Add("server.detail = " + MOTD);
             if (detail != "")
                 temp.Add("detail.user = " + detail);
-            temp.Add("server.sendwomid = " + sendwomid);
+            temp.Add("server.sendwomid = " + sendwomid.ToString().ToLower());
             if (!Directory.Exists("extras/cfg")) Directory.CreateDirectory("extras/cfg");
             File.WriteAllLines("extras/cfg/" + l.name + ".cfg", temp.ToArray());
             temp.Clear();
@@ -199,44 +177,44 @@ namespace MCForge
         //Thanks fcraft...your awesome :D
         //Modified for use in mcforge
         static readonly Regex HttpFirstLine = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-        public void ServeCfg(Player p)
+        public void ServeCfg(Player p, byte[] buffer)
         {
             NetworkStream stream = new NetworkStream(p.socket);
-            using (StreamReader textReader = new StreamReader(stream))
+            using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
             {
-                using (StreamWriter textWriter = new StreamWriter(stream))
+                string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+                Server.s.Log(firstLine);
+                var match = HttpFirstLine.Match(firstLine);
+                if (match.Success)
                 {
-                    string firstLine = "G" + textReader.ReadLine();
-                    var match = HttpFirstLine.Match(firstLine);
-                    if (match.Success)
+                    string worldName = match.Groups[1].Value;
+                    bool firstTime = match.Groups[2].Success;
+                    Level l = Level.Find(worldName);
+                    if (l != null)
                     {
-                        string worldName = match.Groups[1].Value;
-                        bool firstTime = match.Groups[2].Success;
-                        Level l = Level.Find(worldName);
-                        if (l != null)
-                        {
-                            if (!File.Exists("extras/cfg/" + l.name + ".cfg"))
-                                CreateCFG();
-                            string cfg = File.ReadAllText("extras/cfg/" + l.name + ".cfg");
-                            byte[] content = Encoding.UTF8.GetBytes(cfg);
-                            textWriter.WriteLine("HTTP/1.1 200 OK");
-                            textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
-                            textWriter.WriteLine("Content-Type: text/plain");
-                            textWriter.WriteLine("Content-Length: " + content.Length);
-                            textWriter.WriteLine();
-                            textWriter.WriteLine(cfg);
-                        }
-                        else
-                        {
-                            textWriter.WriteLine("HTTP/1.1 404 Not Found");
-                        }
+                        if (!File.Exists("extras/cfg/" + l.name + ".cfg"))
+                            l.textures.CreateCFG();
+                        string cfg = File.ReadAllText("extras/cfg/" + l.name + ".cfg");
+                        byte[] content = Encoding.UTF8.GetBytes(cfg);
+                        textWriter.WriteLine("HTTP/1.1 200 OK");
+                        textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
+                        textWriter.WriteLine("Content-Type: text/plain");
+                        textWriter.WriteLine("Content-Length: " + content.Length);
+                        textWriter.WriteLine();
+                        textWriter.WriteLine(cfg);
                     }
                     else
                     {
-                        textWriter.WriteLine("HTTP/1.1 400 Bad Request");
+                        textWriter.WriteLine("HTTP/1.1 404 Not Found"); Server.s.Log("A");
                     }
                 }
+                else
+                {
+                    textWriter.WriteLine("HTTP/1.1 400 Bad Request"); Server.s.Log("B");
+                }
             }
+            //stream.Close();
+            //p.socket.Close();
         }
         static int ParseHexColor(string text)
         {
