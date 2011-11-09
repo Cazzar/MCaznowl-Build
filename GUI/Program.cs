@@ -176,7 +176,7 @@ namespace MCForge_.Gui
                 {
                     cmd.Use(null, sentMsg);
                     Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                    if (sentCmd.ToLower() != "restart" && sentMsg != String.Empty)
+                    if (sentCmd.ToLower() != "restart" || sentMsg != String.Empty)
                         handleComm(Console.ReadLine());
                     return;
                 }
