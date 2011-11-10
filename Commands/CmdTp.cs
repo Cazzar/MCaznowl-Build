@@ -41,6 +41,11 @@ namespace MCForge
             if (number > 2) { Help(p); return; }
             if (number == 2)
             {
+                if (!p.group.CanExecute(Command.all.Find("P2P")))
+                { 
+                   Player.SendMessage(p, "You cannot teleport others!"); 
+                   return; 
+                }
                 Command.all.Find("P2P").Use(p, message);
             }
             if (number == 1)
@@ -51,7 +56,6 @@ namespace MCForge
                 {
                     if (who.level.name.Contains("cMuseum"))
                     {
-                    http://i1-news.softpedia-static.com/images/news2/EVGA-s-Dual-Socket-LGA-1366-Motherboard-Pictured-2.jpg
                         Player.SendMessage(p, "Player \"" + message + "\" is in a museum!");
                         return;
                     }
@@ -91,8 +95,9 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/tp <player> - Teleports yourself to a player.");
-            Player.SendMessage(p, "If <player> is blank, /spawn is used.");
+            Player.SendMessage(p, "/tp <player1> [player2] - Teleports yourself to a player.");
+            Player.SendMessage(p, "[player2] is optional but if present will act like /p2p.");
+            Player.SendMessage(p, "If <player1> is blank, /spawn is used.");
         }
     }
 }
