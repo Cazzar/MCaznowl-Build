@@ -797,7 +797,7 @@ namespace MCForge
                     if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
                     {
                         // Check to see how many guests we have
-                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
+                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission <= LevelPermission.Guest);
                         if (currentNumOfGuests >= Server.maxGuests)
                         {
                             if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
@@ -857,7 +857,7 @@ namespace MCForge
                 Server.s.PlayerListUpdate();
 
                 //Test code to show when people come back with different accounts on the same IP
-                string temp = "Lately known as:";
+                string temp = name + " is lately known as:";
                 bool found = false;
                 if (!ip.StartsWith("127.0.0."))
                 {
