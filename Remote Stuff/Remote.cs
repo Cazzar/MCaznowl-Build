@@ -28,7 +28,7 @@ namespace MCForge.Remote
 {
     public partial class Remote
     {
-        public static Remote This;
+        //public static Remote This;
         public string ip;
 
         byte[] _bu = new byte[0];
@@ -44,7 +44,7 @@ namespace MCForge.Remote
         public byte remoteType = 4;
         public Remote()
         {
-            Remote.This = this;
+           // Remote.This = this;
             KeyMobile = generateRandChars();
         }
 
@@ -208,8 +208,9 @@ namespace MCForge.Remote
             else { if (OnRemoteKick != null) OnRemoteKick(this); }
 
             this.Dispose();
-
-
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            
         }
         public void Disconnect()
         {
