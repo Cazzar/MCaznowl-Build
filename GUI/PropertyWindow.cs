@@ -721,7 +721,7 @@ namespace MCForge.Gui
                             case "cooldown":
                                 try
                                 {
-                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower());
+                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower()) < 600 ? Convert.ToInt32(value.ToLower()) : 600;
                                 }
                                 catch
                                 {

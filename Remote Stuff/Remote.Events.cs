@@ -46,7 +46,7 @@ namespace MCForge.Remote
 
 
         /// <summary>
-        /// This is called when a Remote is kicked from the server, note: OnRemoteDisconnect will be called too.
+        /// This is called when a Remote is kicked from the server, note: OnRemoteDisconnect will NOT be called.
         /// </summary>
         /// <param name="remote">The Remote Object</param>
         public delegate void RemoteKick(Remote remote);
