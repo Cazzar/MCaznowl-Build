@@ -51,7 +51,7 @@ namespace MCForge
                     string stealth; if (data[4] == "true") stealth = "&aYes"; else stealth = "&cNo";
                     Player.SendMessage(p, "&9Stealth banned: " + stealth);
                 }
-                else if (!Group.findPerm(LevelPermission.Banned).playerList.Contains(message)) Player.SendMessage(p, "That player isn't banend");
+                else if (!Group.findPerm(LevelPermission.Banned).playerList.Contains(message)) Player.SendMessage(p, "That player isn't banned");
                 else if (!Ban.Isbanned(message)) Player.SendMessage(p, "Couldn't find ban info about " + message + ".");
             }
         }
