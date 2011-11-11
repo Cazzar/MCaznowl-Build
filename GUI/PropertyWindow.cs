@@ -62,28 +62,23 @@ namespace MCForge.Gui
             cmbColor.Items.AddRange(colors);
             cmbGlobalChatColor.Items.AddRange(colors);
             button3.Enabled = Server.WomDirect;
-            if (Server.irc == false)
-            {
-                grpIRC.BackColor = Color.LightGray;
-            }
-            if (Server.irc == true)
-            {
-                grpIRC.BackColor = Color.White;
-            }
 
-            if (Server.useMySQL) {
-                grpSQL.BackColor = Color.White;
-            }
-            else
-            {
-                grpSQL.BackColor = Color.LightGray;
-            }
+            if (Server.irc) grpIRC.BackColor = Color.White;
+            else grpIRC.BackColor = Color.LightGray;
+            if (Server.useMySQL) grpSQL.BackColor = Color.White;
+            else grpSQL.BackColor = Color.LightGray;
 
-            string opchatperm = "";
-            string adminchatperm = "";
-            string verifyadminsperm = "";
-            string grieferstonerank = "";
-            string afkkickrank = "";
+            string opchatperm = String.Empty;
+            string adminchatperm = String.Empty;
+            string verifyadminsperm = String.Empty;
+            string grieferstonerank = String.Empty;
+            string afkkickrank = String.Empty;
+            string viewqueuerank = String.Empty;
+            string enterqueuerank = String.Empty;
+            string leavequeuerank = String.Empty;
+            string clearqueuerank = String.Empty;
+            string gotonextrank = String.Empty;
+
             foreach (Group grp in Group.GroupList)
             {
                 cmbDefaultRank.Items.Add(grp.name);
@@ -94,26 +89,32 @@ namespace MCForge.Gui
                 lsCmbControlRank.Items.Add(grp.name);
                 cmbGrieferStoneRank.Items.Add(grp.name);
                 cmbAFKKickPerm.Items.Add(grp.name);
+                cmbViewQueue.Items.Add(grp.name);
+                cmbEnterQueue.Items.Add(grp.name);
+                cmbLeaveQueue.Items.Add(grp.name);
+                cmbClearQueue.Items.Add(grp.name);
+                cmbGotoNext.Items.Add(grp.name);
+
                 if (grp.Permission == Server.opchatperm)
-                {
                     opchatperm = grp.name;
-                }
                 if (grp.Permission == Server.adminchatperm)
-                {
                     adminchatperm = grp.name;
-                }
                 if (grp.Permission == Server.verifyadminsrank)
-                {
                     verifyadminsperm = grp.name;
-                }
                 if (grp.Permission == Server.grieferStoneRank)
-                {
                     grieferstonerank = grp.name;
-                }
                 if (grp.Permission == Server.afkkickperm)
-                {
                     afkkickrank = grp.name;
-                }
+                if (grp.Permission == Server.reviewenter)
+                    enterqueuerank = grp.name;
+                if (grp.Permission == Server.reviewleave)
+                    leavequeuerank = grp.name;
+                if (grp.Permission == Server.reviewview)
+                    viewqueuerank = grp.name;
+                if (grp.Permission == Server.reviewclear)
+                    clearqueuerank = grp.name;
+                if (grp.Permission == Server.reviewnext)
+                    gotonextrank = grp.name;
             }
             listPasswords.Items.Clear();
             if (Directory.Exists("extra/passwords"))
@@ -127,11 +128,16 @@ namespace MCForge.Gui
                 }
             }
             cmbDefaultRank.SelectedIndex = 1;
-            cmbOpChat.SelectedIndex = (opchatperm != "") ? cmbOpChat.Items.IndexOf(opchatperm) : 1;
-            cmbAdminChat.SelectedIndex = (adminchatperm != "") ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1;
-            cmbVerificationRank.SelectedIndex = (verifyadminsperm != "") ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1;
-            cmbGrieferStoneRank.SelectedIndex = (grieferstonerank != "") ? cmbGrieferStoneRank.Items.IndexOf(grieferstonerank) : 1;
-            cmbAFKKickPerm.SelectedIndex = (afkkickrank != "") ? cmbAFKKickPerm.Items.IndexOf(afkkickrank) : 1;
+            cmbOpChat.SelectedIndex = (opchatperm != String.Empty ? cmbOpChat.Items.IndexOf(opchatperm) : 1);
+            cmbAdminChat.SelectedIndex = (adminchatperm != String.Empty ? cmbAdminChat.Items.IndexOf(adminchatperm) : 1);
+            cmbVerificationRank.SelectedIndex = (verifyadminsperm != String.Empty ? cmbVerificationRank.Items.IndexOf(verifyadminsperm) : 1);
+            cmbGrieferStoneRank.SelectedIndex = (grieferstonerank != String.Empty ? cmbGrieferStoneRank.Items.IndexOf(grieferstonerank) : 1);
+            cmbAFKKickPerm.SelectedIndex = (afkkickrank != String.Empty ? cmbAFKKickPerm.Items.IndexOf(afkkickrank) : 1);
+            cmbEnterQueue.SelectedIndex = (enterqueuerank != String.Empty ? cmbEnterQueue.Items.IndexOf(enterqueuerank) : 1);
+            cmbLeaveQueue.SelectedIndex = (leavequeuerank != String.Empty ? cmbLeaveQueue.Items.IndexOf(leavequeuerank) : 1);
+            cmbViewQueue.SelectedIndex = (viewqueuerank != String.Empty ? cmbViewQueue.Items.IndexOf(viewqueuerank) : 1);
+            cmbClearQueue.SelectedIndex = (clearqueuerank != String.Empty ? cmbClearQueue.Items.IndexOf(clearqueuerank) : 1);
+            cmbGotoNext.SelectedIndex = (gotonextrank != String.Empty ? cmbGotoNext.Items.IndexOf(gotonextrank) : 1);
 
             for (byte b = 1; b < 50; b++)
                 cmbGrieferStoneType.Items.Add(Block.Name(b));
@@ -176,7 +182,10 @@ namespace MCForge.Gui
             {
                 Server.s.Log("Failed to start lava control update timer!");
             }
-            reviewlist_update();
+            try { nudCooldownTime.Value = Server.reviewcooldown; }
+            catch { }
+            try { reviewlist_update(); }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
         public static bool EditTextOpen = false;
@@ -520,7 +529,7 @@ namespace MCForge.Gui
                                 notifyInGameUpdate.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "update-countdown":
-                                try { updateTimeNumeric.Value = Convert.ToDecimal(Convert.ToInt32(value)); }
+                                try { updateTimeNumeric.Value = Convert.ToDecimal(value); }
                                 catch { updateTimeNumeric.Value = 10; }
                                 break;
                             case "autoload":
@@ -709,6 +718,7 @@ namespace MCForge.Gui
                             case "send-command-data":
                                 sndcmddataChk.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
+<<<<<<< HEAD
                             case "view":
                                 Server.reviewview = value.ToLower();
                                 break;
@@ -734,6 +744,11 @@ namespace MCForge.Gui
                                 break;
                             case "next":
                                 Server.reviewnext = value.ToLower();
+=======
+                            case "review-cooldown":
+                                try { nudCooldownTime.Value = Convert.ToDecimal(value); }
+                                catch { nudCooldownTime.Value = 600; }
+>>>>>>> 1a9f2e0acbe1a7cb600302908bbeb9dfc682ae03
                                 break;
                         }
                     }
@@ -741,26 +756,6 @@ namespace MCForge.Gui
                 //Save(givenPath);
             }
             //else Save(givenPath);
-                Group[] grouplist = Group.GroupList.ToArray();
-                comboBox1.Items.Clear();
-                comboBox2.Items.Clear();
-                comboBox3.Items.Clear();
-                comboBox4.Items.Clear();
-                comboBox5.Items.Clear();
-                foreach (Group g in grouplist)
-                {
-                    comboBox1.Items.Add(g.name);
-                    comboBox2.Items.Add(g.name);
-                    comboBox3.Items.Add(g.name);
-                    comboBox4.Items.Add(g.name);
-                    comboBox5.Items.Add(g.name);
-                }
-                comboBox1.Text = Server.reviewview;
-                comboBox2.Text = Server.reviewenter;
-                comboBox3.Text = Server.reviewleave;
-                comboBox4.Text = Server.reviewclear;
-                comboBox5.Text = Server.reviewnext;
-                numericUpDown1.Value = Server.reviewcooldown;
         }
         public bool ValidString(string str, string allowed)
         {
@@ -831,8 +826,8 @@ namespace MCForge.Gui
             Server.dollardollardollar = chk17Dollar.Checked;
             //Server.useWhitelist = ; //We don't have a setting for this?
             Server.moneys = txtMoneys.Text;
-            Server.opchatperm = (Group.GroupList.Find(grp => grp.name == cmbOpChat.SelectedItem.ToString()).Permission);
-            Server.adminchatperm = (Group.GroupList.Find(grp => grp.name == cmbAdminChat.SelectedItem.ToString()).Permission);
+            Server.opchatperm = Group.GroupList.Find(grp => grp.name == cmbOpChat.SelectedItem.ToString()).Permission;
+            Server.adminchatperm = Group.GroupList.Find(grp => grp.name == cmbAdminChat.SelectedItem.ToString()).Permission;
             Server.logbeat = chkLogBeat.Checked;
             Server.forceCuboid = chkForceCuboid.Checked;
             Server.profanityFilter = chkProfanityFilter.Checked;
@@ -904,7 +899,7 @@ namespace MCForge.Gui
 
 
             Server.verifyadmins = chkEnableVerification.Checked;
-            Server.verifyadminsrank = (Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission);
+            Server.verifyadminsrank = Group.GroupList.Find(grp => grp.name == cmbVerificationRank.SelectedItem.ToString()).Permission;
 
             Server.checkspam = chkSpamControl.Checked;
             Server.spamcounter = (int)numSpamMessages.Value;
@@ -919,7 +914,7 @@ namespace MCForge.Gui
 
             Server.grieferStoneBan = chkGrieferStoneBan.Checked;
             Server.grieferStoneType = Block.Byte(cmbGrieferStoneType.SelectedItem.ToString());
-            Server.grieferStoneRank = (Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.SelectedItem.ToString()).Permission);
+            Server.grieferStoneRank = Group.GroupList.Find(grp => grp.name == cmbGrieferStoneRank.SelectedItem.ToString()).Permission;
 
             Server.WomDirect = chkWomDirect.Checked;
             //Server.Server_ALT = ;
@@ -928,13 +923,12 @@ namespace MCForge.Gui
             Server.PremiumPlayersOnly = chkPrmOnly.Checked;
 
             Player.sendcommanddata = sndcmddataChk.Checked;
-            Server.reviewview = comboBox1.SelectedItem.ToString();
-            Server.reviewenter = comboBox2.SelectedItem.ToString();
-            Server.reviewleave = comboBox3.SelectedItem.ToString();
-            Server.reviewclear = comboBox4.SelectedItem.ToString();
-            Server.reviewnext = comboBox5.SelectedItem.ToString();
-            decimal value = numericUpDown1.Value;
-            Server.reviewcooldown = Convert.ToInt32(value);
+            Server.reviewview = Group.GroupList.Find(grp => grp.name == cmbViewQueue.SelectedItem.ToString()).Permission;
+            Server.reviewenter = Group.GroupList.Find(grp => grp.name == cmbEnterQueue.SelectedItem.ToString()).Permission;
+            Server.reviewleave = Group.GroupList.Find(grp => grp.name == cmbLeaveQueue.SelectedItem.ToString()).Permission;
+            Server.reviewclear = Group.GroupList.Find(grp => grp.name == cmbClearQueue.SelectedItem.ToString()).Permission;
+            Server.reviewnext = Group.GroupList.Find(grp => grp.name == cmbGotoNext.SelectedItem.ToString()).Permission;
+            Server.reviewcooldown = (int)nudCooldownTime.Value;
         }
 
         private void cmbDefaultColour_SelectedIndexChanged(object sender, EventArgs e)
@@ -2240,10 +2234,14 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Command.all.Find("review").Use(null, "clear");
-            MessageBox.Show("Review queue has been cleared!");
-            reviewlist_update();
+            try
+            {
+                Command.all.Find("review").Use(null, "clear");
+                MessageBox.Show("Review queue has been cleared!");
+                reviewlist_update();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
-       }
+    }
 }

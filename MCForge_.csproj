@@ -538,7 +538,6 @@
     <Compile Include="Remote Stuff\Remote.Events.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Release\Updater.exe" />
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

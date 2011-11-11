@@ -352,7 +352,7 @@ namespace MCForge.Gui
             this.label38 = new System.Windows.Forms.Label();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.groupBox28 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nudCooldownTime = new System.Windows.Forms.NumericUpDown();
             this.label84 = new System.Windows.Forms.Label();
             this.groupBox27 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -361,11 +361,11 @@ namespace MCForge.Gui
             this.label82 = new System.Windows.Forms.Label();
             this.label81 = new System.Windows.Forms.Label();
             this.label80 = new System.Windows.Forms.Label();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmbGotoNext = new System.Windows.Forms.ComboBox();
+            this.cmbClearQueue = new System.Windows.Forms.ComboBox();
+            this.cmbLeaveQueue = new System.Windows.Forms.ComboBox();
+            this.cmbEnterQueue = new System.Windows.Forms.ComboBox();
+            this.cmbViewQueue = new System.Windows.Forms.ComboBox();
             this.label79 = new System.Windows.Forms.Label();
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -436,7 +436,7 @@ namespace MCForge.Gui
             this.groupBox14.SuspendLayout();
             this.tabPage13.SuspendLayout();
             this.groupBox28.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCooldownTime)).BeginInit();
             this.groupBox27.SuspendLayout();
             this.groupBox26.SuspendLayout();
             this.groupBox25.SuspendLayout();
@@ -1202,7 +1202,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(16, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -3831,7 +3831,7 @@ namespace MCForge.Gui
             // 
             // groupBox28
             // 
-            this.groupBox28.Controls.Add(this.numericUpDown1);
+            this.groupBox28.Controls.Add(this.nudCooldownTime);
             this.groupBox28.Controls.Add(this.label84);
             this.groupBox28.Location = new System.Drawing.Point(154, 235);
             this.groupBox28.Name = "groupBox28";
@@ -3840,17 +3840,22 @@ namespace MCForge.Gui
             this.groupBox28.TabStop = false;
             this.groupBox28.Text = "Options";
             // 
-            // numericUpDown1
+            // nudCooldownTime
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(202, 19);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.nudCooldownTime.Location = new System.Drawing.Point(202, 19);
+            this.nudCooldownTime.Maximum = new decimal(new int[] {
+            86400,
+            0,
+            0,
+            0});
+            this.nudCooldownTime.Name = "nudCooldownTime";
+            this.nudCooldownTime.Size = new System.Drawing.Size(120, 21);
+            this.nudCooldownTime.TabIndex = 1;
+            this.nudCooldownTime.Value = new decimal(new int[] {
             600,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 21);
-            this.numericUpDown1.TabIndex = 1;
             // 
             // label84
             // 
@@ -3887,11 +3892,11 @@ namespace MCForge.Gui
             this.groupBox26.Controls.Add(this.label82);
             this.groupBox26.Controls.Add(this.label81);
             this.groupBox26.Controls.Add(this.label80);
-            this.groupBox26.Controls.Add(this.comboBox5);
-            this.groupBox26.Controls.Add(this.comboBox4);
-            this.groupBox26.Controls.Add(this.comboBox3);
-            this.groupBox26.Controls.Add(this.comboBox2);
-            this.groupBox26.Controls.Add(this.comboBox1);
+            this.groupBox26.Controls.Add(this.cmbGotoNext);
+            this.groupBox26.Controls.Add(this.cmbClearQueue);
+            this.groupBox26.Controls.Add(this.cmbLeaveQueue);
+            this.groupBox26.Controls.Add(this.cmbEnterQueue);
+            this.groupBox26.Controls.Add(this.cmbViewQueue);
             this.groupBox26.Controls.Add(this.label79);
             this.groupBox26.Location = new System.Drawing.Point(154, 7);
             this.groupBox26.Name = "groupBox26";
@@ -3936,45 +3941,45 @@ namespace MCForge.Gui
             this.label80.TabIndex = 6;
             this.label80.Text = "Enter queue";
             // 
-            // comboBox5
+            // cmbGotoNext
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(178, 131);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(144, 21);
-            this.comboBox5.TabIndex = 5;
+            this.cmbGotoNext.FormattingEnabled = true;
+            this.cmbGotoNext.Location = new System.Drawing.Point(178, 131);
+            this.cmbGotoNext.Name = "cmbGotoNext";
+            this.cmbGotoNext.Size = new System.Drawing.Size(144, 21);
+            this.cmbGotoNext.TabIndex = 5;
             // 
-            // comboBox4
+            // cmbClearQueue
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(178, 103);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(144, 21);
-            this.comboBox4.TabIndex = 4;
+            this.cmbClearQueue.FormattingEnabled = true;
+            this.cmbClearQueue.Location = new System.Drawing.Point(178, 103);
+            this.cmbClearQueue.Name = "cmbClearQueue";
+            this.cmbClearQueue.Size = new System.Drawing.Size(144, 21);
+            this.cmbClearQueue.TabIndex = 4;
             // 
-            // comboBox3
+            // cmbLeaveQueue
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(178, 75);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(144, 21);
-            this.comboBox3.TabIndex = 3;
+            this.cmbLeaveQueue.FormattingEnabled = true;
+            this.cmbLeaveQueue.Location = new System.Drawing.Point(178, 75);
+            this.cmbLeaveQueue.Name = "cmbLeaveQueue";
+            this.cmbLeaveQueue.Size = new System.Drawing.Size(144, 21);
+            this.cmbLeaveQueue.TabIndex = 3;
             // 
-            // comboBox2
+            // cmbEnterQueue
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(178, 47);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(144, 21);
-            this.comboBox2.TabIndex = 2;
+            this.cmbEnterQueue.FormattingEnabled = true;
+            this.cmbEnterQueue.Location = new System.Drawing.Point(178, 47);
+            this.cmbEnterQueue.Name = "cmbEnterQueue";
+            this.cmbEnterQueue.Size = new System.Drawing.Size(144, 21);
+            this.cmbEnterQueue.TabIndex = 2;
             // 
-            // comboBox1
+            // cmbViewQueue
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(178, 19);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(144, 21);
-            this.comboBox1.TabIndex = 1;
+            this.cmbViewQueue.FormattingEnabled = true;
+            this.cmbViewQueue.Location = new System.Drawing.Point(178, 19);
+            this.cmbViewQueue.Name = "cmbViewQueue";
+            this.cmbViewQueue.Size = new System.Drawing.Size(144, 21);
+            this.cmbViewQueue.TabIndex = 1;
             // 
             // label79
             // 
@@ -4118,7 +4123,7 @@ namespace MCForge.Gui
             this.tabPage13.ResumeLayout(false);
             this.groupBox28.ResumeLayout(false);
             this.groupBox28.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCooldownTime)).EndInit();
             this.groupBox27.ResumeLayout(false);
             this.groupBox26.ResumeLayout(false);
             this.groupBox26.PerformLayout();
@@ -4443,14 +4448,14 @@ namespace MCForge.Gui
         private System.Windows.Forms.Label label82;
         private System.Windows.Forms.Label label81;
         private System.Windows.Forms.Label label80;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmbGotoNext;
+        private System.Windows.Forms.ComboBox cmbClearQueue;
+        private System.Windows.Forms.ComboBox cmbLeaveQueue;
+        private System.Windows.Forms.ComboBox cmbEnterQueue;
+        private System.Windows.Forms.ComboBox cmbViewQueue;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.GroupBox groupBox28;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown nudCooldownTime;
         private System.Windows.Forms.Label label84;
     }
 }

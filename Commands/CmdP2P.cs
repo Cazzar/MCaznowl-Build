@@ -60,6 +60,11 @@ namespace MCForge
                     Player.SendMessage(p, "Player 1 is not online or does not exist!");
                     return;
                 }
+                if (who2 == null)
+                {
+                    Player.SendMessage(p, "Player 2 is not online or does not exist!");
+                    return;
+                }
                 if (who == p)
                 {
                     if (who2 == p)
@@ -67,20 +72,13 @@ namespace MCForge
                         Player.SendMessage(p, "Why are you trying to teleport yourself to yourself? =S");
                         return;
                     }
-                    }
-                if (who == p)
-                {
                     Player.SendMessage(p, "Why not, just use /tp " + who2.name + "!");
                     return;
+
                 }
                 if (who2 == p)
                 {
                     Player.SendMessage(p, "Why not, just use /summon " + who.name + "!");
-                    return;
-                }
-                if (who2 == null)
-                {
-                    Player.SendMessage(p, "Player 2 is not online or does not exist!");
                     return;
                 }
                 if (p.group.Permission < who.group.Permission)

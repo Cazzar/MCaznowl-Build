@@ -525,7 +525,7 @@ namespace MCForge
         #region == INCOMING ==
         static void Receive(IAsyncResult result)
         {
-            //    Server.s.Log(result.AsyncState.ToString());
+            //Server.s.Log(result.AsyncState.ToString());
             Player p = (Player)result.AsyncState;
             if (p.disconnected || p.socket == null)
                 return;
@@ -571,7 +571,7 @@ namespace MCForge
                 {
                     //For wom
                     case (byte)'G':
-                        level.textures.ServeCfg(this);
+                        level.textures.ServeCfg(this, buffer);
                         return new byte[0];
                     case 0:
                         length = 130;
@@ -2590,11 +2590,6 @@ namespace MCForge
                 Server.ErrorLog(e);
 #endif
             }
-            finally
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
         }
 
         public static void SendMessage(Player p, string message)
@@ -2807,7 +2802,7 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 128).CopyTo(buffer, 1); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
@@ -2829,7 +2824,7 @@ namespace MCForge
 
                 for (int i = 0; i < level.blocks.Length; ++i)
                     buffer[4 + i] = Block.Convert(level.blocks[i]);
-
+                
                 SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
@@ -2860,8 +2855,13 @@ namespace MCForge
             }
             catch (Exception ex)
             {
-                Command.all.Find("goto").Use(this, Server.mainLevel.name);
-                SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                if (this.level == Server.mainLevel)
+                    Kick("Error sending map data! Please report this to " + (String.IsNullOrEmpty(Server.server_owner) || Server.server_owner == "Notch" ? "the owner" : Server.server_owner) + "!");
+                else
+                {
+                    Command.all.Find("goto").Use(this, Server.mainLevel.name);
+                    SendMessage("There was an error sending the map data, you have been sent to the main level.");
+                }
                 Server.ErrorLog(ex);
             }
             finally
