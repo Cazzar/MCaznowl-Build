@@ -1045,11 +1045,14 @@ namespace MCForge
             }
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
-				if (Server.guestJoinNotify == false && this.group.Permission <= LevelPermission.Guest)
+				if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
 				{
-					return;
+                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
 				}
-                GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                if (this.group.Permission > LevelPermission.Guest)
+                {
+                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                }
                 //IRCBot.Say(this.name + " has joined the server.");
             }
             if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
@@ -3797,12 +3800,15 @@ namespace MCForge
                         }
 						if (!hidden) 
 						{
-							if (Server.guestLeaveNotify == false && this.group.Permission <= LevelPermission.Guest) 
-							{ 
-								return;
+							if (Server.guestLeaveNotify == true && this.group.Permission <= LevelPermission.Guest) 
+							{
+                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); 
 							}
-							GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); 
-						}
+                            if (this.group.Permission > LevelPermission.Guest)
+                            {
+                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false);
+                            }
+                        }
                         //IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
