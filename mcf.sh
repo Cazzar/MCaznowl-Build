@@ -2,13 +2,14 @@
 #
 #Change these setting according to your setup.
 ################################################################################################################################################################
-default="normal"				##  "normal" = normal console mode, "silent" = silent background mode
-mcfdir="/opt/mcforge"			##  Folder containing MCForge.exe
-monobin="/usr/bin/mono"			##  Where is mono? Do not change if unsure. Typically "/usr/bin/mono"
-gameopt="--gc=boehm"				##  Mono garbage collector options, either "--gc=boehm" (older mono versions) or "--gc=sgen" (mono 2.8 or newer)
-gamename="Linux - MCForge"		##  Arbitrary name of server, will not affect actual server name
-gamepid="${mcfdir}/mcf.pid"		##  If you do not know what this is, do not worry about it, for "silent" mode only.
-gamelog="${mcfdir}/mcf.log"		##  This logs everything sent to console, if started in "silent" mode
+default="normal"					##  "normal" = normal console mode, "silent" = silent background mode
+mcfdir="/opt/mcforge"				##  Folder containing MCForge.exe
+monobin="/opt/mono-2.10/bin/mono"	##  Where is mono? Do not change if unsure. Typically "/usr/bin/mono"
+gameopt="--gc=sgen"					##  Mono garbage collector options, either "--gc=boehm" (older mono versions) or "--gc=sgen" (mono 2.8 or newer)
+gamename="RedCraft - MCForge"		##  Arbitrary name of server, will not affect actual server name
+gamepid="${mcfdir}/mcf.pid"			##  If you do not know what this is, do not worry about it, for "silent" mode only.
+gamelog="${mcfdir}/mcf.log"			##  This logs everything sent to console, if started in "silent" mode
+autorestart=true					##  set to false if you'd rather not auto-restart
 ################################################################################################################################################################
 #
 # NO CHANGES BELOW. ELSE ITS ON YOUR OWN RISK
@@ -107,7 +108,11 @@ case "$1" in
 			echo -e "--Hit CTRL+C multiple times to kill the script! Use '/save all' first, if you want to save"
 			echo -e
 			${monobin} ${gameopt} ${mcfdir}/MCForge.exe
-			$0
+			if $autorestart ; then
+				$0
+			else
+				exit 0
+			fi
 		fi
 ;;
 	*)
