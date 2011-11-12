@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-#Config these setting according to your setup.
-##########################################################################################################################################################
-default="normal"					##  "normal" = normal console mode, "silent" = silent background mode												##
-mcfdir="/opt/mcforge"				##  Folder containing MCForge.exe																					##
-monobin="/opt/mono-2.10/bin/mono"	##  Where is mono? Do not change if unsure. Typically "/usr/bin/mono"												##
-gameopt="--gc=sgen"					##  Mono garbage collector options, either "--gc=boehm" (older mono versions) or "--gc=sgen" (mono 2.8 or newer)	##
-gamename="Linux - MCForge"			##  Arbitrary name of server, will not affect actual server name													##
-gamepid="${mcfdir}/mcf.pid"			##  If you do not know what this is, do not worry about it, for "silent" mode only.									##
-gamelog="${mcfdir}/mcf.log"			##  This logs everything sent to console, if started in "silent" mode												##
-##########################################################################################################################################################
+#Change these setting according to your setup.
+################################################################################################################################################################
+default="normal"				##  "normal" = normal console mode, "silent" = silent background mode
+mcfdir="/opt/mcforge"			##  Folder containing MCForge.exe
+monobin="/usr/bin/mono"			##  Where is mono? Do not change if unsure. Typically "/usr/bin/mono"
+gameopt="--gc=boehm"				##  Mono garbage collector options, either "--gc=boehm" (older mono versions) or "--gc=sgen" (mono 2.8 or newer)
+gamename="Linux - MCForge"		##  Arbitrary name of server, will not affect actual server name
+gamepid="${mcfdir}/mcf.pid"		##  If you do not know what this is, do not worry about it, for "silent" mode only.
+gamelog="${mcfdir}/mcf.log"		##  This logs everything sent to console, if started in "silent" mode
+################################################################################################################################################################
 #
 # NO CHANGES BELOW. ELSE ITS ON YOUR OWN RISK
 #
@@ -26,7 +26,7 @@ else
 	exit 2
 fi
 
-if [ -f "${mcfdir}MCForge.exe" ]; then
+if [ ! -f "${mcfdir}/MCForge.exe" ]; then
 	echo -e "cannot find ${mcfdir}/MCForge.exe!"
 	echo -e "If this is not correct edit the start script"
 	exit 2
@@ -104,7 +104,7 @@ case "$1" in
    			echo -e "already active"
 			exit 3
 		else
-	   		echo -e "--Hit CTRL+C multiple times to kill the server!"
+			echo -e "--Hit CTRL+C multiple times to kill the script! Use '/save all' first, if you want to save"
 			echo -e
 			${monobin} ${gameopt} ${mcfdir}/MCForge.exe
 			$0
@@ -113,6 +113,8 @@ case "$1" in
 	*)
 		if [ -f "${mcfdir}/MCForge_.update" ]; then
 			if [ -f "${mcfdir}/MCForge.update" ]; then
+				echo
+				echo Update Found!
 				echo -n Applying update:
 				rm ${mcfdir}/MCForge.exe
 				rm ${mcfdir}/MCForge_.dll
@@ -140,7 +142,8 @@ case "$1" in
 				fi
 			fi
 		else
-			echo -e "No Update found or automatic update not enabled"
+			echo
+			echo "No Update found or automatic update not enabled"
 		fi
 		$0 ${default}
 		exit 1
