@@ -2781,9 +2781,12 @@ namespace MCForge
         public void SendMotd()
         {
             byte[] buffer = new byte[130];
-            buffer[0] = (byte)8;
+            buffer[0] = Server.version;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            if (Server.UseTextures)
+                StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name + "~motd", 64).CopyTo(buffer, 65);
+            else
+                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
 
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
