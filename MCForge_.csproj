@@ -531,6 +531,9 @@
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
     <Compile Include="Plugins\Plugin.Events.cs" />
+    <Content Include="mcf.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
