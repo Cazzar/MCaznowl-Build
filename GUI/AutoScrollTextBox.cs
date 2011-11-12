@@ -51,11 +51,13 @@ namespace MCForge.Gui
             int sbOffset;
             int savedVpos;
             // Make sure this is done in the UI thread
+            
             if (this.InvokeRequired)
             {
                 LogDelegate d = new LogDelegate(AppendTextAndScroll);
                 this.Invoke(d, new object[] { text, true });
             }
+            
             else
             {
                 // Win32 magic to keep the textbox scrolling to the newest append to the textbox unless
@@ -75,7 +77,33 @@ namespace MCForge.Gui
                 SetScrollPos(this.Handle, SB_VERT, savedVpos, true);
                 PostMessageA(this.Handle, WM_VSCROLL, SB_THUMBPOSITION + 0x10000 * savedVpos, 0);
             }
+            this.Text = ReturnLast250Lines(this.Text);
+            
 
+        }
+
+        public string ReturnLast250Lines(string text)  //NOT WORKIN!
+        {
+            string final = "";
+            string[] array = text.Split(new string[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+            int i = array.Length - 1;
+            if (array.Length != 0)
+            {
+                while (i >= 0)
+                {
+                    if (array[i] != "[PLEASE REFER TO THE LOG TAB FOR THE REST OF THE LOGS!!!]")
+                    {
+                        if (array.Length - i >= 250)
+                        {
+                            return ("[PLEASE REFER TO THE LOG TAB FOR THE REST OF THE LOGS!!!]" + Environment.NewLine + final);
+                        }
+                        final = array[i] + "\r\n" + final;
+                        i--;
+                    }
+                }
+                return final;
+            }
+            return text;
         }
     }
 }
