@@ -2422,7 +2422,7 @@ namespace MCForge
                         	if (sendcommanddata)
                         	{
                         		WebClient wc = new WebClient();
-                        		wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
+                        		wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name);
                         	}
                         }
                         catch {  }

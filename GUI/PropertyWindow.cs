@@ -718,9 +718,31 @@ namespace MCForge.Gui
                             case "send-command-data":
                                 sndcmddataChk.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
-                            case "review-cooldown":
-                                try { nudCooldownTime.Value = Convert.ToDecimal(value); }
-                                catch { nudCooldownTime.Value = 600; }
+                            case "view":
+                                Server.reviewview = Level.PermissionFromName(value.ToLower());
+                                break;
+                            case "enter":
+                                Server.reviewenter = Level.PermissionFromName(value.ToLower());
+                                break;
+                            case "leave":
+                                Server.reviewleave = Level.PermissionFromName(value.ToLower());
+                                break;
+                            case "cooldown":
+                                try
+                                {
+                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower()) < 600 ? Convert.ToInt32(value.ToLower()) : 600;
+                                }
+                                catch
+                                {
+                                    Server.reviewcooldown = 60;
+                                    Server.s.Log("An error occurred reading the review cooldown value");
+                                }
+                                break;
+                            case "clear":
+                                Server.reviewclear = Level.PermissionFromName(value.ToLower());
+                                break;
+                            case "next":
+                                Server.reviewnext = Level.PermissionFromName(value.ToLower());
                                 break;
                         }
                     }
