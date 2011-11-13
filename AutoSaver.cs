@@ -17,10 +17,8 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading;
-using System.IO;
-using System.ComponentModel;
 
 
 namespace MCForge
@@ -35,35 +33,29 @@ namespace MCForge
         {
             _interval = interval * 1000;
 
-            Thread runner;
-            runner = new Thread(new ThreadStart(delegate
-            {
-                while (true)
-                {
-                    Thread.Sleep(_interval);
-                    Server.ml.Queue(delegate
-                    {
-                        if (!Server.ZombieModeOn || !Server.noLevelSaving)
-                        {
-                            Run();
-                        }
-                    });
+            new Thread(new ThreadStart(delegate
+              {
+                 while (true)
+                      {
+                            Thread.Sleep(_interval);
+                             Server.ml.Queue(delegate
+                                 {
+                                         if (!Server.ZombieModeOn || !Server.noLevelSaving)
+                                           {
+                                              Run();
+                                             }
+                                         });
 
-                    if (Player.players.Count > 0)
-                    {
-                        string allCount = "";
-                        foreach (Player pl in Player.players) allCount += ", " + pl.name;
-                        try { Server.s.Log("!PLAYERS ONLINE: " + allCount.Remove(0, 2), true); }
-                        catch { }
+                          if (Player.players.Count <= 0) continue;
+                          string allCount = Player.players.Aggregate("", (current, pl) => current + (", " + pl.name));
+                          try { Server.s.Log("!PLAYERS ONLINE: " + allCount.Remove(0, 2), true); }
+                          catch { }
 
-                        allCount = "";
-                        foreach (Level l in Server.levels) allCount += ", " + l.name;
-                        try { Server.s.Log("!LEVELS ONLINE: " + allCount.Remove(0, 2), true); }
-                        catch { }
-                    }
-                }
-            }));
-            runner.Start();
+                          allCount = Server.levels.Aggregate("", (current, l) => current + (", " + l.name));
+                          try { Server.s.Log("!LEVELS ONLINE: " + allCount.Remove(0, 2), true); }
+                          catch { }
+                      }
+                                                           })).Start();
         }
 
         /*

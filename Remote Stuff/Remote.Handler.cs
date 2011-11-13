@@ -16,8 +16,6 @@
     permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace MCForge.Remote
@@ -27,103 +25,100 @@ namespace MCForge.Remote
         public bool HandleLogin(string message)
         {
             if (!String.IsNullOrEmpty(message))
-            {
-                string[] splitted = message.Split(':');
-
-                if (splitted[0] == RemoteServer.username && splitted[1] == RemoteServer.password)
-                    return true;
-                else
-
-                    return false;
-            }
+                return message.Split(':')[0] == RemoteServer.username && message.Split(':')[1] == RemoteServer.password;
             return false;
         }
         public void RemoteChat(string m)
         {
-            if (!String.IsNullOrEmpty(m))
+            if (String.IsNullOrEmpty(m)) return;
+            switch (m[0])
             {
-                if (m[0] == '/')
-                {
-                    m = m.Remove(0, 1);
-                    string[] args = m.Split(' ');
-                    string cmd = args[0];
-                    Command command = Command.all.Find(cmd);
-
-                    if (command == null)
+                case '/':
                     {
-                        Server.s.Log("Unrecognized command: " + cmd);
+                        m = m.Remove(0, 1);
+                        string[] args = m.Split(' ');
+                        string cmd = args[0];
+                        Command command = Command.all.Find(cmd);
+
+                        if (command == null)
+                        {
+                            Server.s.Log("Unrecognized command: " + cmd);
+                            return;
+                        }
+
+                        StringBuilder lol = new StringBuilder();
+                        for (int i = 1; i <= args.Length - 1; i++)
+                        {
+                            lol.Append(" " + args[i]);
+                        }
+
+                        command.Use(null, lol.ToString().Trim());
+                        return;
+
+                    }
+
+                case '#':
+                    {
+                        m = m.Remove(0, 1);
+                        Gui.Window.thisWindow.WriteOp("[Remote]: " + m);
+                        if (this.RemoteType == 1)
+                        {
+                            string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
+                            messaged = EncryptMobile(messaged, _keyMobile);
+                            byte[] buffed = new byte[(messaged.Length*2) + 3];
+                            util.EndianBitConverter.Big.GetBytes((short) messaged.Length).CopyTo(buffed, 1);
+                            buffed[0] = (byte) 2;
+                            Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+                            SendData(0x05, buffed);
+                        }
+                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Ops -Remote- " + m + Environment.NewLine);
+                            //Did it like this to avoid OnLog event
+                        Player.GlobalMessageOps("%fTo Ops -%6Remote%f- " + m);
                         return;
                     }
-
-                    StringBuilder lol = new StringBuilder();
-                    for (int i = 1; i <= args.Length - 1; i++)
+                case '~':
                     {
-                        lol.Append(" " + args[i]);
+                        m = m.Remove(0, 1);
+                        Gui.Window.thisWindow.WriteAdmin("[Remote]: " + m);
+
+
+                        string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
+                        messaged = EncryptMobile(messaged, _keyMobile);
+                        byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                        util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                        buffed[0] = (byte)4;
+                        Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+                        SendData(0x05, buffed);
+
+                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Admins -Remote- " + m + Environment.NewLine);  //Did it like this to avoid OnLog event
+                        Player.GlobalMessageAdmins("%fTo Admins -%6Remote%f- " + m);
+                        return;
+
                     }
-
-                    command.Use(null, lol.ToString().Trim());
-                    return;
-
-                }
-                if (m[0] == '#')
-                {
-                    m = m.Remove(0, 1);
-                    Gui.Window.thisWindow.WriteOp("[Remote]: " + m);
-
-
-                    string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = EncryptMobile(messaged, KeyMobile);
-                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                    buffed[0] = (byte)2;
-                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-                    SendData(0x05, buffed);
-
-                    Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Ops -Remote- " + m + Environment.NewLine);  //Did it like this to avoid OnLog event
-                    Player.GlobalMessageOps("%fTo Ops -%6Remote%f- " + m);
-                    return;
-
-                }
-                if (m[0] == '~')
-                {
-                    m = m.Remove(0, 1);
-                    Gui.Window.thisWindow.WriteAdmin("[Remote]: " + m);
-
-
-                    string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = EncryptMobile(messaged, KeyMobile);
-                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                    buffed[0] = (byte)4;
-                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-                    SendData(0x05, buffed);
-
-                    Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Admins -Remote- " + m + Environment.NewLine);  //Did it like this to avoid OnLog event
-                    Player.GlobalMessageAdmins("%fTo Admins -%6Remote%f- " + m);
-                    return;
-
-                }
-                else
-                {
-
+                default:
                     Gui.Window.thisWindow.WriteLine("[Remote]: " + m);
+                    if (RemoteType == 1)
+                    {
+                        string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
+                        messaged = EncryptMobile(messaged, _keyMobile);
+                        byte[] buffed = new byte[(messaged.Length * 2) + 3];
+                        util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                        buffed[0] = 1;
+                        Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
 
-
-                    string messaged = new StringBuilder().Append("Remote").Append("ĥ").Append(m).ToString();
-                    messaged = EncryptMobile(messaged, KeyMobile);
-                    byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                    util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                    buffed[0] = (byte)1;
-                    Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
-                    SendData(0x05, buffed);
-
-
-
-                    Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + m + Environment.NewLine);  //Did it like this to avoid OnLog event
-                    Player.GlobalMessage(c.navy + "[Remote]: " + c.white + m);
+                        SendData(0x05, buffed);
+                    }
+                    else
+                    {
+                        m = "[Remote]: " + m;
+                        byte[] buffed = new byte[(m.Length) + 2];
+                        BitConverter.GetBytes((short)m.Length).CopyTo(buffed, 0);
+                        Encoding.UTF8.GetBytes(m).CopyTo(buffed, 2);
+                        SendData(0x12, buffed);
+                    }
+                    Logger.Write(string.Format("{0}{1}{2}", DateTime.Now.ToString("(HH:mm:ss) "), m, Environment.NewLine));  //Did it like this to avoid OnLog event
+                    Player.GlobalMessage(string.Format("{0}[Remote]: {1}{2}", c.navy, c.white, m));
                     return;
-                }
             }
         }
 

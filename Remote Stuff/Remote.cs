@@ -37,15 +37,15 @@ namespace MCForge.Remote
         bool upcast = false;
         public bool LoggedIn { get; protected set; }
 
-        public Socket socket;
-        public static List<Remote> remotes = new List<Remote>();
-        public int protocal = 2;
-        private string KeyMobile;
-        public byte remoteType = 4;
+        public Socket Socket;
+        public static List<Remote> Remotes = new List<Remote>();
+        public int Protocal = 2;
+        private readonly string _keyMobile;
+        public byte RemoteType = 4;
         public Remote()
         {
            // Remote.This = this;
-            KeyMobile = generateRandChars();
+            _keyMobile = generateRandChars();
         }
 
         private string generateRandChars()
@@ -65,36 +65,32 @@ namespace MCForge.Remote
         }
         public void Start()
         {
-
-            if (RemoteServer.enableRemote)
+            if (!RemoteServer.enableRemote) return;
+            try
             {
-                try
-                {
-                    RemoteProperties.Load();
-                    ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                    Player.GlobalMessage(c.navy + "A Remote has connected to the server");
-                    Server.s.Log("[Remote] connected to the server.");
+                RemoteProperties.Load();
+                ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
+                Player.GlobalMessage(c.navy + "A Remote has connected to the server");
+                Server.s.Log("[Remote] connected to the server.");
 
 
-                    socket.BeginReceive(_tbu, 0, _tbu.Length, SocketFlags.None, new AsyncCallback(Receive), this);
-                }
+                Socket.BeginReceive(_tbu, 0, _tbu.Length, SocketFlags.None, new AsyncCallback(Receive), this);
+            }
 
-                catch (Exception e)
-                {
-                    Server.ErrorLog(e);
-                }
-
+            catch (Exception e)
+            {
+                Server.ErrorLog(e);
             }
         }
 
         static void Receive(IAsyncResult result)
         {
             Remote p = (Remote)result.AsyncState;
-            if (p.upcast || p.socket == null)
+            if (p.upcast || p.Socket == null)
                 return;
             try
             {
-                int length = p.socket.EndReceive(result);
+                int length = p.Socket.EndReceive(result);
                 if (length == 0) { p.Disconnect(); return; }
 
                 byte[] b = new byte[p._bu.Length + length];
@@ -102,7 +98,7 @@ namespace MCForge.Remote
                 Buffer.BlockCopy(p._tbu, 0, b, p._bu.Length, length);
 
                 p._bu = p.HandleMessage(b);
-                p.socket.BeginReceive(p._tbu, 0, p._tbu.Length, SocketFlags.None,
+                p.Socket.BeginReceive(p._tbu, 0, p._tbu.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
             catch (SocketException)
@@ -166,14 +162,15 @@ namespace MCForge.Remote
 
                     switch (msg)
                     {
-                        case 7: HandleDesktopLogin(message); remoteType = 0; break;
-                        case 11: HandleMobileLogin(message); remoteType = 1; break;   //Login 
+                        case 7: HandleDesktopLogin(message); RemoteType = 0; break;
+                        case 2: HandleDesktopChat(message); break;
+                        case 3: HandleDesktopRequest(message);break;
+                        case 11: HandleMobileLogin(message); RemoteType = 1; break;   //Login 
                         case 12: HandleMobileChat(message); break;
                         case 13: HandleMobileRequest(message); break;
                         case 14: HandleMobileSettingsChange(message); break;
                         case 15: HandleMobileCommand(message); break;
                         case 16: HandleMobileChangeGroup(message); break;
-                        case 25: Disconnect(); break;
 
                     }
                     if (buffer.Length > 0)
@@ -199,7 +196,7 @@ namespace MCForge.Remote
             {
                 Player.GlobalMessage("%5[Remote] %f" + (kicked ? " has been kicked from server!" : "has disconnected."));
                 Server.s.Log("[Remote]" + (kicked ? " has been kicked from server!" : "has disconnected."));
-                if(kicked)SendData(0x03);
+                if(kicked)SendData((int) 0x03);
             }
             LoggedIn = false;
 
@@ -208,10 +205,27 @@ namespace MCForge.Remote
             else { if (OnRemoteKick != null) OnRemoteKick(this); }
 
             this.Dispose();
+            unregEvents();
             GC.Collect();
             GC.WaitForPendingFinalizers();
             
         }
+
+        private void unregEvents()
+        {
+            switch (RemoteType)
+            {
+                case 1:
+                    unregMobileEvents();
+                    break;
+                case 0:
+                    UnregDesktopEvents();
+                    break;
+                case 2:
+                    break;
+            }
+        }
+
         public void Disconnect()
         {
             KickedOrDisconnect(false);
@@ -224,33 +238,31 @@ namespace MCForge.Remote
         public void SendData(int id) { SendData(id, new byte[0]); }
         public void SendData(int id, byte[] send)
         {
-            if (socket == null || !socket.Connected) return;
-            byte[] buffer = new byte[send.Length + 1];
+            if (Socket == null || !Socket.Connected) return;
+            var buffer = new byte[send.Length + 1];
             buffer[0] = (byte)id;
-            for (int i = 0; i < send.Length; i++)
+            for (var i = 0; i < send.Length; i++)
             {
                 buffer[i + 1] = send[i];
             }
             try
             {
 
-                socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, ar => { },  null);
                 if (OnRemoteSendData != null) OnRemoteSendData(this, (short)(id + send.Length));
-                buffer = null;
             }
             catch (SocketException)
             {
-                buffer = null;
                 Disconnect();
             }
         }
         public void SendData(byte[] send)
         {
-            if (socket == null || !socket.Connected) return;
+            if (Socket == null || !Socket.Connected) return;
             try
             {
 
-                socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                Socket.BeginSend(send, 0, send.Length, SocketFlags.None, delegate{ }, null);
                 if (OnRemoteSendData != null) OnRemoteSendData(this, (short)(send.Length));
                 _bu = null;
             }
@@ -267,28 +279,24 @@ namespace MCForge.Remote
 
             if (packet.Length >= 1)
             {
-                foreach (byte b in packet)
-                {
-                    s += b + ", ";
-                }
-                Server.s.Log("Packet " + id + " { " + s + "}");
+                s = packet.Aggregate(s, (current, b) => current + (b + ", "));
+                Server.s.Log(string.Format("Packet {0} {{ {1}}}", id, s));
             }
             else
             {
-                Server.s.Log("Packet " + id + " had no DATA!");
+                Server.s.Log(string.Format("Packet {0} had no DATA!", id));
             }
         }
 
 
         public void Dispose()
         {
-            if (socket != null && socket.Connected)
+            if (Socket != null && Socket.Connected)
             {
-                try { socket.Close(); }
-                catch { }
-                socket = null;
+                try { Socket.Close(); }
+                finally{ Socket = null;}
             }
-            remotes.Remove(this);
+            Remotes.Remove(this);
         }
     }
 }
