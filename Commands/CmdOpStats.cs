@@ -51,7 +51,7 @@ namespace MCForge
             if (who != null) { message = who.name; } // Online full player name is converted to message
             else
             {
-                using (DataTable playerDb = Database.fillData("SELECT * FROM Players WHERE Name='" + message + "'"))
+                using (DataTable playerDb = Database.fillData("SELECT * FROM Players WHERE Name='" + (message.Split(' ').Length > 1 ? message.Split(' ')[0] : message) + "'"))
                 {
                     if (playerDb.Rows != null && playerDb.Rows.Count > 0) // Check if player exists in database since we couldn't find player online
                     {
