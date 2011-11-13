@@ -306,7 +306,6 @@ namespace MCForge
             all.Add(new CmdXundo());
             all.Add(new CmdZTime());
             all.Add(new CmdZombieGame());
-            all.Add(new CmdZombieSpawn());
             all.Add(new CmdZone());
             all.Add(new CmdZz());
             core.commands = new List<Command>(all.commands);

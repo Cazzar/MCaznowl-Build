@@ -532,7 +532,7 @@ namespace MCForge.Gui
                         {
                             Command commandcmd = Command.all.Find(sentCmd);
                             WebClient wc = new WebClient();
-                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                            wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + commandcmd.name);
                         }
                     }
                     catch 
@@ -985,6 +985,7 @@ namespace MCForge.Gui
                 SurvivalStyleDeathchk.Checked = l.Death;
                 finitechk.Checked = l.finite;
                 edgewaterchk.Checked = l.edgeWater;
+                WoM.Enabled = true;
                 if (l.ai == true)
                 {
                     Aicombo.SelectedItem = "Hunt";
@@ -1017,6 +1018,8 @@ namespace MCForge.Gui
                     }
                 }
             }
+            else
+                WoM.Enabled = false;
             UpdateMapList("'");
             return;
         }
@@ -2110,6 +2113,16 @@ namespace MCForge.Gui
                 return;
             }
             txtGlobalLog.AppendTextAndScroll(message);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (GetSelectedLevel() != null)
+            {
+                GUI.Textures textures = new GUI.Textures();
+                textures.l = GetSelectedLevel();
+                textures.Show();
+            }
         }
 
 

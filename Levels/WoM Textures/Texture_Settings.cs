@@ -7,14 +7,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
-namespace MCForge
+namespace MCForge.Levels.Textures
 {
-    public class Texture_Settings
+    public class LevelTextures
     {
+        string cachecfg = "";
+        bool update = false;
         public bool enabled = false;
-        private string terrainid = "";
+        public string terrainid = "";
         private string edgeid = "";
-        private string side = "";
+        public string side = "";
         private int level = -1;
         private int cloudcolor = -1;
         private int fog = -1;
@@ -24,8 +26,10 @@ namespace MCForge
         public string MOTD = Server.motd;
         public string detail = "";
         private Level l;
-        public Texture_Settings(Level level) { 
-            l = level; 
+        public LevelTextures(Level level) { 
+            l = level;
+            if (File.Exists("extra/cfg/" + l.name + ".cfg"))
+                cachecfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
         }
         #region Network
         public void SendDetail(Player p, string text = "")
@@ -65,13 +69,18 @@ namespace MCForge
         public void ChangeSky(string hex) { sky = ParseHexColor(hex); }
         public void ChangeFog(string hex) { fog = ParseHexColor(hex); }
         public void ChangeCloud(string hex) { cloudcolor = ParseHexColor(hex); }
-        public void ChangeEdge(byte b) { edgeid = EdgeBlock(b); }
+        public void ChangeEdge(byte b) { edgeid = GetBlockTexture(b); }
+        public void ChangeEdge(string id) { edgeid = id; }
         #endregion
         #region Internal Settings
-        string EdgeBlock(byte b)
+        public static string GetBlockTexture(byte b)
         {
             switch (b)
             {
+                case Block.water:
+                    return "4a781d8aaabca8eeab78e14a072a905816f201bf";
+                case Block.lava:
+                    return "d0b6dc6d40dd3141fd58dc0aff7370fd623899df";
                 case Block.blue:
                     return "eea1b7e0a62d90b5b681f142bd2f483a671ba160";
                 case Block.brick:
@@ -144,6 +153,10 @@ namespace MCForge
         //Create CFG
         public void CreateCFG()
         {
+            if (l.motd == "ignore")
+                MOTD = Server.motd;
+            else
+                MOTD = l.motd;
             List<string> temp = new List<string>();
             if (terrainid != "")
                 temp.Add("environment.terrain = " + terrainid);
@@ -166,10 +179,11 @@ namespace MCForge
             if (detail != "")
                 temp.Add("detail.user = " + detail);
             temp.Add("server.sendwomid = " + sendwomid.ToString().ToLower());
-            if (!Directory.Exists("extras/cfg")) Directory.CreateDirectory("extras/cfg");
-            File.WriteAllLines("extras/cfg/" + l.name + ".cfg", temp.ToArray());
+            if (!Directory.Exists("extra/cfg")) Directory.CreateDirectory("extra/cfg");
+            File.WriteAllLines("extra/cfg/" + l.name + ".cfg", temp.ToArray());
             temp.Clear();
             Server.s.Log("CFG File created for " + l.name);
+            update = true;
         }
         #endregion
         #region Thanks FCRAFT
@@ -183,7 +197,6 @@ namespace MCForge
             using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
             {
                 string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-                Server.s.Log(firstLine);
                 var match = HttpFirstLine.Match(firstLine);
                 if (match.Success)
                 {
@@ -192,9 +205,17 @@ namespace MCForge
                     Level l = Level.Find(worldName);
                     if (l != null)
                     {
-                        if (!File.Exists("extras/cfg/" + l.name + ".cfg"))
-                            l.textures.CreateCFG();
-                        string cfg = File.ReadAllText("extras/cfg/" + l.name + ".cfg");
+                        string cfg = "";
+                        if (cachecfg == "" || update)
+                        {
+                            if (!File.Exists("extra/cfg/" + l.name + ".cfg"))
+                                l.textures.CreateCFG();
+                            cfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
+                            cachecfg = cfg;
+                            update = false;
+                        }
+                        else
+                            cfg = cachecfg;
                         byte[] content = Encoding.UTF8.GetBytes(cfg);
                         textWriter.WriteLine("HTTP/1.1 200 OK");
                         textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
