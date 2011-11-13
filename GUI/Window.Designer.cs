@@ -128,10 +128,8 @@ namespace MCForge.Gui
             this.killphysics_button = new System.Windows.Forms.Button();
             this.button_saveall = new System.Windows.Forms.Button();
             this.gBCommands = new System.Windows.Forms.GroupBox();
-            this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
             this.gBChat = new System.Windows.Forms.GroupBox();
-            this.txtLog = new MCForge.Gui.AutoScrollTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCommands = new System.Windows.Forms.TextBox();
             this.txtInput = new System.Windows.Forms.TextBox();
@@ -144,6 +142,7 @@ namespace MCForge.Gui
             this.UnloadedList = new System.Windows.Forms.ListBox();
             this.ldmapbt = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.WoM = new System.Windows.Forms.Button();
             this.TreeGrowChk = new System.Windows.Forms.CheckBox();
             this.label39 = new System.Windows.Forms.Label();
             this.leafDecayChk = new System.Windows.Forms.CheckBox();
@@ -197,7 +196,6 @@ namespace MCForge.Gui
             this.CreateNewMap = new System.Windows.Forms.Button();
             this.dgvMapsTab = new System.Windows.Forms.DataGridView();
             this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.PlayersTextBox = new MCForge.Gui.AutoScrollTextBox();
             this.PlyersListBox = new System.Windows.Forms.ListBox();
             this.StatusTxt = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
@@ -255,15 +253,18 @@ namespace MCForge.Gui
             this.Chat = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label40 = new System.Windows.Forms.Label();
-            this.txtGlobalLog = new MCForge.Gui.AutoScrollTextBox();
             this.txtGlobalInput = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.txtAdminLog = new MCForge.Gui.AutoScrollTextBox();
             this.txtAdminInput = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label33 = new System.Windows.Forms.Label();
             this.txtOpInput = new System.Windows.Forms.TextBox();
+            this.txtCommandsUsed = new MCForge.Gui.AutoScrollTextBox();
+            this.txtLog = new MCForge.Gui.AutoScrollTextBox();
+            this.PlayersTextBox = new MCForge.Gui.AutoScrollTextBox();
+            this.txtGlobalLog = new MCForge.Gui.AutoScrollTextBox();
+            this.txtAdminLog = new MCForge.Gui.AutoScrollTextBox();
             this.txtOpLog = new MCForge.Gui.AutoScrollTextBox();
             this.mapsStrip.SuspendLayout();
             this.playerStrip.SuspendLayout();
@@ -875,19 +876,6 @@ namespace MCForge.Gui
             this.gBCommands.TabStop = false;
             this.gBCommands.Text = "Commands";
             // 
-            // txtCommandsUsed
-            // 
-            this.txtCommandsUsed.BackColor = System.Drawing.Color.White;
-            this.txtCommandsUsed.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtCommandsUsed.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCommandsUsed.Location = new System.Drawing.Point(9, 16);
-            this.txtCommandsUsed.Multiline = true;
-            this.txtCommandsUsed.Name = "txtCommandsUsed";
-            this.txtCommandsUsed.ReadOnly = true;
-            this.txtCommandsUsed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCommandsUsed.Size = new System.Drawing.Size(413, 100);
-            this.txtCommandsUsed.TabIndex = 0;
-            // 
             // dgvMaps
             // 
             this.dgvMaps.AllowUserToAddRows = false;
@@ -916,19 +904,6 @@ namespace MCForge.Gui
             this.gBChat.TabIndex = 32;
             this.gBChat.TabStop = false;
             this.gBChat.Text = "Chat";
-            // 
-            // txtLog
-            // 
-            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLog.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(6, 19);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(413, 262);
-            this.txtLog.TabIndex = 1;
             // 
             // label2
             // 
@@ -1060,6 +1035,7 @@ namespace MCForge.Gui
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.WoM);
             this.panel2.Controls.Add(this.TreeGrowChk);
             this.panel2.Controls.Add(this.label39);
             this.panel2.Controls.Add(this.leafDecayChk);
@@ -1101,6 +1077,17 @@ namespace MCForge.Gui
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(372, 207);
             this.panel2.TabIndex = 48;
+            // 
+            // WoM
+            // 
+            this.WoM.Enabled = false;
+            this.WoM.Location = new System.Drawing.Point(97, 84);
+            this.WoM.Name = "WoM";
+            this.WoM.Size = new System.Drawing.Size(97, 23);
+            this.WoM.TabIndex = 49;
+            this.WoM.Text = "Wom Textures";
+            this.WoM.UseVisualStyleBackColor = true;
+            this.WoM.Click += new System.EventHandler(this.button1_Click);
             // 
             // TreeGrowChk
             // 
@@ -1650,19 +1637,6 @@ namespace MCForge.Gui
             this.tabPage7.Size = new System.Drawing.Size(698, 488);
             this.tabPage7.TabIndex = 7;
             this.tabPage7.Text = "Players";
-            // 
-            // PlayersTextBox
-            // 
-            this.PlayersTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.PlayersTextBox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.PlayersTextBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PlayersTextBox.Location = new System.Drawing.Point(306, 304);
-            this.PlayersTextBox.Multiline = true;
-            this.PlayersTextBox.Name = "PlayersTextBox";
-            this.PlayersTextBox.ReadOnly = true;
-            this.PlayersTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.PlayersTextBox.Size = new System.Drawing.Size(386, 173);
-            this.PlayersTextBox.TabIndex = 63;
             // 
             // PlyersListBox
             // 
@@ -2242,19 +2216,6 @@ namespace MCForge.Gui
             this.label40.TabIndex = 32;
             this.label40.Text = "GlobalChat:";
             // 
-            // txtGlobalLog
-            // 
-            this.txtGlobalLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtGlobalLog.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtGlobalLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGlobalLog.Location = new System.Drawing.Point(6, 20);
-            this.txtGlobalLog.Multiline = true;
-            this.txtGlobalLog.Name = "txtGlobalLog";
-            this.txtGlobalLog.ReadOnly = true;
-            this.txtGlobalLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtGlobalLog.Size = new System.Drawing.Size(671, 102);
-            this.txtGlobalLog.TabIndex = 2;
-            // 
             // txtGlobalInput
             // 
             this.txtGlobalInput.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2285,19 +2246,6 @@ namespace MCForge.Gui
             this.label32.Size = new System.Drawing.Size(62, 13);
             this.label32.TabIndex = 32;
             this.label32.Text = "AdminChat:";
-            // 
-            // txtAdminLog
-            // 
-            this.txtAdminLog.BackColor = System.Drawing.SystemColors.Window;
-            this.txtAdminLog.Cursor = System.Windows.Forms.Cursors.Default;
-            this.txtAdminLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAdminLog.Location = new System.Drawing.Point(6, 20);
-            this.txtAdminLog.Multiline = true;
-            this.txtAdminLog.Name = "txtAdminLog";
-            this.txtAdminLog.ReadOnly = true;
-            this.txtAdminLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtAdminLog.Size = new System.Drawing.Size(671, 102);
-            this.txtAdminLog.TabIndex = 2;
             // 
             // txtAdminInput
             // 
@@ -2338,6 +2286,71 @@ namespace MCForge.Gui
             this.txtOpInput.Size = new System.Drawing.Size(602, 21);
             this.txtOpInput.TabIndex = 30;
             this.txtOpInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtOpInput_KeyDown);
+            // 
+            // txtCommandsUsed
+            // 
+            this.txtCommandsUsed.BackColor = System.Drawing.Color.White;
+            this.txtCommandsUsed.Cursor = System.Windows.Forms.Cursors.Default;
+            this.txtCommandsUsed.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCommandsUsed.Location = new System.Drawing.Point(9, 16);
+            this.txtCommandsUsed.Multiline = true;
+            this.txtCommandsUsed.Name = "txtCommandsUsed";
+            this.txtCommandsUsed.ReadOnly = true;
+            this.txtCommandsUsed.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCommandsUsed.Size = new System.Drawing.Size(413, 100);
+            this.txtCommandsUsed.TabIndex = 0;
+            // 
+            // txtLog
+            // 
+            this.txtLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtLog.Cursor = System.Windows.Forms.Cursors.Default;
+            this.txtLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog.Location = new System.Drawing.Point(6, 19);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtLog.Size = new System.Drawing.Size(413, 262);
+            this.txtLog.TabIndex = 1;
+            // 
+            // PlayersTextBox
+            // 
+            this.PlayersTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.PlayersTextBox.Cursor = System.Windows.Forms.Cursors.Default;
+            this.PlayersTextBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PlayersTextBox.Location = new System.Drawing.Point(306, 304);
+            this.PlayersTextBox.Multiline = true;
+            this.PlayersTextBox.Name = "PlayersTextBox";
+            this.PlayersTextBox.ReadOnly = true;
+            this.PlayersTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.PlayersTextBox.Size = new System.Drawing.Size(386, 173);
+            this.PlayersTextBox.TabIndex = 63;
+            // 
+            // txtGlobalLog
+            // 
+            this.txtGlobalLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtGlobalLog.Cursor = System.Windows.Forms.Cursors.Default;
+            this.txtGlobalLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGlobalLog.Location = new System.Drawing.Point(6, 20);
+            this.txtGlobalLog.Multiline = true;
+            this.txtGlobalLog.Name = "txtGlobalLog";
+            this.txtGlobalLog.ReadOnly = true;
+            this.txtGlobalLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtGlobalLog.Size = new System.Drawing.Size(671, 102);
+            this.txtGlobalLog.TabIndex = 2;
+            // 
+            // txtAdminLog
+            // 
+            this.txtAdminLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtAdminLog.Cursor = System.Windows.Forms.Cursors.Default;
+            this.txtAdminLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAdminLog.Location = new System.Drawing.Point(6, 20);
+            this.txtAdminLog.Multiline = true;
+            this.txtAdminLog.Name = "txtAdminLog";
+            this.txtAdminLog.ReadOnly = true;
+            this.txtAdminLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtAdminLog.Size = new System.Drawing.Size(671, 102);
+            this.txtAdminLog.TabIndex = 2;
             // 
             // txtOpLog
             // 
@@ -2616,5 +2629,6 @@ namespace MCForge.Gui
         private Label label40;
         private AutoScrollTextBox txtGlobalLog;
         private TextBox txtGlobalInput;
+        private Button WoM;
     }
 }

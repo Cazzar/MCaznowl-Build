@@ -639,6 +639,9 @@ namespace MCForge
                             case "wom-serverflag":
                                 Server.Server_Flag = value;
                                 break;
+                            case "wom-textures":
+                                Server.UseTextures = bool.Parse(value);
+                                break;
                             case "send-command-data":
                                 Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -709,6 +712,7 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
+
                         }
                     }
                 }

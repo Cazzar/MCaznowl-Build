@@ -241,6 +241,12 @@
     <Compile Include="GUI\LavaMapBrowser.Designer.cs">
       <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Textures.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Textures.Designer.cs">
+      <DependentUpon>Textures.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\WoM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -488,6 +494,9 @@
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Textures.resx">
+      <DependentUpon>Textures.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
