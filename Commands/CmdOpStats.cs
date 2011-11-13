@@ -31,23 +31,25 @@ namespace MCForge
         public CmdOpStats() { }
         public override void Use(Player p, string message)
         {
+            bool debug = false;
             Player who = null;
-            string timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00");
+            string timespan = "thismonth";
             string timespanname = "This Month";
             bool tspanoption = false;
-            if (message == "" && p != null) { who = p; message = p.name; } else { who = Player.Find(message); }
+            if (message == "" && p != null) { who = p; } else { who = (message.Split(' ').Length > 1 ? Player.Find(message.Split(' ')[0]) : Player.Find(message)); }
+            if (p != null && (message == "today" || message == "yesterday" || message == "thismonth" || message == "lastmonth" || message == "all")) { who = p; }
             if (p == null && message == "") { Help(p); return; }
-            if (message.Split(' ').Length > 1)
-            {
-                who = Player.Find(message.Split(' ')[0]);
-                timespan = message.Split(' ')[1].ToLower();
-                if (timespan.ToLower() == "today") { timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); timespanname = "Today"; tspanoption = true; }
-                if (timespan.ToLower() == "yesterday") { timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00"); timespanname = "Yesterday"; tspanoption = true; }
-                if (timespan.ToLower() == "thismonth") { timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00"); tspanoption = true; }
-                if (timespan.ToLower() == "lastmonth") { timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00"); timespanname = "Last Month"; tspanoption = true; }
-                if (timespan.ToLower() == "all") { timespan = "0000-00-00 00:00:00"; timespanname = "ALL"; tspanoption = true; }
-                if (!tspanoption) { Help(p); return; }
-            }
+            if (message.Split(' ').Length == 1 && (message == "today" || message == "yesterday" || message == "thismonth" || message == "lastmonth" || message == "all")) { timespan = message; }
+            if (message.Split(' ').Length == 2 && (message.Split(' ')[1].ToLower() == "today" || message.Split(' ')[1].ToLower() == "yesterday" || message.Split(' ')[1].ToLower() == "thismonth" || message.Split(' ')[1].ToLower() == "lastmonth" || message.Split(' ')[1].ToLower() == "all")) { timespan = message.Split(' ')[1].ToLower(); }
+            if (debug) { Player.SendMessage(p, "Message = " + message); }
+            if (timespan.ToLower() == "today") { timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); timespanname = "Today"; tspanoption = true; }
+            if (timespan.ToLower() == "yesterday") { timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00"); timespanname = "Yesterday"; tspanoption = true; }
+            if (timespan.ToLower() == "thismonth") { timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00"); tspanoption = true; }
+            if (timespan.ToLower() == "lastmonth") { timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00"); timespanname = "Last Month"; tspanoption = true; }
+            if (timespan.ToLower() == "all") { timespan = "0000-00-00 00:00:00"; timespanname = "ALL"; tspanoption = true; }
+            if (!tspanoption) { Help(p); return; }
+            if (debug) { Player.SendMessage(p, "Timespan = " + timespan); }
+            if (debug) { Player.SendMessage(p, "TimespanName = " + timespanname); }
             if (who != null) { message = who.name; } // Online full player name is converted to message
             else
             {
