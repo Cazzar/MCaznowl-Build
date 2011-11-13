@@ -16,11 +16,7 @@
     permissions and limitations under the Licenses.
 */
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Security.Cryptography;
 
 namespace MCForge.Remote
 {
@@ -34,17 +30,14 @@ namespace MCForge.Remote
                 {
                     try
                     {
-                        if (line[0] != '#')
+                        if (line[0] == '#') continue;
+                        string value = line.Substring(line.IndexOf(" = ") + 3);
+                        switch (line.Substring(0, line.IndexOf(" = ")))
                         {
-                            string value = line.Substring(line.IndexOf(" = ") + 3);
-                            switch (line.Substring(0, line.IndexOf(" = ")))
-                            {
-                                case "RemoteEnable": RemoteServer.enableRemote = bool.Parse(value); break;
-                                case "RemoteUsername": RemoteServer.username = value; break;
-                                case "RemotePassword": RemoteServer.password = value; break;
-                                case "RemotePort": RemoteServer.port = int.Parse(value); break;
-                            }
-
+                            case "RemoteEnable": RemoteServer.enableRemote = bool.Parse(value); break;
+                            case "RemoteUsername": RemoteServer.username = value; break;
+                            case "RemotePassword": RemoteServer.password = value; break;
+                            case "RemotePort": RemoteServer.port = int.Parse(value); break;
                         }
                     }
                     catch { Server.s.Log("Failed to load remote properties!"); }
@@ -59,17 +52,17 @@ namespace MCForge.Remote
             try
             {
                 File.Create(fileName).Dispose();
-                using (StreamWriter w = File.CreateText(fileName))
+                using (var w = File.CreateText(fileName))
                 {
-                    w.WriteLine("RemoteEnable = " + RemoteServer.enableRemote.ToString().ToLower());
-                    w.WriteLine("RemoteUsername = " + RemoteServer.username);
-                    w.WriteLine("RemotePassword = " + RemoteServer.password);
-                    w.WriteLine("RemotePort = " + RemoteServer.port.ToString());
+                    w.WriteLine("RemoteEnable = {0}", RemoteServer.enableRemote.ToString().ToLower());
+                    w.WriteLine("RemoteUsername = {0}", RemoteServer.username);
+                    w.WriteLine("RemotePassword = {0}", RemoteServer.password);
+                    w.WriteLine("RemotePort = {0}", RemoteServer.port);
                 }
             }
             catch
             {
-                Server.s.Log("remote properties save failed " + fileName);
+                Server.s.Log(string.Format("remote properties save failed {0}", fileName));
             }
         }
     }

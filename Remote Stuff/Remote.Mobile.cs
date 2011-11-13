@@ -15,7 +15,7 @@ namespace MCForge.Remote
             short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
             byte id = message[2];
             string messages = Encoding.UTF8.GetString(message, 3, length);
-            messages = this.DecryptMobile(messages, KeyMobile);
+            messages = this.DecryptMobile(messages, _keyMobile);
             switch (id)
             {
                 case 1:
@@ -81,23 +81,18 @@ namespace MCForge.Remote
             Group.InitAll();
 
         }
-
         private void HandleMobileCommand(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string m = Encoding.UTF8.GetString(message, 2, length);
-            m = this.DecryptMobile(m, KeyMobile);
-            foreach (char ch in m)
+            m = DecryptMobile(m, _keyMobile);
+            if (m.Any(ch => ch < 32 || ch >= 127))
             {
-                if (ch < 32 || ch >= 127)
-                {
-                    Kick();
-                    return;
-                }
+                Kick();
+                return;
             }
             RemoteChat(m);
         }
-
         private void HandleMobileSettingsChange(byte[] message)
         {
 
@@ -130,7 +125,7 @@ namespace MCForge.Remote
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string mass = Encoding.UTF8.GetString(message, 2, length);
-            mass = DecryptMobile(mass, KeyMobile);
+            mass = DecryptMobile(mass, _keyMobile);
             try
             {
                 if (mass.StartsWith(KEY_SERVER_NAME))
@@ -317,53 +312,45 @@ namespace MCForge.Remote
                 default: return;
             }
         }
-
         private void HandleMobileChat(byte[] message)
         {
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string m = Encoding.UTF8.GetString(message, 2, length);
-            m = this.DecryptMobile(m, KeyMobile);
-            foreach (char ch in m)
+            m = DecryptMobile(m, _keyMobile);
+            if (m.Any(ch => ch < 32 || ch >= 127))
             {
-                if (ch < 32 || ch >= 127)
-                {
-                    Kick();
-                    return;
-                }
+                Kick();
+                return;
             }
             RemoteChat(m);
 
         }
-
         private void HandleMobileLogin(byte[] message)
         {
 
             short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             string msg = Encoding.UTF8.GetString(message, 2, length);
-            msg = this.DecryptMobile(msg, "FORGEREMOTETIVITY");
+            msg = DecryptMobile(msg, "FORGEREMOTETIVITY");
             byte[] bs = new byte[1];
             //Server.s.Log(msg);
-            if (msg.StartsWith(protocal.ToString()))  //TODO: make a better checker
-            {
-                msg = msg.Replace(protocal.ToString() + ": ", "");
-            }
+            if (msg.StartsWith(Protocal.ToString())) //TODO: make a better checker
+                msg = msg.Replace(string.Format("{0}: ", Protocal), "");
             else
             {
-
-                bs[0] = 3;
-                SendData(11, bs);
+                bs[0] = 0x3;
+                SendData(0xb, bs);
                 Server.s.Log("[Remote] A remote tried to connect with a different version.");
             }
-            if (RemoteServer.tries >= 3)
+            if (RemoteServer.tries >= 0x3)
             {
-                bs[0] = 4;
-                SendData(11, bs);
+                bs[0] = 0x4;
+                SendData(0xb, bs);
                 Server.s.Log("[Remote] A remote tried to connect with exceeding incorrect credentials");
             }
-            if (RemoteServer.tries == 6)
+            if (RemoteServer.tries == 0x6)
             {
-                bs[0] = 5;
-                SendData(11, bs);
+                bs[0] = 0x5;
+                SendData(0xb, bs);
                 Server.s.Log("[Remote] Remote was locked from the console, type \"/remote tryreset\" to reset the try count");
             }
 
@@ -373,41 +360,50 @@ namespace MCForge.Remote
                 bs[0] = 1;
                 if (OnRemoteLogin != null) OnRemoteLogin(this);
                 SendData(11, bs);
-                GenerateKeyMobile(KeyMobile);
+                GenerateKeyMobile(_keyMobile);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
-                //startUp(); // -- dont need because phone will request stuff when ready
                 LoggedIn = true;
-                remotes.Add(this);
-
-
-                Server.s.OnLog += new Server.LogHandler(LogServerMobile);
-                Server.s.OnAdmin += new Server.LogHandler(LogAdminMobile);
-                Server.s.OnOp += new Server.LogHandler(LogOpMobile);
-                Server.s.OnSettingsUpdate += new Server.VoidHandler(SettingsUpdateMobile);
-
-                //Player.PlayerChat +=new Player.OnPlayerChat(Player_PlayerChat);
+                Remotes.Add(this);
+                regMobileEvents();
                 
-                Player.PlayerConnect += new Player.OnPlayerConnect(PlayerConnectMobile);
-                Player.PlayerDisconnect += new Player.OnPlayerDisconnect(PlayerDisconnectMobile);
-                Level.LevelLoad += new Level.OnLevelLoad(LevelLoadMobile);
-                Level.LevelUnload += new Level.OnLevelUnload(LevelUnloadMobile);
-                Group.OnGroupLoad += new Group.GroupLoad(GroupChangedMobile);
-                Group.OnGroupSave += new Group.GroupSave(GroupChangedMobile);
 
 
             }
             else
             {
-                bs[0] = 2;
+                bs[0] = 0x2;
                 SendData(11, bs);
                 Server.s.Log("[Remote] A Remote with incorrect information attempted to join.");
                 RemoteServer.tries++;
 
             }
         }
+
+        private void regMobileEvents()
+        {
+            Server.s.OnLog += LogServerMobile;
+            Server.s.OnAdmin += LogAdminMobile;
+            Server.s.OnOp += LogOpMobile;
+            Server.s.OnSettingsUpdate += SettingsUpdateMobile;
+
+            //Player.PlayerChat +=new Player.OnPlayerChat(Player_PlayerChat);
+
+            Player.PlayerConnect += PlayerConnectMobile;
+            Player.PlayerDisconnect += PlayerDisconnectMobile;
+            Level.LevelLoad += LevelLoadMobile;
+            Level.LevelUnload += LevelUnloadMobile;
+            Group.OnGroupLoad += GroupChangedMobile;
+            Group.OnGroupSave += GroupChangedMobile;
+
+            //Create var for them instead
+        }
+        public void unregMobileEvents()
+        {
+            //TODO: unregister events
+        }
         public void SendStringDataMobile(int id, string p)
         {
-            p = EncryptMobile(p, KeyMobile);
+            p = EncryptMobile(p, _keyMobile);
             byte[] bytes = new byte[(p.Length * 2) + 2];
             util.EndianBitConverter.Big.GetBytes((short)p.Length).CopyTo(bytes, 0);
             Encoding.BigEndianUnicode.GetBytes(p).CopyTo(bytes, 2);
@@ -579,7 +575,7 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)2;
@@ -591,7 +587,7 @@ namespace MCForge.Remote
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)2;
@@ -619,7 +615,7 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)4;
@@ -631,7 +627,7 @@ namespace MCForge.Remote
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message.Replace(p.name + ":", "")).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)4;
@@ -659,7 +655,7 @@ namespace MCForge.Remote
             if (p == null)
             {
                 string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)1;
@@ -671,7 +667,7 @@ namespace MCForge.Remote
             else
             {
                 string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
-                messaged = EncryptMobile(messaged, KeyMobile);
+                messaged = EncryptMobile(messaged, _keyMobile);
                 byte[] buffed = new byte[(messaged.Length * 2) + 3];
                 util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                 buffed[0] = (byte)1;

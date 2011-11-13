@@ -16,10 +16,8 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace MCForge.Remote
@@ -35,87 +33,78 @@ namespace MCForge.Remote
         public static int tries = 0;
 
 
-        static bool shutdown = false;
-
-
-
         public void Start()
         {
             RemoteProperties.Load();
 
-            if (enableRemote)
+            if (!enableRemote) return;
+            try
             {
-                try
-                {
 
-                    IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
-                    listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    listen.Bind(endpoint);
-                    listen.Listen((int)SocketOptionName.MaxConnections);
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
-                    Server.s.Log("Creating listening socket on port " + port + " for remote console...");
-                }
-                catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
-                catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
+                listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                listen.Bind(endpoint);
+                listen.Listen((int)SocketOptionName.MaxConnections);
+                listen.BeginAccept(new AsyncCallback(Accept), null);
+                Server.s.Log(string.Format("Creating listening socket on port {0} for remote console...", port));
             }
+            catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
+            catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }
         }
 
         void Accept(IAsyncResult result)
         {
-            if (Server.shuttingDown == false)
+            if (Server.shuttingDown) return;
+            Remote p = null;
+            var begin = false;
+            try
             {
-                Remote p = null;
-                bool begin = false;
-                try
-                {
-                    p = new Remote();
+                p = new Remote();
 
-                    if (tries < 7)
+                if (tries < 7)
+                {
+                    if (tries < 5)
                     {
-                        if (tries < 5)
-                        {
-                            p.socket = listen.EndAccept(result);
-                            new Thread(new ThreadStart(p.Start)).Start();
+                        p.Socket = listen.EndAccept(result);
+                        new Thread(new ThreadStart(p.Start)).Start();
 
-                            listen.BeginAccept(new AsyncCallback(Accept), null);
-                            begin = true;
-                        }
-                        else
-                        {
-                            new Thread(new ThreadStart(delegate
-                            {
-                                Thread.Sleep(600000);
-                                Command.all.Find("remote").Use(null, "resettry");
-                            })).Start();
-                        }
+                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                        begin = true;
                     }
+                    else
+                    {
+                        new Thread(() =>
+                                       {
+                                           Thread.Sleep(0x927c0);  //10 mins
+                                           Command.all.Find("remote").Use(null, "resettry");
+                                       }).Start();
+                    }
+                }
 
 
-                }
-                catch (SocketException)
-                {
-                    if (p != null)
-                        p.Disconnect();
-                    if (!begin)
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
-                }
-                catch (Exception e)
-                {
-                    Server.s.Log(e.Message);
-                    Server.s.Log(e.StackTrace);
-                    if (p != null)
-                        p.Disconnect();
-                    if (!begin)
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
-                }
+            }
+            catch (SocketException)
+            {
+                if (p != null)
+                    p.Disconnect();
+                if (begin) return;
+                listen.BeginAccept(new AsyncCallback(Accept), null);
+            }
+            catch (Exception e)
+            {
+                Server.s.Log(e.Message);
+                Server.s.Log(e.StackTrace);
+                if (p != null)
+                    p.Disconnect();
+                if (begin) return;
+                listen.BeginAccept(new AsyncCallback(Accept), null);
             }
         }
 
 
         public static void Close()
         {
-            listen.Close();
-            shutdown = true;
+            if (listen != null) listen.Close();
         }
     }
 }
