@@ -146,7 +146,7 @@ namespace MCForge
 
 			try
 			{
-				using (SW = File.CreateText("bots/" + foundPath))
+				using (SW = File.AppendText("bots/" + foundPath))
 				{
 					switch (additional.ToLower())
 					{
