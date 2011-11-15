@@ -985,7 +985,8 @@ namespace MCForge.Gui
                 SurvivalStyleDeathchk.Checked = l.Death;
                 finitechk.Checked = l.finite;
                 edgewaterchk.Checked = l.edgeWater;
-                WoM.Enabled = true;
+                if (Server.UseTextures)
+                    WoM.Enabled = true;
                 if (l.ai == true)
                 {
                     Aicombo.SelectedItem = "Hunt";
@@ -2123,6 +2124,11 @@ namespace MCForge.Gui
                 textures.l = GetSelectedLevel();
                 textures.Show();
             }
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
 
