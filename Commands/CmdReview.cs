@@ -1,5 +1,9 @@
 ﻿/*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+	
+ *  Written by BeMacized
+ *  Assisted by RedNoodle
+ * 
+ *  Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
 	
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -45,98 +49,142 @@ namespace MCForge
                     Player.SendMessage(p, "You can't execute this command as Console!");
                     return;
                 }
-            } 
-            if (message == "enter" || message == "view" || message == "leave" || message == "clear" || message == "next")
+            }
+            if (p != null && message == "")
             {
-                if (message == "enter")
-                {
-                    if (p.canusereview)
+                if (p.group.Permission < LevelPermission.Operator) { message = "enter"; }
+                if (p.group.Permission >= LevelPermission.Operator) { message = "view"; }
+            }
+            switch (message.ToLower())
+            {
+                case "enter":
+                    if (message == "enter")
                     {
-                        Group gr = Group.findPerm(Server.reviewenter);
-                        LevelPermission lp = gr.Permission;
-                        if (p.group.Permission >= lp)
+                        if (p.canusereview)
                         {
-                            foreach (string testwho in Server.reviewlist)
+                            Group gre = Group.findPerm(Server.reviewenter);
+                            LevelPermission lpe = gre.Permission;
+                            if (p.group.Permission >= lpe)
                             {
-                                if (testwho == p.name)
+                                foreach (string testwho in Server.reviewlist)
                                 {
-                                    Player.SendMessage(p, "You already entered the review queue!");
-                                    return;
+                                    if (testwho == p.name)
+                                    {
+                                        Player.SendMessage(p, "You already entered the review queue!");
+                                        return;
+                                    }
                                 }
+
+                                bool isopson = false;
+                                try
+                                {
+                                    foreach (Player pl in Player.players)
+                                    {
+                                        if (pl.group.Permission >= Server.opchatperm && !pl.hidden)
+                                        {
+                                            isopson = true;
+                                            break; // We're done, break out of this loop
+                                        }
+                                    }
+                                }
+                                catch/* (Exception e)*/
+                                {
+                                    isopson = true;
+                                }
+                                if (isopson == true)
+                                {
+                                    Server.reviewlist.Add(p.name);
+                                    int reviewlistpos = Server.reviewlist.IndexOf(p.name);
+                                    if (reviewlistpos > 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. You have &c" + reviewlistpos.ToString() + Server.DefaultColor + " people in front of you in the queue"); }
+                                    if (reviewlistpos == 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. There is &c1 " + Server.DefaultColor + "person in front of you in the queue"); }
+                                    if ((reviewlistpos + 1) == 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. You are &cfirst " + Server.DefaultColor + "in line!"); }
+                                    Player.SendMessage(p, "The Online Operators have been notified. Someone should be with you shortly.");
+                                    Player.GlobalMessageOps(p.color + " - " + p.name + " - " + Server.DefaultColor + "entered the review queue");
+                                    if ((reviewlistpos + 1) > 1) { Player.GlobalMessageOps("There are now &c" + (reviewlistpos + 1) + Server.DefaultColor + " people waiting for &creview!"); }
+                                    else { Player.GlobalMessageOps("There is now &c1 " + Server.DefaultColor + "person waiting for &creview!"); }
+                                    p.ReviewTimer();
+
+                                }
+                                else
+                                {
+                                    Player.SendMessage(p, "&cThere are no operators on to review your build. Please wait for one to come on and try again.");
+                                }
+                                
                             }
-                            Server.reviewlist.Add(p.name);
-                            int reviewlistpos = Server.reviewlist.IndexOf(p.name);
-                            Player.SendMessage(p, "You entered the review queue. You have " + reviewlistpos.ToString() + " people in front of you in the queue");
-                            p.ReviewTimer();
                         }
-                    }
-                    else
-                    {
-                        Player.SendMessage(p, "You have to wait " + Server.reviewcooldown + " seconds everytime you use this command");
-                    }
-                }
-                if (message == "view")
-                {
-                    Group gr = Group.findPerm(Server.reviewview);
-                    LevelPermission lp = gr.Permission;
-                    if (p.group.Permission >= lp)
-                    {
-                    if (Server.reviewlist.Count != 0)
-                    {
-                        Player.SendMessage(p, "&9Players in the review queue:");
-                        int viewnumb = 1;
-                        foreach (string golist in Server.reviewlist)
+                        else
                         {
-                            Player.SendMessage(p, "&a" + viewnumb.ToString() + ". " + golist);
-                            viewnumb++;
+                            Player.SendMessage(p, "You have to wait " + Server.reviewcooldown + " seconds everytime you use this command");
                         }
                     }
-                    else
+                    break;
+
+                case "view":
+                    Group grv = Group.findPerm(Server.reviewview);
+                    LevelPermission lpv = grv.Permission;
+                    if (p.group.Permission >= lpv)
                     {
-                        Player.SendMessage(p, "There are no players in the review queue!");
-                    }
-                }
-                }
-                if (message == "leave")
-                {
-                    Group gr = Group.findPerm(Server.reviewleave);
-                    LevelPermission lp = gr.Permission;
-                    if (p.group.Permission >= lp)
-                    {
-                    bool leavetest = false;
-                    foreach (string testwho2 in Server.reviewlist)
-                    {
-                        if (testwho2 == p.name)
+                        if (Server.reviewlist.Count != 0)
                         {
-                            leavetest = true;
+                            Player.SendMessage(p, "&9Players in the review queue:");
+                            int viewnumb = 1;
+                            foreach (string golist in Server.reviewlist)
+                            {
+                                Player.SendMessage(p, "&a" + viewnumb.ToString() + ". " + Player.Find(golist).color + golist + "&a - Current Rank: " + Player.Find(golist).color + Player.Find(golist).group.name);
+                                viewnumb++;
+                            }
+                        }
+                        else
+                        {
+                            Player.SendMessage(p, "There are no players in the review queue!");
                         }
                     }
-                    if (!leavetest)
+                    break;
+
+                case "leave":
+                    Group grl = Group.findPerm(Server.reviewleave);
+                    LevelPermission lpl = grl.Permission;
+                    if (p.group.Permission >= lpl)
                     {
-                        Player.SendMessage(p, "You aren't in the review queue so you can't leave it!");
+                        bool leavetest = false;
+                        foreach (string testwho2 in Server.reviewlist)
+                        {
+                            if (testwho2 == p.name)
+                            {
+                                leavetest = true;
+                            }
+                        }
+                        if (!leavetest)
+                        {
+                            Player.SendMessage(p, "You aren't in the review queue so you can't leave it!");
+                            return;
+                        }
+                        Server.reviewlist.Remove(p.name);
+                        int toallplayerscount = 1;
+                        foreach (string toallplayers in Server.reviewlist)
+                        {
+                            Player tosend = Player.Find(toallplayers);
+                            Player.SendMessage(tosend, "The review queue has changed. Your now on spot " + toallplayerscount.ToString() + ".");
+                            toallplayerscount++;
+                        }
+                        Player.SendMessage(p, "You have left the review queue!");
                         return;
                     }
-                    Server.reviewlist.Remove(p.name);
-                    int toallplayerscount = 1;
-                    foreach (string toallplayers in Server.reviewlist)
-                    {
-                        Player tosend = Player.Find(toallplayers);
-                        Player.SendMessage(tosend, "The review queue has changed. Your now on spot " + toallplayerscount.ToString() + ".");
-                        toallplayerscount++;
-                    }
-                    Player.SendMessage(p, "You have left the review queue!");
-                    return;
-                }
-                }
-                if (message == "next")
-                {
-                    Group gr = Group.findPerm(Server.reviewnext);
-                    LevelPermission lp = gr.Permission;
-                    if (p.group.Permission >= lp)
+                    break;
+
+                case "next":
+                    Group grn = Group.findPerm(Server.reviewnext);
+                    LevelPermission lpn = grn.Permission;
+                    if (p.group.Permission >= lpn)
                     {
                         if (p == null)
                         {
                             Player.SendMessage(p, "You can't execute this command as Console!");
+                            return;
+                        }
+                        if (Server.reviewlist.Count == 0)
+                        {
+                            Player.SendMessage(p, "There are no players in the review queue!");
                             return;
                         }
                         string[] user = Server.reviewlist.ToArray();
@@ -154,7 +202,7 @@ namespace MCForge
                             return;
                         }
                         Server.reviewlist.Remove(user[0]);
-                        unchecked { p.SendPos((byte)-1, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1]); }
+                        Command.all.Find("tp").Use(p, who.name); 
                         Player.SendMessage(p, "You have been teleported to " + user[0]);
                         Player.SendMessage(who, "Your request has been answered by " + p.name + ".");
                         int toallplayerscount = 0;
@@ -169,12 +217,12 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "&cYou have no permission to use the review queue!");
                     }
-                }
-                if (message == "clear")
-                {
-                    Group gr = Group.findPerm(Server.reviewclear);
-                    LevelPermission lp = gr.Permission;
-                    if (p.group.Permission >= lp)
+                    break;
+
+                case "clear":
+                    Group grc = Group.findPerm(Server.reviewclear);
+                    LevelPermission lpc = grc.Permission;
+                    if (p.group.Permission >= lpc)
                     {
                         Server.reviewlist.Clear();
                         Player.SendMessage(p, "The review queue has been cleared");
@@ -184,12 +232,8 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "&cYou have no permission to clear the Review Queue!");
                     }
-                }
-            }
-            else
-            {
-                Help(p);
-                return;
+                    break;
+                default: Help(p); return;
             }
         }
         public override void Help(Player p)
