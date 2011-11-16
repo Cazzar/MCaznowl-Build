@@ -284,6 +284,7 @@
             this.terr.Size = new System.Drawing.Size(242, 20);
             this.terr.TabIndex = 2;
             this.terr.Text = "bc4acee575474f5266105430c3cc628b8b3948a2";
+            this.terr.TextChanged += new System.EventHandler(this.terr_TextChanged);
             // 
             // panel4
             // 

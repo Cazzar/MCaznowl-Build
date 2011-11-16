@@ -46,19 +46,19 @@ namespace MCForge
             Player who = Player.Find(player);
             
             
-            if (player == "") { Player.SendMessage(p, "&cYou have to enter a player!"); goto end; }          
-            if (who == null) { Player.SendMessage(p, "&cPlayer &a" + player + "&c not found!"); goto end; }
-            if (rank == "") { Player.SendMessage(p, "&cYou have to enter a rank!"); goto end; }
+            if (player == "") { Player.SendMessage(p, "&cYou have to enter a player!"); return; }          
+            if (who == null) { Player.SendMessage(p, "&cPlayer &a" + player + "&c not found!"); return; }
+            if (rank == "") { Player.SendMessage(p, "&cYou have to enter a rank!"); return; }
             else
             {
                 Group groupNew = Group.Find(rank);
                 if (groupNew == null)
                 {
                     Player.SendMessage(p, "&cRank &a" + rank + "&c does not exist");
-                    goto end;
+                    return;
                 }
             }
-            if (period == "") { Player.SendMessage(p, "&cYou have to enter a time period!"); goto end; }
+            if (period == "") { Player.SendMessage(p, "&cYou have to enter a time period!"); return; }
             Boolean isnumber = true;
             try
             {
@@ -71,14 +71,14 @@ namespace MCForge
             if (!isnumber)
             {
                 Player.SendMessage(p, "&cThe period needs to be a number!");
-                goto end;
+                return;
             }
 
             string alltext = File.ReadAllText("text/tempranks.txt");
             if (alltext.Contains(player) == true)
             {
                 Player.SendMessage(p, "&cThe player already has a temporary rank assigned!");
-                goto end;
+                return;
             }
             bool byconsole;
             if (p == null)
@@ -93,19 +93,19 @@ namespace MCForge
             if (player == p.name)
             {
                 Player.SendMessage(p, "&cYou cannot assign yourself a temporary rank!");
-                goto end;
+                return;
             }
             Player who3 = Player.Find(player);
             if (who3.group.Permission >= p.group.Permission)
             {
                 Player.SendMessage(p, "Cannot change the temporary rank of someone equal or higher to yourself.");
-                goto end;
+                return;
             }
             Group newRank2 = Group.Find(rank);
             if (newRank2.Permission >= p.group.Permission)
             {
                 Player.SendMessage(p, "Cannot change the temporary rank to a higher rank than yourself");
-                goto end;
+                return;
             }
         skipper:
             string year = DateTime.Now.Year.ToString();
@@ -151,8 +151,6 @@ namespace MCForge
                     Player.SendMessage(who2, "Your Temporary rank (" + rank + ") is assigned succesfully for " + period + " hours");
                 }
             
-        end:
-            System.Threading.Thread.Sleep(0);
         }
         public override void Help(Player p)
         {

@@ -104,5 +104,10 @@ namespace MCForge.GUI
         {
             MessageBox.Show("Here you can change side block that the players see at the edge of the level (The default is bedrock)");
         }
+
+        private void terr_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
