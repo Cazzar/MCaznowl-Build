@@ -191,6 +191,7 @@ namespace MCForge
         public static List<String> LevelList = new List<String>();
         public static string lastLevelVote1 = "";
         public static string lastLevelVote2 = "";
+        public static bool bufferblocks = true;
 
         // Lava Survival
         public static LavaSurvival lava;
@@ -1004,7 +1005,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-                
+                BlockQueue.Start();
             });
         }
 

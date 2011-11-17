@@ -380,10 +380,8 @@ namespace MCForge.Gui
                 // Reselect map
                 if (selected != null)
                 {
-                    foreach (Level l in Server.levels)
-                        foreach (DataGridViewRow row in dgvMaps.Rows)
-                            if (String.Equals(row.Cells[0].Value, selected))
-                                row.Selected = true;
+                    foreach (DataGridViewRow row in Server.levels.SelectMany(l => dgvMaps.Rows.Cast<DataGridViewRow>().Where(row => (string) row.Cells[0].Value == selected)))
+                        row.Selected = true;
                 }
 
                 dgvMaps.Refresh();

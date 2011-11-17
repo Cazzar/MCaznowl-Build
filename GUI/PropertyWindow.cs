@@ -1327,7 +1327,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             ChkPortResult.BackColor = SystemColors.Control;
             string response;
 
-            Thread checkThread = new Thread(new ThreadStart(delegate
+            new Thread(new ThreadStart(delegate
             {
                 int nPort = 0;
                 nPort = Int32.Parse(txtPort.Text);
@@ -1343,17 +1343,14 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                         setTextColorAndBack("Port Open!", Color.Lime);
                         return;
                     }
-                    else if (response == "closed")
+                    if (response == "closed")
                     {
                         setTextColorAndBack("Port Closed", Color.Red);
                         return;
 
                     }
-                    else
-                    {
-                        setTextColorAndBack("An Error has occured", Color.Yellow);
-                        return;
-                    }
+                    setTextColorAndBack("An Error has occured", Color.Yellow);
+                    return;
                 }
                 catch
                 {
@@ -1361,8 +1358,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                     return;
                 }
 
-            }));
-            checkThread.Start();
+            })).Start();
         }
         delegate void SetTextColorCallback(string text, Color color);
         private void setTextColorAndBack(string text, Color color)

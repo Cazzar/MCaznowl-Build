@@ -12,13 +12,16 @@ namespace MCForge.Remote
         #region Vars
         private Server.LogHandler _logHandler;
         private Player.OnPlayerConnect _onPlayerConnect;
+        private Player.OnPlayerDisconnect _onPlayerDisconnect;
         #endregion
         private void RegEvents()
         {
             _logHandler += LogChatDesktop;
             _onPlayerConnect += PlayerConnect;
+            _onPlayerDisconnect += PlayerDisconnect;
             Server.s.OnLog += _logHandler;
             Player.PlayerConnect += _onPlayerConnect;
+            Player.PlayerDisconnect += _onPlayerDisconnect;
 
 #if Debug
             Server.s.Log("Registered Events");
@@ -30,6 +33,7 @@ namespace MCForge.Remote
         {
             Server.s.OnLog -= _logHandler;
             Player.PlayerConnect -= _onPlayerConnect;
+            Player.PlayerDisconnect -= _onPlayerDisconnect;
 #if Debug
             Server.s.Log("Unregistered Events");
 #endif
@@ -42,6 +46,7 @@ namespace MCForge.Remote
             SendData(0x2, biscut);
         }
         #region Delegate Methods
+
         void LogChatDesktop(string message)
         {
             var bytes = new byte[(message.Length) + 2];
@@ -49,18 +54,48 @@ namespace MCForge.Remote
             Encoding.UTF8.GetBytes(message).CopyTo(bytes, 2);
             SendData(0x12, bytes);
         }
+        void PlayerDisconnect(Player p, string kickReason)
+        {
+            RemovePlayerDesktop(p);
+        }
         void PlayerConnect(Player p)
         {
-            var bytes = new byte[p.name.Length + 6];
-            BitConverter.GetBytes(p.name.Length).CopyTo(bytes, 0);
-            BitConverter.GetBytes((short)7).CopyTo(bytes, 2);
-            BitConverter.GetBytes((short)9).CopyTo(bytes, 4);
-            Encoding.UTF8.GetBytes(p.name).CopyTo(bytes, 6);
-            SendData(0x13, bytes);
+           AddPlayerDesktop(p);
         }
 
 
         #endregion
+
+        private void AddPlayerDesktop(Player p)
+        {
+            var bytes = new byte[10 + (p.name.Length + p.title.Length + p.group.name.Length)];
+            bytes[0] = 2;
+            BitConverter.GetBytes((short)p.name.Length).CopyTo(bytes, 1);
+            BitConverter.GetBytes((short)p.title.Length).CopyTo(bytes, 3);
+            BitConverter.GetBytes((short)p.group.name.Length).CopyTo(bytes, 5);
+
+            Encoding.UTF8.GetBytes(p.name).CopyTo(bytes, 7);
+            Encoding.UTF8.GetBytes(p.title).CopyTo(bytes, 8 + p.name.Length);
+            Encoding.UTF8.GetBytes(p.group.name).CopyTo(bytes, 9 + p.name.Length + p.title.Length);
+            SendData(0x13, bytes);
+        }
+        private void RemovePlayerDesktop(Player p)
+        {
+            var bytes = new byte[p.name.Length + 2];
+            bytes[0] = 1;
+            BitConverter.GetBytes((short)p.name.Length).CopyTo(bytes, 1);
+            Encoding.UTF8.GetBytes(p.name).CopyTo(bytes, 3);
+            SendData(0x13, bytes);
+        }
+
+
+
+
+
+
+
+
+
         #region HANDLERS
         private void HandleDesktopLogin(byte[] message)
         {

@@ -712,6 +712,13 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
+                            case "bufferblocks":
+                                try
+                                {
+                                    Server.bufferblocks = bool.Parse(value);
+                                }
+                                catch { Server.s.Log("Invalid " + key + ". Using default."); }
+                                break;
 
                         }
                     }
@@ -833,6 +840,7 @@ namespace MCForge
             w.WriteLine("#   spam-messages\t=\t5");
             w.WriteLine("#   spam-mute-time\t=\t60");
             w.WriteLine("#   spam-counter-reset-time\t=\t2");
+            w.WriteLine("#   bufferblocks - Should buffer blocks by default for maps?");
             w.WriteLine();
             w.WriteLine("# Server options");
             w.WriteLine("server-name = " + Server.name);
@@ -989,6 +997,7 @@ namespace MCForge
             w.WriteLine("review-cooldown = " + Server.reviewcooldown.ToString());
             w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
             w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
+            w.WriteLine("bufferblocks = " + Server.bufferblocks);
         }
     }
 }

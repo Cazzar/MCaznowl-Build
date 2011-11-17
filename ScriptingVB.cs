@@ -42,86 +42,81 @@ namespace MCForge
             {
                 Directory.CreateDirectory(sourcepath);
             }
-            
-            StreamWriter sw = new StreamWriter(File.Create(sourcepath + "Cmd" + CmdName + ".vb"));
 
-
-
-
-            sw.Write("Imports MCForge" + Environment.NewLine +
-                "'Auto-generated command skeleton class." + Environment.NewLine +
-                Environment.NewLine +
-                "'Use this as a basis for custom commands implemented via the MCForge scripting framework." + Environment.NewLine +
-                "'File and class should be named a specific way.  For example, /update is named 'CmdUpdate.vb' for the file, and 'CmdUpdate' for the class." + Environment.NewLine +
-                "'" + Environment.NewLine +
-                Environment.NewLine +
-                "' Add any other using statements you need up here, of course." + Environment.NewLine +
-                "' As a note, MCForge is designed for .NET 3.5." + Environment.NewLine +
+            using (var sw = new StreamWriter(File.Create(sourcepath + "Cmd" + CmdName + ".vb")))
+            {
+                sw.Write("Imports MCForge" + Environment.NewLine +
+                         "'Auto-generated command skeleton class." + Environment.NewLine +
+                         Environment.NewLine +
+                         "'Use this as a basis for custom commands implemented via the MCForge scripting framework." + Environment.NewLine +
+                         "'File and class should be named a specific way.  For example, /update is named 'CmdUpdate.vb' for the file, and 'CmdUpdate' for the class." + Environment.NewLine +
+                         "'" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' Add any other using statements you need up here, of course." + Environment.NewLine +
+                         "' As a note, MCForge is designed for .NET 3.5." + Environment.NewLine +
               
-                Environment.NewLine +
-                "Namespace MCForge" + Environment.NewLine +
-                "\tPublic Class " + ClassName(CmdName) + Environment.NewLine +
-                "\t\tInherits Command " + Environment.NewLine +
-                "' The command's name, IN ALL LOWERCASE.  What you'll be putting behind the slash when using it." + Environment.NewLine +
+                         Environment.NewLine +
+                         "Namespace MCForge" + Environment.NewLine +
+                         "\tPublic Class " + ClassName(CmdName) + Environment.NewLine +
+                         "\t\tInherits Command " + Environment.NewLine +
+                         "' The command's name, IN ALL LOWERCASE.  What you'll be putting behind the slash when using it." + Environment.NewLine +
 
-                "\t\tPublic Overrides ReadOnly Property name() As String" + Environment.NewLine +
-                "\t\t\tGet" + Environment.NewLine +
-                "\t\t\t\tReturn \"" + CmdName.ToLower() + "\"" + Environment.NewLine +
-                "\t\t\tEnd Get" + Environment.NewLine +
-                "\t\tEnd Property" + Environment.NewLine +
-                  Environment.NewLine +
-                "' Command's shortcut (please take care not to use an existing one, or you may have issues."+  Environment.NewLine +
-                "\t\tPublic Overrides ReadOnly Property shortcut() As String" + Environment.NewLine +
-                "\t\t\tGet" + Environment.NewLine +
-                "\t\t\t\tReturn \"\"" + Environment.NewLine +
-                "\t\t\tEnd Get" + Environment.NewLine +
-                "\t\tEnd Property" + Environment.NewLine +
-                  Environment.NewLine +
-                  "' Determines which submenu the command displays in under /help." +   Environment.NewLine +
-                   "\t\tPublic Overrides ReadOnly Property type() As String" + Environment.NewLine +
-                   "\t\t\tGet" + Environment.NewLine +
-                   "\t\t\t\tReturn \"other\"" + Environment.NewLine +
-                   "\t\t\tEnd Get" + Environment.NewLine +
-                   "\t\t End Property" + Environment.NewLine +
-                     Environment.NewLine +
-                "' Determines whether or not this command can be used in a museum.  Block/map altering commands should be made false to avoid errors."+   Environment.NewLine +
-                "\t\tPublic Overrides ReadOnly Property museumUsable() As Boolean" + Environment.NewLine +
-                "\t\t\tGet" + Environment.NewLine +
-                "\t\t\t\tReturn False" + Environment.NewLine +
-                "\t\t\tEnd Get" + Environment.NewLine +
-                "\t\tEnd Property" + Environment.NewLine + 
-                  Environment.NewLine +
-                  "' Determines the command's default rank.  Valid values are:" +   Environment.NewLine + "' LevelPermission.Nobody, LevelPermission.Banned, LevelPermission.Guest" +
-                    Environment.NewLine + "' LevelPermission.Builder, LevelPermission.AdvBuilder, LevelPermission.Operator, LevelPermission.Admin" +   Environment.NewLine +
-                    "\t\tPublic Overrides ReadOnly Property defaultRank() As LevelPermission" + Environment.NewLine +
-                    "\t\t\tGet" + Environment.NewLine +
-                    "\t\t\t\tReturn LevelPermission.Banned" + Environment.NewLine +
-                    "\t\t\tEnd Get" + Environment.NewLine +
-                    "\t\tEnd Property" + Environment.NewLine +
-                      Environment.NewLine +
-                      "' This is where the magic happens, naturally." +   Environment.NewLine +
-"' p is the player object for the player executing the command.  message is everything after the command invocation itself." +   Environment.NewLine +
-"\t\tPublic Overrides Sub Use(p As Player, message As String)" + Environment.NewLine +
-"\t\t\tPlayer.SendMessage(p, \"Hello World!\")" + Environment.NewLine +
-"\t\tEnd Sub" + Environment.NewLine +
-  Environment.NewLine +
-  "' This one controls what happens when you use /help [commandname]." +   Environment.NewLine +
-  "\t\tPublic Overrides Sub Help(p As Player)" + Environment.NewLine +
-  "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower() + " - Does stuff.  Example command.\")" + Environment.NewLine +
+                         "\t\tPublic Overrides ReadOnly Property name() As String" + Environment.NewLine +
+                         "\t\t\tGet" + Environment.NewLine +
+                         "\t\t\t\tReturn \"" + CmdName.ToLower() + "\"" + Environment.NewLine +
+                         "\t\t\tEnd Get" + Environment.NewLine +
+                         "\t\tEnd Property" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' Command's shortcut (please take care not to use an existing one, or you may have issues."+  Environment.NewLine +
+                         "\t\tPublic Overrides ReadOnly Property shortcut() As String" + Environment.NewLine +
+                         "\t\t\tGet" + Environment.NewLine +
+                         "\t\t\t\tReturn \"\"" + Environment.NewLine +
+                         "\t\t\tEnd Get" + Environment.NewLine +
+                         "\t\tEnd Property" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' Determines which submenu the command displays in under /help." +   Environment.NewLine +
+                         "\t\tPublic Overrides ReadOnly Property type() As String" + Environment.NewLine +
+                         "\t\t\tGet" + Environment.NewLine +
+                         "\t\t\t\tReturn \"other\"" + Environment.NewLine +
+                         "\t\t\tEnd Get" + Environment.NewLine +
+                         "\t\t End Property" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' Determines whether or not this command can be used in a museum.  Block/map altering commands should be made false to avoid errors."+   Environment.NewLine +
+                         "\t\tPublic Overrides ReadOnly Property museumUsable() As Boolean" + Environment.NewLine +
+                         "\t\t\tGet" + Environment.NewLine +
+                         "\t\t\t\tReturn False" + Environment.NewLine +
+                         "\t\t\tEnd Get" + Environment.NewLine +
+                         "\t\tEnd Property" + Environment.NewLine + 
+                         Environment.NewLine +
+                         "' Determines the command's default rank.  Valid values are:" +   Environment.NewLine + "' LevelPermission.Nobody, LevelPermission.Banned, LevelPermission.Guest" +
+                         Environment.NewLine + "' LevelPermission.Builder, LevelPermission.AdvBuilder, LevelPermission.Operator, LevelPermission.Admin" +   Environment.NewLine +
+                         "\t\tPublic Overrides ReadOnly Property defaultRank() As LevelPermission" + Environment.NewLine +
+                         "\t\t\tGet" + Environment.NewLine +
+                         "\t\t\t\tReturn LevelPermission.Banned" + Environment.NewLine +
+                         "\t\t\tEnd Get" + Environment.NewLine +
+                         "\t\tEnd Property" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' This is where the magic happens, naturally." +   Environment.NewLine +
+                         "' p is the player object for the player executing the command.  message is everything after the command invocation itself." +   Environment.NewLine +
+                         "\t\tPublic Overrides Sub Use(p As Player, message As String)" + Environment.NewLine +
+                         "\t\t\tPlayer.SendMessage(p, \"Hello World!\")" + Environment.NewLine +
+                         "\t\tEnd Sub" + Environment.NewLine +
+                         Environment.NewLine +
+                         "' This one controls what happens when you use /help [commandname]." +   Environment.NewLine +
+                         "\t\tPublic Overrides Sub Help(p As Player)" + Environment.NewLine +
+                         "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower() + " - Does stuff.  Example command.\")" + Environment.NewLine +
 
-  "\t\tEnd Sub" + Environment.NewLine +
-  "\tEnd Class" + Environment.NewLine +
-  "End Namespace"
-
-
+                         "\t\tEnd Sub" + Environment.NewLine +
+                         "\tEnd Class" + Environment.NewLine +
+                         "End Namespace"
 
 
 
-               );
 
 
+                    );
 
-            sw.Dispose();
+            }
         }
 
         
@@ -139,13 +134,9 @@ namespace MCForge
                     errlog.WriteLine();
                     errlog.WriteLine(divider);
                     errlog.WriteLine();
-                  //  McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(Environment.NewLine);
-                  //  McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(divider);
-                  //  McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(Environment.NewLine);
                     
                 }
                 errlog.WriteLine("File not found: Cmd" + commandName + ".vb");
-              //  MCForge.Gui.Window.thisWindow.txtCompErrors.AppendText("File not found: Cmd" + commandName + ".vb");
                 
                 errlog.Dispose();
                 return false;
@@ -174,18 +165,12 @@ namespace MCForge
                         sb.AppendLine();
                         sb.AppendLine(divider);
                         sb.AppendLine();
-                     //   McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(Environment.NewLine);
-                     //   McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(divider);
-                     //   McFire.Gui.Window.thisWindow.txtCompErrors.AppendText(Environment.NewLine);
 
 
                     }
                     sb.AppendLine("Error " + error.ErrorNumber);
                     sb.AppendLine("Message: " + error.ErrorText);
                     sb.AppendLine("Line: " + error.Line);
-                   // McFire.Gui.Window.thisWindow.txtCompErrors.AppendText("Error " + error.ErrorNumber);
-                   // McFire.Gui.Window.thisWindow.txtCompErrors.AppendText("Message: " + error.ErrorText);
-                  //  McFire.Gui.Window.thisWindow.txtCompErrors.AppendText("Line: " + error.Line);
 
                     StreamWriter sw = new StreamWriter("logs/errors/compiler.log", exists);
                     sw.Write(sb.ToString());
