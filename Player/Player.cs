@@ -2431,7 +2431,6 @@ namespace MCForge
                                 return;
                             }
                         }
-
                         if (cmd.ToLower() != "setpass" || cmd.ToLower() != "pass")
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
@@ -2443,16 +2442,20 @@ namespace MCForge
                         		WebClient wc = new WebClient();
                                 wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name);
 							}
-							if (Server.useMySQL)
-							{
-								MySQL.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-								" VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
-							}
-							else
-							{
-								SQLite.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-								" VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
-							}	
+                            // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
+                            if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
+                            {
+                                if (Server.useMySQL)
+                                {
+                                    MySQL.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                }
+                                else
+                                {
+                                    SQLite.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                }
+                            }
                         }
                         catch {  }
                         this.commThread = new Thread(new ThreadStart(delegate

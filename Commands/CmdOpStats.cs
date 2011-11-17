@@ -35,6 +35,7 @@ namespace MCForge
         {
             bool debug = false;
             Player who = null;
+            string timespanend = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string timespan = "thismonth";
             string timespanname = "This Month";
             bool tspanoption = false;
@@ -44,11 +45,37 @@ namespace MCForge
             if (message.Split(' ').Length == 1 && (message == "today" || message == "yesterday" || message == "thismonth" || message == "lastmonth" || message == "all")) { timespan = message; }
             if (message.Split(' ').Length == 2 && (message.Split(' ')[1].ToLower() == "today" || message.Split(' ')[1].ToLower() == "yesterday" || message.Split(' ')[1].ToLower() == "thismonth" || message.Split(' ')[1].ToLower() == "lastmonth" || message.Split(' ')[1].ToLower() == "all")) { timespan = message.Split(' ')[1].ToLower(); }
             if (debug) { Player.SendMessage(p, "Message = " + message); }
-            if (timespan.ToLower() == "today") { timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); timespanname = "Today"; tspanoption = true; }
-            if (timespan.ToLower() == "yesterday") { timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00"); timespanname = "Yesterday"; tspanoption = true; }
-            if (timespan.ToLower() == "thismonth") { timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00"); tspanoption = true; }
-            if (timespan.ToLower() == "lastmonth") { timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00"); timespanname = "Last Month"; tspanoption = true; }
-            if (timespan.ToLower() == "all") { timespan = "0000-00-00 00:00:00"; timespanname = "ALL"; tspanoption = true; }
+            if (timespan.ToLower() == "today") 
+            { 
+                timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); 
+                timespanname = "Today"; 
+                tspanoption = true; 
+            }
+            if (timespan.ToLower() == "yesterday") 
+            { 
+                timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00");
+                timespanend = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); 
+                timespanname = "Yesterday"; 
+                tspanoption = true; 
+            }
+            if (timespan.ToLower() == "thismonth") 
+            { 
+                timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00"); 
+                tspanoption = true; 
+            }
+            if (timespan.ToLower() == "lastmonth") 
+            { 
+                timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00");
+                timespanend = DateTime.Now.ToString("yyyy-MM-01 00:00:00");
+                timespanname = "Last Month"; 
+                tspanoption = true; 
+            }
+            if (timespan.ToLower() == "all") 
+            { 
+                timespan = "0000-00-00 00:00:00"; 
+                timespanname = "ALL"; 
+                tspanoption = true; 
+            }
             if (!tspanoption) { Help(p); return; }
             if (debug) { Player.SendMessage(p, "Timespan = " + timespan); }
             if (debug) { Player.SendMessage(p, "TimespanName = " + timespanname); }
@@ -69,24 +96,24 @@ namespace MCForge
                     }
                 }
             }
-            DataTable reviewcount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'review' AND Cmdmsg LIKE 'next'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'review' AND Cmdmsg LIKE 'next'");
-            DataTable promotecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'promote'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'promote'");
-            DataTable demotecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'demote'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'demote'");
-            //DataTable griefercount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'griefer'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'griefer'");
-            DataTable undocount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'undo' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'undo' AND Cmdmsg !=''");
-            DataTable freezecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'freeze'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'freeze'");
-            DataTable mutecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'mute'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'mute'");
-            DataTable warncount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'warn'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'warn'");
-            DataTable kickcount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'kick'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'kick'");
-            DataTable tempbancount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'tempban'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'tempban'");
-            DataTable bancount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'ban'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'ban'");
+            DataTable reviewcount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'review' AND Cmdmsg LIKE 'next'") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'review' AND Cmdmsg LIKE 'next'");
+            DataTable promotecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'promote' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'promote' AND Cmdmsg !=''");
+            DataTable demotecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'demote' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'demote' AND Cmdmsg !=''");
+            DataTable griefercount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'griefer' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'griefer' AND Cmdmsg !=''");
+            DataTable undocount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'undo' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'undo' AND Cmdmsg !=''");
+            DataTable freezecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'freeze' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'freeze' AND Cmdmsg !=''");
+            DataTable mutecount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'mute' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'mute' AND Cmdmsg !=''");
+            DataTable warncount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'warn' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'warn' AND Cmdmsg !=''");
+            DataTable kickcount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'kick' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'kick' AND Cmdmsg !=''");
+            DataTable tempbancount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'tempban' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'tempban' AND Cmdmsg !=''");
+            DataTable bancount = Server.useMySQL ? MySQL.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'ban' AND Cmdmsg !=''") : SQLite.fillData("SELECT COUNT(ID) FROM Playercmds WHERE Time >= '" + timespan + "' AND Time < '" + timespanend + "' AND Name LIKE '" + message + "' AND Cmd LIKE 'ban' AND Cmdmsg !=''");
             Player.SendMessage(p, (p == null ? "" : "&d") + "OpStats for " + (p == null ? "" : "&c") + message); // Use colorcodes if in game, don't use color if in console
             Player.SendMessage(p, (p == null ? "" : "&d") + "Showing " + timespanname + " Starting from " + timespan);
             Player.SendMessage(p, (p == null ? "" : "&0") + "----------------");
             Player.SendMessage(p, (p == null ? "" : "&a") + "Reviews - " + (p == null ? "" : "&5") + reviewcount.Rows[0]["COUNT(id)"]); // Count results within datatable
             Player.SendMessage(p, (p == null ? "" : "&a") + "Promotes - " + (p == null ? "" : "&5") + promotecount.Rows[0]["COUNT(id)"]);
             Player.SendMessage(p, (p == null ? "" : "&a") + "Demotes - " + (p == null ? "" : "&5") + demotecount.Rows[0]["COUNT(id)"]);
-            //Player.SendMessage(p, (p == null ? "" : "&a") + "Griefers - " + (p == null ? "" : "&5") + griefercount.Rows[0]["COUNT(id)"]);
+            Player.SendMessage(p, (p == null ? "" : "&a") + "Griefers - " + (p == null ? "" : "&5") + griefercount.Rows[0]["COUNT(id)"]);
             Player.SendMessage(p, (p == null ? "" : "&a") + "Undo - " + (p == null ? "" : "&5") + undocount.Rows[0]["COUNT(id)"]);
             Player.SendMessage(p, (p == null ? "" : "&a") + "Freezes - " + (p == null ? "" : "&5") + freezecount.Rows[0]["COUNT(id)"]);
             Player.SendMessage(p, (p == null ? "" : "&a") + "Mutes - " + (p == null ? "" : "&5") + mutecount.Rows[0]["COUNT(id)"]);
@@ -97,7 +124,7 @@ namespace MCForge
             reviewcount.Dispose();
             promotecount.Dispose();
             demotecount.Dispose();
-            //griefercount.Dispose();
+            griefercount.Dispose();
             undocount.Dispose();
             freezecount.Dispose();
             mutecount.Dispose();
