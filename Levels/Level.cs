@@ -145,6 +145,7 @@ namespace MCForge
         public bool unload = true;
         public ushort width; // x
         public bool worldChat = true;
+        public bool bufferblocks = Server.bufferblocks;
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
