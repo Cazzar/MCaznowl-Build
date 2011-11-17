@@ -59,6 +59,7 @@ namespace MCForge
             all.Add(new CmdBind());
             all.Add(new CmdBlocks());
             all.Add(new CmdBlockSet());
+            all.Add(new CmdBlockSpeed());
             all.Add(new CmdBotAdd());
             all.Add(new CmdBotAI());
             all.Add(new CmdBotRemove());

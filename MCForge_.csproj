@@ -94,6 +94,7 @@
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
+    <Compile Include="Commands\CmdBlockSpeed.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Commands\CmdServer.cs" />
@@ -255,6 +256,7 @@
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
+    <Compile Include="Levels\BlockQueue.cs" />
     <Compile Include="Levels\WoM Textures\Texture_Settings.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
