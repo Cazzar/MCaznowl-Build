@@ -146,6 +146,7 @@ namespace MCForge
         public ushort width; // x
         public bool worldChat = true;
         public bool bufferblocks = Server.bufferblocks;
+        public List<BlockQueue.block> blockqueue = new List<BlockQueue.block>();
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
@@ -279,6 +280,7 @@ namespace MCForge
             UndoBuffer.Clear();
             blockCache.Clear();
             ZoneList.Clear();
+            blockqueue.Clear();
             blocks = null;
         }
 
