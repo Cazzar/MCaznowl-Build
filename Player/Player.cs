@@ -1187,21 +1187,24 @@ namespace MCForge
 
             if (Server.ZombieModeOn && (action == 1 || (action == 0 && this.painting)))
             {
-                if (blockCount == 0)
+                if (Server.zombie != null && this.level.name == Server.zombie.currentLevelName)
                 {
+                    if (blockCount == 0)
+                    {
+                        if (!referee)
+                        {
+                            SendMessage("You have no blocks left.");
+                            SendBlockchange(x, y, z, b); return;
+                        }
+                    }
+                     
                     if (!referee)
                     {
-                        SendMessage("You have no blocks left.");
-                        SendBlockchange(x, y, z, b); return;
-                    }
-                }
-
-                if (!referee)
-                {
-                    blockCount--;
-                    if (blockCount == 40 || blockCount == 30 || blockCount == 20 || blockCount <= 10 && blockCount >= 0)
-                    {
-                        SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
+                        blockCount--;
+                        if (blockCount == 40 || blockCount == 30 || blockCount == 20 || blockCount <= 10 && blockCount >= 0)
+                        {
+                            SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
+                        }
                     }
                 }
             }
