@@ -301,8 +301,8 @@ namespace MCForge
 				SW.WriteLine("#		It doesn't need to be a .txt file, but you may as well");
 				SW.WriteLine("#		Generally a good idea to just use the same file name as the rank name");
                 SW.WriteLine("#MOTD = string");
-                SW.WriteLine("		Alternate MOTD players of the rank will see when joining the server.");
-                SW.WriteLine("		Leave blank to use the server MOTD.");
+                SW.WriteLine("#		Alternate MOTD players of the rank will see when joining the server.");
+                SW.WriteLine("#		Leave blank to use the server MOTD.");
 				SW.WriteLine();
 				SW.WriteLine();
 
