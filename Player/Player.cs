@@ -2790,10 +2790,8 @@ namespace MCForge
                 StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name + "~motd", 64).CopyTo(buffer, 65);
             else
             {
-                if (this.group.Permission == LevelPermission.Admin)
-                    StringFormat(this.group.MOTD, 64).CopyTo(buffer, 65);
-                else 
-                    StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+                if (!String.IsNullOrEmpty(group.MOTD)) StringFormat(group.MOTD, 64).CopyTo(buffer, 65);
+                else StringFormat(Server.motd, 64).CopyTo(buffer, 65);
             }
 
             if (Block.canPlace(this, Block.blackrock))
@@ -2813,8 +2811,13 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
-            else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            else if (level.motd == "ignore")
+            {
+                StringFormat(Server.name, 64).CopyTo(buffer, 1);
+                if (!String.IsNullOrEmpty(group.MOTD)) StringFormat(group.MOTD, 64).CopyTo(buffer, 65);
+                else StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
             if (Block.canPlace(this.group.Permission, Block.blackrock))

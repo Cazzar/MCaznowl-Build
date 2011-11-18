@@ -41,7 +41,7 @@ namespace MCForge
         public CommandList commands;
         public string fileName;
         public PlayerList playerList;
-        public string MOTD = Server.motd;
+        public string MOTD = String.Empty;
 
         public Group()
         {
@@ -83,7 +83,11 @@ namespace MCForge
 
                 Group thisGroup = new Group();
                 int gots = 0, version = 1;
-                if (lines.Length > 0 && lines[0] == "#Version 2") version = 2;
+                if (lines.Length > 0 && lines[0].StartsWith("#Version "))
+                {
+                    try { version = int.Parse(lines[0].Remove(0, 9)); }
+                    catch { Server.s.Log("The ranks.properties version header is invalid! Ranks may fail to load!"); }
+                }
 
                 foreach (string s in lines)
                 {
@@ -210,7 +214,7 @@ namespace MCForge
                                             break;
                                     }
 
-                                    if ((gots >= 4 && version < 2) || gots >= 5)
+                                    if ((gots >= 4 && version < 2) || (gots >= 5 && version < 3) || gots >= 6)
                                     {
                                         if (version < 2) {
                                             if ((int)thisGroup.Permission >= 100)
@@ -271,7 +275,7 @@ namespace MCForge
 			File.Create("properties/ranks.properties").Dispose();
 			using (StreamWriter SW = File.CreateText("properties/ranks.properties"))
 			{
-                SW.WriteLine("#Version 2");
+                SW.WriteLine("#Version 3");
 				SW.WriteLine("#RankName = string");
 				SW.WriteLine("#     The name of the rank, use capitalization.");
 				SW.WriteLine("#");
@@ -296,6 +300,9 @@ namespace MCForge
 				SW.WriteLine("#     The file which players of this rank will be stored in");
 				SW.WriteLine("#		It doesn't need to be a .txt file, but you may as well");
 				SW.WriteLine("#		Generally a good idea to just use the same file name as the rank name");
+                SW.WriteLine("#MOTD = string");
+                SW.WriteLine("		Alternate MOTD players of the rank will see when joining the server.");
+                SW.WriteLine("		Leave blank to use the server MOTD.");
 				SW.WriteLine();
 				SW.WriteLine();
 
