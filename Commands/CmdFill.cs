@@ -125,9 +125,19 @@ namespace MCForge
                     return;
                 }
 
-                foreach (Pos pos in buffer)
+                if (p.level.bufferblocks)
                 {
-                    p.level.Blockchange(p, pos.x, pos.y, pos.z, cpos.type);
+                    foreach (Pos pos in buffer)
+                    {
+                      BlockQueue.Addblock(p, pos.x, pos.y, pos.z, cpos.type);
+                    }
+                }
+                else
+                {
+                    foreach (Pos pos in buffer)
+                    {
+                        p.level.Blockchange(p, pos.x, pos.y, pos.z, cpos.type);
+                    }
                 }
 
                 Player.SendMessage(p, "Filled " + buffer.Count + " blocks.");

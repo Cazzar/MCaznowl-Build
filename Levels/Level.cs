@@ -145,6 +145,8 @@ namespace MCForge
         public bool unload = true;
         public ushort width; // x
         public bool worldChat = true;
+        public bool bufferblocks = Server.bufferblocks;
+        public List<BlockQueue.block> blockqueue = new List<BlockQueue.block>();
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
@@ -278,6 +280,7 @@ namespace MCForge
             UndoBuffer.Clear();
             blockCache.Clear();
             ZoneList.Clear();
+            blockqueue.Clear();
             blocks = null;
         }
 
@@ -664,6 +667,7 @@ namespace MCForge
                     SW.WriteLine("JailY = " + level.jaily.ToString());
                     SW.WriteLine("JailZ = " + level.jailz.ToString());
                     SW.WriteLine("Unload = " + level.unload.ToString());
+                    SW.WriteLine("WorldChat = " + level.worldChat.ToString());
                     SW.WriteLine("PerBuild = " +
                                  (Group.Exists(PermissionToName(level.permissionbuild).ToLower())
                                       ? PermissionToName(level.permissionbuild).ToLower()
@@ -1161,6 +1165,9 @@ namespace MCForge
                                         break;
                                     case "unload":
                                         level.unload = bool.Parse(value);
+                                        break;
+                                    case "worldchat":
+                                        level.worldChat = bool.Parse(value);
                                         break;
 
                                     case "perbuild":

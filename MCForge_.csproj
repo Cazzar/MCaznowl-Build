@@ -89,11 +89,13 @@
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdDescend.cs" />
+    <Compile Include="Commands\CmdOpStats.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />
     <Compile Include="Commands\CmdReview.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
+    <Compile Include="Commands\CmdBlockSpeed.cs" />
     <Compile Include="DatabaseTransactionHelper.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="Commands\CmdServer.cs" />
@@ -255,6 +257,7 @@
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
     <Compile Include="LavaSurvival.cs" />
+    <Compile Include="Levels\BlockQueue.cs" />
     <Compile Include="Levels\WoM Textures\Texture_Settings.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
@@ -540,6 +543,9 @@
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
     <Compile Include="Plugins\Plugin.Events.cs" />
+    <Content Include="mcf.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -93,10 +93,20 @@ namespace MCForge
 
                 if (blocks.Length != p.level.blocks.Length) { p.SendMessage("Cant restore selection of different size maps."); blocks = null; return; }
 
-                for (ushort xx = Math.Min(cpos.x, x); xx <= Math.Max(cpos.x, x); ++xx)
-                    for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); ++yy)
-                        for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
-                            p.level.Blockchange(p, xx, yy, zz, blocks[xx + (zz * vars[0]) + (yy * vars[0] * vars[1])]);
+                if (p.level.bufferblocks)
+                {
+                    for (ushort xx = Math.Min(cpos.x, x); xx <= Math.Max(cpos.x, x); ++xx)
+                        for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); ++yy)
+                            for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
+                                BlockQueue.Addblock(p, xx, yy, zz, blocks[xx + (zz * vars[0]) + (yy * vars[0] * vars[1])]);
+                }
+                else
+                {
+                    for (ushort xx = Math.Min(cpos.x, x); xx <= Math.Max(cpos.x, x); ++xx)
+                        for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); ++yy)
+                            for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
+                                p.level.Blockchange(p, xx, yy, zz, blocks[xx + (zz * vars[0]) + (yy * vars[0] * vars[1])]);
+                }
 
                 blocks = null;
                 if (p.staticCommands) p.Blockchange += Blockchange1;

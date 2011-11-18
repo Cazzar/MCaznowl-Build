@@ -36,7 +36,7 @@ namespace MCForge
             bool shutdown = true;
             string file = "stopShutdown";
             if (File.Exists(file)) { File.Delete(file); }
-            if (message == "") { message = "Sever is going to shutdown in " + secTime + " seconds"; }
+            if (message == "") { message = "Server is going to shutdown in " + secTime + " seconds"; }
             else
             {
                 if (message == "cancel") { File.Create(file).Close(); shutdown = false; message = "Shutdown cancelled"; }

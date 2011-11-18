@@ -51,7 +51,7 @@ namespace MCForge
                 if (!pl.hidden || p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
                 {
                     playerCount++;
-                    if (pl.hidden && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
+                    if (pl.hidden && pl.group.Permission <= p.group.Permission && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
                     {
                         hiddenCount++;
                     }

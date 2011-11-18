@@ -55,15 +55,30 @@ namespace MCForge
 
             Player.UndoPos Pos1;
             //p.UndoBuffer.Clear();
-            p.CopyBuffer.ForEach(delegate(Player.CopyPos pos)
+            if (p.level.bufferblocks)
             {
-                Pos1.x = (ushort)(Math.Abs(pos.x) + x);
-                Pos1.y = (ushort)(Math.Abs(pos.y) + y);
-                Pos1.z = (ushort)(Math.Abs(pos.z) + z);
+                p.CopyBuffer.ForEach(delegate(Player.CopyPos pos)
+                {
+                    Pos1.x = (ushort)(Math.Abs(pos.x) + x);
+                    Pos1.y = (ushort)(Math.Abs(pos.y) + y);
+                    Pos1.z = (ushort)(Math.Abs(pos.z) + z);
 
-                if (pos.type != Block.air || p.copyAir)
-                    unchecked { if (p.level.GetTile(Pos1.x, Pos1.y, Pos1.z) != Block.Zero) p.level.Blockchange(p, (ushort)(Pos1.x + p.copyoffset[0]), (ushort)(Pos1.y + p.copyoffset[1]), (ushort)(Pos1.z + p.copyoffset[2]), pos.type); }
-            });
+                    if (pos.type != Block.air || p.copyAir)
+                        unchecked { if (p.level.GetTile(Pos1.x, Pos1.y, Pos1.z) != Block.Zero) BlockQueue.Addblock(p, (ushort)(Pos1.x + p.copyoffset[0]), (ushort)(Pos1.y + p.copyoffset[1]), (ushort)(Pos1.z + p.copyoffset[2]), pos.type); }
+                });
+            }
+            else
+            {
+                p.CopyBuffer.ForEach(delegate(Player.CopyPos pos)
+                {
+                    Pos1.x = (ushort)(Math.Abs(pos.x) + x);
+                    Pos1.y = (ushort)(Math.Abs(pos.y) + y);
+                    Pos1.z = (ushort)(Math.Abs(pos.z) + z);
+
+                    if (pos.type != Block.air || p.copyAir)
+                        unchecked { if (p.level.GetTile(Pos1.x, Pos1.y, Pos1.z) != Block.Zero) p.level.Blockchange(p, (ushort)(Pos1.x + p.copyoffset[0]), (ushort)(Pos1.y + p.copyoffset[1]), (ushort)(Pos1.z + p.copyoffset[2]), pos.type); }
+                });
+            }
 
             Player.SendMessage(p, "Pasted " + p.CopyBuffer.Count + " blocks.");
 

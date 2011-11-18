@@ -128,7 +128,7 @@ namespace MCForge
             {
                 StreamWriter sw;
                 sw = File.AppendText("text/tempranks.txt");
-                sw.WriteLine(player + " " + rank + " " + oldrank + " " + period + " " + minute + " " + hour + " " + day + " " + month + " " + year + " " + assigner);
+                sw.WriteLine(who.name + " " + rank + " " + oldrank + " " + period + " " + minute + " " + hour + " " + day + " " + month + " " + year + " " + assigner);
                 sw.Close();
             }
             catch

@@ -73,13 +73,10 @@ namespace MCForge
                         return;
                     }
                     Player.SendMessage(p, "Why not, just use /tp " + who2.name + "!");
-                    return;
-
                 }
                 if (who2 == p)
                 {
                     Player.SendMessage(p, "Why not, just use /summon " + who.name + "!");
-                    return;
                 }
                 if (p.group.Permission < who.group.Permission)
                 {

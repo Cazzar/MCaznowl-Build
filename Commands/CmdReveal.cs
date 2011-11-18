@@ -66,7 +66,8 @@ namespace MCForge
 
                         who.Loading = false;
 
-                        who.SendMessage("&bMap reloaded by " + p.name);
+                        if (!p.hidden) { who.SendMessage("&bMap reloaded by " + p.name); }
+                        if (p.hidden) { who.SendMessage("&bMap reloaded"); }
                         Player.SendMessage(p, "&4Finished reloading for " + who.name);
                         /*
                         foreach (Player pl in Player.players) if (who.level == pl.level && who != pl) who.SendDie(pl.id);
