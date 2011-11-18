@@ -179,6 +179,7 @@ namespace MCForge
 			all.Add(new CmdOHide());
             all.Add(new CmdOpChat());
             all.Add(new CmdOpRules());
+            all.Add(new CmdOpStats());
             all.Add(new CmdOutline());
             all.Add(new CmdOverseer());
             all.Add(new CmdOZone());

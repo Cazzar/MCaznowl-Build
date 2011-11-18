@@ -89,6 +89,7 @@
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdDescend.cs" />
+    <Compile Include="Commands\CmdOpStats.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />
     <Compile Include="Commands\CmdReview.cs" />
@@ -542,6 +543,9 @@
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
     <Compile Include="Plugins\Plugin.Events.cs" />
+    <Content Include="mcf.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

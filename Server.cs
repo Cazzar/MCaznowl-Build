@@ -235,6 +235,7 @@ namespace MCForge
         public static bool reportBack = true;
 
         public static bool irc = false;
+        public static bool ircColorsEnable = false;
 //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
@@ -309,6 +310,8 @@ namespace MCForge
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static bool customGrieferStone = false;
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
+        public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
+        public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
@@ -319,6 +322,8 @@ namespace MCForge
         public static bool WomDirect = false;
         public static bool UseSeasons = false;
         public static bool guestLimitNotify = false;
+        public static bool guestJoinNotify = true;
+        public static bool guestLeaveNotify = true;
 
         public static bool flipHead = false;
 
@@ -595,7 +600,8 @@ namespace MCForge
                     return;
                 }
                 Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
-                
+				Database.executeQuery("CREATE TABLE if not exists Playercmds (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
+
                 // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
                 if (Server.useMySQL) {
                     // Check if the color column exists.
@@ -649,7 +655,7 @@ namespace MCForge
                         {
                             if (File.Exists("levels/" + Server.level + ".lvl.backup"))
                             {
-                                Log("Attempting to load backup.");
+                                Log("Attempting to load backup of " + Server.level + ".");
                                 File.Copy("levels/" + Server.level + ".lvl.backup", "levels/" + Server.level + ".lvl", true);
                                 mainLevel = Level.Load(Server.level);
                                 if (mainLevel == null)

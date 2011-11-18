@@ -116,12 +116,12 @@ namespace MCForge
                 Player.SendMessage(p, "&cAn error has occurred!");
                 return;
             }
-            if (!File.Exists("extra/passwords/" + p.name + ".xml"))
+            if (!File.Exists("extra/passwords/" + p.name.ToLower() + ".xml"))
             {
                 Player.SendMessage(p, "You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
-            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name + ".xml"), "MCForgeEncryption", p, message);
+            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name.ToLower() + ".xml"), "MCForgeEncryption", p, message);
             if (message == password)
             {
                 Player.SendMessage(p, "Thank you, " + p.color + p.name + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");

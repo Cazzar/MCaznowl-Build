@@ -797,7 +797,7 @@ namespace MCForge
                     if (Group.findPlayerGroup(name) == Group.findPerm(LevelPermission.Guest))
                     {
                         // Check to see how many guests we have
-                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission == LevelPermission.Guest);
+                        int currentNumOfGuests = Player.players.Count(pl => pl.group.Permission <= LevelPermission.Guest);
                         if (currentNumOfGuests >= Server.maxGuests)
                         {
                             if (Server.guestLimitNotify) GlobalMessageOps("Guest " + this.name + " couldn't log in - too many guests.");
@@ -857,7 +857,7 @@ namespace MCForge
                 Server.s.PlayerListUpdate();
 
                 //Test code to show when people come back with different accounts on the same IP
-                string temp = "Lately known as:";
+                string temp = name + " is lately known as:";
                 bool found = false;
                 if (!ip.StartsWith("127.0.0."))
                 {
@@ -908,11 +908,11 @@ namespace MCForge
 
                 if (Server.useMySQL)
                 MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
-                    "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
+                    " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                     ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
                 else
                     SQLite.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
-                    "VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
+                    " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                     ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
 
             }
@@ -1045,7 +1045,14 @@ namespace MCForge
             }
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
-                GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+				if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
+				{
+                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+				}
+                if (this.group.Permission > LevelPermission.Guest)
+                {
+                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                }
                 //IRCBot.Say(this.name + " has joined the server.");
             }
             if (this.group.Permission >= Server.adminchatperm && Server.adminsjoinsilent == true)
@@ -2132,6 +2139,18 @@ namespace MCForge
                         return;
                     }
                 }
+                if (text[0] == '-')
+                {
+                    string newtext = text;
+                    if (text[0] == '-') newtext = text.Remove(0, 1).Trim();
+
+                    GlobalMessage(color + prefix + name + ": &f" + newtext);
+                    Server.s.Log(name + ": " + newtext);
+                    //Server.s.OpLog(name + ": " + newtext);
+                    //IRCBot.Say(name + ": " + newtext, true);
+                    Server.IRC.Say(name + ": " + newtext, true);
+                    return;
+                }
                 if (text[0] == '#' || opchat)
                 {
                     string newtext = text;
@@ -2141,7 +2160,7 @@ namespace MCForge
                     if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
-                    Server.s.OpLog("(OPs): " + name + ": " + newtext);
+                    //Server.s.OpLog("(OPs): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
                     return;
@@ -2155,7 +2174,7 @@ namespace MCForge
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
-                    Server.s.AdminLog("(Admins): " + name + ": " + newtext);
+                    //Server.s.AdminLog("(Admins): " + name + ": " + newtext);
                     //IRCBot.Say(name + ": " + newtext, true);
                     Server.IRC.Say(name + ": " + newtext, true);
                     return;
@@ -2415,7 +2434,6 @@ namespace MCForge
                                 return;
                             }
                         }
-
                         if (cmd.ToLower() != "setpass" || cmd.ToLower() != "pass")
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
@@ -2425,8 +2443,22 @@ namespace MCForge
                         	if (sendcommanddata)
                         	{
                         		WebClient wc = new WebClient();
-                        		wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name);
-                        	}
+                                wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name);
+							}
+                            // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
+                            if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
+                            {
+                                if (Server.useMySQL)
+                                {
+                                    MySQL.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                }
+                                else
+                                {
+                                    SQLite.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                }
+                            }
                         }
                         catch {  }
                         this.commThread = new Thread(new ThreadStart(delegate
@@ -2531,7 +2563,7 @@ namespace MCForge
                     return;
                 }
             }
-            if (p != null && !p.hidden)
+            if (p != null && !p.hidden || p.hidden && this.group.Permission >= p.group.Permission)
             {
                 Server.s.Log(name + " @" + p.name + ": " + message);
                 SendChat(this, Server.DefaultColor + "[<] " + p.color + p.prefix + p.name + ": &f" + message);
@@ -2784,12 +2816,9 @@ namespace MCForge
         public void SendMotd()
         {
             byte[] buffer = new byte[130];
-            buffer[0] = Server.version;
+            buffer[0] = (byte)8;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            if (Server.UseTextures)
-                StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name + "~motd", 64).CopyTo(buffer, 65);
-            else
-                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
 
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
@@ -2830,7 +2859,6 @@ namespace MCForge
 
                 for (int i = 0; i < level.blocks.Length; ++i)
                     buffer[4 + i] = Block.Convert(level.blocks[i]);
-                
                 SendRaw(2);
                 buffer = buffer.GZip();
                 int number = (int)Math.Ceiling(((double)buffer.Length) / 1024);
@@ -2861,20 +2889,17 @@ namespace MCForge
             }
             catch (Exception ex)
             {
-                if (this.level == Server.mainLevel)
-                    Kick("Error sending map data! Please report this to " + (String.IsNullOrEmpty(Server.server_owner) || Server.server_owner == "Notch" ? "the owner" : Server.server_owner) + "!");
-                else
-                {
-                    Command.all.Find("goto").Use(this, Server.mainLevel.name);
-                    SendMessage("There was an error sending the map data, you have been sent to the main level.");
-                }
+                Command.all.Find("goto").Use(this, Server.mainLevel.name);
+                SendMessage("There was an error sending the map data, you have been sent to the main level.");
                 Server.ErrorLog(ex);
             }
             finally
             {
                 //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
+                DateTime start = DateTime.Now;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                Server.s.Log((DateTime.Now - start).TotalMilliseconds.ToString());
             }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
@@ -3789,7 +3814,17 @@ namespace MCForge
                         {
                             File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
-                        if (!hidden) { GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); }
+						if (!hidden) 
+						{
+							if (Server.guestLeaveNotify == true && this.group.Permission <= LevelPermission.Guest) 
+							{
+                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); 
+							}
+                            if (this.group.Permission > LevelPermission.Guest)
+                            {
+                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false);
+                            }
+                        }
                         //IRCBot.Say(name + " left the game.");
                         Server.s.Log(name + " disconnected.");
                         if (Server.notifyOnJoinLeave)
@@ -3884,10 +3919,10 @@ namespace MCForge
                         Directory.CreateDirectory("extra/undo");
                     }
 
-                    if (!Directory.Exists("extra/undo/" + p.name)) Directory.CreateDirectory("extra/undo/" + p.name);
-                    di = new DirectoryInfo("extra/undo/" + p.name);
-                    File.Create("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                    if (!Directory.Exists("extra/undo/" + p.name.ToLower())) Directory.CreateDirectory("extra/undo/" + p.name.ToLower());
+                    di = new DirectoryInfo("extra/undo/" + p.name.ToLower());
+                    File.Create("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo"))
                     {
                         foreach (UndoPos uP in p.UndoBuffer)
                         {
