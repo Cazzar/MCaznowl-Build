@@ -38,19 +38,23 @@ namespace MCForge
                 Player.SendMessage(p, "Using ~" + (BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000 + "KB/s times " + Player.players.Count + " player(s) = ~" + Player.players.Count * ((BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000) + "KB/s");
                 return;
             }
-
+            if (text == "clear")
+            {
+                Server.levels.ForEach((Level l) => { l.blockqueue.Clear(); });
+                return;
+            }
             if (text.StartsWith("bs"))
             {
                 try { BlockQueue.blockupdates = int.Parse(text.Split(' ')[1]); }
-                catch { p.SendMessage("Invalid number specified."); return; }
-                p.SendMessage("Blocks per interval is now " + BlockQueue.blockupdates + ".");
+                catch { Player.SendMessage(p, "Invalid number specified."); return; }
+                Player.SendMessage(p, "Blocks per interval is now " + BlockQueue.blockupdates + ".");
                 return;
             }
             if (text.StartsWith("ts"))
             {
                 try { BlockQueue.time = int.Parse(text.Split(' ')[1]); }
-                catch { p.SendMessage("Invalid number specified."); return; }
-                p.SendMessage("Block interval is now " + BlockQueue.time + ".");
+                catch { Player.SendMessage(p, "Invalid number specified."); return; }
+                Player.SendMessage(p, "Block interval is now " + BlockQueue.time + ".");
                 return;
             }
             if (text.StartsWith("buf"))
@@ -58,12 +62,12 @@ namespace MCForge
                 if (p.level.bufferblocks)
                 {
                     p.level.bufferblocks = false;
-                    p.SendMessage("Block buffering on " + p.level.name + " disabled.");
+                    Player.SendMessage(p, "Block buffering on " + p.level.name + " disabled.");
                 }
                 else
                 {
                     p.level.bufferblocks = true;
-                    p.SendMessage("Block buffering on " + p.level.name + " enabled.");
+                    Player.SendMessage(p, "Block buffering on " + p.level.name + " enabled.");
                 }
                 return;
             }
@@ -116,7 +120,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/bs [option] [option value] - Options for block speeds.");
-            Player.SendMessage(p, "Options are: bs (blocks per interval), ts (interval in milliseconds), buf (toggles buffering), net.");
+            Player.SendMessage(p, "Options are: bs (blocks per interval), ts (interval in milliseconds), buf (toggles buffering), clear, net.");
             Player.SendMessage(p, "/bs net [2,4,8,12,16,20,24] - Presets, divide by 8 and times by 1000 to get blocks per second.");
         }
     }
