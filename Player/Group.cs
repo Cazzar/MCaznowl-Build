@@ -107,7 +107,7 @@ namespace MCForge
                                             gots = 0;
                                             thisGroup = new Group();
 
-                                            if (value.ToLower() == "developers" || value.ToLower() == "devs")
+                                            if (value.ToLower() == "developer" || value.ToLower() == "dev" || value.ToLower() == "developers" || value.ToLower() == "devs")
                                                 Server.s.Log("You are not a developer. Stop pretending you are.");
                                             if (value.ToLower() == "adv" || value.ToLower() == "op" || value.ToLower() == "super" || value.ToLower() == "nobody" || value.ToLower() == "noone")
                                                 Server.s.Log("Cannot have a rank named \"" + value.ToLower() + "\", this rank is hard-coded.");
