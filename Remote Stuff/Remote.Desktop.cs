@@ -81,7 +81,7 @@ namespace MCForge.Remote
         }
         private void RemovePlayerDesktop(Player p)
         {
-            var bytes = new byte[p.name.Length + 2];
+            var bytes = new byte[p.name.Length + 3];
             bytes[0] = 1;
             BitConverter.GetBytes((short)p.name.Length).CopyTo(bytes, 1);
             Encoding.UTF8.GetBytes(p.name).CopyTo(bytes, 3);

@@ -111,10 +111,7 @@ namespace MCForge.Remote
                     else
                     {
                         m = "[Remote]: " + m;
-                        byte[] buffed = new byte[(m.Length) + 2];
-                        BitConverter.GetBytes((short)m.Length).CopyTo(buffed, 0);
-                        Encoding.UTF8.GetBytes(m).CopyTo(buffed, 2);
-                        SendData(0x12, buffed);
+                        SendData(18, new byte[]{0xA});
                     }
                     Logger.Write(string.Format("{0}{1}{2}", DateTime.Now.ToString("(HH:mm:ss) "), m, Environment.NewLine));  //Did it like this to avoid OnLog event
                     Player.GlobalMessage(string.Format("{0}[Remote]: {1}{2}", c.navy, c.white, m));
