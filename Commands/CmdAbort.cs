@@ -44,15 +44,9 @@ namespace MCForge
                 p.aiming = false;
                 p.onTrain = false;
                 p.isFlying = false;
-                //p.level.blockqueue.ForEach((BlockQueue.block b) => { if (b.p == p) p.level.blockqueue.Remove(b); });
                 try
                 {
-                    BlockQueue.pause();
-                    for (int i = 0; i < p.level.blockqueue.Count; )
-                    {
-                        if (p.level.blockqueue[i].p.id == p.id) { p.level.blockqueue.RemoveAt(i); continue; } //this is very slow, anyone got any input?
-                        i++;
-                    }
+                    p.level.blockqueue.RemoveAll((BlockQueue.block b) => { if (b.p == p) return true; return false; });
                 }
                 finally { BlockQueue.resume(); }
                 Player.SendMessage(p, "Every toggle or action was aborted.");
