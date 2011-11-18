@@ -960,7 +960,7 @@ namespace MCForge.Gui
             foreach (Control tP in tabControl.Controls)
                 if (tP is TabPage && tP != tabPage3 && tP != tabPage5)
                     foreach (Control ctrl in tP.Controls)
-                        if (ctrl is TextBox)
+                        if (ctrl is TextBox && ctrl.Name.ToLower() != "txtgrpmotd")
                             if (ctrl.Text == "")
                             {
                                 MessageBox.Show("A textbox has been left empty. It must be filled.\n" + ctrl.Name);
