@@ -1052,7 +1052,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             txtLimit.Text = foundRank.maxBlocks.ToString();
             txtMaxUndo.Text = foundRank.maxUndo.ToString();
             cmbColor.SelectedIndex = cmbColor.Items.IndexOf(c.Name(foundRank.color));
-            txtGrpMOTD.Text = String.IsNullOrEmpty(foundRank.MOTD) ? Server.motd : foundRank.MOTD;
+            txtGrpMOTD.Text = String.IsNullOrEmpty(foundRank.MOTD) ? String.Empty : foundRank.MOTD;
             txtFileName.Text = foundRank.fileName;
         }
 
