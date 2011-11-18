@@ -212,7 +212,7 @@ namespace MCForge
                                             if (!String.IsNullOrEmpty(value))
                                                 thisGroup.MOTD = value;
                                             gots++;
-                                            break;
+                                               break;
                                     }
 
                                     if ((gots >= 4 && version < 2) || (gots >= 5 && version < 3) || gots >= 6)
