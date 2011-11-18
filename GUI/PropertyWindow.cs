@@ -1052,6 +1052,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             txtLimit.Text = foundRank.maxBlocks.ToString();
             txtMaxUndo.Text = foundRank.maxUndo.ToString();
             cmbColor.SelectedIndex = cmbColor.Items.IndexOf(c.Name(foundRank.color));
+            txtGrpMOTD.Text = String.IsNullOrEmpty(foundRank.MOTD) ? Server.motd : foundRank.MOTD;
             txtFileName.Text = foundRank.fileName;
         }
 
@@ -2233,5 +2234,12 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
+        private void txtGrpMOTD_TextChanged(object sender, EventArgs e)
+        {
+            if (txtGrpMOTD.Text != "")
+            {
+                storedRanks[listRanks.SelectedIndex].MOTD = txtGrpMOTD.Text;
+            }
+        }
     }
 }

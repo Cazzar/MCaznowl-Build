@@ -41,6 +41,7 @@ namespace MCForge
         public CommandList commands;
         public string fileName;
         public PlayerList playerList;
+        public string MOTD = Server.motd;
 
         public Group()
         {
@@ -202,6 +203,11 @@ namespace MCForge
                                             gots++;
                                             thisGroup.fileName = value;
                                             break;
+                                        case "motd":
+                                            if (!String.IsNullOrEmpty(value))
+                                                thisGroup.MOTD = value;
+                                            gots++;
+                                            break;
                                     }
 
                                     if ((gots >= 4 && version < 2) || gots >= 5)
@@ -303,6 +309,7 @@ namespace MCForge
                         SW.WriteLine("MaxUndo = " + grp.maxUndo);
 						SW.WriteLine("Color = " + grp.color[1]);
 						SW.WriteLine("FileName = " + grp.fileName);
+                        SW.WriteLine("MOTD = " + grp.MOTD);
 						SW.WriteLine();
 					}
 				}

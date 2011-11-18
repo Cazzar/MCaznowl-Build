@@ -2789,7 +2789,12 @@ namespace MCForge
             if (Server.UseTextures)
                 StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name + "~motd", 64).CopyTo(buffer, 65);
             else
-                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            {
+                if (this.group.Permission == LevelPermission.Admin)
+                    StringFormat(this.group.MOTD, 64).CopyTo(buffer, 65);
+                else 
+                    StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            }
 
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;

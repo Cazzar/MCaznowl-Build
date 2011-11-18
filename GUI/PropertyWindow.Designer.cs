@@ -160,6 +160,7 @@ namespace MCForge.Gui
             this.label20 = new System.Windows.Forms.Label();
             this.listBlocks = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label85 = new System.Windows.Forms.Label();
             this.txtMaxUndo = new System.Windows.Forms.TextBox();
             this.label52 = new System.Windows.Forms.Label();
             this.lblColor = new System.Windows.Forms.Label();
@@ -370,6 +371,7 @@ namespace MCForge.Gui
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.txtGrpMOTD = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1202,7 +1204,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(16, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -1738,6 +1740,8 @@ namespace MCForge.Gui
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage2.Controls.Add(this.txtGrpMOTD);
+            this.tabPage2.Controls.Add(this.label85);
             this.tabPage2.Controls.Add(this.txtMaxUndo);
             this.tabPage2.Controls.Add(this.label52);
             this.tabPage2.Controls.Add(this.lblColor);
@@ -1760,6 +1764,15 @@ namespace MCForge.Gui
             this.tabPage2.Size = new System.Drawing.Size(488, 509);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Ranks";
+            // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Location = new System.Drawing.Point(37, 179);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(38, 13);
+            this.label85.TabIndex = 16;
+            this.label85.Text = "MOTD:";
             // 
             // txtMaxUndo
             // 
@@ -1792,7 +1805,7 @@ namespace MCForge.Gui
             this.cmbColor.FormattingEnabled = true;
             this.cmbColor.Location = new System.Drawing.Point(81, 149);
             this.cmbColor.Name = "cmbColor";
-            this.cmbColor.Size = new System.Drawing.Size(92, 21);
+            this.cmbColor.Size = new System.Drawing.Size(100, 21);
             this.cmbColor.TabIndex = 12;
             this.cmbColor.SelectedIndexChanged += new System.EventHandler(this.cmbColor_SelectedIndexChanged);
             // 
@@ -1807,7 +1820,7 @@ namespace MCForge.Gui
             // 
             // txtFileName
             // 
-            this.txtFileName.Location = new System.Drawing.Point(81, 206);
+            this.txtFileName.Location = new System.Drawing.Point(81, 227);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(100, 21);
             this.txtFileName.TabIndex = 4;
@@ -1840,7 +1853,7 @@ namespace MCForge.Gui
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(21, 209);
+            this.label14.Location = new System.Drawing.Point(21, 230);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 13);
             this.label14.TabIndex = 3;
@@ -4008,6 +4021,14 @@ namespace MCForge.Gui
             this.listBox1.Size = new System.Drawing.Size(129, 472);
             this.listBox1.TabIndex = 0;
             // 
+            // txtGrpMOTD
+            // 
+            this.txtGrpMOTD.Location = new System.Drawing.Point(81, 176);
+            this.txtGrpMOTD.Name = "txtGrpMOTD";
+            this.txtGrpMOTD.Size = new System.Drawing.Size(100, 21);
+            this.txtGrpMOTD.TabIndex = 17;
+            this.txtGrpMOTD.TextChanged += new System.EventHandler(this.txtGrpMOTD_TextChanged);
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4457,5 +4478,7 @@ namespace MCForge.Gui
         private System.Windows.Forms.GroupBox groupBox28;
         private System.Windows.Forms.NumericUpDown nudCooldownTime;
         private System.Windows.Forms.Label label84;
+        private System.Windows.Forms.Label label85;
+        private System.Windows.Forms.TextBox txtGrpMOTD;
     }
 }
