@@ -160,6 +160,7 @@ namespace MCForge.Gui
             this.label20 = new System.Windows.Forms.Label();
             this.listBlocks = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtGrpMOTD = new System.Windows.Forms.TextBox();
             this.label85 = new System.Windows.Forms.Label();
             this.txtMaxUndo = new System.Windows.Forms.TextBox();
             this.label52 = new System.Windows.Forms.Label();
@@ -371,7 +372,6 @@ namespace MCForge.Gui
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.txtGrpMOTD = new System.Windows.Forms.TextBox();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -1765,6 +1765,14 @@ namespace MCForge.Gui
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Ranks";
             // 
+            // txtGrpMOTD
+            // 
+            this.txtGrpMOTD.Location = new System.Drawing.Point(81, 176);
+            this.txtGrpMOTD.Name = "txtGrpMOTD";
+            this.txtGrpMOTD.Size = new System.Drawing.Size(100, 21);
+            this.txtGrpMOTD.TabIndex = 17;
+            this.txtGrpMOTD.TextChanged += new System.EventHandler(this.txtGrpMOTD_TextChanged);
+            // 
             // label85
             // 
             this.label85.AutoSize = true;
@@ -1794,7 +1802,7 @@ namespace MCForge.Gui
             // 
             // lblColor
             // 
-            this.lblColor.Location = new System.Drawing.Point(179, 144);
+            this.lblColor.Location = new System.Drawing.Point(185, 147);
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(26, 23);
             this.lblColor.TabIndex = 13;
@@ -4020,14 +4028,6 @@ namespace MCForge.Gui
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(129, 472);
             this.listBox1.TabIndex = 0;
-            // 
-            // txtGrpMOTD
-            // 
-            this.txtGrpMOTD.Location = new System.Drawing.Point(81, 176);
-            this.txtGrpMOTD.Name = "txtGrpMOTD";
-            this.txtGrpMOTD.Size = new System.Drawing.Size(100, 21);
-            this.txtGrpMOTD.TabIndex = 17;
-            this.txtGrpMOTD.TextChanged += new System.EventHandler(this.txtGrpMOTD_TextChanged);
             // 
             // PropertyWindow
             // 

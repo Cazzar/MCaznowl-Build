@@ -2236,10 +2236,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void txtGrpMOTD_TextChanged(object sender, EventArgs e)
         {
-            if (txtGrpMOTD.Text != "")
-            {
-                storedRanks[listRanks.SelectedIndex].MOTD = txtGrpMOTD.Text;
-            }
+            if (txtGrpMOTD.Text != null) storedRanks[listRanks.SelectedIndex].MOTD = txtGrpMOTD.Text;
         }
     }
 }
