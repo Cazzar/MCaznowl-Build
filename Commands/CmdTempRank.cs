@@ -143,7 +143,6 @@ namespace MCForge
                 }
                 else
                 {
-                    Group oldgroup = Group.findPlayerGroup(who.name);
                     Group newgroup = Group.Find(rank);
                     Command.all.Find("setrank").Use(null, who.name + " " + newgroup.name);
                     Player.SendMessage(p, "Temporary rank (" + rank + ") is assigned succesfully to " + player + " for " + period + " hours");
