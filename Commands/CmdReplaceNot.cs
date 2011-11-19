@@ -93,12 +93,21 @@ namespace MCForge
             }
 
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
-            
 
-            buffer.ForEach(delegate(Pos pos)
+            if (p.level.bufferblocks)
             {
-                p.level.Blockchange(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
-            });
+                buffer.ForEach(delegate(Pos pos)
+                {
+                    BlockQueue.Addblock(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
+                });
+            }
+            else
+            {
+                buffer.ForEach(delegate(Pos pos)
+                {
+                    p.level.Blockchange(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
+                });
+            }
             wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }

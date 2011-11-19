@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MCForge
 {
@@ -19,7 +18,7 @@ namespace MCForge
             {
                 if (started == 1) return;
                 started = 1;
-                Server.levels.ForEach((Level l) =>
+                Server.levels.ForEach((l) =>
                 {
                     try
                     {
@@ -37,7 +36,7 @@ namespace MCForge
                     catch (Exception e)
                     {
                         Server.s.ErrorCase("error:" + e);
-                        Server.s.Log("Block cache failed for map: " + l.name + ". " + l.blockqueue.Count + "lost.");
+                        Server.s.Log(String.Format("Block cache failed for map: {0}. {1}lost.", l.name, l.blockqueue.Count));
                         l.blockqueue.Clear();
                     }
                 });
