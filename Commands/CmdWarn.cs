@@ -22,16 +22,11 @@ namespace MCForge
     public class CmdWarn : Command
     {
         public override string name { get { return "warn"; } }
-
-        string reason;
-
         public override string shortcut { get { return ""; } }
-
         public override string type { get { return "mod"; } }
-
         public override bool museumUsable { get { return true; } }
-
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
+        string reason;
 
         public override void Use(Player p, string message)
         {
@@ -104,7 +99,6 @@ namespace MCForge
                 who.Kick("KICKED BECAUSE " + reason + "");
                 return;
             }
-
         }
         public override void Help(Player p)
         {
