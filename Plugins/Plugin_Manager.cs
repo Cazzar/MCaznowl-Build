@@ -96,7 +96,7 @@ namespace MCForge
                 {
                     foreach (Type t in lib.GetTypes())
                     {
-                        if (t.BaseType.ToString() == "MCForge.Plugin")
+                        if (t.BaseType == typeof(Plugin))
                         {
                             instance = Activator.CreateInstance(lib.GetTypes()[0]);
                             break;
