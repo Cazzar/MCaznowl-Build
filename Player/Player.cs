@@ -2442,7 +2442,7 @@ namespace MCForge
                         {
                         	if (sendcommanddata)
                         	{
-                                using (WebClient wc = new WebClient()) { wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name); }
+                                using (WebClient wc = new WebClient()) { wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name); }
 							}
                             // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
                             if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
