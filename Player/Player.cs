@@ -2454,8 +2454,8 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    SQLite.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')"); // this causes an error (for me atleast)
+                                    SQLite.executeQuery("INSERT INTO Playercmds (Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + DateTime.Now + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
                                 }
                             }
                         }
