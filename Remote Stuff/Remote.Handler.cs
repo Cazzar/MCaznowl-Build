@@ -103,9 +103,10 @@ namespace MCForge.Remote
                         messaged = EncryptMobile(messaged, _keyMobile);
                         byte[] buffed = new byte[(messaged.Length * 2) + 3];
                         util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                        buffed[0] = 1;
+                        buffed[0] = 4;
                         Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
+                        SendData(0x05, buffed);
+                        buffed[0] = 1;
                         SendData(0x05, buffed);
                     }
                     else
