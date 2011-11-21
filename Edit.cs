@@ -16,12 +16,11 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MCForge
 {
-    public class Edit
+    public static class Edit
     {
         /// <summary>
         /// Replaces a line in a textfile
@@ -31,7 +30,7 @@ namespace MCForge
         /// <param name="oldstring">The string to get replaced.</param>
         /// <param name="newstring">The string to replace the oldstring</param>
         /// <returns></returns>
-        public bool Replace(string path, string search, string oldstring, string newstring)
+        public static bool Replace(string path, string search, string oldstring, string newstring)
         {
             return Replace(path, 0, search, 0, oldstring, newstring);
         }
@@ -45,7 +44,7 @@ namespace MCForge
         /// <param name="oldstring">the oldstring to be replaced</param>
         /// <param name="newstring">the replacement for oldstring</param>
         /// <returns></returns>
-        public bool Replace(string path, int splitsearch, string search, int splitedit, string oldstring, string newstring)
+        public static bool Replace(string path, int splitsearch, string search, int splitedit, string oldstring, string newstring)
         {
             bool succes = false;
             string end = "";
@@ -73,7 +72,7 @@ namespace MCForge
         /// <param name="path">the path to the textfile</param>
         /// <param name="line">the line to be added.</param>
         /// <returns></returns>
-        public bool Add(string path, string line)
+        public static bool Add(string path, string line)
         {
             bool succes = false;
             if (File.Exists(path))
@@ -89,7 +88,7 @@ namespace MCForge
         /// </summary>
         /// <param name="path">Path to file which has to get edited</param>
         /// <param name="search">The string to search for.</param>
-        public bool Delete(string path, string search)
+        public static bool Delete(string path, string search)
         {
             bool succes = false;
             string end = "";
@@ -116,7 +115,7 @@ namespace MCForge
         /// <param name="split">The split number of the searchstring (split = (' '))</param>
         /// <param name="search">string to search for</param>
         /// <returns>Returns true if succes</returns>
-        public bool Delete(string path, int split, string search)
+        public static bool Delete(string path, int split, string search)
         {
             bool succes = false;
             string end = "";

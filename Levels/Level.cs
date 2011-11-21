@@ -1373,30 +1373,8 @@ namespace MCForge
 
         public int PosToInt(ushort x, ushort y, ushort z)
         {
-            if (x < 0)
-            {
+            if (x < 0 || x >= width || y < 0 || y >= depth || z < 0 || z >= height)
                 return -1;
-            }
-            if (x >= width)
-            {
-                return -1;
-            }
-            if (y < 0)
-            {
-                return -1;
-            }
-            if (y >= depth)
-            {
-                return -1;
-            }
-            if (z < 0)
-            {
-                return -1;
-            }
-            if (z >= height)
-            {
-                return -1;
-            }
             return x + (z*width) + (y*width*height);
             //alternate method: (h * widthY + y) * widthX + x;
         }

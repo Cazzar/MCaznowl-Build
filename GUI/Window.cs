@@ -530,7 +530,7 @@ namespace MCForge.Gui
                         {
                             Command commandcmd = Command.all.Find(sentCmd);
                             WebClient wc = new WebClient();
-                            wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + commandcmd.name);
+                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
                         }
                     }
                     catch 

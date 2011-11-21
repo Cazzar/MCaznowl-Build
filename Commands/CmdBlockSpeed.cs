@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.IO;
 using System.Collections.Generic;
 
 namespace MCForge
@@ -34,27 +33,26 @@ namespace MCForge
         {
             if (text == "")
             {
-                Player.SendMessage(p, BlockQueue.blockupdates + " blocks every " + BlockQueue.time + " milliseconds = " + BlockQueue.blockupdates * (1000 / BlockQueue.time) + " blocks per second.");
-                Player.SendMessage(p, "Using ~" + (BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000 + "KB/s times " + Player.players.Count + " player(s) = ~" + Player.players.Count * ((BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000) + "KB/s");
+                SendEstimation(p);
                 return;
             }
             if (text == "clear")
             {
-                Server.levels.ForEach((Level l) => { l.blockqueue.Clear(); });
+                Server.levels.ForEach((l) => { l.blockqueue.Clear(); });
                 return;
             }
             if (text.StartsWith("bs"))
             {
                 try { BlockQueue.blockupdates = int.Parse(text.Split(' ')[1]); }
                 catch { Player.SendMessage(p, "Invalid number specified."); return; }
-                Player.SendMessage(p, "Blocks per interval is now " + BlockQueue.blockupdates + ".");
+                Player.SendMessage(p, String.Format("Blocks per interval is now {0}.", BlockQueue.blockupdates));
                 return;
             }
             if (text.StartsWith("ts"))
             {
                 try { BlockQueue.time = int.Parse(text.Split(' ')[1]); }
                 catch { Player.SendMessage(p, "Invalid number specified."); return; }
-                Player.SendMessage(p, "Block interval is now " + BlockQueue.time + ".");
+                Player.SendMessage(p, String.Format("Block interval is now {0}.", BlockQueue.time));
                 return;
             }
             if (text.StartsWith("buf"))
@@ -62,12 +60,12 @@ namespace MCForge
                 if (p.level.bufferblocks)
                 {
                     p.level.bufferblocks = false;
-                    Player.SendMessage(p, "Block buffering on " + p.level.name + " disabled.");
+                    Player.SendMessage(p, String.Format("Block buffering on {0} disabled.", p.level.name));
                 }
                 else
                 {
                     p.level.bufferblocks = true;
-                    Player.SendMessage(p, "Block buffering on " + p.level.name + " enabled.");
+                    Player.SendMessage(p, String.Format("Block buffering on {0} enabled.", p.level.name));
                 }
                 return;
             }
@@ -112,10 +110,14 @@ namespace MCForge
                         BlockQueue.time = 100;
                         break;
                 }
-                Player.SendMessage(p, BlockQueue.blockupdates + " blocks every " + BlockQueue.time + " milliseconds = " + BlockQueue.blockupdates * (1000 / BlockQueue.time) + " blocks per second.");
-                Player.SendMessage(p, "Using ~" + (BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000 + "KB/s times " + Player.players.Count + " player(s) = ~" + Player.players.Count * ((BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000) + "KB/s"); 
+                SendEstimation(p);
                 return;
             }
+        }
+        private static void SendEstimation(Player p)
+        {
+            Player.SendMessage(p, String.Format("{0} blocks every {1} milliseconds = {2} blocks per second.", BlockQueue.blockupdates, BlockQueue.time, BlockQueue.blockupdates * (1000 / BlockQueue.time)));
+            Player.SendMessage(p, String.Format("Using ~{0}KB/s times {1} player(s) = ~{2}KB/s", (BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000, Player.players.Count, Player.players.Count * ((BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000)));
         }
         public override void Help(Player p)
         {

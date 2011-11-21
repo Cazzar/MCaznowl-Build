@@ -19,12 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Net;
 using System.IO;
 using System.Threading;
-using System.ComponentModel;
-using System.Collections;
 
 namespace MCForge
 {
@@ -95,8 +92,6 @@ namespace MCForge
                     }
                 };
                 MCForgeBeatTimer.Start();
-
-                System.Timers.Timer WomBeat = new System.Timers.Timer(500);
             }));
             backupThread.Start();
         }
@@ -333,5 +328,5 @@ namespace MCForge
                                                  '=', '+', '$', ',', '/', '?', '%', '#', '[', ']' };
     }
 
-    public enum BeatType { Minecraft, TChalo, MCForge }
+    public enum BeatType { Minecraft, MCForge }
 }

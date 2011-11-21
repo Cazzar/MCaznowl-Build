@@ -21,7 +21,7 @@ namespace MCForge
             }
             else
             {
-                Player.SendMessage(p, "Players who are " + c.red + "infected " + c.yellow + "are:");
+                Player.SendMessage(p, "Players who are " + c.red + "infected " + Server.DefaultColor + "are:");
                 string playerstring = "";
                 ZombieGame.infectd.ForEach(delegate(Player player)
                 {

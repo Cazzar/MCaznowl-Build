@@ -2442,8 +2442,7 @@ namespace MCForge
                         {
                         	if (sendcommanddata)
                         	{
-                        		WebClient wc = new WebClient();
-                                wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + command.name);
+                                using (WebClient wc = new WebClient()) { wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name); }
 							}
                             // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
                             if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
@@ -2455,8 +2454,8 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    SQLite.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                    SQLite.executeQuery("INSERT INTO Playercmds (Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + DateTime.Now + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
                                 }
                             }
                         }
@@ -2896,10 +2895,10 @@ namespace MCForge
             finally
             {
                 //if (derp) SendMessage("Something went derp when sending the map data, you should return to the main level.");
-                DateTime start = DateTime.Now;
+                //DateTime start = DateTime.Now;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-                Server.s.Log((DateTime.Now - start).TotalMilliseconds.ToString());
+                //Server.s.Log((DateTime.Now - start).TotalMilliseconds.ToString()); // We dont want random numbers showing up do we?
             }
         }
         public void SendSpawn(byte id, string name, ushort x, ushort y, ushort z, byte rotx, byte roty)
