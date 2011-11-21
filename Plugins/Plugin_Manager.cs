@@ -98,7 +98,7 @@ namespace MCForge
                     {
                         if (t.BaseType == typeof(Plugin))
                         {
-                            instance = Activator.CreateInstance(lib.GetTypes()[0]);
+                            instance = Activator.CreateInstance(t);
                             break;
                         }
                     }
