@@ -59,13 +59,13 @@ namespace MCForge
                     if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
 
                     Level level = Level.Find(t);
-                    if (level.permissionbuild > p.group.Permission)
-                    {
-                        Player.SendMessage(p, "You cannot change the perbuild of a level with a perbuild higher than your rank.");
-                        return;
-                    }
                     if (level != null)
                     {
+                        if (level.permissionbuild > p.group.Permission)
+                        {
+                            Player.SendMessage(p, "You cannot change the perbuild of a level with a perbuild higher than your rank.");
+                            return;
+                        }
                         level.permissionbuild = Perm;
                         Level.SaveSettings(level);
                         Server.s.Log(level.name + " build permission changed to " + s + ".");
