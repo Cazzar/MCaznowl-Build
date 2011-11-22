@@ -67,9 +67,8 @@
         /// This is called when a log event is being sent to the remote
         /// </summary>
         /// <param name="remote">The Remote Object</param>
-        /// <param name="p">The player that the remote is handling, Note player can be null(console)</param>
         /// <param name="message">the message being sent to the remote</param>
-        public delegate void RemoteLog(Remote remote, Player p, string message);
+        public delegate void RemoteLog(Remote remote, string message);
         public static event RemoteLog OnRemoteLog;
         public static event RemoteLog OnRemoteOpLog;
         public static event RemoteLog OnRemoteAdminLog;
