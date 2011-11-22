@@ -67,7 +67,7 @@ namespace MCForge
             }
             if (p.passtries == 3)
             {
-                p.Kick("Did you really think you could keep on guessing? =S");
+                p.Kick("Did you really think you could keep on guessing?");
                 return;
             }
             int foundone = 0;
@@ -95,7 +95,7 @@ namespace MCForge
             {
                 foreach (FileInfo file in fi)
                 {
-                    if (file.Name.Replace(".xml", "").ToLower() == p.name.ToLower())
+                    if (file.Name.Replace(".xml", "") == p.name)
                     {
                         foundone++;
                     }
@@ -116,12 +116,12 @@ namespace MCForge
                 Player.SendMessage(p, "&cAn error has occurred!");
                 return;
             }
-            if (!File.Exists("extra/passwords/" + p.name.ToLower() + ".xml"))
+            if (!File.Exists("extra/passwords/" + p.name + ".xml"))
             {
                 Player.SendMessage(p, "You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
-            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name.ToLower() + ".xml"), "MCForgeEncryption", p, message);
+            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.name + ".xml"), "MCForgeEncryption", p, message);
             if (message == password)
             {
                 Player.SendMessage(p, "Thank you, " + p.color + p.name + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
