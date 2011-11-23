@@ -32,9 +32,9 @@ namespace MCForge.Remote
         public string ip;
 
         byte[] _bu = new byte[0];
-        byte[] _tbu = new byte[0xFF];
+        readonly byte[] _tbu = new byte[0xFF];
 
-        bool upcast = false;
+        private bool Upcast { get; set; }
         public bool LoggedIn { get; protected set; }
 
         public Socket Socket;
@@ -74,7 +74,7 @@ namespace MCForge.Remote
                 Server.s.Log("[Remote] connected to the server.");
 
 
-                Socket.BeginReceive(_tbu, 0, _tbu.Length, SocketFlags.None, new AsyncCallback(Receive), this);
+                Socket.BeginReceive(_tbu, 0, _tbu.Length, SocketFlags.None, Receive, this);
             }
 
             catch (Exception e)
@@ -86,7 +86,7 @@ namespace MCForge.Remote
         static void Receive(IAsyncResult result)
         {
             Remote p = (Remote)result.AsyncState;
-            if (p.upcast || p.Socket == null)
+            if (p.Upcast || p.Socket == null)
                 return;
             try
             {
@@ -120,7 +120,8 @@ namespace MCForge.Remote
             
             try
             {
-                int length = 0; byte msg = buffer[0];
+                int length;
+                byte msg = buffer[0];
                 switch (msg)
                 {
 
@@ -187,6 +188,25 @@ namespace MCForge.Remote
         }
 
 
+        
+        public List<string> GetUnloaded()
+        {
+            var tmpList = new List<string>();
+            var realList = new List<string>();
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo("levels/");
+                FileInfo[] fi = di.GetFiles("*.lvl");
+                tmpList.AddRange(Server.levels.Select(l => l.name));
+                realList.AddRange(from t in fi where !tmpList.Contains(t.Name.Replace(".lvl", "")) select t.Name.Replace(".lvl", ""));
+                return realList;
+            }
+            catch (Exception e)
+            {
+                Server.ErrorLog(e);
+                return null;
+            }
+        }
 
         public void KickedOrDisconnect(bool kicked)
         {
@@ -196,7 +216,7 @@ namespace MCForge.Remote
             {
                 Player.GlobalMessage("%5[Remote] %f" + (kicked ? " has been kicked from server!" : "has disconnected."));
                 Server.s.Log("[Remote]" + (kicked ? " has been kicked from server!" : "has disconnected."));
-                if(kicked)SendData((int) 0x03);
+                if(kicked)SendData(0x03);
             }
             LoggedIn = false;
 
@@ -205,13 +225,13 @@ namespace MCForge.Remote
             else { if (OnRemoteKick != null) OnRemoteKick(this); }
 
             this.Dispose();
-            unregEvents();
+            UnregEvents();
             GC.Collect();
             GC.WaitForPendingFinalizers();
             
         }
 
-        private void unregEvents()
+        private void UnregEvents()
         {
             switch (RemoteType)
             {
@@ -294,7 +314,11 @@ namespace MCForge.Remote
             if (Socket != null && Socket.Connected)
             {
                 try { Socket.Close(); }
-                finally{ Socket = null;}
+                finally
+                {
+                    Socket = null;
+
+                }
             }
             Remotes.Remove(this);
         }

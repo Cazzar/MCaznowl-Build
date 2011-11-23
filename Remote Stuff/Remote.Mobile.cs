@@ -22,7 +22,7 @@ namespace MCForge.Remote
 
         private void HandleMobileChangeGroup(byte[] message)
         {
-            short length = util.BigEndianBitConverter.Big.ToInt16(message, 0);
+            short length = util.EndianBitConverter.Big.ToInt16(message, 0);
             byte id = message[2];
             string messages = Encoding.UTF8.GetString(message, 3, length);
             messages = this.DecryptMobile(messages, _keyMobile);
@@ -559,29 +559,29 @@ namespace MCForge.Remote
         {
             SendStringDataMobile(0x04, "DELETE:" + p.name);
         }
-        readonly List<string> _levels = new List<string>(Server.levels.Count);
+       
         internal void SendMapsMobile()
         {
-            _levels.Clear();
-            try
-            {
-                DirectoryInfo di = new DirectoryInfo("levels/");
-                FileInfo[] fi = di.GetFiles("*.lvl");
-                foreach (Level l in Server.levels) { _levels.Add(l.name.ToLower()); }
+            //_levels.Clear();
+            //try
+            //{
+            //    DirectoryInfo di = new DirectoryInfo("levels/");
+            //    FileInfo[] fi = di.GetFiles("*.lvl");
+            //    foreach (Level l in Server.levels) { _levels.Add(l.name.ToLower()); }
 
-                foreach (FileInfo file in fi)
-                {
-                    if (!_levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
-                    {
-                        SendStringDataMobile(0x06, "UN_" + file.Name.Replace(".lvl", ""));
-                    }
-                }
+            //    foreach (FileInfo file in fi)
+            //    {
+            //        if (!_levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
+            //        {
+            //            SendStringDataMobile(0x06, "UN_" + file.Name.Replace(".lvl", ""));
+            //        }
+            //    }
+                GetUnloaded().ForEach(l =>  SendStringDataMobile(0x06, "UN_" + l));
+                Server.levels.ForEach(l => SendStringDataMobile(0x06, "LO_" + l.name));
 
-                Server.levels.ForEach(delegate(Level l) { SendStringDataMobile(0x06, "LO_" + l.name); });
+            //}
 
-            }
-
-            catch (Exception e) { Server.ErrorLog(e); }
+            //catch (Exception e) { Server.ErrorLog(e); }
 
         }
         internal void SendGroupsMobile()
@@ -645,7 +645,7 @@ namespace MCForge.Remote
 
         void LogAdminMobile(string message)
         {
-            Player p = null;
+            Player p;
 
             message = message.Remove(0, 11);
             message = message.Replace("(Admins): ", "");
@@ -707,13 +707,13 @@ namespace MCForge.Remote
             }
             else
             {*/
-                string messaged = new StringBuilder().Append("Console").Append("ĥ").Append(message).ToString();
-                messaged = EncryptMobile(messaged, _keyMobile);
-                byte[] buffed = new byte[(messaged.Length * 2) + 3];
-                util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+                
+                message = EncryptMobile(message, _keyMobile);
+                byte[] buffed = new byte[(message.Length * 2) + 3];
+                util.EndianBitConverter.Big.GetBytes((short)message.Length).CopyTo(buffed, 1);
                 buffed[0] = 4;
-                Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-                if (OnRemoteLog != null) OnRemoteLog(this, messaged);
+                Encoding.BigEndianUnicode.GetBytes(message).CopyTo(buffed, 3);
+                if (OnRemoteLog != null) OnRemoteLog(this, message);
                 SendData(0x05, buffed);
                 System.Threading.Thread.Sleep(100);
             

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace MCForge.Remote
 {
@@ -13,15 +14,22 @@ namespace MCForge.Remote
         private Server.LogHandler _logHandler;
         private Player.OnPlayerConnect _onPlayerConnect;
         private Player.OnPlayerDisconnect _onPlayerDisconnect;
+        private Level.OnLevelLoaded _levelLoaded;
+        private Level.OnLevelUnload _levelUnloaded;
         #endregion
         private void RegEvents()
         {
             _logHandler += LogChatDesktop;
             _onPlayerConnect += PlayerConnect;
             _onPlayerDisconnect += PlayerDisconnect;
+            _levelUnloaded += LevelUnloadDesktop;
+            _levelLoaded += LevelLoadDesktop;
+
             Server.s.OnLog += _logHandler;
             Player.PlayerConnect += _onPlayerConnect;
             Player.PlayerDisconnect += _onPlayerDisconnect;
+            Level.LevelLoaded += _levelLoaded;
+            Level.LevelUnload += _levelUnloaded;
 
 #if Debug
             Server.s.Log("Registered Events");
@@ -29,11 +37,25 @@ namespace MCForge.Remote
 
         }
 
+        private void LevelLoadDesktop(Level l)
+        {
+            this.AddMapDesktop(l);
+            this.RemoveUnloadedMap(l.name);
+        }
+
+        private void LevelUnloadDesktop(Level l)
+        {
+            this.RemoveMapDesktop(l);
+            this.AddUnloadedMapDesktop(l.name);
+        }
+
         private void UnregDesktopEvents()
         {
             Server.s.OnLog -= _logHandler;
             Player.PlayerConnect -= _onPlayerConnect;
             Player.PlayerDisconnect -= _onPlayerDisconnect;
+            Level.LevelLoaded -= _levelLoaded;
+            Level.LevelUnload -= _levelUnloaded;
 #if Debug
             Server.s.Log("Unregistered Events");
 #endif
@@ -68,6 +90,7 @@ namespace MCForge.Remote
 
         private void AddPlayerDesktop(Player p)
         {
+            Thread.Sleep(500);
             var bytes = new byte[10 + (p.name.Length + p.title.Length + p.group.name.Length)];
             bytes[0] = 2;
             BitConverter.GetBytes((short)p.name.Length).CopyTo(bytes, 1);
@@ -87,13 +110,74 @@ namespace MCForge.Remote
             Encoding.UTF8.GetBytes(p.name).CopyTo(bytes, 3);
             SendData(0x13, bytes);
         }
+        private void AddMapDesktop(Level l)
+        {
+            var bytes = new byte[l.name.Length + 14];
+            bytes[0] = 0;
+            bytes[1] = 0;
+            BitConverter.GetBytes((short)l.name.Length).CopyTo(bytes, 2);
+            BitConverter.GetBytes((short)l.height).CopyTo(bytes, 4);
+            BitConverter.GetBytes((short)l.length).CopyTo(bytes, 6);
+            BitConverter.GetBytes((short)l.permissionbuild).CopyTo(bytes, 8);
+            BitConverter.GetBytes((short)l.permissionvisit).CopyTo(bytes, 10);
+            BitConverter.GetBytes((short)l.width).CopyTo(bytes, 12);
+            Encoding.UTF8.GetBytes(l.name).CopyTo(bytes, 14);
+            SendData(0x14, bytes);
+        }
+        private void RemoveMapDesktop(Level l)
+        {
+            byte[] bytes = new byte[l.name.Length + 4];
+            bytes[0] = 0;
+            bytes[1] = 1;
+            BitConverter.GetBytes((short)l.name.Length).CopyTo(bytes, 2);
+            Encoding.UTF8.GetBytes(l.name).CopyTo(bytes, 4);
+            SendData(0x14, bytes);
+        }
+        private void AddUnloadedMapDesktop(string name)
+        {
+            byte[] bytes = new byte[name.Length + 4];
+            bytes[0] = 1;
+            bytes[1] = 0;
+            BitConverter.GetBytes((short)name.Length).CopyTo(bytes, 2);
+            Encoding.UTF8.GetBytes(name).CopyTo(bytes, 4);
+            SendData(0x14, bytes);
+        }
+        private void RemoveUnloadedMap(string name)
+        {
+            byte[] bytes = new byte[name.Length + 4];
+            bytes[0] = 1;
+            bytes[1] = 1;
+            BitConverter.GetBytes((short)name.Length).CopyTo(bytes, 2);
+            Encoding.UTF8.GetBytes(name).CopyTo(bytes, 4);
+            SendData(0x14, bytes);
+        }
+        private void StartUpDesktop()
+        {
+            //SendGroupsDesktop();
+            lock (new object())
+            {
+                SendPlayersDesktop();
+                SendMapsDesktop();
+            }
+            //SendSettingsDesktop();
+        }
 
+        private void SendMapsDesktop()
+        {
+            lock (new object())
+            {
+                Server.levels.ForEach(AddMapDesktop);
+                GetUnloaded().ForEach(AddUnloadedMapDesktop);
+            }
+        }
 
-
-
-
-
-
+        private void SendPlayersDesktop()
+        {
+            foreach (var p in Player.players)
+            {
+                AddPlayerDesktop(p);
+            }
+        }
 
 
         #region HANDLERS
@@ -134,11 +218,11 @@ namespace MCForge.Remote
                 bs[0] = 1;
                 if (OnRemoteLogin != null) OnRemoteLogin(this);
                 SendData(0x40, bs);
-                //_genDH(_gend);
                 Server.s.Log("[Remote] Remote Verified, passing controls to it!");
                 LoggedIn = true;
                 if (Remotes != null) Remotes.Add(this);
                 RegEvents();
+                StartUpDesktop();
                 return;
             }
             bs[0] = 2;
@@ -147,6 +231,8 @@ namespace MCForge.Remote
             RemoteServer.tries++;
             return;
         }
+
+       
         private void HandleDesktopChat(byte[] message)
         {
             var length = BitConverter.ToInt16(message, 0);

@@ -25,7 +25,7 @@ namespace MCForge.Remote
         public bool HandleLogin(string message)
         {
             if (!String.IsNullOrEmpty(message))
-                return message.Split(':')[0] == RemoteServer.username && message.Split(':')[1] == RemoteServer.password;
+                return message.Split(':')[0] == RemoteServer.Username && message.Split(':')[1] == RemoteServer.Password;
             return false;
         }
         public void RemoteChat(string m)
@@ -86,7 +86,7 @@ namespace MCForge.Remote
                         messaged = EncryptMobile(messaged, _keyMobile);
                         byte[] buffed = new byte[(messaged.Length * 2) + 3];
                         util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                        buffed[0] = (byte)4;
+                        buffed[0] = 3;
                         Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
                         SendData(0x05, buffed);
 
