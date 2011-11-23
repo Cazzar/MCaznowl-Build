@@ -353,8 +353,9 @@ namespace MCForge
             try
             {
                 Window.thisWindow.UpdateMapList("'");
-                    //Bad idea, have window check it, not level call for window to check
+                //Bad idea, have window check it, not level call for window to check
             }
+            catch { }
             finally
             {
                 Dispose();
