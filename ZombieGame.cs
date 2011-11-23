@@ -37,7 +37,6 @@ namespace MCForge
         public int amountOfMilliseconds = 0;
         public string currentZombieLevel = "";
         public static System.Timers.Timer timer;
-        public static System.Timers.Timer timer2;
         public bool initialChangeLevel = false;
         public string currentLevelName = "";
         public static List<Player> alive = new List<Player>();
@@ -166,10 +165,6 @@ namespace MCForge
             timer.Elapsed += new ElapsedEventHandler(EndRound);
             timer.Enabled = true;
 
-            timer2 = new System.Timers.Timer(1); ///Ztime timer
-            timer2.Elapsed += new ElapsedEventHandler(ChangeTime);
-            timer2.Enabled = true;
-
             foreach (Player playaboi in Player.players)
             {
                 if(playaboi != player)
@@ -277,7 +272,6 @@ namespace MCForge
             else
                 Player.GlobalMessage(c.green + "Congratulations to our survivor(s)");
             timer.Enabled = false;
-            timer2.Enabled = false;
             string playersString = "";
             if (aliveCount == 0)
             {
