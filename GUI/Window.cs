@@ -455,36 +455,29 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtInput.Text == null || txtInput.Text.Trim() == "") { return; }
                 string text = txtInput.Text.Trim();
-                string newtext = text;
-                if (txtInput.Text[0] == '#')
+                if (String.IsNullOrEmpty(text)) return; 
+                switch (text[0])
                 {
-                    newtext = text.Remove(0, 1).Trim();
-                    Player.GlobalMessageOps(newtext);
-                    Server.s.OpLog("(OPs): Console: " + newtext);
-                    //IRCBot.Say("Console: " + newtext, true);
-                    Server.IRC.Say("Console: " + newtext, true);
-                    //   WriteLine("(OPs):<CONSOLE> " + txtInput.Text);
-                    txtInput.Clear();
+                    case '#':
+                        text = text.Remove(0, 1);
+                        Player.GlobalMessageOps(text);
+                        Server.s.OpLog("(OPs): Console: " + text);
+                        Server.IRC.Say("Console: " + text, true);
+                        break;
+                    case '+':
+                        text = text.Remove(0, 1);
+                        Player.GlobalMessageAdmins(text);
+                        Server.s.AdminLog("(Admins): Console: " + text);
+                        Server.IRC.Say("Console: " + text, true);
+                        break;
+                    default:
+                        Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + text);
+                        Server.IRC.Say("Console [" + Server.ZallState + "]: " + text);
+                        WriteLine("<CONSOLE> " + text);
+                        break;
                 }
-                else if (txtInput.Text[0] == '+')
-                {
-                    newtext = text.Remove(0, 1).Trim();
-                    Player.GlobalMessageAdmins(newtext);
-                    Server.s.AdminLog("(Admins): Console: " + newtext);
-                    //IRCBot.Say("Console: " + newtext, true);
-                    Server.IRC.Say("Console: " + newtext, true);
-                    txtInput.Clear();
-                }
-                else
-                {
-                    Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + txtInput.Text);
-                    //IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
-                    Server.IRC.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
-                    WriteLine("<CONSOLE> " + txtInput.Text);
-                    txtInput.Clear();
-                }
+                txtInput.Clear();
             }
         }
 
@@ -501,9 +494,8 @@ namespace MCForge.Gui
                     return;
                 }
 
-                if (txtCommands.Text[0] == '/')
-                    if (txtCommands.Text.Length > 1)
-                        txtCommands.Text = txtCommands.Text.Substring(1);
+                if (txtCommands.Text[0] == '/' && txtCommands.Text.Length > 1)
+                    txtCommands.Text = txtCommands.Text.Substring(1);
 
                 if (txtCommands.Text.IndexOf(' ') != -1)
                 {
@@ -520,35 +512,39 @@ namespace MCForge.Gui
                 }
 
                 new Thread(() =>{
-                try
-                {
-                    Command.all.Find(sentCmd).Use(null, sentMsg);
-                    newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
                     try
                     {
+                        Command commandcmd = Command.all.Find(sentCmd);
+                        if (commandcmd == null)
+                        {
+                            Server.s.Log("No such command!");
+                            return;
+                        }
+                        commandcmd.Use(null, sentMsg);
+                        newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
                         if (Player.sendcommanddata)
                         {
-                            Command commandcmd = Command.all.Find(sentCmd);
                             WebClient wc = new WebClient();
-                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                            try
+                            {
+                                wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                            }
+                            catch
+                            {
+                                Server.s.Log("The command data sending failed! if this happens more often I suggest to turn it off");
+                            }
+                            finally
+                            {
+                                if (wc != null)
+                                    wc.Dispose();
+                            }
                         }
                     }
-                    catch 
+                    catch (Exception ex)
                     {
-                        Server.s.Log("The command data sending failed! if this happens more often I suggest to turn it off");
+                        Server.ErrorLog(ex);
+                        newCommand("CONSOLE: Failed command.");
                     }
-                }
-                catch (Exception ex)
-                {
-                    if (!Command.all.Contains(sentCmd))
-                    {
-                        Server.s.Log("No such command!");
-                        Server.s.Log("CONSOLE: Failed command.");
-                        return;
-                    }
-                    Server.ErrorLog(ex);
-                    newCommand("CONSOLE: Failed command.");
-                }
                 }).Start();
 
                 txtCommands.Clear();
