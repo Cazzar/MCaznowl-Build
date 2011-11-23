@@ -452,7 +452,7 @@ namespace MCForge.Remote
         }
         internal void StartUpMobile()
         {
-            System.Object lockThis = new System.Object();
+            var lockThis = new Object();
             lock (lockThis)
             {
                 SendStepsMobile(0);
@@ -578,6 +578,7 @@ namespace MCForge.Remote
             //    }
                 GetUnloaded().ForEach(l =>  SendStringDataMobile(0x06, "UN_" + l));
                 Server.levels.ForEach(l => SendStringDataMobile(0x06, "LO_" + l.name));
+            
 
             //}
 
