@@ -191,14 +191,14 @@ namespace MCForge.Remote
         
         public List<string> GetUnloaded()
         {
-            var tmpList = new List<string>();
+            var tmpList = new List<string>(Server.levels.Count);
             var realList = new List<string>();
             try
             {
                 DirectoryInfo di = new DirectoryInfo("levels/");
                 FileInfo[] fi = di.GetFiles("*.lvl");
                 tmpList.AddRange(Server.levels.Select(l => l.name));
-                realList.AddRange(from t in fi where !tmpList.Contains(t.Name.Replace(".lvl", "")) select t.Name.Replace(".lvl", ""));
+                realList.AddRange(from l in fi where !tmpList.Contains(l.Name.Replace(".lvl", "")) select l.Name.Replace(".lvl", ""));
                 return realList;
             }
             catch (Exception e)

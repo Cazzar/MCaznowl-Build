@@ -82,7 +82,7 @@ namespace MCForge.Remote
         }
         void PlayerConnect(Player p)
         {
-           AddPlayerDesktop(p);
+            AddPlayerDesktop(p);
         }
 
 
@@ -154,21 +154,18 @@ namespace MCForge.Remote
         private void StartUpDesktop()
         {
             //SendGroupsDesktop();
-            lock (new object())
-            {
-                SendPlayersDesktop();
-                SendMapsDesktop();
-            }
+
+            SendPlayersDesktop();
+            SendMapsDesktop();
+
             //SendSettingsDesktop();
         }
 
         private void SendMapsDesktop()
         {
-            lock (new object())
-            {
-                Server.levels.ForEach(AddMapDesktop);
-                GetUnloaded().ForEach(AddUnloadedMapDesktop);
-            }
+            Server.levels.ForEach(AddMapDesktop);
+            GetUnloaded().ForEach(AddUnloadedMapDesktop);
+
         }
 
         private void SendPlayersDesktop()
@@ -222,7 +219,7 @@ namespace MCForge.Remote
                 LoggedIn = true;
                 if (Remotes != null) Remotes.Add(this);
                 RegEvents();
-                StartUpDesktop();
+                //StartUpDesktop();
                 return;
             }
             bs[0] = 2;
@@ -232,7 +229,7 @@ namespace MCForge.Remote
             return;
         }
 
-       
+
         private void HandleDesktopChat(byte[] message)
         {
             var length = BitConverter.ToInt16(message, 0);
@@ -250,10 +247,12 @@ namespace MCForge.Remote
             var requestId = message[0];
             switch (requestId)
             {
-                //case 1: SendPlayersDesktop(); break;
-                //case 2: SendMapsDesktop(); break;
+                case 0: StartUpDesktop();
+                    break;
+                case 1: SendPlayersDesktop(); break;
+                case 2: SendMapsDesktop(); break;
                 //case 3:SendProperties(); break;
-                case 4:SendServerInfo();break;
+                case 4: SendServerInfo(); break;
                 default: return;
 
             }
