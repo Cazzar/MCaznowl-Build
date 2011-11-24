@@ -17,18 +17,11 @@
 */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Net.Mail;
 using MCForge;
 using System.Net;
 
@@ -67,29 +60,6 @@ namespace MCForge.Gui
         {
             InitializeComponent();
         }
-
-        /*private void Window_Minimize(object sender, EventArgs e)
-        {
-            /*     if (!Minimized)
-                  {
-                      Minimized = true;
-                      ntf.Text = "MCZall";
-                      ntf.Icon = this.Icon;
-                      ntf.Click += delegate
-                      {
-                          try
-                          {
-                              Minimized = false;
-                              this.ShowInTaskbar = true;
-                              this.Show();
-                              WindowState = FormWindowState.Normal;
-                          }
-                          catch (Exception ex) { MessageBox.Show(ex.Message); }
-                      };
-                      ntf.Visible = true;
-                      this.ShowInTaskbar = false;
-                  } */
-        /*}*/
 
         public static Window thisWindow;
 
@@ -569,42 +539,14 @@ namespace MCForge.Gui
             }
         }
 
-        //void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
-
         private void btnProperties_Click_1(object sender, EventArgs e)
         {
             if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
             PropertyForm.Show();
         }
 
-        private void btnUpdate_Click_1(object sender, EventArgs e)
-        {
-            if (!MCForge_.Gui.Program.CurrentUpdate)
-                MCForge_.Gui.Program.UpdateCheck();
-            else
-            {
-                Thread messageThread = new Thread(new ThreadStart(delegate
-                {
-                    MessageBox.Show("Already checking for updates.");
-                })); messageThread.Start();
-            }
-        }
-
         public static bool prevLoaded = false;
         Form PropertyForm;
-
-        /*private void gBChat_Enter(object sender, EventArgs e)
-        {
-
-        }*/
-
-        private void btnExtra_Click_1(object sender, EventArgs e)
-        {
-            if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
-            PropertyForm.Show();
-            PropertyForm.Top = this.Top + this.Height - txtCommandsUsed.Height;
-            PropertyForm.Left = this.Left;
-        }
 
         private void Window_Resize(object sender, EventArgs e)
         {
@@ -616,22 +558,6 @@ namespace MCForge.Gui
             this.Show();
             this.BringToFront();
             WindowState = FormWindowState.Normal;
-        }
-
-        private void tmrRestart_Tick(object sender, EventArgs e)
-        {
-            if (Server.autorestart)
-            {
-                if (DateTime.Now.TimeOfDay.CompareTo(Server.restarttime.TimeOfDay) > 0 && (DateTime.Now.TimeOfDay.CompareTo(Server.restarttime.AddSeconds(1).TimeOfDay)) < 0)
-                {
-                    Player.GlobalMessage("The time is now " + DateTime.Now.TimeOfDay);
-                    Player.GlobalMessage("The server will now begin auto restart procedures.");
-                    Server.s.Log("The time is now " + DateTime.Now.TimeOfDay);
-                    Server.s.Log("The server will now begin auto restart procedures.");
-
-                    MCForge_.Gui.Program.ExitProgram(true);
-                }
-            }
         }
 
         private void openConsole_Click(object sender, EventArgs e)
@@ -685,52 +611,27 @@ namespace MCForge.Gui
 
         private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("clones").Use(null, p.name);
-            }*/
             playerselect("clones");
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("voice").Use(null, p.name);
-            }*/
             playerselect("voice");
         }
 
         private void whoisToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("whois").Use(null, p.name);
-            }*/
             playerselect("whois");
         }
 
         private void kickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
-            }*/
             playerselect("kick", " You have been kicked by the console.");
         }
 
 
         private void banToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("ban").Use(null, p.name);
-            }*/
             playerselect("ban");
         }
 
@@ -745,93 +646,43 @@ namespace MCForge.Gui
                 Command.all.Find(com).Use(null, GetSelectedPlayer().name + args);
         }
 
-        private void unloadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("unload").Use(null, l.name);
-            }*/
-            levelcommand("unload");
-        }
-
         private void finiteModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " finite");
-            }*/
             levelcommand("map", " finite");
         }
 
         private void animalAIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " ai");
-            }*/
             levelcommand("map", " ai");
         }
 
         private void edgeWaterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " edge");
-            }*/
             levelcommand("map", " edge");
         }
 
         private void growingGrassToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " grass");
-            }*/
             levelcommand("map", " grass");
         }
 
         private void survivalDeathToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " death");
-            }*/
             levelcommand("map", " death");
         }
 
         private void killerBlocksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " killer");
-            }*/
             levelcommand("map", " killer");
         }
 
         private void rPChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " chat");
-            }*/
             levelcommand("map", " chat");
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("save").Use(null, l.name);
-            }*/
             levelcommand("save");
         }
 
@@ -922,45 +773,14 @@ namespace MCForge.Gui
             e.PaintParts &= ~DataGridViewPaintParts.Focus;
         }
 
-        private void dgvPlayersTAB_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            e.PaintParts &= ~DataGridViewPaintParts.Focus;
-        }
-
         private void promoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("promote").Use(null, p.name);
-            }*/
             playerselect("promote");
         }
 
         private void demoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("demote").Use(null, p.name);
-            }*/
             playerselect("demote");
-        }
-
-        private void toolStripMenuItem12_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedLevelTab() != null)
-            {
-                Command.all.Find("unload").Use(null, GetSelectedLevelTab().name);
-            }
-        }
-
-        private void toolStripMenuItem21_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedLevelTab() != null)
-            {
-                Command.all.Find("save").Use(null, GetSelectedLevelTab().name);
-            }
         }
 
         #region Tabs
@@ -2124,21 +1944,5 @@ namespace MCForge.Gui
         {
 
         }
-
-
-
-
-        /*private void txtLog_TextChanged(object sender, EventArgs e)
-        {
-
-        }*/
-
-
-
-
-
-
-
-
     }
 }
