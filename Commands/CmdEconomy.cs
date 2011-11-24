@@ -17,7 +17,7 @@ namespace MCForge.Commands
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public override void Use(Player p, string message)
         {
-            string[] command = message.ToLower().Trim().Split(' ');
+            string[] command = message.Trim().Split(' ');
             string par0 = String.Empty;
             string par1 = String.Empty;
             string par2 = String.Empty;
@@ -29,8 +29,8 @@ namespace MCForge.Commands
             string par8 = String.Empty;
             try
             {
-                par0 = command[0];
-                par1 = command[1];
+                par0 = command[0].ToLower();
+                par1 = command[1].ToLower();
                 par2 = command[2];
                 par3 = command[3];
                 par4 = command[4];
@@ -449,7 +449,8 @@ namespace MCForge.Commands
                         case "title":
                             if (par2 == p.title) { Player.SendMessage(p, "You already have that title"); return; }
                             if (p.EnoughMoney(Economy.Settings.TitlePrice) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy a title"); return; }
-                            else { Command.all.Find("title").Use(null, p.name + " " + par2); p.money = p.money - Economy.Settings.TitlePrice; Player.SendMessage(p, "Changed title"); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
+                            if (par2.Length > 17) { Player.SendMessage(p, "Title cannot be longer than 17 characters."); return; }
+                            Command.all.Find("title").Use(null, p.name + " " + par2); p.money = p.money - Economy.Settings.TitlePrice; Player.SendMessage(p, "Changed title"); Player.SendMessage(p, "Your balance is now " + p.money + " " + Server.moneys); return;
 
                         case "ranks":
                         case "rank":
