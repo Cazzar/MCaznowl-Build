@@ -149,9 +149,10 @@ namespace MCForge_.Gui
 
         public static void handleComm()
         {
-            string s, sentCmd = String.Empty, sentMsg = String.Empty;
+            string s;
             while (true)
             {
+                string sentCmd = String.Empty, sentMsg = String.Empty;
                 s = Console.ReadLine().Trim(); // Make sure we have no whitespace!
 
                 doComm:
@@ -167,7 +168,7 @@ namespace MCForge_.Gui
 
                 try
                 {
-                    if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; return; }
+                    if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; continue; }
                     Command cmd = Command.all.Find(sentCmd);
                     if (cmd != null)
                     {
