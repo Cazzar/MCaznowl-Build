@@ -105,7 +105,6 @@ namespace MCForge.Gui
             this.clonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.promoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.demoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmrRestart = new System.Windows.Forms.Timer(this.components);
             this.iconContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownServer = new System.Windows.Forms.ToolStripMenuItem();
@@ -625,11 +624,6 @@ namespace MCForge.Gui
             this.demoteToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.demoteToolStripMenuItem.Text = "Demote";
             this.demoteToolStripMenuItem.Click += new System.EventHandler(this.demoteToolStripMenuItem_Click);
-            // 
-            // tmrRestart
-            // 
-            this.tmrRestart.Enabled = true;
-            this.tmrRestart.Interval = 1000;
             // 
             // iconContext
             // 
@@ -2428,7 +2422,6 @@ namespace MCForge.Gui
 
         #endregion
 
-        private Timer tmrRestart;
         private Button btnProperties;
         private Button btnClose;
         private ContextMenuStrip iconContext;
