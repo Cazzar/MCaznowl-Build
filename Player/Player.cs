@@ -2449,8 +2449,8 @@ namespace MCForge
                             {
                                 if (Server.useMySQL)
                                 {
-                                    MySQL.executeQuery("INSERT INTO Playercmds (ID, Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-                                    " VALUES ('" + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                    MySQL.executeQuery("INSERT INTO Playercmds (Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
+                                    " VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
                                 }
                                 else
                                 {
