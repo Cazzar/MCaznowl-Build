@@ -27,6 +27,7 @@ namespace MCForge
     public class ForgeBot
     {
         public static readonly string ColorSignal = "\x03";
+        public static readonly string ResetSignal = "\x0F";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
