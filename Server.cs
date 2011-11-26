@@ -491,6 +491,7 @@ namespace MCForge
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
             if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
+            if (!File.Exists("text/grdata.txt")) File.CreateText("text/grdata.txt");
             if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
             else
             {

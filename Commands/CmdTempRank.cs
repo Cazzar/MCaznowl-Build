@@ -74,7 +74,7 @@ namespace MCForge
             }
 
             string alltext = File.ReadAllText("text/tempranks.txt");
-            if (alltext.Contains(player) == true)
+            if (alltext.Contains(player))
             {
                 Player.SendMessage(p, "&cThe player already has a temporary rank assigned!");
                 return;
