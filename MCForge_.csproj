@@ -89,7 +89,6 @@
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdDescend.cs" />
-    <Compile Include="Commands\CmdGriefReport.cs" />
     <Compile Include="Commands\CmdOpStats.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />

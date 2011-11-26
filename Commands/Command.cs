@@ -120,7 +120,6 @@ namespace MCForge
             all.Add(new CmdGlobal());
             all.Add(new CmdGlobalCLS());
             all.Add(new CmdGoto());
-            all.Add(new CmdGriefReport());
             all.Add(new CmdGun());
             all.Add(new CmdHackRank());
             all.Add(new CmdHacks());
