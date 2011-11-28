@@ -62,7 +62,7 @@ namespace MCForge
 
             Player.SendMessage(p, stored.Count + " blocks out of " + currentBlock + " are " + Block.Name(b1));
 
-            if (p.level.bufferblocks)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
                 foreach (Pos Pos in stored)
                 {

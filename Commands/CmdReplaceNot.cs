@@ -94,7 +94,7 @@ namespace MCForge
 
             Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
 
-            if (p.level.bufferblocks)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
                 buffer.ForEach(delegate(Pos pos)
                 {

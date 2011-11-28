@@ -55,7 +55,7 @@ namespace MCForge
 
             Player.UndoPos Pos1;
             //p.UndoBuffer.Clear();
-            if (p.level.bufferblocks)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
                 p.CopyBuffer.ForEach(delegate(Player.CopyPos pos)
                 {

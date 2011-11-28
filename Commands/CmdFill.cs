@@ -125,7 +125,7 @@ namespace MCForge
                     return;
                 }
 
-                if (p.level.bufferblocks)
+                if (p.level.bufferblocks && !p.level.Instant)
                 {
                     foreach (Pos pos in buffer)
                     {

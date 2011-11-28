@@ -93,7 +93,7 @@ namespace MCForge
 
                 if (blocks.Length != p.level.blocks.Length) { p.SendMessage("Cant restore selection of different size maps."); blocks = null; return; }
 
-                if (p.level.bufferblocks)
+                if (p.level.bufferblocks && !p.level.Instant)
                 {
                     for (ushort xx = Math.Min(cpos.x, x); xx <= Math.Max(cpos.x, x); ++xx)
                         for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); ++yy)

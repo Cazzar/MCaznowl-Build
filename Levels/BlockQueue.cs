@@ -36,7 +36,7 @@ namespace MCForge
                     catch (Exception e)
                     {
                         Server.s.ErrorCase("error:" + e);
-                        Server.s.Log(String.Format("Block cache failed for map: {0}. {1}lost.", l.name, l.blockqueue.Count));
+                        Server.s.Log(String.Format("Block cache failed for map: {0}. {1} lost.", l.name, l.blockqueue.Count));
                         l.blockqueue.Clear();
                     }
                 });
