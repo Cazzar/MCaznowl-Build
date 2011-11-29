@@ -554,7 +554,8 @@ namespace MCForge
                 if (connections.Contains(p))
                     connections.Remove(p);
                 p.disconnected = true;
-            }
+                bool leavetest = false;
+             }
             catch (Exception e)
             {
                 Server.ErrorLog(e);
@@ -3719,6 +3720,7 @@ namespace MCForge
 
         public void leftGame(string kickString = "", bool skip = false)
         {
+
             //Umm...fixed?
             if (name == "")
             {
@@ -3730,7 +3732,19 @@ namespace MCForge
                 disconnected = true;
                 return;
             }
-
+            ////If player has been found in the reviewlist he will be removed
+            bool leavetest = false;
+            foreach (string testwho2 in Server.reviewlist)
+            {
+                if (testwho2 == name)
+                {
+                    leavetest = true;
+                }
+            }
+            if (leavetest)
+            {
+                Server.reviewlist.Remove(name);
+            }
             try
             {
                 SaveUndo();
