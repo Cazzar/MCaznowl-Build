@@ -35,6 +35,7 @@ namespace MCForge
     {
         PlayerCommand,
         PlayerChat,
+        MessageRecieve,
         BlockChange,
         PlayerMove,
         MYSQLSave,

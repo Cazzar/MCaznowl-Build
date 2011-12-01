@@ -2789,6 +2789,15 @@ namespace MCForge
 
             message = sb.ToString();
             int totalTries = 0;
+            if (MessageRecieve != null)
+                MessageRecieve(this, message);
+            if (OnMessageRecieve != null)
+                OnMessageRecieve(this, message);
+            if (cancelmessage)
+            {
+                cancelmessage = false;
+                return;
+            }
         retryTag: try
             {
                 foreach (string line in Wordwrap(message))

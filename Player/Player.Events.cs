@@ -4,11 +4,12 @@ namespace MCForge
 {
     public partial class Player
     {
-        public bool cancelcommand = false;
-        public bool cancelchat = false;
-        public bool cancelmove = false;
-        public bool cancelBlock = false;
-        public bool cancelmysql = false;
+        internal bool cancelcommand = false;
+        internal bool cancelchat = false;
+        internal bool cancelmove = false;
+        internal bool cancelBlock = false;
+        internal bool cancelmysql = false;
+        internal bool cancelmessage = false;
         //Should people be able to cancel this event?
         public delegate void MOTDSent(Player p, byte[] buffer);
         public static event MOTDSent OnSendMOTD;
@@ -103,6 +104,16 @@ namespace MCForge
         /// PlayerChat event is called when a player chats (Player p, string message)
         /// </summary>
         public static event OnPlayerChat PlayerChat = null;
+
+        /// <summary>
+        /// This event is called when a player is about to recieve a chat message
+        /// </summary>
+        public static event OnPlayerChat MessageRecieve = null;
+
+        /// <summary>
+        /// This event is called when the player is about to recieve a chat message
+        /// </summary>
+        public event OnPlayerChat OnMessageRecieve = null;
         /// <summary>
         /// The OnPlayerDeath event is called when...a player dies
         /// </summary>
