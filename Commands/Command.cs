@@ -273,6 +273,7 @@ namespace MCForge
             all.Add(new CmdTopTen());
             all.Add(new CmdTp());
             all.Add(new CmdTpZone());
+            all.Add(new CmdTranslate());
             all.Add(new CmdTree());
             all.Add(new CmdTrust());
             all.Add(new CmdUBan());

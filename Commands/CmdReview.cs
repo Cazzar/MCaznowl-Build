@@ -38,8 +38,7 @@ namespace MCForge
         {
             if (p != null && message == "")
             {
-                if (p.group.Permission < LevelPermission.Operator) { message = "enter"; }
-                if (p.group.Permission >= LevelPermission.Operator) { message = "view"; }
+                message = "enter"; 
             }
             switch (message.ToLower())
             {

@@ -68,6 +68,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -86,6 +88,7 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdDescend.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />
     <Compile Include="Commands\CmdReview.cs" />
+    <Compile Include="Commands\CmdTranslate.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="Commands\CmdBlockSpeed.cs" />
@@ -274,6 +278,11 @@
     <Compile Include="Remote Stuff\Remote.Mobile.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
+    <Compile Include="Service References\TranslateService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />
@@ -540,6 +549,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\TranslateService\MCForge.TranslateService.GetTranslationsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TranslateService\MCForge.TranslateService.TranslateArrayResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TranslateService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\TranslateService\configuration.svcinfo" />
+    <None Include="Service References\TranslateService\configuration91.svcinfo" />
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
     <Compile Include="Plugins\Plugin.Events.cs" />
@@ -550,6 +571,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Remote Stuff\Remote.Events.cs" />
+    <None Include="Service References\TranslateService\soap.wsdl" />
+    <None Include="Service References\TranslateService\soap.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\SoapService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt">
@@ -565,6 +600,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TranslateService\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

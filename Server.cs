@@ -122,6 +122,9 @@ namespace MCForge
         public static List<Level> levels;
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
+        //Translate settings initialize
+        public static bool transenabled = false;
+        public static string translang = "en";
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -492,6 +495,7 @@ namespace MCForge
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
             if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
             if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
+            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt");
             else
             {
                 string bantext = File.ReadAllText("text/bans.txt");
@@ -783,6 +787,7 @@ namespace MCForge
 
             ml.Queue(delegate
             {
+                Translate.Init();
                 Log("Creating listening socket on port " + Server.port + "... ");
                 if (Setup())
                 {
