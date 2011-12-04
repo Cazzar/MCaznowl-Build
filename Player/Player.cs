@@ -290,6 +290,7 @@ namespace MCForge
         {
             return CheckIfInsideBlock(this);
         }
+        
         public static bool CheckIfInsideBlock(Player p)
         {
             ushort x, y, z;
@@ -303,8 +304,10 @@ namespace MCForge
 
             if (!Block.Walkthrough(Block.Convert(b)) || !Block.Walkthrough(Block.Convert(b1)))
             {
-                Server.s.Log("HAAAAAAAX!!");
-                return true;
+                if (Block.Convert(b) != Block.Zero && Block.Convert(b) != Block.op_air)
+                    return true;
+                else
+                    return false;
             }
             else
             {
@@ -424,6 +427,12 @@ namespace MCForge
                     }
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
+                    catch { }      
+                    try
+                    {
+                        ZombieGame.alive.Remove(this);
+                        ZombieGame.infectd.Remove(this);
+                    }
                     catch { }
                     if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
