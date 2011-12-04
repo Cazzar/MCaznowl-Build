@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace MCForge
@@ -23,12 +23,8 @@ namespace MCForge
             {
                 if (!who.referee)
                 {
-                    int leftMinute = (int)((Server.zombie.amountOfMilliseconds / (1000 * 60)) % 60);
-                    if (leftMinute > 1)
-                    {
-                        Server.zombie.DisinfectPlayer(who);
-                        Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " just got Disnfected!");
-                    }
+                    Server.zombie.DisinfectPlayer(who);
+                    Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " just got Disnfected!");
                 }
             }
         }
