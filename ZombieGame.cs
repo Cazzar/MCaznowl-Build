@@ -42,8 +42,8 @@ namespace MCForge
         public string currentLevelName = "";
         public static List<Player> alive = new List<Player>();
         public static List<Player> infectd = new List<Player>();
-        string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "", "transplanted " };
-        string[] infectMessages2 = new string[] { "", "", "'s brain", "", " meet their maker", "", "", " see the dark side", "", " open source", "", "", " got nommed on", " got $nameifyed by $name!", " living brain" };
+        string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "transplanted " };
+        string[] infectMessages2 = new string[] { "", "", "'s brain", "", " meet their maker", "", "", " see the dark side", "", " open source", "", "", " got nommed on", "'s living brain" };
         public ZombieGame() { }
 
         public void StartGame(int status, int amount)
@@ -231,7 +231,7 @@ namespace MCForge
                                         }
                                         Server.lastPlayerToInfect = player1.name;
                                         player1.infectThisRound++;
-                                        int cazzar = random.Next(0, 14);
+                                        int cazzar = random.Next(0, infectMessages.Length);
                                         if (infectMessages2[cazzar] == "")
                                         {
                                             Player.GlobalMessage(c.red + player1.name + c.yellow + infectMessages[cazzar] + c.red + player2.name);
