@@ -535,7 +535,7 @@ namespace MCForge
         public void InfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
-            if (p == null) return false;
+            if (p == null) return;
             infectd.Add(p);
             alive.Remove(p);
             p.infected = true;
@@ -548,7 +548,7 @@ namespace MCForge
         public void DisinfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
-            if (p == null) return false;
+            if (p == null) return;
             infectd.Remove(p);
             alive.Add(p);
             p.infected = false;
