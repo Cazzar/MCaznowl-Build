@@ -188,8 +188,20 @@ namespace MCForge
                 aliveCount = alive.Count;
                 infectd.ForEach(delegate(Player player1)
                 {
+                    if (player1.color != c.red)
+                    {
+                        player1.color = c.red;
+                        Player.GlobalDie(player1, false);
+                        Player.GlobalSpawn(player1, player1.pos[0], player1.pos[1], player1.pos[2], player1.rot[0], player1.rot[1], false);
+                    }
                     alive.ForEach(delegate(Player player2)
                     {
+                        if (player2.color != player2.group.color)
+                        {
+                            player2.color = player2.group.color;
+                            Player.GlobalDie(player2, false);
+                            Player.GlobalSpawn(player2, player2.pos[0], player2.pos[1], player2.pos[2], player2.rot[0], player2.rot[1], false);
+                        }
                         if (player2.pos[0] / 32 == player1.pos[0] / 32 || player2.pos[0] / 32 == player1.pos[0] / 32 + 1 || player2.pos[0] / 32 == player1.pos[0] / 32 - 1)
                         {
                             if (player2.pos[1] / 32 == player1.pos[1] / 32 || player2.pos[1] / 32 == player1.pos[1] / 32 - 1 || player2.pos[1] / 32 == player1.pos[1] / 32 + 1)
@@ -353,6 +365,9 @@ namespace MCForge
             foreach (Player player in Player.players)
             {
                 player.infected = false;
+                player.color = player.group.color;
+                Player.GlobalDie(player, false);
+                Player.GlobalSpawn(player, player.pos[0], player.pos[1], player.pos[2], player.rot[0], player.rot[1], false);
                 if (player.level.name == currentLevelName)
                 {
                     if (player.referee)
@@ -496,6 +511,7 @@ namespace MCForge
         public bool InfectedPlayerLogin(Player p)
         {
             if (Server.gameStatus == 0) return false;
+            if (p == null) return false;
             p.SendMessage("You have joined in the middle of a round. You are now infected!");
             p.blockCount = 50;
             Command.all.Find("logininfect").Use(p, p.name);
@@ -515,6 +531,7 @@ namespace MCForge
         public void InfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
+            if (p == null) return false;
             infectd.Add(p);
             alive.Remove(p);
             p.infected = true;
@@ -527,6 +544,7 @@ namespace MCForge
         public void DisinfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
+            if (p == null) return false;
             infectd.Remove(p);
             alive.Add(p);
             p.infected = false;
