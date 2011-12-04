@@ -20,6 +20,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Timers;
 using System.Text;
+using System.Linq;
 
 namespace MCForge
 {
@@ -45,6 +46,30 @@ namespace MCForge
         public int lifeNum;
         public double voteTime;
         public LevelPermission setupRank, controlRank;
+
+        // Plugin event delegates
+        public delegate void GameStartHandler(Level map);
+        public delegate void GameStopHandler();
+        public delegate void MapChangeHandler(Level oldmap, Level newmap); // Keep in mind oldmap will be unloaded after this event finishes.
+        public delegate void LavaFloodHandler(ushort x, ushort y, ushort z); // Only called on normal flood, not layer flood.
+        public delegate void LayerFloodHandler(ushort x, ushort y, ushort z);
+        public delegate void RoundStartHandler(Level map);
+        public delegate void RoundEndHandler();
+        public delegate void VoteStartHandler(string[] options);
+        public delegate void VoteEndHandler(string winner);
+        public delegate void PlayerDeathHandler(Player p); // Only called when the plaer is out of the round, not when they lose a life.
+
+        // Plugin events
+        public event GameStartHandler OnGameStart;
+        public event GameStopHandler OnGameStop;
+        public event MapChangeHandler OnMapChange;
+        public event LavaFloodHandler OnLavaFlood;
+        public event LayerFloodHandler OnLayerFlood;
+        public event RoundStartHandler OnRoundStart;
+        public event RoundEndHandler OnRoundEnd;
+        public event VoteStartHandler OnVoteStart;
+        public event VoteEndHandler OnVoteEnd;
+        public event PlayerDeathHandler OnPlayerDeath;
 
         // Constructors
         public LavaSurvival()
@@ -91,12 +116,16 @@ namespace MCForge
             Server.s.Log("[Lava Survival] Game started.");
             try { LoadMap(String.IsNullOrEmpty(mapName) ? maps[rand.Next(maps.Count)] : mapName); }
             catch (Exception e) { Server.ErrorLog(e); active = false; return 4; }
+            if (OnGameStart != null)
+                OnGameStart(map);
             return 0;
         }
         public byte Stop()
         {
             if (!active) return 1; // Not started
 
+            if (OnGameStop != null)
+                OnGameStop();
             active = false;
             roundActive = false;
             voteActive = false;
@@ -110,6 +139,7 @@ namespace MCForge
             try { transferTimer.Dispose(); }
             catch { }
             map.Unload(true, false);
+            map = null;
             Server.s.Log("[Lava Survival] Game stopped.");
             return 0;
         }
@@ -118,6 +148,8 @@ namespace MCForge
         {
             if (roundActive) return;
 
+            if (OnRoundStart != null)
+                OnRoundStart(map);
             try
             {
                 deaths.Clear();
@@ -137,6 +169,8 @@ namespace MCForge
         {
             if (!roundActive) return;
 
+            if (OnRoundEnd != null)
+                OnRoundEnd();
             roundActive = false;
             flooded = false;
             try
@@ -176,7 +210,11 @@ namespace MCForge
                     mapData.layerTimer.Start();
                 }
                 else
+                {
                     map.Blockchange((ushort)mapSettings.blockFlood.x, (ushort)mapSettings.blockFlood.y, (ushort)mapSettings.blockFlood.z, mapData.block, true);
+                    if (OnLavaFlood != null)
+                        OnLavaFlood((ushort)mapSettings.blockFlood.x, (ushort)mapSettings.blockFlood.y, (ushort)mapSettings.blockFlood.z);
+                }
             }
             catch (Exception e) { Server.ErrorLog(e); }
         }
@@ -186,6 +224,8 @@ namespace MCForge
             map.ChatLevel("&4Layer " + mapData.currentLayer + " flooding...");
             Server.s.Log("[Lava Survival] Layer " + mapData.currentLayer + " flooding.");
             map.Blockchange((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z, mapData.block, true);
+            if (OnLayerFlood != null)
+                OnLayerFlood((ushort)mapSettings.blockLayer.x, (ushort)(mapSettings.blockLayer.y + ((mapSettings.layerHeight * mapData.currentLayer) - 1)), (ushort)mapSettings.blockLayer.z);
             mapData.currentLayer++;
         }
 
@@ -268,6 +308,8 @@ namespace MCForge
                             else Command.all.Find("goto").Use(pl, map.name);
                         }
                     });
+                    if (OnMapChange != null)
+                        OnMapChange(oldMap, map);
                     oldMap.Unload(true, false);
                 }
                 catch { }
@@ -298,6 +340,8 @@ namespace MCForge
                 }
             }
 
+            if (OnVoteStart != null)
+                OnVoteStart(votes.Keys.ToList().ToArray());
             map.ChatLevel("Vote for the next map! The vote ends in " + voteTime + " minute" + (voteTime == 1 ? "" : "s") +".");
             map.ChatLevel("Choices: " + str.Remove(0, 4));
 
@@ -331,6 +375,8 @@ namespace MCForge
             votes.Clear();
             voted.Clear();
 
+            if (OnVoteEnd != null)
+                OnVoteEnd(most.Key);
             map.ChatLevel("The vote has ended! &5" + most.Key.Capitalize() + Server.DefaultColor + " won with &a" + most.Value + Server.DefaultColor + " vote" + (most.Value == 1 ? "" : "s") + ".");
             map.ChatLevel("You will be transferred in 5 seconds...");
             transferTimer = new Timer(5000);
@@ -375,10 +421,12 @@ namespace MCForge
             deaths[name]++;
             if (!silent && IsPlayerDead(p))
             {
+                if (OnPlayerDeath != null)
+                    OnPlayerDeath(p);
                 Player.players.ForEach(delegate(Player pl)
                 {
                     if (pl != p && HasPlayer(pl))
-                        Player.SendMessage(pl, pl.color + pl.name + " &4ran out of lives, and is out of the round!");
+                        Player.SendMessage(pl, p.color + p.name + " &4ran out of lives, and is out of the round!");
                 });
                 Player.SendMessage(p, "&4You ran out of lives, and are out of the round!");
                 Player.SendMessage(p, "&4You can still watch, but you cannot build.");

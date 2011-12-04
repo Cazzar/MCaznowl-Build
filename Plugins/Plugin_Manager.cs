@@ -33,7 +33,7 @@ namespace MCForge
         public abstract void Unload(bool shutdown);
         public abstract string name { get; }
         public abstract string website { get; }
-        public abstract string MCForge_Version { get; }
+        public abstract string MCForge_Version { get; } // Oldest version of MCForge the plugin is compatible with.
         public abstract int build { get; }
         public abstract string welcome { get; }
 	    public abstract string creator { get; }
@@ -110,7 +110,7 @@ namespace MCForge
                     return;
                 }
                 String plugin_version = ((Plugin)instance).MCForge_Version;
-                if (plugin_version != "" && new Version(plugin_version) != Server.Version)
+                if (!String.IsNullOrEmpty(plugin_version) && new Version(plugin_version) > Server.Version)
                 {
                     Server.s.Log("This plugin (" + ((Plugin)instance).name + ") isnt compatible with this version of MCForge!");
                     Thread.Sleep(1000);
