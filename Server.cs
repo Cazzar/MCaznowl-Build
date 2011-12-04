@@ -125,6 +125,7 @@ namespace MCForge
         //Translate settings initialize
         public static bool transenabled = false;
         public static string translang = "en";
+        public static List<string> transignore = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -710,6 +711,7 @@ namespace MCForge
 
             ml.Queue(delegate
             {
+                transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
                 if (File.Exists("text/autoload.txt"))
                 {
                     try

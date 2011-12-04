@@ -728,8 +728,8 @@ namespace MCForge
                 {
                     if (Server.transenabled)
                     {
-                        string alltext = File.ReadAllText("text/transexceptions.txt");
-                        if (alltext.Contains(p.name))
+                       
+                        if (Server.transignore.Contains(p.name))
                         {
                             //turn on
                             string alllines = "";
@@ -745,6 +745,8 @@ namespace MCForge
                                 }
                             }
                             File.WriteAllText("text/transexceptions.txt", alllines);
+                            Server.transignore.Clear();
+                            Server.transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
                         }
                         else
                         {
@@ -754,6 +756,8 @@ namespace MCForge
                             sw = File.AppendText("text/transexceptions.txt");
                             sw.WriteLine(p.name);
                             sw.Close();
+                            Server.transignore.Clear();
+                            Server.transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
                         }
                     }
                     else

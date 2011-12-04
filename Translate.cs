@@ -682,14 +682,9 @@ namespace MCForge
                                 break;
                         }
 
-                        string ignore = "";
-                        foreach (string line in File.ReadAllLines("text/transexceptions.txt"))
-                        {
-                            ignore += ignore + " " + line;
-                        }
                         foreach (Player p in Player.players)
                         {
-                            if (!ignore.Contains(p.name))
+                            if (!Server.transignore.Contains(p.name))
                             {
                                 Player.SendMessage(p, player.color + player.name + "&c translated " + language + " to " + langcode + ": " + Server.DefaultColor + result);
                             }
