@@ -514,7 +514,16 @@ namespace MCForge
             if (p == null) return false;
             p.SendMessage("You have joined in the middle of a round. You are now infected!");
             p.blockCount = 50;
-            Command.all.Find("logininfect").Use(p, p.name);
+            p.blockCount = 50;
+            try
+            {
+                ZombieGame.infectd.Add(p);
+                ZombieGame.alive.Remove(p);
+                p.infected = true;
+                p.color = c.red;
+                Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
+            }
+            catch { }
             return true;
         }
 
