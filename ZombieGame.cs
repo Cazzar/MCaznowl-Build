@@ -487,6 +487,7 @@ namespace MCForge
             if ((Server.gameStatus != 0 && Server.zombieRound) && infectd.Count <= 0)
             {
                 int firstinfect = random.Next(alive.Count);
+                firstinfect = firstinfect - 1;
                 while (alive[firstinfect].referee == true || alive[firstinfect].level.name == Server.zombie.currentLevelName)
                 {
                     if (firstinfect == alive.Count)
@@ -512,8 +513,8 @@ namespace MCForge
         {
             if (Server.gameStatus == 0) return false;
             if (p == null) return false;
+            if (p.level.name != Server.zombie.currentLevelName) return false;
             p.SendMessage("You have joined in the middle of a round. You are now infected!");
-            p.blockCount = 50;
             p.blockCount = 50;
             try
             {
