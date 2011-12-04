@@ -732,32 +732,17 @@ namespace MCForge
                         if (Server.transignore.Contains(p.name))
                         {
                             //turn on
-                            string alllines = "";
-                            foreach (string line in File.ReadAllLines("text/transexceptions.txt"))
-                            {
-                                if (line.Contains(p.name))
-                                {
-                                    Player.SendMessage(p, "Personal translation has been turned &aON");
-                                }
-                                else
-                                {
-                                    alllines = alllines + line + "\r\n";
-                                }
-                            }
-                            File.WriteAllText("text/transexceptions.txt", alllines);
-                            Server.transignore.Clear();
-                            Server.transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
+                            Player.SendMessage(p, "Personal translation has been turned &aON");
+                            Server.transignore.Remove(p.name);
+                            File.WriteAllLines("text/transexceptions.txt", Server.transignore.ToArray());
+                            
                         }
                         else
                         {
                             //turn off
                             Player.SendMessage(p, "Personal translation has been turned &cOFF");
-                            StreamWriter sw;
-                            sw = File.AppendText("text/transexceptions.txt");
-                            sw.WriteLine(p.name);
-                            sw.Close();
-                            Server.transignore.Clear();
-                            Server.transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
+                            Server.transignore.Add(p.name);
+                            File.WriteAllLines("text/transexceptions", Server.transignore.ToArray());
                         }
                     }
                     else
