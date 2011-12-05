@@ -512,11 +512,7 @@ namespace MCForge
             p.blockCount = 50;
             try
             {
-                ZombieGame.infectd.Add(p);
-                ZombieGame.alive.Remove(p);
-                p.infected = true;
-                p.color = c.red;
-                Player.GlobalSpawn(p, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1], false);
+                Server.zombie.InfectPlayer(p);
             }
             catch { }
             return true;
