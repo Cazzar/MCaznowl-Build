@@ -47,10 +47,12 @@ namespace MCForge
             Thread flyThread = new Thread(new ThreadStart(delegate
             {
                 Pos pos;
+                ushort[] oldpos = new ushort[3];
                 List<Pos> buffer = new List<Pos>();
                 while (p.isFlying)
                 {
-                    //Thread.Sleep(20);
+                    Thread.Sleep(1);
+                    if (p.pos == oldpos) continue;
                     try
                     {
                         List<Pos> tempBuffer = new List<Pos>();
@@ -101,6 +103,7 @@ namespace MCForge
                         catch { }
                     }
                     catch { }
+                    oldpos = p.pos;
                 }
 
                 foreach (Pos cP in buffer)
