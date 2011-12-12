@@ -2123,9 +2123,10 @@ namespace MCForge
                 }
                 Player.lastMSG = this.name;
 
-                if (text[0] == '@' && text[1] == '@')
+                if (text.Length >= 2 && text[0] == '@' && text[1] == '@')
                 {
                     text = text.Remove(0, 2);
+                    if (text.Length < 1) { SendMessage("No message entered"); return; }
                     SendChat(this, Server.DefaultColor + "[<] Console: &f" + message);
                     Server.s.Log("[>] " + this.name + ": " + message);
                     return;
