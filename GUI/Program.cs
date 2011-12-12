@@ -157,7 +157,8 @@ namespace MCForge_.Gui
                     string sentCmd = String.Empty, sentMsg = String.Empty;
                     s = Console.ReadLine().Trim(); // Make sure we have no whitespace!
 
-                    if (s.StartsWith("/")) s = s.Remove(0, 1);
+                    if (s.Length < 1) continue;
+                    if (s[0] == '/') s = s.Remove(0, 1);
                     else goto talk;
                     if (s.IndexOf(' ') != -1)
                     {
@@ -205,20 +206,26 @@ namespace MCForge_.Gui
                         Player.SendMessage(pl, msg);
                         continue;
                     }
-                    if (s[0] == '#')
+                    else if (s[0] == '#')
                     {
-                        Player.GlobalMessageOps("(To Ops) " + msg);
+                        msg = String.Format("To Ops -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
+                        Player.GlobalMessageOps(msg);
                         Server.IRC.Say(msg, true);
                         continue;
                     }
-                    if (s[0] == '+')
+                    else if (s[0] == '+')
                     {
-                        Player.GlobalMessageAdmins("(To Admins) " + msg);
+                        msg = String.Format("To Admins -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
+                        Player.GlobalMessageAdmins(msg);
                         Server.IRC.Say(msg, true);
                         continue;
                     }
-                    Player.GlobalMessage(msg);
-                    Server.IRC.Say(msg);
+                    else
+                    {
+                        Player.GlobalMessage(msg);
+                        Server.IRC.Say(msg);
+                    }
+                    Console.WriteLine(msg);
                 }
                 catch (Exception ex)
                 {
