@@ -194,7 +194,6 @@ namespace MCForge_.Gui
                     }
 
                 talk:
-                    msg = String.Format("{0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s);
                     if (s[0] == '@')
                     {
                         s = s.Remove(0, 1);
@@ -204,24 +203,22 @@ namespace MCForge_.Gui
                         if (pl == null) { Console.WriteLine("Player not found."); continue; }
                         msg = String.Format("&9[>] {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s.Substring(spacePos + 1));
                         Player.SendMessage(pl, msg);
-                        continue;
                     }
                     else if (s[0] == '#')
                     {
                         msg = String.Format("To Ops -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessageOps(msg);
                         Server.IRC.Say(msg, true);
-                        continue;
                     }
                     else if (s[0] == '+')
                     {
                         msg = String.Format("To Admins -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessageAdmins(msg);
                         Server.IRC.Say(msg, true);
-                        continue;
                     }
                     else
                     {
+                        msg = String.Format("{0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessage(msg);
                         Server.IRC.Say(msg);
                     }
