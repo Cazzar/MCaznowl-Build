@@ -2123,6 +2123,13 @@ namespace MCForge
                 }
                 Player.lastMSG = this.name;
 
+                if (text[0] == '@' && text[1] == '@')
+                {
+                    text = text.Remove(0, 2);
+                    SendChat(this, Server.DefaultColor + "[<] Console: &f" + message);
+                    Server.s.Log("[>] " + this.name + ": " + message);
+                    return;
+                }
                 if (text[0] == '@' || whisper)
                 {
                     string newtext = text;

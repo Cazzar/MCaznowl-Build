@@ -493,10 +493,11 @@ namespace MCForge
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
-            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
-            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
-            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
-            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt").Dispose();
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt").Dispose();
+            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt").Dispose();
+            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt").Dispose();
+            // DO NOT STICK ANYTHING IN BETWEEN HERE!!!!!!!!!!!!!!!
             else
             {
                 string bantext = File.ReadAllText("text/bans.txt");

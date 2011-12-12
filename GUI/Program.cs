@@ -149,49 +149,81 @@ namespace MCForge_.Gui
 
         public static void handleComm()
         {
-            string s;
+            string s, msg;
             while (true)
             {
-                string sentCmd = String.Empty, sentMsg = String.Empty;
-                s = Console.ReadLine().Trim(); // Make sure we have no whitespace!
-
-                doComm:
-                if (s.StartsWith("/")) s = s.Remove(0, 1);
-                else goto talk;
-                if (s.IndexOf(' ') != -1)
-                {
-                    sentCmd = s.Substring(0, s.IndexOf(' '));
-                    sentMsg = s.Substring(s.IndexOf(' ') + 1);
-                }
-                else if (s != String.Empty) sentCmd = s;
-                else goto talk;
-
                 try
                 {
-                    if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; continue; }
-                    Command cmd = Command.all.Find(sentCmd);
-                    if (cmd != null)
+                    string sentCmd = String.Empty, sentMsg = String.Empty;
+                    s = Console.ReadLine().Trim(); // Make sure we have no whitespace!
+
+                    if (s.StartsWith("/")) s = s.Remove(0, 1);
+                    else goto talk;
+                    if (s.IndexOf(' ') != -1)
                     {
-                        cmd.Use(null, sentMsg);
-                        Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                        if (sentCmd.ToLower() != "restart")
-                            continue;
-                        break;
+                        sentCmd = s.Substring(0, s.IndexOf(' '));
+                        sentMsg = s.Substring(s.IndexOf(' ') + 1);
                     }
-                    else
+                    else if (s != String.Empty) sentCmd = s;
+                    else goto talk;
+
+                    try
                     {
-                        Console.WriteLine("CONSOLE: Unknown command.");
+                        if (Server.Check(sentCmd, sentMsg)) { Server.cancelcommand = false; continue; }
+                        Command cmd = Command.all.Find(sentCmd);
+                        if (cmd != null)
+                        {
+                            cmd.Use(null, sentMsg);
+                            Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
+                            if (sentCmd.ToLower() != "restart")
+                                continue;
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("CONSOLE: Unknown command.");
+                            continue;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Server.ErrorLog(e);
+                        Console.WriteLine("CONSOLE: Failed command.");
                         continue;
                     }
-                }
-                catch (Exception e)
-                {
-                    Server.ErrorLog(e);
-                    Console.WriteLine("CONSOLE: Failed command.");
-                    continue;
-                }
 
-                talk: s = String.Format("/say {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s); goto doComm;
+                talk:
+                    msg = String.Format("{0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s);
+                    if (s[0] == '@')
+                    {
+                        s = s.Remove(0, 1);
+                        int spacePos = s.IndexOf(' ');
+                        if (spacePos == -1) { Console.WriteLine("No message entered."); continue; }
+                        Player pl = Player.Find(s.Substring(0, spacePos));
+                        if (pl == null) { Console.WriteLine("Player not found."); continue; }
+                        msg = String.Format("&9[>] {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s.Substring(spacePos + 1));
+                        Player.SendMessage(pl, msg);
+                        continue;
+                    }
+                    if (s[0] == '#')
+                    {
+                        Player.GlobalMessageOps("(To Ops) " + msg);
+                        Server.IRC.Say(msg, true);
+                        continue;
+                    }
+                    if (s[0] == '+')
+                    {
+                        Player.GlobalMessageAdmins("(To Admins) " + msg);
+                        Server.IRC.Say(msg, true);
+                        continue;
+                    }
+                    Player.GlobalMessage(msg);
+                    Server.IRC.Say(msg);
+                }
+                catch (Exception ex)
+                {
+                    Server.ErrorLog(ex);
+                }
             }
         }
         /*
