@@ -2127,8 +2127,8 @@ namespace MCForge
                 {
                     text = text.Remove(0, 2);
                     if (text.Length < 1) { SendMessage("No message entered"); return; }
-                    SendChat(this, Server.DefaultColor + "[<] Console: &f" + message);
-                    Server.s.Log("[>] " + this.name + ": " + message);
+                    SendChat(this, Server.DefaultColor + "[<] Console: &f" + text);
+                    Server.s.Log("[>] " + this.name + ": " + text);
                     return;
                 }
                 if (text[0] == '@' || whisper)
