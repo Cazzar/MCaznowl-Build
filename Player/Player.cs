@@ -2157,18 +2157,6 @@ namespace MCForge
                         return;
                     }
                 }
-                if (text[0] == '-')
-                {
-                    string newtext = text;
-                    if (text[0] == '-') newtext = text.Remove(0, 1).Trim();
-
-                    GlobalMessage(color + prefix + name + ": &f" + newtext);
-                    Server.s.Log(name + ": " + newtext);
-                    //Server.s.OpLog(name + ": " + newtext);
-                    //IRCBot.Say(name + ": " + newtext, true);
-                    Server.IRC.Say(name + ": " + newtext, true);
-                    return;
-                }
                 if (text[0] == '#' || opchat)
                 {
                     string newtext = text;
@@ -2711,17 +2699,17 @@ namespace MCForge
 // Begin fix to replace all invalid color codes typed in console or chat with "." 
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
                 }
                 for (char ch = (char)103; ch <= (char)127; ch++) // Characters that cause clients to disconnect
                 {
-                    sb.Replace("%" + ch, String.Empty);
+                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
 		}
 // End fix
