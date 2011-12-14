@@ -38,7 +38,7 @@ namespace MCForge
             else if (p != null) { if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot freeze someone of equal or greater rank."); return; } }
             if (Server.devs.Contains(who.name.ToLower()))
             {
-                Player.SendMessage(p, "You cant freeze a MCForge Dev!");
+                Player.SendMessage(p, "You can't freeze a MCForge Developer!");
                 return;
             }
             if (!who.frozen)

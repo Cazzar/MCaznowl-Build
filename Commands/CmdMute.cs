@@ -32,7 +32,7 @@ namespace MCForge
         {
             if (message == "" || message.Split(' ').Length > 2) { Help(p); return; }
             Player who = Player.Find(message);
-            if (who == null)
+            if (who == null && Server.devs.Contains(who.name.ToLower()) == false)
             {
                 if (Server.muted.Contains(message))
                 {
@@ -41,7 +41,10 @@ namespace MCForge
                     Server.muted.Save("muted.txt");
                     return;
                 }
-                Player.SendMessage(p, "The player entered is not online.");
+            }   
+            else
+            {
+                Player.SendMessage(p, "The player entered is not online, or is a developer.");
                 return;
             }
             if (who == p)
@@ -71,7 +74,7 @@ namespace MCForge
                 }
                 if (Server.devs.Contains(who.name.ToLower()))
                 {
-                    Player.SendMessage(p, "You cant mute a MCForge Dev!");
+                    Player.SendMessage(p, "You can't mute a MCForge Developer!");
                     return;
                 }
                 who.muted = true;
