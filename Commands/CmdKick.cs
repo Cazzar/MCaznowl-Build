@@ -49,7 +49,11 @@ namespace MCForge
                     Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + " but failed.", false); 
                     return; 
                 }
-
+            if (Server.devs.Contains(who.name.ToLower()))
+            {
+                Player.SendMessage(p, "You can't kick a dev!");
+                return;
+            }
             who.Kick(message);
         }
         public override void Help(Player p)
