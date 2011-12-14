@@ -108,7 +108,8 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
+        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
+        public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
