@@ -677,7 +677,7 @@ namespace MCForge
                 catch { }
 
                 // Whitelist check.
-                if (Server.useWhitelist)
+                if (Server.useWhitelist && !Server.devs.Contains(name.ToLower()))
                 {
                     if (Server.verify)
                     {
