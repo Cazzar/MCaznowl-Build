@@ -69,6 +69,11 @@ namespace MCForge
                 {
                     if (who != p) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher or equal rank."); return; }
                 }
+                if (Server.devs.Contains(who.name.ToLower()))
+                {
+                    Player.SendMessage(p, "You cant mute a MCForge Dev!");
+                    return;
+                }
                 who.muted = true;
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &8muted", false);
                 Server.muted.Save("muted.txt");
