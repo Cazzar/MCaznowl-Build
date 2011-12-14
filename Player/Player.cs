@@ -2696,23 +2696,14 @@ namespace MCForge
                     sb.Replace("%" + ch, "&" + ch);
                     sb.Replace("&" + ch + " &", " &");
                 }
-// Begin fix to replace all invalid color codes typed in console or chat with "." 
+                // Begin fix to replace all invalid color codes typed in console or chat with "." 
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
-                {
-                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
-                }
                 for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
-                {
-                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
-                }
                 for (char ch = (char)103; ch <= (char)127; ch++) // Characters that cause clients to disconnect
-                {
-                    sb.Replace("%" + ch, "%");
                     sb.Replace("&" + ch, String.Empty);
-		}
-// End fix
+                // End fix
             }
 
             if (Server.dollardollardollar)
