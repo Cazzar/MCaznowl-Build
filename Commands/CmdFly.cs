@@ -103,7 +103,7 @@ namespace MCForge
                         catch { }
                     }
                     catch { }
-                    oldpos = p.pos;
+                    p.pos.CopyTo(oldpos);
                 }
 
                 foreach (Pos cP in buffer)
