@@ -51,7 +51,7 @@ namespace MCForge
 
         public static bool storeHelp = false;
         public static string storedHelp = "";
-
+        internal bool dontmindme = false;
         public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
@@ -563,7 +563,6 @@ namespace MCForge
                 if (connections.Contains(p))
                     connections.Remove(p);
                 p.disconnected = true;
-                bool leavetest = false;
              }
             catch (Exception e)
             {
@@ -602,7 +601,13 @@ namespace MCForge
                         length = 65;
                         break; // chat
                     default:
-                        Kick("Unhandled message id \"" + msg + "\"!");
+                        if (!dontmindme)
+                            Kick("Unhandled message id \"" + msg + "\"!");
+                        else
+                        {
+                            CloseSocket();
+                            disconnected = true;
+                        }
                         return new byte[0];
                 }
                 if (buffer.Length > length)
@@ -2823,8 +2828,10 @@ namespace MCForge
             byte[] buffer = new byte[130];
             buffer[0] = (byte)8;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
-
+            if (!Server.UseTextures)
+                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            else
+                StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65);
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
             else
@@ -2842,7 +2849,7 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
@@ -3686,7 +3693,7 @@ namespace MCForge
         public void Disconnect() { leftGame(); }
         public void Kick(string kickString) { leftGame(kickString); }
 
-        private void CloseSocket()
+        internal void CloseSocket()
         {
             // Try to close the socket.
             // Sometimes its already closed so these lines will cause an error
