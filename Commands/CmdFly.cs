@@ -51,7 +51,7 @@ namespace MCForge
                 List<Pos> buffer = new List<Pos>();
                 while (p.isFlying)
                 {
-                    Thread.Sleep(1);
+                    Thread.Sleep(20);
                     if (p.pos == oldpos) continue;
                     try
                     {
@@ -103,7 +103,7 @@ namespace MCForge
                         catch { }
                     }
                     catch { }
-                    oldpos = p.pos;
+                    p.pos.CopyTo(oldpos, 0);
                 }
 
                 foreach (Pos cP in buffer)
