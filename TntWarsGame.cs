@@ -24,6 +24,8 @@ namespace MCForge
         public TntWarsGameMode GameMode = TntWarsGameMode.TDM;
         public TntWarsDifficulty GameDifficulty = TntWarsDifficulty.Normal;
         public int GameNumber;
+        public ushort[] RedSpawn = null;
+        public ushort[] BlueSpawn = null;
             //incase they don't want the default
         public int TntPerPlayerAtATime = Properties.DefaultTntPerPlayerAtATime;
         public bool GracePeriod = Properties.DefaultGracePeriodAtStart;
@@ -90,40 +92,6 @@ namespace MCForge
             lvl.permissionbuild = Group.Find(Server.defaultRank).Permission;
             lvl.permissionvisit = Group.Find(Server.defaultRank).Permission;
             lvl.Killer = true;
-            //Announcing Etc.
-            string Gamemode = "Free For All";
-            if (GameMode == TntWarsGameMode.TDM) Gamemode = "Team Deathmatch";
-            string Difficulty = "Normal";
-            string HitsToDie = "2";
-            string explosiontime = "medium";
-            string explosionsize = "normal";
-            switch (GameDifficulty)
-            {
-                case TntWarsDifficulty.Easy:
-                    Difficulty = "Easy";
-                    explosiontime = "long";
-                    break;
-
-                case TntWarsDifficulty.Normal:
-                    Difficulty = "Normal";
-                    break;
-
-                case TntWarsDifficulty.Hard:
-                    HitsToDie = "1";
-                    Difficulty = "Hard";
-                    break;
-
-                case TntWarsDifficulty.Extreme:
-                    HitsToDie = "1";
-                    explosiontime = "short";
-                    explosionsize = "big";
-                    Difficulty = "Extreme";
-                    break;
-            }
-            string teamkillling = "Disabled";
-            if (TeamKills) teamkillling = "Enabled";
-            Player.GlobalMessage(c.red + "TNT Wars " + Server.DefaultColor + "on '" + lvl.name + "' has started " + c.teal + Gamemode + Server.DefaultColor + " with a difficulty of " + c.teal + Difficulty + Server.DefaultColor + " (" + c.teal + HitsToDie + Server.DefaultColor + " hits to die, a " + c.teal + explosiontime + Server.DefaultColor + " explosion delay and with a " + c.teal + explosionsize + Server.DefaultColor + " explosion size)" + ", team killing is " + c.teal + teamkillling + Server.DefaultColor + " and you can place " + c.teal + TntPerPlayerAtATime.ToString() + Server.DefaultColor + " TNT at a time and there is a score limit of " + c.teal + ScoreLimit.ToString() + Server.DefaultColor + "!!");
-            if (GameMode == TntWarsGameMode.TDM) SendAllPlayersMessage("TNT Wars: Start your message with ':' to send it as a team chat!");
             //Seting Up Some Player stuff
             {
                 foreach (player p in Players)
@@ -163,10 +131,47 @@ namespace MCForge
                         while (p.p.Loading) { Thread.Sleep(250); }
                         p.p.inTNTwarsMap = true;
                     }
-                    Command.all.Find("spawn").Use(p.p, "");
                 }
-                Command.all.Find("reveal").Use(null, "all " + lvl.name);//So peoples names apear above their heads in the right color!
+                if (GameMode == TntWarsGameMode.TDM) { Command.all.Find("reveal").Use(null, "all " + lvl.name); }//So peoples names apear above their heads in the right color!
+                foreach (player p in Players)
+                {
+                    Command.all.Find("spawn").Use(p.p, ""); //This has to be after reveal so that they spawn in the correct place!!
+                }
             }
+            //Announcing Etc.
+            string Gamemode = "Free For All";
+            if (GameMode == TntWarsGameMode.TDM) Gamemode = "Team Deathmatch";
+            string Difficulty = "Normal";
+            string HitsToDie = "2";
+            string explosiontime = "medium";
+            string explosionsize = "normal";
+            switch (GameDifficulty)
+            {
+                case TntWarsDifficulty.Easy:
+                    Difficulty = "Easy";
+                    explosiontime = "long";
+                    break;
+
+                case TntWarsDifficulty.Normal:
+                    Difficulty = "Normal";
+                    break;
+
+                case TntWarsDifficulty.Hard:
+                    HitsToDie = "1";
+                    Difficulty = "Hard";
+                    break;
+
+                case TntWarsDifficulty.Extreme:
+                    HitsToDie = "1";
+                    explosiontime = "short";
+                    explosionsize = "big";
+                    Difficulty = "Extreme";
+                    break;
+            }
+            string teamkillling = "Disabled";
+            if (TeamKills) teamkillling = "Enabled";
+            Player.GlobalMessage(c.red + "TNT Wars " + Server.DefaultColor + "on '" + lvl.name + "' has started " + c.teal + Gamemode + Server.DefaultColor + " with a difficulty of " + c.teal + Difficulty + Server.DefaultColor + " (" + c.teal + HitsToDie + Server.DefaultColor + " hits to die, a " + c.teal + explosiontime + Server.DefaultColor + " explosion delay and with a " + c.teal + explosionsize + Server.DefaultColor + " explosion size)" + ", team killing is " + c.teal + teamkillling + Server.DefaultColor + " and you can place " + c.teal + TntPerPlayerAtATime.ToString() + Server.DefaultColor + " TNT at a time and there is a score limit of " + c.teal + ScoreLimit.ToString() + Server.DefaultColor + "!!");
+            if (GameMode == TntWarsGameMode.TDM) SendAllPlayersMessage("TNT Wars: Start your message with ':' to send it as a team chat!");
             //GracePeriod
             if (GracePeriod) //Check This Grace Stuff
             {
@@ -377,7 +382,11 @@ namespace MCForge
             }
             //Reset map
             Command.all.Find("restore").Use(null, BackupNumber.ToString() + " " + lvl.name);
-
+            if (lvl.overload == 2501)
+            {
+                lvl.overload = 1500;
+                Server.s.Log("TNT Wars: Set level physics overload back to 1500");
+            }
         }
 
         public void SendAllPlayersMessage(string Message)

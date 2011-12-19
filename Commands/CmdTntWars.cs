@@ -100,6 +100,7 @@ namespace MCForge
 							if (it == null)
 							{
 								Player.SendMessage(p, "TNT Wars Error: There isn't a game on your current level!");
+								return;
 							}
 						}
 						else
@@ -493,6 +494,12 @@ namespace MCForge
 									{
 										if (it.PlayingPlayers() >= 2)
 										{
+											if (it.lvl.overload < 2500)
+											{
+												it.lvl.overload = 2501;
+												Player.SendMessage(p, "TNT Wars: Increasing physics overload to 2500");
+												Server.s.Log("TNT Wars: Increasing physics overload to 2500");
+											}
 											Thread t = new Thread(it.Start);
 											t.Start();
 										}
@@ -533,8 +540,47 @@ namespace MCForge
 								}
 								break;
 
+							case "spawn":
+							case "spawns":
+							case "sp":
+							case "teamspawns":
+							case "teamspawn":
+							case "ts":
+							case "teams":
+							case "tspawn":
+							case "tspawns":
+								if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) { Player.SendMessage(p, "TNT Wars Error: Cannot set spawns because you are on Team Deathmatch!"); return; }
+								switch (text[2])
+								{
+									case "red":
+									case "r":
+									case "1":
+                                        it.RedSpawn = new ushort[5];
+										it.RedSpawn[0] = (ushort)(p.pos[0] / 32);
+										it.RedSpawn[1] = (ushort)(p.pos[1] / 32);
+										it.RedSpawn[2] = (ushort)(p.pos[2] / 32);
+										it.RedSpawn[3] = p.rot[0];
+										it.RedSpawn[4] = p.rot[1];
+										Player.SendMessage(p, "TNT Wars: Set " + c.red + "Red" + Server.DefaultColor + " spawn");
+										break;
+
+									case "blue":
+									case "b":
+									case "2":
+                                        it.BlueSpawn = new ushort[5];
+										it.BlueSpawn[0] = (ushort)(p.pos[0] / 32);
+										it.BlueSpawn[1] = (ushort)(p.pos[1] / 32);
+										it.BlueSpawn[2] = (ushort)(p.pos[2] / 32);
+										it.BlueSpawn[3] = p.rot[0];
+										it.RedSpawn[4] = p.rot[1];
+										Player.SendMessage(p, "TNT Wars: Set " + c.blue + "Blue" + Server.DefaultColor + " spawn");
+										break;
+								}
+								break;
+
 							case "level":
 							case "l":
+							case "lvl":
 								if (text[2] == "")
 								{
 									it.lvl = p.level;
@@ -549,6 +595,8 @@ namespace MCForge
 									}
 								}
 								Player.SendMessage(p, "TNT Wars: Level is now '" + it.lvl.name + "'");
+								it.RedSpawn = null;
+								it.BlueSpawn = null;
 								it.CheckAllSetUp(p);
 								break;
 
@@ -1329,7 +1377,6 @@ namespace MCForge
 								break;
 
 							case "balance":
-							case "teams":
 							case "balanceteams":
 							case "bt":
 							case "b":
@@ -1465,10 +1512,11 @@ namespace MCForge
 								Player.SendMessage(p, "new {n}/delete - create/delete a game");
 								Player.SendMessage(p, "start/stop/reset {r} - start/stop/reset the current game");
 								Player.SendMessage(p, "level {l} - change the level for the game");
+                                Player.SendMessage(p, "teamsspawns {ts} [red/blue] - set the spawns for red/blue");
 								Player.SendMessage(p, "tnt {t} - change the amount of tnt per player at a time");
 								Player.SendMessage(p, "graceperiod {g} [on/off/check] - enable/disable the grace period (or check it)");
 								Player.SendMessage(p, "gracetime {gt} [set/check] <amount> - set the grace period time (in seconds) (or check it)");
-								Player.SendMessage(p, "gamemode {m} [check/tdm/ffa] - change the gamemode to FFA (Free For All) or TDM (Team Death Match) (or check it)");
+								Player.SendMessage(p, "gamemode {m} [check/tdm/ffa] - change the gamemode to FFA or TDM (or check it)");
 								Player.SendMessage(p, "difficulty {d} [1/2/3/4] - change the difficulty (easy/normal/hard/extreme)");
 								Player.SendMessage(p, "balanceteams {b} [on/off/check] - enable/disable balancing teams (or check it)");
 								Player.SendMessage(p, "teamkill {tk} [on/off/check] - enable/disable teamkills (or check it)");

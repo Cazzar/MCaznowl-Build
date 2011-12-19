@@ -2214,8 +2214,8 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                             TntWarsGame.player pl = it.FindPlayer(this);
                             foreach (TntWarsGame.player p in it.Players)
                             {
-                                if (pl.Red && p.Red) SendMessage(p.p, "To Team " + c.red + "-" + color + name + Server.DefaultColor + "- " + newtext);
-                                if (pl.Blue && p.Blue) SendMessage(p.p, "To Team " + c.blue + "-" + color + name + Server.DefaultColor + "- " + newtext);
+                                if (pl.Red && p.Red) SendMessage(p.p, "To Team " + c.red + "-" + color + name + c.red + "- " + Server.DefaultColor + newtext);
+                                if (pl.Blue && p.Blue) SendMessage(p.p, "To Team " + c.blue + "-" + color + name + c.blue + "- " + Server.DefaultColor + newtext);
                             }
                             Server.s.Log("[TNT Wars] [TeamChat (" + (pl.Red ? "Red" : "Blue") + ") " + name + " " + newtext);
                             return;
