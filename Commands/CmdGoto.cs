@@ -115,6 +115,25 @@ namespace MCForge
                                 if (ZombieGame.infectd.Contains(p))
                                 ZombieGame.infectd.Remove(p);
                             }
+
+                            if (TntWarsGame.GetTntWarsGame(p) != null)
+                            {
+                                Player.SendMessage(p, "TNT Wars: To stop not being able to build, please leave TNT Wars!");
+                            }
+                            if (p.inTNTwarsMap)
+                            {
+                                p.canBuild = true;
+                            }
+                            if (TntWarsGame.Find(p.level) != null)
+                            {
+                                if (TntWarsGame.Find(p.level).GameStatus != TntWarsGame.TntWarsGameStatus.Finished && TntWarsGame.Find(p.level).GameStatus != TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
+                                {
+                                    p.canBuild = false;
+                                    Player.SendMessage(p, "TNT Wars: Disabled your building because you are in a TNT Wars map!");
+                                }
+
+                                p.inTNTwarsMap = true;
+                            }
                         }
                         else Player.SendMessage(p, "The level " + message + " is locked.");
                     }
