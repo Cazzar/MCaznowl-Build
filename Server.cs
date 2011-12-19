@@ -108,7 +108,8 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
+        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "shade2010", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
+        public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -125,6 +126,7 @@ namespace MCForge
         //Translate settings initialize
         public static bool transenabled = false;
         public static string translang = "en";
+        public static List<string> transignore = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -492,10 +494,11 @@ namespace MCForge
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
-            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
-            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
-            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
-            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt").Dispose();
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt").Dispose();
+            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt").Dispose();
+            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt").Dispose();
+            // DO NOT STICK ANYTHING IN BETWEEN HERE!!!!!!!!!!!!!!!
             else
             {
                 string bantext = File.ReadAllText("text/bans.txt");
@@ -676,6 +679,13 @@ namespace MCForge
                                 Level.CreateLeveldb(Server.level);
                             }
                         }
+                        //Wom Textures
+                        if (Server.UseTextures)
+                        {
+                            mainLevel.textures.sendwomid = true;
+                            mainLevel.textures.MOTD = Server.motd;
+                            mainLevel.textures.CreateCFG();
+                        }
                     }
                     else
                     {
@@ -710,6 +720,7 @@ namespace MCForge
 
             ml.Queue(delegate
             {
+                transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
                 if (File.Exists("text/autoload.txt"))
                 {
                     try

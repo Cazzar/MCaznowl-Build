@@ -1322,11 +1322,12 @@ namespace MCForge
             w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
             w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString());
             w.WriteLine();
-            w.WriteLine("#WoM Direct thingy");
+            w.WriteLine("#WoM Settings");
             w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
+            w.WriteLine("wom-textures = " + Server.UseTextures);
             w.WriteLine("");
             w.WriteLine("#Review settings");
             w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());

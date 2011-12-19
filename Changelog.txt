@@ -1,3 +1,6 @@
+v5.4.0.0
+- Fixed SQLite on mono
+
 v5.3.0.0
 - Added tempranks.
 - More ban options and info.

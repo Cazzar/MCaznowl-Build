@@ -41,8 +41,8 @@ namespace MCForge
         public string currentLevelName = "";
         public static List<Player> alive = new List<Player>();
         public static List<Player> infectd = new List<Player>();
-        string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "", "transplanted " };
-        string[] infectMessages2 = new string[] { "", "", "'s brain", "", " meet their maker", "", "", " see the dark side", "", " open source", "", "", " got nommed on", " got $nameifyed by $name!", " living brain" };
+        string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "transplanted " };
+        string[] infectMessages2 = new string[] { "", "", "'s brain", "", " meet their maker", "", "", " see the dark side", "", " open source", "", "", " got nommed on", "'s living brain" };
         public ZombieGame() { }
 
         public void StartGame(int status, int amount)
@@ -183,8 +183,20 @@ namespace MCForge
                 aliveCount = alive.Count;
                 infectd.ForEach(delegate(Player player1)
                 {
+                    if (player1.color != c.red)
+                    {
+                        player1.color = c.red;
+                        Player.GlobalDie(player1, false);
+                        Player.GlobalSpawn(player1, player1.pos[0], player1.pos[1], player1.pos[2], player1.rot[0], player1.rot[1], false);
+                    }
                     alive.ForEach(delegate(Player player2)
                     {
+                        if (player2.color != player2.group.color)
+                        {
+                            player2.color = player2.group.color;
+                            Player.GlobalDie(player2, false);
+                            Player.GlobalSpawn(player2, player2.pos[0], player2.pos[1], player2.pos[2], player2.rot[0], player2.rot[1], false);
+                        }
                         if (player2.pos[0] / 32 == player1.pos[0] / 32 || player2.pos[0] / 32 == player1.pos[0] / 32 + 1 || player2.pos[0] / 32 == player1.pos[0] / 32 - 1)
                         {
                             if (player2.pos[1] / 32 == player1.pos[1] / 32 || player2.pos[1] / 32 == player1.pos[1] / 32 - 1 || player2.pos[1] / 32 == player1.pos[1] / 32 + 1)
@@ -214,7 +226,7 @@ namespace MCForge
                                         }
                                         Server.lastPlayerToInfect = player1.name;
                                         player1.infectThisRound++;
-                                        int cazzar = random.Next(0, 14);
+                                        int cazzar = random.Next(0, infectMessages.Length);
                                         if (infectMessages2[cazzar] == "")
                                         {
                                             Player.GlobalMessage(c.red + player1.name + c.yellow + infectMessages[cazzar] + c.red + player2.name);
@@ -347,6 +359,9 @@ namespace MCForge
             foreach (Player player in Player.players)
             {
                 player.infected = false;
+                player.color = player.group.color;
+                Player.GlobalDie(player, false);
+                Player.GlobalSpawn(player, player.pos[0], player.pos[1], player.pos[2], player.rot[0], player.rot[1], false);
                 if (player.level.name == currentLevelName)
                 {
                     if (player.referee)
@@ -466,6 +481,7 @@ namespace MCForge
             if ((Server.gameStatus != 0 && Server.zombieRound) && infectd.Count <= 0)
             {
                 int firstinfect = random.Next(alive.Count);
+                firstinfect = firstinfect - 1;
                 while (alive[firstinfect].referee == true || alive[firstinfect].level.name == Server.zombie.currentLevelName)
                 {
                     if (firstinfect == alive.Count)
@@ -490,9 +506,15 @@ namespace MCForge
         public bool InfectedPlayerLogin(Player p)
         {
             if (Server.gameStatus == 0) return false;
+            if (p == null) return false;
+            if (p.level.name != Server.zombie.currentLevelName) return false;
             p.SendMessage("You have joined in the middle of a round. You are now infected!");
             p.blockCount = 50;
-            Command.all.Find("logininfect").Use(p, p.name);
+            try
+            {
+                Server.zombie.InfectPlayer(p);
+            }
+            catch { }
             return true;
         }
 
@@ -509,6 +531,7 @@ namespace MCForge
         public void InfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
+            if (p == null) return;
             infectd.Add(p);
             alive.Remove(p);
             p.infected = true;
@@ -521,6 +544,7 @@ namespace MCForge
         public void DisinfectPlayer(Player p)
         {
             if (Server.zombieRound == false) return;
+            if (p == null) return;
             infectd.Remove(p);
             alive.Add(p);
             p.infected = false;

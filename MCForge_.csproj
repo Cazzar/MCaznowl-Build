@@ -599,6 +599,9 @@
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
     <Content Include="mcpony.png" />
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

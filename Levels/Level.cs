@@ -642,7 +642,7 @@ namespace MCForge
                 }
 
                 errorLocation = "Adding physics";
-                if (p.PlayingTntWars && type == Block.smalltnt) AddCheck(PosToInt(x, y, z), "", false, true, TntWarsGame.GetTntWarsGame(p).GameDifficulty, p);
+                if (p.PlayingTntWars && type == Block.smalltnt) AddCheck(PosToInt(x, y, z), "", false, p);
                 if (physics > 0) if (Block.Physics(type)) AddCheck(PosToInt(x, y, z));
 
                 changed = true;
@@ -3142,10 +3142,10 @@ namespace MCForge
 
                                                           case Block.smalltnt:
                                                               //For TNT Wars
-                                                              if (C.p != null && C.TNTWars)
+                                                              if (C.p != null && C.p.PlayingTntWars)
                                                               {
                                                                   int ExplodeDistance = -1;
-                                                                  switch (C.TntWarsDifficulty)
+                                                                  switch (TntWarsGame.GetTntWarsGame(C.p).GameDifficulty)
                                                                   {
                                                                       case TntWarsGame.TntWarsDifficulty.Easy:
                                                                           if (C.time < 7)
@@ -5039,13 +5039,13 @@ namespace MCForge
             }
         }
 
-        public void AddCheck(int b, string extraInfo = "", bool overRide = false, bool tntWars = false, TntWarsGame.TntWarsDifficulty tntWarsDif = TntWarsGame.TntWarsDifficulty.Normal, MCForge.Player Placer = null)
+        public void AddCheck(int b, string extraInfo = "", bool overRide = false, MCForge.Player Placer = null)
         {
             try
             {
                 if (!ListCheck.Exists(Check => Check.b == b))
                 {
-                    ListCheck.Add(new Check(b, extraInfo, tntWars, tntWarsDif, Placer)); //Adds block to list to be updated
+                    ListCheck.Add(new Check(b, extraInfo, Placer)); //Adds block to list to be updated
                 }
                 else
                 {
@@ -6240,20 +6240,13 @@ public class Check
     public int b;
     public string extraInfo = "";
     public byte time;
-    public bool TNTWars;
-    public MCForge.TntWarsGame.TntWarsDifficulty TntWarsDifficulty;
     public MCForge.Player p;
 
-    public Check(int b, string extraInfo = "", bool TntWars = false, MCForge.TntWarsGame.TntWarsDifficulty TntWarsDif = MCForge.TntWarsGame.TntWarsDifficulty.Normal, MCForge.Player placer = null)
+    public Check(int b, string extraInfo = "", MCForge.Player placer = null)
     {
         this.b = b;
         time = 0;
         this.extraInfo = extraInfo;
-        if (TntWars)
-        {
-            TNTWars = TntWars;
-            TntWarsDifficulty = TntWarsDif;
-        }
         p = placer;
     }
 }

@@ -115,11 +115,6 @@ namespace MCForge
                                 if (ZombieGame.infectd.Contains(p))
                                 ZombieGame.infectd.Remove(p);
                             }
-
-                            if (TntWarsGame.GetTntWarsGame(p) != null)
-                            {
-                                Player.SendMessage(p, "TNT Wars: To stop not being able to build, please leave TNT Wars!");
-                            }
                             if (p.inTNTwarsMap)
                             {
                                 p.canBuild = true;

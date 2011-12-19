@@ -123,7 +123,7 @@ namespace MCForge
             string teamkillling = "Disabled";
             if (TeamKills) teamkillling = "Enabled";
             Player.GlobalMessage(c.red + "TNT Wars " + Server.DefaultColor + "on '" + lvl.name + "' has started " + c.teal + Gamemode + Server.DefaultColor + " with a difficulty of " + c.teal + Difficulty + Server.DefaultColor + " (" + c.teal + HitsToDie + Server.DefaultColor + " hits to die, a " + c.teal + explosiontime + Server.DefaultColor + " explosion delay and with a " + c.teal + explosionsize + Server.DefaultColor + " explosion size)" + ", team killing is " + c.teal + teamkillling + Server.DefaultColor + " and you can place " + c.teal + TntPerPlayerAtATime.ToString() + Server.DefaultColor + " TNT at a time and there is a score limit of " + c.teal + ScoreLimit.ToString() + Server.DefaultColor + "!!");
-            if (GameMode == TntWarsGameMode.TDM) SendAllPlayersMessage("TNT Wars: Start your message with '!' to send it as a team chat!");
+            if (GameMode == TntWarsGameMode.TDM) SendAllPlayersMessage("TNT Wars: Start your message with ':' to send it as a team chat!");
             //Seting Up Some Player stuff
             {
                 foreach (player p in Players)
@@ -707,21 +707,25 @@ namespace MCForge
         }
         public static void SetTitlesAndColor(player p, bool reset = false)
         {
-            if (reset)
+            try
             {
-                p.p.title = p.OldTitle;
-                p.p.color = p.OldTitleColor;
-                p.p.color = p.OldColor;
-                p.p.SetPrefix();
+                if (reset)
+                {
+                    p.p.title = p.OldTitle;
+                    p.p.color = p.OldTitleColor;
+                    p.p.color = p.OldColor;
+                    p.p.SetPrefix();
+                }
+                else
+                {
+                    p.p.title = "TNT Wars";
+                    p.p.titlecolor = c.white;
+                    if (p.Red) p.p.color = c.red;
+                    if (p.Blue) p.p.color = c.blue;
+                    p.p.SetPrefix();
+                }
             }
-            else
-            {
-                p.p.title = "TNT Wars";
-                p.p.titlecolor = c.white;
-                if (p.Red) p.p.color = c.red;
-                if (p.Blue) p.p.color = c.blue;
-                p.p.SetPrefix();
-            }
+            catch { }
         }
 
         public bool CheckAllSetUp(Player p, bool ReturnErrors = false, bool TellPlayerOnSuccess = true)

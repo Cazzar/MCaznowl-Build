@@ -85,7 +85,7 @@ namespace MCForge
 					break;
 
 				case "join":
-					if (p.PlayingTntWars == true || TntWarsGame.GetTntWarsGame(p).Players.Contains(TntWarsGame.GetTntWarsGame(p).FindPlayer(p)))
+					if (p.PlayingTntWars == true || (TntWarsGame.GetTntWarsGame(p) != null && TntWarsGame.GetTntWarsGame(p).Players.Contains(TntWarsGame.GetTntWarsGame(p).FindPlayer(p))))
 					{
 						Player.SendMessage(p, "TNT Wars Error: You have already joined a game!");
 						return;
