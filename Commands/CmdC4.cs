@@ -45,9 +45,11 @@ namespace MCForge
                 else
                 {
                     Player.SendMessage(p, "To use c4, the physics level must be 1, 2, 3 or 4");
+                    return;
                 }
             }
             Player.SendMessage(p, "This command can only be used in-game!");
+            return
         }
         public override void Help(Player p)
         {
