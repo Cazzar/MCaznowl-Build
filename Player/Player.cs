@@ -238,6 +238,7 @@ namespace MCForge
         public string[] cmdBind = new string[10];
         public string[] messageBind = new string[10];
         public string lastCMD = "";
+        public sbyte c4circuitNumber = -1;
 
         public Level level = Server.mainLevel;
         public bool Loading = true; //True if player is loading a map.
@@ -1469,7 +1470,7 @@ namespace MCForge
             Random rand = new Random();
             int mx, mz;
 
-            if (deleteMode) { level.Blockchange(this, x, y, z, Block.air); return; }
+            if (deleteMode && b != Block.c4det) { level.Blockchange(this, x, y, z, Block.air); return; }
 
             if (Block.tDoor(b)) { SendBlockchange(x, y, z, b); return; }
             if (Block.DoorAirs(b) != 0)
@@ -1582,6 +1583,12 @@ namespace MCForge
                     } SendBlockchange(x, y, z, b);
 
                     break;
+
+                case Block.c4det:
+                    Level.C4.BlowUp(new ushort[] { x, y, z }, level);
+                    level.Blockchange(x, y, z, Block.air);
+                    break;
+
                 default:
                     level.Blockchange(this, x, y, z, (byte)(Block.air));
                     break;

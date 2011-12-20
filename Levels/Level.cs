@@ -148,6 +148,8 @@ namespace MCForge
         public bool bufferblocks = Server.bufferblocks;
         public List<BlockQueue.block> blockqueue = new List<BlockQueue.block>();
 
+        public List<C4.C4s> C4list = new List<C4.C4s>();
+
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
             onLevelSave += null;
@@ -643,7 +645,7 @@ namespace MCForge
 
                 errorLocation = "Adding physics";
                 if (p.PlayingTntWars && type == Block.smalltnt) AddCheck(PosToInt(x, y, z), "", false, p);
-                if (physics > 0) if (Block.Physics(type)) AddCheck(PosToInt(x, y, z));
+                if (physics > 0) if (Block.Physics(type)) AddCheck(PosToInt(x, y, z), "", false, p);
 
                 changed = true;
                 backedup = false;
@@ -4998,6 +5000,28 @@ namespace MCForge
 
                                                               #endregion
 
+                                                          case Block.c4:
+                                                              C4.C4s c4 = C4.Find(this, C.p.c4circuitNumber);
+                                                              if (c4 != null)
+                                                              {
+                                                                  C4.C4s.OneC4 one = new C4.C4s.OneC4(x, y, z);
+                                                                  c4.list.Add(one);
+                                                              }
+                                                              C.time = 255;
+                                                              break;
+
+                                                          case Block.c4det:
+                                                              C4.C4s c = C4.Find(this, C.p.c4circuitNumber);
+                                                              if (c != null)
+                                                              {
+                                                                  c.detenator[0] = x;
+                                                                  c.detenator[1] = y;
+                                                                  c.detenator[2] = z;
+                                                              }
+                                                              C.p.c4circuitNumber = -1;
+                                                              C.time = 255;
+                                                              break;
+
                                                           default:
                                                               //non special blocks are then ignored, maybe it would be better to avoid getting here and cutting down the list
                                                               if (!C.extraInfo.Contains("wait")) C.time = 255;
@@ -6231,6 +6255,70 @@ namespace MCForge
         }
 
         #endregion
+
+        public static class C4
+        {
+            public static void BlowUp(ushort[] detenator, Level lvl)
+            {
+                try
+                {
+                    foreach (C4s c4 in lvl.C4list)
+                    {
+                        if (c4.detenator[0] == detenator[0] && c4.detenator[1] == detenator[1] && c4.detenator[2] == detenator[2])
+                        {
+                            foreach (C4s.OneC4 c in c4.list)
+                            {
+                                lvl.MakeExplosion(c.pos[0], c.pos[1], c.pos[2], 0);
+                            }
+                            lvl.C4list.Remove(c4);
+                        }
+                    }
+                }
+                catch { }
+            }
+            public static sbyte NextCircuit(Level lvl)
+            {
+                sbyte number = 1; 
+                foreach (C4s c4 in lvl.C4list)
+                {
+                    number++;
+                }
+                return number;
+            }
+            public static C4s Find(Level lvl, sbyte CircuitNumber)
+            {
+                foreach (C4s c4 in lvl.C4list)
+                {
+                    if (c4.CircuitNumb == CircuitNumber)
+                    {
+                        return c4;
+                    }
+                }
+                return null;
+            }
+            public class C4s
+            {
+                public sbyte CircuitNumb;
+                public ushort[] detenator;
+                public List<OneC4> list;
+                public class OneC4
+                {
+                    public ushort[] pos = new ushort[3];
+                    public OneC4(ushort x, ushort y, ushort z)
+                    {
+                        pos[0] = x;
+                        pos[1] = y;
+                        pos[2] = z;
+                    }
+                }
+                public C4s(sbyte num)
+                {
+                    CircuitNumb = num;
+                    list = new List<OneC4>();
+                    detenator = new ushort[3];
+                }
+            }
+        }
     }
 }
 

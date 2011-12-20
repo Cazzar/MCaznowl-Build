@@ -99,6 +99,9 @@ namespace MCForge
 
         public const byte fastdeathlava = (byte)73;
 
+        public const byte c4 = (byte)74;
+        public const byte c4det = (byte)75;
+
         public const byte door_cobblestone = (byte)80;
         public const byte door_cobblestone_air = (byte)81;
         public const byte door_red = (byte)83;
@@ -478,6 +481,8 @@ namespace MCForge
                     case fastdeathlava:
                     case fire:
 
+                    case c4:
+                    case c4det:
                     case smalltnt:
                     case tntexplosion:
                     case firework:
@@ -807,6 +812,7 @@ namespace MCForge
                 case door_lightgrey:
                 case door_white:
 
+                case Block.c4:
                 case Block.smalltnt:
                 case Block.bigtnt:
                 case Block.nuketnt:
@@ -1359,6 +1365,8 @@ namespace MCForge
                 case 175: return "blue_portal";
                 case 176: return "orange_portal";
 
+                case c4: return "c4";
+                case c4det: return "c4_det";
                 case 182: return "small_tnt";
                 case 183: return "big_tnt";
                 case 186: return "nuke_tnt";
@@ -1660,7 +1668,8 @@ namespace MCForge
                 case "blue_portal": return 175;
                 case "orange_portal": return 176;
 
-
+                case "c4": return c4;
+                case "c4_det": return c4det;
                 case "small_tnt": return 182;
                 case "big_tnt": return 183;
                 case "nuke_tnt": return 186;
@@ -1862,6 +1871,8 @@ namespace MCForge
                 case 175: return (byte)28;//blue portal
                 case 176: return (byte)22;//orange portal
 
+                case c4: return (byte)46;
+                case c4det: return (byte)red;
                 case 182: return (byte)46;//smalltnt
                 case 183: return (byte)46;//bigtnt
                 case 186: return (byte)46;//nuketnt

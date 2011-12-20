@@ -89,6 +89,7 @@
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
+    <Compile Include="Commands\CmdC4.cs" />
     <Compile Include="TntWarsGame.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
