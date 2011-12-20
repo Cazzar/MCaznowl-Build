@@ -26,8 +26,8 @@ namespace MCForge
 	public class CmdTntWars : Command
 	{
 		public override string name { get { return "tntwars"; } }
-		public override string shortcut { get { return "b"; } }
-		public override string type { get { return "information"; } }
+		public override string shortcut { get { return "tw"; } }
+		public override string type { get { return "game"; } }
 		public override bool museumUsable { get { return false; } }
 		public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
 		public CmdTntWars() { }
@@ -1366,12 +1366,11 @@ namespace MCForge
 									case "h":
 									default:
 										Player.SendMessage(p, "TNT Wars Setup Scoring Help:");
-										Player.SendMessage(p, "/tntwars setup score commandaddition <optional addition> [needed addition] {shortcut} - description");
-										Player.SendMessage(p, "maximum {m} [check/set] <value> - set the score limit (or check it)");
-										Player.SendMessage(p, "streaks {s} [on/off/check] - enable/disable streaks (or check it)");
-										Player.SendMessage(p, "multi {mk} [on/off/switch/check/set] - enable/disable/switch multikills or set the score bonus per multikill (or check it)");
-										Player.SendMessage(p, "scorekill {k} [check/set] <value> - set the score per kill (or check it)");
-										Player.SendMessage(p, "assistkill {a} [check/set] <value> - set the score per assist (or check it)");
+										Player.SendMessage(p, "/tw s score maximum {m} [check/set] <value> - set the score limit (or check it)");
+										Player.SendMessage(p, "/tw s score streaks {s} [on/off/check] - enable/disable streaks (or check it)");
+										Player.SendMessage(p, "/tw s score multi {mk} [on/off/switch/check/set] - enable/disable/switch multikills or set the score bonus per multikill (or check it)");
+										Player.SendMessage(p, "/tw s score scorekill {k} [check/set] <value> - set the score per kill (or check it)");
+										Player.SendMessage(p, "/tw s score assistkill {a} [check/set] <value> - set the score per assist (or check it)");
 										break;
 								}
 								break;
@@ -1508,20 +1507,19 @@ namespace MCForge
 							case "help":
 							case "h":
 								Player.SendMessage(p, "TNT Wars Setup Help:");
-								Player.SendMessage(p, "/tntwars setup commandaddition <optional addition> [needed addition] {shortcut} - description");
-								Player.SendMessage(p, "new {n}/delete - create/delete a game");
-								Player.SendMessage(p, "start/stop/reset {r} - start/stop/reset the current game");
-								Player.SendMessage(p, "level {l} - change the level for the game");
-                                Player.SendMessage(p, "teamsspawns {ts} [red/blue] - set the spawns for red/blue");
-								Player.SendMessage(p, "tnt {t} - change the amount of tnt per player at a time");
-								Player.SendMessage(p, "graceperiod {g} [on/off/check] - enable/disable the grace period (or check it)");
-								Player.SendMessage(p, "gracetime {gt} [set/check] <amount> - set the grace period time (in seconds) (or check it)");
-								Player.SendMessage(p, "gamemode {m} [check/tdm/ffa] - change the gamemode to FFA or TDM (or check it)");
-								Player.SendMessage(p, "difficulty {d} [1/2/3/4] - change the difficulty (easy/normal/hard/extreme)");
-								Player.SendMessage(p, "balanceteams {b} [on/off/check] - enable/disable balancing teams (or check it)");
-								Player.SendMessage(p, "teamkill {tk} [on/off/check] - enable/disable teamkills (or check it)");
-								Player.SendMessage(p, "score - scoring setup (use '/tntwars setup scoring help' for more info)");
-								Player.SendMessage(p, "status {s} - view the status of setup");
+								Player.SendMessage(p, "/tw s new {n}/delete - create/delete a game");
+								Player.SendMessage(p, "/tw s start/stop/reset {r} - start/stop/reset the current game");
+								Player.SendMessage(p, "/tw s level {l} - change the level for the game");
+                                Player.SendMessage(p, "/tw s teamsspawns {ts} [red/blue] - set the spawns for red/blue");
+								Player.SendMessage(p, "/tw s tnt {t} - change the amount of tnt per player at a time");
+								Player.SendMessage(p, "/tw s graceperiod {g} [on/off/check] - enable/disable the grace period (or check it)");
+								Player.SendMessage(p, "/tw s gracetime {gt} [set/check] <amount> - set the grace period time (in seconds) (or check it)");
+								Player.SendMessage(p, "/tw s gamemode {m} [check/tdm/ffa] - change the gamemode to FFA or TDM (or check it)");
+								Player.SendMessage(p, "/tw s difficulty {d} [1/2/3/4] - change the difficulty (easy/normal/hard/extreme)");
+								Player.SendMessage(p, "/tw s balanceteams {b} [on/off/check] - enable/disable balancing teams (or check it)");
+								Player.SendMessage(p, "/tw s teamkill {tk} [on/off/check] - enable/disable teamkills (or check it)");
+								Player.SendMessage(p, "/tw s score - scoring setup (use '/tntwars setup scoring help' for more info)");
+								Player.SendMessage(p, "/tw s status {s} - view the status of setup");
 								break;
 
 							default:
@@ -1590,16 +1588,15 @@ namespace MCForge
 		public override void Help(Player p)
 		{
 			Player.SendMessage(p, "TNT Wars Help:");
-			Player.SendMessage(p, "/tntwars commandaddition <optional addition> [needed addition] {shortcut} - description");
-			Player.SendMessage(p, "list {l} - Lists all the current games");
-			Player.SendMessage(p, "join <team/level> - join a game on <level> or on <team>(red/blue)");
-			Player.SendMessage(p, "leave - leave the current game");
-			Player.SendMessage(p, "scores <top/team/me> - view the top score/team scores/your scores");
-			Player.SendMessage(p, "players {p} - view the current players in your game");
-			Player.SendMessage(p, "health {hp} - view your currrent amount of health left");
+			Player.SendMessage(p, "/tw list {l} - Lists all the current games");
+			Player.SendMessage(p, "/tw join <team/level> - join a game on <level> or on <team>(red/blue)");
+			Player.SendMessage(p, "/tw leave - leave the current game");
+			Player.SendMessage(p, "/tw scores <top/team/me> - view the top score/team scores/your scores");
+			Player.SendMessage(p, "/tw players {p} - view the current players in your game");
+			Player.SendMessage(p, "/tw health {hp} - view your currrent amount of health left");
 			if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
 			{
-				Player.SendMessage(p, "setup {s} - setup the game (do '/tntwars setup help' for more info!");
+				Player.SendMessage(p, "/tw setup {s} - setup the game (do '/tntwars setup help' for more info!");
 			}
 		}
 	}
