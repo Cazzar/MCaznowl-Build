@@ -1,5 +1,8 @@
 v5.4.0.0
 - Fixed SQLite on mono
+- Added a new gamemode, TNT Wars
+- In global chat, developers names are now prefixed with '[Dev]' if they are on a server and use /global
+- Added /c4
 
 v5.3.0.0
 - Added tempranks.

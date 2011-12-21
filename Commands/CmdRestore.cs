@@ -38,40 +38,62 @@ namespace MCForge
 
             if (message != "")
             {
-                Server.s.Log(@Server.backupLocation + "/" + p.level.name + "/" + message + "/" + p.level.name + ".lvl");
-                if (File.Exists(@Server.backupLocation + "/" + p.level.name + "/" + message + "/" + p.level.name + ".lvl"))
+                Level lvl;
+                string[] text = new string[2];
+                text[0] = "";
+                text[1] = "";
+                try
+                {
+                    text[0] = message.Split(' ')[0].ToLower();
+                    text[1] = message.Split(' ')[1].ToLower();
+                }
+                catch { }
+                {
+                    if (p != null && p.level != null) lvl = p.level;
+                    else
+                    {
+                        lvl = Level.Find(text[1]);
+                        if (lvl == null)
+                        {
+                            Player.SendMessage(p, "Level not found!");
+                            return;
+                        }
+                    }
+                }
+                Server.s.Log(@Server.backupLocation + "/" + lvl.name + "/" + text[0] + "/" + lvl.name + ".lvl");
+                if (File.Exists(@Server.backupLocation + "/" + lvl.name + "/" + text[0] + "/" + lvl.name + ".lvl"))
                 {
                     try
                     {
-                        File.Copy(@Server.backupLocation + "/" + p.level.name + "/" + message + "/" + p.level.name + ".lvl", "levels/" + p.level.name + ".lvl", true);
-                        Level temp = Level.Load(p.level.name);
+                        File.Copy(@Server.backupLocation + "/" + lvl.name + "/" + text[0] + "/" + lvl.name + ".lvl", "levels/" + lvl.name + ".lvl", true);
+                        Level temp = Level.Load(lvl.name);
                         temp.physThread.Start();
                         if (temp != null)
                         {
-                            p.level.spawnx = temp.spawnx;
-                            p.level.spawny = temp.spawny;
-                            p.level.spawnz = temp.spawnz;
+                            lvl.spawnx = temp.spawnx;
+                            lvl.spawny = temp.spawny;
+                            lvl.spawnz = temp.spawnz;
 
-                            p.level.height = temp.height;
-                            p.level.width = temp.width;
-                            p.level.depth = temp.depth;
+                            lvl.height = temp.height;
+                            lvl.width = temp.width;
+                            lvl.depth = temp.depth;
 
-                            p.level.blocks = temp.blocks;
-                            p.level.setPhysics(0);
-                            p.level.ClearPhysics();
+                            lvl.blocks = temp.blocks;
+                            lvl.setPhysics(0);
+                            lvl.ClearPhysics();
 
-                            Command.all.Find("reveal").Use(p, "all");
+                            Command.all.Find("reveal").Use(null, "all " + text[1]);
                         }
                         else
                         {
                             Server.s.Log("Restore nulled");
-                            File.Copy("levels/" + p.level.name + ".lvl.backup", "levels/" + p.level.name + ".lvl", true);
+                            File.Copy("levels/" + lvl.name + ".lvl.backup", "levels/" + lvl.name + ".lvl", true);
                         }
 
                     }
                     catch { Server.s.Log("Restore fail"); }
                 }
-                else { Player.SendMessage(p, "Backup " + message + " does not exist."); }
+                else { Player.SendMessage(p, "Backup " + text[0] + " does not exist."); }
             }
             else
             {
@@ -112,6 +134,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/restore <number> - restores a previous backup of the current map");
+            Player.SendMessage(p, "/restore <number> <name> - restores a previous backup of the selected map");
         }
     }
 }
