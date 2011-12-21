@@ -656,7 +656,7 @@ namespace MCForge
 										it.BlueSpawn[1] = (ushort)(p.pos[1] / 32);
 										it.BlueSpawn[2] = (ushort)(p.pos[2] / 32);
 										it.BlueSpawn[3] = p.rot[0];
-										it.RedSpawn[4] = p.rot[1];
+										it.BlueSpawn[4] = p.rot[1];
 										Player.SendMessage(p, "TNT Wars: Set " + c.blue + "Blue" + Server.DefaultColor + " spawn");
 										break;
 								}

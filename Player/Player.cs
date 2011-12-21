@@ -1906,6 +1906,11 @@ level.ctfgame.GrabFlag(this, workTeam);
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
                     }
+                    else if (PlayingTntWars)
+                    {
+                        TntWarsKillStreak = 0;
+                        TntWarsScoreMultiplier = 1f;
+                    }
                     else if (Server.lava.active && Server.lava.HasPlayer(this))
                     {
                         if (!Server.lava.IsPlayerDead(this))
