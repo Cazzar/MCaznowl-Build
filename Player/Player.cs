@@ -2006,6 +2006,11 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     SendMessage("Message appended!");
                     return;
                 }
+                else if (text.Contains("%/"))//This causes all players to crash!
+                {
+                    Player.SendMessage(this, "You're not allowed to send that message!");
+                    return;
+                }
 
                 text = Regex.Replace(text, @"\s\s+", " ");
                 foreach (char ch in text)
