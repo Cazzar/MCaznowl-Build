@@ -67,7 +67,30 @@ namespace MCForge
         public ushort x;
         public ushort y;
         public ushort z;
+        public ushort spawnx = 0;
+        public ushort spawny = 0;
+        public ushort spawnz = 0;
         public byte block;
+        public void SendToSpawn(Level mainlevel, Auto_CTF game, Player p1)
+        {
+            Random rand = new Random();
+            if (spawnx == 0 && spawny == 0 && spawnz == 0)
+            {
+                ushort xx = (ushort)(rand.Next(0, mainlevel.width));
+                ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
+                ushort zz = (ushort)(rand.Next(0, mainlevel.height));
+                while (mainlevel.GetTile(xx, yy, zz) != Block.air && game.OnSide((ushort)(zz * 32), this))
+                {
+                    xx = (ushort)(rand.Next(0, mainlevel.width));
+                    yy = (ushort)(rand.Next(0, mainlevel.depth));
+                    zz = (ushort)(rand.Next(0, mainlevel.height));
+                }
+                unchecked { p1.SendPos((byte)-1, (ushort)(xx * 32), (ushort)(yy * 32), (ushort)(zz * 32), p1.rot[0], p1.rot[1]); }
+            }
+            else
+                unchecked { p1.SendPos((byte)-1, spawnx, spawny, spawnz, p1.rot[0], p1.rot[1]); }
+
+        }
         public Base(ushort x, ushort y, ushort z, Teams team)
         {
             this.x = x; this.y = y; this.z = z;
@@ -141,6 +164,27 @@ namespace MCForge
                         break;
                     case "base.red.block":
                         redbase.block = Block.Byte(l.Split('=')[1]);
+                        break;
+                    case "base.blue.block":
+                        bluebase.block = Block.Byte(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawnx":
+                        bluebase.spawnx = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawny":
+                        bluebase.spawny = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawnz":
+                        bluebase.spawnz = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawnx":
+                        redbase.spawnx = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawny":
+                        redbase.spawny = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawnz":
+                        redbase.spawnz = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.x":
                         bluebase.x = ushort.Parse(l.Split('=')[1]);
@@ -231,17 +275,7 @@ namespace MCForge
                             {
                                 GetPlayer(p1).tagging = true;
                                 Player.SendMessage(p1, p.color + p.name + Server.DefaultColor + " tagged you!");
-                                Random rand = new Random();
-                                ushort xx = (ushort)(rand.Next(0, mainlevel.width));
-                                ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
-                                ushort zz = (ushort)(rand.Next(0, mainlevel.height));
-                                while (mainlevel.GetTile(xx, yy, zz) != Block.air && OnSide((ushort)(zz * 32), b))
-                                {
-                                    xx = (ushort)(rand.Next(0, mainlevel.width));
-                                    yy = (ushort)(rand.Next(0, mainlevel.depth));
-                                    zz = (ushort)(rand.Next(0, mainlevel.height));
-                                }
-                                unchecked { p1.SendPos((byte)-1, (ushort)(xx * 32), (ushort)(yy * 32), (ushort)(zz * 32), p1.rot[0], p1.rot[1]); }
+                                b.SendToSpawn(mainlevel, this, p1);
                                 Thread.Sleep(300);
                                 if (GetPlayer(p1).hasflag)
                                 {
@@ -677,7 +711,7 @@ namespace MCForge
                 }
             }
         }
-        bool OnSide(ushort z, Base b)
+        public bool OnSide(ushort z, Base b)
         {
             if (b.z < zline && z / 32 < zline)
                 return true;

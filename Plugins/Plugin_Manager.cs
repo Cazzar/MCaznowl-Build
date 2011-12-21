@@ -195,6 +195,10 @@ namespace MCForge
             }
             else
                 Directory.CreateDirectory("plugins");
+            /*
+             ===Load Internal Plugins===
+             */
+            Plugin.all_simple.Add(new MCForge.CTF.Setup());
         }
     }
 }

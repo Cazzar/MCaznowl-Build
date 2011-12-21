@@ -250,7 +250,8 @@ namespace MCForge
 
                     //no need for default
             }
-
+            string name = Group.findPerm(LevelPermission.Operator).name;
+            string realname = Group.findPerm(LevelPermission.Operator).trueName;
             spawnx = (ushort) (width/2);
             spawny = (ushort) (depth*0.75f);
             spawnz = (ushort) (height/2);
