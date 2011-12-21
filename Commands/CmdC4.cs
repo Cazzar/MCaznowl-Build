@@ -49,7 +49,7 @@ namespace MCForge
                 }
             }
             Player.SendMessage(p, "This command can only be used in-game!");
-            return
+            return;
         }
         public override void Help(Player p)
         {

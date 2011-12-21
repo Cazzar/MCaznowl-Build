@@ -242,17 +242,101 @@ namespace MCForge
 					{
 						case "all":
 						case "a":
+                        case "everyone":
+							if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+                            {
+                                foreach (Player who in Player.players)
+                                {
+                                    Player.SendMessage(who, "TNT Wars Rules: (sent to all players by " + p.color + p.name + Server.DefaultColor + " )");
+                                    Player.SendMessage(who, "The aim of the game is to blow up people using TNT!");
+                                    Player.SendMessage(who, "To place tnt simply place a TNT block and after a short delay it shall explode!");
+                                    Player.SendMessage(who, "During the game the amount of TNT placable at one time may be limited!");
+                                    Player.SendMessage(who, "You are not allowed to use hacks of any sort during the game!");
+                                }
+                                Player.SendMessage(p, "TNT Wars: Sent rules to all players");
+                                return;
+                            }
 							break;
 
 						case "level":
 						case "l":
+                        case "lvl":
+                        case "map":
+                        case "m":
+                            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+                            {
+                                foreach (Player who in p.level.players)
+                                {
+                                    Player.SendMessage(who, "TNT Wars Rules: (sent to all players in map by " + p.color + p.name + Server.DefaultColor + " )");
+                                    Player.SendMessage(who, "The aim of the game is to blow up people using TNT!");
+                                    Player.SendMessage(who, "To place tnt simply place a TNT block and after a short delay it shall explode!");
+                                    Player.SendMessage(who, "During the game the amount of TNT placable at one time may be limited!");
+                                    Player.SendMessage(who, "You are not allowed to use hacks of any sort during the game!");
+                                        
+                                }
+                                Player.SendMessage(p, "TNT Wars: Sent rules to all current players in map");
+                                return;
+                            }
 							break;
 
 						case "players":
+                        case "pls":
+                        case "pl":
 						case "p":
+                            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+                            {
+                                TntWarsGame gm = TntWarsGame.GetTntWarsGame(p);
+                                if (gm == null)
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: You aren't in a TNT Wars game!");
+                                    return;
+                                }
+                                else
+                                {
+                                    foreach (TntWarsGame.player who in gm.Players)
+                                    {
+                                        Player.SendMessage(who.p, "TNT Wars Rules: (sent to all current players by " + p.color + p.name + Server.DefaultColor + " )");
+                                        Player.SendMessage(who.p, "The aim of the game is to blow up people using TNT!");
+                                        Player.SendMessage(who.p, "To place tnt simply place a TNT block and after a short delay it shall explode!");
+                                        Player.SendMessage(who.p, "During the game the amount of TNT placable at one time may be limited!");
+                                        Player.SendMessage(who.p, "You are not allowed to use hacks of any sort during the game!");
+                                        
+                                    }
+                                    Player.SendMessage(p, "TNT Wars: Sent rules to all current players");
+                                    return;
+                                }
+                            }
 							break;
 
 						default:
+                            if (text[1] != null && (int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+                            {
+                                Player who = Player.Find(text[1]);
+                                if (who != null)
+                                {
+                                    Player.SendMessage(who, "TNT Wars Rules: (sent to you by " + p.color + p.name + Server.DefaultColor + " )");
+                                    Player.SendMessage(who, "The aim of the game is to blow up people using TNT!");
+                                    Player.SendMessage(who, "To place tnt simply place a TNT block and after a short delay it shall explode!");
+                                    Player.SendMessage(who, "During the game the amount of TNT placable at one time may be limited!");
+                                    Player.SendMessage(who, "You are not allowed to use hacks of any sort during the game!");
+                                    Player.SendMessage(p, "TNT Wars: Sent rules to " + who.color + who.name);
+                                    return;
+                                }
+                                else
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: Couldn't find player '" + text[1] + "' to send rules to!");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                Player.SendMessage(p, "TNT Wars Rules:");
+                                Player.SendMessage(p, "The aim of the game is to blow up people using TNT!");
+                                Player.SendMessage(p, "To place tnt simply place a TNT block and after a short delay it shall explode!");
+                                Player.SendMessage(p, "During the game the amount of TNT placable at one time may be limited!");
+                                Player.SendMessage(p, "You are not allowed to use hacks of any sort during the game!");
+                                return;
+                            }
 							break;
 					}
 					break;
@@ -1594,10 +1678,15 @@ namespace MCForge
 			Player.SendMessage(p, "/tw scores <top/team/me> - view the top score/team scores/your scores");
 			Player.SendMessage(p, "/tw players {p} - view the current players in your game");
 			Player.SendMessage(p, "/tw health {hp} - view your currrent amount of health left");
-			if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
-			{
-				Player.SendMessage(p, "/tw setup {s} - setup the game (do '/tntwars setup help' for more info!");
-			}
+            if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 1))
+            {
+                Player.SendMessage(p, "/tw rules <all/level/players/<playername>> - send the rules to yourself, all, your map, all players in your game or to one person!");
+                Player.SendMessage(p, "/tw setup {s} - setup the game (do '/tntwars setup help' for more info!");
+            }
+            else
+            {
+                Player.SendMessage(p, "/tw rules - read the rules");
+            }
 		}
 	}
 }
