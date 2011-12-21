@@ -679,6 +679,13 @@ namespace MCForge
                                 Level.CreateLeveldb(Server.level);
                             }
                         }
+                        //Wom Textures
+                        if (Server.UseTextures)
+                        {
+                            mainLevel.textures.sendwomid = true;
+                            mainLevel.textures.MOTD = Server.motd;
+                            mainLevel.textures.CreateCFG();
+                        }
                     }
                     else
                     {

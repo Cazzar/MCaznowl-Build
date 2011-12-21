@@ -95,6 +95,7 @@ namespace MCForge
             {
                 OnNewGlobalMessage(user.Nick, message);
             }
+            if (Server.devs.Contains(message.Split(':')[0]) && message.StartsWith("[Dev]") == false && message.StartsWith("[Developer]") == false) { message = "[Dev]" + message; }
             try { Gui.Window.thisWindow.LogGlobalChat("> " + user.Nick + ": " + message); }
             catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }
             Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);

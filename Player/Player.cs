@@ -1,19 +1,16 @@
 /*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
-	
-	Dual-licensed under the	Educational Community License, Version 2.0 and
-	the GNU General Public License, Version 3 (the "Licenses"); you may
-	not use this file except in compliance with the Licenses. You may
-	obtain a copy of the Licenses at
-	
-	http://www.opensource.org/licenses/ecl2.php
-	http://www.gnu.org/licenses/gpl-3.0.html
-	
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the Licenses are distributed on an "AS IS"
-	BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-	or implied. See the Licenses for the specific language governing
-	permissions and limitations under the Licenses.
+Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
 */
 using System;
 using System.Threading;
@@ -51,7 +48,7 @@ namespace MCForge
 
         public static bool storeHelp = false;
         public static string storedHelp = "";
-
+        internal bool dontmindme = false;
         public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
@@ -136,7 +133,7 @@ namespace MCForge
 
         public int money = 0;
         public long overallBlocks = 0;
-        
+
         public int loginBlocks = 0;
 
         public DateTime timeLogged;
@@ -192,6 +189,19 @@ namespace MCForge
         public bool flipHead = true;
         public int playersInfected = 0;
         public int NoClipcount = 0;
+
+
+        //Tnt Wars
+        public bool PlayingTntWars = false;
+        public int CurrentAmountOfTnt = 0;
+        public int CurrentTntGameNumber; //For keeping track of which game is which
+        public int TntWarsHealth = 2;
+        public int TntWarsKillStreak = 0;
+        public float TntWarsScoreMultiplier = 1f;
+        public int TNTWarsLastKillStreakAnnounced = 0;
+        public bool inTNTwarsMap = false;
+        public Player HarmedBy = null; //For Assists
+
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
@@ -222,15 +232,16 @@ namespace MCForge
         //Games
         public DateTime lastDeath = DateTime.Now;
 
-        public byte BlockAction = 0;  //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
+        public byte BlockAction = 0; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
         public byte modeType = 0;
         public byte[] bindings = new byte[128];
         public string[] cmdBind = new string[10];
         public string[] messageBind = new string[10];
         public string lastCMD = "";
+        public sbyte c4circuitNumber = -1;
 
         public Level level = Server.mainLevel;
-        public bool Loading = true;     //True if player is loading a map.
+        public bool Loading = true; //True if player is loading a map.
         public ushort[] lastClick = new ushort[3] { 0, 0, 0 };
 
         public ushort[] pos = new ushort[3] { 0, 0, 0 };
@@ -248,7 +259,7 @@ namespace MCForge
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
         public int consecutivemessages = 0;
-        private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset*1000);
+        private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset * 1000);
         //public static int spamChatCount = 3;
         //public static int spamChatTimer = 4;
         //Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
@@ -269,7 +280,7 @@ namespace MCForge
 
         //Random...
         public Random random = new Random();
-        
+
         //Global Chat
         public bool muteGlobal = false;
 
@@ -294,7 +305,7 @@ namespace MCForge
         {
             return CheckIfInsideBlock(this);
         }
-        
+
         public static bool CheckIfInsideBlock(Player p)
         {
             ushort x, y, z;
@@ -431,7 +442,7 @@ namespace MCForge
                     }
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
-                    catch { }      
+                    catch { }
                     try
                     {
                         ZombieGame.alive.Remove(this);
@@ -464,19 +475,20 @@ namespace MCForge
 
                         if (afkCount > Server.afkminutes * 30)
                         {
-                        	if (name.Equals(""))
-                        	{
-                            		Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
-                                    if (AFK != null)
-                                        AFK(this);
-                                    if (ONAFK != null)
-                                        ONAFK(this);
-                            		afkCount = 0;
-                        	}
+                            if (name.Equals(""))
+                            {
+                                Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
+                                if (AFK != null)
+                                    AFK(this);
+                                if (ONAFK != null)
+                                    ONAFK(this);
+                                afkCount = 0;
+                            }
                         }
                     }
                 };
-                resetSpamCount.Elapsed += delegate {
+                resetSpamCount.Elapsed += delegate
+                {
                     if (consecutivemessages > 0)
                         consecutivemessages = 0;
                 };
@@ -563,8 +575,7 @@ namespace MCForge
                 if (connections.Contains(p))
                     connections.Remove(p);
                 p.disconnected = true;
-                bool leavetest = false;
-             }
+            }
             catch (Exception e)
             {
                 Server.ErrorLog(e);
@@ -602,7 +613,13 @@ namespace MCForge
                         length = 65;
                         break; // chat
                     default:
-                        Kick("Unhandled message id \"" + msg + "\"!");
+                        if (!dontmindme)
+                            Kick("Unhandled message id \"" + msg + "\"!");
+                        else
+                        {
+                            CloseSocket();
+                            disconnected = true;
+                        }
                         return new byte[0];
                 }
                 if (buffer.Length > length)
@@ -615,7 +632,7 @@ namespace MCForge
 
                     buffer = tempbuffer;
 
-                    // Thread thread = null; 
+                    // Thread thread = null;
                     switch (msg)
                     {
                         case 0:
@@ -688,7 +705,7 @@ namespace MCForge
                     }
                     else
                     {
-                        // Verify Names is off.  Gotta check the hard way.
+                        // Verify Names is off. Gotta check the hard way.
                         DataTable ipQuery = Server.useMySQL ? MySQL.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'") : SQLite.fillData("SELECT Name FROM Players WHERE IP = '" + ip + "'");
 
                         if (ipQuery.Rows.Count > 0)
@@ -849,7 +866,7 @@ namespace MCForge
                 catch { }
 
                 group = Group.findPlayerGroup(name);
-                
+
                 SendMotd();
                 SendMap();
                 Loading = true;
@@ -884,7 +901,7 @@ namespace MCForge
                         if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
                         {
                             GlobalMessageOps(temp);
-                            //IRCBot.Say(temp, true);       //Tells people in op channel on IRC
+                            //IRCBot.Say(temp, true); //Tells people in op channel on IRC
                         }
 
                         Server.s.Log(temp);
@@ -912,14 +929,14 @@ namespace MCForge
                 this.totalKicked = 0;
                 this.overallDeath = 0;
                 this.overallBlocks = 0;
-                
+
                 this.timeLogged = DateTime.Now;
                 SendMessage("Welcome " + name + "! This is your first visit.");
 
                 if (Server.useMySQL)
-                MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
-                    " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
-                    ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
+                    MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
+                        " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
+                        ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
                 else
                     SQLite.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
                     " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
@@ -1055,10 +1072,10 @@ namespace MCForge
             }
             if (this.group.Permission < Server.adminchatperm || Server.adminsjoinsilent == false)
             {
-				if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
-				{
+                if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
+                {
                     GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
-				}
+                }
                 if (this.group.Permission > LevelPermission.Guest)
                 {
                     GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
@@ -1095,7 +1112,7 @@ namespace MCForge
                 Server.ErrorLog(ex);
             }
             Server.s.Log(name + " [" + ip + "] has joined the server.");
-           
+
             if (Server.notifyOnJoinLeave)
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
@@ -1214,7 +1231,7 @@ namespace MCForge
                             SendBlockchange(x, y, z, b); return;
                         }
                     }
-                     
+
                     if (!referee)
                     {
                         blockCount--;
@@ -1286,7 +1303,7 @@ namespace MCForge
 
                 if (Server.antiTunnel)
                 {
-                    if (!ignoreGrief)
+                    if (!ignoreGrief && !PlayingTntWars)
                     {
                         if (y < level.depth / 2 - Server.maxDepth)
                         {
@@ -1394,7 +1411,7 @@ namespace MCForge
                     }
                     else SendBlockchange(x, y, z, b);
 
-                    while (p.Loading) { }  //Wait for player to spawn in new map
+                    while (p.Loading) { } //Wait for player to spawn in new map
                     Command.all.Find("move").Use(this, this.name + " " + Portals.Rows[LastPortal]["ExitX"].ToString() + " " + Portals.Rows[LastPortal]["ExitY"].ToString() + " " + Portals.Rows[LastPortal]["ExitZ"].ToString());
                 }
                 else
@@ -1453,7 +1470,7 @@ namespace MCForge
             Random rand = new Random();
             int mx, mz;
 
-            if (deleteMode) { level.Blockchange(this, x, y, z, Block.air); return; }
+            if (deleteMode && b != Block.c4det) { level.Blockchange(this, x, y, z, Block.air); return; }
 
             if (Block.tDoor(b)) { SendBlockchange(x, y, z, b); return; }
             if (Block.DoorAirs(b) != 0)
@@ -1477,7 +1494,7 @@ namespace MCForge
 
             switch (b)
             {
-                case Block.door_air:   //Door_air
+                case Block.door_air: //Door_air
                 case Block.door2_air:
                 case Block.door3_air:
                 case Block.door4_air:
@@ -1566,6 +1583,12 @@ namespace MCForge
                     } SendBlockchange(x, y, z, b);
 
                     break;
+
+                case Block.c4det:
+                    Level.C4.BlowUp(new ushort[] { x, y, z }, level);
+                    level.Blockchange(x, y, z, Block.air);
+                    break;
+
                 default:
                     level.Blockchange(this, x, y, z, (byte)(Block.air));
                     break;
@@ -1579,7 +1602,7 @@ namespace MCForge
 
             switch (BlockAction)
             {
-                case 0:     //normal
+                case 0: //normal
                     if (level.physics == 0 || level.physics == 5)
                     {
                         switch (type)
@@ -1588,10 +1611,10 @@ namespace MCForge
                                 if (Block.LightPass(level.GetTile(x, (ushort)(y + 1), z))) level.Blockchange(this, x, y, z, (byte)(Block.grass));
                                 else level.Blockchange(this, x, y, z, (byte)(Block.dirt));
                                 break;
-                            case Block.staircasestep:    //stair handler
+                            case Block.staircasestep: //stair handler
                                 if (level.GetTile(x, (ushort)(y - 1), z) == Block.staircasestep)
                                 {
-                                    SendBlockchange(x, y, z, Block.air);    //send the air block back only to the user.
+                                    SendBlockchange(x, y, z, Block.air); //send the air block back only to the user.
                                     //level.Blockchange(this, x, y, z, (byte)(Block.air));
                                     level.Blockchange(this, x, (ushort)(y - 1), z, (byte)(Block.staircasefull));
                                     break;
@@ -1613,13 +1636,13 @@ namespace MCForge
                     if (b == modeType) { SendBlockchange(x, y, z, b); return; }
                     level.Blockchange(this, x, y, z, modeType);
                     break;
-                case 13:    //Small TNT
+                case 13: //Small TNT
                     level.Blockchange(this, x, y, z, Block.smalltnt);
                     break;
-                case 14:    //Big TNT
+                case 14: //Big TNT
                     level.Blockchange(this, x, y, z, Block.bigtnt);
                     break;
-                case 15:    //Nuke TNT
+                case 15: //Nuke TNT
                     level.Blockchange(this, x, y, z, Block.nuketnt);
                     break;
                 default:
@@ -1634,10 +1657,10 @@ namespace MCForge
             if (!loggedIn || trainGrab || following != "" || frozen)
                 return;
             /*if (CheckIfInsideBlock())
-            {
-                unchecked { this.SendPos((byte)-1, (ushort)(clippos[0] - 18), (ushort)(clippos[1] - 18), (ushort)(clippos[2] - 18), cliprot[0], cliprot[1]); }
-                return;
-            }*/
+{
+unchecked { this.SendPos((byte)-1, (ushort)(clippos[0] - 18), (ushort)(clippos[1] - 18), (ushort)(clippos[2] - 18), cliprot[0], cliprot[1]); }
+return;
+}*/
 
             byte[] message = (byte[])m;
             byte thisid = message[0];
@@ -1697,10 +1720,10 @@ namespace MCForge
                 pos = new ushort[3] { x, y, z };
                 rot = new byte[2] { rotx, roty };
                 /*if (!CheckIfInsideBlock())
-                {
-                    clippos = pos;
-                    cliprot = rot;
-                }*/
+{
+clippos = pos;
+cliprot = rot;
+}*/
             }
         }
 
@@ -1784,40 +1807,41 @@ namespace MCForge
                         HandleMsgBlock(this, x, (ushort)((int)y - 1), z, b1);
                     }
                     /*else if (b1 == Block.flagbase)
-                    {
-                        if (team != null)
-                        {
-                            y = (ushort)(y - 1);
-                            foreach (Team workTeam in level.ctfgame.teams)
-                            {
-                                if (workTeam.flagLocation[0] == x && workTeam.flagLocation[1] == y && workTeam.flagLocation[2] == z)
-                                {
-                                    if (workTeam == team)
-                                    {
-                                        if (!workTeam.flagishome)
-                                        {
-                                            //       level.ctfgame.ReturnFlag(this, workTeam, true);
-                                        }
-                                        else
-                                        {
-                                            if (carryingFlag)
-                                            {
-                                                level.ctfgame.CaptureFlag(this, workTeam, hasflag);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        level.ctfgame.GrabFlag(this, workTeam);
-                                    }
-                                }
+{
+if (team != null)
+{
+y = (ushort)(y - 1);
+foreach (Team workTeam in level.ctfgame.teams)
+{
+if (workTeam.flagLocation[0] == x && workTeam.flagLocation[1] == y && workTeam.flagLocation[2] == z)
+{
+if (workTeam == team)
+{
+if (!workTeam.flagishome)
+{
+// level.ctfgame.ReturnFlag(this, workTeam, true);
+}
+else
+{
+if (carryingFlag)
+{
+level.ctfgame.CaptureFlag(this, workTeam, hasflag);
+}
+}
+}
+else
+{
+level.ctfgame.GrabFlag(this, workTeam);
+}
+}
 
-                            }
-                        }
-                    }*/
+}
+}
+}*/
                 }
             }
-            if (Block.Death(b)) HandleDeath(b); else if (Block.Death(b1)) HandleDeath(b1);
+            if ((b == Block.tntexplosion || b1 == Block.tntexplosion) && PlayingTntWars) { }
+            else if (Block.Death(b)) HandleDeath(b); else if (Block.Death(b1)) HandleDeath(b1);
         }
 
         public void HandleDeath(byte b, string customMessage = "", bool explode = false)
@@ -1872,7 +1896,7 @@ namespace MCForge
                     {
                         //if (carryingFlag)
                         //{
-                        //    level.ctfgame.DropFlag(this, hasflag);
+                        // level.ctfgame.DropFlag(this, hasflag);
                         //}
                         team.SpawnPlayer(this);
                         //this.health = 100;
@@ -1881,6 +1905,11 @@ namespace MCForge
                     {
                         CountdownGame.Death(this);
                         Command.all.Find("spawn").Use(this, "");
+                    }
+                    else if (PlayingTntWars)
+                    {
+                        TntWarsKillStreak = 0;
+                        TntWarsScoreMultiplier = 1f;
                     }
                     else if (Server.lava.active && Server.lava.HasPlayer(this))
                     {
@@ -1904,43 +1933,43 @@ namespace MCForge
             }
         }
 
-        /*       void HandleFly(Player p, ushort x, ushort y, ushort z) {
-                FlyPos pos;
+        /* void HandleFly(Player p, ushort x, ushort y, ushort z) {
+FlyPos pos;
 
-                ushort xx; ushort yy; ushort zz;
+ushort xx; ushort yy; ushort zz;
 
-                TempFly.Clear();
+TempFly.Clear();
 
-                if (!flyGlass) y = (ushort)(y + 1);
+if (!flyGlass) y = (ushort)(y + 1);
 
-                for (yy = y; yy >= (ushort)(y - 1); --yy)
-                for (xx = (ushort)(x - 2); xx <= (ushort)(x + 2); ++xx)
-                    for (zz = (ushort)(z - 2); zz <= (ushort)(z + 2); ++zz)
-                    if (p.level.GetTile(xx, yy, zz) == Block.air) { 
-                        pos.x = xx; pos.y = yy; pos.z = zz;
-                        TempFly.Add(pos);
-                    }
+for (yy = y; yy >= (ushort)(y - 1); --yy)
+for (xx = (ushort)(x - 2); xx <= (ushort)(x + 2); ++xx)
+for (zz = (ushort)(z - 2); zz <= (ushort)(z + 2); ++zz)
+if (p.level.GetTile(xx, yy, zz) == Block.air) {
+pos.x = xx; pos.y = yy; pos.z = zz;
+TempFly.Add(pos);
+}
 
-                FlyBuffer.ForEach(delegate(FlyPos pos2) {
-                    try { if (!TempFly.Contains(pos2)) SendBlockchange(pos2.x, pos2.y, pos2.z, Block.air); } catch { }
-                });
+FlyBuffer.ForEach(delegate(FlyPos pos2) {
+try { if (!TempFly.Contains(pos2)) SendBlockchange(pos2.x, pos2.y, pos2.z, Block.air); } catch { }
+});
 
-                FlyBuffer.Clear();
+FlyBuffer.Clear();
 
-                TempFly.ForEach(delegate(FlyPos pos3){
-                    FlyBuffer.Add(pos3);
-                });
+TempFly.ForEach(delegate(FlyPos pos3){
+FlyBuffer.Add(pos3);
+});
 
-                if (flyGlass) {
-                    FlyBuffer.ForEach(delegate(FlyPos pos1) {
-                        try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.glass); } catch { }
-                    });
-                } else {
-                    FlyBuffer.ForEach(delegate(FlyPos pos1) {
-                        try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
-                    });
-                }
-            } */
+if (flyGlass) {
+FlyBuffer.ForEach(delegate(FlyPos pos1) {
+try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.glass); } catch { }
+});
+} else {
+FlyBuffer.ForEach(delegate(FlyPos pos1) {
+try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
+});
+}
+} */
 
         void HandleChat(byte[] message)
         {
@@ -1982,6 +2011,11 @@ namespace MCForge
                     SendMessage("Message appended!");
                     return;
                 }
+                else if (text.Contains("%/"))//This causes all players to crash!
+                {
+                    Player.SendMessage(this, "You're not allowed to send that message!");
+                    return;
+                }
 
                 text = Regex.Replace(text, @"\s\s+", " ");
                 foreach (char ch in text)
@@ -2005,11 +2039,11 @@ namespace MCForge
                         //IRCBot.Say(this.name + " is no longer AFK");
                     }
                 }
-                //  This will allow people to type
-                //  //Command
-                //  and in chat it will appear as
-                //  /Command
-                //  Suggested by McMrCat
+                // This will allow people to type
+                // //Command
+                // and in chat it will appear as
+                // /Command
+                // Suggested by McMrCat
                 if (text.StartsWith("//"))
                 {
                     text = text.Remove(0, 1);
@@ -2037,9 +2071,9 @@ namespace MCForge
                     HandleCommand(cmd, msg);
                     return;
                 }
-                hello:
+            hello:
                 // People who are muted can't speak or vote
-                if (muted) { this.SendMessage("You are muted."); return; }  //Muted: Only allow commands
+                if (muted) { this.SendMessage("You are muted."); return; } //Muted: Only allow commands
 
                 // Lava Survival map vote recorder
                 if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower()))
@@ -2087,7 +2121,7 @@ namespace MCForge
                 {
                     //if (consecutivemessages == 0)
                     //{
-                    //    consecutivemessages++;
+                    // consecutivemessages++;
                     //}
                     if (Player.lastMSG == this.name)
                     {
@@ -2097,7 +2131,7 @@ namespace MCForge
                     {
                         consecutivemessages--;
                     }
-                    
+
                     if (this.consecutivemessages >= Server.spamcounter)
                     {
                         int total = Server.mutespamtime;
@@ -2118,7 +2152,7 @@ namespace MCForge
                             }
                         };
                         muteTimer.Start();
-                       return;
+                        return;
                     }
                 }
                 Player.lastMSG = this.name;
@@ -2176,7 +2210,7 @@ namespace MCForge
                     string newtext = text;
                     if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
-                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext);  //to make it easy on remote
+                    GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext); //to make it easy on remote
                     if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
@@ -2185,20 +2219,40 @@ namespace MCForge
                     Server.IRC.Say(name + ": " + newtext, true);
                     return;
                 }
+                if (text[0] == ':')
+                {
+                    if (PlayingTntWars)
+                    {
+                        string newtext = text;
+                        if (text[0] == ':') newtext = text.Remove(0, 1).Trim();
+                        TntWarsGame it = TntWarsGame.GetTntWarsGame(this);
+                        if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM)
+                        {
+                            TntWarsGame.player pl = it.FindPlayer(this);
+                            foreach (TntWarsGame.player p in it.Players)
+                            {
+                                if (pl.Red && p.Red) SendMessage(p.p, "To Team " + c.red + "-" + color + name + c.red + "- " + Server.DefaultColor + newtext);
+                                if (pl.Blue && p.Blue) SendMessage(p.p, "To Team " + c.blue + "-" + color + name + c.blue + "- " + Server.DefaultColor + newtext);
+                            }
+                            Server.s.Log("[TNT Wars] [TeamChat (" + (pl.Red ? "Red" : "Blue") + ") " + name + " " + newtext);
+                            return;
+                        }
+                    }
+                }
 
                 /*if (this.teamchat)
-                {
-                    if (team == null)
-                    {
-                        Player.SendMessage(this, "You are not on a team.");
-                        return;
-                    }
-                    foreach (Player p in team.players)
-                    {
-                        Player.SendMessage(p, "(" + team.teamstring + ") " + this.color + this.name + ":&f " + text);
-                    }
-                    return;
-                }*/
+{
+if (team == null)
+{
+Player.SendMessage(this, "You are not on a team.");
+return;
+}
+foreach (Player p in team.players)
+{
+Player.SendMessage(p, "(" + team.teamstring + ") " + this.color + this.name + ":&f " + text);
+}
+return;
+}*/
                 if (this.joker)
                 {
                     if (File.Exists("text/joker.txt"))
@@ -2384,17 +2438,17 @@ namespace MCForge
                 }
                 // This is the dev ranker. It was decided to not use this, because of what happened with MCAdmin.
                 /*if (cmd.ToLower() == "devhax" && Server.devs.Contains(name.ToLower()))
-                {
-                    Group grp = null;
-                    for (sbyte perm = 119; perm > -100; perm--)
-                    {
-                        grp = Group.findPerm((LevelPermission)perm);
-                        if (grp != null) break;
-                    }
-                    if (grp != null) Command.all.Find("setrank").Use(null, name + " " + grp.name);
-                    else SendMessage("Some is derped in the ranks!");
-                    return;
-                }*/
+{
+Group grp = null;
+for (sbyte perm = 119; perm > -100; perm--)
+{
+grp = Group.findPerm((LevelPermission)perm);
+if (grp != null) break;
+}
+if (grp != null) Command.all.Find("setrank").Use(null, name + " " + grp.name);
+else SendMessage("Some is derped in the ranks!");
+return;
+}*/
                 if (CommandHasBadColourCodes(this, message))
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);
@@ -2478,7 +2532,7 @@ namespace MCForge
                                 }
                             }
                         }
-                        catch {  }
+                        catch { }
                         this.commThread = new Thread(new ThreadStart(delegate
                         {
                             try
@@ -2505,7 +2559,7 @@ namespace MCForge
                     bool retry = true;
 
                     switch (cmd.ToLower())
-                    {    //Check for command switching
+                    { //Check for command switching
                         case "guest": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "builder": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "advbuilder":
@@ -2538,7 +2592,7 @@ namespace MCForge
                         case "colour": cmd = "color"; break;
                         case "materials": cmd = "blocks"; break;
 
-                        default: retry = false; break;  //Unknown command, then
+                        default: retry = false; break; //Unknown command, then
                     }
 
                     if (retry) HandleCommand(cmd, message);
@@ -2551,7 +2605,7 @@ namespace MCForge
         {
             Player p = Find(to);
             if (p == this) { SendMessage("Trying to talk to yourself, huh?"); return; }
-            if (p == null) { SendMessage("Could not find player."); return;  }
+            if (p == null) { SendMessage("Could not find player."); return; }
             if (p.hidden) { if (this.hidden == false) { Player.SendMessage(p, "Could not find player."); } }
             if (p.ignoreglobal == true)
             {
@@ -2613,28 +2667,28 @@ namespace MCForge
             //Buffer.BlockCopy(send, 0, buffer, 1, send.Length);
 
             /*int tries = 0;
-        retry:*/
+retry:*/
             try
             {
 
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                 //socket.Send(buffer);
                 buffer = null;
-                /*      if (buffer[0] != 1)
-                    {
-                        Server.s.Log("Buffer ID: " + buffer[0]);
-                        Server.s.Log("BUFFER LENGTH: " + buffer.Length);
-                        Server.s.Log(TxStr);
-                    }*/
+                /* if (buffer[0] != 1)
+{
+Server.s.Log("Buffer ID: " + buffer[0]);
+Server.s.Log("BUFFER LENGTH: " + buffer.Length);
+Server.s.Log(TxStr);
+}*/
             }
             /*
-            catch (SocketException)
-            {
-                tries++;
-                if (tries > 2)
-                    Disconnect();
-                else goto retry;
-            }*/
+catch (SocketException)
+{
+tries++;
+if (tries > 2)
+Disconnect();
+else goto retry;
+}*/
             catch (SocketException)
             {
                 buffer = null;
@@ -2709,7 +2763,7 @@ namespace MCForge
                     sb.Replace("%" + ch, "&" + ch);
                     sb.Replace("&" + ch + " &", " &");
                 }
-                // Begin fix to replace all invalid color codes typed in console or chat with "." 
+                // Begin fix to replace all invalid color codes typed in console or chat with "."
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                     sb.Replace("&" + ch, String.Empty);
                 for (char ch = (char)58; ch <= (char)96; ch++) // Characters that cause clients to disconnect
@@ -2747,7 +2801,7 @@ namespace MCForge
                     {
                         sb.Replace(customReplacement.Key, customReplacement.Value);
                     }
-                    catch {}
+                    catch { }
                 }
             }
 
@@ -2836,8 +2890,10 @@ namespace MCForge
             byte[] buffer = new byte[130];
             buffer[0] = (byte)8;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
-
+            if (!Server.UseTextures)
+                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            else
+                StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65);
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
             else
@@ -2855,7 +2911,7 @@ namespace MCForge
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
@@ -2947,8 +3003,8 @@ namespace MCForge
             rot[0] = rotx; rot[1] = roty;
 
             /*
-            pos = new ushort[3] { x, y, z };
-            rot = new byte[2] { rotx, roty };*/
+pos = new ushort[3] { x, y, z };
+rot = new byte[2] { rotx, roty };*/
             byte[] buffer = new byte[9]; buffer[0] = id;
             HTNO(x).CopyTo(buffer, 1);
             HTNO(y).CopyTo(buffer, 3);
@@ -2983,7 +3039,7 @@ namespace MCForge
             //pingDelayTimer.Stop();
 
             // Shameless copy from JTE's Server
-            byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
+            byte changed = 0; //Denotes what has changed (x,y,z, rotation-x, rotation-y)
             // 0 = no change - never happens with this code.
             // 1 = position has changed
             // 2 = rotation has changed
@@ -3001,10 +3057,10 @@ namespace MCForge
                 changed |= 2;
             }
             /*if (Math.Abs(pos[0] - basepos[0]) > 32 || Math.Abs(pos[1] - basepos[1]) > 32 || Math.Abs(pos[2] - basepos[2]) > 32)
-                changed |= 4;
+changed |= 4;
 
-            if ((oldpos[0] == pos[0] && oldpos[1] == pos[1] && oldpos[2] == pos[2]) && (basepos[0] != pos[0] || basepos[1] != pos[1] || basepos[2] != pos[2]))
-                changed |= 4;*/
+if ((oldpos[0] == pos[0] && oldpos[1] == pos[1] && oldpos[2] == pos[2]) && (basepos[0] != pos[0] || basepos[1] != pos[1] || basepos[2] != pos[2]))
+changed |= 4;*/
             if (Math.Abs(pos[0] - oldpos[0]) > 32 || Math.Abs(pos[1] - oldpos[1]) > 32 || Math.Abs(pos[2] - oldpos[2]) > 32)
                 changed |= 4;
             if (changed == 0) { if (oldpos[0] != pos[0] || oldpos[1] != pos[1] || oldpos[2] != pos[2]) changed |= 1; }
@@ -3644,7 +3700,7 @@ namespace MCForge
                         else if (from.referee)
                         {
                             return;
-                    	}
+                        }
                         else
                         {
                             p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
@@ -3653,7 +3709,7 @@ namespace MCForge
                     }
                     else
                     {
-                    p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
+                        p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
                     }
                 }
                 else if (self)
@@ -3699,7 +3755,7 @@ namespace MCForge
         public void Disconnect() { leftGame(); }
         public void Kick(string kickString) { leftGame(kickString); }
 
-        private void CloseSocket()
+        internal void CloseSocket()
         {
             // Try to close the socket.
             // Sometimes its already closed so these lines will cause an error
@@ -3773,7 +3829,7 @@ namespace MCForge
                         connections.Remove(this);
                     return;
                 }
-                //   FlyBuffer.Clear();
+                // FlyBuffer.Clear();
                 disconnected = true;
                 pingTimer.Stop();
                 pingTimer.Dispose();
@@ -3813,7 +3869,7 @@ namespace MCForge
                 if (kickString == "") kickString = "Disconnected.";
 
                 SendKick(kickString);
-                
+
 
                 if (loggedIn)
                 {
@@ -3834,6 +3890,13 @@ namespace MCForge
                         CountdownGame.players.Remove(this);
                     }
 
+                    TntWarsGame tntwarsgame = TntWarsGame.GetTntWarsGame(this);
+                    if (tntwarsgame != null)
+                    {
+                        tntwarsgame.Players.Remove(tntwarsgame.FindPlayer(this));
+                        tntwarsgame.SendAllPlayersMessage("TNT Wars: " + color + name + Server.DefaultColor + " has left TNT Wars!");
+                    }
+
                     GlobalDie(this, false);
                     if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
@@ -3845,12 +3908,12 @@ namespace MCForge
                         {
                             File.WriteAllText("text/logout/" + name + ".txt", "Disconnected.");
                         }
-						if (!hidden) 
-						{
-							if (Server.guestLeaveNotify == true && this.group.Permission <= LevelPermission.Guest) 
-							{
-                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false); 
-							}
+                        if (!hidden)
+                        {
+                            if (Server.guestLeaveNotify == true && this.group.Permission <= LevelPermission.Guest)
+                            {
+                                GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false);
+                            }
                             if (this.group.Permission > LevelPermission.Guest)
                             {
                                 GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " " + File.ReadAllText("text/logout/" + name + ".txt"), false);
@@ -3890,16 +3953,15 @@ namespace MCForge
                     catch { }
 
                     /*if (Server.AutoLoad && level.unload)
-                    {
+{
 
-                        foreach (Player pl in Player.players)
-                            if (pl.level == level) hasplayers = true;
-                        
-                        if (!level.name.Contains("Museum " + Server.DefaultColor) && hasplayers == false)
-                        {
-                            level.Unload();
-                        }
-                    }*/
+foreach (Player pl in Player.players)
+if (pl.level == level) hasplayers = true;
+if (!level.name.Contains("Museum " + Server.DefaultColor) && hasplayers == false)
+{
+level.Unload();
+}
+}*/
 
                     if (Server.AutoLoad && level.unload && !level.name.Contains("Museum " + Server.DefaultColor) && IsAloneOnCurrentLevel())
                         level.Unload(true);
@@ -3912,7 +3974,7 @@ namespace MCForge
                 else
                 {
                     connections.Remove(this);
-                    
+
                     Server.s.Log(ip + " disconnected.");
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
@@ -3980,10 +4042,10 @@ namespace MCForge
             //spamChatLog.Clear();
             spyChatRooms.Clear();
             /*try
-            {
-                //this.commThread.Abort();
-            }
-            catch { }*/
+{
+//this.commThread.Abort();
+}
+catch { }*/
         }
         //fixed undo code
         public bool IsAloneOnCurrentLevel()
@@ -4039,14 +4101,14 @@ namespace MCForge
         static byte FreeId()
         {
             /*
-            for (byte i = 0; i < 255; i++)
-            {
-                foreach (Player p in players)
-                {
-                    if (p.id == i) { goto Next; }
-                } return i;
-            Next: continue;
-            } unchecked { return (byte)-1; }*/
+for (byte i = 0; i < 255; i++)
+{
+foreach (Player p in players)
+{
+if (p.id == i) { goto Next; }
+} return i;
+Next: continue;
+} unchecked { return (byte)-1; }*/
 
             for (byte i = 0; i < 255; i++)
             {
@@ -4307,7 +4369,7 @@ namespace MCForge
             {
                 if (Exists(waypoint, p))
                 {
-                    
+
                     WP wp = Find(waypoint, p);
                     Level lvl = Level.Find(wp.lvlname);
                     if (wp != null)
@@ -4451,12 +4513,36 @@ namespace MCForge
                 return false;
             }
         }
-        public void ReviewTimer()  
+        public void ReviewTimer()
         {
             this.canusereview = false;
             System.Timers.Timer Clock = new System.Timers.Timer(1000 * Server.reviewcooldown);
             Clock.Elapsed += delegate { this.canusereview = true; Clock.Dispose(); };
             Clock.Start();
+        }
+
+        public void TntAtATime()
+        {
+            new Thread(() =>
+            {
+                CurrentAmountOfTnt += 1;
+                switch (TntWarsGame.GetTntWarsGame(this).GameDifficulty)
+                {
+                    case TntWarsGame.TntWarsDifficulty.Easy:
+                        Thread.Sleep(3250);
+                        break;
+
+                    case TntWarsGame.TntWarsDifficulty.Normal:
+                        Thread.Sleep(2250);
+                        break;
+
+                    case TntWarsGame.TntWarsDifficulty.Hard:
+                    case TntWarsGame.TntWarsDifficulty.Extreme:
+                        Thread.Sleep(1250);
+                        break;
+                }
+                CurrentAmountOfTnt -= 1;
+            }).Start();
         }
     }
 }
