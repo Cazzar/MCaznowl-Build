@@ -88,6 +88,7 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="CTF\Setup.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
