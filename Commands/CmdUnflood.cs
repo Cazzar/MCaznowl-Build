@@ -45,6 +45,7 @@ namespace MCForge
                 Command.all.Find("replaceall").Use(p, "active_water air");
                 Command.all.Find("replaceall").Use(p, "active_hot_lava air");
                 Command.all.Find("replaceall").Use(p, "active_cold_water air");
+                Command.all.Find("replaceall").Use(p, "fast_hot_lava air");
                 Command.all.Find("replaceall").Use(p, "magma air");
             }
             else

@@ -93,7 +93,7 @@ namespace MCForge
         public bool canusereview = true;
 
         // check what commands are being used much:
-        public static bool sendcommanddata = false;
+        public static bool sendcommanddata = true;
 
         //Pyramid Code
 
@@ -2448,7 +2448,20 @@ namespace MCForge
                         {
                         	if (sendcommanddata)
                         	{
-                                using (WebClient wc = new WebClient()) { wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name); }
+                                new Thread(() =>
+                                {
+                                    using (WebClient wc = new WebClient())
+                                    {
+                                        try
+                                        {
+                                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
+                                        }
+                                        catch
+                                        {
+                                            Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                        }
+                                    }
+                                }).Start();
 							}
                             // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
                             if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
