@@ -71,6 +71,19 @@ namespace MCForge
         public int RedScore = 0;
         public int BlueScore = 0;
 
+        //Zones
+        public List<Zone> NoTNTplacableZones = new List<Zone>();
+        public List<Zone> NoBlockDeathZones = new List<Zone>();
+        public class Zone
+        {
+            public ushort bigX;
+            public ushort bigY;
+            public ushort bigZ;
+            public ushort smallX;
+            public ushort smallY;
+            public ushort smallZ;
+        }
+
         //During Game Main Methods
         public void Start()
         {
@@ -136,6 +149,7 @@ namespace MCForge
                 foreach (player p in Players)
                 {
                     Command.all.Find("spawn").Use(p.p, ""); //This has to be after reveal so that they spawn in the correct place!!
+                    Thread.Sleep(250);
                 }
             }
             //Announcing Etc.
@@ -310,10 +324,10 @@ namespace MCForge
         public void End()
         {
             GameStatus = TntWarsGameStatus.Finished;
-            //Don't let them build and spawn them and change playingtntwars to false
+            //let them build and spawn them and change playingtntwars to false
             foreach (player p in Players)
             {
-                p.p.canBuild = false;
+                p.p.canBuild = true;
                 Command.all.Find("spawn").Use(p.p, "");
                 p.p.PlayingTntWars = false;
             }
@@ -562,6 +576,77 @@ namespace MCForge
                     BlueScore += (int)(Amount * multiplier);
                 }
             }
+        }
+
+        public bool InZone(ushort x, ushort y, ushort z, bool CheckForPlacingTnt)
+        {
+            if (CheckForPlacingTnt)
+            {
+                foreach (Zone Zn in NoTNTplacableZones)
+                {
+                    if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                foreach (Zone Zn in NoBlockDeathZones)
+                {
+                    if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public void DeleteZone(ushort x, ushort y, ushort z, bool NoTntZone, Player p = null)
+        {
+            try
+            {
+                Zone Z = new Zone();
+                if (NoTntZone)
+                {
+                    foreach (Zone Zn in NoTNTplacableZones)
+                    {
+                        if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
+                        {
+                            Z = Zn;
+                        }
+                    }
+                    NoTNTplacableZones.Remove(Z);
+                    if (p != null)
+                    {
+                        Player.SendMessage(p, "TNT Wars: Zone Deleted!");
+                    }
+                    return;
+                }
+                else
+                {
+                    foreach (Zone Zn in NoBlockDeathZones)
+                    {
+                        if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
+                        {
+                            Z = Zn;
+                        }
+                    }
+                    NoBlockDeathZones.Remove(Z);
+                    if (p != null)
+                    {
+                        Player.SendMessage(p, "TNT Wars: Zone Deleted!");
+                    }
+                    return;
+                }
+            }
+            catch
+            {
+                Player.SendMessage(p, "TNT Wars Error: Zone not deleted!");
+            }
+
         }
         
         public bool TeamKill (Player p1, Player p2)
