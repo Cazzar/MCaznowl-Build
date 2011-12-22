@@ -342,6 +342,19 @@ namespace MCForge
                 if ((!Server.lava.active || !Server.lava.HasMap(name)) && save) Save();
                 saveChanges();
             }
+            if (TntWarsGame.Find(this) != null)
+            {
+                foreach (TntWarsGame.player pl in TntWarsGame.Find(this).Players)
+                {
+                    pl.p.CurrentTntGameNumber = -1;
+                    Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
+                    pl.p.PlayingTntWars = false;
+                    pl.p.canBuild = true;
+                    TntWarsGame.SetTitlesAndColor(pl, true);
+                }
+                Server.s.Log("TNT Wars: Game deleted on " + name);
+                TntWarsGame.GameList.Remove(TntWarsGame.Find(this));
+            }
             try
             {
                 physThread.Abort();
