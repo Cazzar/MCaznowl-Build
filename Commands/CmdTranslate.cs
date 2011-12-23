@@ -365,12 +365,7 @@ namespace MCForge
                     if (Server.transenabled)
                     {
                         string serverlanguage = langcode;
-                        string ignore = "";
-                        foreach (string line in File.ReadAllLines("text/transexceptions.txt"))
-                        {
-                            ignore += ignore + " " + line;
-                        }
-                        if (ignore.Contains(p.name))
+                        if (Server.transignore.Contains(p.name))
                         {
 
                             Player.SendMessage(p, "Global translation is &aON" + Server.DefaultColor + ". Personal translation is &cOFF" + Server.DefaultColor + ". The global language is &c" + serverlanguage + ".");
