@@ -592,9 +592,9 @@ namespace MCForge
                 switch (msg)
                 {
                     //For wom
-                    case (byte)'G':
-                        level.textures.ServeCfg(this, buffer);
-                        return new byte[0];
+                    //case (byte)'G':
+                    //    level.textures.ServeCfg(this, buffer);
+                    //   return new byte[0];
                     case 0:
                         length = 130;
                         break; // login
@@ -614,14 +614,7 @@ namespace MCForge
                         length = 65;
                         break; // chat
                     default:
-                        if (!dontmindme)
-                            Kick("Unhandled message id \"" + msg + "\"!");
-                        else
-                        {
-                            CloseSocket();
-                            disconnected = true;
-                            Server.s.Log("Spoon Fed WoM NOW LEAVE");
-                        }
+                        Kick("Unhandled message id \"" + msg + "\"!");
                         return new byte[0];
                 }
                 if (buffer.Length > length)
@@ -2892,10 +2885,10 @@ else goto retry;
             byte[] buffer = new byte[130];
             buffer[0] = (byte)8;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            if (!Server.UseTextures)
-                StringFormat(Server.motd, 64).CopyTo(buffer, 65);
-            else
-                StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65);
+            //if (!Server.UseTextures)
+            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            //else
+            //    StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65);
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
             else
@@ -2913,8 +2906,8 @@ else goto retry;
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
-            else if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
+            //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
             if (Block.canPlace(this.group.Permission, Block.blackrock))

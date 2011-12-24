@@ -1932,12 +1932,12 @@ namespace MCForge.Gui
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (GetSelectedLevel() != null)
+            /*if (GetSelectedLevel() != null)
             {
                 GUI.Textures textures = new GUI.Textures();
                 textures.l = GetSelectedLevel();
                 textures.Show();
-            }
+            }*/
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)

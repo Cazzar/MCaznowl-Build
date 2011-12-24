@@ -2135,7 +2135,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            new GUI.WoM().Show();
+            //new GUI.WoM().Show();
         }
 
         private void chkWomDirect_CheckedChanged(object sender, EventArgs e)
