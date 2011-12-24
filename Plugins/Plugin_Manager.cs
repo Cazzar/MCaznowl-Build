@@ -168,7 +168,8 @@ namespace MCForge
         public static void Unload(Plugin p, bool shutdown)
         {
             p.Unload(shutdown);
-            all.Remove(p);
+            try { all.Remove(p); }
+            catch { }
             Server.s.Log(p.name + " was unloaded.");
         }
         /// <summary>

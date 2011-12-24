@@ -32,7 +32,7 @@ namespace MCForge
             int i = 0;
             for (i = 0; i < 20; i++)
             {
-                Player.GlobalMessage("%3 ");
+                Player.GlobalMessage("%3."); //YOU MUST PUT SOMETHING
             }
             Player.GlobalMessage("%4Global Chat Cleared.");
         }
