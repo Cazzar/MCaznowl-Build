@@ -47,16 +47,27 @@ namespace MCForge
                     text[0] = message.Split(' ')[0].ToLower();
                     text[1] = message.Split(' ')[1].ToLower();
                 }
-                catch {
+                catch
+                {
                     text[1] = p.level.name;
                 }
-                if (p != null && p.level != null) lvl = p.level;
-                else
+                if (message.Split(' ').Length >= 2)
                 {
+
                     lvl = Level.Find(text[1]);
                     if (lvl == null)
                     {
                         Player.SendMessage(p, "Level not found!");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    if (p != null && p.level != null) lvl = p.level;
+                    else
+                    {
+                        Server.s.Log("u dun derped, specify the level, silly head");
                         return;
                     }
                 }
