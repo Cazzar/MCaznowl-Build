@@ -494,20 +494,20 @@ namespace MCForge.Gui
                         newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
                         if (Player.sendcommanddata)
                         {
-                            WebClient wc = new WebClient();
-                            try
+                            new Thread(() =>
                             {
-                                wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
-                            }
-                            catch
-                            {
-                                Server.s.Log("The command data sending failed! if this happens more often I suggest to turn it off");
-                            }
-                            finally
-                            {
-                                if (wc != null)
-                                    wc.Dispose();
-                            }
+                                using (WebClient wc = new WebClient())
+                                {
+                                    try
+                                    {
+                                        wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                                    }
+                                    catch
+                                    {
+                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                    }
+                                }
+                            }).Start();
                         }
                     }
                     catch (Exception ex)

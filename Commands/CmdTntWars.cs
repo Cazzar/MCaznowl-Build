@@ -32,6 +32,10 @@ namespace MCForge
 		public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
 		public CmdTntWars() { }
 
+        public bool DeleteZone = false;
+        public bool CheckZone = false;
+        public bool NoTntZone = false;
+
 		public override void Use(Player p, string message)
 		{
 			string[] text = new string[5];
@@ -487,1176 +491,1309 @@ namespace MCForge
 								}
 							}
 						}
-						switch (text[1])
-						{
-							case "new":
-							case "n":
-								if (it != null)
-								{
-									if (it.FindPlayer(p) != null)
-									{
-										Player.SendMessage(p, "TNT Wars Error: Please leave the current game first!");
-										return;
-									}
-								}
-								if (it == null || it.lvl != p.level)
-								{
-									it = new TntWarsGame(p.level);
-									it.GameNumber = TntWarsGame.GameList.Count + 1;
-									TntWarsGame.GameList.Add(it);
-									p.CurrentTntGameNumber = it.GameNumber;
-									Player.SendMessage(p, "TNT Wars: Created New TNT Wars game on '" + p.level.name + "'");
-									justcreated = true;
-									return;
-								}
-								else if (justcreated == false)
-								{
-									Player.SendMessage(p, "TNT Wars Error: Please delete the current game first!");
-									return;
-								}
-								break;
+                        switch (text[1])
+                        {
+                            case "new":
+                            case "n":
+                                if (it != null)
+                                {
+                                    if (it.FindPlayer(p) != null)
+                                    {
+                                        Player.SendMessage(p, "TNT Wars Error: Please leave the current game first!");
+                                        return;
+                                    }
+                                }
+                                if (it == null || it.lvl != p.level)
+                                {
+                                    it = new TntWarsGame(p.level);
+                                    it.GameNumber = TntWarsGame.GameList.Count + 1;
+                                    TntWarsGame.GameList.Add(it);
+                                    p.CurrentTntGameNumber = it.GameNumber;
+                                    Player.SendMessage(p, "TNT Wars: Created New TNT Wars game on '" + p.level.name + "'");
+                                    justcreated = true;
+                                    return;
+                                }
+                                else if (justcreated == false)
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: Please delete the current game first!");
+                                    return;
+                                }
+                                break;
 
-							case "delete":
-							case "remove":
-								if (it.GameStatus != TntWarsGame.TntWarsGameStatus.Finished && it.GameStatus != TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
-								{
-									Player.SendMessage(p, "Please stop the game first!");
-									return;
-								}
-								else
-								{
-									foreach (TntWarsGame.player pl in it.Players)
-									{
-										pl.p.CurrentTntGameNumber = -1;
-										Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
-										pl.p.PlayingTntWars = false;
-										pl.p.canBuild = true;
-										TntWarsGame.SetTitlesAndColor(pl, true);
-									}
-									Player.SendMessage(p, "TNT Wars: Game deleted");
-									TntWarsGame.GameList.Remove(it);
-									return;
-								}
-								break;
+                            case "delete":
+                            case "remove":
+                                if (it.GameStatus != TntWarsGame.TntWarsGameStatus.Finished && it.GameStatus != TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
+                                {
+                                    Player.SendMessage(p, "Please stop the game first!");
+                                    return;
+                                }
+                                else
+                                {
+                                    foreach (TntWarsGame.player pl in it.Players)
+                                    {
+                                        pl.p.CurrentTntGameNumber = -1;
+                                        Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
+                                        pl.p.PlayingTntWars = false;
+                                        pl.p.canBuild = true;
+                                        TntWarsGame.SetTitlesAndColor(pl, true);
+                                    }
+                                    Player.SendMessage(p, "TNT Wars: Game deleted");
+                                    TntWarsGame.GameList.Remove(it);
+                                    return;
+                                }
+                                break;
 
-							case "reset":
-							case "r":
-								if (it.GameStatus != TntWarsGame.TntWarsGameStatus.Finished)
-								{
-									Player.SendMessage(p, "TNT Wars Error: The game has to have finished to be reset!");
-									return;
-								}
-								else
-								{
-									it.GameStatus = TntWarsGame.TntWarsGameStatus.WaitingForPlayers;
-									Command.all.Find("restore").Use(null, it.BackupNumber + it.lvl.name);
-									it.RedScore = 0;
-									it.BlueScore = 0;
-									foreach (TntWarsGame.player pl in it.Players)
-									{
-										pl.Score = 0;
-										pl.spec = false;
-										pl.p.TntWarsKillStreak = 0;
-										pl.p.TNTWarsLastKillStreakAnnounced = 0;
-										pl.p.CurrentAmountOfTnt = 0;
-										pl.p.CurrentTntGameNumber = it.GameNumber;
-										pl.p.PlayingTntWars = false;
-										pl.p.canBuild = true;
-										pl.p.TntWarsHealth = 2;
-										pl.p.TntWarsScoreMultiplier = 1f;
-										pl.p.inTNTwarsMap = true;
-										pl.p.HarmedBy = null;
-									}
-									Player.SendMessage(p, "TNT Wars: Reset TNT Wars");
-								}
-								break;
+                            case "reset":
+                            case "r":
+                                if (it.GameStatus != TntWarsGame.TntWarsGameStatus.Finished)
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: The game has to have finished to be reset!");
+                                    return;
+                                }
+                                else
+                                {
+                                    it.GameStatus = TntWarsGame.TntWarsGameStatus.WaitingForPlayers;
+                                    Command.all.Find("restore").Use(null, it.BackupNumber + it.lvl.name);
+                                    it.RedScore = 0;
+                                    it.BlueScore = 0;
+                                    foreach (TntWarsGame.player pl in it.Players)
+                                    {
+                                        pl.Score = 0;
+                                        pl.spec = false;
+                                        pl.p.TntWarsKillStreak = 0;
+                                        pl.p.TNTWarsLastKillStreakAnnounced = 0;
+                                        pl.p.CurrentAmountOfTnt = 0;
+                                        pl.p.CurrentTntGameNumber = it.GameNumber;
+                                        pl.p.PlayingTntWars = false;
+                                        pl.p.canBuild = true;
+                                        pl.p.TntWarsHealth = 2;
+                                        pl.p.TntWarsScoreMultiplier = 1f;
+                                        pl.p.inTNTwarsMap = true;
+                                        pl.p.HarmedBy = null;
+                                    }
+                                    Player.SendMessage(p, "TNT Wars: Reset TNT Wars");
+                                }
+                                break;
 
-							case "start":
-								if (it.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
-								{
-									if (it.CheckAllSetUp(p, true) == true)
-									{
-										if (it.PlayingPlayers() >= 2)
-										{
-											if (it.lvl.overload < 2500)
-											{
-												it.lvl.overload = 2501;
-												Player.SendMessage(p, "TNT Wars: Increasing physics overload to 2500");
-												Server.s.Log("TNT Wars: Increasing physics overload to 2500");
-											}
-											Thread t = new Thread(it.Start);
-											t.Start();
-										}
-										else
-										{
-											Player.SendMessage(p, "TNT Wars Error: Not Enough Players (2 or more needed)");
-											return;
-										}
-									}
-								}
-								else if (it.GameStatus == TntWarsGame.TntWarsGameStatus.Finished)
-								{
-									Player.SendMessage(p, "TNT Wars Error: Please use '/tntwars setup reset' to reset the game before starting!");
-									return;
-								}
-								else
-								{
-									Player.SendMessage(p, "TNT Wars Error: Game already in progress!!");
-								}
-								return;
+                            case "start":
+                                if (it.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
+                                {
+                                    if (it.CheckAllSetUp(p, true) == true)
+                                    {
+                                        if (it.PlayingPlayers() >= 2)
+                                        {
+                                            if (it.lvl.overload < 2500)
+                                            {
+                                                it.lvl.overload = 2501;
+                                                Player.SendMessage(p, "TNT Wars: Increasing physics overload to 2500");
+                                                Server.s.Log("TNT Wars: Increasing physics overload to 2500");
+                                            }
+                                            Thread t = new Thread(it.Start);
+                                            t.Start();
+                                        }
+                                        else
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Not Enough Players (2 or more needed)");
+                                            return;
+                                        }
+                                    }
+                                }
+                                else if (it.GameStatus == TntWarsGame.TntWarsGameStatus.Finished)
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: Please use '/tntwars setup reset' to reset the game before starting!");
+                                    return;
+                                }
+                                else
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: Game already in progress!!");
+                                }
+                                return;
 
-							case "stop":
-								if (it.GameStatus == TntWarsGame.TntWarsGameStatus.Finished || it.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
-								{
-									Player.SendMessage(p, "TNT Wars Error: Game already ended / not started!");
-									return;
-								}
-								else
-								{
-									foreach (TntWarsGame.player pl in it.Players)
-									{
-										pl.p.canBuild = true;
-										pl.p.PlayingTntWars = false;
-										pl.p.CurrentAmountOfTnt = 0;
-									}
-									it.GameStatus = TntWarsGame.TntWarsGameStatus.Finished;
-									it.SendAllPlayersMessage("TNT Wars: Game has been stopped!");
-								}
-								break;
+                            case "stop":
+                                if (it.GameStatus == TntWarsGame.TntWarsGameStatus.Finished || it.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: Game already ended / not started!");
+                                    return;
+                                }
+                                else
+                                {
+                                    foreach (TntWarsGame.player pl in it.Players)
+                                    {
+                                        pl.p.canBuild = true;
+                                        pl.p.PlayingTntWars = false;
+                                        pl.p.CurrentAmountOfTnt = 0;
+                                    }
+                                    it.GameStatus = TntWarsGame.TntWarsGameStatus.Finished;
+                                    it.SendAllPlayersMessage("TNT Wars: Game has been stopped!");
+                                }
+                                break;
 
-							case "spawn":
-							case "spawns":
-							case "sp":
-							case "teamspawns":
-							case "teamspawn":
-							case "ts":
-							case "teams":
-							case "tspawn":
-							case "tspawns":
-								if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) { Player.SendMessage(p, "TNT Wars Error: Cannot set spawns because you are on Team Deathmatch!"); return; }
-								switch (text[2])
-								{
-									case "red":
-									case "r":
-									case "1":
+                            case "spawn":
+                            case "spawns":
+                            case "sp":
+                            case "teamspawns":
+                            case "teamspawn":
+                            case "ts":
+                            case "teams":
+                            case "tspawn":
+                            case "tspawns":
+                                if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) { Player.SendMessage(p, "TNT Wars Error: Cannot set spawns because you are on Team Deathmatch!"); return; }
+                                switch (text[2])
+                                {
+                                    case "red":
+                                    case "r":
+                                    case "1":
                                         it.RedSpawn = new ushort[5];
-										it.RedSpawn[0] = (ushort)(p.pos[0] / 32);
-										it.RedSpawn[1] = (ushort)(p.pos[1] / 32);
-										it.RedSpawn[2] = (ushort)(p.pos[2] / 32);
-										it.RedSpawn[3] = p.rot[0];
-										it.RedSpawn[4] = p.rot[1];
-										Player.SendMessage(p, "TNT Wars: Set " + c.red + "Red" + Server.DefaultColor + " spawn");
-										break;
+                                        it.RedSpawn[0] = (ushort)(p.pos[0] / 32);
+                                        it.RedSpawn[1] = (ushort)(p.pos[1] / 32);
+                                        it.RedSpawn[2] = (ushort)(p.pos[2] / 32);
+                                        it.RedSpawn[3] = p.rot[0];
+                                        it.RedSpawn[4] = p.rot[1];
+                                        Player.SendMessage(p, "TNT Wars: Set " + c.red + "Red" + Server.DefaultColor + " spawn");
+                                        break;
 
-									case "blue":
-									case "b":
-									case "2":
+                                    case "blue":
+                                    case "b":
+                                    case "2":
                                         it.BlueSpawn = new ushort[5];
-										it.BlueSpawn[0] = (ushort)(p.pos[0] / 32);
-										it.BlueSpawn[1] = (ushort)(p.pos[1] / 32);
-										it.BlueSpawn[2] = (ushort)(p.pos[2] / 32);
-										it.BlueSpawn[3] = p.rot[0];
-										it.BlueSpawn[4] = p.rot[1];
-										Player.SendMessage(p, "TNT Wars: Set " + c.blue + "Blue" + Server.DefaultColor + " spawn");
-										break;
-								}
-								break;
+                                        it.BlueSpawn[0] = (ushort)(p.pos[0] / 32);
+                                        it.BlueSpawn[1] = (ushort)(p.pos[1] / 32);
+                                        it.BlueSpawn[2] = (ushort)(p.pos[2] / 32);
+                                        it.BlueSpawn[3] = p.rot[0];
+                                        it.BlueSpawn[4] = p.rot[1];
+                                        Player.SendMessage(p, "TNT Wars: Set " + c.blue + "Blue" + Server.DefaultColor + " spawn");
+                                        break;
+                                }
+                                break;
 
-							case "level":
-							case "l":
-							case "lvl":
-								if (text[2] == "")
-								{
-									it.lvl = p.level;
-								}
-								else
-								{
-									it.lvl = Level.Find(text[2]);
-									if (it.lvl == null)
-									{
-										Player.SendMessage(p, "TNT Wars Error: '" + text[2] + "' is not a level!");
-										return;
-									}
-								}
-								Player.SendMessage(p, "TNT Wars: Level is now '" + it.lvl.name + "'");
-								it.RedSpawn = null;
-								it.BlueSpawn = null;
-								it.CheckAllSetUp(p);
-								break;
+                            case "level":
+                            case "l":
+                            case "lvl":
+                                if (text[2] == "")
+                                {
+                                    it.lvl = p.level;
+                                }
+                                else
+                                {
+                                    it.lvl = Level.Find(text[2]);
+                                    if (it.lvl == null)
+                                    {
+                                        Player.SendMessage(p, "TNT Wars Error: '" + text[2] + "' is not a level!");
+                                        return;
+                                    }
+                                }
+                                Player.SendMessage(p, "TNT Wars: Level is now '" + it.lvl.name + "'");
+                                it.RedSpawn = null;
+                                it.BlueSpawn = null;
+                                it.NoTNTplacableZones.Clear();
+                                it.NoBlockDeathZones.Clear();
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "tntatatime":
-							case "tnt":
-							case "t":
-								int number = 1;
-								try
-								{
-									number = int.Parse(text[2]);
-								}
-								catch
-								{
-									Player.SendMessage(p, "TNT Wars Error: '" + text[2] + "' is not a number!");
-									return;
-								}
-								if (number >= 0)
-								{
-									it.TntPerPlayerAtATime = number;
-									if (number == 0)
-									{
-										Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now unlimited");
-									}
-									else
-									{
-										Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now " + number.ToString());
-									}
-									it.CheckAllSetUp(p);
-								}
-								break;
+                            case "tntatatime":
+                            case "tnt":
+                            case "t":
+                                int number = 1;
+                                try
+                                {
+                                    number = int.Parse(text[2]);
+                                }
+                                catch
+                                {
+                                    Player.SendMessage(p, "TNT Wars Error: '" + text[2] + "' is not a number!");
+                                    return;
+                                }
+                                if (number >= 0)
+                                {
+                                    it.TntPerPlayerAtATime = number;
+                                    if (number == 0)
+                                    {
+                                        Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now unlimited");
+                                    }
+                                    else
+                                    {
+                                        Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now " + number.ToString());
+                                    }
+                                    it.CheckAllSetUp(p);
+                                }
+                                break;
 
-							case "grace":
-							case "g":
-							case "graceperiod":
-								if (text[1] == "grace" || text[1] == "g")
-								{
-									if (text[2] == "time" || text[2] == "t")
-									{
-										text[1] = "gt";
-										text[2] = text[3];
-										break;
-									}
-								}
-								string msg;
-								if (text[2] != "")
-								{
-									switch (text[2])
-									{
-										case "true":
-										case "yes":
-										case "t":
-										case "y":
-										case "enable":
-										case "e":
-										case "on":
-											it.GracePeriod = true;
-											Player.SendMessage(p, "TNT Wars: Grace period is now enabled");
-											return;
+                            case "grace":
+                            case "g":
+                            case "graceperiod":
+                                if (text[1] == "grace" || text[1] == "g")
+                                {
+                                    if (text[2] == "time" || text[2] == "t")
+                                    {
+                                        text[1] = "gt";
+                                        text[2] = text[3];
+                                        break;
+                                    }
+                                }
+                                string msg;
+                                if (text[2] != "")
+                                {
+                                    switch (text[2])
+                                    {
+                                        case "true":
+                                        case "yes":
+                                        case "t":
+                                        case "y":
+                                        case "enable":
+                                        case "e":
+                                        case "on":
+                                            it.GracePeriod = true;
+                                            Player.SendMessage(p, "TNT Wars: Grace period is now enabled");
+                                            return;
 
-										case "false":
-										case "no":
-										case "f":
-										case "n":
-										case "disable":
-										case "d":
-										case "off":
-											it.GracePeriod = false;
-											Player.SendMessage(p, "TNT Wars: Grace period is now disabled");
-											return;
+                                        case "false":
+                                        case "no":
+                                        case "f":
+                                        case "n":
+                                        case "disable":
+                                        case "d":
+                                        case "off":
+                                            it.GracePeriod = false;
+                                            Player.SendMessage(p, "TNT Wars: Grace period is now disabled");
+                                            return;
 
-										case "check":
-										case "current":
-										case "c":
-										case "now":
-										case "ATM":
-											if (it.GracePeriod == true) msg = "enabled";
-											else msg = "disabled";
-											Player.SendMessage(p, "TNT Wars: Grace Period is currently " + msg);
-											return;
+                                        case "check":
+                                        case "current":
+                                        case "c":
+                                        case "now":
+                                        case "ATM":
+                                            if (it.GracePeriod == true) msg = "enabled";
+                                            else msg = "disabled";
+                                            Player.SendMessage(p, "TNT Wars: Grace Period is currently " + msg);
+                                            return;
 
-										default:
-											it.GracePeriod = !it.GracePeriod;
-											break;
-									}
-								}
-								else
-								{
-									it.GracePeriod = !it.GracePeriod;
-								}
-								{
-									if (it.GracePeriod == true) msg = "enabled";
-									else msg = "disabled";
-									Player.SendMessage(p, "TNT Wars: Grace Period is now " + msg);
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                        default:
+                                            it.GracePeriod = !it.GracePeriod;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    it.GracePeriod = !it.GracePeriod;
+                                }
+                                {
+                                    if (it.GracePeriod == true) msg = "enabled";
+                                    else msg = "disabled";
+                                    Player.SendMessage(p, "TNT Wars: Grace Period is now " + msg);
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "gracetime":
-							case "gt":
-							case "gtime":
-							case "gracet":
-							case "graceperiodtime":
-								switch (text[2])
-								{
-									case "check":
-									case "current":
-									case "now":
-									case "ATM":
-									case "c":
-									case "t":
-										Player.SendMessage(p, "TNT Wars: Current grace time is " + it.GracePeriodSecs.ToString() + " seconds long!");
-										break;
+                            case "gracetime":
+                            case "gt":
+                            case "gtime":
+                            case "gracet":
+                            case "graceperiodtime":
+                                switch (text[2])
+                                {
+                                    case "check":
+                                    case "current":
+                                    case "now":
+                                    case "ATM":
+                                    case "c":
+                                    case "t":
+                                        Player.SendMessage(p, "TNT Wars: Current grace time is " + it.GracePeriodSecs.ToString() + " seconds long!");
+                                        break;
 
-									default:
-										if (text[2] == "set" || text[2] == "s" || text[2] == "change")
-										{
-											text[2] = text[3];
-										}
-										int numb = -1;
-										if (int.TryParse(text[2], out numb) == false)
-										{ Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[2] + "'"); return; }
-										if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[2] + "'"); return; }
-										if (numb >= (60 * 5)) { Player.SendMessage(p, "TNT Wars Error: Grace time cannot be above 5 minutes!!"); return; }
-										if (numb <= 9) { Player.SendMessage(p, "TNT Wars Error: Grace time cannot be lower than 10 seconds!!"); return; }
-										else
-										{
-											it.GracePeriodSecs = numb;
-											Player.SendMessage(p, "TNT Wars: Grace period is now " + numb.ToString() + " seconds long!");
-											return;
-										}
-										break;
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                    default:
+                                        if (text[2] == "set" || text[2] == "s" || text[2] == "change")
+                                        {
+                                            text[2] = text[3];
+                                        }
+                                        int numb = -1;
+                                        if (int.TryParse(text[2], out numb) == false)
+                                        { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[2] + "'"); return; }
+                                        if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[2] + "'"); return; }
+                                        if (numb >= (60 * 5)) { Player.SendMessage(p, "TNT Wars Error: Grace time cannot be above 5 minutes!!"); return; }
+                                        if (numb <= 9) { Player.SendMessage(p, "TNT Wars Error: Grace time cannot be lower than 10 seconds!!"); return; }
+                                        else
+                                        {
+                                            it.GracePeriodSecs = numb;
+                                            Player.SendMessage(p, "TNT Wars: Grace period is now " + numb.ToString() + " seconds long!");
+                                            return;
+                                        }
+                                        break;
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "mode":
-							case "game":
-							case "gamemode":
-							case "m":
-								switch (text[2])
-								{
-									case "check":
-									case "current":
-									case "mode":
-									case "now":
-									case "ATM":
-									case "m":
-									case "c":
-										if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) Player.SendMessage(p, "TNT Wars: The current game mode is Free For All");
-										if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM) Player.SendMessage(p, "TNT Wars: The current game mode is Team Deathmatch");
-										break;
+                            case "mode":
+                            case "game":
+                            case "gamemode":
+                            case "m":
+                                switch (text[2])
+                                {
+                                    case "check":
+                                    case "current":
+                                    case "mode":
+                                    case "now":
+                                    case "ATM":
+                                    case "m":
+                                    case "c":
+                                        if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) Player.SendMessage(p, "TNT Wars: The current game mode is Free For All");
+                                        if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM) Player.SendMessage(p, "TNT Wars: The current game mode is Team Deathmatch");
+                                        break;
 
-									case "tdm":
-									case "team":
-									case "teamdeathmatch":
-									case "deathmatch":
-									case "teams":
-									case "t":
-									case "td":
-									case "dm":
-									case "death":
-									case "match":
-										if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA)
-										{
-											it.GameMode = TntWarsGame.TntWarsGameMode.TDM;
-											if (!it.Players.Contains(it.FindPlayer(p)))
-											{
-												Player.SendMessage(p, "TNT Wars: Changed gamemode to Team Deathmatch");
-											}
-											foreach (TntWarsGame.player pl in it.Players)
-											{
-												{
-													Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
-													pl.Red = false;
-													pl.Blue = false;
-													if (it.BlueTeam() > it.RedTeam())
-													{
-														pl.Red = true;
-													}
-													else if (it.RedTeam() > it.BlueTeam())
-													{
-														pl.Blue = true;
-													}
-													else if (it.RedScore > it.BlueScore)
-													{
-														pl.Blue = true;
-													}
-													else if (it.BlueScore > it.RedScore)
-													{
-														pl.Red = true;
-													}
-													else
-													{
-														pl.Red = true;
-													}
-												}
-												{
-													string mesg = pl.p.color + pl.p.name + Server.DefaultColor + " " + "is now";
-													if (pl.Red)
-													{
-														mesg += " on the " + c.red + "red team";
-													}
-													if (pl.Blue)
-													{
-														mesg += " on the " + c.blue + "blue team";
-													}
-													if (pl.spec)
-													{
-														mesg += Server.DefaultColor + " (as a spectator)";
-													}
-													Player.GlobalMessage(mesg);
-												}
-											}
-											if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
-											{
-												it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
-												Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
-											}
-											else
-											{
-												Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
-											}
-										}
-										else
-										{
-											Player.SendMessage(p, "TNT Wars Error: Gamemode is already Team Deathmatch!");
-											return;
-										}
-										break;
+                                    case "tdm":
+                                    case "team":
+                                    case "teamdeathmatch":
+                                    case "deathmatch":
+                                    case "teams":
+                                    case "t":
+                                    case "td":
+                                    case "dm":
+                                    case "death":
+                                    case "match":
+                                        if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA)
+                                        {
+                                            it.GameMode = TntWarsGame.TntWarsGameMode.TDM;
+                                            if (!it.Players.Contains(it.FindPlayer(p)))
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Changed gamemode to Team Deathmatch");
+                                            }
+                                            foreach (TntWarsGame.player pl in it.Players)
+                                            {
+                                                {
+                                                    Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
+                                                    pl.Red = false;
+                                                    pl.Blue = false;
+                                                    if (it.BlueTeam() > it.RedTeam())
+                                                    {
+                                                        pl.Red = true;
+                                                    }
+                                                    else if (it.RedTeam() > it.BlueTeam())
+                                                    {
+                                                        pl.Blue = true;
+                                                    }
+                                                    else if (it.RedScore > it.BlueScore)
+                                                    {
+                                                        pl.Blue = true;
+                                                    }
+                                                    else if (it.BlueScore > it.RedScore)
+                                                    {
+                                                        pl.Red = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        pl.Red = true;
+                                                    }
+                                                }
+                                                {
+                                                    string mesg = pl.p.color + pl.p.name + Server.DefaultColor + " " + "is now";
+                                                    if (pl.Red)
+                                                    {
+                                                        mesg += " on the " + c.red + "red team";
+                                                    }
+                                                    if (pl.Blue)
+                                                    {
+                                                        mesg += " on the " + c.blue + "blue team";
+                                                    }
+                                                    if (pl.spec)
+                                                    {
+                                                        mesg += Server.DefaultColor + " (as a spectator)";
+                                                    }
+                                                    Player.GlobalMessage(mesg);
+                                                }
+                                            }
+                                            if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
+                                            {
+                                                it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
+                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                            }
+                                            else
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Gamemode is already Team Deathmatch!");
+                                            return;
+                                        }
+                                        break;
 
-									case "ffa":
-									case "all":
-									case "free":
-									case "man":
-									case "himself":
-									case "allvall":
-									case "allvsall":
-									case "allv":
-									case "allvs":
-									case "a":
-									case "f":
-									case "ff":
-									case "fa":
-										if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM)
-										{
-											it.GameMode = TntWarsGame.TntWarsGameMode.FFA;
-											if (!it.Players.Contains(it.FindPlayer(p)))
-											{
-												Player.SendMessage(p, "TNT Wars: Changed gamemode to Free For All");
-											}
-											it.SendAllPlayersMessage("TNT Wars: Changed gamemode to Free For All");
-											if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
-											{
-												it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
-												Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
-											}
-											else
-											{
-												Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
-											}
-											foreach (TntWarsGame.player pl in it.Players)
-											{
-												pl.p.color = pl.OldColor;
-												pl.p.SetPrefix();
-											}
-										}
-										else
-										{
-											Player.SendMessage(p, "TNT Wars Error: Gamemode is already Free For All!");
-											return;
-										}
-										break;
+                                    case "ffa":
+                                    case "all":
+                                    case "free":
+                                    case "man":
+                                    case "himself":
+                                    case "allvall":
+                                    case "allvsall":
+                                    case "allv":
+                                    case "allvs":
+                                    case "a":
+                                    case "f":
+                                    case "ff":
+                                    case "fa":
+                                        if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM)
+                                        {
+                                            it.GameMode = TntWarsGame.TntWarsGameMode.FFA;
+                                            if (!it.Players.Contains(it.FindPlayer(p)))
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Changed gamemode to Free For All");
+                                            }
+                                            it.SendAllPlayersMessage("TNT Wars: Changed gamemode to Free For All");
+                                            if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
+                                            {
+                                                it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
+                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                            }
+                                            else
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                            }
+                                            foreach (TntWarsGame.player pl in it.Players)
+                                            {
+                                                pl.p.color = pl.OldColor;
+                                                pl.p.SetPrefix();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Gamemode is already Free For All!");
+                                            return;
+                                        }
+                                        break;
 
-									case "swap":
-									case "s":
-									case "change":
-									case "edit":
-									case "switch":
-									default:
-										{
-											if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA)
-											{
-												it.GameMode = TntWarsGame.TntWarsGameMode.TDM;
-												if (!it.Players.Contains(it.FindPlayer(p)))
-												{
-													Player.SendMessage(p, "TNT Wars: Changed gamemode to Team Deathmatch");
-												}
-												int Red = it.RedTeam();
-												int Blue = it.BlueTeam();
-												foreach (TntWarsGame.player pl in it.Players)
-												{
-													{
-														Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
-														pl.Red = false;
-														pl.Blue = false;
-														if (Blue > Red)
-														{
-															pl.Red = true;
-														}
-														else if (Red > Blue)
-														{
-															pl.Blue = true;
-														}
-														else if (it.RedScore > it.BlueScore)
-														{
-															pl.Blue = true;
-														}
-														else if (it.BlueScore > it.RedScore)
-														{
-															pl.Red = true;
-														}
-														else
-														{
-															pl.Red = true;
-														}
-													}
-													string mesg = p.color + p.name + Server.DefaultColor + " " + "is now";
-													if (pl.Red)
-													{
-														mesg += " on the " + c.red + "red team";
-													}
-													if (pl.Blue)
-													{
-														mesg += " on the " + c.blue + "blue team";
-													}
-													if (pl.spec)
-													{
-														mesg += Server.DefaultColor + " (as a spectator)";
-													}
-													Player.GlobalMessage(mesg);
-												}
-												if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
-												{
-													it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
-													Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
-												}
-												else
-												{
-													Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
-												}
-											}
-											else
-											{
-												it.GameMode = TntWarsGame.TntWarsGameMode.FFA;
-												if (!it.Players.Contains(it.FindPlayer(p)))
-												{
-													Player.SendMessage(p, "TNT Wars: Changed gamemode to Free For All");
-												}
-												it.SendAllPlayersMessage("TNT Wars: Changed gamemode to Free For All");
-												if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
-												{
-													it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
-													Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
-												}
-												else
-												{
-													Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
-												}
-											}
+                                    case "swap":
+                                    case "s":
+                                    case "change":
+                                    case "edit":
+                                    case "switch":
+                                    default:
+                                        {
+                                            if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA)
+                                            {
+                                                it.GameMode = TntWarsGame.TntWarsGameMode.TDM;
+                                                if (!it.Players.Contains(it.FindPlayer(p)))
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars: Changed gamemode to Team Deathmatch");
+                                                }
+                                                int Red = it.RedTeam();
+                                                int Blue = it.BlueTeam();
+                                                foreach (TntWarsGame.player pl in it.Players)
+                                                {
+                                                    {
+                                                        Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
+                                                        pl.Red = false;
+                                                        pl.Blue = false;
+                                                        if (Blue > Red)
+                                                        {
+                                                            pl.Red = true;
+                                                        }
+                                                        else if (Red > Blue)
+                                                        {
+                                                            pl.Blue = true;
+                                                        }
+                                                        else if (it.RedScore > it.BlueScore)
+                                                        {
+                                                            pl.Blue = true;
+                                                        }
+                                                        else if (it.BlueScore > it.RedScore)
+                                                        {
+                                                            pl.Red = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            pl.Red = true;
+                                                        }
+                                                    }
+                                                    string mesg = p.color + p.name + Server.DefaultColor + " " + "is now";
+                                                    if (pl.Red)
+                                                    {
+                                                        mesg += " on the " + c.red + "red team";
+                                                    }
+                                                    if (pl.Blue)
+                                                    {
+                                                        mesg += " on the " + c.blue + "blue team";
+                                                    }
+                                                    if (pl.spec)
+                                                    {
+                                                        mesg += Server.DefaultColor + " (as a spectator)";
+                                                    }
+                                                    Player.GlobalMessage(mesg);
+                                                }
+                                                if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
+                                                {
+                                                    it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                }
+                                                else
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                it.GameMode = TntWarsGame.TntWarsGameMode.FFA;
+                                                if (!it.Players.Contains(it.FindPlayer(p)))
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars: Changed gamemode to Free For All");
+                                                }
+                                                it.SendAllPlayersMessage("TNT Wars: Changed gamemode to Free For All");
+                                                if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
+                                                {
+                                                    it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                }
+                                                else
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                }
+                                            }
 
-										}
-										break;
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                        }
+                                        break;
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "difficulty":
-							case "d":
-							case "dif":
-							case "diff":
-							case "difficult":
-								switch (text[2])
-								{
-									case "easy":
-									case "e":
-									case "easiest":
-									case "1":
-									case "1st":
-										if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Easy) Player.SendMessage(p, "TNT Wars Error: Already on easy difficulty!");
-										else
-										{
-											it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Easy;
-											if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to easy");
-											it.SendAllPlayersMessage("TNT Wars: Changed difficulty to easy!");
-											if (it.TeamKills == true)
-											{
-												Player.SendMessage(p, "TNT Wars: Team killing is now off");
-												it.TeamKills = false;
-											}
-										}
-										break;
+                            case "difficulty":
+                            case "d":
+                            case "dif":
+                            case "diff":
+                            case "difficult":
+                                switch (text[2])
+                                {
+                                    case "easy":
+                                    case "e":
+                                    case "easiest":
+                                    case "1":
+                                    case "1st":
+                                        if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Easy) Player.SendMessage(p, "TNT Wars Error: Already on easy difficulty!");
+                                        else
+                                        {
+                                            it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Easy;
+                                            if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to easy");
+                                            it.SendAllPlayersMessage("TNT Wars: Changed difficulty to easy!");
+                                            if (it.TeamKills == true)
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Team killing is now off");
+                                                it.TeamKills = false;
+                                            }
+                                        }
+                                        break;
 
-									case "normal":
-									case "n":
-									case "medium":
-									case "m":
-									case "2":
-									case "2nd":
-									default:
-										if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Normal) Player.SendMessage(p, "TNT Wars Error: Already on normal difficulty!");
-										else
-										{
-											it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Normal;
-											if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to normal");
-											it.SendAllPlayersMessage("TNT Wars: Changed difficulty to normal!");
-											if (it.TeamKills == true)
-											{
-												Player.SendMessage(p, "TNT Wars: Team killing is now off");
-												it.TeamKills = false;
-											}
-										}
-										break;
+                                    case "normal":
+                                    case "n":
+                                    case "medium":
+                                    case "m":
+                                    case "2":
+                                    case "2nd":
+                                    default:
+                                        if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Normal) Player.SendMessage(p, "TNT Wars Error: Already on normal difficulty!");
+                                        else
+                                        {
+                                            it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Normal;
+                                            if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to normal");
+                                            it.SendAllPlayersMessage("TNT Wars: Changed difficulty to normal!");
+                                            if (it.TeamKills == true)
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Team killing is now off");
+                                                it.TeamKills = false;
+                                            }
+                                        }
+                                        break;
 
-									case "hard":
-									case "h":
-									case "difficult":
-									case "d":
-									case "3":
-									case "3rd":
-										if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Hard) Player.SendMessage(p, "TNT Wars Error: Already on hard difficulty!");
-										else
-										{
-											it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Hard;
-											if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to hard");
-											it.SendAllPlayersMessage("TNT Wars: Changed difficulty to hard!");
-											if (it.TeamKills == false)
-											{
-												Player.SendMessage(p, "TNT Wars: Team killing is now on");
-												it.TeamKills = true;
-											}
-										}
-										break;
+                                    case "hard":
+                                    case "h":
+                                    case "difficult":
+                                    case "d":
+                                    case "3":
+                                    case "3rd":
+                                        if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Hard) Player.SendMessage(p, "TNT Wars Error: Already on hard difficulty!");
+                                        else
+                                        {
+                                            it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Hard;
+                                            if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to hard");
+                                            it.SendAllPlayersMessage("TNT Wars: Changed difficulty to hard!");
+                                            if (it.TeamKills == false)
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Team killing is now on");
+                                                it.TeamKills = true;
+                                            }
+                                        }
+                                        break;
 
-									case "extreme":
-									case "ex":
-									case "hardest":
-									case "impossible":
-									case "ultimate":
-									case "i":
-									case "u":
-									case "4":
-									case "4th":
-										if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Extreme) Player.SendMessage(p, "TNT Wars Error: Already on extreme difficulty!");
-										else
-										{
-											it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Extreme;
-											if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to extreme");
-											it.SendAllPlayersMessage("TNT Wars: Changed difficulty to extreme!");
-											if (it.TeamKills == false)
-											{
-												Player.SendMessage(p, "TNT Wars: Team killing is now on");
-												it.TeamKills = true;
-											}
-										}
-										break;
+                                    case "extreme":
+                                    case "ex":
+                                    case "hardest":
+                                    case "impossible":
+                                    case "ultimate":
+                                    case "i":
+                                    case "u":
+                                    case "4":
+                                    case "4th":
+                                        if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Extreme) Player.SendMessage(p, "TNT Wars Error: Already on extreme difficulty!");
+                                        else
+                                        {
+                                            it.GameDifficulty = TntWarsGame.TntWarsDifficulty.Extreme;
+                                            if (!it.Players.Contains(it.FindPlayer(p))) Player.SendMessage(p, "TNT Wars: Changed difficulty to extreme");
+                                            it.SendAllPlayersMessage("TNT Wars: Changed difficulty to extreme!");
+                                            if (it.TeamKills == false)
+                                            {
+                                                Player.SendMessage(p, "TNT Wars: Team killing is now on");
+                                                it.TeamKills = true;
+                                            }
+                                        }
+                                        break;
 
 
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "score":
-							case "scores":
-							case "scoring":
-								switch (text[2])
-								{
-									case "max":
-									case "m":
-									case "maximum":
-									case "limit":
-									case "top":
-									case "goal":
-									case "maxscore":
-									case "maximumscore":
-									case "scorelimit":
-										switch (text[3])
-										{
-											case "check":
-											case "current":
-											case "now":
-											case "ATM":
-											case "c":
-											case "t":
-												Player.SendMessage(p, "TNT Wars: Score limit is " + it.ScoreLimit.ToString() + " points!");
-												break;
+                            case "score":
+                            case "scores":
+                            case "scoring":
+                                switch (text[2])
+                                {
+                                    case "max":
+                                    case "m":
+                                    case "maximum":
+                                    case "limit":
+                                    case "top":
+                                    case "goal":
+                                    case "maxscore":
+                                    case "maximumscore":
+                                    case "scorelimit":
+                                        switch (text[3])
+                                        {
+                                            case "check":
+                                            case "current":
+                                            case "now":
+                                            case "ATM":
+                                            case "c":
+                                            case "t":
+                                                Player.SendMessage(p, "TNT Wars: Score limit is " + it.ScoreLimit.ToString() + " points!");
+                                                break;
 
-											default:
-												if (text[3] == "set" || text[3] == "s" || text[3] == "change")
-												{
-													text[3] = text[4];
-												}
-												int numb = -1;
-												if (int.TryParse(text[3], out numb) == false)
-												{ Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												if (numb <= it.ScorePerKill) { Player.SendMessage(p, "TNT Wars Error: Minimum score limit of " + it.ScorePerKill.ToString() + " points"); return; }
-												else
-												{
-													it.ScoreLimit = numb;
-													Player.SendMessage(p, "TNT Wars: Score limit is now " + numb.ToString() + " points!");
-													return;
-												}
-												break;
-										}
-										it.CheckAllSetUp(p);
-										break;
+                                            default:
+                                                if (text[3] == "set" || text[3] == "s" || text[3] == "change")
+                                                {
+                                                    text[3] = text[4];
+                                                }
+                                                int numb = -1;
+                                                if (int.TryParse(text[3], out numb) == false)
+                                                { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                if (numb <= it.ScorePerKill) { Player.SendMessage(p, "TNT Wars Error: Minimum score limit of " + it.ScorePerKill.ToString() + " points"); return; }
+                                                else
+                                                {
+                                                    it.ScoreLimit = numb;
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + numb.ToString() + " points!");
+                                                    return;
+                                                }
+                                                break;
+                                        }
+                                        it.CheckAllSetUp(p);
+                                        break;
 
-									case "streaks":
-									case "streak":
-									case "s":
-										switch (text[3])
-										{
-											case "on":
-											case "enable":
-												if (it.Streaks == true)
-												{
-													Player.SendMessage(p, "TNT Wars Error: Streaks are already enabled");
-													return;
-												}
-												else
-												{
-													it.Streaks = true;
-													Player.SendMessage(p, "TNT Wars: Streaks are now enabled");
-												}
-												break;
+                                    case "streaks":
+                                    case "streak":
+                                    case "s":
+                                        switch (text[3])
+                                        {
+                                            case "on":
+                                            case "enable":
+                                                if (it.Streaks == true)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error: Streaks are already enabled");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.Streaks = true;
+                                                    Player.SendMessage(p, "TNT Wars: Streaks are now enabled");
+                                                }
+                                                break;
 
-											case "off":
-											case "disable":
-												if (it.Streaks == false)
-												{
-													Player.SendMessage(p, "TNT Wars Error:  Streaks are already disabled");
-													return;
-												}
-												else
-												{
-													it.Streaks = false;
-													Player.SendMessage(p, "TNT Wars: Streaks are now disabled");
-												}
-												break;
+                                            case "off":
+                                            case "disable":
+                                                if (it.Streaks == false)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error:  Streaks are already disabled");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.Streaks = false;
+                                                    Player.SendMessage(p, "TNT Wars: Streaks are now disabled");
+                                                }
+                                                break;
 
-											case "check":
-											case "current":
-											case "now":
-											case "ATM":
-											case "c":
-											case "t":
-												if (it.Streaks == true) { Player.SendMessage(p, "TNT Wars: Streaks are currently enabled"); return; }
-												else if (it.Streaks == false) { Player.SendMessage(p, "TNT Wars: Streaks are currently disabled"); return; }
-												break;
+                                            case "check":
+                                            case "current":
+                                            case "now":
+                                            case "ATM":
+                                            case "c":
+                                            case "t":
+                                                if (it.Streaks == true) { Player.SendMessage(p, "TNT Wars: Streaks are currently enabled"); return; }
+                                                else if (it.Streaks == false) { Player.SendMessage(p, "TNT Wars: Streaks are currently disabled"); return; }
+                                                break;
 
-											default:
-												if (it.Streaks == false)
-												{
-													it.Streaks = true;
-													Player.SendMessage(p, "TNT Wars: Streaks are now enabled");
-													return;
-												}
-												else if (it.Streaks == true)
-												{
-													it.Streaks = false;
-													Player.SendMessage(p, "TNT Wars: Streaks are now disabled");
-													return;
-												}
-												break;
-										}
-										it.CheckAllSetUp(p);
-										break;
+                                            default:
+                                                if (it.Streaks == false)
+                                                {
+                                                    it.Streaks = true;
+                                                    Player.SendMessage(p, "TNT Wars: Streaks are now enabled");
+                                                    return;
+                                                }
+                                                else if (it.Streaks == true)
+                                                {
+                                                    it.Streaks = false;
+                                                    Player.SendMessage(p, "TNT Wars: Streaks are now disabled");
+                                                    return;
+                                                }
+                                                break;
+                                        }
+                                        it.CheckAllSetUp(p);
+                                        break;
 
-									case "multi":
-									case "multikills":
-									case "multiples":
-									case "multiplekills":
-									case "multis":
-									case "doublekill":
-									case "double":
-									case "triplekill":
-									case "triple":
-									case "mk":
-									case "d":
-									case "t":
-										switch (text[3])
-										{
-											case "on":
-											case "enable":
-												if (it.MultiKillBonus > 0)
-												{
-													Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already enabled (at " + it.MultiKillBonus.ToString() + " points!");
-													return;
-												}
-												else
-												{
-													it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
-													Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
-												}
-												break;
+                                    case "multi":
+                                    case "multikills":
+                                    case "multiples":
+                                    case "multiplekills":
+                                    case "multis":
+                                    case "doublekill":
+                                    case "double":
+                                    case "triplekill":
+                                    case "triple":
+                                    case "mk":
+                                    case "d":
+                                    case "t":
+                                        switch (text[3])
+                                        {
+                                            case "on":
+                                            case "enable":
+                                                if (it.MultiKillBonus > 0)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already enabled (at " + it.MultiKillBonus.ToString() + " points!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
+                                                }
+                                                break;
 
-											case "off":
-											case "disable":
-												if (it.MultiKillBonus == 0)
-												{
-													Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already disabled!");
-													return;
-												}
-												else
-												{
-													it.MultiKillBonus = 0;
-													Player.SendMessage(p, "TNT Wars: Multikill bonuses are now disabled!");
-												}
-												break;
+                                            case "off":
+                                            case "disable":
+                                                if (it.MultiKillBonus == 0)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already disabled!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.MultiKillBonus = 0;
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now disabled!");
+                                                }
+                                                break;
 
-											case "switch":
-												if (it.MultiKillBonus == 0)
-												{
-													it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
-													Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
-													return;
-												}
-												else
-												{
-													it.MultiKillBonus = 0;
-													Player.SendMessage(p, "TNT Wars: Multikill bonuses are now disabled!");
-												}
-												break;
+                                            case "switch":
+                                                if (it.MultiKillBonus == 0)
+                                                {
+                                                    it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.MultiKillBonus = 0;
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now disabled!");
+                                                }
+                                                break;
 
-											case "check":
-											case "current":
-											case "now":
-											case "ATM":
-											case "c":
-											case "t":
-												Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is " + it.MultiKillBonus.ToString() + " points!");
-												break;
+                                            case "check":
+                                            case "current":
+                                            case "now":
+                                            case "ATM":
+                                            case "c":
+                                            case "t":
+                                                Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is " + it.MultiKillBonus.ToString() + " points!");
+                                                break;
 
-											default:
-												if (text[3] == "set" || text[3] == "s" || text[3] == "change")
-												{
-													text[3] = text[4];
-												}
-												int numb = -1;
-												if (int.TryParse(text[2], out numb) == false)
-												{ Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												else
-												{
-													it.MultiKillBonus = numb;
-													Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is now " + numb.ToString() + " points!");
-													return;
-												}
-												break;
-										}
-										it.CheckAllSetUp(p);
-										break;
+                                            default:
+                                                if (text[3] == "set" || text[3] == "s" || text[3] == "change")
+                                                {
+                                                    text[3] = text[4];
+                                                }
+                                                int numb = -1;
+                                                if (int.TryParse(text[2], out numb) == false)
+                                                { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                else
+                                                {
+                                                    it.MultiKillBonus = numb;
+                                                    Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is now " + numb.ToString() + " points!");
+                                                    return;
+                                                }
+                                                break;
+                                        }
+                                        it.CheckAllSetUp(p);
+                                        break;
 
-									case "scorekill":
-									case "kill":
-									case "killscore":
-									case "k":
-										switch (text[3])
-										{
-											case "check":
-											case "current":
-											case "now":
-											case "ATM":
-											case "c":
-											case "t":
-												Player.SendMessage(p, "TNT Wars: Score per kill is " + it.ScorePerKill.ToString() + " points!");
-												break;
+                                    case "scorekill":
+                                    case "kill":
+                                    case "killscore":
+                                    case "k":
+                                        switch (text[3])
+                                        {
+                                            case "check":
+                                            case "current":
+                                            case "now":
+                                            case "ATM":
+                                            case "c":
+                                            case "t":
+                                                Player.SendMessage(p, "TNT Wars: Score per kill is " + it.ScorePerKill.ToString() + " points!");
+                                                break;
 
-											default:
-												if (text[3] == "set" || text[3] == "s" || text[3] == "change")
-												{
-													text[3] = text[4];
-												}
-												int numb = -1;
-												if (int.TryParse(text[2], out numb) == false)
-												{ Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												else
-												{
-													it.ScorePerKill = numb;
-													Player.SendMessage(p, "TNT Wars: Score per kill is now " + numb.ToString() + " points!");
-													return;
-												}
-												break;
-										}
-										it.CheckAllSetUp(p);
-										break;
+                                            default:
+                                                if (text[3] == "set" || text[3] == "s" || text[3] == "change")
+                                                {
+                                                    text[3] = text[4];
+                                                }
+                                                int numb = -1;
+                                                if (int.TryParse(text[2], out numb) == false)
+                                                { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                else
+                                                {
+                                                    it.ScorePerKill = numb;
+                                                    Player.SendMessage(p, "TNT Wars: Score per kill is now " + numb.ToString() + " points!");
+                                                    return;
+                                                }
+                                                break;
+                                        }
+                                        it.CheckAllSetUp(p);
+                                        break;
 
-									case "assistkill":
-									case "assist":
-									case "assists":
-									case "assistscore":
-									case "a":
-										switch (text[3])
-										{
-											case "on":
-											case "enable":
-												if (it.ScorePerAssist > 0)
-												{
-													Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already enabled (at " + it.ScorePerAssist.ToString() + " points!");
-													return;
-												}
-												else
-												{
-													it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
-													Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
-												}
-												break;
+                                    case "assistkill":
+                                    case "assist":
+                                    case "assists":
+                                    case "assistscore":
+                                    case "a":
+                                        switch (text[3])
+                                        {
+                                            case "on":
+                                            case "enable":
+                                                if (it.ScorePerAssist > 0)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already enabled (at " + it.ScorePerAssist.ToString() + " points!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
+                                                }
+                                                break;
 
-											case "off":
-											case "disable":
-												if (it.ScorePerAssist == 0)
-												{
-													Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already disabled!");
-													return;
-												}
-												else
-												{
-													it.ScorePerAssist = 0;
-													Player.SendMessage(p, "TNT Wars: Assist bonuses are now disabled!");
-												}
-												break;
+                                            case "off":
+                                            case "disable":
+                                                if (it.ScorePerAssist == 0)
+                                                {
+                                                    Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already disabled!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.ScorePerAssist = 0;
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now disabled!");
+                                                }
+                                                break;
 
-											case "switch":
-												if (it.ScorePerAssist == 0)
-												{
-													it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
-													Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
-													return;
-												}
-												else
-												{
-													it.ScorePerAssist = 0;
-													Player.SendMessage(p, "TNT Wars: Assist bonuses are now disabled!");
-												}
-												break;
+                                            case "switch":
+                                                if (it.ScorePerAssist == 0)
+                                                {
+                                                    it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    it.ScorePerAssist = 0;
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now disabled!");
+                                                }
+                                                break;
 
-											case "check":
-											case "current":
-											case "now":
-											case "ATM":
-											case "c":
-											case "t":
-												Player.SendMessage(p, "TNT Wars: Score per assist is " + it.ScorePerAssist.ToString() + " points!");
-												break;
+                                            case "check":
+                                            case "current":
+                                            case "now":
+                                            case "ATM":
+                                            case "c":
+                                            case "t":
+                                                Player.SendMessage(p, "TNT Wars: Score per assist is " + it.ScorePerAssist.ToString() + " points!");
+                                                break;
 
-											default:
-												if (text[3] == "set" || text[3] == "s" || text[3] == "change")
-												{
-													text[3] = text[4];
-												}
-												int numb = -1;
-												if (int.TryParse(text[2], out numb) == false)
-												{ Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-												else
-												{
-													it.ScorePerAssist = numb;
-													Player.SendMessage(p, "TNT Wars: Score per assist is now " + numb.ToString() + " points!");
-													return;
-												}
-												break;
-										}
-										it.CheckAllSetUp(p);
-										break;
+                                            default:
+                                                if (text[3] == "set" || text[3] == "s" || text[3] == "change")
+                                                {
+                                                    text[3] = text[4];
+                                                }
+                                                int numb = -1;
+                                                if (int.TryParse(text[2], out numb) == false)
+                                                { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                if (numb <= -1) { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
+                                                else
+                                                {
+                                                    it.ScorePerAssist = numb;
+                                                    Player.SendMessage(p, "TNT Wars: Score per assist is now " + numb.ToString() + " points!");
+                                                    return;
+                                                }
+                                                break;
+                                        }
+                                        it.CheckAllSetUp(p);
+                                        break;
 
-									case "help":
-									case "h":
-									default:
-										Player.SendMessage(p, "TNT Wars Setup Scoring Help:");
-										Player.SendMessage(p, "/tw s score maximum {m} [check/set] <value> - set the score limit (or check it)");
-										Player.SendMessage(p, "/tw s score streaks {s} [on/off/check] - enable/disable streaks (or check it)");
-										Player.SendMessage(p, "/tw s score multi {mk} [on/off/switch/check/set] - enable/disable/switch multikills or set the score bonus per multikill (or check it)");
-										Player.SendMessage(p, "/tw s score scorekill {k} [check/set] <value> - set the score per kill (or check it)");
-										Player.SendMessage(p, "/tw s score assistkill {a} [check/set] <value> - set the score per assist (or check it)");
-										break;
-								}
-								break;
+                                    case "help":
+                                    case "h":
+                                    default:
+                                        Player.SendMessage(p, "TNT Wars Setup Scoring Help:");
+                                        Player.SendMessage(p, "/tw s score maximum {m} [check/set] <value> - set the score limit (or check it)");
+                                        Player.SendMessage(p, "/tw s score streaks {s} [on/off/check] - enable/disable streaks (or check it)");
+                                        Player.SendMessage(p, "/tw s score multi {mk} [on/off/switch/check/set] - enable/disable/switch multikills or set the score bonus per multikill (or check it)");
+                                        Player.SendMessage(p, "/tw s score scorekill {k} [check/set] <value> - set the score per kill (or check it)");
+                                        Player.SendMessage(p, "/tw s score assistkill {a} [check/set] <value> - set the score per assist (or check it)");
+                                        break;
+                                }
+                                break;
 
-							case "balance":
-							case "balanceteams":
-							case "bt":
-							case "b":
-								switch (text[3])
-								{
-									case "on":
-									case "enable":
-										if (it.BalanceTeams == true)
-										{
-											Player.SendMessage(p, "TNT Wars Error: Team balancing is already enabled");
-											return;
-										}
-										else
-										{
-											it.BalanceTeams = true;
-											Player.SendMessage(p, "TNT Wars: Team balancing is now enabled");
-										}
-										break;
+                            case "balance":
+                            case "balanceteams":
+                            case "bt":
+                            case "b":
+                                switch (text[2])
+                                {
+                                    case "on":
+                                    case "enable":
+                                        if (it.BalanceTeams == true)
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Team balancing is already enabled");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            it.BalanceTeams = true;
+                                            Player.SendMessage(p, "TNT Wars: Team balancing is now enabled");
+                                        }
+                                        break;
 
-									case "off":
-									case "disable":
-										if (it.BalanceTeams == false)
-										{
-											Player.SendMessage(p, "TNT Wars Error: Team balancing is already disabled");
-											return;
-										}
-										else
-										{
-											it.BalanceTeams = false;
-											Player.SendMessage(p, "TNT Wars: Team balancing is now disabled");
-										}
-										break;
+                                    case "off":
+                                    case "disable":
+                                        if (it.BalanceTeams == false)
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Team balancing is already disabled");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            it.BalanceTeams = false;
+                                            Player.SendMessage(p, "TNT Wars: Team balancing is now disabled");
+                                        }
+                                        break;
 
-									case "check":
-									case "current":
-									case "now":
-									case "ATM":
-									case "c":
-									case "t":
-										if (it.BalanceTeams == true) { Player.SendMessage(p, "TNT Wars: Team balancing is currently enabled"); return; }
-										else if (it.BalanceTeams == false) { Player.SendMessage(p, "TNT Wars: Team balancing is currently siabled"); return; }
-										break;
+                                    case "check":
+                                    case "current":
+                                    case "now":
+                                    case "ATM":
+                                    case "c":
+                                    case "t":
+                                        if (it.BalanceTeams == true) { Player.SendMessage(p, "TNT Wars: Team balancing is currently enabled"); return; }
+                                        else if (it.BalanceTeams == false) { Player.SendMessage(p, "TNT Wars: Team balancing is currently disabled"); return; }
+                                        break;
 
-									default:
-										if (it.BalanceTeams == false)
-										{
-											it.BalanceTeams = true;
-											Player.SendMessage(p, "TNT Wars: Team balancing is now enabled");
-											return;
-										}
-										else if (it.BalanceTeams == true)
-										{
-											it.BalanceTeams = false;
-											Player.SendMessage(p, "TNT Wars: Team balancing is now disabled");
-											return;
-										}
-										break;
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                    default:
+                                        if (it.BalanceTeams == false)
+                                        {
+                                            it.BalanceTeams = true;
+                                            Player.SendMessage(p, "TNT Wars: Team balancing is now enabled");
+                                            return;
+                                        }
+                                        else if (it.BalanceTeams == true)
+                                        {
+                                            it.BalanceTeams = false;
+                                            Player.SendMessage(p, "TNT Wars: Team balancing is now disabled");
+                                            return;
+                                        }
+                                        break;
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "teamkill":
-							case "tk":
-							case "tkill":
-							case "teamk":
-							case "friendly":
-							case "friendlyfire":
-							case "ff":
-							case "friendlyf":
-							case "ffire":
-								switch (text[3])
-								{
-									case "on":
-									case "enable":
-										if (it.TeamKills == true)
-										{
-											Player.SendMessage(p, "TNT Wars Error: Team killing is already enabled");
-											return;
-										}
-										else
-										{
-											it.TeamKills = true;
-											Player.SendMessage(p, "TNT Wars: Team killing is now enabled");
-										}
-										break;
+                            case "teamkill":
+                            case "tk":
+                            case "tkill":
+                            case "teamk":
+                            case "friendly":
+                            case "friendlyfire":
+                            case "ff":
+                            case "friendlyf":
+                            case "ffire":
+                                switch (text[2])
+                                {
+                                    case "on":
+                                    case "enable":
+                                        if (it.TeamKills == true)
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Team killing is already enabled");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            it.TeamKills = true;
+                                            Player.SendMessage(p, "TNT Wars: Team killing is now enabled");
+                                        }
+                                        break;
 
-									case "off":
-									case "disable":
-										if (it.TeamKills == false)
-										{
-											Player.SendMessage(p, "TNT Wars Error: Team killing is already disabled");
-											return;
-										}
-										else
-										{
-											it.TeamKills = false;
-											Player.SendMessage(p, "TNT Wars: Team killing is now disabled");
-										}
-										break;
+                                    case "off":
+                                    case "disable":
+                                        if (it.TeamKills == false)
+                                        {
+                                            Player.SendMessage(p, "TNT Wars Error: Team killing is already disabled");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            it.TeamKills = false;
+                                            Player.SendMessage(p, "TNT Wars: Team killing is now disabled");
+                                        }
+                                        break;
 
-									case "check":
-									case "current":
-									case "now":
-									case "ATM":
-									case "c":
-									case "t":
-										if (it.TeamKills == true) { Player.SendMessage(p, "TNT Wars: Team killing is currently enabled"); return; }
-										else if (it.TeamKills == false) { Player.SendMessage(p, "TNT Wars: Team killing is currently siabled"); return; }
-										break;
+                                    case "check":
+                                    case "current":
+                                    case "now":
+                                    case "ATM":
+                                    case "c":
+                                    case "t":
+                                        if (it.TeamKills == true) { Player.SendMessage(p, "TNT Wars: Team killing is currently enabled"); return; }
+                                        else if (it.TeamKills == false) { Player.SendMessage(p, "TNT Wars: Team killing is currently disabled"); return; }
+                                        break;
 
-									default:
-										if (it.TeamKills == false)
-										{
-											it.TeamKills = true;
-											Player.SendMessage(p, "TNT Wars: Team killing is now enabled");
-											return;
-										}
-										else if (it.TeamKills == true)
-										{
-											it.TeamKills = false;
-											Player.SendMessage(p, "TNT Wars: Team killing is now disabled");
-											return;
-										}
-										break;
-								}
-								it.CheckAllSetUp(p);
-								break;
+                                    default:
+                                        if (it.TeamKills == false)
+                                        {
+                                            it.TeamKills = true;
+                                            Player.SendMessage(p, "TNT Wars: Team killing is now enabled");
+                                            return;
+                                        }
+                                        else if (it.TeamKills == true)
+                                        {
+                                            it.TeamKills = false;
+                                            Player.SendMessage(p, "TNT Wars: Team killing is now disabled");
+                                            return;
+                                        }
+                                        break;
+                                }
+                                it.CheckAllSetUp(p);
+                                break;
 
-							case "help":
-							case "h":
-								Player.SendMessage(p, "TNT Wars Setup Help:");
-								Player.SendMessage(p, "/tw s new {n}/delete - create/delete a game");
-								Player.SendMessage(p, "/tw s start/stop/reset {r} - start/stop/reset the current game");
-								Player.SendMessage(p, "/tw s level {l} - change the level for the game");
+                            case "zone":
+                            case "zones":
+                            case "z":
+                            case "zn":
+                            case "zns":
+                            case "zs":
+                                CatchPos cpos;
+                                cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
+                                switch (text[2])
+                                {
+                                    case "notnt":
+                                    case "tnt":
+                                    case "no":
+                                    case "none":
+                                    case "nothing":
+                                    case "blocktnt":
+                                    case "blockt":
+                                    case "bt":
+                                    case "nt":
+                                        NoTntZone = true;
+                                        DeleteZone = false;
+                                        CheckZone = false;
+                                        switch (text[3])
+                                        {
+                                            case "add":
+                                            case "a":
+                                            case "new":
+                                                DeleteZone = false;
+                                                CheckZone = false;
+                                                Player.SendMessage(p, "TNT Wars: Place 2 blocks to create the zone for no TNT!");
+                                                //p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+
+                                            case "delete":
+                                            case "d":
+                                            case "remove":
+                                            case "r":
+                                                if (text[4] == "all" || text[4] == "a")
+                                                {
+                                                    it.NoTNTplacableZones.Clear();
+                                                    Player.SendMessage(p, "TNT Wars: Deleted all zones for no blocks deleted on explosions!");
+                                                    return;
+                                                }
+                                                DeleteZone = true;
+                                                CheckZone = false;
+                                                Player.SendMessage(p, "TNT Wars: Place a block to delete the zone for no TNT!");
+                                                p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+
+                                            case "check":
+                                            case "c":
+                                                DeleteZone = false;
+                                                CheckZone = true;
+                                                Player.SendMessage(p, "TNT Wars: Place a block to check for no TNT zones!");
+                                                p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+                                        }
+                                        break;
+
+                                    case "noexplosion":
+                                    case "nodeleteblocks":
+                                    case "deleteblocks":
+                                    case "nd":
+                                    case "nb":
+                                    case "ne":
+                                    case "neb":
+                                    case "ndb":
+                                        NoTntZone = false;
+                                        DeleteZone = false;
+                                        CheckZone = false;
+                                        switch (text[3])
+                                        {
+                                            case "add":
+                                            case "a":
+                                            case "new":
+                                                DeleteZone = false;
+                                                CheckZone = false;
+                                                Player.SendMessage(p, "TNT Wars: Place 2 blocks to create the zone for no blocks deleted on explosions!");
+                                                p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+
+                                            case "delete":
+                                            case "d":
+                                            case "remove":
+                                            case "r":
+                                                if (text[4] == "all" || text[4] == "a")
+                                                {
+                                                    it.NoBlockDeathZones.Clear();
+                                                    Player.SendMessage(p, "TNT Wars: Deleted all zones for no blocks deleted on explosions!");
+                                                    return;
+                                                }
+                                                DeleteZone = true;
+                                                CheckZone = false;
+                                                Player.SendMessage(p, "TNT Wars: Place a block to delete the zone for no blocks deleted on explosions!");
+                                                p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+
+                                            case "check":
+                                            case "c":
+                                                DeleteZone = false;
+                                                CheckZone = true;
+                                                Player.SendMessage(p, "TNT Wars: Place a block to check for no blocks deleted on explosions!");
+                                                p.ClearBlockchange();
+                                                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+
+                            case "help":
+                            case "h":
+                                int SleepAmount = 500;
+                                Player.SendMessage(p, "TNT Wars Setup Help:");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s new {n}/delete - create/delete a game");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s start/stop/reset {r} - start/stop/reset the current game");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s level {l} - change the level for the game");
+                                Thread.Sleep(SleepAmount);
                                 Player.SendMessage(p, "/tw s teamsspawns {ts} [red/blue] - set the spawns for red/blue");
-								Player.SendMessage(p, "/tw s tnt {t} - change the amount of tnt per player at a time");
-								Player.SendMessage(p, "/tw s graceperiod {g} [on/off/check] - enable/disable the grace period (or check it)");
-								Player.SendMessage(p, "/tw s gracetime {gt} [set/check] <amount> - set the grace period time (in seconds) (or check it)");
-								Player.SendMessage(p, "/tw s gamemode {m} [check/tdm/ffa] - change the gamemode to FFA or TDM (or check it)");
-								Player.SendMessage(p, "/tw s difficulty {d} [1/2/3/4] - change the difficulty (easy/normal/hard/extreme)");
-								Player.SendMessage(p, "/tw s balanceteams {b} [on/off/check] - enable/disable balancing teams (or check it)");
-								Player.SendMessage(p, "/tw s teamkill {tk} [on/off/check] - enable/disable teamkills (or check it)");
-								Player.SendMessage(p, "/tw s score - scoring setup (use '/tntwars setup scoring help' for more info)");
-								Player.SendMessage(p, "/tw s status {s} - view the status of setup");
-								break;
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s tnt {t} - change the amount of tnt per player at a time");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s graceperiod {g} [on/off/check] - enable/disable the grace period (or check it)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s gracetime {gt} [set/check] <amount> - set the grace period time (in seconds) (or check it)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s gamemode {m} [check/tdm/ffa] - change the gamemode to FFA or TDM (or check it)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s difficulty {d} [1/2/3/4] - change the difficulty (easy/normal/hard/extreme)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s balanceteams {b} [on/off/check] - enable/disable balancing teams (or check it)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s teamkill {tk} [on/off/check] - enable/disable teamkills (or check it)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s zone {z} [notnt {nt}/noexplodeblocks {neb}] [add {a}/delete {d} <all>/check {c}]- create zones (No TNT zones or zones where explosions do not delete blocks");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s score - scoring setup (use '/tntwars setup scoring help' for more info)");
+                                Thread.Sleep(SleepAmount);
+                                Player.SendMessage(p, "/tw s status {s} - view the status of setup");
+                                break;
 
-							default:
-							case "status":
-							case "s":
-							case "ready":
-							case "check":
-							case "info":
-							case "c":
-								Player.SendMessage(p, "TNT Wars: Current Setup:");
-								//1
-								if (it.lvl == null) { Player.SendMessage(p, "Level: " + c.red + "NONE"); }
-								else { Player.SendMessage(p, "Level: " + c.green + it.lvl.name); }
-								//2
-								if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) { Player.SendMessage(p, "Gamemode: " + c.green + "FFA"); }
-								if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM) { Player.SendMessage(p, "Gamemode: " + c.green + "TDM"); }
-								//3
-								if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Easy) { Player.SendMessage(p, "Game difficulty: " + c.green + "Easy"); }
-								if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Normal) { Player.SendMessage(p, "Game difficulty: " + c.green + "Normal"); }
-								if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Hard) { Player.SendMessage(p, "Game difficulty: " + c.green + "Hard"); }
-								if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Extreme) { Player.SendMessage(p, "Game difficulty: " + c.green + "Extreme"); }
-								//4
-								if (it.TntPerPlayerAtATime >= 1) { Player.SendMessage(p, "TNT per player at a time: " + c.green + it.TntPerPlayerAtATime.ToString()); }
-								else if (it.TntPerPlayerAtATime == 0) { Player.SendMessage(p, "TNT per player at a time: " + c.green + "unlimited"); }
-								//5
-								if (it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "enabled"); }
-								if (!it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "disabled"); }
-								//6
-								Player.SendMessage(p, "Grace period time: " + c.green + it.GracePeriodSecs.ToString() + " seconds");
-								//7
-								if (it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "enabled"); }
-								if (!it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "disabled"); }
-								//8
-								Player.SendMessage(p, "Score limit: " + c.green + it.ScoreLimit.ToString() + " points");
-								//9
-								if (it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "enabled"); }
-								if (!it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "disabled"); }
-								//10
-								if (it.MultiKillBonus == 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "disabled"); }
-								if (it.MultiKillBonus != 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "enabled"); }
-								//11
-								Player.SendMessage(p, "Score per kill: " + c.green + it.ScorePerKill.ToString() + " points");
-								//12
-								if (it.ScorePerAssist == 0) { Player.SendMessage(p, "Assists: " + c.green + "disabled"); }
-								if (it.ScorePerAssist != 0) { Player.SendMessage(p, "Assists : " + c.green + "enabled (at " + it.ScorePerAssist.ToString() + " points)"); }
-								//13
-								if (it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "enabled"); }
-								if (!it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "disabled"); }
-								//14
-								it.CheckAllSetUp(p);
-								//15
-								break;
-						}
+                            default:
+                            case "status":
+                            case "s":
+                            case "ready":
+                            case "check":
+                            case "info":
+                            case "c":
+                                Player.SendMessage(p, "TNT Wars: Current Setup:");
+                                //1
+                                if (it.lvl == null) { Player.SendMessage(p, "Level: " + c.red + "NONE"); }
+                                else { Player.SendMessage(p, "Level: " + c.green + it.lvl.name); }
+                                //2
+                                if (it.GameMode == TntWarsGame.TntWarsGameMode.FFA) { Player.SendMessage(p, "Gamemode: " + c.green + "FFA"); }
+                                if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM) { Player.SendMessage(p, "Gamemode: " + c.green + "TDM"); }
+                                //3
+                                if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Easy) { Player.SendMessage(p, "Game difficulty: " + c.green + "Easy"); }
+                                if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Normal) { Player.SendMessage(p, "Game difficulty: " + c.green + "Normal"); }
+                                if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Hard) { Player.SendMessage(p, "Game difficulty: " + c.green + "Hard"); }
+                                if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Extreme) { Player.SendMessage(p, "Game difficulty: " + c.green + "Extreme"); }
+                                //4
+                                if (it.TntPerPlayerAtATime >= 1) { Player.SendMessage(p, "TNT per player at a time: " + c.green + it.TntPerPlayerAtATime.ToString()); }
+                                else if (it.TntPerPlayerAtATime == 0) { Player.SendMessage(p, "TNT per player at a time: " + c.green + "unlimited"); }
+                                //5
+                                if (it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "enabled"); }
+                                if (!it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "disabled"); }
+                                //6
+                                Player.SendMessage(p, "Grace period time: " + c.green + it.GracePeriodSecs.ToString() + " seconds");
+                                //7
+                                if (it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "enabled"); }
+                                if (!it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "disabled"); }
+                                //8
+                                Player.SendMessage(p, "Score limit: " + c.green + it.ScoreLimit.ToString() + " points");
+                                //9
+                                if (it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "enabled"); }
+                                if (!it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "disabled"); }
+                                //10
+                                if (it.MultiKillBonus == 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "disabled"); }
+                                if (it.MultiKillBonus != 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "enabled"); }
+                                //11
+                                Player.SendMessage(p, "Score per kill: " + c.green + it.ScorePerKill.ToString() + " points");
+                                //12
+                                if (it.ScorePerAssist == 0) { Player.SendMessage(p, "Assists: " + c.green + "disabled"); }
+                                if (it.ScorePerAssist != 0) { Player.SendMessage(p, "Assists : " + c.green + "enabled (at " + it.ScorePerAssist.ToString() + " points)"); }
+                                //13
+                                if (it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "enabled"); }
+                                if (!it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "disabled"); }
+                                //14
+                                it.CheckAllSetUp(p);
+                                //15
+                                break;
+                        }
 					}
 					else
 					{
@@ -1688,5 +1825,106 @@ namespace MCForge
                 Player.SendMessage(p, "/tw rules - read the rules");
             }
 		}
-	}
+        public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            p.ClearBlockchange();
+            byte b = p.level.GetTile(x, y, z);
+            p.SendBlockchange(x, y, z, b);
+            CatchPos bp = (CatchPos)p.blockchangeObject;
+            bp.x = x; bp.y = y; bp.z = z; p.blockchangeObject = bp;
+            if (DeleteZone == false && CheckZone == false)
+            {
+                Player.SendMessage(p, "TNT Wars: Place another block to mark the other corner of the zone!");
+                p.Blockchange += new Player.BlockchangeEventHandler(Blockchange2);
+                return;
+            }
+            TntWarsGame it = TntWarsGame.GetTntWarsGame(p);
+            if (DeleteZone == true)
+            {
+                if (it == null)
+                {
+                    Player.SendMessage(p, "TNT Wars Error: Couldn't find your game!");
+                }
+                else
+                {
+                    if (it.InZone(x, y, z, NoTntZone))
+                    {
+                        it.DeleteZone(x, y, z, NoTntZone, p);
+                    }
+                }
+            }
+            else if (CheckZone == true && NoTntZone == true)
+            {
+                if (it == null)
+                {
+                    Player.SendMessage(p, "TNT Wars Error: Couldn't find your game!");
+                    return;
+                }
+                else
+                {
+                    if (it.InZone(x, y, z, true))
+                    {
+                        Player.SendMessage(p, "TNT Wars: You are currently in a no TNT zone!");
+                        return;
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "TNT Wars: You are not currently in a no TNT zone!");
+                        return;
+                    }
+                }
+            }
+            else if (CheckZone == true && NoTntZone == false)
+            {
+                if (it == null)
+                {
+                    Player.SendMessage(p, "TNT Wars Error: Couldn't find your game!");
+                    return;
+                }
+                else
+                {
+                    if (it.InZone(x, y, z, true))
+                    {
+                        Player.SendMessage(p, "TNT Wars: You are currently in a no TNT block explosion zone (explosions won't destory blocks)!");
+                        return;
+                    }
+                    else
+                    {
+                        Player.SendMessage(p, "TNT Wars: You are currently in a TNT block explosion zone (explosions will destory blocks)!");
+                        return;
+                    }
+                }
+            }
+        }
+
+        public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            p.ClearBlockchange();
+            byte b = p.level.GetTile(x, y, z);
+            p.SendBlockchange(x, y, z, b);
+            CatchPos cpos = (CatchPos)p.blockchangeObject;
+
+            TntWarsGame.Zone Zn = new TntWarsGame.Zone();
+
+            Zn.smallX = Math.Min(cpos.x, x);
+            Zn.smallY = Math.Min(cpos.y, y);
+            Zn.smallZ = Math.Min(cpos.z, z);
+            Zn.bigX = Math.Max(cpos.x, x);
+            Zn.bigY = Math.Max(cpos.y, y);
+            Zn.bigZ = Math.Max(cpos.z, z);
+
+            TntWarsGame it = TntWarsGame.GetTntWarsGame(p);
+            if (it == null)
+            {
+                Player.SendMessage(p, "TNT Wars Error: Couldn't find your game!");
+                return;
+            }
+            if (NoTntZone) it.NoTNTplacableZones.Add(Zn);
+            else it.NoBlockDeathZones.Add(Zn);
+            Player.SendMessage(p, "Added zone");
+            return;
+        }
+
+        struct CatchPos { public ushort x, y, z; }
+    }
 }

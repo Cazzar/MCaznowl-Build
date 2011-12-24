@@ -342,6 +342,19 @@ namespace MCForge
                 if ((!Server.lava.active || !Server.lava.HasMap(name)) && save) Save();
                 saveChanges();
             }
+            if (TntWarsGame.Find(this) != null)
+            {
+                foreach (TntWarsGame.player pl in TntWarsGame.Find(this).Players)
+                {
+                    pl.p.CurrentTntGameNumber = -1;
+                    Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
+                    pl.p.PlayingTntWars = false;
+                    pl.p.canBuild = true;
+                    TntWarsGame.SetTitlesAndColor(pl, true);
+                }
+                Server.s.Log("TNT Wars: Game deleted on " + name);
+                TntWarsGame.GameList.Remove(TntWarsGame.Find(this));
+            }
             try
             {
                 physThread.Abort();
@@ -465,6 +478,18 @@ namespace MCForge
                     {
                         p.SendBlockchange(x, y, z, b);
                         return;
+                    }
+                }
+                errorLocation = "Allowed to place tnt there (TNT Wars)";
+                if (type == Block.tnt || type == Block.smalltnt || type == Block.bigtnt || type == Block.nuketnt)
+                {
+                    if (p.PlayingTntWars)
+                    {
+                        if (TntWarsGame.GetTntWarsGame(p).InZone(x, y, z, true))
+                        {
+                            p.SendBlockchange(x, y, z, b);
+                            return;
+                        }
                     }
                 }
                 errorLocation = "Max tnt for TNT Wars checking";
@@ -3212,7 +3237,7 @@ namespace MCForge
                                                                       {
                                                                           ExplodeDistance += 1;
                                                                       }
-                                                                      MakeExplosion(x, y, z, ExplodeDistance - 2, true);
+                                                                      MakeExplosion(x, y, z, ExplodeDistance - 2, true, TntWarsGame.GetTntWarsGame(C.p));
                                                                       List<Player> Killed = new List<Player>();
                                                                       players.ForEach(delegate(Player p1)
                                                                       {
@@ -6029,7 +6054,7 @@ namespace MCForge
             if (Block.odoor(blocks[foundInt]) != Block.Zero) AddUpdate(foundInt, Block.odoor(blocks[foundInt]), true);
         }
 
-        public void MakeExplosion(ushort x, ushort y, ushort z, int size, bool force = false)
+        public void MakeExplosion(ushort x, ushort y, ushort z, int size, bool force = false, TntWarsGame CheckForExplosionZone = null)
         {
             //DateTime start = DateTime.Now;
             int xx, yy, zz;
@@ -6052,6 +6077,13 @@ namespace MCForge
                             }
                             else if (b != Block.smalltnt && b != Block.bigtnt && b != Block.nuketnt)
                             {
+                                if (CheckForExplosionZone != null && b != Block.air)
+                                {
+                                    if (CheckForExplosionZone.InZone((ushort)xx, (ushort)yy, (ushort)zz, false))
+                                    {
+                                        continue;
+                                    }
+                                }
                                 if (rand.Next(1, 11) <= 4)
                                     AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)
@@ -6076,6 +6108,13 @@ namespace MCForge
                         if (rand.Next(1, 10) < 7)
                             if (Block.Convert(b) != Block.tnt)
                             {
+                                if (CheckForExplosionZone != null && b != Block.air)
+                                {
+                                    if (CheckForExplosionZone.InZone((ushort)xx, (ushort)yy, (ushort)zz, false))
+                                    {
+                                        continue;
+                                    }
+                                }
                                 if (rand.Next(1, 11) <= 4)
                                     AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)
@@ -6101,6 +6140,13 @@ namespace MCForge
                         if (rand.Next(1, 10) < 3)
                             if (Block.Convert(b) != Block.tnt)
                             {
+                                if (CheckForExplosionZone != null && b != Block.air)
+                                {
+                                    if (CheckForExplosionZone.InZone((ushort)xx, (ushort)yy, (ushort)zz, false))
+                                    {
+                                        continue;
+                                    }
+                                }
                                 if (rand.Next(1, 11) <= 4)
                                     AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)

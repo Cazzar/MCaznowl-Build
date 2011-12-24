@@ -167,9 +167,12 @@ namespace MCForge
         /// <param name="shutdown">Is this shutdown?</param>
         public static void Unload(Plugin p, bool shutdown)
         {
-            p.Unload(shutdown);
+            try { p.Unload(shutdown);
             all.Remove(p);
+
             Server.s.Log(p.name + " was unloaded.");
+            }
+            catch { Server.s.Log("An Error occurred while unloading a plugin"); }
         }
         /// <summary>
         /// Unload all plugins
