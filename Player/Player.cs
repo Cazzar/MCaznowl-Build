@@ -560,7 +560,8 @@ namespace MCForge
                 Buffer.BlockCopy(p.tempbuffer, 0, b, p.buffer.Length, length);
 
                 p.buffer = p.HandleMessage(b);
-                p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
+                if (!p.disconnected)
+                    p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                       new AsyncCallback(Receive), p);
             }
             catch (SocketException)
@@ -619,6 +620,7 @@ namespace MCForge
                         {
                             CloseSocket();
                             disconnected = true;
+                            Server.s.Log("Spoon Fed WoM NOW LEAVE");
                         }
                         return new byte[0];
                 }

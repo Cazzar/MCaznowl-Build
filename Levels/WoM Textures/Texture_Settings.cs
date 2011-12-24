@@ -198,6 +198,7 @@ namespace MCForge.Levels.Textures
                 using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
                 {
                     string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+                    Server.s.Log(firstLine);
                     var match = HttpFirstLine.Match(firstLine);
                     if (match.Success)
                     {
@@ -220,8 +221,8 @@ namespace MCForge.Levels.Textures
                             byte[] content = Encoding.UTF8.GetBytes(cfg);
                             textWriter.WriteLine("HTTP/1.1 200 OK");
                             textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
-                            textWriter.WriteLine("Content-Type: text/generic-x");
-                            textWriter.WriteLine("Content-Length: " + content.Length);
+                            textWriter.WriteLine("Content-Type: text/plain");
+                            textWriter.WriteLine("Content-Length: " + content.Length); //idk
                             textWriter.WriteLine();
                             textWriter.WriteLine(cfg);
                         }
