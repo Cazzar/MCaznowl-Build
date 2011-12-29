@@ -43,7 +43,7 @@ namespace MCForge
             Player who2 = Player.Find(message);
             if (who2 == null)
             {
-                Player.SendMessage(p, "&cPlayer &e" + message + "&cHas not been found!");
+                Player.SendMessage(p, "&cPlayer &e" + message + " &cHas not been found!");
                 return;
             }
             if (alltext.Contains(message) == false)
