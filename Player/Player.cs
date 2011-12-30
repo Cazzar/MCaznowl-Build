@@ -1267,13 +1267,12 @@ namespace MCForge
                 return;
             }
             if (PlayerBlockChange != null)
-            {
                 PlayerBlockChange(this, x, y, z, type);
-                if (cancelBlock)
-                {
-                    cancelBlock = false;
-                    return;
-                }
+            OnBlockChangeEvent.Call(this, x, y, z, type);
+            if (cancelBlock)
+            {
+                cancelBlock = false;
+                return;
             }
 
             if (group.Permission == LevelPermission.Banned) return;
@@ -1848,6 +1847,7 @@ level.ctfgame.GrabFlag(this, workTeam);
                 OnDeath(this, b);
             if (PlayerDeath != null)
                 PlayerDeath(this, b);
+            OnPlayerDeathEvent.Call(this, b);
             if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
                 return;
             if (lastDeath.AddSeconds(2) < DateTime.Now)
@@ -2309,6 +2309,7 @@ return;
                         OnChat(this, text);
                     if (PlayerChat != null)
                         PlayerChat(this, text);
+                    OnPlayerChatEvent.Call(this, text);
                     return;
                 }
                 Server.s.Log("<" + name + "> " + text);
@@ -2316,6 +2317,7 @@ return;
                     OnChat(this, text);
                 if (PlayerChat != null)
                     PlayerChat(this, text);
+                OnPlayerChatEvent.Call(this, text);
                 if (cancelchat)
                 {
                     cancelchat = false;
@@ -2452,6 +2454,7 @@ return;
                     OnCommand(cmd, this, message);
                 if (PlayerCommand != null)
                     PlayerCommand(cmd, this, message);
+                OnPlayerCommandEvent.Call(cmd, this, message);
                 if (cancelcommand)
                 {
                     cancelcommand = false;
@@ -2852,6 +2855,7 @@ else goto retry;
                 MessageRecieve(this, message);
             if (OnMessageRecieve != null)
                 OnMessageRecieve(this, message);
+            OnMessageRecieveEvent.Call(this, message);
             if (cancelmessage)
             {
                 cancelmessage = false;

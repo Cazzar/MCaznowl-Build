@@ -90,8 +90,14 @@
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdC4.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
-    <Compile Include="CTF\Setup.cs" />
-    <Compile Include="TntWarsGame.cs" />
+    <Compile Include="Games\CTF\Setup.cs" />
+    <Compile Include="Games\TntWarsGame.cs" />
+    <Compile Include="Plugins\Events\OnBlockChangeEvent.cs" />
+    <Compile Include="Plugins\Events\OnMessageRecieveEvent.cs" />
+    <Compile Include="Plugins\Events\OnPlayerChatEvent.cs" />
+    <Compile Include="Plugins\Events\OnPlayerCommandEvent.cs" />
+    <Compile Include="Plugins\Events\OnPlayerDeathEvent.cs" />
+    <Compile Include="Plugins\Priority.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
@@ -233,10 +239,10 @@
     <Compile Include="Commands\CmdPLoad.cs" />
     <Compile Include="Commands\CmdPUnload.cs" />
     <Compile Include="Commands\CommandOtherPerms.cs" />
-    <Compile Include="CTF\Auto_CTF.cs" />
+    <Compile Include="Games\CTF\Auto_CTF.cs" />
     <Compile Include="Edit.cs" />
     <Compile Include="GlobalChatBot.cs" />
-    <Compile Include="CountdownGame.cs" />
+    <Compile Include="Games\CountdownGame.cs" />
     <Compile Include="Economy.cs" />
     <Compile Include="ForgeBot.cs" />
     <Compile Include="GUI\EditText.cs">
@@ -252,7 +258,7 @@
       <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
-    <Compile Include="LavaSurvival.cs" />
+    <Compile Include="Games\LavaSurvival.cs" />
     <Compile Include="Levels\BlockQueue.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
@@ -486,7 +492,7 @@
     <Compile Include="Remote Stuff\Remote.Handler.cs" />
     <Compile Include="Remote Stuff\RemoteProperties.cs" />
     <Compile Include="Remote Stuff\RemoteServer.cs" />
-    <Compile Include="ZombieGame.cs" />
+    <Compile Include="Games\ZombieGame.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
