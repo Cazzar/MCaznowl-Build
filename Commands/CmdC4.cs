@@ -53,7 +53,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/c4 - place c4!");
+            Player.SendMessage(p, "/c4 - Place c4!");
         }
         public void Blockchange1(Player p, ushort x, ushort y, ushort z, byte type)
         {
@@ -72,7 +72,7 @@ namespace MCForge
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
             p.level.Blockchange(p, x, y, z, Block.c4det);
-            Player.SendMessage(p, "Placed detenator block!");
+            Player.SendMessage(p, "Placed detonator block!");
         }
     }
 }
