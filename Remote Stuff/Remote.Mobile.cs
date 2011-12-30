@@ -8,17 +8,17 @@ using System.Security.Cryptography;
 
 namespace MCForge.Remote
 {
-   public partial class Remote
-   {
-       private Server.LogHandler _log, _adminLog, _opLog;
-       private Server.VoidHandler _settings;
-       private Player.OnPlayerConnect _playerConnect;
-       private Player.OnPlayerChat _playerChat;
-       private Player.OnPlayerDisconnect _playerDisconnect;
-       private Level.OnLevelLoad _levelLoad;
-       private Level.OnLevelUnload _levelUnload;
-       private Group.GroupLoad _groupLoad;
-       private Group.GroupSave _groupSave;
+    public partial class Remote
+    {
+        private Server.LogHandler _log, _adminLog, _opLog;
+        private Server.VoidHandler _settings;
+        private Player.OnPlayerConnect _playerConnect;
+        private Player.OnPlayerChat _playerChat;
+        private Player.OnPlayerDisconnect _playerDisconnect;
+        private Level.OnLevelLoad _levelLoad;
+        private Level.OnLevelUnload _levelUnload;
+        private Group.GroupLoad _groupLoad;
+        private Group.GroupSave _groupSave;
 
         private void HandleMobileChangeGroup(byte[] message)
         {
@@ -375,7 +375,7 @@ namespace MCForge.Remote
                 LoggedIn = true;
                 Remotes.Add(this);
                 regMobileEvents();
-                
+
 
 
             }
@@ -391,14 +391,14 @@ namespace MCForge.Remote
 
         private void regMobileEvents()
         {
-            
+
             _log += LogServerMobile;
             _opLog += LogOpMobile;
             _adminLog += LogAdminMobile;
             _settings += SettingsUpdateMobile;
             _playerConnect += PlayerConnectMobile;
             _playerDisconnect += PlayerDisconnectMobile;
-             _playerChat += PlayerChatMobile;
+            _playerChat += PlayerChatMobile;
             _levelLoad += LevelLoadMobile;
             _levelUnload += LevelUnloadMobile;
             _groupSave += GroupChangedMobile;
@@ -418,15 +418,15 @@ namespace MCForge.Remote
 
         }
 
-     
 
-       public void unregMobileEvents()
+
+        public void unregMobileEvents()
         {
             Server.s.OnAdmin -= _adminLog;
             Server.s.OnOp -= _opLog;
             Server.s.OnLog -= _log;
             Server.s.OnSettingsUpdate -= _settings;
-            //Player.PlayerChat -= _playerChat;
+            Player.PlayerChat -= _playerChat;
             Player.PlayerConnect -= _onPlayerConnect;
             Player.PlayerDisconnect -= _playerDisconnect;
             Level.LevelLoad -= _levelLoad;
@@ -559,7 +559,7 @@ namespace MCForge.Remote
         {
             SendStringDataMobile(0x04, "DELETE:" + p.name);
         }
-       
+
         internal void SendMapsMobile()
         {
             //_levels.Clear();
@@ -576,9 +576,9 @@ namespace MCForge.Remote
             //            SendStringDataMobile(0x06, "UN_" + file.Name.Replace(".lvl", ""));
             //        }
             //    }
-                GetUnloaded().ForEach(l =>  SendStringDataMobile(0x06, "UN_" + l));
-                Server.levels.ForEach(l => SendStringDataMobile(0x06, "LO_" + l.name));
-            
+            GetUnloaded().ForEach(l => SendStringDataMobile(0x06, "UN_" + l));
+            Server.levels.ForEach(l => SendStringDataMobile(0x06, "LO_" + l.name));
+
 
             //}
 
@@ -631,18 +631,18 @@ namespace MCForge.Remote
 
 
         }
-        
-  private void PlayerChatMobile(Player p, string message)
-       {
-           string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
-           messaged = EncryptMobile(messaged, _keyMobile);
-           byte[] buffed = new byte[(messaged.Length * 2) + 3];
-           util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-           buffed[0] = 1;
-           Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-           SendData(0x05, buffed);
-           System.Threading.Thread.Sleep(100);
-       }
+
+        private void PlayerChatMobile(Player p, string message)
+        {
+            string messaged = new StringBuilder().Append(p.name).Append("ĥ").Append(message).ToString();
+            messaged = EncryptMobile(messaged, _keyMobile);
+            byte[] buffed = new byte[(messaged.Length * 2) + 3];
+            util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
+            buffed[0] = 1;
+            Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
+            SendData(0x05, buffed);
+            System.Threading.Thread.Sleep(100);
+        }
 
         void LogAdminMobile(string message)
         {
@@ -708,16 +708,16 @@ namespace MCForge.Remote
             }
             else
             {*/
-                
-                message = EncryptMobile(message, _keyMobile);
-                byte[] buffed = new byte[(message.Length * 2) + 3];
-                util.EndianBitConverter.Big.GetBytes((short)message.Length).CopyTo(buffed, 1);
-                buffed[0] = 4;
-                Encoding.BigEndianUnicode.GetBytes(message).CopyTo(buffed, 3);
-                if (OnRemoteLog != null) OnRemoteLog(this, message);
-                SendData(0x05, buffed);
-                System.Threading.Thread.Sleep(100);
-            
+
+            message = EncryptMobile(message, _keyMobile);
+            byte[] buffed = new byte[(message.Length * 2) + 3];
+            util.EndianBitConverter.Big.GetBytes((short)message.Length).CopyTo(buffed, 1);
+            buffed[0] = 4;
+            Encoding.BigEndianUnicode.GetBytes(message).CopyTo(buffed, 3);
+            if (OnRemoteLog != null) OnRemoteLog(this, message);
+            SendData(0x05, buffed);
+            System.Threading.Thread.Sleep(100);
+
 
 
         }
