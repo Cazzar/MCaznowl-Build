@@ -24,10 +24,12 @@ namespace MCForge
         /// <summary>
         /// This event is triggered when a player goes AFK
         /// </summary>
+        [Obsolete("Please use the OnPlayerAFKEvent.Register()")]
         public static event OnAFK AFK;
         /// <summary>
         /// This event is triggered when a player goes AFK
         /// </summary>
+        [Obsolete("Please use the OnPlayerAFKEvent.Register()")]
         public event OnAFK ONAFK;
         /// <summary>
         /// This method is called whenever a players data is saved in mysql (even if disabled)
@@ -38,6 +40,7 @@ namespace MCForge
         /// <summary>
         /// This event is called whenever a players data is saved in mysql (even if disabled) (Can be cancled)
         /// </summary>
+        [Obsolete("Please use the OnMySQLSaveEvent.Register()")]
         public static event OnMySQLSave MySQLSave;
         /// <summary>
         /// BlockchangeEventHandler2 event is called when a player removes or places a block
@@ -71,6 +74,7 @@ namespace MCForge
         /// <summary>
         /// PlayerConnect event is called when a player connects (Player p)
         /// </summary>
+        [Obsolete("Please use OnPlayerConnectEvent.Register()")]
         public static event OnPlayerConnect PlayerConnect = null;
         /// <summary>
         /// Player Disconnect is called when a player disconnects

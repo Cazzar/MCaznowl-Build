@@ -482,6 +482,7 @@ namespace MCForge
                                     AFK(this);
                                 if (ONAFK != null)
                                     ONAFK(this);
+                                OnPlayerAFKEvent.Call(this);
                                 afkCount = 0;
                             }
                         }
@@ -514,13 +515,12 @@ namespace MCForge
                 ", TimeSpent='" + time +
                 "' WHERE Name='" + name + "'";
             if (MySQLSave != null)
-            {
                 MySQLSave(this, commandString);
-                if (cancelmysql)
-                {
-                    cancelmysql = false;
-                    return;
-                }
+            OnMySQLSaveEvent.Call(this, commandString);
+            if (cancelmysql)
+            {
+                cancelmysql = false;
+                return;
             }
             if (Server.useMySQL) MySQL.executeQuery(commandString); else SQLite.executeQuery(commandString);
 
@@ -981,6 +981,7 @@ namespace MCForge
             playerDb.Dispose();
             if (PlayerConnect != null)
                 PlayerConnect(this);
+            OnPlayerConnectEvent.Call(this);
             if (Server.devs.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
@@ -1704,6 +1705,7 @@ return;
                     OnMove(this, x, y, z);
                 if (PlayerMove != null)
                     PlayerMove(this, x, y, z);
+                PlayerMoveEvent.Call(this, x, y, z);
                 if (cancelmove)
                 {
                     unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }

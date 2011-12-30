@@ -5,34 +5,34 @@ using System.Text;
 
 namespace MCForge
 {
-    public class OnPlayerDeathEvent
+    public class PlayerMoveEvent
     {
-        internal static List<OnPlayerDeathEvent> events = new List<OnPlayerDeathEvent>();
+        internal static List<PlayerMoveEvent> events = new List<PlayerMoveEvent>();
         Plugin plugin;
-        Player.OnPlayerDeath method;
+        Player.OnPlayerMove method;
         Priority priority;
-        internal OnPlayerDeathEvent(Player.OnPlayerDeath method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p, byte type)
+        internal PlayerMoveEvent(Player.OnPlayerMove method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
+        internal static void Call(Player p, ushort x, ushort y,  ushort z)
         {
-            events.ForEach(delegate(OnPlayerDeathEvent p1)
+            events.ForEach(delegate(PlayerMoveEvent p1)
             {
                 try
                 {
-                    p1.method(p, type);
+                    p1.method(p, x, y, z);
                 }
-                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the PlayerBlockChange Event!"); Server.ErrorLog(e); }
+                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the PlayerMove Event!"); Server.ErrorLog(e); }
             });
         }
         static void Organize()
         {
-            List<OnPlayerDeathEvent> temp = new List<OnPlayerDeathEvent>();
-            List<OnPlayerDeathEvent> temp2 = events;
-            OnPlayerDeathEvent temp3 = null;
+            List<PlayerMoveEvent> temp = new List<PlayerMoveEvent>();
+            List<PlayerMoveEvent> temp2 = events;
+            PlayerMoveEvent temp3 = null;
             int i = 0;
             int ii = temp2.Count;
             while (i < ii)
             {
-                foreach (OnPlayerDeathEvent p in temp2)
+                foreach (PlayerMoveEvent p in temp2)
                 {
                     if (temp3 == null)
                         temp3 = p;
@@ -46,20 +46,20 @@ namespace MCForge
             }
             events = temp;
         }
-        public static OnPlayerDeathEvent Find(Plugin plugin)
+        public static PlayerMoveEvent Find(Plugin plugin)
         {
-            foreach (OnPlayerDeathEvent p in events.ToArray())
+            foreach (PlayerMoveEvent p in events.ToArray())
             {
                 if (p.plugin == plugin)
                     return p;
             }
             return null;
         }
-        public static void Register(Player.OnPlayerDeath method, Priority priority, Plugin plugin)
+        public static void Register(Player.OnPlayerMove method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
                 throw new Exception("The user tried to register 2 of the same event!");
-            events.Add(new OnPlayerDeathEvent(method, priority, plugin));
+            events.Add(new PlayerMoveEvent(method, priority, plugin));
             Organize();
         }
         public static void UnRegister(Plugin plugin)

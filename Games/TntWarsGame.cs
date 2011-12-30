@@ -324,9 +324,9 @@ namespace MCForge
                     SendAllPlayersScore(false, true, true);
                 }
             }
-            End();
+            END();
         }
-        public void End()
+        public void END()
         {
             GameStatus = TntWarsGameStatus.Finished;
             //let them build and spawn them and change playingtntwars to false

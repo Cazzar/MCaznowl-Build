@@ -92,12 +92,16 @@
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
-    <Compile Include="Plugins\Events\OnBlockChangeEvent.cs" />
-    <Compile Include="Plugins\Events\OnMessageRecieveEvent.cs" />
-    <Compile Include="Plugins\Events\OnPlayerChatEvent.cs" />
-    <Compile Include="Plugins\Events\OnPlayerCommandEvent.cs" />
-    <Compile Include="Plugins\Events\OnPlayerDeathEvent.cs" />
-    <Compile Include="Plugins\Priority.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnBlockChangeEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnMessageRecieveEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnMySQLSaveEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerAFKEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerChatEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerCommandEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerConnectEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
+    <Compile Include="Plugins\Utils\Priority.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
@@ -263,9 +267,9 @@
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
-    <Compile Include="Plugins\Events.cs" />
-    <Compile Include="Plugins\Plugin_Manager.cs" />
-    <Compile Include="Plugins\Plugin_Simpile.cs" />
+    <Compile Include="Plugins\Utils\Events.cs" />
+    <Compile Include="Plugins\Manager\Plugin_Manager.cs" />
+    <Compile Include="Plugins\Manager\Plugin_Simpile.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -554,7 +558,7 @@
     <None Include="Service References\TranslateService\configuration91.svcinfo" />
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
-    <Compile Include="Plugins\Plugin.Events.cs" />
+    <Compile Include="Plugins\Manager\Plugin.Events.cs" />
     <Content Include="mcf.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -597,6 +601,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\TranslateService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\LevelEvents\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
