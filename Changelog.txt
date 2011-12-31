@@ -1,9 +1,73 @@
 v5.4.0.0
-- Fixed SQLite on mono
-- Added a new gamemode, TNT Wars
-- In global chat, developers names are now prefixed with '[Dev]' if they are on a server and use /global
-- Added /c4
-- Fixed a chat bug which would cause all players to crash
+- Fixed SQLite on Mono.
+- Fixed a chat bug which would cause all players to crash.
+- Fixed numerous small memory leaks.
+- Fixed numerous typos. 
+- Fixed an issue where putting a "-" at the front of a message would cause the "-" to disappear.
+- Fixed the issue where all "%" characters were removed from chat. 
+- Fixed an issue in /botai. 
+- Fixed an issue where chat in IRC from the server would appear white, often becoming invisible on light colored backgrounds. 
+- In global chat, developers names are now prefixed with '[Dev]' if they are on a server and use /global.
+- Added a new gamemode: TNT Wars. 
+- Added Commands:
+	- /ascend - Teleports you to the first free space above you. 
+	- /copyloadnet - Loads a copy from a network location.
+	- /copysavenet - Saves a copy to a network location. 
+	- /descend - Teleports you to the first free space below you.
+	- /opstats [player] [today]|[yesterday]|[thismonth]|[lastmonth]|[all] - Displays information about operator command usage.
+	- /quick [function] [block] [type] - Cuboids the selected function instantly. Available functions: cuboid, pyramid, replace, replaceall, replacenot, spheroid. 
+	- /tntwars (shortcut /tw):
+	- /tw list - Lists all current games.
+	- /tw join <team/level> - join the game on <level> or on <team> (red/blue).
+	- /tw leave - leave the current game.
+	- /tw scores <top/team/me> - view the top score/team scores/your scores.
+	- /tw players - view current players in your game.
+	- /tw health - view your current health level.
+	- /tw rules - View TNTWars rules. (You can also send these to the map, all players in a TNTWars game, or a single player)
+	- /tw setup - Sets up the TNT War game (For more info use /tntwars setup help).
+	- /translate - Shows whether translation is enabled or disabled.
+	- /translate toggle - turns on or off personal translation.	
+- Added C4 block (use /c4 to place).
+- Added Automatic Translation. Disabled by default (/translate is related to this).
+- Added an option to only allow people with premium minecraft accounts onto the server. 
+- Added a Command Usage Register which sends information on how often commands are used to MCForge Devs. This can be disabled.
+- Added support to /write for more characters. Some new characters include: [ ] { } < > ; | ` ( ) ~ 
+- Added a configurable startup script for linux/mac users (mcf.sh).
+- Added Plugin API Events (Examples on how to use can be found here: http://pastebin.com/NZbdJvkK)
+	- OnBlockChangeEvent.Register(delegate, Priority, Plugin)
+	- OnBlockChangeEvent.UnRegister(Plugin)
+	- OnMessageRecieveEvent.Register(delegate, Priority, Plugin)
+	- OnMessageRecieveEvent.UnRegister(Plugin)
+	- OnMySQLSaveEvent.Register(delegate, Priority, Plugin)
+	- OnMySQLSaveEvent.UnRegister(Plugin)
+	- OnPlayerAFKEvent.Register(delegate, Priority, Plugin)
+	- OnPlayerAFKEvent.UnRegister(Plugin)
+	- OnPlayerChatEvent.Register(delegate, Priority, Plugin)
+	- OnPlayerChatEvent.UnRegister(Plugin)
+	- OnPlayerCommandEvent.Register(delegate, Priority, Plugin)
+	- OnPlayerCommandEvent.UnRegister(Plugin)
+	- OnPlayerConnectEvent.Register(delegate, Priority, Plugin)
+	- OnPlayerConnectEvent.UnRegister(Plugin)
+	- OnPlayerDeathEvent.Register(delegate, Priority, Plugin)
+	- OnPlayerDeathEvent.UnRegister(Plugin)
+	- PlayerMoveEvent.Register(delegate, Priority, Plugin)
+	- PlayerMoveEvent.UnRegister(Plugin)
+- Added shortcut /ms to /measure. 
+- Made some changes to the way that cuboid, paste, line, etc... work to make them lag less. 
+- Made it so the CLI Console can now use adminchat, opchat, and whisper chat.
+- Made some changes to /votekick to make it function better.
+- Made it so people can now whisper to hidden players of equal or higher rank. 
+- Modified /tp so it is now /tp <player1> [player2]. Player2 is an optional parameter and will move player one to player two if specified. 
+- Re-added shortcut /m for /repeat (Due to complaints.)
+- Removed /zombiespawn due to it being able to crash servers.
+- Revamped /review, so it now uses a queue. 
+	-/review enter - enters you into the review queue (/review does the same for those who can't use /review next).
+	-/review next - will take an op to the next person in the review queue.
+	-/review view - lists everyone in the review queue. 
+	-/review leave - using this will remove you from the queue.
+	-/review clear - clears the review queue.
+	-There is a new tab in the properties window for /review. 
+- Using @@ before a message will send a whisper message to the console.	
 
 v5.3.0.0
 - Added tempranks.
