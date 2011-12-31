@@ -20,6 +20,7 @@ using System;
 using System.Data;
 using System.IO;
 using MCForge.SQL;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -48,10 +49,10 @@ namespace MCForge
            
             foreach (Player pl in Player.players)
             {
-                if (!pl.hidden || p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
+                if (!pl.hidden || p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower(CultureInfo.CurrentCulture)))
                 {
                     playerCount++;
-                    if (pl.hidden && pl.group.Permission <= p.group.Permission && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
+                    if (pl.hidden && pl.group.Permission <= p.group.Permission && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower(CultureInfo.CurrentCulture))))
                     {
                         hiddenCount++;
                     }

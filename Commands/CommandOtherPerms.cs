@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -54,13 +55,7 @@ namespace MCForge
 
         public static List<OtherPerms> list = new List<OtherPerms>();
 
-        public class OtherPerms
-        {
-            public Command cmd;
-            public int Permission;
-            public string Description = "";
-            public int number;
-        }
+
 
         public static int GetPerm(Command cmd, int number = 1)
         {
@@ -151,11 +146,11 @@ namespace MCForge
                         line = SR.ReadLine();
                         try
                         {
-                            if (!line.StartsWith("#") && line.Contains(':'))
+                            if (!line.StartsWith("#", StringComparison.CurrentCulture) && line.Contains(':'))
                             {
-                                string[] LINE = line.ToLower().Split(':');
-                                OtherPerms OTPE = Find(Command.all.Find(LINE[0]), int.Parse(LINE[1]));
-                                Edit(OTPE, int.Parse(LINE[2]));
+                                string[] LINE = line.ToLower(CultureInfo.CurrentCulture).Split(':');
+                                OtherPerms OTPE = Find(Command.all.Find(LINE[0]), int.Parse(LINE[1], CultureInfo.CurrentCulture));
+                                Edit(OTPE, int.Parse(LINE[2], CultureInfo.CurrentCulture));
                             }
                         }
                         catch { Server.s.Log("Loading an additional command permission failed!!"); }
@@ -165,5 +160,13 @@ namespace MCForge
             }
             else { Save(); Load(); }
         }
+    }
+
+    public class OtherPerms
+    {
+        public Command cmd;
+        public int Permission;
+        public string Description = "";
+        public int number;
     }
 }

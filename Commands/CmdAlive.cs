@@ -31,7 +31,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Player who = null;
-            if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
+            if ((message != null && String.IsNullOrEmpty(message))) { who = p; message = p.name; } else { who = Player.Find(message); }
             if (ZombieGame.alive.Count == 0)
             {
                 Player.SendMessage(p, "No one is alive.");

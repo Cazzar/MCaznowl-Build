@@ -40,7 +40,7 @@ namespace MCForge
             if (!Directory.Exists("extra/images/")) { Directory.CreateDirectory("extra/images/"); }
             layer = false;
             popType = 1;
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (message.IndexOf(' ') != -1)     //Yay parameters
             {
                 string[] parameters = message.Split(' ');
@@ -323,10 +323,30 @@ namespace MCForge
             Player.SendMessage(p, "Use switch (&flayer" + Server.DefaultColor + ") or (&fl" + Server.DefaultColor + ") to print horizontally.");
         }
 
-        public struct CatchPos { public ushort x, y, z; }
+        public struct CatchPos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
 
         string bitmaplocation;
-        bool layer = false;
+        bool layer/* = false*/;
         byte popType = 1;
     }
 }

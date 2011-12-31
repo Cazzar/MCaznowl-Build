@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -36,7 +37,7 @@ namespace MCForge
                 return;
             }
 
-            string[] command = message.ToLower().Split(' ');
+            string[] command = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
             string par0 = String.Empty;
             string par1 = String.Empty;
             string par2 = String.Empty;
@@ -50,7 +51,7 @@ namespace MCForge
             }
             catch { }
 
-            if (message == null || par0 == null || message.Trim() == "" || par0.Trim() == "")
+            if (message == null || par0 == null || (message.Trim() != null && String.IsNullOrEmpty(message.Trim())) || (par0.Trim() != null && String.IsNullOrEmpty(par0.Trim())))
             {
                 if (Server.Chatrooms.Count == 0)
                 {

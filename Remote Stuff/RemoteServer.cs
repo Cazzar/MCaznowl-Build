@@ -19,6 +19,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge.Remote
 {
@@ -30,7 +31,7 @@ namespace MCForge.Remote
         public static string Username = "head";
         public static string Password = "lols";
         public static bool enableRemote = true;
-        public static int tries = 0;
+        public static int tries/* = 0*/;
 
 
         public void Start()
@@ -46,7 +47,7 @@ namespace MCForge.Remote
                 listen.Bind(endpoint);
                 listen.Listen((int)SocketOptionName.MaxConnections);
                 listen.BeginAccept(new AsyncCallback(Accept), null);
-                Server.s.Log(string.Format("Creating listening socket on port {0} for remote console...", port));
+                Server.s.Log(string.Format(CultureInfo.CurrentCulture, "Creating listening socket on port {0} for remote console...", port));
             }
             catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
             catch (Exception e) { Server.s.Log(e.Message + e.StackTrace); }

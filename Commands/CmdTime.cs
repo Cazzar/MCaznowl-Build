@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            string time = DateTime.Now.ToString("HH:mm:ss");
+            string time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.CurrentCulture);
             message = "Server time is " + time;
             Player.SendMessage(p, message);
             //message = "full Date/Time is " + DateTime.Now.ToString();

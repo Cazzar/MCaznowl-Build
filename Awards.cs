@@ -21,14 +21,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
-    public class Awards
+    public static class Awards
     {
-        public struct playerAwards { public string playerName; public List<string> awards; }
-        public class awardData { 
-            public string awardName, description;
+        public struct playerAwards { public string playerName; public List<string> awards;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(playerAwards x, playerAwards y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(playerAwards x, playerAwards y)
+        {
+            throw new NotImplementedException();
+        }
+        }
+        public class awardData {
+            private string _description; 
+
+            public string description
+            {
+                get
+                {
+                    return _description;
+                }
+                set
+                {
+                    _description = value;
+                }
+            }
+            private string _awardName; 
+
+            public string awardName
+            {
+                get
+                {
+                    return _awardName;
+                }
+                set
+                {
+                    _awardName = value;
+                }
+            }
             public void setAward(string name) { awardName = camelCase(name); }
         }
 
@@ -54,8 +100,8 @@ namespace MCForge
             allAwards = new List<awardData>();
             foreach (string s in File.ReadAllLines("text/awardsList.txt"))
             {
-                if (s == "" || s[0] == '#') continue;
-                if (s.IndexOf(" : ") == -1) continue;
+                if ((s != null && String.IsNullOrEmpty(s)) || s[0] == '#') continue;
+                if (s.IndexOf(" : ", StringComparison.CurrentCulture) == -1) continue;
 
                 awardData aD = new awardData();
 
@@ -70,17 +116,17 @@ namespace MCForge
             {
                 foreach (String s in File.ReadAllLines("text/playerAwards.txt"))
                 {
-                    if (s.IndexOf(" : ") == -1) continue;
+                    if (s.IndexOf(" : ", StringComparison.CurrentCulture) == -1) continue;
 
                     playerAwards pA;
-                    pA.playerName = s.Split(new string[] { " : " }, StringSplitOptions.None)[0].ToLower();
+                    pA.playerName = s.Split(new string[] { " : " }, StringSplitOptions.None)[0].ToLower(CultureInfo.CurrentCulture);
                     string myAwards = s.Split(new string[] { " : " }, StringSplitOptions.None)[1];
 
                     pA.awards = new List<string>();
                     if (myAwards.IndexOf(',') != -1)
                         foreach (string a in myAwards.Split(','))
                             pA.awards.Add(camelCase(a));
-                    else if (myAwards.Trim() != "")
+                    else if (!(myAwards.Trim() != null && String.IsNullOrEmpty(myAwards.Trim())))
                         pA.awards.Add(camelCase(myAwards));
 
                     playersAwards.Add(pA);
@@ -104,7 +150,7 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText("text/playerAwards.txt"))
 			{
             foreach (playerAwards pA in playersAwards)
-                SW.WriteLine(pA.playerName.ToLower() + " : " + string.Join(",", pA.awards.ToArray()));
+                SW.WriteLine(pA.playerName.ToLower(CultureInfo.CurrentCulture) + " : " + string.Join(",", pA.awards.ToArray()));
 			}
         }
 
@@ -112,7 +158,7 @@ namespace MCForge
         {
             foreach (playerAwards pA in playersAwards)
             {
-                if (pA.playerName == playerName.ToLower())
+                if (pA.playerName == playerName.ToLower(CultureInfo.CurrentCulture))
                 {
                     if (pA.awards.Contains(camelCase(awardName)))
                         return false;
@@ -122,7 +168,7 @@ namespace MCForge
             }
 
             playerAwards newPlayer;
-            newPlayer.playerName = playerName.ToLower();
+            newPlayer.playerName = playerName.ToLower(CultureInfo.CurrentCulture);
             newPlayer.awards = new List<string>();
             newPlayer.awards.Add(camelCase(awardName));
             playersAwards.Add(newPlayer);
@@ -132,7 +178,7 @@ namespace MCForge
         {
             foreach (playerAwards pA in playersAwards)
             {
-                if (pA.playerName == playerName.ToLower())
+                if (pA.playerName == playerName.ToLower(CultureInfo.CurrentCulture))
                 {
                     if (!pA.awards.Contains(camelCase(awardName)))
                         return false;
@@ -146,7 +192,7 @@ namespace MCForge
         public static List<string> getPlayersAwards(string playerName)
         {
             foreach (playerAwards pA in playersAwards)
-                if (pA.playerName == playerName.ToLower())
+                if (pA.playerName == playerName.ToLower(CultureInfo.CurrentCulture))
                     return pA.awards;
 
             return new List<string>();
@@ -162,7 +208,7 @@ namespace MCForge
         public static string awardAmount(string playerName)
         {
             foreach (playerAwards pA in playersAwards)
-                if (pA.playerName == playerName.ToLower())
+                if (pA.playerName == playerName.ToLower(CultureInfo.CurrentCulture))
                     return "&f" + pA.awards.Count + "/" + allAwards.Count + " (" + Math.Round((double)((double)pA.awards.Count / allAwards.Count) * 100, 2) + "%)" + Server.DefaultColor;
 
             return "&f0/" + allAwards.Count + " (0%)" + Server.DefaultColor;
@@ -202,12 +248,12 @@ namespace MCForge
         public static string camelCase(string givenName)
         {
             string returnString = "";
-            if (givenName != "")
+            if (!(givenName != null && String.IsNullOrEmpty(givenName)))
                 foreach (string s in givenName.Split(' '))
                     if (s.Length > 1)
-                        returnString += s[0].ToString().ToUpper() + s.Substring(1).ToLower() + " ";
+                        returnString += s[0].ToString(CultureInfo.CurrentCulture).ToUpper(CultureInfo.CurrentCulture) + s.Substring(1).ToLower(CultureInfo.CurrentCulture) + " ";
                     else
-                        returnString += s.ToUpper() + " ";
+                        returnString += s.ToUpper(CultureInfo.CurrentCulture) + " ";
 
             return returnString.Trim();
         }

@@ -46,7 +46,7 @@ namespace MCForge
         /// <param name="message">Message</param>
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 Help(p);
                 return;
@@ -74,7 +74,7 @@ namespace MCForge
         /// <param name="newRank">Group</param>
         public void ranker(Player p, Group newRank)
         {
-            string color = newRank.color;
+//            string color = newRank.color // COMMENTED BY CODEIT.RIGHT;
             string oldrank = p.group.name;
 
             p.color = newRank.color;

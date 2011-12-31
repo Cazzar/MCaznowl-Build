@@ -33,7 +33,7 @@ namespace MCForge {
         public CmdXundo() { }
         public override void Use(Player p, string message) {
 
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number != 1) { Help(p); return; }
 

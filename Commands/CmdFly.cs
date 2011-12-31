@@ -120,6 +120,26 @@ namespace MCForge
             Player.SendMessage(p, "/fly - Allows you to fly, it is a bit glitchy, you can't fly while playing CTF.");
         }
 
-        struct Pos { public ushort x, y, z; }
+        struct Pos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
     }
 }

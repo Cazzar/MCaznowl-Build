@@ -18,6 +18,7 @@ Created by Snowl (David D.) and Cazzar (Cayde D.)
 */
 
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +33,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (String.IsNullOrEmpty(message)) { Help(p); return; }
-            string[] s = message.ToLower().Split(' ');
+            string[] s = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
             if (s[0] == "status")
             {
                 switch (Server.zombie.ZombieStatus())

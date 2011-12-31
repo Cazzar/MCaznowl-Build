@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -39,7 +40,7 @@ namespace MCForge
             int totalCount = 0;
             string foundPlayer = "";
 
-            if (message != "")
+            if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 if (message.Split(' ').Length == 2)
                 {
@@ -48,7 +49,7 @@ namespace MCForge
                     if (who != null) foundPlayer = who.name;
                     try
                     {
-                        totalCount = int.Parse(message.Split(' ')[1]);
+                        totalCount = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
                     }
                     catch
                     {
@@ -62,7 +63,7 @@ namespace MCForge
                     {
                         try
                         {
-                            totalCount = int.Parse(message);
+                            totalCount = int.Parse(message, CultureInfo.CurrentCulture);
                         }
                         catch
                         {
@@ -87,7 +88,7 @@ namespace MCForge
             }
 
             List<Awards.awardData> awardList = new List<Awards.awardData>();
-            if (foundPlayer == "")
+            if ((foundPlayer != null && String.IsNullOrEmpty(foundPlayer)))
             {
                 awardList = Awards.allAwards;
             }
@@ -104,7 +105,7 @@ namespace MCForge
 
             if (awardList.Count == 0)
             {
-                if (foundPlayer != "")
+                if (!(foundPlayer != null && String.IsNullOrEmpty(foundPlayer)))
                     Player.SendMessage(p, "The player has no awards!");
                 else
                     Player.SendMessage(p, "There are no awards in this server yet");
@@ -122,7 +123,7 @@ namespace MCForge
             if (max > awardList.Count) 
                 max = awardList.Count;
 
-            if (foundPlayer != "")
+            if (!(foundPlayer != null && String.IsNullOrEmpty(foundPlayer)))
                 Player.SendMessage(p, Server.FindColor(foundPlayer) + foundPlayer + Server.DefaultColor + " has the following awards:");
             else
                 Player.SendMessage(p, "Awards available: ");

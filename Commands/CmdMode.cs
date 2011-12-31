@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,11 +32,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 if (p.modeType != 0)
                 {
-                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString().ToUpper() + Block.Name(p.modeType).Remove(0, 1).ToLower() + Server.DefaultColor + " mode: &cOFF");
+                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString(CultureInfo.CurrentCulture).ToUpper(CultureInfo.CurrentCulture) + Block.Name(p.modeType).Remove(0, 1).ToLower(CultureInfo.CurrentCulture) + Server.DefaultColor + " mode: &cOFF");
                     p.modeType = 0;
                     p.BlockAction = 0;
                 }
@@ -107,7 +108,7 @@ namespace MCForge
 
                 if (p.modeType == b)
                 {
-                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString().ToUpper() + Block.Name(p.modeType).Remove(0, 1).ToLower() + Server.DefaultColor + " mode: &cOFF");
+                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString(CultureInfo.CurrentCulture).ToUpper(CultureInfo.CurrentCulture) + Block.Name(p.modeType).Remove(0, 1).ToLower(CultureInfo.CurrentCulture) + Server.DefaultColor + " mode: &cOFF");
                     p.modeType = 0;
                     p.BlockAction = 0;
                 }
@@ -115,7 +116,7 @@ namespace MCForge
                 {
                     p.BlockAction = 6;
                     p.modeType = b;
-                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString().ToUpper() + Block.Name(p.modeType).Remove(0, 1).ToLower() + Server.DefaultColor + " mode: &aON");
+                    Player.SendMessage(p, "&b" + Block.Name(p.modeType)[0].ToString(CultureInfo.CurrentCulture).ToUpper(CultureInfo.CurrentCulture) + Block.Name(p.modeType).Remove(0, 1).ToLower(CultureInfo.CurrentCulture) + Server.DefaultColor + " mode: &aON");
                 }
             }
         }

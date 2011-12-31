@@ -17,13 +17,13 @@ namespace MCForge
                 init(MySQL.connString);
             }
 
-            public MySQLTransactionHelper(string connString)
+            public MySQLTransactionHelper(string conn)
             {
-                init(connString);
+                init(conn);
             }
 
-            private void init(string connString) {
-                connection = new MySqlConnection(connString);
+            private void init(string conn) {
+                connection = new MySqlConnection(conn);
                 connection.Open();
                 connection.ChangeDatabase(Server.MySQLDatabaseName);
 
@@ -34,11 +34,11 @@ namespace MCForge
                 return Create(MySQL.connString);
             }
 
-            public static DatabaseTransactionHelper Create(string connString)
+            public static DatabaseTransactionHelper Create(string conn)
             {
                 try
                 {
-                    return new MySQLTransactionHelper(connString);
+                    return new MySQLTransactionHelper(conn);
                 }
                 catch (Exception ex)
                 {

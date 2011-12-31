@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -64,7 +65,7 @@ namespace MCForge
                     "\tpublic class " + ClassName(CmdName) + " : Command" + Environment.NewLine +
                     "\t{" + Environment.NewLine +
                     "\t\t// The command's name, in all lowercase.  What you'll be putting behind the slash when using it." + Environment.NewLine +
-                    "\t\tpublic override string name { get { return \"" + CmdName.ToLower() + "\"; } }" + Environment.NewLine +
+                    "\t\tpublic override string name { get { return \"" + CmdName.ToLower(CultureInfo.CurrentCulture) + "\"; } }" + Environment.NewLine +
                     Environment.NewLine +
                     "\t\t// Command's shortcut (please take care not to use an existing one, or you may have issues." + Environment.NewLine +
                     "\t\tpublic override string shortcut { get { return \"\"; } }" + Environment.NewLine +
@@ -90,7 +91,7 @@ namespace MCForge
                     "\t\t// This one controls what happens when you use /help [commandname]." + Environment.NewLine +
                     "\t\tpublic override void Help(Player p)" + Environment.NewLine +
                     "\t\t{" + Environment.NewLine +
-                    "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower() + " - Does stuff.  Example command.\");" + Environment.NewLine +
+                    "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower(CultureInfo.CurrentCulture) + " - Does stuff.  Example command.\");" + Environment.NewLine +
                     "\t\t}" + Environment.NewLine +
                     "\t}" + Environment.NewLine +
                     "}");
@@ -194,18 +195,18 @@ namespace MCForge
             string[] autocmds = File.ReadAllLines("text/cmdautoload.txt");
             foreach (string cmd in autocmds)
             {
-                if (cmd == "")
+                if ((cmd != null && String.IsNullOrEmpty(cmd)))
                 {
                     continue;
                 }
-                string error = Scripting.Load("Cmd" + cmd.ToLower());
+                string error = Scripting.Load("Cmd" + cmd.ToLower(CultureInfo.CurrentCulture));
                 if (error != null)
                 {
                     Server.s.Log(error);
                     error = null;
                     continue;
                 }
-                Server.s.Log("AUTOLOAD: Loaded " + cmd.ToLower() + ".dll");
+                Server.s.Log("AUTOLOAD: Loaded " + cmd.ToLower(CultureInfo.CurrentCulture) + ".dll");
 
             }
             //ScriptingVB.Autoload();
@@ -218,7 +219,7 @@ namespace MCForge
         /// <returns>Error string on failure, null on success.</returns>
         public static string Load(string command)
         {
-            if (command.Length < 3 || command.Substring(0, 3).ToLower() != "cmd")
+            if (command.Length < 3 || command.Substring(0, 3).ToLower(CultureInfo.CurrentCulture) != "cmd")
             {
                 return "Invalid command name specified.";
             }
@@ -307,7 +308,7 @@ namespace MCForge
         private static string ClassName(string name)
         {
             char[] conv = name.ToCharArray();
-            conv[0] = char.ToUpper(conv[0]);
+            conv[0] = char.ToUpper(conv[0], CultureInfo.CurrentCulture);
             return "Cmd" + new string(conv);
         }
     }

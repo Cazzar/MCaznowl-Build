@@ -22,6 +22,7 @@ using System.Collections.Generic;
 //using MySql.Data.Types;
 using System.Data;
 using MCForge.SQL;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -42,7 +43,7 @@ namespace MCForge
 
             if (message.IndexOf(' ') != -1)
             {
-                if (message.Split(' ')[1].ToLower() == "multi")
+                if (message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "multi")
                 {
                     portalPos.Multi = true;
                     message = message.Split(' ')[0];
@@ -54,12 +55,12 @@ namespace MCForge
                 }
             }
 
-            if (message.ToLower() == "blue" || message == "") { portalPos.type = Block.blue_portal; }
-            else if (message.ToLower() == "orange") { portalPos.type = Block.orange_portal; }
-            else if (message.ToLower() == "air") { portalPos.type = Block.air_portal; }
-            else if (message.ToLower() == "water") { portalPos.type = Block.water_portal; }
-            else if (message.ToLower() == "lava") { portalPos.type = Block.lava_portal; }
-            else if (message.ToLower() == "show") { showPortals(p); return; }
+            if (message.ToLower(CultureInfo.CurrentCulture) == "blue" || (message != null && String.IsNullOrEmpty(message))) { portalPos.type = Block.blue_portal; }
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "orange") { portalPos.type = Block.orange_portal; }
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "air") { portalPos.type = Block.air_portal; }
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "water") { portalPos.type = Block.water_portal; }
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "lava") { portalPos.type = Block.lava_portal; }
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "show") { showPortals(p); return; }
             else { Help(p); return; }
 
             p.ClearBlockchange();
@@ -87,7 +88,7 @@ namespace MCForge
 
             if (bp.Multi && type == Block.red && bp.port.Count > 0) { ExitChange(p, x, y, z, type); return; }
 
-            byte b = p.level.GetTile(x, y, z);
+//            byte b = p.level.GetTile(x, y, z) // COMMENTED BY CODEIT.RIGHT;
             p.level.Blockchange(p, x, y, z, bp.type);
             p.SendBlockchange(x, y, z, Block.green);
             portPos Port;
@@ -140,8 +141,48 @@ namespace MCForge
             if (p.staticCommands) { bp.port.Clear(); p.blockchangeObject = bp; p.Blockchange += new Player.BlockchangeEventHandler(EntryChange); }
         }
 
-        public struct portalPos { public List<portPos> port; public byte type; public bool Multi; }
-        public struct portPos { public ushort x, y, z; public string portMapName; }
+        public struct portalPos { public List<portPos> port; public byte type; public bool Multi;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(portalPos x, portalPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(portalPos x, portalPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
+        public struct portPos { public ushort x, y, z; public string portMapName;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(portPos x, portPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(portPos x, portPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
 
         public void showPortals(Player p)
         {
@@ -160,7 +201,7 @@ namespace MCForge
                     p.SendBlockchange((ushort)Portals.Rows[i]["EntryX"], (ushort)Portals.Rows[i]["EntryY"], (ushort)Portals.Rows[i]["EntryZ"], Block.blue_portal);
                 }
 
-                Player.SendMessage(p, "Now showing &a" + i.ToString() + Server.DefaultColor + " portals.");
+                Player.SendMessage(p, "Now showing &a" + i.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " portals.");
             }
             else
             {

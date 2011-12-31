@@ -17,6 +17,7 @@
 */
 
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
+            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             string devlist = "";
             string temp;
             foreach (string dev in Server.devs)
@@ -41,7 +42,7 @@ namespace MCForge
                 else
                 {
                     temp = dev.Substring(0, 1);
-                    temp = temp.ToUpper() + dev.Remove(0, 1);
+                    temp = temp.ToUpper(CultureInfo.CurrentCulture) + dev.Remove(0, 1);
                     devlist += temp + ", ";
                 }
             }

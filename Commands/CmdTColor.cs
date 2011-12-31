@@ -32,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             string[] args = message.Split(' ');
             Player who = Player.Find(args[0]);
             if (who == null)
@@ -55,7 +55,7 @@ namespace MCForge
             else
             {
                 string color = c.Parse(args[1]);
-                if (color == "") { Player.SendMessage(p, "There is no color \"" + args[1] + "\"."); return; }
+                if ((color != null && String.IsNullOrEmpty(color))) { Player.SendMessage(p, "There is no color \"" + args[1] + "\"."); return; }
                 else if (color == who.titlecolor) { Player.SendMessage(p, who.name + " already has that title color."); return; }
                 else
                 {

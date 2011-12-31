@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -38,26 +39,26 @@ namespace MCForge
 
                 string unloadedLevels = ""; int currentNum = 0; int maxMaps = 0;
 
-                if (message != "")
+                if (!(message != null && String.IsNullOrEmpty(message)))
                 {
-                    try { maxMaps = int.Parse(message) * 50; currentNum = maxMaps - 50; }
+                    try { maxMaps = int.Parse(message, CultureInfo.CurrentCulture) * 50; currentNum = maxMaps - 50; }
                     catch { Help(p); return; }
                 }
 
                 DirectoryInfo di = new DirectoryInfo("levels/");
                 FileInfo[] fi = di.GetFiles("*.lvl");
-                foreach (Level l in Server.levels) { levels.Add(l.name.ToLower()); }
+                foreach (Level l in Server.levels) { levels.Add(l.name.ToLower(CultureInfo.CurrentCulture)); }
 
                 if (maxMaps == 0)
                 {
                     foreach (FileInfo file in fi)
                     {
-                        if (!levels.Contains(file.Name.Replace(".lvl", "").ToLower()))
+                        if (!levels.Contains(file.Name.Replace(".lvl", "").ToLower(CultureInfo.CurrentCulture)))
                         {
                             unloadedLevels += ", " + file.Name.Replace(".lvl", "");
                         }
                     }
-                    if (unloadedLevels != "")
+                    if (!(unloadedLevels != null && String.IsNullOrEmpty(unloadedLevels)))
                     {
                         Player.SendMessage(p, "Unloaded levels: ");
                         Player.SendMessage(p, "&4" + unloadedLevels.Remove(0, 2));
@@ -73,13 +74,13 @@ namespace MCForge
                     Player.SendMessage(p, "Unloaded levels (" + currentNum + " to " + maxMaps + "):");
                     for (int i = currentNum; i < maxMaps; i++)
                     {
-                        if (!levels.Contains(fi[i].Name.Replace(".lvl", "").ToLower()))
+                        if (!levels.Contains(fi[i].Name.Replace(".lvl", "").ToLower(CultureInfo.CurrentCulture)))
                         {
                             unloadedLevels += ", " + fi[i].Name.Replace(".lvl", "");
                         }
                     }
 
-                    if (unloadedLevels != "")
+                    if (!(unloadedLevels != null && String.IsNullOrEmpty(unloadedLevels)))
                     {
                         Player.SendMessage(p, "&4" + unloadedLevels.Remove(0, 2));
                     }

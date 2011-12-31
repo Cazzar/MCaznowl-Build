@@ -24,7 +24,7 @@ using System.Text;
 
 namespace MCForge
 {
-    class MCForgeBeat : Beat
+    class MCForgeBeat : IBeat
     {
         public string URL { get { return ServerSettings.HeartbeatAnnounce; } }
         public string Parameters { get; set; }

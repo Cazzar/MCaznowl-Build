@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -35,8 +36,8 @@ namespace MCForge
             if (number != 2) { Help(p); return; }
 
             int pos = message.IndexOf(' ');
-            string t = message.Substring(0, pos).ToLower();
-            string t2 = message.Substring(pos + 1).ToLower();
+            string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+            string t2 = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
             byte type = Block.Byte(t);
             if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); return; }
             byte type2 = Block.Byte(t2);
@@ -107,20 +108,61 @@ namespace MCForge
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
-        {
-            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
+//        {
+//            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
+//        }
 
         struct Pos
         {
             public ushort x, y, z;
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
+            }
         }
         struct CatchPos
         {
             public byte type;
             public byte type2;
             public ushort x, y, z;
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
         }
 
     }

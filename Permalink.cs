@@ -21,6 +21,7 @@ using System;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Security.Cryptography;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -48,7 +49,7 @@ namespace MCForge
             }
 
             // also add the server's current port, so that one machine may run multiple servers
-            macs += Server.port.ToString();
+            macs += Server.port.ToString(CultureInfo.CurrentCulture);
 
             // generate hash
 			using (var md5 = new MD5CryptoServiceProvider())
@@ -60,7 +61,7 @@ namespace MCForge
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < hash.Length; i++)
 				{
-					sb.Append(hash[i].ToString("X2"));
+					sb.Append(hash[i].ToString("X2", CultureInfo.CurrentCulture));
 				}
 
 				// the the final hash as a string

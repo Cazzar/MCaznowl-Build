@@ -45,7 +45,7 @@ namespace MCForge
 			}
 
             Player who = null;
-            if (message != "")
+            if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 if (p != null || (int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                 {

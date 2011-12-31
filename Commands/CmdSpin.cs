@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message.Split(' ').Length > 1) { Help(p); return; }
-            if (message == "") message = "y";
+            if ((message != null && String.IsNullOrEmpty(message))) message = "y";
 
             List<Player.CopyPos> newBuffer = new List<Player.CopyPos>();
             int TotalLoop = 0; ushort temp;

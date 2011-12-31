@@ -10,6 +10,7 @@ using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,10 +31,34 @@ namespace MCForge
 
 		private int pos; //for unserialize
 
-		public bool XMLSafe = true; //This member tells the serializer wether or not to strip carriage returns from strings when serializing and adding them back in when deserializing
+        private bool _xmlSafe = true; 
+
+        public bool XMLSafe
+        {
+            get
+            {
+                return _xmlSafe;
+            }
+            set
+            {
+                _xmlSafe = value;
+            }
+        } //This member tells the serializer wether or not to strip carriage returns from strings when serializing and adding them back in when deserializing
 									 //http://www.w3.org/TR/REC-xml/#sec-line-ends
 
-        public Encoding StringEncoding = new System.Text.UTF8Encoding();
+        private Encoding _stringEncoding = new System.Text.UTF8Encoding(); 
+
+        public Encoding StringEncoding
+        {
+            get
+            {
+                return _stringEncoding;
+            }
+            set
+            {
+                _stringEncoding = value;
+            }
+        }
 
 		private System.Globalization.NumberFormatInfo nfi;
 		
@@ -148,23 +173,23 @@ namespace MCForge
 					return chBool == '1';
 				case 'i':
 					string stInt;
-					start = str.IndexOf(":", this.pos) + 1;
-					end = str.IndexOf(";", start);
+					start = str.IndexOf(":", this.pos, StringComparison.CurrentCulture) + 1;
+					end = str.IndexOf(";", start, StringComparison.CurrentCulture);
 					stInt = str.Substring(start, end - start);
 					this.pos += 3 + stInt.Length;
 					return Int32.Parse(stInt, this.nfi);
 				case 'd':
 					string stDouble;
-					start = str.IndexOf(":", this.pos) + 1;
-					end = str.IndexOf(";", start);
+					start = str.IndexOf(":", this.pos, StringComparison.CurrentCulture) + 1;
+					end = str.IndexOf(";", start, StringComparison.CurrentCulture);
 					stDouble = str.Substring(start, end - start);
 					this.pos += 3 + stDouble.Length;
 					return Double.Parse(stDouble, this.nfi);					
 				case 's':
-					start = str.IndexOf(":", this.pos) + 1;
-					end = str.IndexOf(":", start);
+					start = str.IndexOf(":", this.pos, StringComparison.CurrentCulture) + 1;
+					end = str.IndexOf(":", start, StringComparison.CurrentCulture);
 					stLen = str.Substring(start, end - start);
-                    int bytelen = Int32.Parse(stLen);
+                    int bytelen = Int32.Parse(stLen, CultureInfo.CurrentCulture);
 					length=bytelen;
 					//This is the byte length, not the character length - so we migth  
 					//need to shorten it before usage. This also implies bounds checking
@@ -183,10 +208,10 @@ namespace MCForge
 					return stRet;
 				case 'a':
 					//if keys are ints 0 through N, returns an ArrayList, else returns Hashtable
-					start = str.IndexOf(":", this.pos) + 1;
-					end = str.IndexOf(":", start);
+					start = str.IndexOf(":", this.pos, StringComparison.CurrentCulture) + 1;
+					end = str.IndexOf(":", start, StringComparison.CurrentCulture);
 					stLen = str.Substring(start, end - start);
-					length = Int32.Parse(stLen);
+					length = Int32.Parse(stLen, CultureInfo.CurrentCulture);
 					Hashtable htRet = new Hashtable(length);
 					ArrayList alRet = new ArrayList(length);
 					this.pos += 4 + stLen.Length; //a:Len:{

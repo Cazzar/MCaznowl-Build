@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -39,8 +40,8 @@ namespace MCForge
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
+                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
                 byte type = Block.Byte(t);
                 if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); return; }
 
@@ -54,10 +55,10 @@ namespace MCForge
                 CatchPos cpos; cpos.solid = solid; cpos.type = type;
                 cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             }
-            else if (message != "")
+            else if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 SolidType solid = SolidType.solid;
-                message = message.ToLower();
+                message = message.ToLower(CultureInfo.CurrentCulture);
                 byte type; unchecked { type = (byte)-1; }
                 if (message == "solid") { solid = SolidType.solid; }
                 else if (message == "hollow") { solid = SolidType.hollow; }
@@ -174,7 +175,7 @@ namespace MCForge
                 return;
             }
 
-            Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
+            Player.SendMessage(p, buffer.Count.ToString(CultureInfo.CurrentCulture) + " blocks.");
             Player.SendMessage(p, "Use /abort to cancel the megaboid at any time.");
             p.megaBoid = true;
             Pos pos; int CurrentLoop = 0;
@@ -206,12 +207,52 @@ namespace MCForge
         struct Pos
         {
             public ushort x, y, z;
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
+            }
         }
         struct CatchPos
         {
             public SolidType solid;
             public byte type;
             public ushort x, y, z;
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
         }
         enum SolidType { solid, hollow, walls };
     }

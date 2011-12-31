@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             string[] parameters = message.Split(' '); // Grab the parameters from the player's message
             if (parameters.Length >= 5 && parameters.Length <= 6) // make sure there are 5 or 6 params
@@ -55,20 +56,20 @@ namespace MCForge
                         Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space, rainbow, and hell"); return;
                 }
 
-                string name = parameters[0].ToLower();
+                string name = parameters[0].ToLower(CultureInfo.CurrentCulture);
                 ushort x = 1, y = 1, z = 1;
                 int seed = 0;
                 bool useSeed = false;
                 try
                 {
-                    x = Convert.ToUInt16(parameters[1]);
-                    y = Convert.ToUInt16(parameters[2]);
-                    z = Convert.ToUInt16(parameters[3]);
+                    x = Convert.ToUInt16(parameters[1], CultureInfo.CurrentCulture);
+                    y = Convert.ToUInt16(parameters[2], CultureInfo.CurrentCulture);
+                    z = Convert.ToUInt16(parameters[3], CultureInfo.CurrentCulture);
                 }
                 catch { Player.SendMessage(p, "Invalid dimensions."); return; }
                 if (parameters.Length == 6)
                 {
-                    try { seed = Convert.ToInt32(parameters[5]); }
+                    try { seed = Convert.ToInt32(parameters[5], CultureInfo.CurrentCulture); }
                     catch { seed = parameters[5].GetHashCode(); }
                     useSeed = true;
                 }

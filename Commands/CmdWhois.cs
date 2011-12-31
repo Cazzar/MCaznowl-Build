@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +33,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Player who = null;
-            if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
+            if ((message != null && String.IsNullOrEmpty(message))) { who = p; message = p.name; } else { who = Player.Find(message); }
             if (who != null && !who.hidden)
             {
                 Player.SendMessage(p, who.color + who.name + Server.DefaultColor + " is on &b" + who.level.name);
@@ -45,10 +46,10 @@ namespace MCForge
                 catch { }
                 Player.SendMessage(p, "> > &cdied &a" + who.overallDeath + Server.DefaultColor + " times");
                 Player.SendMessage(p, "> > &bmodified &a" + who.overallBlocks + " &eblocks &eand &a" + who.loginBlocks + " &ewere changed &9since logging in&e.");
-                string storedTime = Convert.ToDateTime(DateTime.Now.Subtract(who.timeLogged).ToString()).ToString("HH:mm:ss");
+                string storedTime = Convert.ToDateTime(DateTime.Now.Subtract(who.timeLogged).ToString(), CultureInfo.CurrentCulture).ToString("HH:mm:ss", CultureInfo.CurrentCulture);
 				Player.SendMessage(p, "> > time spent on server: " + who.time.Split(' ')[0] + " Days, " + who.time.Split(' ')[1] + " Hours, " + who.time.Split(' ')[2] + " Minutes, " + who.time.Split(' ')[3] + " Seconds.");
                 Player.SendMessage(p, "> > been logged in for &a" + storedTime);
-                Player.SendMessage(p, "> > first logged into the server on &a" + who.firstLogin.ToString("yyyy-MM-dd") + " at " + who.firstLogin.ToString("HH:mm:ss"));
+                Player.SendMessage(p, "> > first logged into the server on &a" + who.firstLogin.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture) + " at " + who.firstLogin.ToString("HH:mm:ss", CultureInfo.CurrentCulture));
                 Player.SendMessage(p, "> > logged in &a" + who.totalLogins + Server.DefaultColor + " times, &c" + who.totalKicked + Server.DefaultColor + " of which ended in a kick.");
                 Player.SendMessage(p, "> > " + Awards.awardAmount(who.name) + " awards");
 
@@ -67,7 +68,7 @@ namespace MCForge
                                 Player.SendMessage(p, "> > Player is &fWhitelisted");
                             }
                         }
-                        if (Server.devs.Contains(who.name.ToLower()))
+                        if (Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)))
                         {
                             Player.SendMessage(p, Server.DefaultColor + "> > Player is a &9Developer");
                         }
