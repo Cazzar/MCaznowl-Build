@@ -469,6 +469,25 @@ namespace MCForge
                         Log("Downloading System.Data.SQLite.dll failed, please try again later");
                     }
                 }
+                if (!File.Exists("sqlite3.dll"))
+                {
+                    Log("sqlite3.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://www.mcforge.net/sqlite3.dll", "sqlite3.dll");
+                        }
+                        if (File.Exists("System.Data.SQLite.dll"))
+                        {
+                            Log("sqlite3.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading sqlite3.dll failed, please try again later");
+                    }
+                }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
                 {
                     Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
