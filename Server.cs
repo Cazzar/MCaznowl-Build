@@ -478,7 +478,7 @@ namespace MCForge
                         {
                             WEB.DownloadFile("http://www.mcforge.net/sqlite3.dll", "sqlite3.dll");
                         }
-                        if (File.Exists("System.Data.SQLite.dll"))
+                        if (File.Exists("sqlite3.dll"))
                         {
                             Log("sqlite3.dll download succesful!");
                         }
