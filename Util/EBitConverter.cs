@@ -707,7 +707,27 @@ namespace MCForge.util
 			{
 				get { return f; }
 			}
-		}
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(Int32SingleUnion x, Int32SingleUnion y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(Int32SingleUnion x, Int32SingleUnion y)
+            {
+                throw new NotImplementedException();
+            }
+        }
 		#endregion
 	}
 }

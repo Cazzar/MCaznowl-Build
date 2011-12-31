@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -36,7 +37,7 @@ namespace MCForge
 
             TimeSpan t = TimeSpan.FromMilliseconds(Server.zombie.amountOfMilliseconds);
 
-            string time = string.Format("{0:D2} minutes, {1:D2} seconds",
+            string time = string.Format(CultureInfo.CurrentCulture, "{0:D2} minutes, {1:D2} seconds",
                                     t.Minutes,
                                     t.Seconds);
             message = time + " remaining for the current round!";

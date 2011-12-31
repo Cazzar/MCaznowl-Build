@@ -54,6 +54,12 @@
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Updater.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Updater.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MCForge.ico" />

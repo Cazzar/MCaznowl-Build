@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -36,11 +37,11 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (p != null && message == "")
+            if (p != null && (message != null && String.IsNullOrEmpty(message)))
             {
                 message = "enter"; 
             }
-            switch (message.ToLower())
+            switch (message.ToLower(CultureInfo.CurrentCulture))
             {
                 case "enter":
                     if (p == null)
@@ -83,7 +84,7 @@ namespace MCForge
                             {
                                 Server.reviewlist.Add(p.name);
                                 int reviewlistpos = Server.reviewlist.IndexOf(p.name);
-                                if (reviewlistpos > 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. You have &c" + reviewlistpos.ToString() + Server.DefaultColor + " people in front of you in the queue"); }
+                                if (reviewlistpos > 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. You have &c" + reviewlistpos.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " people in front of you in the queue"); }
                                 if (reviewlistpos == 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. There is &c1 " + Server.DefaultColor + "person in front of you in the queue"); }
                                 if ((reviewlistpos + 1) == 1) { Player.SendMessage(p, "You entered the &creview " + Server.DefaultColor + "queue. You are &cfirst " + Server.DefaultColor + "in line!"); }
                                 Player.SendMessage(p, "The Online Operators have been notified. Someone should be with you shortly.");
@@ -114,8 +115,8 @@ namespace MCForge
                             int viewnumb = 1;
                             foreach (string golist in Server.reviewlist)
                             {
-                                string FoundRank = Group.findPlayer(golist.ToLower());
-                                Player.SendMessage(p, viewnumb.ToString() + ". " + golist + " - Current Rank: " + FoundRank);
+                                string FoundRank = Group.findPlayer(golist.ToLower(CultureInfo.CurrentCulture));
+                                Player.SendMessage(p, viewnumb.ToString(CultureInfo.CurrentCulture) + ". " + golist + " - Current Rank: " + FoundRank);
                                 viewnumb++;
                             }
                         }
@@ -135,8 +136,8 @@ namespace MCForge
                             int viewnumb = 1;
                             foreach (string golist in Server.reviewlist)
                             {
-                                string FoundRank = Group.findPlayer(golist.ToLower());
-                                Player.SendMessage(p, "&a" + viewnumb.ToString() + ". &f" + golist + "&a - Current Rank: " + Group.Find(FoundRank).color + FoundRank);
+                                string FoundRank = Group.findPlayer(golist.ToLower(CultureInfo.CurrentCulture));
+                                Player.SendMessage(p, "&a" + viewnumb.ToString(CultureInfo.CurrentCulture) + ". &f" + golist + "&a - Current Rank: " + Group.Find(FoundRank).color + FoundRank);
                                 viewnumb++;
                             }
                         }
@@ -175,7 +176,7 @@ namespace MCForge
                         foreach (string toallplayers in Server.reviewlist)
                         {
                             Player tosend = Player.Find(toallplayers);
-                            Player.SendMessage(tosend, "The review queue has changed. Your now on spot " + toallplayerscount.ToString() + ".");
+                            Player.SendMessage(tosend, "The review queue has changed. Your now on spot " + toallplayerscount.ToString(CultureInfo.CurrentCulture) + ".");
                             toallplayerscount++;
                         }
                         Player.SendMessage(p, "You have left the review queue!");
@@ -220,7 +221,7 @@ namespace MCForge
                         foreach (string toallplayers in Server.reviewlist)
                         {
                             Player who2 = Player.Find(toallplayers);
-                            Player.SendMessage(who2, "The review queue has been rotated. you now have " + toallplayerscount.ToString() + " players waiting in front of you");
+                            Player.SendMessage(who2, "The review queue has been rotated. you now have " + toallplayerscount.ToString(CultureInfo.CurrentCulture) + " players waiting in front of you");
                             toallplayerscount++;
                         }
                     }

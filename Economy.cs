@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -11,37 +12,133 @@ namespace MCForge
     {
         public static class Settings
         {
-            public static bool Enabled = false;
+            public static bool Enabled/* = false*/;
 
             //Maps
-            public static bool Levels = false;
+            public static bool Levels/* = false*/;
             public static List<Level> LevelsList = new List<Level>();
             public class Level
             {
-                public int price;
-                public string name;
-                public string x;
-                public string y;
-                public string z;
-                public string type;
+                private int _price; 
+
+                public int price
+                {
+                    get
+                    {
+                        return _price;
+                    }
+                    set
+                    {
+                        _price = value;
+                    }
+                }
+                private string _name; 
+
+                public string name
+                {
+                    get
+                    {
+                        return _name;
+                    }
+                    set
+                    {
+                        _name = value;
+                    }
+                }
+                private string _x; 
+
+                public string x
+                {
+                    get
+                    {
+                        return _x;
+                    }
+                    set
+                    {
+                        _x = value;
+                    }
+                }
+                private string _y; 
+
+                public string y
+                {
+                    get
+                    {
+                        return _y;
+                    }
+                    set
+                    {
+                        _y = value;
+                    }
+                }
+                private string _z; 
+
+                public string z
+                {
+                    get
+                    {
+                        return _z;
+                    }
+                    set
+                    {
+                        _z = value;
+                    }
+                }
+                private string _type; 
+
+                public string type
+                {
+                    get
+                    {
+                        return _type;
+                    }
+                    set
+                    {
+                        _type = value;
+                    }
+                }
             }
 
             //Titles
-            public static bool Titles = false;
+            public static bool Titles/* = false*/;
             public static int TitlePrice = 100;
 
             //Colors
-            public static bool Colors = false;
+            public static bool Colors/* = false*/;
             public static int ColorPrice = 100;
 
             //Ranks
-            public static bool Ranks = false;
+            public static bool Ranks/* = false*/;
             public static LevelPermission MaxRank = LevelPermission.AdvBuilder;
             public static List<Rank> RanksList = new List<Rank>();
             public class Rank
             {
-                public Group group;
-                public int price = 1000;
+                private Group _group; 
+
+                public Group group
+                {
+                    get
+                    {
+                        return _group;
+                    }
+                    set
+                    {
+                        _group = value;
+                    }
+                }
+                private int _price = 1000; 
+
+                public int price
+                {
+                    get
+                    {
+                        return _price;
+                    }
+                    set
+                    {
+                        _price = value;
+                    }
+                }
             }
         }
 
@@ -53,8 +150,8 @@ namespace MCForge
                 string line;
                 while (!r.EndOfStream)
                 {
-                    line = r.ReadLine().ToLower().Trim();
-                    string[] linear = line.ToLower().Trim().Split(':');
+                    line = r.ReadLine().ToLower(CultureInfo.CurrentCulture).Trim();
+                    string[] linear = line.ToLower(CultureInfo.CurrentCulture).Trim().Split(':');
                     try
                     {
                         switch (linear[0])
@@ -65,7 +162,7 @@ namespace MCForge
                                 break;
 
                             case "title":
-                                if (linear[1] == "price") { Settings.TitlePrice = int.Parse(linear[2]); }
+                                if (linear[1] == "price") { Settings.TitlePrice = int.Parse(linear[2], CultureInfo.CurrentCulture); }
                                 if (linear[1] == "enabled")
                                 {
                                     if (linear[2] == "true") { Settings.Titles = true; }
@@ -74,7 +171,7 @@ namespace MCForge
                                 break;
 
                             case "color":
-                                if (linear[1] == "price") { Settings.ColorPrice = int.Parse(linear[2]); }
+                                if (linear[1] == "price") { Settings.ColorPrice = int.Parse(linear[2], CultureInfo.CurrentCulture); }
                                 if (linear[1] == "enabled")
                                 {
                                     if (linear[2] == "true") { Settings.Colors = true; }
@@ -91,13 +188,13 @@ namespace MCForge
                                     {
                                         rnk = new Economy.Settings.Rank();
                                         rnk.group = Group.Find(linear[2]);
-                                        rnk.price = int.Parse(linear[3]);
+                                        rnk.price = int.Parse(linear[3], CultureInfo.CurrentCulture);
                                         Economy.Settings.RanksList.Add(rnk);
                                     }
                                     else
                                     {
                                         Economy.Settings.RanksList.Remove(rnk);
-                                        rnk.price = int.Parse(linear[3]);
+                                        rnk.price = int.Parse(linear[3], CultureInfo.CurrentCulture);
                                         Economy.Settings.RanksList.Add(rnk);
                                     }
                                 }
@@ -130,7 +227,7 @@ namespace MCForge
                                             break;
 
                                         case "price":
-                                            lvl.price = int.Parse(linear[4]);
+                                            lvl.price = int.Parse(linear[4], CultureInfo.CurrentCulture);
                                             break;
 
                                         case "x":
@@ -211,7 +308,7 @@ namespace MCForge
             {
                 try
                 {
-                    if (lvl.name.ToLower() == name.ToLower())
+                    if (lvl.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture))
                     {
                         found = lvl;
                     }
@@ -228,7 +325,7 @@ namespace MCForge
             {
                 try
                 {
-                    if (rnk.group.name.ToLower() == name.ToLower())
+                    if (rnk.group.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture))
                     {
                         found = rnk;
                     }

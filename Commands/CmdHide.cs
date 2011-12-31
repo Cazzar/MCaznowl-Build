@@ -46,8 +46,8 @@ namespace MCForge
                 }
             }
             else
-                if (message != "")
-                    if (p.possess != "")
+                if (!(message != null && String.IsNullOrEmpty(message)))
+                    if (!(p.possess != null && String.IsNullOrEmpty(p.possess)))
                     {
                         Player.SendMessage(p, "Stop your current possession first.");
                 return;

@@ -4,12 +4,12 @@ namespace MCForge
 {
     public partial class Player
     {
-        internal bool cancelcommand = false;
-        internal bool cancelchat = false;
-        internal bool cancelmove = false;
-        internal bool cancelBlock = false;
-        internal bool cancelmysql = false;
-        internal bool cancelmessage = false;
+        internal bool cancelcommand/* = false*/;
+        internal bool cancelchat/* = false*/;
+        internal bool cancelmove/* = false*/;
+        internal bool cancelBlock/* = false*/;
+        internal bool cancelmysql/* = false*/;
+        internal bool cancelmessage/* = false*/;
         //Should people be able to cancel this event?
         public delegate void MOTDSent(Player p, byte[] buffer);
         public static event MOTDSent OnSendMOTD;
@@ -175,7 +175,19 @@ namespace MCForge
         public void ClearPlayerDeath() { OnDeath = null; }
         public void ClearBlockchange() { Blockchange = null; }
         public bool HasBlockchange() { return (Blockchange == null); }
-        public object blockchangeObject = null;
+        private object _blockchangeObject = null; 
+
+        public object blockchangeObject
+        {
+            get
+            {
+                return _blockchangeObject;
+            }
+            set
+            {
+                _blockchangeObject = value;
+            }
+        }
 
         //lolwut
         public delegate void BecomeBrony(Player p);

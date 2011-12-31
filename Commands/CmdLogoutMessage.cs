@@ -41,7 +41,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number > 18) { Help(p); return; }
             if (number >= 2)

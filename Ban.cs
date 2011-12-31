@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -37,11 +38,11 @@ namespace MCForge
         {
             // Getting date and time.
             string dayname = DateTime.Now.DayOfWeek.ToString();
-            string daynumber = DateTime.Now.Day.ToString();
-            string month = DateTime.Now.Month.ToString();
-            string year = DateTime.Now.Year.ToString();
-            string hour = DateTime.Now.Hour.ToString();
-            string minute = DateTime.Now.Minute.ToString();
+            string daynumber = DateTime.Now.Day.ToString(CultureInfo.CurrentCulture);
+            string month = DateTime.Now.Month.ToString(CultureInfo.CurrentCulture);
+            string year = DateTime.Now.Year.ToString(CultureInfo.CurrentCulture);
+            string hour = DateTime.Now.Hour.ToString(CultureInfo.CurrentCulture);
+            string minute = DateTime.Now.Minute.ToString(CultureInfo.CurrentCulture);
             // Creating date + time string that looks nice to read:
             string datetime = dayname + "%20" + daynumber + "%20" + month + "%20" + year + ",%20at%20" + hour + ":" + minute;
             // checking if p = player or console
@@ -52,7 +53,7 @@ namespace MCForge
             string stealthn;
             if (stealth) stealthn = "true";
             else stealthn = "false";
-            if (reason == "") reason = "&c-";
+            if ((reason != null && String.IsNullOrEmpty(reason))) reason = "&c-";
             Write(player, who, reason, stealthn, datetime, oldrank);
         }
         static void Write(string pl, string whol, string reasonl, string stealthstr, string datetimel, string oldrankl)

@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using System.Threading;
 using MCForge;
 using System.Net;
+using System.Globalization;
 
 namespace MCForge.Gui
 {
@@ -38,15 +39,27 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
-        public static bool fileexists = false;
-        bool mapgen = false;
+        public static bool fileexists/* = false*/;
+        bool mapgen/* = false*/;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
         LevelCollection lcTAB = new LevelCollection(new LevelListViewForTab());
 
         //public static event EventHandler Minimize;
-        public NotifyIcon notifyIcon1 = new NotifyIcon();
+        private NotifyIcon _notifyIcon1 = new NotifyIcon(); 
+
+        public NotifyIcon notifyIcon1
+        {
+            get
+            {
+                return _notifyIcon1;
+            }
+            set
+            {
+                _notifyIcon1 = value;
+            }
+        }
         //  public static bool Minimized = false;
 
         Level prpertiesoflvl;
@@ -457,7 +470,7 @@ namespace MCForge.Gui
             {
                 string sentCmd = "", sentMsg = "";
 
-                if (txtCommands.Text == null || txtCommands.Text.Trim() == "")
+                if (txtCommands.Text == null || (txtCommands.Text.Trim() != null && String.IsNullOrEmpty(txtCommands.Text.Trim())))
                 {
                     newCommand("CONSOLE: Whitespace commands are not allowed.");
                     txtCommands.Clear();
@@ -472,7 +485,7 @@ namespace MCForge.Gui
                     sentCmd = txtCommands.Text.Split(' ')[0];
                     sentMsg = txtCommands.Text.Substring(txtCommands.Text.IndexOf(' ') + 1);
                 }
-                else if (txtCommands.Text != "")
+                else if (!(txtCommands.Text != null && String.IsNullOrEmpty(txtCommands.Text)))
                 {
                     sentCmd = txtCommands.Text;
                 }
@@ -545,7 +558,7 @@ namespace MCForge.Gui
             PropertyForm.Show();
         }
 
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
 
         private void Window_Resize(object sender, EventArgs e)
@@ -706,7 +719,7 @@ namespace MCForge.Gui
             catch { }
             try
             {
-                if (LogsTxtBox.Text == "")
+                if ((LogsTxtBox.Text != null && String.IsNullOrEmpty(LogsTxtBox.Text)))
                 {
                     dateTimePicker1.Value = DateTime.Now;
                 }
@@ -743,9 +756,9 @@ namespace MCForge.Gui
 
         private void DatePicker1_ValueChanged(object sender, EventArgs e)
         {
-            string dayofmonth = dateTimePicker1.Value.Day.ToString().PadLeft(2, '0');
-            string year = dateTimePicker1.Value.Year.ToString();
-            string month = dateTimePicker1.Value.Month.ToString().PadLeft(2, '0');
+            string dayofmonth = dateTimePicker1.Value.Day.ToString(CultureInfo.CurrentCulture).PadLeft(2, '0');
+            string year = dateTimePicker1.Value.Year.ToString(CultureInfo.CurrentCulture);
+            string month = dateTimePicker1.Value.Month.ToString(CultureInfo.CurrentCulture).PadLeft(2, '0');
 
             string ymd = year + "-" + month + "-" + dayofmonth;
             string filename = ymd + ".txt";
@@ -825,7 +838,7 @@ namespace MCForge.Gui
                         string line;
                         while ((line = r.ReadLine()) != null)
                         {
-                            if (line.Contains(l.name) || line.Contains(l.name.ToLower()))
+                            if (line.Contains(l.name) || line.Contains(l.name.ToLower(CultureInfo.CurrentCulture)))
                             {
                                 AutoLoadChk.Checked = true;
                             }
@@ -844,7 +857,7 @@ namespace MCForge.Gui
             if (prpertiesoflvl == null) return;
             Level l = prpertiesoflvl;
             l.motd = MOTDtxt.Text;
-            if (MOTDtxt.Text == "")
+            if ((MOTDtxt.Text != null && String.IsNullOrEmpty(MOTDtxt.Text)))
             {
                 l.motd = "ignore";
             }
@@ -879,7 +892,7 @@ namespace MCForge.Gui
                     string line;
                     while ((line = r.ReadLine()) != null)
                     {
-                        if (line.ToLower().Contains(l.name.ToLower()))
+                        if (line.ToLower(CultureInfo.CurrentCulture).Contains(l.name.ToLower(CultureInfo.CurrentCulture)))
                         {
                             if (AutoLoadChk.Checked == false)
                             {
@@ -899,7 +912,7 @@ namespace MCForge.Gui
                 {
                     foreach (string line in oldlines)
                     {
-                        if (line.Trim() != "")
+                        if (!(line.Trim() != null && String.IsNullOrEmpty(line.Trim())))
                         {
                             SW.WriteLine(line);
                         }
@@ -921,11 +934,11 @@ namespace MCForge.Gui
             string type;
             string seed;
 
-            try { name = nametxtbox.Text.ToLower(); } catch { name = ""; }
+            try { name = nametxtbox.Text.ToLower(CultureInfo.CurrentCulture); } catch { name = ""; }
             try { x = xtxtbox.SelectedItem.ToString(); } catch { x = ""; }
             try { y = ytxtbox.SelectedItem.ToString(); } catch { y = ""; }
             try { z = ztxtbox.SelectedItem.ToString(); } catch { z = ""; }
-            try { type = maptypecombo.SelectedItem.ToString().ToLower(); } catch { type = ""; }
+            try { type = maptypecombo.SelectedItem.ToString().ToLower(CultureInfo.CurrentCulture); } catch { type = ""; }
             try { seed = seedtxtbox.Text; } catch { seed = ""; }
 
             if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(x) || String.IsNullOrEmpty(y) || String.IsNullOrEmpty(z) || String.IsNullOrEmpty(type))
@@ -988,7 +1001,7 @@ namespace MCForge.Gui
             foreach (FileInfo file in fi)
             {
                 name = file.Name.Replace(".lvl", "");
-                if (Level.Find(name.ToLower()) == null)
+                if (Level.Find(name.ToLower(CultureInfo.CurrentCulture)) == null)
                     UnloadedList.Items.Add(name);
             }
         }
@@ -1007,11 +1020,11 @@ namespace MCForge.Gui
                     RankTxt.Text = p.group.name;
                     StatusTxt.Text = Player.CheckPlayerStatus(p);
                     IPtxt.Text = p.ip;
-                    DeathsTxt.Text = p.deathCount.ToString();
-                    Blockstxt.Text = p.overallBlocks.ToString();
-                    TimesLoggedInTxt.Text = p.totalLogins.ToString();
-                    LoggedinForTxt.Text = Convert.ToDateTime(DateTime.Now.Subtract(p.timeLogged).ToString()).ToString("HH:mm:ss");
-                    Kickstxt.Text = p.totalKicked.ToString();
+                    DeathsTxt.Text = p.deathCount.ToString(CultureInfo.CurrentCulture);
+                    Blockstxt.Text = p.overallBlocks.ToString(CultureInfo.CurrentCulture);
+                    TimesLoggedInTxt.Text = p.totalLogins.ToString(CultureInfo.CurrentCulture);
+                    LoggedinForTxt.Text = Convert.ToDateTime(DateTime.Now.Subtract(p.timeLogged).ToString(), CultureInfo.CurrentCulture).ToString("HH:mm:ss", CultureInfo.CurrentCulture);
+                    Kickstxt.Text = p.totalKicked.ToString(CultureInfo.CurrentCulture);
                 }
                 { //Check buttons
                     if (p.joker) { JokerBt.Text = "UnJoker"; } else { JokerBt.Text = "Joker"; }
@@ -1260,7 +1273,7 @@ namespace MCForge.Gui
                 PlayersTextBox.AppendTextAndScroll("No Player Selected");
                 return;
             }
-            if (MapCombo.Text.ToLower() == prpertiesofplyer.level.name.ToLower())
+            if (MapCombo.Text.ToLower(CultureInfo.CurrentCulture) == prpertiesofplyer.level.name.ToLower(CultureInfo.CurrentCulture))
             {
                 PlayersTextBox.AppendTextAndScroll("The player is already on that map");
                 return;
@@ -1292,7 +1305,7 @@ namespace MCForge.Gui
                 PlayersTextBox.AppendTextAndScroll("No Player Selected");
                 return;
             }
-            if (UndoTxt.Text.Trim() == "")
+            if ((UndoTxt.Text.Trim() != null && String.IsNullOrEmpty(UndoTxt.Text.Trim())))
             {
                 PlayersTextBox.AppendTextAndScroll("You didn't specify a time");
                 return;
@@ -1333,7 +1346,7 @@ namespace MCForge.Gui
             }
             try
             {
-                if (ImpersonateORSendCmdTxt.Text.StartsWith("/"))
+                if (ImpersonateORSendCmdTxt.Text.StartsWith("/", StringComparison.CurrentCulture))
                 {
                     string[] array = ImpersonateORSendCmdTxt.Text.Split(' ');
                     Command cmd = Command.all.Find(array[0].Replace("/", ""));
@@ -1758,7 +1771,7 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtOpInput.Text == null || txtOpInput.Text.Trim() == "") { return; }
+                if (txtOpInput.Text == null || (txtOpInput.Text.Trim() != null && String.IsNullOrEmpty(txtOpInput.Text.Trim()))) { return; }
                 string optext = txtOpInput.Text.Trim();
                 string opnewtext = optext;
                 Player.GlobalMessageOps("To Ops &f-" + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]&f- " + opnewtext);
@@ -1772,7 +1785,7 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtAdminInput.Text == null || txtAdminInput.Text.Trim() == "") { return; }
+                if (txtAdminInput.Text == null || (txtAdminInput.Text.Trim() != null && String.IsNullOrEmpty(txtAdminInput.Text.Trim()))) { return; }
                 string admintext = txtAdminInput.Text.Trim();
                 string adminnewtext = admintext;
                 Player.GlobalMessageAdmins("To Admins &f-" + Server.DefaultColor + "Console [&a" + Server.ZallState + Server.DefaultColor + "]&f- " + adminnewtext);
@@ -1910,7 +1923,7 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                if (txtGlobalInput.Text == null || (txtGlobalInput.Text.Trim() != null && String.IsNullOrEmpty(txtGlobalInput.Text.Trim()))) { return; }
                 try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
                 catch (Exception ex) { Server.ErrorLog(ex); }
                 txtGlobalInput.Clear();

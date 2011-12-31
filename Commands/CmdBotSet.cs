@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             try
             {
@@ -54,7 +55,7 @@ namespace MCForge
 
                 PlayerBot Pb = PlayerBot.Find(message.Split(' ')[0]);
                 if (Pb == null) { Player.SendMessage(p, "Could not find specified Bot"); return; }
-                string foundPath = message.Split(' ')[1].ToLower();
+                string foundPath = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
 
                 if (foundPath == "hunt")
                 {
@@ -89,27 +90,27 @@ namespace MCForge
                 {
                     foreach (string s in foundWay)
                     {
-                        if (s != "" && s[0] != '#')
+                        if (!(s != null && String.IsNullOrEmpty(s)) && s[0] != '#')
                         {
                             bool skip = false;
                             newPos.type = s.Split(' ')[0];
-                            switch (s.Split(' ')[0].ToLower())
+                            switch (s.Split(' ')[0].ToLower(CultureInfo.CurrentCulture))
                             {
                                 case "walk":
                                 case "teleport":
-                                    newPos.x = Convert.ToUInt16(s.Split(' ')[1]);
-                                    newPos.y = Convert.ToUInt16(s.Split(' ')[2]);
-                                    newPos.z = Convert.ToUInt16(s.Split(' ')[3]);
-                                    newPos.rotx = Convert.ToByte(s.Split(' ')[4]);
-                                    newPos.roty = Convert.ToByte(s.Split(' ')[5]);
+                                    newPos.x = Convert.ToUInt16(s.Split(' ')[1], CultureInfo.CurrentCulture);
+                                    newPos.y = Convert.ToUInt16(s.Split(' ')[2], CultureInfo.CurrentCulture);
+                                    newPos.z = Convert.ToUInt16(s.Split(' ')[3], CultureInfo.CurrentCulture);
+                                    newPos.rotx = Convert.ToByte(s.Split(' ')[4], CultureInfo.CurrentCulture);
+                                    newPos.roty = Convert.ToByte(s.Split(' ')[5], CultureInfo.CurrentCulture);
                                     break;
                                 case "wait":
                                 case "speed":
-                                    newPos.seconds = Convert.ToInt16(s.Split(' ')[1]); break;
+                                    newPos.seconds = Convert.ToInt16(s.Split(' ')[1], CultureInfo.CurrentCulture); break;
                                 case "nod":
                                 case "spin":
-                                    newPos.seconds = Convert.ToInt16(s.Split(' ')[1]);
-                                    newPos.rotspeed = Convert.ToInt16(s.Split(' ')[2]);
+                                    newPos.seconds = Convert.ToInt16(s.Split(' ')[1], CultureInfo.CurrentCulture);
+                                    newPos.rotspeed = Convert.ToInt16(s.Split(' ')[2], CultureInfo.CurrentCulture);
                                     break;
                                 case "linkscript":
                                     newPos.newscript = s.Split(' ')[1]; break;

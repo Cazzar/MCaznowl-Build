@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -36,7 +37,7 @@ namespace MCForge
         {
             //Thread CrossThread;
 
-            if (message != "")
+            if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 Level lvl;
                 string[] text = new string[2];
@@ -44,8 +45,8 @@ namespace MCForge
                 text[1] = "";
                 try
                 {
-                    text[0] = message.Split(' ')[0].ToLower();
-                    text[1] = message.Split(' ')[1].ToLower();
+                    text[0] = message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture);
+                    text[1] = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
                 }
                 catch
                 {
@@ -120,7 +121,7 @@ namespace MCForge
                         string directoryName = s.Substring(s.LastIndexOf('\\') + 1);
                         try
                         {
-                            int.Parse(directoryName);
+                            int.Parse(directoryName, CultureInfo.CurrentCulture);
                         }
                         catch
                         {

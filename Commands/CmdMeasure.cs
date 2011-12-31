@@ -35,7 +35,7 @@ namespace MCForge
 
             CatchPos cpos;
             cpos.toIgnore = Block.Byte(message);
-            if (cpos.toIgnore == Block.Zero && message != "") { Player.SendMessage(p, "Could not find block specified"); return; }
+            if (cpos.toIgnore == Block.Zero && !(message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "Could not find block specified"); return; }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
 
@@ -79,6 +79,26 @@ namespace MCForge
         struct CatchPos
         {
             public ushort x, y, z; public byte toIgnore;
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(CatchPos x, CatchPos y)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -96,7 +97,7 @@ namespace MCForge
             backupThread.Start();
         }
 
-        public static bool Pump(Beat beat)
+        public static bool Pump(IBeat beat)
         {
             //lock (Lock)
             //{
@@ -141,7 +142,7 @@ namespace MCForge
                             requestStream.Write(formData, 0, formData.Length);
                             if (Server.logbeat && beat.Log)
                             {
-                                BeatLog(beat, beattype + " request sent at " + DateTime.Now.ToString());
+                                BeatLog(beat, beattype + " request sent at " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                             }
                             requestStream.Flush();
                             requestStream.Close();
@@ -157,7 +158,7 @@ namespace MCForge
 #if DEBUG
                                 Server.s.Log(beattype + " timeout detected at " + DateTime.Now.ToString());
 #endif
-                                BeatLog(beat, beattype + " timeout detected at " + DateTime.Now.ToString());
+                                BeatLog(beat, beattype + " timeout detected at " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                             }
                             if (totalTriesStream < max_retries)
                             {
@@ -166,7 +167,7 @@ namespace MCForge
                             else
                             {
                                 if (Server.logbeat && beat.Log)
-                                    BeatLog(beat, beattype + " timed out " + max_retries + " times. Aborting this request. " + DateTime.Now.ToString());
+                                    BeatLog(beat, beattype + " timed out " + max_retries + " times. Aborting this request. " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                                 Server.s.Log(beattype + " timed out " + max_retries + " times. Aborting this request.");
                                 //throw new WebException("Failed during request.GetRequestStream()", e.InnerException, e.Status, e.Response);
                                 beatlogger.Close();
@@ -194,7 +195,7 @@ namespace MCForge
 #if DEBUG
                                 Server.s.Log(beattype + " response received at " + DateTime.Now.ToString());
 #endif
-                                BeatLog(beat, beattype + " response received at " + DateTime.Now.ToString());
+                                BeatLog(beat, beattype + " response received at " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                             }
 
                             if (String.IsNullOrEmpty(hash) && response.ContentLength > 0)
@@ -224,7 +225,7 @@ namespace MCForge
 #if DEBUG
                             Server.s.Log(beattype + " timeout detected at " + DateTime.Now.ToString());
 #endif
-                            BeatLog(beat, "Timeout detected at " + DateTime.Now.ToString());
+                            BeatLog(beat, "Timeout detected at " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                         }
                         Pump(beat);
                     }
@@ -233,7 +234,7 @@ namespace MCForge
                 {
                     if (Server.logbeat && beat.Log)
                     {
-                        BeatLog(beat, beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString());
+                        BeatLog(beat, beattype + " failure #" + totalTries + " at " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
                     }
                     if (totalTries < max_retries) goto retry;
                     if (Server.logbeat && beat.Log)
@@ -272,13 +273,13 @@ namespace MCForge
                 }
                 else if (Array.IndexOf<char>(reservedChars, input[i]) != -1)
                 {
-                    output.Append('%').Append(((int)input[i]).ToString("X"));
+                    output.Append('%').Append(((int)input[i]).ToString("X", CultureInfo.CurrentCulture));
                 }
             }
             return output.ToString();
         }
 
-        private static void BeatLog(Beat beat, string text)
+        private static void BeatLog(IBeat beat, string text)
         {
             if (Server.logbeat && beat.Log && beatlogger != null)
             {

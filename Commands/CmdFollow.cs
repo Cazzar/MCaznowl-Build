@@ -45,11 +45,11 @@ namespace MCForge
             {
                 bool stealth = false;
 
-                if (message != "")
+                if (!(message != null && String.IsNullOrEmpty(message)))
                 {
                     if (message == "#")
                     {
-                        if (p.following != "")
+                        if (!(p.following != null && String.IsNullOrEmpty(p.following)))
                         {
                             stealth = true;
                             message = "";
@@ -71,11 +71,11 @@ namespace MCForge
                 }
 
                 Player who = Player.Find(message);
-                if (message == "" && p.following == "") {
+                if ((message != null && String.IsNullOrEmpty(message)) && (p.following != null && String.IsNullOrEmpty(p.following))) {
                     Help(p);
                     return;
                 }
-                else if (message == "" && p.following != "" || message == p.following)
+                else if ((message != null && String.IsNullOrEmpty(message)) && !(p.following != null && String.IsNullOrEmpty(p.following)) || message == p.following)
                 {
                     who = Player.Find(p.following);
                     p.following = "";
@@ -104,12 +104,12 @@ namespace MCForge
                 if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
                 else if (who == p) { Player.SendMessage(p, "Cannot follow yourself."); return; }
                 else if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot follow someone of equal or greater rank."); return; }
-                else if (who.following != "") { Player.SendMessage(p, who.name + " is already following " + who.following); return; }
+                else if (!(who.following != null && String.IsNullOrEmpty(who.following))) { Player.SendMessage(p, who.name + " is already following " + who.following); return; }
 
                 if (!p.hidden) Command.all.Find("hide").Use(p, "");
 
                 if (p.level != who.level) Command.all.Find("tp").Use(p, who.name);
-                if (p.following != "")
+                if (!(p.following != null && String.IsNullOrEmpty(p.following)))
                 {
                     who = Player.Find(p.following);
                     p.SendSpawn(who.id, who.color + who.name, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1]);

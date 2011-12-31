@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -50,7 +51,7 @@ namespace MCForge
                 Server.ProcessCounter.NextValue();
             }
 
-            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime;
+//            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime // COMMENTED BY CODEIT.RIGHT;
             TimeSpan up = (DateTime.Now - Process.GetCurrentProcess().StartTime);
 
             //To get actual CPU% is OS dependant
@@ -58,7 +59,7 @@ namespace MCForge
             //Alternative Average?
             //string ProcessorUsage = "CPU Usage is Not Implemented: So here is ProcessUsageTime/ProcessTotalTime:"+String.Format("00.00",(((tp.Ticks/up.Ticks))*100))+"%";
             //reports Private Bytes because it is what the process has reserved for itself and is unsharable
-            string MemoryUsage = "Memory Usage: " + Math.Round((double)Process.GetCurrentProcess().PrivateMemorySize64 / 1048576).ToString() + " Megabytes";
+            string MemoryUsage = "Memory Usage: " + Math.Round((double)Process.GetCurrentProcess().PrivateMemorySize64 / 1048576).ToString(CultureInfo.CurrentCulture) + " Megabytes";
             string Uptime = "Uptime: " + up.Days + " Days " + up.Hours + " Hours " + up.Minutes + " Minutes " + up.Seconds + " Seconds";
             string Threads = "Threads: " + Process.GetCurrentProcess().Threads.Count;
             Player.SendMessage(p, Uptime);

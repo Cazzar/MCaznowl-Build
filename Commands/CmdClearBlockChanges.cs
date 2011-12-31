@@ -40,7 +40,7 @@ namespace MCForge
                 return;
             }
             Level l = Level.Find(message);
-            if (l == null && message != "") { Player.SendMessage(p, "Could not find level."); return; }
+            if (l == null && !(message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "Could not find level."); return; }
             if (l == null) l = p.level;
 
             if (Server.useMySQL) MySQL.executeQuery("TRUNCATE TABLE `Block" + l.name + "`"); else SQLite.executeQuery("DELETE FROM `Block" + l.name + "`");

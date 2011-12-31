@@ -21,7 +21,7 @@ using MCForge.Commands;
 
 namespace MCForge
 {
-	public abstract class Command
+    public abstract class Command : IDisposable
 	{
 		public abstract string name { get; }
 		public abstract string shortcut { get; }
@@ -30,10 +30,58 @@ namespace MCForge
 		public abstract LevelPermission defaultRank { get; }
 		public abstract void Use(Player p, string message);
 		public abstract void Help(Player p);
-		public bool isIntervalized;
-		public int intervalInMinutes;
-		public DateTime nextExecution;
-		public Player intervalUsingPlayer;
+        private bool _isIntervalized; 
+
+        public bool isIntervalized
+        {
+            get
+            {
+                return _isIntervalized;
+            }
+            set
+            {
+                _isIntervalized = value;
+            }
+        }
+        private int _intervalInMinutes; 
+
+        public int intervalInMinutes
+        {
+            get
+            {
+                return _intervalInMinutes;
+            }
+            set
+            {
+                _intervalInMinutes = value;
+            }
+        }
+        private DateTime _nextExecution; 
+
+        public DateTime nextExecution
+        {
+            get
+            {
+                return _nextExecution;
+            }
+            set
+            {
+                _nextExecution = value;
+            }
+        }
+        private Player _intervalUsingPlayer; 
+
+        public Player intervalUsingPlayer
+        {
+            get
+            {
+                return _intervalUsingPlayer;
+            }
+            set
+            {
+                _intervalUsingPlayer = value;
+            }
+        }
 
 		public static CommandList all = new CommandList();
 		public static CommandList core = new CommandList();
@@ -211,7 +259,7 @@ namespace MCForge
 			all.Add(new CmdPumpkin());
 			all.Add(new CmdPUnload());
 			all.Add(new CmdPyramid());
-			all.Add(new CmdQueue());
+			all.Add(new Cmd());
 			all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
 			all.Add(new CmdRainbow());
@@ -316,5 +364,41 @@ namespace MCForge
 			core.commands = new List<Command>(all.commands);
 			Scripting.Autoload();
 		}
-	}
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (intervalUsingPlayer != null)
+                        intervalUsingPlayer.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+    }
 }

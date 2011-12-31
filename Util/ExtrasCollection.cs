@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 
 namespace MCForge
 {
-    public class ExtrasCollection : IDisposable
+    public class Extras : IDisposable
     {
         private Dictionary<string, object> _objects = new Dictionary<string, object>();
 
         /// <summary>
         /// An array of keys in the collection
         /// </summary>
-        public String[] Keys
+        public String[] GetKeys()
         {
-            get
-            {
-                return _objects.Keys.ToArray();
-            }
+            return _objects.Keys.ToArray();
         }
 
         /// <summary>
@@ -62,7 +60,7 @@ namespace MCForge
         {
             if (_objects.ContainsKey(key))
             {
-                try { return Convert.ToBoolean(_objects[key]); }
+                try { return Convert.ToBoolean(_objects[key], CultureInfo.CurrentCulture); }
                 catch (Exception) { }
             }
             
@@ -89,7 +87,7 @@ namespace MCForge
         {
             if (_objects.ContainsKey(key))
             {
-                try { return Convert.ToInt32(_objects[key]); }
+                try { return Convert.ToInt32(_objects[key], CultureInfo.CurrentCulture); }
                 catch (Exception) { }
             }
 
@@ -116,7 +114,7 @@ namespace MCForge
         {
             if (_objects.ContainsKey(key))
             {
-                try { return Convert.ToString(_objects[key]); }
+                try { return Convert.ToString(_objects[key], CultureInfo.CurrentCulture); }
                 catch (Exception) { }
             }
 

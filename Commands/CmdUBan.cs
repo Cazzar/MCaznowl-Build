@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge {
     public class CmdUBan : Command {
@@ -33,11 +34,11 @@ namespace MCForge {
         public CmdUBan() { }
         public override void Use(Player p, string message) {
 
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             Player who = Player.Find(message.Split(' ')[0]);
             string msg = message.Split(' ')[0];
-            if (Server.devs.Contains(message.ToLower())) {
+            if (Server.devs.Contains(message.ToLower(CultureInfo.CurrentCulture))) {
                 Player.SendMessage(p, "You can't ban a MCForge Developer!");
                 if (p != null) {
                     Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a MCForge Developer!");

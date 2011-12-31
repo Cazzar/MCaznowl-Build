@@ -17,6 +17,7 @@
 */
 using System;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge.Remote
 {
@@ -71,7 +72,7 @@ namespace MCForge.Remote
                             Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
                             SendData(0x05, buffed);
                         }
-                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Ops -Remote- " + m + Environment.NewLine);
+                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + "To Ops -Remote- " + m + Environment.NewLine);
                             //Did it like this to avoid OnLog event
                         Player.GlobalMessageOps("%fTo Ops -%6Remote%f- " + m);
                         return;
@@ -90,7 +91,7 @@ namespace MCForge.Remote
                         Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
                         SendData(0x05, buffed);
 
-                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + "To Admins -Remote- " + m + Environment.NewLine);  //Did it like this to avoid OnLog event
+                        Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + "To Admins -Remote- " + m + Environment.NewLine);  //Did it like this to avoid OnLog event
                         Player.GlobalMessageAdmins("%fTo Admins -%6Remote%f- " + m);
                         return;
 
@@ -112,8 +113,8 @@ namespace MCForge.Remote
                         m = "[Remote]: " + m;
                         SendData(18, new byte[]{0xA});
                     }
-                    Logger.Write(string.Format("{0}{1}{2}", DateTime.Now.ToString("(HH:mm:ss) "), m, Environment.NewLine));  //Did it like this to avoid OnLog event
-                    Player.GlobalMessage(string.Format("{0}[Remote]: {1}{2}", c.navy, c.white, m));
+                    Logger.Write(string.Format(CultureInfo.CurrentCulture, "{0}{1}{2}", DateTime.Now.ToString("(HH:mm:ss) "), m, Environment.NewLine));  //Did it like this to avoid OnLog event
+                    Player.GlobalMessage(string.Format(CultureInfo.CurrentCulture, "{0}[Remote]: {1}{2}", c.navy, c.white, m));
                     return;
             }
         }

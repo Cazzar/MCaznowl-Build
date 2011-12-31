@@ -30,7 +30,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "" || message.IndexOf(' ') != -1) { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') != -1) { Help(p); return; }
 
             Player who = Player.Find(message);
             if (who == null)

@@ -21,10 +21,11 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Text;
 using System.Linq;
+using System.Globalization;
 
 namespace MCForge
 {
-    public class LavaSurvival
+    public class LavaSurvival : IDisposable
     {
         // Private variables
         private string propsPath = "properties/lavasurvival/";
@@ -35,17 +36,203 @@ namespace MCForge
         private DateTime startTime;
 
         // Public variables
-        public bool active = false, roundActive = false, flooded = false, voteActive = false, sendingPlayers = false;
-        public Level map;
-        public MapSettings mapSettings;
-        public MapData mapData;
+        private bool _sendingPlayers; 
+
+        public bool sendingPlayers
+        {
+            get
+            {
+                return _sendingPlayers;
+            }
+            set
+            {
+                _sendingPlayers = value;
+            }
+        }
+        private bool _voteActive; 
+
+        public bool voteActive
+        {
+            get
+            {
+                return _voteActive;
+            }
+            set
+            {
+                _voteActive = value;
+            }
+        }
+        private bool _flooded; 
+
+        public bool flooded
+        {
+            get
+            {
+                return _flooded;
+            }
+            set
+            {
+                _flooded = value;
+            }
+        }
+        private bool _roundActive; 
+
+        public bool roundActive
+        {
+            get
+            {
+                return _roundActive;
+            }
+            set
+            {
+                _roundActive = value;
+            }
+        }
+        private bool _active; 
+
+        public bool active
+        {
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                _active = value;
+            }
+        }
+        private Level _map; 
+
+        public Level map
+        {
+            get
+            {
+                return _map;
+            }
+            set
+            {
+                _map = value;
+            }
+        }
+        private MapSettings _mapSettings; 
+
+        public MapSettings mapSettings
+        {
+            get
+            {
+                return _mapSettings;
+            }
+            set
+            {
+                _mapSettings = value;
+            }
+        }
+        private MapData _mapData; 
+
+        public MapData mapData
+        {
+            get
+            {
+                return _mapData;
+            }
+            set
+            {
+                _mapData = value;
+            }
+        }
 
         // Settings
-        public bool startOnStartup, sendAfkMain;
-        public byte voteCount;
-        public int lifeNum;
-        public double voteTime;
-        public LevelPermission setupRank, controlRank;
+        private bool _sendAfkMain; 
+
+        public bool sendAfkMain
+        {
+            get
+            {
+                return _sendAfkMain;
+            }
+            set
+            {
+                _sendAfkMain = value;
+            }
+        }
+        private bool _startOnStartup; 
+
+        public bool startOnStartup
+        {
+            get
+            {
+                return _startOnStartup;
+            }
+            set
+            {
+                _startOnStartup = value;
+            }
+        }
+        private byte _voteCount; 
+
+        public byte voteCount
+        {
+            get
+            {
+                return _voteCount;
+            }
+            set
+            {
+                _voteCount = value;
+            }
+        }
+        private int _lifeNum; 
+
+        public int lifeNum
+        {
+            get
+            {
+                return _lifeNum;
+            }
+            set
+            {
+                _lifeNum = value;
+            }
+        }
+        private double _voteTime; 
+
+        public double voteTime
+        {
+            get
+            {
+                return _voteTime;
+            }
+            set
+            {
+                _voteTime = value;
+            }
+        }
+        private LevelPermission _controlRank; 
+
+        public LevelPermission controlRank
+        {
+            get
+            {
+                return _controlRank;
+            }
+            set
+            {
+                _controlRank = value;
+            }
+        }
+        private LevelPermission _setupRank; 
+
+        public LevelPermission setupRank
+        {
+            get
+            {
+                return _setupRank;
+            }
+            set
+            {
+                _setupRank = value;
+            }
+        }
 
         // Plugin event delegates
         public delegate void GameStartHandler(Level map);
@@ -85,7 +272,7 @@ namespace MCForge
                 if (!flooded) AnnounceTimeLeft(true, false);
             };
 
-            startOnStartup = false;
+            /*startOnStartup = false*/;
             sendAfkMain = true;
             voteCount = 2;
             voteTime = 2;
@@ -96,13 +283,14 @@ namespace MCForge
         }
 
         // Private methods
-        private void LevelCommand(string name, string msg = "")
-        {
-            Command cmd = Command.all.Find(name.Trim());
-            if (cmd != null && map != null)
-                try { cmd.Use(null, map.name + " " + msg.Trim()); }
-                catch (Exception e) { Server.ErrorLog(e); }
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        private void LevelCommand(string name, string msg = "")
+//        {
+//            Command cmd = Command.all.Find(name.Trim());
+//            if (cmd != null && map != null)
+//                try { cmd.Use(null, map.name + " " + msg.Trim()); }
+//                catch (Exception e) { Server.ErrorLog(e); }
+//        }
 
         // Public methods
         public byte Start(string mapName = "")
@@ -276,7 +464,7 @@ namespace MCForge
         {
             if (String.IsNullOrEmpty(name) || !HasMap(name)) return;
 
-            name = name.ToLower();
+            name = name.ToLower(CultureInfo.CurrentCulture);
             Level oldMap = null;
             if (active && map != null) oldMap = map;
             Command.all.Find("load").Use(null, name);
@@ -415,7 +603,7 @@ namespace MCForge
         public void KillPlayer(Player p, bool silent = false)
         {
             if (lifeNum < 1) return;
-            string name = p.name.ToLower();
+            string name = p.name.ToLower(CultureInfo.CurrentCulture);
             if (!deaths.ContainsKey(name))
                 deaths.Add(name, 0);
             deaths[name]++;
@@ -434,7 +622,7 @@ namespace MCForge
         }
         public bool IsPlayerDead(Player p)
         {
-            string name = p.name.ToLower();
+            string name = p.name.ToLower(CultureInfo.CurrentCulture);
             if (lifeNum < 1 || !deaths.ContainsKey(name))
                 return false;
             return (deaths[name] >= lifeNum);
@@ -466,8 +654,8 @@ namespace MCForge
                 {
                     if (line[0] != '#')
                     {
-                        string value = line.Substring(line.IndexOf(" = ") + 3);
-                        switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+                        string value = line.Substring(line.IndexOf(" = ", StringComparison.CurrentCulture) + 3);
+                        switch (line.Substring(0, line.IndexOf(" = ", StringComparison.CurrentCulture)).ToLower(CultureInfo.CurrentCulture))
                         {
                             case "start-on-startup":
                                 startOnStartup = bool.Parse(value);
@@ -476,21 +664,21 @@ namespace MCForge
                                 sendAfkMain = bool.Parse(value);
                                 break;
                             case "vote-count":
-                                voteCount = (byte)MathHelper.Clamp(decimal.Parse(value), 2, 10);
+                                voteCount = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 2, 10);
                                 break;
                             case "vote-time":
-                                voteTime = double.Parse(value);
+                                voteTime = double.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "lives":
-                                lifeNum = int.Parse(value);
+                                lifeNum = int.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "setup-rank":
-                                if (Group.Find(value.ToLower()) != null)
-                                    setupRank = Group.Find(value.ToLower()).Permission;
+                                if (Group.Find(value.ToLower(CultureInfo.CurrentCulture)) != null)
+                                    setupRank = Group.Find(value.ToLower(CultureInfo.CurrentCulture)).Permission;
                                 break;
                             case "control-rank":
-                                if (Group.Find(value.ToLower()) != null)
-                                    controlRank = Group.Find(value.ToLower()).Permission;
+                                if (Group.Find(value.ToLower(CultureInfo.CurrentCulture)) != null)
+                                    controlRank = Group.Find(value.ToLower(CultureInfo.CurrentCulture)).Permission;
                                 break;
                             case "maps":
                                 foreach (string mapname in value.Split(','))
@@ -508,13 +696,13 @@ namespace MCForge
             using (StreamWriter SW = File.CreateText("properties/lavasurvival.properties"))
             {
                 SW.WriteLine("#Lava Survival main properties");
-                SW.WriteLine("start-on-startup = " + startOnStartup.ToString().ToLower());
-                SW.WriteLine("send-afk-to-main = " + sendAfkMain.ToString().ToLower());
-                SW.WriteLine("vote-count = " + voteCount.ToString());
-                SW.WriteLine("vote-time = " + voteTime.ToString());
-                SW.WriteLine("lives = " + lifeNum.ToString());
-                SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower());
-                SW.WriteLine("control-rank = " + Level.PermissionToName(controlRank).ToLower());
+                SW.WriteLine("start-on-startup = " + startOnStartup.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+                SW.WriteLine("send-afk-to-main = " + sendAfkMain.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+                SW.WriteLine("vote-count = " + voteCount.ToString(CultureInfo.CurrentCulture));
+                SW.WriteLine("vote-time = " + voteTime.ToString(CultureInfo.CurrentCulture));
+                SW.WriteLine("lives = " + lifeNum.ToString(CultureInfo.CurrentCulture));
+                SW.WriteLine("setup-rank = " + Level.PermissionToName(setupRank).ToLower(CultureInfo.CurrentCulture));
+                SW.WriteLine("control-rank = " + Level.PermissionToName(controlRank).ToLower(CultureInfo.CurrentCulture));
                 SW.WriteLine("maps = " + maps.Concatenate(","));
             }
         }
@@ -536,51 +724,51 @@ namespace MCForge
                     if (line[0] != '#')
                     {
                         string[] sp;
-                        string value = line.Substring(line.IndexOf(" = ") + 3);
-                        switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
+                        string value = line.Substring(line.IndexOf(" = ", StringComparison.CurrentCulture) + 3);
+                        switch (line.Substring(0, line.IndexOf(" = ", StringComparison.CurrentCulture)).ToLower(CultureInfo.CurrentCulture))
                         {
                             case "fast-chance":
-                                settings.fast = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
+                                settings.fast = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 0, 100);
                                 break;
                             case "killer-chance":
-                                settings.killer = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
+                                settings.killer = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 0, 100);
                                 break;
                             case "destroy-chance":
-                                settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
+                                settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 0, 100);
                                 break;
                             case "water-chance":
-                                settings.water = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
+                                settings.water = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 0, 100);
                                 break;
                             case "layer-chance":
-                                settings.layer = (byte)MathHelper.Clamp(decimal.Parse(value), 0, 100);
+                                settings.layer = (byte)MathHelper.Clamp(decimal.Parse(value, CultureInfo.CurrentCulture), 0, 100);
                                 break;
                             case "layer-height":
-                                settings.layerHeight = int.Parse(value);
+                                settings.layerHeight = int.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "layer-count":
-                                settings.layerCount = int.Parse(value);
+                                settings.layerCount = int.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "layer-interval":
-                                settings.layerInterval = double.Parse(value);
+                                settings.layerInterval = double.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "round-time":
-                                settings.roundTime = double.Parse(value);
+                                settings.roundTime = double.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "flood-time":
-                                settings.floodTime = double.Parse(value);
+                                settings.floodTime = double.Parse(value, CultureInfo.CurrentCulture);
                                 break;
                             case "block-flood":
                                 sp = value.Split(',');
-                                settings.blockFlood = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
+                                settings.blockFlood = new Pos(ushort.Parse(sp[0], CultureInfo.CurrentCulture), ushort.Parse(sp[1], CultureInfo.CurrentCulture), ushort.Parse(sp[2], CultureInfo.CurrentCulture));
                                 break;
                             case "block-layer":
                                 sp = value.Split(',');
-                                settings.blockLayer = new Pos(ushort.Parse(sp[0]), ushort.Parse(sp[1]), ushort.Parse(sp[2]));
+                                settings.blockLayer = new Pos(ushort.Parse(sp[0], CultureInfo.CurrentCulture), ushort.Parse(sp[1], CultureInfo.CurrentCulture), ushort.Parse(sp[2], CultureInfo.CurrentCulture));
                                 break;
                             case "safe-zone":
                                 sp = value.Split('-');
                                 string[] p1 = sp[0].Split(','), p2 = sp[1].Split(',');
-                                settings.safeZone = new Pos[] { new Pos(ushort.Parse(p1[0]), ushort.Parse(p1[1]), ushort.Parse(p1[2])), new Pos(ushort.Parse(p2[0]), ushort.Parse(p2[1]), ushort.Parse(p2[2])) };
+                                settings.safeZone = new Pos[] { new Pos(ushort.Parse(p1[0], CultureInfo.CurrentCulture), ushort.Parse(p1[1], CultureInfo.CurrentCulture), ushort.Parse(p1[2], CultureInfo.CurrentCulture)), new Pos(ushort.Parse(p2[0], CultureInfo.CurrentCulture), ushort.Parse(p2[1], CultureInfo.CurrentCulture), ushort.Parse(p2[2], CultureInfo.CurrentCulture)) };
                                 break;
                         }
                     }
@@ -609,29 +797,29 @@ namespace MCForge
                 SW.WriteLine("flood-time = " + settings.floodTime);
                 SW.WriteLine("block-flood = " + settings.blockFlood.ToString());
                 SW.WriteLine("block-layer = " + settings.blockLayer.ToString());
-                SW.WriteLine(String.Format("safe-zone = {0}-{1}", settings.safeZone[0].ToString(), settings.safeZone[1].ToString()));
+                SW.WriteLine(String.Format(CultureInfo.CurrentCulture, "safe-zone = {0}-{1}", settings.safeZone[0].ToString(), settings.safeZone[1].ToString()));
             }
         }
 
         public void AddMap(string name)
         {
-            if (!String.IsNullOrEmpty(name) && !maps.Contains(name.ToLower()))
+            if (!String.IsNullOrEmpty(name) && !maps.Contains(name.ToLower(CultureInfo.CurrentCulture)))
             {
-                maps.Add(name.ToLower());
+                maps.Add(name.ToLower(CultureInfo.CurrentCulture));
                 SaveSettings();
             }
         }
         public void RemoveMap(string name)
         {
-            if (maps.Contains(name.ToLower()))
+            if (maps.Contains(name.ToLower(CultureInfo.CurrentCulture)))
             {
-                maps.Remove(name.ToLower());
+                maps.Remove(name.ToLower(CultureInfo.CurrentCulture));
                 SaveSettings();
             }
         }
         public bool HasMap(string name)
         {
-            return maps.Contains(name.ToLower());
+            return maps.Contains(name.ToLower(CultureInfo.CurrentCulture));
         }
 
         public bool InSafeZone(Pos pos)
@@ -675,21 +863,197 @@ namespace MCForge
         // Internal classes
         public class MapSettings
         {
-            public string name;
-            public byte fast, killer, destroy, water, layer;
-            public int layerHeight, layerCount;
-            public double layerInterval, roundTime, floodTime;
-            public Pos blockFlood, blockLayer;
-            public Pos[] safeZone;
+            private string _name; 
+
+            public string name
+            {
+                get
+                {
+                    return _name;
+                }
+                set
+                {
+                    _name = value;
+                }
+            }
+            private byte _layer; 
+
+            public byte layer
+            {
+                get
+                {
+                    return _layer;
+                }
+                set
+                {
+                    _layer = value;
+                }
+            }
+            private byte _water; 
+
+            public byte water
+            {
+                get
+                {
+                    return _water;
+                }
+                set
+                {
+                    _water = value;
+                }
+            }
+            private byte _destroy; 
+
+            public byte destroy
+            {
+                get
+                {
+                    return _destroy;
+                }
+                set
+                {
+                    _destroy = value;
+                }
+            }
+            private byte _killer; 
+
+            public byte killer
+            {
+                get
+                {
+                    return _killer;
+                }
+                set
+                {
+                    _killer = value;
+                }
+            }
+            private byte _fast; 
+
+            public byte fast
+            {
+                get
+                {
+                    return _fast;
+                }
+                set
+                {
+                    _fast = value;
+                }
+            }
+            private int _layerCount; 
+
+            public int layerCount
+            {
+                get
+                {
+                    return _layerCount;
+                }
+                set
+                {
+                    _layerCount = value;
+                }
+            }
+            private int _layerHeight; 
+
+            public int layerHeight
+            {
+                get
+                {
+                    return _layerHeight;
+                }
+                set
+                {
+                    _layerHeight = value;
+                }
+            }
+            private double _floodTime; 
+
+            public double floodTime
+            {
+                get
+                {
+                    return _floodTime;
+                }
+                set
+                {
+                    _floodTime = value;
+                }
+            }
+            private double _roundTime; 
+
+            public double roundTime
+            {
+                get
+                {
+                    return _roundTime;
+                }
+                set
+                {
+                    _roundTime = value;
+                }
+            }
+            private double _layerInterval; 
+
+            public double layerInterval
+            {
+                get
+                {
+                    return _layerInterval;
+                }
+                set
+                {
+                    _layerInterval = value;
+                }
+            }
+            private Pos _blockLayer; 
+
+            public Pos blockLayer
+            {
+                get
+                {
+                    return _blockLayer;
+                }
+                set
+                {
+                    _blockLayer = value;
+                }
+            }
+            private Pos _blockFlood; 
+
+            public Pos blockFlood
+            {
+                get
+                {
+                    return _blockFlood;
+                }
+                set
+                {
+                    _blockFlood = value;
+                }
+            }
+            private Pos[] _safeZone; 
+
+            public Pos[] safeZone
+            {
+                get
+                {
+                    return _safeZone;
+                }
+                set
+                {
+                    _safeZone = value;
+                }
+            }
 
             public MapSettings(string name)
             {
                 this.name = name;
-                fast = 0;
+                /*fast = 0*/;
                 killer = 100;
-                destroy = 0;
-                water = 0;
-                layer = 0;
+                /*destroy = 0*/;
+                /*water = 0*/;
+                /*layer = 0*/;
                 layerHeight = 3;
                 layerCount = 10;
                 layerInterval = 2;
@@ -703,18 +1067,144 @@ namespace MCForge
 
         public class MapData : IDisposable
         {
-            public bool fast, killer, destroy, water, layer;
-            public byte block;
-            public int currentLayer;
-            public Timer roundTimer, floodTimer, layerTimer;
+            private bool _layer; 
+
+            public bool layer
+            {
+                get
+                {
+                    return _layer;
+                }
+                set
+                {
+                    _layer = value;
+                }
+            }
+            private bool _water; 
+
+            public bool water
+            {
+                get
+                {
+                    return _water;
+                }
+                set
+                {
+                    _water = value;
+                }
+            }
+            private bool _destroy; 
+
+            public bool destroy
+            {
+                get
+                {
+                    return _destroy;
+                }
+                set
+                {
+                    _destroy = value;
+                }
+            }
+            private bool _killer; 
+
+            public bool killer
+            {
+                get
+                {
+                    return _killer;
+                }
+                set
+                {
+                    _killer = value;
+                }
+            }
+            private bool _fast; 
+
+            public bool fast
+            {
+                get
+                {
+                    return _fast;
+                }
+                set
+                {
+                    _fast = value;
+                }
+            }
+            private byte _block; 
+
+            public byte block
+            {
+                get
+                {
+                    return _block;
+                }
+                set
+                {
+                    _block = value;
+                }
+            }
+            private int _currentLayer; 
+
+            public int currentLayer
+            {
+                get
+                {
+                    return _currentLayer;
+                }
+                set
+                {
+                    _currentLayer = value;
+                }
+            }
+            private Timer _layerTimer; 
+
+            public Timer layerTimer
+            {
+                get
+                {
+                    return _layerTimer;
+                }
+                set
+                {
+                    _layerTimer = value;
+                }
+            }
+            private Timer _floodTimer; 
+
+            public Timer floodTimer
+            {
+                get
+                {
+                    return _floodTimer;
+                }
+                set
+                {
+                    _floodTimer = value;
+                }
+            }
+            private Timer _roundTimer; 
+
+            public Timer roundTimer
+            {
+                get
+                {
+                    return _roundTimer;
+                }
+                set
+                {
+                    _roundTimer = value;
+                }
+            }
 
             public MapData(MapSettings settings)
             {
-                fast = false;
-                killer = false;
-                destroy = false;
-                water = false;
-                layer = false;
+                /*fast = false*/;
+                /*killer = false*/;
+                /*destroy = false*/;
+                /*water = false*/;
+                /*layer = false*/;
                 block = Block.lava;
                 currentLayer = 1;
                 roundTimer = new Timer(TimeSpan.FromMinutes(settings.roundTime).TotalMilliseconds); roundTimer.AutoReset = false;
@@ -749,8 +1239,72 @@ namespace MCForge
 
             public string ToString(string separator)
             {
-                return String.Format("{1}{0}{2}{0}{3}", separator, this.x, this.y, this.z);
+                return String.Format(CultureInfo.CurrentCulture, "{1}{0}{2}{0}{3}", separator, this.x, this.y, this.z);
+            }
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool Equals(Object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator !=(Pos x, Pos y)
+            {
+                throw new NotImplementedException();
             }
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (announceTimer != null)
+                        announceTimer.Dispose();
+                    if (voteTimer != null)
+                        voteTimer.Dispose();
+                    if (transferTimer != null)
+                        transferTimer.Dispose();
+                    if (map != null)
+                        map.Dispose();
+                    if (mapData != null)
+                        mapData.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

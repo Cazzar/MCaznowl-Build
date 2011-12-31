@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -43,7 +44,7 @@ namespace MCForge
 				string[] message2 = message.Split(' ');
 
 				#region cones
-				if (message2[0].ToLower() == "cone")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "cone")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -51,8 +52,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -66,7 +67,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "hcone")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "hcone")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -74,8 +75,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -90,7 +91,7 @@ namespace MCForge
 					return;
 				}
 
-				if (message2[0].ToLower() == "icone")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "icone")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -98,8 +99,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -113,7 +114,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "hicone")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "hicone")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 1)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -121,8 +122,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -138,7 +139,7 @@ namespace MCForge
 				}
 				#endregion
 				#region pyramids
-				if (message2[0].ToLower() == "pyramid")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "pyramid")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -146,8 +147,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -161,7 +162,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "hpyramid")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "hpyramid")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -169,8 +170,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -184,7 +185,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "ipyramid")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "ipyramid")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -192,8 +193,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -207,7 +208,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "hipyramid")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "hipyramid")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -215,8 +216,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -232,7 +233,7 @@ namespace MCForge
 				}
 				#endregion
 				#region spheres
-				if (message2[0].ToLower() == "sphere")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "sphere")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 3)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name + "+"); return; }
 					if (message2.Length != 2)
@@ -240,7 +241,7 @@ namespace MCForge
 
 					try
 					{
-						radius = Convert.ToUInt16(message2[1].Trim());
+						radius = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { 0, radius };
 					}
 					catch
@@ -254,7 +255,7 @@ namespace MCForge
 
 					return;
 				}
-				if (message2[0].ToLower() == "hsphere")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "hsphere")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 3)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 3)).name + "+"); return; }
 					if (message2.Length != 2)
@@ -262,7 +263,7 @@ namespace MCForge
 
 					try
 					{
-						radius = Convert.ToUInt16(message2[1].Trim());
+						radius = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { 0, radius };
 					}
 					catch
@@ -278,7 +279,7 @@ namespace MCForge
 				}
 				#endregion
 				#region other
-				if (message2[0].ToLower() == "volcano")
+				if (message2[0].ToLower(CultureInfo.CurrentCulture) == "volcano")
 				{
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 4)) { Player.SendMessage(p, "That commands addition is for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 4)).name + "+"); return; }
 					if (message2.Length != 3)
@@ -286,8 +287,8 @@ namespace MCForge
 
 					try
 					{
-						height = Convert.ToUInt16(message2[1].Trim());
-						radius = Convert.ToUInt16(message2[2].Trim());
+						height = Convert.ToUInt16(message2[1].Trim(), CultureInfo.CurrentCulture);
+						radius = Convert.ToUInt16(message2[2].Trim(), CultureInfo.CurrentCulture);
 						p.BcVar = new int[2] { height, radius };
 					}
 					catch
@@ -402,7 +403,7 @@ namespace MCForge
 		#region Sphere Blockchanges
 		public void BlockchangeSphere(Player p, ushort x, ushort y, ushort z, byte type)
 		{
-			int height = p.BcVar[0];
+//			int height = p.BcVar[0] // COMMENTED BY CODEIT.RIGHT;
 			int radius = p.BcVar[1];
 
 			byte b = p.level.GetTile(x, y, z);
@@ -412,7 +413,7 @@ namespace MCForge
 		}
 		public void BlockchangeHSphere(Player p, ushort x, ushort y, ushort z, byte type)
 		{
-			int height = p.BcVar[0];
+//			int height = p.BcVar[0] // COMMENTED BY CODEIT.RIGHT;
 			int radius = p.BcVar[1];
 
 			byte b = p.level.GetTile(x, y, z);

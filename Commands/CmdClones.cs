@@ -22,6 +22,7 @@ using System.Text;
 //using MySql.Data.Types;
 using System.Data;
 using MCForge.SQL;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -37,9 +38,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") message = p.name;
+            if ((message != null && String.IsNullOrEmpty(message))) message = p.name;
 
-            string originalName = message.ToLower();
+            string originalName = message.ToLower(CultureInfo.CurrentCulture);
 
             Player who = Player.Find(message);
             if (who == null)
@@ -65,8 +66,8 @@ namespace MCForge
             List<string> foundPeople = new List<string>();
             for (int i = 0; i < Clones.Rows.Count; ++i)
             {
-                if (!foundPeople.Contains(Clones.Rows[i]["Name"].ToString().ToLower()))
-                    foundPeople.Add(Clones.Rows[i]["Name"].ToString().ToLower());
+                if (!foundPeople.Contains(Clones.Rows[i]["Name"].ToString().ToLower(CultureInfo.CurrentCulture)))
+                    foundPeople.Add(Clones.Rows[i]["Name"].ToString().ToLower(CultureInfo.CurrentCulture));
             }
 
             Clones.Dispose();

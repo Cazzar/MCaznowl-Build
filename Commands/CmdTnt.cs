@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -43,7 +44,7 @@ namespace MCForge
 
                 p.BlockAction = 0; Player.SendMessage(p, "TNT mode is now &cOFF" + Server.DefaultColor + ".");
             }
-            else if (message.ToLower() == "small" || message == "")
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "small" || (message != null && String.IsNullOrEmpty(message)))
             {
                 if (p.allowTnt == true) 
                 {
@@ -53,7 +54,7 @@ namespace MCForge
                 Player.SendMessage(p, "Tnt usage is not allowed at the moment!");
                 return;
             }
-            else if (message.ToLower() == "big")
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "big")
             {
                 if (p.allowTnt == false) 
                 {
@@ -69,7 +70,7 @@ namespace MCForge
                     Player.SendMessage(p, "This mode is reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 1)).name + "+");
                 }
             }
-            else if (message.ToLower() == "allow")
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "allow")
             {
                 if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
@@ -80,7 +81,7 @@ namespace MCForge
                 Player.SendMessage(p, "You must be " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+ to use this command.");
                 return;
             }
-            else if (message.ToLower() == "disallow")
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "disallow")
             {
                 if ((int)p.group.Permission >= CommandOtherPerms.GetPerm(this, 2))
                 {
@@ -91,7 +92,7 @@ namespace MCForge
                 Player.SendMessage(p, "You must be " + Group.findPermInt(CommandOtherPerms.GetPerm(this, 2)).name + "+ to use this command.");
                 return;
             }
-            else if (message.ToLower() == "nuke")
+            else if (message.ToLower(CultureInfo.CurrentCulture) == "nuke")
             {
                 if (p.allowTnt == false) 
                 {

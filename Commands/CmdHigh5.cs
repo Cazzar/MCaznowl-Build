@@ -31,7 +31,7 @@ namespace MCForge
         public CmdHigh5() { }
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 Help(p);
 				return;

@@ -18,21 +18,34 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
     public sealed class PlayerList
     {
         //public string name;
-        public Group group;
+        private Group _group; 
+
+        public Group group
+        {
+            get
+            {
+                return _group;
+            }
+            set
+            {
+                _group = value;
+            }
+        }
         List<string> players = new List<string>();
         public PlayerList() { }
-        public void Add(string p) { players.Add(p.ToLower()); }
+        public void Add(string p) { players.Add(p.ToLower(CultureInfo.CurrentCulture)); }
         public bool Remove(string p)
         {
-            return players.Remove(p.ToLower());
+            return players.Remove(p.ToLower(CultureInfo.CurrentCulture));
         }
-        public bool Contains(string p) { return players.Contains(p.ToLower()); }
+        public bool Contains(string p) { return players.Contains(p.ToLower(CultureInfo.CurrentCulture)); }
         public List<string> All() { return new List<string>(players); }
         public void Save(string path) { Save(path, true); }
         public void Save() {

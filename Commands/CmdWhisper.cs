@@ -30,7 +30,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 p.whisper = !p.whisper; p.whisperTo = "";
                 if (p.whisper) Player.SendMessage(p, "All messages sent will now auto-whisper");

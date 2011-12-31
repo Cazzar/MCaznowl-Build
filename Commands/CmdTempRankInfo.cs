@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -37,7 +38,7 @@ namespace MCForge
                 Player.SendMessage(p, "&cPlayer &a" + message + "&c Has not been assigned a temporary rank. Cannot unnasign.");
                 return;
             }
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 Help(p);
                 Player.SendMessage(p, "&cYou need to enter a player!");
@@ -51,19 +52,19 @@ namespace MCForge
                     string temprank = line3.Split(' ')[1];
                     string oldrank = line3.Split(' ')[2];
                     string tempranker = line3.Split(' ')[9];
-                    int period = Convert.ToInt32(line3.Split(' ')[3]);
-                    int minutes = Convert.ToInt32(line3.Split(' ')[4]);
-                    int hours = Convert.ToInt32(line3.Split(' ')[5]);
-                    int days = Convert.ToInt32(line3.Split(' ')[6]);
-                    int months = Convert.ToInt32(line3.Split(' ')[7]);
-                    int years = Convert.ToInt32(line3.Split(' ')[8]);
+                    int period = Convert.ToInt32(line3.Split(' ')[3], CultureInfo.CurrentCulture);
+                    int minutes = Convert.ToInt32(line3.Split(' ')[4], CultureInfo.CurrentCulture);
+                    int hours = Convert.ToInt32(line3.Split(' ')[5], CultureInfo.CurrentCulture);
+                    int days = Convert.ToInt32(line3.Split(' ')[6], CultureInfo.CurrentCulture);
+                    int months = Convert.ToInt32(line3.Split(' ')[7], CultureInfo.CurrentCulture);
+                    int years = Convert.ToInt32(line3.Split(' ')[8], CultureInfo.CurrentCulture);
                     DateTime ExpireDate = new DateTime(years, months, days, hours, minutes, 0);
                     DateTime tocheck = ExpireDate.AddHours(Convert.ToDouble(period));
                     Player.SendMessage(p, "&1Temporary Rank Information of " + message);
                     Player.SendMessage(p, "&aTemporary Rank: " + temprank);
                     Player.SendMessage(p, "&aOld Rank: " + oldrank);
-                    Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString());
-                    Player.SendMessage(p, "&aDate of expiry: " + tocheck.ToString());
+                    Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString(CultureInfo.CurrentCulture));
+                    Player.SendMessage(p, "&aDate of expiry: " + tocheck.ToString(CultureInfo.CurrentCulture));
                     Player.SendMessage(p, "&aTempranked by: " + tempranker);
                 }
             }

@@ -17,6 +17,7 @@
 */
 using System;
 using MCForge.SQL;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -33,7 +34,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "" || message.Split(' ').Length > 2) { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message)) || message.Split(' ').Length > 2) { Help(p); return; }
             int pos = message.IndexOf(' ');
             if (pos != -1)
             {
@@ -52,7 +53,7 @@ namespace MCForge
                     return;
                 }
                 string color = c.Parse(message.Substring(pos + 1));
-                if (color == "") { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
+                if ((color != null && String.IsNullOrEmpty(color))) { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
                 else if (color == who.color) { Player.SendMessage(p, who.name + " already has that color."); }
                 else
                 {
@@ -90,7 +91,7 @@ namespace MCForge
                         return;
                     }
                     string color = c.Parse(message);
-                    if (color == "") { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
+                    if ((color != null && String.IsNullOrEmpty(color))) { Player.SendMessage(p, "There is no color \"" + message + "\"."); }
                     else if (color == p.color) { Player.SendMessage(p, "You already have that color."); }
                     else
                     {
@@ -114,7 +115,7 @@ namespace MCForge
         }
         static string Name(string name)
         {
-            string ch = name[name.Length - 1].ToString().ToLower();
+            string ch = name[name.Length - 1].ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture);
             if (ch == "s" || ch == "x") { return name + Server.DefaultColor + "'"; }
             else { return name + Server.DefaultColor + "'s"; }
         }

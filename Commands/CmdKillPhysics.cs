@@ -36,7 +36,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 foreach (Level l in Server.levels)
                 {

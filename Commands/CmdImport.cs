@@ -33,7 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             string fileName;
             fileName = "extra/import/" + message + ".dat";
 

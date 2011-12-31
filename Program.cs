@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace Starter
 {
-    class Program
+    internal static class Program
     {
         // Attempt to read the location from the DLL, if available.
         public static string DLLLocation
@@ -35,8 +35,8 @@ namespace Starter
                 return "http://www.mcforge.net/MCForge_.dll";
             }
         }
-        static int tries = 0;
-        static bool needsToRestart = false;
+        static int tries/* = 0*/;
+        static bool needsToRestart/* = false*/;
         static string parent = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
         //Console.ReadLine() is ignored while Starter is set as Windows Application in properties. (At least on Windows)
         static void Main(string[] args)

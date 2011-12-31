@@ -21,13 +21,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using System.Data.SQLite;
 
 
 namespace MCForge {
     namespace SQL {
-        class Database {
+        internal static class Database {
             public static void CopyDatabase(StreamWriter sql) {
                 //We technically know all tables in the DB...  But since this is MySQL, we can also get them all with a MySQL command
                 //So we show the tables, and store the result.
@@ -70,18 +71,18 @@ namespace MCForge {
                                     tmp.Add(row.Field<string>(col));
                                 }// end:for(col)
                                 rowParams = tmp.ToArray<string>();
-                                rowParams[2] = (rowParams[2].ToLower().Equals("no") ? "NOT " : "DEFAULT ") + "NULL";
-                                pri += (rowParams[3].ToLower().Equals("pri") ? rowParams[0] + ";" : "");
+                                rowParams[2] = (rowParams[2].ToLower(CultureInfo.CurrentCulture).Equals("no", StringComparison.CurrentCulture) ? "NOT " : "DEFAULT ") + "NULL";
+                                pri += (rowParams[3].ToLower(CultureInfo.CurrentCulture).Equals("pri", StringComparison.CurrentCulture) ? rowParams[0] + ";" : "");
                                 sql.WriteLine("`{0}` {1} {2}" + (rowParams[5].Equals("") ? "" : " {5}") + (pri.Equals("") && row == tableRowSchema.Rows[tableRowSchema.Rows.Count - 1] ? "" : ","), rowParams);
                                 tableSchema.Add(rowParams);
                             }// end:foreach(DataRow row)
                         }
-                        if (!pri.Equals("")) {
+                        if (!String.IsNullOrEmpty(pri)) {
                             string[] tmp = pri.Substring(0, pri.Length - 1).Split(';');
                             sql.Write("PRIMARY KEY (`");
                             foreach (string prim in tmp) {
                                 sql.Write(prim);
-                                sql.Write("`" + (tmp[tmp.Count() - 1].Equals(prim) ? ")" : ", `"));
+                                sql.Write("`" + (tmp[tmp.Count() - 1].Equals(prim, StringComparison.CurrentCulture) ? ")" : ", `"));
                             }
                         } /*else {
                             sql.Flush();
@@ -132,14 +133,14 @@ namespace MCForge {
                                     if (row.IsNull(col)) {
                                         sql.Write("NULL");
 
-                                    } else if (eleType.Name.Equals("DateTime")) { // special format
+                                    } else if (eleType.Name.Equals("DateTime", StringComparison.CurrentCulture)) { // special format
                                         DateTime dt = row.Field<DateTime>(col);
                                         sql.Write("'{0:yyyy-MM-dd HH:mm:ss.ffff}'", dt);
 
-                                    } else if (eleType.Name.Equals("Boolean")) {
+                                    } else if (eleType.Name.Equals("Boolean", StringComparison.CurrentCulture)) {
                                         sql.Write(row.Field<Boolean>(col) ? "1" : "0");
 
-                                    } else if (eleType.Name.Equals("String")) { // Requires ''
+                                    } else if (eleType.Name.Equals("String", StringComparison.CurrentCulture)) { // Requires ''
                                         sql.Write("'{0}'", row.Field<string>(col));
 
                                     } else {
@@ -161,22 +162,22 @@ namespace MCForge {
 
             }
 
-            private static List<string[]> getSchema(string tableSQLString) {
+            private static List<string[]> getSchema(string tableSQL) {
                 // All SQL for creating tables looks like "CREATE TABLE [IF NOT EXISTS] <TableName> (<ColumnDef>[, ... [, PRIMARY KEY (<ColumnName>[, ...])]])
                 // <ColumnDef> = <name> <type> [[NOT|DEFAULT] NULL] [PRIMARY KEY] [AUTO_INCREMENT]
                 List<string[]> schema = new List<string[]>();
-                int foundStart = tableSQLString.IndexOf("(") + 1;
-                int foundLength = tableSQLString.LastIndexOf(")") - foundStart;
-                tableSQLString = tableSQLString.Substring(foundStart, foundLength);
+                int foundStart = tableSQL.IndexOf("(", StringComparison.CurrentCulture) + 1;
+                int foundLength = tableSQL.LastIndexOf(")", StringComparison.CurrentCulture) - foundStart;
+                tableSQL = tableSQL.Substring(foundStart, foundLength);
                 // Now we have everything inside the parenthisies.
-                string[] column = tableSQLString.Split(',');
+                string[] column = tableSQL.Split(',');
                 foreach (string col in column) {
-                    if (!col.ToUpper().StartsWith("PRIMARY KEY")) {
+                    if (!col.ToUpper(CultureInfo.CurrentCulture).StartsWith("PRIMARY KEY", StringComparison.CurrentCulture)) {
                         string[] split = col.TrimStart('\n', '\r', '\t').Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         //Just to make it the same as the MySQL schema.
                         schema.Add(new string[] { split[0].Trim('`'), split[1].Trim('\t', '`'),
-                                              ( split.Count() > 2 ? (split[2].Trim('\t', '`').ToUpper() == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
-                                              ( split.Count() > 2 ? (split[split.Count() - 2].Trim('\t', '`').ToUpper() == "PRIMARY" && split[split.Count() - 1].Trim('\t', '`').ToUpper() == "KEY" ? "PRI" : "") : ""),
+                                              ( split.Count() > 2 ? (split[2].Trim('\t', '`').ToUpper(CultureInfo.CurrentCulture) == "NOT" ? "NOT NULL" : "DEFAULT NULL") : ""),
+                                              ( split.Count() > 2 ? (split[split.Count() - 2].Trim('\t', '`').ToUpper(CultureInfo.CurrentCulture) == "PRIMARY" && split[split.Count() - 1].Trim('\t', '`').ToUpper(CultureInfo.CurrentCulture) == "KEY" ? "PRI" : "") : ""),
                                               "NULL",
                                               (split.Contains("AUTO_INCREMENT") || split.Contains("AUTOINCREMENT") ? "AUTO_INCREMENT" : "")});
                     }
@@ -195,44 +196,44 @@ namespace MCForge {
                 return tableNames;
             }// end:CopyDatabase()
 
-            public static void executeQuery(string queryString, bool createDB = false) {
+            public static void executeQuery(string query, bool createDB = false) {
                 int totalCount = 0;
             retry: try {
                     if (Server.useMySQL) {
-                        MySQL.execute(queryString, createDB);
+                        MySQL.execute(query, createDB);
                     } else {
                         if (!createDB) // Databases do not need to be created in SQLite.
-                            SQLite.execute(queryString);
+                            SQLite.execute(query);
                     }
                 } catch (Exception e) {
                     if (!createDB || !Server.useMySQL) {
                         totalCount++;
                         if (totalCount > 10) {
-                            File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
+                            File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
                             Server.ErrorLog(e);
                         } else {
                             goto retry;
                         }
                     } else {
-                        throw e;
+                        throw; 
                     }
                 }
             }
 
-            public static DataTable fillData(string queryString, bool skipError = false) {
+            public static DataTable fillData(string query, bool skipError = false) {
                 int totalCount = 0;
                 using (DataTable toReturn = new DataTable("toReturn")) {
                 retry: try {
                         if (Server.useMySQL) {
-                            MySQL.fill(queryString, toReturn);
+                            MySQL.fill(query, toReturn);
                         } else {
-                            SQLite.fill(queryString, toReturn);
+                            SQLite.fill(query, toReturn);
                         }
                     } catch (Exception e) {
                         totalCount++;
                         if (totalCount > 10) {
                             if (!skipError) {
-                                File.AppendAllText("MySQL_error.log", DateTime.Now + " " + queryString + "\r\n");
+                                File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
                                 Server.ErrorLog(e);
                             }
                         } else
@@ -250,44 +251,44 @@ namespace MCForge {
                 //Delete old
                 List<string> tables = getTables();
                 foreach (string name in tables) {
-                    executeQuery(String.Format("DROP TABLE `{0}`", name));
+                    executeQuery(String.Format(CultureInfo.CurrentCulture, "DROP TABLE `{0}`", name));
                 }
                 //Make new
                 string script = new StreamReader(stream).ReadToEnd();
                 string[] cmds = script.Split(';');
-                StringBuilder sb = new StringBuilder();
+//                StringBuilder sb = new StringBuilder() // COMMENTED BY CODEIT.RIGHT;
 
                 using (DatabaseTransactionHelper helper = DatabaseTransactionHelper.Create()) {
 
                     foreach (string cmd in cmds) {
                         String newCmd = cmd.Trim(" \r\n\t".ToCharArray());
-                        int index = newCmd.ToUpper().IndexOf("CREATE TABLE");
+                        int index = newCmd.ToUpper(CultureInfo.CurrentCulture).IndexOf("CREATE TABLE", StringComparison.CurrentCulture);
                         if (index > -1) {
                             newCmd = newCmd.Remove(0, index);
                             //Do we have a primary key?
                             try {
                                 if (Server.useMySQL) {
-                                    int priIndex = newCmd.ToUpper().IndexOf(" PRIMARY KEY AUTOINCREMENT");
+                                    int priIndex = newCmd.ToUpper(CultureInfo.CurrentCulture).IndexOf(" PRIMARY KEY AUTOINCREMENT", StringComparison.CurrentCulture);
                                     int priCount = " PRIMARY KEY AUTOINCREMENT".Length;
                                     int attIdx = newCmd.Substring(0, newCmd.Substring(0, priIndex - 1).LastIndexOfAny("` \n".ToCharArray())).LastIndexOfAny("` \n".ToCharArray()) + 1;
                                     int attIdxEnd = newCmd.IndexOfAny("` \n".ToCharArray(), attIdx) - 1;
                                     string attName = newCmd.Substring(attIdx, attIdxEnd - attIdx + 1).Trim(' ', '\n', '`', '\r');
                                     //For speed, we just delete this, and add it to the attribute name, then delete the auto_increment clause.
                                     newCmd = newCmd.Remove(priIndex, priCount);
-                                    newCmd = newCmd.Insert(newCmd.LastIndexOf(")"), ", PRIMARY KEY (`" + attName + "`)");
+                                    newCmd = newCmd.Insert(newCmd.LastIndexOf(")", StringComparison.CurrentCulture), ", PRIMARY KEY (`" + attName + "`)");
                                     newCmd = newCmd.Insert(newCmd.IndexOf(',', priIndex), " AUTO_INCREMENT");
 
                                 } else {
-                                    int priIndex = newCmd.ToUpper().IndexOf(",\r\nPRIMARY KEY");
-                                    int priIndexEnd = newCmd.ToUpper().IndexOf(')', priIndex);
-                                    int attIdx = newCmd.IndexOf("(", priIndex) + 1;
+                                    int priIndex = newCmd.ToUpper(CultureInfo.CurrentCulture).IndexOf(",\r\nPRIMARY KEY", StringComparison.CurrentCulture);
+                                    int priIndexEnd = newCmd.ToUpper(CultureInfo.CurrentCulture).IndexOf(')', priIndex);
+                                    int attIdx = newCmd.IndexOf("(", priIndex, StringComparison.CurrentCulture) + 1;
                                     int attIdxEnd = priIndexEnd - 1;
                                     string attName = newCmd.Substring(attIdx, attIdxEnd - attIdx + 1);
                                     newCmd = newCmd.Remove(priIndex, priIndexEnd - priIndex + 1);
-                                    int start = newCmd.IndexOf(attName) + attName.Length;
+                                    int start = newCmd.IndexOf(attName, StringComparison.CurrentCulture) + attName.Length;
                                     int end = newCmd.IndexOf(',');
                                     newCmd = newCmd.Remove(start, end - start);
-                                    newCmd = newCmd.Insert(newCmd.IndexOf(attName) + attName.Length, " INTEGER PRIMARY KEY AUTOINCREMENT");
+                                    newCmd = newCmd.Insert(newCmd.IndexOf(attName, StringComparison.CurrentCulture) + attName.Length, " INTEGER PRIMARY KEY AUTOINCREMENT");
                                     newCmd = newCmd.Replace(" auto_increment", "").Replace(" AUTO_INCREMENT", "").Replace("True", "1").Replace("False", "0");
                                 }
                             } catch (ArgumentOutOfRangeException) { } // If we don't, just ignore it.

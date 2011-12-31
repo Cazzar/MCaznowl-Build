@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -27,12 +28,24 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
-        public string[,] botlist;
+        private string[,] _botlist; 
+
+        public string[,] botlist
+        {
+            get
+            {
+                return _botlist;
+            }
+            set
+            {
+                _botlist = value;
+            }
+        }
         public CmdBotRemove() { }
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (p == null)
             {
                 Player.SendMessage(p, "This command can only be used in-game!");
@@ -40,7 +53,7 @@ namespace MCForge
             }
                 try
                 {
-                    if (message.ToLower() == "all")
+                    if (message.ToLower(CultureInfo.CurrentCulture) == "all")
                     {
                         for (int i = 0; i < PlayerBot.playerbots.Count; i++)
                         {

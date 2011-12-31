@@ -38,7 +38,7 @@ namespace MCForge
                 return;
             }
             string[] strArray = File.ReadAllLines(newsFile);
-            if (message == "") { for (int j = 0; j < strArray.Length; j++) { Player.SendMessage(p, strArray[j]); } }
+            if ((message != null && String.IsNullOrEmpty(message))) { for (int j = 0; j < strArray.Length; j++) { Player.SendMessage(p, strArray[j]); } }
             else
             {
                 string[] split = message.Split(' ');

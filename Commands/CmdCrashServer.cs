@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -33,9 +34,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
+            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             Player.GlobalMessageOps(p.color + Server.DefaultColor + " used &b/crashserver");
-            p.Kick("Server crash! Error code 0x" + Convert.ToString(p.random.Next(int.MinValue, int.MaxValue), 16).ToUpper());
+            p.Kick("Server crash! Error code 0x" + Convert.ToString(p.random.Next(int.MinValue, int.MaxValue), 16).ToUpper(CultureInfo.CurrentCulture));
         }
         public override void Help(Player p)
         {

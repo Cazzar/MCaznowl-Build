@@ -26,19 +26,104 @@ using System.Text;
 using System.IO;
 using System.Timers;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
-    public class ZombieGame
+    public class ZombieGame : IDisposable
     {
-        public int amountOfRounds = 0;
-        public int limitRounds = 0;
-        public int aliveCount = 0;
-        public int amountOfMilliseconds = 0;
-        public string currentZombieLevel = "";
+        private int _amountOfRounds; 
+
+        public int amountOfRounds
+        {
+            get
+            {
+                return _amountOfRounds;
+            }
+            set
+            {
+                _amountOfRounds = value;
+            }
+        }
+        private int _limitRounds; 
+
+        public int limitRounds
+        {
+            get
+            {
+                return _limitRounds;
+            }
+            set
+            {
+                _limitRounds = value;
+            }
+        }
+        private int _aliveCount; 
+
+        public int aliveCount
+        {
+            get
+            {
+                return _aliveCount;
+            }
+            set
+            {
+                _aliveCount = value;
+            }
+        }
+        private int _amountOfMilliseconds; 
+
+        public int amountOfMilliseconds
+        {
+            get
+            {
+                return _amountOfMilliseconds;
+            }
+            set
+            {
+                _amountOfMilliseconds = value;
+            }
+        }
+        private string _currentZombieLevel = ""; 
+
+        public string currentZombieLevel
+        {
+            get
+            {
+                return _currentZombieLevel;
+            }
+            set
+            {
+                _currentZombieLevel = value;
+            }
+        }
         public static System.Timers.Timer timer;
-        public bool initialChangeLevel = false;
-        public string currentLevelName = "";
+        private bool _initialChangeLevel; 
+
+        public bool initialChangeLevel
+        {
+            get
+            {
+                return _initialChangeLevel;
+            }
+            set
+            {
+                _initialChangeLevel = value;
+            }
+        }
+        private string _currentLevelName = ""; 
+
+        public string currentLevelName
+        {
+            get
+            {
+                return _currentLevelName;
+            }
+            set
+            {
+                _currentLevelName = value;
+            }
+        }
         public static List<Player> alive = new List<Player>();
         public static List<Player> infectd = new List<Player>();
         string[] infectMessages = new string[] { " WIKIWOO'D ", " stuck their teeth into ", " licked ", " danubed ", " made ", " tripped ", " made some zombie babies with ", " made ", " tweeted ", " made ", " infected ", " iDotted ", "", "transplanted " };
@@ -104,7 +189,7 @@ namespace MCForge
             Thread.Sleep(60000); if (!Server.ZombieModeOn) { return; }
             Player.GlobalMessage("%4Round Start:%f 1:00");
             Thread.Sleep(55000); if (!Server.ZombieModeOn) { return; }
-            Server.s.Log(Convert.ToString(Server.ChangeLevels) + " " + Convert.ToString(Server.ZombieOnlyServer) + " " + Convert.ToString(Server.UseLevelList) + " " + string.Join(",", Server.LevelList.ToArray()));
+            Server.s.Log(Convert.ToString(Server.ChangeLevels, CultureInfo.CurrentCulture) + " " + Convert.ToString(Server.ZombieOnlyServer, CultureInfo.CurrentCulture) + " " + Convert.ToString(Server.UseLevelList, CultureInfo.CurrentCulture) + " " + string.Join(",", Server.LevelList.ToArray()));
             Player.GlobalMessage("%4Round Start:%f 5...");
             Thread.Sleep(1000); if (!Server.ZombieModeOn) { return; }
             Player.GlobalMessage("%4Round Start:%f 4...");
@@ -227,11 +312,11 @@ namespace MCForge
                                         Server.lastPlayerToInfect = player1.name;
                                         player1.infectThisRound++;
                                         int cazzar = random.Next(0, infectMessages.Length);
-                                        if (infectMessages2[cazzar] == "")
+                                        if ((infectMessages2[cazzar] != null && String.IsNullOrEmpty(infectMessages2[cazzar])))
                                         {
                                             Player.GlobalMessage(c.red + player1.name + c.yellow + infectMessages[cazzar] + c.red + player2.name);
                                         }
-                                        else if (infectMessages[cazzar] == "")
+                                        else if ((infectMessages[cazzar] != null && String.IsNullOrEmpty(infectMessages[cazzar])))
                                         {
                                             Player.GlobalMessage(c.red + player2.name + c.yellow + infectMessages2[cazzar]);
                                         }
@@ -263,7 +348,7 @@ namespace MCForge
             }
         }
 
-        public void EndRound(object sender, ElapsedEventArgs e)
+        private void EndRound(object sender, ElapsedEventArgs e)
         {
             if (Server.gameStatus == 0) return;
             Player.GlobalMessage("%4Round End:%f 5"); Thread.Sleep(1000);
@@ -415,14 +500,14 @@ namespace MCForge
                     {
                         x = r.Next(0, Server.LevelList.Count());
                         x2 = r.Next(0, Server.LevelList.Count());
-                        level = Server.LevelList[x].ToString();
-                        level2 = Server.LevelList[x2].ToString();
+                        level = Server.LevelList[x].ToString(CultureInfo.CurrentCulture);
+                        level2 = Server.LevelList[x2].ToString(CultureInfo.CurrentCulture);
                     }
                     Level current = Server.mainLevel;
 
                     if (Server.lastLevelVote1 == level || Server.lastLevelVote2 == level2 || Server.lastLevelVote1 == level2 || Server.lastLevelVote2 == level || current == Level.Find(level) || currentZombieLevel == level || current == Level.Find(level2) || currentZombieLevel == level2)
                         goto LevelChoice;
-                    else if (selectedLevel1 == "") { selectedLevel1 = level; goto LevelChoice; }
+                    else if ((selectedLevel1 != null && String.IsNullOrEmpty(selectedLevel1))) { selectedLevel1 = level; goto LevelChoice; }
                     else
                         selectedLevel2 = level2;
 
@@ -560,13 +645,13 @@ namespace MCForge
             currentLevelName = next;
             Server.queLevel = false;
             Server.nextLevel = "";
-            Command.all.Find("load").Use(null, next.ToLower() + " 0");
-            Player.GlobalMessage("The next map has been chosen - " + c.red + next.ToLower());
+            Command.all.Find("load").Use(null, next.ToLower(CultureInfo.CurrentCulture) + " 0");
+            Player.GlobalMessage("The next map has been chosen - " + c.red + next.ToLower(CultureInfo.CurrentCulture));
             Player.GlobalMessage("Please wait while you are transfered.");
             String oldLevel = Server.mainLevel.name;
             if (changeMainLevel)
             {
-                Server.mainLevel = Level.Find(next.ToLower());
+                Server.mainLevel = Level.Find(next.ToLower(CultureInfo.CurrentCulture));
                 Player.players.ForEach(delegate(Player player)
                 {
                     if (player.level.name != next && player.level.name == currentLevelName)
@@ -585,7 +670,7 @@ namespace MCForge
             return;
         }
 
-        public void ChangeTime(object sender, ElapsedEventArgs e)
+        private void ChangeTime(object sender, ElapsedEventArgs e)
         {
             amountOfMilliseconds = amountOfMilliseconds - 10;
         }
@@ -595,5 +680,41 @@ namespace MCForge
             return p.level.name == currentLevelName;
         }
 
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (timer != null)
+                        timer.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

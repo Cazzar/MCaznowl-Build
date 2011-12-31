@@ -16,6 +16,7 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -45,9 +46,9 @@ namespace MCForge
             Player who = Player.Find(player);
             
             
-            if (player == "") { Player.SendMessage(p, "&cYou have to enter a player!"); return; }          
+            if ((player != null && String.IsNullOrEmpty(player))) { Player.SendMessage(p, "&cYou have to enter a player!"); return; }          
             if (who == null) { Player.SendMessage(p, "&cPlayer &a" + player + "&c not found!"); return; }
-            if (rank == "") { Player.SendMessage(p, "&cYou have to enter a rank!"); return; }
+            if ((rank != null && String.IsNullOrEmpty(rank))) { Player.SendMessage(p, "&cYou have to enter a rank!"); return; }
             else
             {
                 Group groupNew = Group.Find(rank);
@@ -57,11 +58,11 @@ namespace MCForge
                     return;
                 }
             }
-            if (period == "") { Player.SendMessage(p, "&cYou have to enter a time period!"); return; }
+            if ((period != null && String.IsNullOrEmpty(period))) { Player.SendMessage(p, "&cYou have to enter a time period!"); return; }
             Boolean isnumber = true;
             try
             {
-                Convert.ToInt32(period);
+                Convert.ToInt32(period, CultureInfo.CurrentCulture);
             }
             catch
             {
@@ -107,11 +108,11 @@ namespace MCForge
                 return;
             }
         skipper:
-            string year = DateTime.Now.Year.ToString();
-            string month = DateTime.Now.Month.ToString();
-            string day = DateTime.Now.Day.ToString();
-            string hour = DateTime.Now.Hour.ToString();
-            string minute = DateTime.Now.Minute.ToString();
+            string year = DateTime.Now.Year.ToString(CultureInfo.CurrentCulture);
+            string month = DateTime.Now.Month.ToString(CultureInfo.CurrentCulture);
+            string day = DateTime.Now.Day.ToString(CultureInfo.CurrentCulture);
+            string hour = DateTime.Now.Hour.ToString(CultureInfo.CurrentCulture);
+            string minute = DateTime.Now.Minute.ToString(CultureInfo.CurrentCulture);
             string oldrank = who.group.name;
             string assigner;
             if (byconsole)

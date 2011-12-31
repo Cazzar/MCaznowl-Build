@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Player who;
-            if (message != String.Empty)
+            if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 who = Player.Find(message);
             }

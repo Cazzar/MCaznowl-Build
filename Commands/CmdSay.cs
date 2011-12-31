@@ -32,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             for (int i = 0; i < 10; i++)
                 message = message.Replace("%" + i, "&" + i);
