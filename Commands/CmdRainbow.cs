@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -121,7 +120,7 @@ namespace MCForge
                 return;
             }
 
-            Player.SendMessage(p, buffer.Count.ToString(CultureInfo.CurrentCulture) + " blocks.");
+            Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
             buffer.ForEach(delegate(Pos pos)
             {
                 p.level.Blockchange(p, pos.x, pos.y, pos.z, pos.newType);                  //update block for everyone
@@ -136,47 +135,7 @@ namespace MCForge
             list.Add(pos);
         }
 
-        struct Pos { public ushort x, y, z; public byte newType;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
-        struct CatchPos { public ushort x, y, z;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct Pos { public ushort x, y, z; public byte newType; }
+        struct CatchPos { public ushort x, y, z; }
     }
 }

@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
 
             Player who; string killMsg; int killMethod = 0;
             if (message.IndexOf(' ') == -1)
@@ -54,7 +53,7 @@ namespace MCForge
 
                 if (message.IndexOf(' ') == -1)
                 {
-                    if (message.ToLower(CultureInfo.CurrentCulture) == "explode")
+                    if (message.ToLower() == "explode")
                     {
                         if (p != null)
                         {
@@ -73,7 +72,7 @@ namespace MCForge
                 }
                 else
                 {
-                    if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "explode")
+                    if (message.Split(' ')[0].ToLower() == "explode")
                     {
                         killMethod = 1;
                         message = message.Substring(message.IndexOf(' ') + 1);

@@ -1,66 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Globalization;
-using MCForge;
 namespace MCForge.CTF
 {
 
     public class Setup : Plugin_Simple
     {
         Dictionary<Player, Data> cache = new Dictionary<Player, Data>();
-        private Player.OnPlayerCommand _command; 
-
-        public Player.OnPlayerCommand command
-        {
-            get
-            {
-                return _command;
-            }
-            set
-            {
-                _command = value;
-            }
-        }
-        private Player.OnPlayerChat _chat; 
-
-        public Player.OnPlayerChat chat
-        {
-            get
-            {
-                return _chat;
-            }
-            set
-            {
-                _chat = value;
-            }
-        }
-        private Player.BlockchangeEventHandler2 _block; 
-
-        public Player.BlockchangeEventHandler2 block
-        {
-            get
-            {
-                return _block;
-            }
-            set
-            {
-                _block = value;
-            }
-        }
-        private Player.OnPlayerDisconnect _disconnect; 
-
-        public Player.OnPlayerDisconnect disconnect
-        {
-            get
-            {
-                return _disconnect;
-            }
-            set
-            {
-                _disconnect = value;
-            }
-        }
+        public Player.OnPlayerCommand command;
+        public Player.OnPlayerChat chat;
+        public Player.BlockchangeEventHandler2 block;
+        public Player.OnPlayerDisconnect disconnect;
         public override string creator
         {
             get { return "GamezGalaxy"; }
@@ -163,7 +113,7 @@ namespace MCForge.CTF
         }
         public void chatuse(Player p, string message)
         {
-            if (message.ToLower(CultureInfo.CurrentCulture) == "random")
+            if (message.ToLower() == "random")
             {
                 if (cache.ContainsKey(p))
                 {
@@ -176,7 +126,7 @@ namespace MCForge.CTF
                     }
                 }
             }
-            if (message.ToLower(CultureInfo.CurrentCulture) == "set")
+            if (message.ToLower() == "set")
             {
                 if (cache.ContainsKey(p))
                 {
@@ -187,7 +137,7 @@ namespace MCForge.CTF
                     }
                 }
             }
-            if (message.ToLower(CultureInfo.CurrentCulture) == "continue")
+            if (message.ToLower() == "continue")
             {
                 if (cache.ContainsKey(p))
                 {
@@ -219,10 +169,10 @@ namespace MCForge.CTF
         }
         public void commanduse(string cmd, Player p, string message)
         {
-            if (cmd.ToLower(CultureInfo.CurrentCulture) == "ctfsetup")
+            if (cmd.ToLower() == "ctfsetup")
             {
                 Level current = p.level;
-//                int middle = p.level.height / 2 // COMMENTED BY CODEIT.RIGHT;
+                int middle = p.level.height / 2;
                 Player.SendMessage(p, "%2Hello and welcome to the noob friendly CTF setup :D");
                 if (!Directory.Exists("CTF")) Directory.CreateDirectory("CTF");
                 Player.SendMessage(p, "I'll setup this map, but first can you stand in the middle of the map?");
@@ -241,230 +191,26 @@ namespace MCForge.CTF
             Player.PlayerDisconnect -= disconnect;
         }
     }
-    public class Data : IDisposable
+    public class Data
     {
-        private Step _s; 
-
-        public Step s
-        {
-            get
-            {
-                return _s;
-            }
-            set
-            {
-                _s = value;
-            }
-        }
-        private Level _current; 
-
-        public Level current
-        {
-            get
-            {
-                return _current;
-            }
-            set
-            {
-                _current = value;
-            }
-        }
-        private int _middle; 
-
-        public int middle
-        {
-            get
-            {
-                return _middle;
-            }
-            set
-            {
-                _middle = value;
-            }
-        }
-        private int _bx; 
-
-        public int bx
-        {
-            get
-            {
-                return _bx;
-            }
-            set
-            {
-                _bx = value;
-            }
-        }
-        private int _by; 
-
-        public int by
-        {
-            get
-            {
-                return _by;
-            }
-            set
-            {
-                _by = value;
-            }
-        }
-        private int _bz; 
-
-        public int bz
-        {
-            get
-            {
-                return _bz;
-            }
-            set
-            {
-                _bz = value;
-            }
-        }
-        private int _rx; 
-
-        public int rx
-        {
-            get
-            {
-                return _rx;
-            }
-            set
-            {
-                _rx = value;
-            }
-        }
-        private int _ry; 
-
-        public int ry
-        {
-            get
-            {
-                return _ry;
-            }
-            set
-            {
-                _ry = value;
-            }
-        }
-        private int _rz; 
-
-        public int rz
-        {
-            get
-            {
-                return _rz;
-            }
-            set
-            {
-                _rz = value;
-            }
-        }
-        private byte _blue; 
-
-        public byte blue
-        {
-            get
-            {
-                return _blue;
-            }
-            set
-            {
-                _blue = value;
-            }
-        }
-        private byte _red; 
-
-        public byte red
-        {
-            get
-            {
-                return _red;
-            }
-            set
-            {
-                _red = value;
-            }
-        }
-        private int _bluex; 
-
-        public int bluex
-        {
-            get
-            {
-                return _bluex;
-            }
-            set
-            {
-                _bluex = value;
-            }
-        }
-        private int _bluey; 
-
-        public int bluey
-        {
-            get
-            {
-                return _bluey;
-            }
-            set
-            {
-                _bluey = value;
-            }
-        }
-        private int _bluez; 
-
-        public int bluez
-        {
-            get
-            {
-                return _bluez;
-            }
-            set
-            {
-                _bluez = value;
-            }
-        }
+        public Step s;
+        public Level current;
+        public int middle = 0;
+        public int bx = 0;
+        public int by = 0;
+        public int bz = 0;
+        public int rx = 0;
+        public int ry = 0;
+        public int rz = 0;
+        public byte blue;
+        public byte red;
+        public int bluex;
+        public int bluey;
+        public int bluez;
         public Data()
         {
 
         }
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (current != null)
-                        current.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
     public enum Step
     {

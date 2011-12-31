@@ -21,38 +21,13 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
     public class OmniBan
     {
-        private List<string> _bans; 
-
-        public List<string> bans
-        {
-            get
-            {
-                return _bans;
-            }
-            set
-            {
-                _bans = value;
-            }
-        }
-        private string _kickMsg; 
-
-        public string kickMsg
-        {
-            get
-            {
-                return _kickMsg;
-            }
-            set
-            {
-                _kickMsg = value;
-            }
-        }
+        public List<string> bans;
+        public string kickMsg;
 
 
         public OmniBan()
@@ -71,7 +46,7 @@ namespace MCForge
                     try
                     {
                         using (WebClient WC = new WebClient())
-                            data = WC.DownloadString("http://mcforge.net/omniban.php").ToLower(CultureInfo.CurrentCulture);
+                            data = WC.DownloadString("http://mcforge.net/omniban.php").ToLower();
                     }
                     catch { Load(false); return; }
 
@@ -88,7 +63,7 @@ namespace MCForge
                 try
                 {
                     foreach (string line in File.ReadAllLines("text/omniban.txt"))
-                        if (!String.IsNullOrEmpty(line)) bans.Add(line.ToLower(CultureInfo.CurrentCulture));
+                        if (!String.IsNullOrEmpty(line)) bans.Add(line.ToLower());
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             }
@@ -123,7 +98,7 @@ namespace MCForge
 
         public bool CheckPlayer(Player p)
         {
-            return p.name.ToLower(CultureInfo.CurrentCulture) != Server.server_owner.ToLower(CultureInfo.CurrentCulture) && !Player.IPInPrivateRange(p.ip) && (bans.Contains(p.name.ToLower(CultureInfo.CurrentCulture)) || bans.Contains(p.ip));
+            return p.name.ToLower() != Server.server_owner.ToLower() && !Player.IPInPrivateRange(p.ip) && (bans.Contains(p.name.ToLower()) || bans.Contains(p.ip));
         }
     }
 }

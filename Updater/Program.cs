@@ -7,14 +7,13 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Threading;
 using System.Reflection;
-using System.Globalization;
 
 namespace Updater
 {
-    internal static class Program
+    class Program
     {
-        static int tries/* = 0*/;
-        static bool usingConsole/* = false*/;
+        static int tries = 0;
+        static bool usingConsole = false;
         static string parent = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
         static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         static void Main(string[] args)
@@ -23,7 +22,7 @@ namespace Updater
             try
             {
                 string[] foundView = File.ReadAllLines("Viewmode.cfg");
-                if (foundView[4].Split(' ')[2].ToLower(CultureInfo.CurrentCulture) == "true")
+                if (foundView[4].Split(' ')[2].ToLower() == "true")
                 {
                     usingConsole = true;
                 }

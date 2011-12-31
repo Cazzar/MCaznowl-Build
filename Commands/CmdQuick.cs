@@ -36,7 +36,7 @@ namespace MCForge
         {
             string msg = String.Empty;
             string type = String.Empty;
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 type = "cuboid";
             }

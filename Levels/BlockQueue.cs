@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Globalization;
 
 namespace MCForge
 {
-    public static class Block1
+    public static class BlockQueue
     {
         public static int time { get { return (int)blocktimer.Interval; } set { blocktimer.Interval = value; } }
         public static int blockupdates = 200;
         static block b = new block();
         static System.Timers.Timer blocktimer = new System.Timers.Timer(100);
-        static byte started/* = 0*/;
+        static byte started = 0;
 
         public static void Start()
         {
@@ -37,7 +36,7 @@ namespace MCForge
                     catch (Exception e)
                     {
                         Server.s.ErrorCase("error:" + e);
-                        Server.s.Log(String.Format(CultureInfo.CurrentCulture, "Block cache failed for map: {0}. {1} lost.", l.name, l.blockqueue.Count));
+                        Server.s.Log(String.Format("Block cache failed for map: {0}. {1} lost.", l.name, l.blockqueue.Count));
                         l.blockqueue.Clear();
                     }
                 });
@@ -54,26 +53,6 @@ namespace MCForge
             P.level.blockqueue.Add(b);
         }
 
-        public struct block { public Player p; public ushort x; public ushort y; public ushort z; public byte type;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(block x, block y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(block x, block y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        public struct block { public Player p; public ushort x; public ushort y; public ushort z; public byte type; }
     }
 }

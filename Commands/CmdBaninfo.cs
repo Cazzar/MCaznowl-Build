@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             string[] data;
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             if (message.Length <= 3) { Help(p); }
             else
             {

@@ -35,7 +35,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (!Directory.Exists("extra/text/")) Directory.CreateDirectory("extra/text");
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 DirectoryInfo di = new DirectoryInfo("extra/text/");
                 string allFiles = "";
@@ -58,7 +58,7 @@ namespace MCForge
                     } catch (Exception e) { Server.ErrorLog(e); Player.SendMessage(p, "Error"); }
                 }
 
-                if ((allFiles != null && String.IsNullOrEmpty(allFiles)))
+                if (allFiles == "")
                 {
                     Player.SendMessage(p, "No files are viewable by you");
                 }

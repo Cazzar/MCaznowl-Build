@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -36,18 +35,18 @@ namespace MCForge
         {
             try
             {
-                if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+                if (message == "") { Help(p); return; }
                 if (message.Split(' ').Length > 2) { Help(p); return; }
                 int pos = message.IndexOf(' ');
                 string phys = "0";
                 if (pos != -1)
                 {
                     phys = message.Substring(pos + 1);
-                    message = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+                    message = message.Substring(0, pos).ToLower();
                 }
                 else
                 {
-                    message = message.ToLower(CultureInfo.CurrentCulture);
+                    message = message.ToLower();
                 }
 
                 while (Server.levels == null) Thread.Sleep(100); // Do nothing while we wait on the levels list...
@@ -154,7 +153,7 @@ namespace MCForge
                 catch { }
                 try
                 {
-                    int temp = int.Parse(phys, CultureInfo.CurrentCulture);
+                    int temp = int.Parse(phys);
                     if (temp >= 1 && temp <= 5)
                     {
                         level.setPhysics(temp);

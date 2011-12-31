@@ -31,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message != "") { Help(p); return; }
             Player.SendMessage(p, "Spawn location changed.");
             p.level.spawnx = (ushort)(p.pos[0] / 32);
             p.level.spawny = (ushort)(p.pos[1] / 32);

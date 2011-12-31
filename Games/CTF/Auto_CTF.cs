@@ -22,51 +22,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using MCForge.SQL;
-using System.Globalization;
 
 namespace MCForge
 {
     public class Teams
     {
-        private string _color; 
-
-        public string color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        private int _points; 
-
-        public int points
-        {
-            get
-            {
-                return _points;
-            }
-            set
-            {
-                _points = value;
-            }
-        }
-        private List<Player> _members; 
-
-        public List<Player> members
-        {
-            get
-            {
-                return _members;
-            }
-            set
-            {
-                _members = value;
-            }
-        }
+        public string color;
+        public int points = 0;
+        public List<Player> members;
         public Teams(string color)
         {
             this.color = c.Parse(color);
@@ -84,100 +47,30 @@ namespace MCForge
                 return false;
         }
     }
-
+    public class Data
+    {
+        public Player p;
+        public int cap = 0;
+        public int tag = 0;
+        public int points = 0;
+        public bool hasflag;
+        public bool blue;
+        public bool tagging = false;
+        public bool chatting = false;
+        public Data(bool team, Player p)
+        {
+            blue = team; this.p = p;
+        }
+    }
     public class Base
     {
-        private ushort _x; 
-
-        public ushort x
-        {
-            get
-            {
-                return _x;
-            }
-            set
-            {
-                _x = value;
-            }
-        }
-        private ushort _y; 
-
-        public ushort y
-        {
-            get
-            {
-                return _y;
-            }
-            set
-            {
-                _y = value;
-            }
-        }
-        private ushort _z; 
-
-        public ushort z
-        {
-            get
-            {
-                return _z;
-            }
-            set
-            {
-                _z = value;
-            }
-        }
-        private ushort _spawnx; 
-
-        public ushort spawnx
-        {
-            get
-            {
-                return _spawnx;
-            }
-            set
-            {
-                _spawnx = value;
-            }
-        }
-        private ushort _spawny; 
-
-        public ushort spawny
-        {
-            get
-            {
-                return _spawny;
-            }
-            set
-            {
-                _spawny = value;
-            }
-        }
-        private ushort _spawnz; 
-
-        public ushort spawnz
-        {
-            get
-            {
-                return _spawnz;
-            }
-            set
-            {
-                _spawnz = value;
-            }
-        }
-        private byte _block; 
-
-        public byte block
-        {
-            get
-            {
-                return _block;
-            }
-            set
-            {
-                _block = value;
-            }
-        }
+        public ushort x;
+        public ushort y;
+        public ushort z;
+        public ushort spawnx = 0;
+        public ushort spawny = 0;
+        public ushort spawnz = 0;
+        public byte block;
         public void SendToSpawn(Level mainlevel, Auto_CTF game, Player p1)
         {
             Random rand = new Random();
@@ -206,110 +99,26 @@ namespace MCForge
         {
         }
     }
-    public class Auto_CTF : IDisposable
+    public class Auto_CTF
     {
-        private System.Timers.Timer _tagging = new System.Timers.Timer(500); 
-
-        public System.Timers.Timer tagging
-        {
-            get
-            {
-                return _tagging;
-            }
-            set
-            {
-                _tagging = value;
-            }
-        }
-        private bool _voting; 
-
-        public bool voting
-        {
-            get
-            {
-                return _voting;
-            }
-            set
-            {
-                _voting = value;
-            }
-        }
-        int vote1/* = 0*/;
-        int vote2/* = 0*/;
-        int vote3/* = 0*/;
+        public System.Timers.Timer tagging = new System.Timers.Timer(500);
+        public bool voting = false;
+        int vote1 = 0;
+        int vote2 = 0;
+        int vote3 = 0;
         string map1 = "";
         string map2 = "";
         string map3 = "";
-        private int _xline; 
-
-        public int xline
-        {
-            get
-            {
-                return _xline;
-            }
-            set
-            {
-                _xline = value;
-            }
-        }
-        private bool _started; 
-
-        public bool started
-        {
-            get
-            {
-                return _started;
-            }
-            set
-            {
-                _started = value;
-            }
-        }
-        private int _zline; 
-
-        public int zline
-        {
-            get
-            {
-                return _zline;
-            }
-            set
-            {
-                _zline = value;
-            }
-        }
-        private int _yline; 
-
-        public int yline
-        {
-            get
-            {
-                return _yline;
-            }
-            set
-            {
-                _yline = value;
-            }
-        }
+        public int xline;
+        public bool started = false;
+        public int zline;
+        public int yline;
         int tagpoint = 5;
         int cappoint = 10;
         int taglose = 5;
         int caplose = 10;
-        bool look/* = false*/;
-        private int _maxpoints = 3; 
-
-        public int maxpoints
-        {
-            get
-            {
-                return _maxpoints;
-            }
-            set
-            {
-                _maxpoints = value;
-            }
-        }
+        bool look = false;
+        public int maxpoints = 3;
         Teams redteam;
         Teams blueteam;
         Base bluebase;
@@ -327,31 +136,31 @@ namespace MCForge
                 switch (l.Split('=')[0])
                 {
                     case "base.red.x":
-                        redbase.x = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.x = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.y":
-                        redbase.y = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.y = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "game.maxpoints":
-                        maxpoints = int.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        maxpoints = int.Parse(l.Split('=')[1]);
                         break;
                     case "game.tag.points-gain":
-                        tagpoint = int.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        tagpoint = int.Parse(l.Split('=')[1]);
                         break;
                     case "game.tag.points-lose":
-                        taglose = int.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        taglose = int.Parse(l.Split('=')[1]);
                         break;
                     case "game.capture.points-gain":
-                        cappoint = int.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        cappoint = int.Parse(l.Split('=')[1]);
                         break;
                     case "game.capture.points-lose":
-                        caplose = int.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        caplose = int.Parse(l.Split('=')[1]);
                         break;
                     case "auto.setup":
                         look = bool.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.z":
-                        redbase.z = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.z = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.block":
                         redbase.block = Block.Byte(l.Split('=')[1]);
@@ -360,34 +169,34 @@ namespace MCForge
                         bluebase.block = Block.Byte(l.Split('=')[1]);
                         break;
                     case "base.blue.spawnx":
-                        bluebase.spawnx = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.spawnx = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.spawny":
-                        bluebase.spawny = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.spawny = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.spawnz":
-                        bluebase.spawnz = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.spawnz = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.spawnx":
-                        redbase.spawnx = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.spawnx = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.spawny":
-                        redbase.spawny = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.spawny = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.red.spawnz":
-                        redbase.spawnz = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        redbase.spawnz = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.x":
-                        bluebase.x = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.x = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.y":
-                        bluebase.y = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.y = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "base.blue.z":
-                        bluebase.z = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        bluebase.z = ushort.Parse(l.Split('=')[1]);
                         break;
                     case "map.line.z":
-                        zline = ushort.Parse(l.Split('=')[1], CultureInfo.CurrentCulture);
+                        zline = ushort.Parse(l.Split('=')[1]);
                         break;
                 }
             }
@@ -511,7 +320,7 @@ namespace MCForge
             if (started && l == mainlevel)
             {
                 Server.s.Log("Failed!, A ctf game is curretnly going on!");
-                Plugin.CancelLevelEvent(LevelEvent.LevelUnload, l);
+                Plugin.CancelLevelEvent(LevelEvents.LevelUnload, l);
             }
 
         }
@@ -650,7 +459,7 @@ namespace MCForge
                 {
                     p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
                     Player.SendMessage(p, "You are not on a team!");
-                    Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
+                    Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
                 }
                 if (p.level == mainlevel && blueteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
                 {
@@ -673,7 +482,7 @@ namespace MCForge
                         blueteam.points++;
                         mainlevel.Blockchange(redbase.x, redbase.y, redbase.z, Block.red);
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
                         if (blueteam.points >= maxpoints)
                         {
                             End();
@@ -684,7 +493,7 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "You cant take your own flag!");
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
                     }
                 }
                 if (p.level == mainlevel && redteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
@@ -698,7 +507,7 @@ namespace MCForge
                         redteam.points++;
                         mainlevel.Blockchange(bluebase.x, bluebase.y, bluebase.z, Block.blue);
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
                         if (redteam.points >= maxpoints)
                         {
                             End();
@@ -709,7 +518,7 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "You cant take your own flag!");
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
                     }
                 }
             }
@@ -742,7 +551,7 @@ namespace MCForge
                             Player.SendMessage(d.p, "You are now chatting with your team!");
                             d.chatting = !d.chatting;
                         }
-                        Plugin.CancelPlayerEvent(PlayerEvent.PlayerCommand, p);
+                        Plugin.CancelPlayerEvent(PlayerEvents.PlayerCommand, p);
                     }
                 }
                 if (cmd == "goto")
@@ -824,29 +633,29 @@ namespace MCForge
         {
             if (voting)
             {
-                if (message == "1" || message.ToLower(CultureInfo.CurrentCulture) == map1)
+                if (message == "1" || message.ToLower() == map1)
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote1++;
-                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                 }
-                else if (message == "2" || message.ToLower(CultureInfo.CurrentCulture) == map2)
+                else if (message == "2" || message.ToLower() == map2)
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote2++;
-                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                 }
-                else if (message == "3" || message.ToLower(CultureInfo.CurrentCulture) == map3)
+                else if (message == "3" || message.ToLower() == map3)
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote3++;
-                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                 }
                 else
                 {
                     Player.SendMessage(p, "%2VOTE:");
                     Player.SendMessage(p, "1. " + map1 + " 2. " + map2 + " 3. " + map3);
-                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                 }
             }
             if (started)
@@ -862,7 +671,7 @@ namespace MCForge
                                 if (blueteam.members.Contains(p1))
                                     Player.SendMessage(p1, "(Blue) " + p.color + p.name + ":&f " + message);
                             });
-                            Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                            Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                         }
                         if (redteam.members.Contains(p))
                         {
@@ -871,7 +680,7 @@ namespace MCForge
                                 if (redteam.members.Contains(p1))
                                     Player.SendMessage(p1, "(Red) " + p.color + p.name + ":&f " + message);
                             });
-                            Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
+                            Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
                         }
                     }
                 }
@@ -920,43 +729,5 @@ namespace MCForge
             else
                 return false;
         }
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (tagging != null)
-                        tagging.Dispose();
-                    if (mainlevel != null)
-                        mainlevel.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

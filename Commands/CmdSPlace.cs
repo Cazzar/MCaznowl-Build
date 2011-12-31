@@ -17,7 +17,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             distance = 0; interval = 0;
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             if (message.Split(' ').Length > 1)
             {
                 try { ushort.TryParse(message.Split(' ')[0], out distance); }
@@ -135,26 +135,6 @@ namespace MCForge
         struct CatchPos
         {
             public ushort x, y, z; public string givenMessage;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
     }

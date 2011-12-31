@@ -89,17 +89,9 @@
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdC4.cs" />
-    <Compile Include="Commands\CmdCopyLoadNet.cs" />
-    <Compile Include="Commands\CmdImagePrint2.cs" />
-    <Compile Include="Commands\CmdpCinema2.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
-    <Compile Include="Games\CTF\Data.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
-    <Compile Include="Levels\Check.cs" />
-    <Compile Include="Levels\LevelListView.cs" />
-    <Compile Include="Player\GrpCommands.cs" />
-    <Compile Include="Player\PlayerListView.cs" />
     <Compile Include="Plugins\PlayerEvents\OnBlockChangeEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMessageRecieveEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMySQLSaveEvent.cs" />
@@ -110,7 +102,6 @@
     <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
-    <Compile Include="Service References\TranslateService\GetTranslationsResponse.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />

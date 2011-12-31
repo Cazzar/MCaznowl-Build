@@ -24,7 +24,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -38,18 +37,18 @@ namespace MCForge
 
                 foreach (string line in lines)
                 {
-                    if (!(line != null && String.IsNullOrEmpty(line)) && line[0] != '#')
+                    if (line != "" && line[0] != '#')
                     {
                         string key = line.Split('=')[0].Trim();
                         string value = line.Split('=')[1].Trim();
 
-                        switch (key.ToLower(CultureInfo.CurrentCulture))
+                        switch (key.ToLower())
                         {
                             case "autoupdate":
-                                Server.autoupdate = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.autoupdate = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "notify":
-                                Server.notifyPlayers = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.notifyPlayers = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "restartcountdown":
                                 Server.restartcountdown = value;

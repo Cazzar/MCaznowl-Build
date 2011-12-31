@@ -26,7 +26,6 @@ using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Net;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -47,7 +46,7 @@ namespace MCForge
                 return;
             }
             int number = message.Split(' ').Length;
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Help(p);
                 return;
@@ -59,7 +58,7 @@ namespace MCForge
                     Player.SendMessage(p, "You need to be a " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ to do that!");
                     return;
                 }
-                if (message.ToLower(CultureInfo.CurrentCulture) == "check")
+                if (message.ToLower() == "check")
                 {
 
                     if (!Directory.Exists("extra/reported"))
@@ -94,9 +93,9 @@ namespace MCForge
             if (number >= 2)
             {
                 int pos = message.IndexOf(' ');
-                string msg1 = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
-                string msg2 = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
-                if (msg1.ToLower(CultureInfo.CurrentCulture) == "view")
+                string msg1 = message.Substring(0, pos).ToLower();
+                string msg2 = message.Substring(pos + 1).ToLower();
+                if (msg1.ToLower() == "view")
                 {
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                     {
@@ -112,7 +111,7 @@ namespace MCForge
                     Player.SendMessage(p, readtext);
                     return;
                 }
-                if (msg1.ToLower(CultureInfo.CurrentCulture) == "delete")
+                if (msg1.ToLower() == "delete")
                 {
                     if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                     {

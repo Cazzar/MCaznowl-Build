@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data.SQLite;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,32 +32,32 @@ namespace MCForge
         {
             private static string connStringFormat = "Data Source =" + Server.apppath + "/MCForge.db; Version =3; Pooling ={0}; Max Pool Size =1000;";
 
-            public static string connString { get { return String.Format(CultureInfo.CurrentCulture, connStringFormat, Server.DatabasePooling); } }
+            public static string connString { get { return String.Format(connStringFormat, Server.DatabasePooling); } }
 
-            public static void executeQuery(string query)
+            public static void executeQuery(string queryString)
             {
-                Database.executeQuery(query);
+                Database.executeQuery(queryString);
             }
 
-            public static DataTable fillData(string query, bool skipError = false)
+            public static DataTable fillData(string queryString, bool skipError = false)
             {
-                return Database.fillData(query, skipError);
+                return Database.fillData(queryString, skipError);
             }
 
-            internal static void execute(string query) {
+            internal static void execute(string queryString) {
                 using (var conn = new SQLiteConnection(SQLite.connString)) {
                     conn.Open();
-                    using (SQLiteCommand cmd = new SQLiteCommand(query, conn)) {
+                    using (SQLiteCommand cmd = new SQLiteCommand(queryString, conn)) {
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                 }
             }
 
-            internal static void fill(string query, DataTable toReturn) {
+            internal static void fill(string queryString, DataTable toReturn) {
                 using (var conn = new SQLiteConnection(SQLite.connString)) {
                     conn.Open();
-                    using (SQLiteDataAdapter da = new SQLiteDataAdapter(query, conn)) {
+                    using (SQLiteDataAdapter da = new SQLiteDataAdapter(queryString, conn)) {
                         da.Fill(toReturn);
                     }
                     conn.Close();

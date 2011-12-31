@@ -10,276 +10,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
-    public class TntWarsGame : IDisposable
+    public class TntWarsGame
     {
         //Vars
         public static List<TntWarsGame> GameList = new List<TntWarsGame>();
-        private Level _lvl; 
-
-        public Level lvl
-        {
-            get
-            {
-                return _lvl;
-            }
-            set
-            {
-                _lvl = value;
-            }
-        }
-        private TntWarsGameStatus _gameStatus = TntWarsGameStatus.WaitingForPlayers; 
-
-        public TntWarsGameStatus GameStatus
-        {
-            get
-            {
-                return _gameStatus;
-            }
-            set
-            {
-                _gameStatus = value;
-            }
-        }
-        private int _backupNumber; 
-
-        public int BackupNumber
-        {
-            get
-            {
-                return _backupNumber;
-            }
-            set
-            {
-                _backupNumber = value;
-            }
-        }
-        private bool _allSetUp; 
-
-        public bool AllSetUp
-        {
-            get
-            {
-                return _allSetUp;
-            }
-            set
-            {
-                _allSetUp = value;
-            }
-        }
-        private TntWarsGameMode _gameMode = TntWarsGameMode.TDM; 
-
-        public TntWarsGameMode GameMode
-        {
-            get
-            {
-                return _gameMode;
-            }
-            set
-            {
-                _gameMode = value;
-            }
-        }
-        private TntWarsDifficulty _gameDifficulty = TntWarsDifficulty.Normal; 
-
-        public TntWarsDifficulty GameDifficulty
-        {
-            get
-            {
-                return _gameDifficulty;
-            }
-            set
-            {
-                _gameDifficulty = value;
-            }
-        }
-        private int _gameNumber; 
-
-        public int GameNumber
-        {
-            get
-            {
-                return _gameNumber;
-            }
-            set
-            {
-                _gameNumber = value;
-            }
-        }
-        private ushort[] _redSpawn; 
-
-        public ushort[] RedSpawn
-        {
-            get
-            {
-                return _redSpawn;
-            }
-            set
-            {
-                _redSpawn = value;
-            }
-        }
-        private ushort[] _blueSpawn; 
-
-        public ushort[] BlueSpawn
-        {
-            get
-            {
-                return _blueSpawn;
-            }
-            set
-            {
-                _blueSpawn = value;
-            }
-        }
-        //incase they don't want the default
-        private int _tntPerPlayerAtATime = Properties.DefaultTntPerPlayerAtATime; 
-
-        public int TntPerPlayerAtATime
-        {
-            get
-            {
-                return _tntPerPlayerAtATime;
-            }
-            set
-            {
-                _tntPerPlayerAtATime = value;
-            }
-        }
-        private bool _gracePeriod = Properties.DefaultGracePeriodAtStart; 
-
-        public bool GracePeriod
-        {
-            get
-            {
-                return _gracePeriod;
-            }
-            set
-            {
-                _gracePeriod = value;
-            }
-        }
-        private int _gracePeriodSecs = Properties.DefaultGracePeriodSecs; 
-
-        public int GracePeriodSecs
-        {
-            get
-            {
-                return _gracePeriodSecs;
-            }
-            set
-            {
-                _gracePeriodSecs = value;
-            }
-        }
-        private bool _balanceTeams = Properties.DefaultBalanceTeams; 
-
-        public bool BalanceTeams
-        {
-            get
-            {
-                return _balanceTeams;
-            }
-            set
-            {
-                _balanceTeams = value;
-            }
-        }
-        //scores/streaks
-        private int _scoreLimit = Properties.DefaultTDMmaxScore; 
-
-        public int ScoreLimit
-        {
-            get
-            {
-                return _scoreLimit;
-            }
-            set
-            {
-                _scoreLimit = value;
-            }
-        }
-        private bool _streaks = true; 
-
-        public bool Streaks
-        {
-            get
-            {
-                return _streaks;
-            }
-            set
-            {
-                _streaks = value;
-            }
-        }
-        private int _multiKillBonus = Properties.DefaultMultiKillBonus; 
-
-        public int MultiKillBonus
-        {
-            get
-            {
-                return _multiKillBonus;
-            }
-            set
-            {
-                _multiKillBonus = value;
-            }
-        } //This is the amount of extra points per each player that is killed per 1 tnt (if playerskilledforthistnt > 1)
-        private int _scorePerKill = Properties.DefaultScorePerKill; 
-
-        public int ScorePerKill
-        {
-            get
-            {
-                return _scorePerKill;
-            }
-            set
-            {
-                _scorePerKill = value;
-            }
-        }
-        private int _scorePerAssist = Properties.DefaultAssistScore; 
-
-        public int ScorePerAssist
-        {
-            get
-            {
-                return _scorePerAssist;
-            }
-            set
-            {
-                _scorePerAssist = value;
-            }
-        }
-        private bool _teamKills; 
-
-        public bool TeamKills
-        {
-            get
-            {
-                return _teamKills;
-            }
-            set
-            {
-                _teamKills = value;
-            }
-        }
-        private Thread _starter; 
-
-        public Thread Starter
-        {
-            get
-            {
-                return _starter;
-            }
-            set
-            {
-                _starter = value;
-            }
-        }
+        public Level lvl;
+        public TntWarsGameStatus GameStatus = TntWarsGameStatus.WaitingForPlayers;
+        public int BackupNumber;
+        public bool AllSetUp = false;
+        public TntWarsGameMode GameMode = TntWarsGameMode.TDM;
+        public TntWarsDifficulty GameDifficulty = TntWarsDifficulty.Normal;
+        public int GameNumber;
+        public ushort[] RedSpawn = null;
+        public ushort[] BlueSpawn = null;
+            //incase they don't want the default
+        public int TntPerPlayerAtATime = Properties.DefaultTntPerPlayerAtATime;
+        public bool GracePeriod = Properties.DefaultGracePeriodAtStart;
+        public int GracePeriodSecs = Properties.DefaultGracePeriodSecs;
+        public bool BalanceTeams = Properties.DefaultBalanceTeams;
+            //scores/streaks
+        public int ScoreLimit = Properties.DefaultTDMmaxScore;
+        public bool Streaks = true;
+        public int MultiKillBonus = Properties.DefaultMultiKillBonus; //This is the amount of extra points per each player that is killed per 1 tnt (if playerskilledforthistnt > 1)
+        public int ScorePerKill = Properties.DefaultScorePerKill;
+        public int ScorePerAssist = Properties.DefaultAssistScore;
+        public bool TeamKills = false;
+        public Thread Starter;
 
         public static TntWarsGame GuiLoaded = null;
         //======PLUGIN EVENTS======
@@ -295,154 +54,39 @@ namespace MCForge
         }
 
         //Player/Team stuff
-        private List<player> _players = new List<player>(); 
-
-        public List<player> Players
+        public List<player> Players = new List<player>();
+        public class player
         {
-            get
+            public Player p;
+            public bool Red = false;
+            public bool Blue = false;
+            public bool spec = false;
+            public int Score = 0;
+            public string OldColor;
+            public string OldTitle;
+            public string OldTitleColor;
+            public player(Player pl)
             {
-                return _players;
-            }
-            set
-            {
-                _players = value;
+                p = pl;
+                OldColor = pl.color;
+                OldTitle = pl.title;
+                OldTitleColor = pl.titlecolor;
             }
         }
-
-        private int _redScore; 
-
-        public int RedScore
-        {
-            get
-            {
-                return _redScore;
-            }
-            set
-            {
-                _redScore = value;
-            }
-        }
-        private int _blueScore; 
-
-        public int BlueScore
-        {
-            get
-            {
-                return _blueScore;
-            }
-            set
-            {
-                _blueScore = value;
-            }
-        }
+        public int RedScore = 0;
+        public int BlueScore = 0;
 
         //Zones
-        private List<Zone> _noTNTplacableZones = new List<Zone>(); 
-
-        public List<Zone> NoTNTplacableZones
-        {
-            get
-            {
-                return _noTNTplacableZones;
-            }
-            set
-            {
-                _noTNTplacableZones = value;
-            }
-        }
-        private List<Zone> _noBlockDeathZones = new List<Zone>(); 
-
-        public List<Zone> NoBlockDeathZones
-        {
-            get
-            {
-                return _noBlockDeathZones;
-            }
-            set
-            {
-                _noBlockDeathZones = value;
-            }
-        }
+        public List<Zone> NoTNTplacableZones = new List<Zone>();
+        public List<Zone> NoBlockDeathZones = new List<Zone>();
         public class Zone
         {
-            private ushort _bigX; 
-
-            public ushort bigX
-            {
-                get
-                {
-                    return _bigX;
-                }
-                set
-                {
-                    _bigX = value;
-                }
-            }
-            private ushort _bigY; 
-
-            public ushort bigY
-            {
-                get
-                {
-                    return _bigY;
-                }
-                set
-                {
-                    _bigY = value;
-                }
-            }
-            private ushort _bigZ; 
-
-            public ushort bigZ
-            {
-                get
-                {
-                    return _bigZ;
-                }
-                set
-                {
-                    _bigZ = value;
-                }
-            }
-            private ushort _smallX; 
-
-            public ushort smallX
-            {
-                get
-                {
-                    return _smallX;
-                }
-                set
-                {
-                    _smallX = value;
-                }
-            }
-            private ushort _smallY; 
-
-            public ushort smallY
-            {
-                get
-                {
-                    return _smallY;
-                }
-                set
-                {
-                    _smallY = value;
-                }
-            }
-            private ushort _smallZ; 
-
-            public ushort smallZ
-            {
-                get
-                {
-                    return _smallZ;
-                }
-                set
-                {
-                    _smallZ = value;
-                }
-            }
+            public ushort bigX;
+            public ushort bigY;
+            public ushort bigZ;
+            public ushort smallX;
+            public ushort smallY;
+            public ushort smallZ;
         }
 
         //During Game Main Methods
@@ -459,7 +103,7 @@ namespace MCForge
                     GameStatus = TntWarsGameStatus.Finished;
                     return;
                 }
-                Server.s.Log("Backed up " + lvl.name + " (" + BackupNumber.ToString(CultureInfo.CurrentCulture) + ") for TNT Wars");
+                Server.s.Log("Backed up " + lvl.name + " (" + BackupNumber.ToString() + ") for TNT Wars");
             }
             //Map stuff
             lvl.setPhysics(3);
@@ -545,14 +189,14 @@ namespace MCForge
             }
             string teamkillling = "Disabled";
             if (TeamKills) teamkillling = "Enabled";
-            Player.GlobalMessage(c.red + "TNT Wars " + Server.DefaultColor + "on '" + lvl.name + "' has started " + c.teal + Gamemode + Server.DefaultColor + " with a difficulty of " + c.teal + Difficulty + Server.DefaultColor + " (" + c.teal + HitsToDie + Server.DefaultColor + " hits to die, a " + c.teal + explosiontime + Server.DefaultColor + " explosion delay and with a " + c.teal + explosionsize + Server.DefaultColor + " explosion size)" + ", team killing is " + c.teal + teamkillling + Server.DefaultColor + " and you can place " + c.teal + TntPerPlayerAtATime.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " TNT at a time and there is a score limit of " + c.teal + ScoreLimit.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + "!!");
+            Player.GlobalMessage(c.red + "TNT Wars " + Server.DefaultColor + "on '" + lvl.name + "' has started " + c.teal + Gamemode + Server.DefaultColor + " with a difficulty of " + c.teal + Difficulty + Server.DefaultColor + " (" + c.teal + HitsToDie + Server.DefaultColor + " hits to die, a " + c.teal + explosiontime + Server.DefaultColor + " explosion delay and with a " + c.teal + explosionsize + Server.DefaultColor + " explosion size)" + ", team killing is " + c.teal + teamkillling + Server.DefaultColor + " and you can place " + c.teal + TntPerPlayerAtATime.ToString() + Server.DefaultColor + " TNT at a time and there is a score limit of " + c.teal + ScoreLimit.ToString() + Server.DefaultColor + "!!");
             if (GameMode == TntWarsGameMode.TDM) SendAllPlayersMessage("TNT Wars: Start your message with ':' to send it as a team chat!");
             //GracePeriod
             if (GracePeriod) //Check This Grace Stuff
             {
                 GameStatus = TntWarsGameStatus.GracePeriod;
                 int GracePeriodSecsRemaining = GracePeriodSecs;
-                SendAllPlayersMessage("TNT Wars: Grace Period of " + c.lime + GracePeriodSecsRemaining.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " seconds");
+                SendAllPlayersMessage("TNT Wars: Grace Period of " + c.lime + GracePeriodSecsRemaining.ToString() + Server.DefaultColor + " seconds");
                 while (GracePeriodSecsRemaining > 0)
                 {
                     switch (GracePeriodSecsRemaining)
@@ -633,7 +277,7 @@ namespace MCForge
                             SendAllPlayersMessage("TNT Wars: " + c.teal + "1" + Server.DefaultColor + " second remaining!");
                             break;
                     }
-
+                                
                     Thread.Sleep(1000);
                     GracePeriodSecsRemaining -= 1;
                 }
@@ -705,11 +349,11 @@ namespace MCForge
             {
                 if (RedScore >= BlueScore)
                 {
-                    Player.GlobalMessage("TNT Wars: Team " + c.red + "Red " + Server.DefaultColor + "won " + c.red + "TNT Wars " + Server.DefaultColor + "by " + (RedScore - BlueScore).ToString(CultureInfo.CurrentCulture) + " points!");
+                    Player.GlobalMessage("TNT Wars: Team " + c.red + "Red " + Server.DefaultColor + "won " + c.red + "TNT Wars " + Server.DefaultColor + "by " + (RedScore - BlueScore).ToString() + " points!");
                 }
                 if (BlueScore >= RedScore)
                 {
-                    Player.GlobalMessage("TNT Wars: Team " + c.blue + "Blue " + Server.DefaultColor + "won " + c.red + "TNT Wars " + Server.DefaultColor + "by " + (BlueScore - RedScore).ToString(CultureInfo.CurrentCulture) + " points!");
+                    Player.GlobalMessage("TNT Wars: Team " + c.blue + "Blue " + Server.DefaultColor + "won " + c.red + "TNT Wars " + Server.DefaultColor + "by " + (BlueScore - RedScore).ToString() + " points!");
                 }
                 try
                 {
@@ -717,7 +361,7 @@ namespace MCForge
                     {
                         if (!p.spec)
                         {
-                            Player.SendMessage(p.p, "TNT Wars: You Scored " + p.Score.ToString(CultureInfo.CurrentCulture) + " points");
+                            Player.SendMessage(p.p, "TNT Wars: You Scored " + p.Score.ToString() + " points");
                         }
                     }
                 }
@@ -745,7 +389,7 @@ namespace MCForge
                     }
                     else if (count >= 4)
                     {
-                        SendAllPlayersMessage(c.red + "TNT Wars " + Server.DefaultColor + count.ToString(CultureInfo.CurrentCulture) + "th Place: " + pl.p.color + pl.p.name + Server.DefaultColor + " with a score of " + pl.p.color + pl.Score);
+                        SendAllPlayersMessage(c.red + "TNT Wars " + Server.DefaultColor + count.ToString() + "th Place: " + pl.p.color + pl.p.name + Server.DefaultColor + " with a score of " + pl.p.color + pl.Score);
                     }
                     if (count >= PlayingPlayers())
                     {
@@ -756,7 +400,7 @@ namespace MCForge
                 }
             }
             //Reset map
-            Command.all.Find("restore").Use(null, BackupNumber.ToString(CultureInfo.CurrentCulture) + " " + lvl.name);
+            Command.all.Find("restore").Use(null, BackupNumber.ToString() + " " + lvl.name);
             if (lvl.overload == 2501)
             {
                 lvl.overload = 1500;
@@ -845,12 +489,12 @@ namespace MCForge
                     {
                         if (TeamKill(Died.HarmedBy, Died))
                         {
-                            Player.SendMessage(Died.HarmedBy, "TNT Wars: - " + ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " point(s) for team kill assist!");
+                            Player.SendMessage(Died.HarmedBy, "TNT Wars: - " + ScorePerAssist.ToString() + " point(s) for team kill assist!");
                             ChangeScore(Died.HarmedBy, -ScorePerAssist);
                         }
                         else
                         {
-                            Player.SendMessage(Died.HarmedBy, "TNT Wars: + " + ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " point(s) for assist!");
+                            Player.SendMessage(Died.HarmedBy, "TNT Wars: + " + ScorePerAssist.ToString() + " point(s) for assist!");
                             ChangeScore(Died.HarmedBy, ScorePerAssist);
                         }
                     }
@@ -867,22 +511,22 @@ namespace MCForge
             {
                 if (Killer.TntWarsKillStreak >= Properties.DefaultStreakOneAmount && Killer.TntWarsKillStreak < Properties.DefaultStreakTwoAmount && Killer.TNTWarsLastKillStreakAnnounced != Properties.DefaultStreakOneAmount)
                 {
-                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture) + " (Multiplier of " + Properties.DefaultStreakOneMultiplier.ToString(CultureInfo.CurrentCulture) + ")");
-                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture));
+                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString() + " (Multiplier of " + Properties.DefaultStreakOneMultiplier.ToString() + ")");
+                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString());
                     Killer.TntWarsScoreMultiplier = Properties.DefaultStreakOneMultiplier;
                     Killer.TNTWarsLastKillStreakAnnounced = Properties.DefaultStreakOneAmount;
                 }
                 else if (Killer.TntWarsKillStreak >= Properties.DefaultStreakTwoAmount && Killer.TntWarsKillStreak < Properties.DefaultStreakThreeAmount && Killer.TNTWarsLastKillStreakAnnounced != Properties.DefaultStreakTwoAmount)
                 {
-                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture) + " (Multiplier of " + Properties.DefaultStreakTwoMultiplier.ToString(CultureInfo.CurrentCulture) + " and a bigger explosion!)");
-                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture) + " and now has a bigger explosion for their TNT!");
+                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString() + " (Multiplier of " + Properties.DefaultStreakTwoMultiplier.ToString() + " and a bigger explosion!)");
+                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString() + " and now has a bigger explosion for their TNT!");
                     Killer.TntWarsScoreMultiplier = Properties.DefaultStreakTwoMultiplier;
                     Killer.TNTWarsLastKillStreakAnnounced = Properties.DefaultStreakTwoAmount;
                 }
                 else if (Killer.TntWarsKillStreak >= Properties.DefaultStreakThreeAmount && Killer.TNTWarsLastKillStreakAnnounced != Properties.DefaultStreakThreeAmount)
                 {
-                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture) + " (Multiplier of " + Properties.DefaultStreakThreeMultiplier.ToString(CultureInfo.CurrentCulture) + " and you now have 1 extra health!)");
-                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture) + " and now has 1 extra health!");
+                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString() + " (Multiplier of " + Properties.DefaultStreakThreeMultiplier.ToString() + " and you now have 1 extra health!)");
+                    SendAllPlayersMessage("TNT Wars: " + Killer.color + Killer.name + Server.DefaultColor + " has a kill streak of " + Killer.TntWarsKillStreak.ToString() + " and now has 1 extra health!");
                     Killer.TntWarsScoreMultiplier = Properties.DefaultStreakThreeMultiplier;
                     Killer.TNTWarsLastKillStreakAnnounced = Properties.DefaultStreakThreeAmount;
                     if (GameDifficulty == TntWarsDifficulty.Hard || GameDifficulty == TntWarsDifficulty.Extreme)
@@ -896,7 +540,7 @@ namespace MCForge
                 }
                 else
                 {
-                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString(CultureInfo.CurrentCulture));
+                    Player.SendMessage(Killer, "TNT Wars: Kill streak of " + Killer.TntWarsKillStreak.ToString());
                 }
             }
             AddToScore += kills * ScorePerKill;
@@ -909,12 +553,12 @@ namespace MCForge
             if (AddToScore > 0)
             {
                 ChangeScore(Killer, AddToScore, Killer.TntWarsScoreMultiplier);
-                Player.SendMessage(Killer, "TNT Wars: + " + ((int)(AddToScore * Killer.TntWarsScoreMultiplier)).ToString(CultureInfo.CurrentCulture) + " point(s) for " + kills.ToString(CultureInfo.CurrentCulture) + " kills");
+                Player.SendMessage(Killer, "TNT Wars: + " + ((int)(AddToScore * Killer.TntWarsScoreMultiplier)).ToString() + " point(s) for " + kills.ToString() + " kills");
             }
             if (minusfromscore != 0)
             {
-                ChangeScore(Killer, -minusfromscore);
-                Player.SendMessage(Killer, "TNT Wars: - " + minusfromscore.ToString(CultureInfo.CurrentCulture) + " point(s) for team kill(s)!");
+                ChangeScore(Killer, - minusfromscore);
+                Player.SendMessage(Killer, "TNT Wars: - " + minusfromscore.ToString() + " point(s) for team kill(s)!");
             }
         }
 
@@ -1009,8 +653,8 @@ namespace MCForge
             }
 
         }
-
-        public bool TeamKill(Player p1, Player p2)
+        
+        public bool TeamKill (Player p1, Player p2)
         {
             return TeamKill(FindPlayer(p1), FindPlayer(p2));
         }
@@ -1032,8 +676,8 @@ namespace MCForge
                 if (TotalTeamScores)
                 {
                     SendAllPlayersMessage("TNT Wars Scores:");
-                    SendAllPlayersMessage(c.red + "RED: " + c.white + RedScore + " " + c.red + "(" + (ScoreLimit - RedScore).ToString(CultureInfo.CurrentCulture) + " needed)");
-                    SendAllPlayersMessage(c.blue + "BLUE: " + c.white + BlueScore + " " + c.red + "(" + (ScoreLimit - BlueScore).ToString(CultureInfo.CurrentCulture) + " needed)");
+                    SendAllPlayersMessage(c.red + "RED: " + c.white + RedScore + " " + c.red + "(" + (ScoreLimit - RedScore).ToString() + " needed)");
+                    SendAllPlayersMessage(c.blue + "BLUE: " + c.white + BlueScore + " " + c.red + "(" + (ScoreLimit - BlueScore).ToString() + " needed)");
                     Thread.Sleep(1000);
                 }
                 if (TopScores)
@@ -1051,7 +695,7 @@ namespace MCForge
                         int count = 1;
                         foreach (var pl in pls)
                         {
-                            Player.SendMessage(p.p, count.ToString(CultureInfo.CurrentCulture) + ": " + pl.p.name + " - " + pl.Score.ToString(CultureInfo.CurrentCulture));
+                            Player.SendMessage(p.p, count.ToString() + ": " + pl.p.name + " - " + pl.Score.ToString());
                             if (count >= max)
                             {
                                 break;
@@ -1068,7 +712,7 @@ namespace MCForge
                     {
                         if (!p.spec)
                         {
-                            Player.SendMessage(p.p, "TNT Wars: Your Score: " + c.white + p.Score.ToString(CultureInfo.CurrentCulture));
+                            Player.SendMessage(p.p, "TNT Wars: Your Score: " + c.white + p.Score.ToString());
                         }
                     }
                     Thread.Sleep(1000);
@@ -1295,63 +939,6 @@ namespace MCForge
             public static float DefaultStreakTwoMultiplier = 1.5f;
             public static int DefaultStreakThreeAmount = 7;
             public static float DefaultStreakThreeMultiplier = 2f;
-        }
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (lvl != null)
-                        lvl.Dispose();
-                    if (GuiLoaded != null)
-                        GuiLoaded.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
-    }
-
-    public class player
-    {
-        public Player p;
-        public bool Red/* = false*/;
-        public bool Blue/* = false*/;
-        public bool spec/* = false*/;
-        public int Score/* = 0*/;
-        public string OldColor;
-        public string OldTitle;
-        public string OldTitleColor;
-        public player(Player pl)
-        {
-            p = pl;
-            OldColor = pl.color;
-            OldTitle = pl.title;
-            OldTitleColor = pl.titlecolor;
         }
     }
 }

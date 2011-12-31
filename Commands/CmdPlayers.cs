@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,27 +31,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdPlayers() { }
 
-        struct groups { public Group group; public List<string> players;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(groups x, groups y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(groups x, groups y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct groups { public Group group; public List<string> players; }
         public override void Use(Player p, string message)
         {
             try
@@ -88,7 +67,7 @@ namespace MCForge
                 int totalPlayers = 0;
                 foreach (Player pl in Player.players)
                 {
-                    if (!pl.hidden || p == null || p.group.Permission > LevelPermission.Operator || Server.devs.Contains(p.name.ToLower(CultureInfo.CurrentCulture)))
+                    if (!pl.hidden || p == null || p.group.Permission > LevelPermission.Operator || Server.devs.Contains(p.name.ToLower()))
                     {
                         if (String.IsNullOrEmpty(message) || !Group.Exists(message) || Group.Find(message) == pl.group)
                         {
@@ -100,7 +79,7 @@ namespace MCForge
                                 foundName = pl.name + "-afk";
                             }
 
-                            if (Server.devs.Contains(pl.name.ToLower(CultureInfo.CurrentCulture)))
+                            if (Server.devs.Contains(pl.name.ToLower()))
                             {
                                 if (pl.voice)
                                     devs += " " + "&f+" + Server.DefaultColor + foundName + " (" + pl.level.name + "),";
@@ -135,7 +114,7 @@ namespace MCForge
                         foreach (string player in groups.players)
                             appendString += ", " + player;
 
-                        if (!(appendString != null && String.IsNullOrEmpty(appendString)))
+                        if (appendString != "")
                             appendString = appendString.Remove(0, 2);
                         appendString = ":" + groups.group.color + getPlural(groups.group.trueName) + ": " + appendString;
 
@@ -150,7 +129,7 @@ namespace MCForge
         {
             try
             {
-                string last2 = groupName.Substring(groupName.Length - 2).ToLower(CultureInfo.CurrentCulture);
+                string last2 = groupName.Substring(groupName.Length - 2).ToLower();
                 if ((last2 != "ed" || groupName.Length <= 3) && last2[1] != 's')
                 {
                     return groupName + "s";

@@ -31,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message != "") { Help(p); return; }
             p.painting = !p.painting; if (p.painting) { Player.SendMessage(p, "Painting mode: &aON" + Server.DefaultColor + "."); }
             else { Player.SendMessage(p, "Painting mode: &cOFF" + Server.DefaultColor + "."); }
             p.BlockAction = 0;

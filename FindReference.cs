@@ -1159,26 +1159,6 @@ namespace MCForge
         public struct ColorBlock
         {
             public ushort x, y, z; public byte type, r, g, b, a;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(ColorBlock x, ColorBlock y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(ColorBlock x, ColorBlock y)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

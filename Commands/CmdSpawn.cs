@@ -30,7 +30,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message != "") { Help(p); return; }
             ushort x = (ushort)((0.5 + p.level.spawnx) * 32);
             ushort y = (ushort)((1 + p.level.spawny) * 32);
             ushort z = (ushort)((0.5 + p.level.spawnz) * 32);

@@ -30,7 +30,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') == -1) { Help(p); return; }
+            if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
 
             byte foundBlock = Block.Byte(message.Split(' ')[0]);
             if (foundBlock == Block.Zero) { Player.SendMessage(p, "Could not find block entered"); return; }

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using MySql.Data.MySqlClient;
 using MCForge.SQL;
-using System.Globalization;
 
 namespace MCForge.Commands
 {
@@ -30,8 +29,8 @@ namespace MCForge.Commands
             string par8 = String.Empty;
             try
             {
-                par0 = command[0].ToLower(CultureInfo.CurrentCulture);
-                par1 = command[1].ToLower(CultureInfo.CurrentCulture);
+                par0 = command[0].ToLower();
+                par1 = command[1].ToLower();
                 par2 = command[2];
                 par3 = command[3];
                 par4 = command[4];
@@ -68,7 +67,7 @@ namespace MCForge.Commands
                                             if (isGood(par5)) { level.y = par5; }
                                             if (isGood(par6)) { level.z = par6; }
                                             else { Player.SendMessage(p, "A Dimension was wrong, it must a power of 2"); break; }
-                                            switch (par7.ToLower(CultureInfo.CurrentCulture))
+                                            switch (par7.ToLower())
                                             {
                                                 case "flat":
                                                 case "pixel":
@@ -78,14 +77,14 @@ namespace MCForge.Commands
                                                 case "forest":
                                                 case "desert":
                                                 case "space":
-                                                    level.type = par7.ToLower(CultureInfo.CurrentCulture);
+                                                    level.type = par7.ToLower();
                                                     break;
 
                                                 default:
                                                     Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space");
                                                     break;
                                             }
-                                            level.price = int.Parse(par8, CultureInfo.CurrentCulture);
+                                            level.price = int.Parse(par8);
                                             Economy.Settings.LevelsList.Add(level);
                                             Player.SendMessage(p, "Added map to presets");
                                             break;
@@ -146,7 +145,7 @@ namespace MCForge.Commands
 
                                                 case "type":
                                                     Economy.Settings.LevelsList.Remove(lvl);
-                                                    switch (par5.ToLower(CultureInfo.CurrentCulture))
+                                                    switch (par5.ToLower())
                                                     {
                                                         case "flat":
                                                         case "pixel":
@@ -156,7 +155,7 @@ namespace MCForge.Commands
                                                         case "forest":
                                                         case "desert":
                                                         case "space":
-                                                            lvl.type = par5.ToLower(CultureInfo.CurrentCulture);
+                                                            lvl.type = par5.ToLower();
                                                             break;
 
                                                         default:
@@ -183,7 +182,7 @@ namespace MCForge.Commands
 
                                                 case "price":
                                                     Economy.Settings.LevelsList.Remove(lvl);
-                                                    lvl.price = int.Parse(par5, CultureInfo.CurrentCulture);
+                                                    lvl.price = int.Parse(par5);
                                                     Economy.Settings.LevelsList.Add(lvl);
                                                     Player.SendMessage(p, "Changed preset price");
                                                     break;
@@ -222,7 +221,7 @@ namespace MCForge.Commands
                                         else { Economy.Settings.Titles = false; Player.SendMessage(p, "Titles are now disabled for the economy system"); break; }
 
                                     case "price":
-                                        Economy.Settings.TitlePrice = int.Parse(par3, CultureInfo.CurrentCulture);
+                                        Economy.Settings.TitlePrice = int.Parse(par3);
                                         Player.SendMessage(p, "Changed title price");
                                         break;
 
@@ -247,7 +246,7 @@ namespace MCForge.Commands
                                         else { Economy.Settings.Colors = false; Player.SendMessage(p, "Colors are now disabled for the economy system"); break; }
 
                                     case "price":
-                                        Economy.Settings.ColorPrice = int.Parse(par3, CultureInfo.CurrentCulture);
+                                        Economy.Settings.ColorPrice = int.Parse(par3);
                                         Player.SendMessage(p, "Changed color price");
                                         break;
 
@@ -274,7 +273,7 @@ namespace MCForge.Commands
                                          if (rnk == null) { Player.SendMessage(p, "That isn't a rank or it's past the max rank"); break; }
                                          else
                                          {
-                                             rnk.price = int.Parse(par4, CultureInfo.CurrentCulture);
+                                             rnk.price = int.Parse(par4);
                                              Player.SendMessage(p, "Changed rank price for " + rnk.group.name);
                                              break;
                                          }
@@ -358,7 +357,7 @@ namespace MCForge.Commands
                                             Command.all.Find("newlvl").Use(null, p.name + "_" + par3 + " " + lvl.x + " " + lvl.y + " " + lvl.z + " " + lvl.type);
                                             Player.SendMessage(p, "Created level '" + p.name + "_" + par3 + "'");
                                             p.money = p.money - lvl.price;
-                                            Player.SendMessage(p, "Your balance is now " + p.money.ToString(CultureInfo.CurrentCulture) + " " + Server.moneys);
+                                            Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys);
                                             Command.all.Find("load").Use(null, p.name + "_" + par3);
                                             Thread.Sleep(250);
                                             Level level = Level.Find(p.name + "_" + par3);
@@ -385,7 +384,7 @@ namespace MCForge.Commands
                         case "color":
                         case "colours":
                         case "colour":
-                            if (!par2.StartsWith("&", StringComparison.CurrentCulture) || !par2.StartsWith("%", StringComparison.CurrentCulture))
+                            if (!par2.StartsWith("&") || !par2.StartsWith("%"))
                             {
                                 switch (par2)
                                 {
@@ -444,7 +443,7 @@ namespace MCForge.Commands
                             }
                             if (par2 == p.color) { Player.SendMessage(p, "You already have that color"); return; }
                             if (p.EnoughMoney(Economy.Settings.ColorPrice) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy a color"); return; }
-                            else { Command.all.Find("color").Use(null, p.name + " " + c.Name(par2)); p.money = p.money - Economy.Settings.ColorPrice; Player.SendMessage(p, "Changed color"); Player.SendMessage(p, "Your balance is now " + p.money.ToString(CultureInfo.CurrentCulture) + " " + Server.moneys); return; }
+                            else { Command.all.Find("color").Use(null, p.name + " " + c.Name(par2)); p.money = p.money - Economy.Settings.ColorPrice; Player.SendMessage(p, "Changed color"); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
 
                         case "titles":
                         case "title":
@@ -457,7 +456,7 @@ namespace MCForge.Commands
                         case "rank":
                             if (p.group.Permission == Economy.Settings.MaxRank || p.group.Permission >= Economy.Settings.MaxRank) { Player.SendMessage(p, "You are past the max buyable rank"); return; }
                             if (p.EnoughMoney(Economy.NextRank(p).price) == false) { Player.SendMessage(p, "You don't have enough " + Server.moneys + " to buy the next rank"); return; }
-                            else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.FindRank(p.group.name).price; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString(CultureInfo.CurrentCulture) + " " + Server.moneys); return; }
+                            else { Command.all.Find("promote").Use(null, p.name); p.money = p.money - Economy.FindRank(p.group.name).price; Player.SendMessage(p, "You bought the rank " + p.group.name); Player.SendMessage(p, "Your balance is now " + p.money.ToString() + " " + Server.moneys); return; }
 
                         default:
                             Player.SendMessage(p, "That wasn't a valid command addition");
@@ -508,7 +507,7 @@ namespace MCForge.Commands
                            case "title":
                            case "titles":
                                if (Economy.Settings.Titles == false) { Player.SendMessage(p, "Titles are not enabled for the economy system"); return; }
-                               Player.SendMessage(p, "Titles cost " + Economy.Settings.TitlePrice.ToString(CultureInfo.CurrentCulture) + " each");
+                               Player.SendMessage(p, "Titles cost " + Economy.Settings.TitlePrice.ToString() + " each");
                                return;
 
                            case "colors":
@@ -516,7 +515,7 @@ namespace MCForge.Commands
                            case "colours":
                            case "colour":
                                if (Economy.Settings.Colors == false) { Player.SendMessage(p, "Colors are not enabled for the economy system"); return; }
-                               Player.SendMessage(p, "Colors cost " + Economy.Settings.ColorPrice.ToString(CultureInfo.CurrentCulture) + " each");
+                               Player.SendMessage(p, "Colors cost " + Economy.Settings.ColorPrice.ToString() + " each");
                                return;
 
                            case "ranks":
@@ -607,7 +606,7 @@ namespace MCForge.Commands
 
         public bool isGood(string value)
         {
-            ushort uvalue = ushort.Parse(value, CultureInfo.CurrentCulture);
+            ushort uvalue = ushort.Parse(value);
             switch (uvalue)
             {
                 case 2:

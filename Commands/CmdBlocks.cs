@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,7 +32,7 @@ namespace MCForge
         {
             try
             {
-                if ((message != null && String.IsNullOrEmpty(message)))
+                if (message == "")
                 {
                     Player.SendMessage(p, "Basic blocks: ");
                     for (byte i = 0; i < 50; i++)
@@ -43,20 +42,20 @@ namespace MCForge
                     Player.SendMessage(p, message.Remove(0, 2));
                     Player.SendMessage(p, "&d/blocks all <0/1/2/3/4> " + Server.DefaultColor + "will show the rest.");
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture) == "all")
+                else if (message.ToLower() == "all")
                 {
                     Player.SendMessage(p, "Complex blocks: ");
                     for (byte i = 50; i < 255; i++)
                     {
-                        if (Block.Name(i).ToLower(CultureInfo.CurrentCulture) != "unknown") message += ", " + Block.Name(i);
+                        if (Block.Name(i).ToLower() != "unknown") message += ", " + Block.Name(i);
                     }
                     Player.SendMessage(p, message.Remove(0, 2));
                     Player.SendMessage(p, "Use &d/blocks all <0/1/2/3/4> " + Server.DefaultColor + "for a readable list.");
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture).IndexOf(' ') != -1 && message.Split(' ')[0] == "all")
+                else if (message.ToLower().IndexOf(' ') != -1 && message.Split(' ')[0] == "all")
                 {
                     int foundRange = 0;
-                    try { foundRange = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture); }
+                    try { foundRange = int.Parse(message.Split(' ')[1]); }
                     catch { Player.SendMessage(p, "Incorrect syntax"); return; }
 
                     if (foundRange >= 5 || foundRange < 0) { Player.SendMessage(p, "Number must be between 0 and 4"); return; }
@@ -65,7 +64,7 @@ namespace MCForge
                     Player.SendMessage(p, "Blocks between " + foundRange * 51 + " and " + (foundRange + 1) * 51);
                     for (byte i = (byte)(foundRange * 51); i < (byte)((foundRange + 1) * 51); i++)
                     {
-                        if (Block.Name(i).ToLower(CultureInfo.CurrentCulture) != "unknown") message += ", " + Block.Name(i);
+                        if (Block.Name(i).ToLower() != "unknown") message += ", " + Block.Name(i);
                     }
                     Player.SendMessage(p, message.Remove(0, 2));
                 }
@@ -119,7 +118,7 @@ namespace MCForge
                         LevelPermission Perm = Group.Find(message).Permission;
                         foreach (Block.Blocks bL in Block.BlockList)
                         {
-                            if (Block.canPlace(Perm, bL.type) && Block.Name(bL.type).ToLower(CultureInfo.CurrentCulture) != "unknown") printMessage += Block.Name(bL.type) + ", ";
+                            if (Block.canPlace(Perm, bL.type) && Block.Name(bL.type).ToLower() != "unknown") printMessage += Block.Name(bL.type) + ", ";
                         }
 
                         if (printMessage != ">>>&b")
@@ -131,10 +130,10 @@ namespace MCForge
                     }
                     else if (message.IndexOf(' ') == -1)
                     {
-                        if (message.ToLower(CultureInfo.CurrentCulture) == "count") Player.SendMessage(p, "Blocks in this map: " + p.level.blocks.Length);
+                        if (message.ToLower() == "count") Player.SendMessage(p, "Blocks in this map: " + p.level.blocks.Length);
                         else Help(p);
                     }
-                    else if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "count")
+                    else if (message.Split(' ')[0].ToLower() == "count")
                     {
                         int foundNum = 0; byte foundBlock = Block.Byte(message.Split(' ')[1]);
                         if (foundBlock == Block.Zero) { Player.SendMessage(p, "Could not find block specified"); return; }
@@ -146,7 +145,7 @@ namespace MCForge
 
                         if (foundNum == 0) Player.SendMessage(p, "No blocks were of type \"" + message.Split(' ')[1] + "\"");
                         else if (foundNum == 1) Player.SendMessage(p, "1 block was of type \"" + message.Split(' ')[1] + "\"");
-                        else Player.SendMessage(p, foundNum.ToString(CultureInfo.CurrentCulture) + " blocks were of type \"" + message.Split(' ')[1] + "\"");
+                        else Player.SendMessage(p, foundNum.ToString() + " blocks were of type \"" + message.Split(' ')[1] + "\"");
                     }
                     else
                     {

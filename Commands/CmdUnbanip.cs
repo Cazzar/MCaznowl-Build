@@ -19,7 +19,6 @@ using System;
 using System.Data;
 using System.Text.RegularExpressions;
 using MCForge.SQL;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -39,7 +38,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             if (message[0] == '@')
             {
                 message = message.Remove(0, 1).Trim();
@@ -90,14 +89,14 @@ namespace MCForge
 
             if (p != null)
             {
-                Server.IRC.Say(message.ToLower(CultureInfo.CurrentCulture) + " was un-ip-banned by " + p.name + ".");
-                Server.s.Log("IP-UNBANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by " + p.name + ".");
+                Server.IRC.Say(message.ToLower() + " was un-ip-banned by " + p.name + ".");
+                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by " + p.name + ".");
                 Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
             }
             else
             {
-                Server.IRC.Say(message.ToLower(CultureInfo.CurrentCulture) + " was un-ip-banned by console.");
-                Server.s.Log("IP-UNBANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by console.");
+                Server.IRC.Say(message.ToLower() + " was un-ip-banned by console.");
+                Server.s.Log("IP-UNBANNED: " + message.ToLower() + " by console.");
                 Player.GlobalMessage(message + " was &8un-ip-banned" + Server.DefaultColor + " by console.");
             }
         }

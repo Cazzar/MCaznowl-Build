@@ -22,7 +22,7 @@ using System.Text;
 
 namespace MCForge
 {
-    public enum ServerEvent
+    public enum ServerEvents
     {
     	//TODO
     	//Make these do things
@@ -31,7 +31,7 @@ namespace MCForge
     	ServerAdminLog,
     	ConsoleCommand
     }
-    public enum PlayerEvent
+    public enum PlayerEvents
     {
         PlayerCommand,
         PlayerChat,
@@ -41,12 +41,12 @@ namespace MCForge
         MYSQLSave,
         PlayerRankChange
     }
-    public enum GlobalLevelEvent
+    public enum GlobalLevelEvents
     {
         LevelLoad,
         LevelSave
     }
-    public enum LevelEvent
+    public enum LevelEvents
     {
         LevelUnload,
         LevelSave

@@ -44,7 +44,7 @@ namespace MCForge
 					SW.WriteLine(Server.mainLevel.name);
 				}
             }
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             else
             {
 				using (StreamReader SR = new StreamReader(jailMapFile))

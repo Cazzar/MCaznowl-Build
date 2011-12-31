@@ -18,7 +18,6 @@
 */
 
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -35,7 +34,7 @@ namespace MCForge
         {
             int totalFixed = 0;
 
-            switch (message.ToLower(CultureInfo.CurrentCulture))
+            switch (message.ToLower())
             {
                 case "":
                     for (int i = 0; i < p.level.blocks.Length; i++)

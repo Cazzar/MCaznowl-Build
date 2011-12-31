@@ -20,19 +20,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
     public static class VIP
     {
-        public const string file = "text/vips.txt";
+        public static readonly string file = "text/vips.txt";
 
 
         public static void Add(string name)
         {
             if (!File.Exists(file)) return;
-            name = name.Trim().ToLower(CultureInfo.CurrentCulture);
+            name = name.Trim().ToLower();
             List<string> list = new List<string>(File.ReadAllLines(file));
             list.Add(name);
             File.WriteAllLines(file, list.ToArray());
@@ -45,10 +44,10 @@ namespace MCForge
         public static void Remove(string name)
         {
             if (!File.Exists(file)) return;
-            name = name.Trim().ToLower(CultureInfo.CurrentCulture);
+            name = name.Trim().ToLower();
             List<string> list = new List<string>();
             foreach (string line in File.ReadAllLines(file))
-                if (line.Trim().ToLower(CultureInfo.CurrentCulture) != name)
+                if (line.Trim().ToLower() != name)
                     list.Add(line);
             File.WriteAllLines(file, list.ToArray());
         }
@@ -60,9 +59,9 @@ namespace MCForge
         public static bool Find(string name)
         {
             if (!File.Exists(file)) return false;
-            name = name.Trim().ToLower(CultureInfo.CurrentCulture);
+            name = name.Trim().ToLower();
             foreach (string line in File.ReadAllLines(file))
-                if (line.Trim().ToLower(CultureInfo.CurrentCulture) == name)
+                if (line.Trim().ToLower() == name)
                     return true;
             return false;
         }

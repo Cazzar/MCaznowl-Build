@@ -18,7 +18,6 @@
 using System;
 using System.IO;
 using System.Data;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +31,7 @@ namespace MCForge
         public CmdSave() { }
 
         public override void Use(Player p, string message) {
-            if (message.ToLower(CultureInfo.CurrentCulture) == "all") {
+            if (message.ToLower() == "all") {
                 foreach (Level l in Server.levels) {
                     try {
                         if (!Server.lava.active || !Server.lava.HasMap(name)) l.Save();
@@ -41,7 +40,7 @@ namespace MCForge
                 }
                 Player.GlobalMessage("All levels have been saved.");
             } else {
-                if ((message != null && String.IsNullOrEmpty(message))) { // for empty string/no parameters.
+                if (message == "") { // for empty string/no parameters.
                     if (p == null) {
                         Use(p, "all");
                     } else {
@@ -73,10 +72,10 @@ namespace MCForge
                     }
                 } else if (message.Split(' ').Length == 2) {
                     Level foundLevel = Level.Find(message.Split(' ')[0]);
-                    string restoreName = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
+                    string restoreName = message.Split(' ')[1].ToLower();
                     if (foundLevel != null) {
                         foundLevel.Save(true);
-//                        int backupNumber = p.level.Backup(true, restoreName) // COMMENTED BY CODEIT.RIGHT;
+                        int backupNumber = p.level.Backup(true, restoreName);
                         Player.GlobalMessage(foundLevel.name + " had a backup created named &b" + restoreName);
                         Player.SendMessage(null, foundLevel.name + " had a backup created named &b" + restoreName);
                     } else {

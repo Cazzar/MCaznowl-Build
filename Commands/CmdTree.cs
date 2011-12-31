@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             p.ClearBlockchange();
-            switch (message.ToLower(CultureInfo.CurrentCulture))
+            switch (message.ToLower())
             {
                 case "2":
                 case "cactus": p.Blockchange += new Player.BlockchangeEventHandler(AddCactus); break;
@@ -61,18 +60,16 @@ namespace MCForge
             Server.MapGen.AddNotchTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
-//  COMMENTED BY CODEIT.RIGHT
-//        void AddNotchBigTree(Player p, ushort x, ushort y, ushort z)
-//        {
-//            Server.MapGen.AddNotchBigTree(p.level, x, y, z, p.random, true, true, p);
-//            if (!p.staticCommands) p.ClearBlockchange();
-//        }
-//  COMMENTED BY CODEIT.RIGHT
-//        void AddNotchPineTree(Player p, ushort x, ushort y, ushort z)
-//        {
-//            Server.MapGen.AddNotchPineTree(p.level, x, y, z, p.random, true, true, p);
-//            if (!p.staticCommands) p.ClearBlockchange();
-//        }
+        void AddNotchBigTree(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            Server.MapGen.AddNotchBigTree(p.level, x, y, z, p.random, true, true, p);
+            if (!p.staticCommands) p.ClearBlockchange();
+        }
+        void AddNotchPineTree(Player p, ushort x, ushort y, ushort z, byte type)
+        {
+            Server.MapGen.AddNotchPineTree(p.level, x, y, z, p.random, true, true, p);
+            if (!p.staticCommands) p.ClearBlockchange();
+        }
         void AddNotchSwampTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
             Server.MapGen.AddNotchSwampTree(p.level, x, y, z, p.random, true, true, p);

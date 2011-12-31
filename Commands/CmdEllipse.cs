@@ -32,7 +32,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
 
-            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message != "") { Help(p); return; }
             Player.SendMessage(p, "Place two blocks to determine the edges.");
             p.ClearBlockchange();
             p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
@@ -359,26 +359,6 @@ namespace MCForge
         {
             public byte type;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Position x, Position y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Position x, Position y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
     }

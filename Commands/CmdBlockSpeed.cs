@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string text)
         {
-            if ((text != null && String.IsNullOrEmpty(text)))
+            if (text == "")
             {
                 SendEstimation(p);
                 return;
@@ -42,73 +41,73 @@ namespace MCForge
                 Server.levels.ForEach((l) => { l.blockqueue.Clear(); });
                 return;
             }
-            if (text.StartsWith("bs", StringComparison.CurrentCulture))
+            if (text.StartsWith("bs"))
             {
-                try { Block1.blockupdates = int.Parse(text.Split(' ')[1], CultureInfo.CurrentCulture); }
+                try { BlockQueue.blockupdates = int.Parse(text.Split(' ')[1]); }
                 catch { Player.SendMessage(p, "Invalid number specified."); return; }
-                Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Blocks per interval is now {0}.", Block1.blockupdates));
+                Player.SendMessage(p, String.Format("Blocks per interval is now {0}.", BlockQueue.blockupdates));
                 return;
             }
-            if (text.StartsWith("ts", StringComparison.CurrentCulture))
+            if (text.StartsWith("ts"))
             {
-                try { Block1.time = int.Parse(text.Split(' ')[1], CultureInfo.CurrentCulture); }
+                try { BlockQueue.time = int.Parse(text.Split(' ')[1]); }
                 catch { Player.SendMessage(p, "Invalid number specified."); return; }
-                Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Block interval is now {0}.", Block1.time));
+                Player.SendMessage(p, String.Format("Block interval is now {0}.", BlockQueue.time));
                 return;
             }
-            if (text.StartsWith("buf", StringComparison.CurrentCulture))
+            if (text.StartsWith("buf"))
             {
                 if (p.level.bufferblocks)
                 {
                     p.level.bufferblocks = false;
-                    Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Block buffering on {0} disabled.", p.level.name));
+                    Player.SendMessage(p, String.Format("Block buffering on {0} disabled.", p.level.name));
                 }
                 else
                 {
                     p.level.bufferblocks = true;
-                    Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Block buffering on {0} enabled.", p.level.name));
+                    Player.SendMessage(p, String.Format("Block buffering on {0} enabled.", p.level.name));
                 }
                 return;
             }
-            if (text.StartsWith("net", StringComparison.CurrentCulture))
+            if (text.StartsWith("net"))
             {
-                switch (int.Parse(text.Split(' ')[1], CultureInfo.CurrentCulture))
+                switch (int.Parse(text.Split(' ')[1]))
                 {
                     case 2:
-                        Block1.blockupdates = 25;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 25;
+                        BlockQueue.time = 100;
                         break;
                     case 4:
-                        Block1.blockupdates = 50;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 50;
+                        BlockQueue.time = 100;
                         break;
                     case 8:
-                        Block1.blockupdates = 100;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 100;
+                        BlockQueue.time = 100;
                         break;
                     case 12:
-                        Block1.blockupdates = 200;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 200;
+                        BlockQueue.time = 100;
                         break;
                     case 16:
-                        Block1.blockupdates = 200;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 200;
+                        BlockQueue.time = 100;
                         break;
                     case 161:
-                        Block1.blockupdates = 100;
-                        Block1.time = 50;
+                        BlockQueue.blockupdates = 100;
+                        BlockQueue.time = 50;
                         break;
                     case 20:
-                        Block1.blockupdates = 125;
-                        Block1.time = 50;
+                        BlockQueue.blockupdates = 125;
+                        BlockQueue.time = 50;
                         break;
                     case 24:
-                        Block1.blockupdates = 150;
-                        Block1.time = 50;
+                        BlockQueue.blockupdates = 150;
+                        BlockQueue.time = 50;
                         break;
                     default:
-                        Block1.blockupdates = 200;
-                        Block1.time = 100;
+                        BlockQueue.blockupdates = 200;
+                        BlockQueue.time = 100;
                         break;
                 }
                 SendEstimation(p);
@@ -117,8 +116,8 @@ namespace MCForge
         }
         private static void SendEstimation(Player p)
         {
-            Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "{0} blocks every {1} milliseconds = {2} blocks per second.", Block1.blockupdates, Block1.time, Block1.blockupdates * (1000 / Block1.time)));
-            Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Using ~{0}KB/s times {1} player(s) = ~{2}KB/s", (Block1.blockupdates * (1000 / Block1.time) * 8) / 1000, Player.players.Count, Player.players.Count * ((Block1.blockupdates * (1000 / Block1.time) * 8) / 1000)));
+            Player.SendMessage(p, String.Format("{0} blocks every {1} milliseconds = {2} blocks per second.", BlockQueue.blockupdates, BlockQueue.time, BlockQueue.blockupdates * (1000 / BlockQueue.time)));
+            Player.SendMessage(p, String.Format("Using ~{0}KB/s times {1} player(s) = ~{2}KB/s", (BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000, Player.players.Count, Player.players.Count * ((BlockQueue.blockupdates * (1000 / BlockQueue.time) * 8) / 1000)));
         }
         public override void Help(Player p)
         {

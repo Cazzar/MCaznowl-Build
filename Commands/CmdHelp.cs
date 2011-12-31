@@ -13,7 +13,6 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -30,7 +29,7 @@ namespace MCForge
         {
             try
             {
-                message.ToLower(CultureInfo.CurrentCulture);
+                message.ToLower();
                 switch (message)
                 {
                     case "":
@@ -56,7 +55,7 @@ namespace MCForge
                         foreach (Group grp in Group.GroupList)
                         {
                             if (grp.name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
-                                Player.SendMessage(p, grp.color + grp.name + " - &bCmd: " + grp.maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString(CultureInfo.CurrentCulture) : "max") + " - &cPerm: " + (int)grp.Permission);
+                                Player.SendMessage(p, grp.color + grp.name + " - &bCmd: " + grp.maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
                         }
                         break;
                     case "build":
@@ -69,7 +68,7 @@ namespace MCForge
                             }
                         }
 
-                        if ((message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Building commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
@@ -83,7 +82,7 @@ namespace MCForge
                             }
                         }
 
-                        if ((message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Moderation commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
@@ -97,7 +96,7 @@ namespace MCForge
                             }
                         }
 
-                        if ((message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Information commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
@@ -111,7 +110,7 @@ namespace MCForge
                             }
                         }
 
-                        if ((message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Game commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
@@ -125,7 +124,7 @@ namespace MCForge
                             }
                         }
 
-                        if ((message != null && String.IsNullOrEmpty(message))) { Player.SendMessage(p, "No commands of this type are available to you."); break; }
+                        if (message == "") { Player.SendMessage(p, "No commands of this type are available to you."); break; }
                         Player.SendMessage(p, "Other commands you may use:");
                         Player.SendMessage(p, message.Remove(0, 2) + ".");
                         break;
@@ -135,7 +134,7 @@ namespace MCForge
                         {
                             if (p == null || p.group.commands.All().Contains(comm))
                             {
-                                if (!(comm.shortcut != null && String.IsNullOrEmpty(comm.shortcut))) message += ", &b" + comm.shortcut + " " + Server.DefaultColor + "[" + comm.name + "]";
+                                if (comm.shortcut != "") message += ", &b" + comm.shortcut + " " + Server.DefaultColor + "[" + comm.name + "]";
                             }
                         }
                         Player.SendMessage(p, "Available shortcuts:");
@@ -188,7 +187,7 @@ namespace MCForge
                         Plugin plugin = null;
                         foreach (Plugin p1 in Plugin.all)
                         {
-                            if (p1.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
+                            if (p1.name.ToLower() == message.ToLower())
                             {
                                 plugin = p1;
                                 break;

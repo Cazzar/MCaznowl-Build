@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -35,9 +34,9 @@ namespace MCForge
         {
             CatchPos cpos;
 
-            message = message.ToLower(CultureInfo.CurrentCulture);
+            message = message.ToLower();
 
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 cpos.maxNum = 0;
                 cpos.extraType = 0;
@@ -47,7 +46,7 @@ namespace MCForge
             {
                 try
                 {
-                    cpos.maxNum = int.Parse(message, CultureInfo.CurrentCulture);
+                    cpos.maxNum = int.Parse(message);
                     cpos.extraType = 0;
                     cpos.type = Block.Zero;
                 }
@@ -81,7 +80,7 @@ namespace MCForge
                 {
                     try
                     {
-                        cpos.maxNum = int.Parse(message.Split(' ')[0], CultureInfo.CurrentCulture);
+                        cpos.maxNum = int.Parse(message.Split(' ')[0]);
                         cpos.type = Block.Byte(message.Split(' ')[1]);
                         if (cpos.type == Block.Zero)
                             if (message.Split(' ')[1] == "wall") cpos.extraType = 1;
@@ -100,7 +99,7 @@ namespace MCForge
                 }
                 else
                 {
-                    try { cpos.maxNum = int.Parse(message.Split(' ')[0], CultureInfo.CurrentCulture); }
+                    try { cpos.maxNum = int.Parse(message.Split(' ')[0]); }
                     catch { Help(p); return; }
                     cpos.type = Block.Byte(message.Split(' ')[1]); if (cpos.type == Block.Zero) { Help(p); return; }
                     if (message.Split(' ')[2] == "wall") cpos.extraType = 1;
@@ -285,30 +284,10 @@ namespace MCForge
                 }
             }
 
-            Player.SendMessage(p, "Line was " + count.ToString(CultureInfo.CurrentCulture) + " blocks long.");
+            Player.SendMessage(p, "Line was " + count.ToString() + " blocks long.");
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-        struct CatchPos { public ushort x, y, z; public int maxNum; public int extraType; public byte type;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; public int maxNum; public int extraType; public byte type; }
     }
 }

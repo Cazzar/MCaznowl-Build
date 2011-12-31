@@ -33,7 +33,7 @@ namespace MCForge
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdIgnore() { }
-        public static byte lastused/* = 0*/;
+        public static byte lastused = 0;
         public static string ignore = "";
         public static string ignore2 = "";
 

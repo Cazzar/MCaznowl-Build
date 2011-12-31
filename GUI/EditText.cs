@@ -21,7 +21,7 @@ namespace MCForge.Gui
         {
             checkforsave(sender, e);
         }
-        bool loaded/* = false*/;
+        bool loaded = false;
         string oldtxt;
         string loadedfile;
 

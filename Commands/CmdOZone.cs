@@ -15,7 +15,6 @@
 	or implied. See the Licenses for the specific language governing
 	permissions and limitations under the Licenses.
 */
-using System;
 namespace MCForge
 {
     public class CmdOZone : Command
@@ -32,7 +31,7 @@ namespace MCForge
         }
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { this.Help(p); }
+            if (message == "") { this.Help(p); }
             else
             {
                 int x2 = p.level.width - 1;

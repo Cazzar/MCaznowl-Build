@@ -115,27 +115,7 @@ namespace MCForge
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-        struct CatchPos { public ushort x, y, z;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; }
 
         public ushort z { get; set; }
     }

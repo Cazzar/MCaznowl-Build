@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using MCForge.SQL;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -36,7 +35,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') == -1) { Help(p); return; }
+            if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
 
             Player who = Player.Find(message.Split(' ')[0]);
 
@@ -53,7 +52,7 @@ namespace MCForge
                 Database.executeQuery("CREATE TABLE if not exists `Inbox" + whoTo + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));");
                 if (!Server.useMySQL)
                     Server.s.Log(message.Replace("'", "\\'"));
-                Database.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', '" + message.Replace("'", (Server.useMySQL ? "\\'" : "''")) + "')");
+                Database.executeQuery("INSERT INTO `Inbox" + whoTo + "` (PlayerFrom, TimeSent, Contents) VALUES ('" + fromname + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + message.Replace("'", (Server.useMySQL ? "\\'" : "''")) + "')");
             //DB
 
             Player.SendMessage(p, "Message sent to &5" + whoTo + ".");

@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -34,18 +33,18 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) message = "list";
+            if (message == "") message = "list";
 
             string[] parameters = message.Split(' ');
 
-            if (parameters[0].ToLower(CultureInfo.CurrentCulture) == "list")
+            if (parameters[0].ToLower() == "list")
             {
                 if (parameters.Length > 1)
                 {
                     int pageNum, currentNum;
                     try
                     {
-                        pageNum = int.Parse(parameters[1], CultureInfo.CurrentCulture) * 10; currentNum = pageNum - 10;
+                        pageNum = int.Parse(parameters[1]) * 10; currentNum = pageNum - 10;
                     }
                     catch { Help(p); return; }
 
@@ -83,7 +82,7 @@ namespace MCForge
                 int zoneID;
                 try
                 {
-                    zoneID = int.Parse(message, CultureInfo.CurrentCulture);
+                    zoneID = int.Parse(message);
                 }
                 catch { Help(p); return; }
 

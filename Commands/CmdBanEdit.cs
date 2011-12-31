@@ -40,7 +40,7 @@ namespace MCForge
             string creason = message;
             string reason = creason.Remove(0, username.Length + 1).Replace(" ", "%20");
             string errormessage = Ban.Editreason(username, reason);
-            if (!(errormessage != null && String.IsNullOrEmpty(errormessage)))
+            if (errormessage != "")
             {
                 Player.SendMessage(p, errormessage);
             }

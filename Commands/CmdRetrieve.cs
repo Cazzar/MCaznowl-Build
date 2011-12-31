@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -31,19 +30,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public List<CopyOwner> _list = new List<CopyOwner>(); 
-
-        public List<CopyOwner> list
-        {
-            get
-            {
-                return _list;
-            }
-            set
-            {
-                _list = value;
-            }
-        }
+        public List<CopyOwner> list = new List<CopyOwner>();
         public CmdRetrieve() { }
 
         public override void Use(Player p, string message)
@@ -51,7 +38,7 @@ namespace MCForge
             try
             {
                 if (!File.Exists("extra/copy/index.copydb")) { File.Create("extra/copy/index.copydb").Dispose(); /*Player.SendMessage(p, "No copy index found! Save something before trying to retrieve it!"); return;*/ }
-                if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+                if (message == "") { Help(p); return; }
                 if (message.Split(' ')[0] == "info")
                 {
                     if (message.IndexOf(' ') != -1)
@@ -78,7 +65,7 @@ namespace MCForge
                     message = message.Replace("find", "");
                     string storedcopies = ""; int maxCopies = 0; int findnum = 0; int currentnum = 0;
                     bool isint = int.TryParse(message, out findnum);
-                    if ((message != null && String.IsNullOrEmpty(message))) { goto retrieve; }
+                    if (message == "") { goto retrieve; }
                     if (!isint)
                     {
                         message = message.Trim();
@@ -90,10 +77,10 @@ namespace MCForge
                             cO.name = s.Split(' ')[1];
                             list.Add(cO);
                         }
-//                        List<CopyOwner> results = new List<CopyOwner>() // COMMENTED BY CODEIT.RIGHT;
+                        List<CopyOwner> results = new List<CopyOwner>();
                         for (int i = 0; i < list.Count; i++)
                         {
-                            if (list[i].name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
+                            if (list[i].name.ToLower() == message.ToLower())
                             {
                                 storedcopies += ", " + list[i].file;
                             }
@@ -121,7 +108,7 @@ namespace MCForge
                         {
                             storedcopies += ", " + file.Name.Replace(".copy", "");
                         }
-                        if (!(storedcopies != null && String.IsNullOrEmpty(storedcopies)))
+                        if (storedcopies != "")
                         {
                             Player.SendMessage(p, "Saved copy files: ");
                             Player.SendMessage(p, "&f " + storedcopies.Remove(0, 2));
@@ -139,7 +126,7 @@ namespace MCForge
                         {
                             storedcopies += ", " + fi[i].Name.Replace(".copy", "");
                         }
-                        if (!(storedcopies != null && String.IsNullOrEmpty(storedcopies)))
+                        if (storedcopies != "")
                         {
                             Player.SendMessage(p, "&f" + storedcopies.Remove(0, 2));
                         }
@@ -160,10 +147,10 @@ namespace MCForge
                                 if (readFirst)
                                 {
                                     Player.CopyPos cP;
-                                    cP.x = Convert.ToUInt16(s.Split(' ')[0], CultureInfo.CurrentCulture);
-                                    cP.y = Convert.ToUInt16(s.Split(' ')[1], CultureInfo.CurrentCulture);
-                                    cP.z = Convert.ToUInt16(s.Split(' ')[2], CultureInfo.CurrentCulture);
-                                    cP.type = Convert.ToByte(s.Split(' ')[3], CultureInfo.CurrentCulture);
+                                    cP.x = Convert.ToUInt16(s.Split(' ')[0]);
+                                    cP.y = Convert.ToUInt16(s.Split(' ')[1]);
+                                    cP.z = Convert.ToUInt16(s.Split(' ')[2]);
+                                    cP.type = Convert.ToByte(s.Split(' ')[3]);
                                     p.CopyBuffer.Add(cP);
                                 }
                                 else readFirst = true;

@@ -47,7 +47,7 @@ namespace MCForge
         }
         public override void Use(Player p, string message)
         {
-            if (((message != null && String.IsNullOrEmpty(message)))) { this.Help(p); }
+            if ((message == "")) { this.Help(p); }
             else
             {
                 Player player = Player.Find(message.Split(' ')[0]);

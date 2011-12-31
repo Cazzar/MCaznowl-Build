@@ -26,7 +26,6 @@ using System.Linq;
 using System.Text;
 using MCForge.SQL;
 using System.Timers;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -37,1942 +36,218 @@ namespace MCForge
         public static List<Player> connections = new List<Player>(Server.players);
         System.Timers.Timer muteTimer = new System.Timers.Timer(1000);
         public static List<string> emoteList = new List<string>();
-        private List<string> _listignored = new List<string>(); 
-
-        public List<string> listignored
-        {
-            get
-            {
-                return _listignored;
-            }
-            set
-            {
-                _listignored = value;
-            }
-        }
-        private List<string> _mapgroups = new List<string>(); 
-
-        public List<string> mapgroups
-        {
-            get
-            {
-                return _mapgroups;
-            }
-            set
-            {
-                _mapgroups = value;
-            }
-        }
+        public List<string> listignored = new List<string>();
+        public List<string> mapgroups = new List<string>();
         public static List<string> globalignores = new List<string>();
-        public static int totalMySQLFailed/* = 0*/;
+        public static int totalMySQLFailed = 0;
         public static byte number { get { return (byte)players.Count; } }
         static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
         static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
         public static List<Player> totalplayers = new List<Player>();
         public static string lastMSG = "";
 
-        public static bool storeHelp/* = false*/;
+        public static bool storeHelp = false;
         public static string storedHelp = "";
-        internal bool dontmindme/* = false*/;
-        private Socket _socket; 
-
-        public Socket socket
-        {
-            get
-            {
-                return _socket;
-            }
-            set
-            {
-                _socket = value;
-            }
-        }
+        internal bool dontmindme = false;
+        public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
-        private System.Timers.Timer _pingTimer = new System.Timers.Timer(2000); 
-
-        public System.Timers.Timer pingTimer
-        {
-            get
-            {
-                return _pingTimer;
-            }
-            set
-            {
-                _pingTimer = value;
-            }
-        }
+        public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
         System.Timers.Timer extraTimer = new System.Timers.Timer(22000);
-        private System.Timers.Timer _afkTimer = new System.Timers.Timer(2000); 
+        public System.Timers.Timer afkTimer = new System.Timers.Timer(2000);
+        public int afkCount = 0;
+        public DateTime afkStart;
 
-        public System.Timers.Timer afkTimer
-        {
-            get
-            {
-                return _afkTimer;
-            }
-            set
-            {
-                _afkTimer = value;
-            }
-        }
-        private int _afkCount; 
-
-        public int afkCount
-        {
-            get
-            {
-                return _afkCount;
-            }
-            set
-            {
-                _afkCount = value;
-            }
-        }
-        private DateTime _afkStart; 
-
-        public DateTime afkStart
-        {
-            get
-            {
-                return _afkStart;
-            }
-            set
-            {
-                _afkStart = value;
-            }
-        }
-
-        private bool _megaBoid; 
-
-        public bool megaBoid
-        {
-            get
-            {
-                return _megaBoid;
-            }
-            set
-            {
-                _megaBoid = value;
-            }
-        }
-        private bool _cmdTimer; 
-
-        public bool cmdTimer
-        {
-            get
-            {
-                return _cmdTimer;
-            }
-            set
-            {
-                _cmdTimer = value;
-            }
-        }
-        private bool _usingWom; 
-
-        public bool UsingWom
-        {
-            get
-            {
-                return _usingWom;
-            }
-            set
-            {
-                _usingWom = value;
-            }
-        }
+        public bool megaBoid = false;
+        public bool cmdTimer = false;
+        public bool UsingWom = false;
 
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
-        private bool _disconnected; 
-
-        public bool disconnected
-        {
-            get
-            {
-                return _disconnected;
-            }
-            set
-            {
-                _disconnected = value;
-            }
-        }
-        private string _time; 
-
-        public string time
-        {
-            get
-            {
-                return _time;
-            }
-            set
-            {
-                _time = value;
-            }
-        }
-        private string _name; 
-
-        public string name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        private string _realName; 
-
-        public string realName
-        {
-            get
-            {
-                return _realName;
-            }
-            set
-            {
-                _realName = value;
-            }
-        }
-        private int _warn; 
-
-        public int warn
-        {
-            get
-            {
-                return _warn;
-            }
-            set
-            {
-                _warn = value;
-            }
-        }
-        private byte _id; 
-
-        public byte id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
-        private int _userID = -1; 
-
-        public int userID
-        {
-            get
-            {
-                return _userID;
-            }
-            set
-            {
-                _userID = value;
-            }
-        }
-        private string _ip; 
-
-        public string ip
-        {
-            get
-            {
-                return _ip;
-            }
-            set
-            {
-                _ip = value;
-            }
-        }
-        private string _color; 
-
-        public string color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        private Group _group; 
-
-        public Group group
-        {
-            get
-            {
-                return _group;
-            }
-            set
-            {
-                _group = value;
-            }
-        }
-        private bool _hidden; 
-
-        public bool hidden
-        {
-            get
-            {
-                return _hidden;
-            }
-            set
-            {
-                _hidden = value;
-            }
-        }
-        private bool _painting; 
-
-        public bool painting
-        {
-            get
-            {
-                return _painting;
-            }
-            set
-            {
-                _painting = value;
-            }
-        }
-        private bool _muted; 
-
-        public bool muted
-        {
-            get
-            {
-                return _muted;
-            }
-            set
-            {
-                _muted = value;
-            }
-        }
-        private bool _jailed; 
-
-        public bool jailed
-        {
-            get
-            {
-                return _jailed;
-            }
-            set
-            {
-                _jailed = value;
-            }
-        }
-        private bool _invincible; 
-
-        public bool invincible
-        {
-            get
-            {
-                return _invincible;
-            }
-            set
-            {
-                _invincible = value;
-            }
-        }
-        private string _prefix = ""; 
-
-        public string prefix
-        {
-            get
-            {
-                return _prefix;
-            }
-            set
-            {
-                _prefix = value;
-            }
-        }
-        private string _title = ""; 
-
-        public string title
-        {
-            get
-            {
-                return _title;
-            }
-            set
-            {
-                _title = value;
-            }
-        }
-        private string _titlecolor; 
-
-        public string titlecolor
-        {
-            get
-            {
-                return _titlecolor;
-            }
-            set
-            {
-                _titlecolor = value;
-            }
-        }
-        private int _totalMessagesSent; 
-
-        public int TotalMessagesSent
-        {
-            get
-            {
-                return _totalMessagesSent;
-            }
-            set
-            {
-                _totalMessagesSent = value;
-            }
-        }
-        private int _passtries; 
-
-        public int passtries
-        {
-            get
-            {
-                return _passtries;
-            }
-            set
-            {
-                _passtries = value;
-            }
-        }
-        private int _ponycount; 
-
-        public int ponycount
-        {
-            get
-            {
-                return _ponycount;
-            }
-            set
-            {
-                _ponycount = value;
-            }
-        }
-        private int _rdcount; 
-
-        public int rdcount
-        {
-            get
-            {
-                return _rdcount;
-            }
-            set
-            {
-                _rdcount = value;
-            }
-        }
-        private bool _hasreadrules; 
-
-        public bool hasreadrules
-        {
-            get
-            {
-                return _hasreadrules;
-            }
-            set
-            {
-                _hasreadrules = value;
-            }
-        }
-        private bool _canusereview = true; 
-
-        public bool canusereview
-        {
-            get
-            {
-                return _canusereview;
-            }
-            set
-            {
-                _canusereview = value;
-            }
-        }
+        public bool disconnected = false;
+        public string time;
+        public string name;
+        public string realName;
+        public int warn = 0;
+        public byte id;
+        public int userID = -1;
+        public string ip;
+        public string color;
+        public Group group;
+        public bool hidden = false;
+        public bool painting = false;
+        public bool muted = false;
+        public bool jailed = false;
+        public bool invincible = false;
+        public string prefix = "";
+        public string title = "";
+        public string titlecolor;
+        public int TotalMessagesSent = 0;
+        public int passtries = 0;
+        public int ponycount = 0;
+        public int rdcount = 0;
+        public bool hasreadrules = false;
+        public bool canusereview = true;
 
         // check what commands are being used much:
         public static bool sendcommanddata = true;
 
         //Pyramid Code
 
-        private int _pyramidx1; 
+        public int pyramidx1;
+        public int pyramidx2;
+        public int pyramidy1;
+        public int pyramidy2;
+        public int pyramidz1;
+        public int pyramidz2;
+        public string pyramidblock;
+        public int pyramidtotal;
+        public int pyramidtotal2;
+        public bool pyramidsilent = false;
 
-        public int pyramidx1
-        {
-            get
-            {
-                return _pyramidx1;
-            }
-            set
-            {
-                _pyramidx1 = value;
-            }
-        }
-        private int _pyramidx2; 
+        public bool deleteMode = false;
+        public bool ignorePermission = false;
+        public bool ignoreGrief = false;
+        public bool parseSmiley = true;
+        public bool smileySaved = true;
+        public bool opchat = false;
+        public bool adminchat = false;
+        public bool onWhitelist = false;
+        public bool whisper = false;
+        public string whisperTo = "";
+        public bool ignoreglobal = false;
 
-        public int pyramidx2
-        {
-            get
-            {
-                return _pyramidx2;
-            }
-            set
-            {
-                _pyramidx2 = value;
-            }
-        }
-        private int _pyramidy1; 
+        public string storedMessage = "";
 
-        public int pyramidy1
-        {
-            get
-            {
-                return _pyramidy1;
-            }
-            set
-            {
-                _pyramidy1 = value;
-            }
-        }
-        private int _pyramidy2; 
+        public bool trainGrab = false;
+        public bool onTrain = false;
+        public bool allowTnt = true;
 
-        public int pyramidy2
-        {
-            get
-            {
-                return _pyramidy2;
-            }
-            set
-            {
-                _pyramidy2 = value;
-            }
-        }
-        private int _pyramidz1; 
-
-        public int pyramidz1
-        {
-            get
-            {
-                return _pyramidz1;
-            }
-            set
-            {
-                _pyramidz1 = value;
-            }
-        }
-        private int _pyramidz2; 
-
-        public int pyramidz2
-        {
-            get
-            {
-                return _pyramidz2;
-            }
-            set
-            {
-                _pyramidz2 = value;
-            }
-        }
-        private string _pyramidblock; 
-
-        public string pyramidblock
-        {
-            get
-            {
-                return _pyramidblock;
-            }
-            set
-            {
-                _pyramidblock = value;
-            }
-        }
-        private int _pyramidtotal; 
-
-        public int pyramidtotal
-        {
-            get
-            {
-                return _pyramidtotal;
-            }
-            set
-            {
-                _pyramidtotal = value;
-            }
-        }
-        private int _pyramidtotal2; 
-
-        public int pyramidtotal2
-        {
-            get
-            {
-                return _pyramidtotal2;
-            }
-            set
-            {
-                _pyramidtotal2 = value;
-            }
-        }
-        private bool _pyramidsilent; 
-
-        public bool pyramidsilent
-        {
-            get
-            {
-                return _pyramidsilent;
-            }
-            set
-            {
-                _pyramidsilent = value;
-            }
-        }
-
-        private bool _deleteMode; 
-
-        public bool deleteMode
-        {
-            get
-            {
-                return _deleteMode;
-            }
-            set
-            {
-                _deleteMode = value;
-            }
-        }
-        private bool _ignorePermission; 
-
-        public bool ignorePermission
-        {
-            get
-            {
-                return _ignorePermission;
-            }
-            set
-            {
-                _ignorePermission = value;
-            }
-        }
-        private bool _ignoreGrief; 
-
-        public bool ignoreGrief
-        {
-            get
-            {
-                return _ignoreGrief;
-            }
-            set
-            {
-                _ignoreGrief = value;
-            }
-        }
-        private bool _parseSmiley = true; 
-
-        public bool parseSmiley
-        {
-            get
-            {
-                return _parseSmiley;
-            }
-            set
-            {
-                _parseSmiley = value;
-            }
-        }
-        private bool _smileySaved = true; 
-
-        public bool smileySaved
-        {
-            get
-            {
-                return _smileySaved;
-            }
-            set
-            {
-                _smileySaved = value;
-            }
-        }
-        private bool _opchat; 
-
-        public bool opchat
-        {
-            get
-            {
-                return _opchat;
-            }
-            set
-            {
-                _opchat = value;
-            }
-        }
-        private bool _adminchat; 
-
-        public bool adminchat
-        {
-            get
-            {
-                return _adminchat;
-            }
-            set
-            {
-                _adminchat = value;
-            }
-        }
-        private bool _onWhitelist; 
-
-        public bool onWhitelist
-        {
-            get
-            {
-                return _onWhitelist;
-            }
-            set
-            {
-                _onWhitelist = value;
-            }
-        }
-        private bool _whisper; 
-
-        public bool whisper
-        {
-            get
-            {
-                return _whisper;
-            }
-            set
-            {
-                _whisper = value;
-            }
-        }
-        private string _whisperTo = ""; 
-
-        public string whisperTo
-        {
-            get
-            {
-                return _whisperTo;
-            }
-            set
-            {
-                _whisperTo = value;
-            }
-        }
-        private bool _ignoreglobal; 
-
-        public bool ignoreglobal
-        {
-            get
-            {
-                return _ignoreglobal;
-            }
-            set
-            {
-                _ignoreglobal = value;
-            }
-        }
-
-        private string _storedMessage = ""; 
-
-        public string storedMessage
-        {
-            get
-            {
-                return _storedMessage;
-            }
-            set
-            {
-                _storedMessage = value;
-            }
-        }
-
-        private bool _trainGrab; 
-
-        public bool trainGrab
-        {
-            get
-            {
-                return _trainGrab;
-            }
-            set
-            {
-                _trainGrab = value;
-            }
-        }
-        private bool _onTrain; 
-
-        public bool onTrain
-        {
-            get
-            {
-                return _onTrain;
-            }
-            set
-            {
-                _onTrain = value;
-            }
-        }
-        private bool _allowTnt = true; 
-
-        public bool allowTnt
-        {
-            get
-            {
-                return _allowTnt;
-            }
-            set
-            {
-                _allowTnt = value;
-            }
-        }
-
-        private bool _frozen; 
-
-        public bool frozen
-        {
-            get
-            {
-                return _frozen;
-            }
-            set
-            {
-                _frozen = value;
-            }
-        }
-        private string _following = ""; 
-
-        public string following
-        {
-            get
-            {
-                return _following;
-            }
-            set
-            {
-                _following = value;
-            }
-        }
-        private string _possess = ""; 
-
-        public string possess
-        {
-            get
-            {
-                return _possess;
-            }
-            set
-            {
-                _possess = value;
-            }
-        }
+        public bool frozen = false;
+        public string following = "";
+        public string possess = "";
 
         // Only used for possession.
         //Using for anything else can cause unintended effects!
-        private bool _canBuild = true; 
+        public bool canBuild = true;
 
-        public bool canBuild
-        {
-            get
-            {
-                return _canBuild;
-            }
-            set
-            {
-                _canBuild = value;
-            }
-        }
+        public int money = 0;
+        public long overallBlocks = 0;
 
-        private int _money; 
+        public int loginBlocks = 0;
 
-        public int money
-        {
-            get
-            {
-                return _money;
-            }
-            set
-            {
-                _money = value;
-            }
-        }
-        private long _overallBlocks; 
+        public DateTime timeLogged;
+        public DateTime firstLogin;
+        public int totalLogins = 0;
+        public int totalKicked = 0;
+        public int overallDeath = 0;
 
-        public long overallBlocks
-        {
-            get
-            {
-                return _overallBlocks;
-            }
-            set
-            {
-                _overallBlocks = value;
-            }
-        }
+        public string savedcolor = "";
 
-        private int _loginBlocks; 
+        public bool staticCommands = false;
 
-        public int loginBlocks
-        {
-            get
-            {
-                return _loginBlocks;
-            }
-            set
-            {
-                _loginBlocks = value;
-            }
-        }
+        public DateTime ZoneSpam;
+        public bool ZoneCheck = false;
+        public bool zoneDel = false;
 
-        private DateTime _timeLogged; 
+        public Thread commThread;
+        public bool commUse = false;
 
-        public DateTime timeLogged
-        {
-            get
-            {
-                return _timeLogged;
-            }
-            set
-            {
-                _timeLogged = value;
-            }
-        }
-        private DateTime _firstLogin; 
+        public bool aiming;
+        public bool isFlying = false;
 
-        public DateTime firstLogin
-        {
-            get
-            {
-                return _firstLogin;
-            }
-            set
-            {
-                _firstLogin = value;
-            }
-        }
-        private int _totalLogins; 
+        public bool joker = false;
+        public bool adminpen = false;
 
-        public int totalLogins
-        {
-            get
-            {
-                return _totalLogins;
-            }
-            set
-            {
-                _totalLogins = value;
-            }
-        }
-        private int _totalKicked; 
+        public bool voice = false;
+        public string voicestring = "";
 
-        public int totalKicked
-        {
-            get
-            {
-                return _totalKicked;
-            }
-            set
-            {
-                _totalKicked = value;
-            }
-        }
-        private int _overallDeath; 
-
-        public int overallDeath
-        {
-            get
-            {
-                return _overallDeath;
-            }
-            set
-            {
-                _overallDeath = value;
-            }
-        }
-
-        private string _savedcolor = ""; 
-
-        public string savedcolor
-        {
-            get
-            {
-                return _savedcolor;
-            }
-            set
-            {
-                _savedcolor = value;
-            }
-        }
-
-        private bool _staticCommands; 
-
-        public bool staticCommands
-        {
-            get
-            {
-                return _staticCommands;
-            }
-            set
-            {
-                _staticCommands = value;
-            }
-        }
-
-        private DateTime _zoneSpam; 
-
-        public DateTime ZoneSpam
-        {
-            get
-            {
-                return _zoneSpam;
-            }
-            set
-            {
-                _zoneSpam = value;
-            }
-        }
-        private bool _zoneCheck; 
-
-        public bool ZoneCheck
-        {
-            get
-            {
-                return _zoneCheck;
-            }
-            set
-            {
-                _zoneCheck = value;
-            }
-        }
-        private bool _zoneDel; 
-
-        public bool zoneDel
-        {
-            get
-            {
-                return _zoneDel;
-            }
-            set
-            {
-                _zoneDel = value;
-            }
-        }
-
-        private Thread _commThread; 
-
-        public Thread commThread
-        {
-            get
-            {
-                return _commThread;
-            }
-            set
-            {
-                _commThread = value;
-            }
-        }
-        private bool _commUse; 
-
-        public bool commUse
-        {
-            get
-            {
-                return _commUse;
-            }
-            set
-            {
-                _commUse = value;
-            }
-        }
-
-        private bool _aiming; 
-
-        public bool aiming
-        {
-            get
-            {
-                return _aiming;
-            }
-            set
-            {
-                _aiming = value;
-            }
-        }
-        private bool _isFlying; 
-
-        public bool isFlying
-        {
-            get
-            {
-                return _isFlying;
-            }
-            set
-            {
-                _isFlying = value;
-            }
-        }
-
-        private bool _joker; 
-
-        public bool joker
-        {
-            get
-            {
-                return _joker;
-            }
-            set
-            {
-                _joker = value;
-            }
-        }
-        private bool _adminpen; 
-
-        public bool adminpen
-        {
-            get
-            {
-                return _adminpen;
-            }
-            set
-            {
-                _adminpen = value;
-            }
-        }
-
-        private bool _voice; 
-
-        public bool voice
-        {
-            get
-            {
-                return _voice;
-            }
-            set
-            {
-                _voice = value;
-            }
-        }
-        private string _voicestring = ""; 
-
-        public string voicestring
-        {
-            get
-            {
-                return _voicestring;
-            }
-            set
-            {
-                _voicestring = value;
-            }
-        }
-
-        private int _grieferStoneWarn; 
-
-        public int grieferStoneWarn
-        {
-            get
-            {
-                return _grieferStoneWarn;
-            }
-            set
-            {
-                _grieferStoneWarn = value;
-            }
-        }
+        public int grieferStoneWarn = 0;
 
         //CTF
-        private Team _team; 
-
-        public Team team
-        {
-            get
-            {
-                return _team;
-            }
-            set
-            {
-                _team = value;
-            }
-        }
-        private Team _hasflag; 
-
-        public Team hasflag
-        {
-            get
-            {
-                return _hasflag;
-            }
-            set
-            {
-                _hasflag = value;
-            }
-        }
+        public Team team;
+        public Team hasflag;
 
         //Countdown
-        private bool _playerofcountdown; 
-
-        public bool playerofcountdown
-        {
-            get
-            {
-                return _playerofcountdown;
-            }
-            set
-            {
-                _playerofcountdown = value;
-            }
-        }
-        private bool _incountdown; 
-
-        public bool incountdown
-        {
-            get
-            {
-                return _incountdown;
-            }
-            set
-            {
-                _incountdown = value;
-            }
-        }
-        private ushort _countdowntempx; 
-
-        public ushort countdowntempx
-        {
-            get
-            {
-                return _countdowntempx;
-            }
-            set
-            {
-                _countdowntempx = value;
-            }
-        }
-        private ushort _countdowntempz; 
-
-        public ushort countdowntempz
-        {
-            get
-            {
-                return _countdowntempz;
-            }
-            set
-            {
-                _countdowntempz = value;
-            }
-        }
-        private bool _countdownsettemps; 
-
-        public bool countdownsettemps
-        {
-            get
-            {
-                return _countdownsettemps;
-            }
-            set
-            {
-                _countdownsettemps = value;
-            }
-        }
+        public bool playerofcountdown = false;
+        public bool incountdown = false;
+        public ushort countdowntempx;
+        public ushort countdowntempz;
+        public bool countdownsettemps = false;
 
         //Zombie
-        private bool _referee; 
-
-        public bool referee
-        {
-            get
-            {
-                return _referee;
-            }
-            set
-            {
-                _referee = value;
-            }
-        }
-        private int _blockCount = 50; 
-
-        public int blockCount
-        {
-            get
-            {
-                return _blockCount;
-            }
-            set
-            {
-                _blockCount = value;
-            }
-        }
-        private bool _voted; 
-
-        public bool voted
-        {
-            get
-            {
-                return _voted;
-            }
-            set
-            {
-                _voted = value;
-            }
-        }
-        private int _blocksStacked; 
-
-        public int blocksStacked
-        {
-            get
-            {
-                return _blocksStacked;
-            }
-            set
-            {
-                _blocksStacked = value;
-            }
-        }
-        private int _infectThisRound; 
-
-        public int infectThisRound
-        {
-            get
-            {
-                return _infectThisRound;
-            }
-            set
-            {
-                _infectThisRound = value;
-            }
-        }
-        private int _lastYblock; 
-
-        public int lastYblock
-        {
-            get
-            {
-                return _lastYblock;
-            }
-            set
-            {
-                _lastYblock = value;
-            }
-        }
-        private int _lastXblock; 
-
-        public int lastXblock
-        {
-            get
-            {
-                return _lastXblock;
-            }
-            set
-            {
-                _lastXblock = value;
-            }
-        }
-        private int _lastZblock; 
-
-        public int lastZblock
-        {
-            get
-            {
-                return _lastZblock;
-            }
-            set
-            {
-                _lastZblock = value;
-            }
-        }
-        private bool _infected; 
-
-        public bool infected
-        {
-            get
-            {
-                return _infected;
-            }
-            set
-            {
-                _infected = value;
-            }
-        }
-        private bool _aka; 
-
-        public bool aka
-        {
-            get
-            {
-                return _aka;
-            }
-            set
-            {
-                _aka = value;
-            }
-        }
-        private bool _flipHead = true; 
-
-        public bool flipHead
-        {
-            get
-            {
-                return _flipHead;
-            }
-            set
-            {
-                _flipHead = value;
-            }
-        }
-        private int _playersInfected; 
-
-        public int playersInfected
-        {
-            get
-            {
-                return _playersInfected;
-            }
-            set
-            {
-                _playersInfected = value;
-            }
-        }
-        private int _noClipcount; 
-
-        public int NoClipcount
-        {
-            get
-            {
-                return _noClipcount;
-            }
-            set
-            {
-                _noClipcount = value;
-            }
-        }
+        public bool referee = false;
+        public int blockCount = 50;
+        public bool voted = false;
+        public int blocksStacked = 0;
+        public int infectThisRound = 0;
+        public int lastYblock = 0;
+        public int lastXblock = 0;
+        public int lastZblock = 0;
+        public bool infected = false;
+        public bool aka = false;
+        public bool flipHead = true;
+        public int playersInfected = 0;
+        public int NoClipcount = 0;
 
 
         //Tnt Wars
-        private bool _playingTntWars; 
-
-        public bool PlayingTntWars
-        {
-            get
-            {
-                return _playingTntWars;
-            }
-            set
-            {
-                _playingTntWars = value;
-            }
-        }
-        private int _currentAmountOfTnt; 
-
-        public int CurrentAmountOfTnt
-        {
-            get
-            {
-                return _currentAmountOfTnt;
-            }
-            set
-            {
-                _currentAmountOfTnt = value;
-            }
-        }
-        private int _currentTntGameNumber; 
-
-        public int CurrentTntGameNumber
-        {
-            get
-            {
-                return _currentTntGameNumber;
-            }
-            set
-            {
-                _currentTntGameNumber = value;
-            }
-        } //For keeping track of which game is which
-        private int _tntWarsHealth = 2; 
-
-        public int TntWarsHealth
-        {
-            get
-            {
-                return _tntWarsHealth;
-            }
-            set
-            {
-                _tntWarsHealth = value;
-            }
-        }
-        private int _tntWarsKillStreak; 
-
-        public int TntWarsKillStreak
-        {
-            get
-            {
-                return _tntWarsKillStreak;
-            }
-            set
-            {
-                _tntWarsKillStreak = value;
-            }
-        }
-        private float _tntWarsScoreMultiplier = 1f; 
-
-        public float TntWarsScoreMultiplier
-        {
-            get
-            {
-                return _tntWarsScoreMultiplier;
-            }
-            set
-            {
-                _tntWarsScoreMultiplier = value;
-            }
-        }
-        private int _tntWarsLastKillStreakAnnounced; 
-
-        public int TNTWarsLastKillStreakAnnounced
-        {
-            get
-            {
-                return _tntWarsLastKillStreakAnnounced;
-            }
-            set
-            {
-                _tntWarsLastKillStreakAnnounced = value;
-            }
-        }
-        private bool _inTNTwarsMap; 
-
-        public bool inTNTwarsMap
-        {
-            get
-            {
-                return _inTNTwarsMap;
-            }
-            set
-            {
-                _inTNTwarsMap = value;
-            }
-        }
-        private Player _harmedBy = null; 
-
-        public Player HarmedBy
-        {
-            get
-            {
-                return _harmedBy;
-            }
-            set
-            {
-                _harmedBy = value;
-            }
-        } //For Assists
+        public bool PlayingTntWars = false;
+        public int CurrentAmountOfTnt = 0;
+        public int CurrentTntGameNumber; //For keeping track of which game is which
+        public int TntWarsHealth = 2;
+        public int TntWarsKillStreak = 0;
+        public float TntWarsScoreMultiplier = 1f;
+        public int TNTWarsLastKillStreakAnnounced = 0;
+        public bool inTNTwarsMap = false;
+        public Player HarmedBy = null; //For Assists
 
         //Copy
-        private List<CopyPos> _copyBuffer = new List<CopyPos>(); 
-
-        public List<CopyPos> CopyBuffer
-        {
-            get
-            {
-                return _copyBuffer;
-            }
-            set
-            {
-                _copyBuffer = value;
-            }
-        }
-        public struct CopyPos
-        {
-            public ushort x, y, z; public byte type;
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CopyPos x, CopyPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CopyPos x, CopyPos y)
-            {
-                throw new NotImplementedException();
-            }
-        }
-        private bool _copyAir; 
-
-        public bool copyAir
-        {
-            get
-            {
-                return _copyAir;
-            }
-            set
-            {
-                _copyAir = value;
-            }
-        }
-        private int[] _copyoffset = new int[3] { 0, 0, 0 }; 
-
-        public int[] copyoffset
-        {
-            get
-            {
-                return _copyoffset;
-            }
-            set
-            {
-                _copyoffset = value;
-            }
-        }
-        private ushort[] _copystart = new ushort[3] { 0, 0, 0 }; 
-
-        public ushort[] copystart
-        {
-            get
-            {
-                return _copystart;
-            }
-            set
-            {
-                _copystart = value;
-            }
-        }
+        public List<CopyPos> CopyBuffer = new List<CopyPos>();
+        public struct CopyPos { public ushort x, y, z; public byte type; }
+        public bool copyAir = false;
+        public int[] copyoffset = new int[3] { 0, 0, 0 };
+        public ushort[] copystart = new ushort[3] { 0, 0, 0 };
 
         //Undo
-        public struct UndoPos
-        {
-            public ushort x, y, z; public byte type, newtype; public string mapName; public DateTime timePlaced;
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(UndoPos x, UndoPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(UndoPos x, UndoPos y)
-            {
-                throw new NotImplementedException();
-            }
-        }
-        private List<UndoPos> _undoBuffer = new List<UndoPos>(); 
-
-        public List<UndoPos> UndoBuffer
-        {
-            get
-            {
-                return _undoBuffer;
-            }
-            set
-            {
-                _undoBuffer = value;
-            }
-        }
-        private List<UndoPos> _redoBuffer = new List<UndoPos>(); 
-
-        public List<UndoPos> RedoBuffer
-        {
-            get
-            {
-                return _redoBuffer;
-            }
-            set
-            {
-                _redoBuffer = value;
-            }
-        }
+        public struct UndoPos { public ushort x, y, z; public byte type, newtype; public string mapName; public DateTime timePlaced; }
+        public List<UndoPos> UndoBuffer = new List<UndoPos>();
+        public List<UndoPos> RedoBuffer = new List<UndoPos>();
 
 
-        private bool _showPortals; 
+        public bool showPortals = false;
+        public bool showMBs = false;
 
-        public bool showPortals
-        {
-            get
-            {
-                return _showPortals;
-            }
-            set
-            {
-                _showPortals = value;
-            }
-        }
-        private bool _showMbs; 
-
-        public bool showMBs
-        {
-            get
-            {
-                return _showMbs;
-            }
-            set
-            {
-                _showMbs = value;
-            }
-        }
-
-        private string _prevMsg = ""; 
-
-        public string prevMsg
-        {
-            get
-            {
-                return _prevMsg;
-            }
-            set
-            {
-                _prevMsg = value;
-            }
-        }
+        public string prevMsg = "";
 
         //Block Change variable holding
-        private int[] _bcVar; 
-
-        public int[] BcVar
-        {
-            get
-            {
-                return _bcVar;
-            }
-            set
-            {
-                _bcVar = value;
-            }
-        }
+        public int[] BcVar;
 
 
         //Movement
-        private ushort _oldBlock; 
-
-        public ushort oldBlock
-        {
-            get
-            {
-                return _oldBlock;
-            }
-            set
-            {
-                _oldBlock = value;
-            }
-        }
-        private ushort _deathCount; 
-
-        public ushort deathCount
-        {
-            get
-            {
-                return _deathCount;
-            }
-            set
-            {
-                _deathCount = value;
-            }
-        }
-        private byte _deathBlock; 
-
-        public byte deathBlock
-        {
-            get
-            {
-                return _deathBlock;
-            }
-            set
-            {
-                _deathBlock = value;
-            }
-        }
+        public ushort oldBlock = 0;
+        public ushort deathCount = 0;
+        public byte deathBlock;
 
         //Games
-        private DateTime _lastDeath = DateTime.Now; 
+        public DateTime lastDeath = DateTime.Now;
 
-        public DateTime lastDeath
-        {
-            get
-            {
-                return _lastDeath;
-            }
-            set
-            {
-                _lastDeath = value;
-            }
-        }
+        public byte BlockAction = 0; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
+        public byte modeType = 0;
+        public byte[] bindings = new byte[128];
+        public string[] cmdBind = new string[10];
+        public string[] messageBind = new string[10];
+        public string lastCMD = "";
+        public sbyte c4circuitNumber = -1;
 
-        private byte _blockAction; 
+        public Level level = Server.mainLevel;
+        public bool Loading = true; //True if player is loading a map.
+        public ushort[] lastClick = new ushort[3] { 0, 0, 0 };
 
-        public byte BlockAction
-        {
-            get
-            {
-                return _blockAction;
-            }
-            set
-            {
-                _blockAction = value;
-            }
-        } //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
-        private byte _modeType; 
-
-        public byte modeType
-        {
-            get
-            {
-                return _modeType;
-            }
-            set
-            {
-                _modeType = value;
-            }
-        }
-        private byte[] _bindings = new byte[128]; 
-
-        public byte[] bindings
-        {
-            get
-            {
-                return _bindings;
-            }
-            set
-            {
-                _bindings = value;
-            }
-        }
-        private string[] _cmdBind = new string[10]; 
-
-        public string[] cmdBind
-        {
-            get
-            {
-                return _cmdBind;
-            }
-            set
-            {
-                _cmdBind = value;
-            }
-        }
-        private string[] _messageBind = new string[10]; 
-
-        public string[] messageBind
-        {
-            get
-            {
-                return _messageBind;
-            }
-            set
-            {
-                _messageBind = value;
-            }
-        }
-        private string _lastCmd = ""; 
-
-        public string lastCMD
-        {
-            get
-            {
-                return _lastCmd;
-            }
-            set
-            {
-                _lastCmd = value;
-            }
-        }
-        private sbyte _c4circuitNumber = -1; 
-
-        public sbyte c4circuitNumber
-        {
-            get
-            {
-                return _c4circuitNumber;
-            }
-            set
-            {
-                _c4circuitNumber = value;
-            }
-        }
-
-        private Level _level = Server.mainLevel; 
-
-        public Level level
-        {
-            get
-            {
-                return _level;
-            }
-            set
-            {
-                _level = value;
-            }
-        }
-        private bool _loading = true; 
-
-        public bool Loading
-        {
-            get
-            {
-                return _loading;
-            }
-            set
-            {
-                _loading = value;
-            }
-        } //True if player is loading a map.
-        private ushort[] _lastClick = new ushort[3] { 0, 0, 0 }; 
-
-        public ushort[] lastClick
-        {
-            get
-            {
-                return _lastClick;
-            }
-            set
-            {
-                _lastClick = value;
-            }
-        }
-
-        private ushort[] _pos = new ushort[3] { 0, 0, 0 }; 
-
-        public ushort[] pos
-        {
-            get
-            {
-                return _pos;
-            }
-            set
-            {
-                _pos = value;
-            }
-        }
+        public ushort[] pos = new ushort[3] { 0, 0, 0 };
         ushort[] oldpos = new ushort[3] { 0, 0, 0 };
         ushort[] basepos = new ushort[3] { 0, 0, 0 };
-        private byte[] _rot = new byte[2] { 0, 0 }; 
-
-        public byte[] rot
-        {
-            get
-            {
-                return _rot;
-            }
-            set
-            {
-                _rot = value;
-            }
-        }
+        public byte[] rot = new byte[2] { 0, 0 };
         byte[] oldrot = new byte[2] { 0, 0 };
 
         //ushort[] clippos = new ushort[3] { 0, 0, 0 };
@@ -1983,141 +258,33 @@ namespace MCForge
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
-        private int _consecutivemessages; 
-
-        public int consecutivemessages
-        {
-            get
-            {
-                return _consecutivemessages;
-            }
-            set
-            {
-                _consecutivemessages = value;
-            }
-        }
+        public int consecutivemessages = 0;
         private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset * 1000);
         //public static int spamChatCount = 3;
         //public static int spamChatTimer = 4;
         //Queue<DateTime> spamChatLog = new Queue<DateTime>(spamChatCount);
 
         // CmdVoteKick
-        private VoteKickChoice _voteKickChoice = VoteKickChoice.HasntVoted; 
-
-        public VoteKickChoice voteKickChoice
-        {
-            get
-            {
-                return _voteKickChoice;
-            }
-            set
-            {
-                _voteKickChoice = value;
-            }
-        }
+        public VoteKickChoice voteKickChoice = VoteKickChoice.HasntVoted;
 
         // Extra storage for custom commands
-        private Extras _extras = new Extras(); 
-
-        public Extras Extras
-        {
-            get
-            {
-                return _extras;
-            }
-            set
-            {
-                _extras = value;
-            }
-        }
+        public ExtrasCollection Extras = new ExtrasCollection();
 
         //Chatrooms
-        private string _chatroom; 
-
-        public string Chatroom
-        {
-            get
-            {
-                return _chatroom;
-            }
-            set
-            {
-                _chatroom = value;
-            }
-        }
-        private List<string> _spyChatRooms = new List<string>(); 
-
-        public List<string> spyChatRooms
-        {
-            get
-            {
-                return _spyChatRooms;
-            }
-            set
-            {
-                _spyChatRooms = value;
-            }
-        }
-        private DateTime _lastchatroomglobal = new DateTime(); 
-
-        public DateTime lastchatroomglobal
-        {
-            get
-            {
-                return _lastchatroomglobal;
-            }
-            set
-            {
-                _lastchatroomglobal = value;
-            }
-        }
+        public string Chatroom;
+        public List<string> spyChatRooms = new List<string>();
+        public DateTime lastchatroomglobal = new DateTime();
 
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
 
         //Random...
-        private Random _random = new Random(); 
-
-        public Random random
-        {
-            get
-            {
-                return _random;
-            }
-            set
-            {
-                _random = value;
-            }
-        }
+        public Random random = new Random();
 
         //Global Chat
-        private bool _muteGlobal; 
+        public bool muteGlobal = false;
 
-        public bool muteGlobal
-        {
-            get
-            {
-                return _muteGlobal;
-            }
-            set
-            {
-                _muteGlobal = value;
-            }
-        }
-
-        private bool _loggedIn; 
-
-        public bool loggedIn
-        {
-            get
-            {
-                return _loggedIn;
-            }
-            set
-            {
-                _loggedIn = value;
-            }
-        }
+        public bool loggedIn = false;
 
         private Player()
         {
@@ -2184,10 +351,10 @@ namespace MCForge
                     {
                         try
                         {
-                            int Days = Convert.ToInt32(time.Split(' ')[0], CultureInfo.CurrentCulture);
-                            int Hours = Convert.ToInt32(time.Split(' ')[1], CultureInfo.CurrentCulture);
-                            int Minutes = Convert.ToInt32(time.Split(' ')[2], CultureInfo.CurrentCulture);
-                            int Seconds = Convert.ToInt32(time.Split(' ')[3], CultureInfo.CurrentCulture);
+                            int Days = Convert.ToInt32(time.Split(' ')[0]);
+                            int Hours = Convert.ToInt32(time.Split(' ')[1]);
+                            int Minutes = Convert.ToInt32(time.Split(' ')[2]);
+                            int Seconds = Convert.ToInt32(time.Split(' ')[3]);
                             Seconds++;
                             if (Seconds >= 60)
                             {
@@ -2288,7 +455,7 @@ namespace MCForge
 
                 afkTimer.Elapsed += delegate
                 {
-                    if ((name != null && String.IsNullOrEmpty(name))) return;
+                    if (name == "") return;
 
                     if (Server.afkset.Contains(name))
                     {
@@ -2308,7 +475,7 @@ namespace MCForge
 
                         if (afkCount > Server.afkminutes * 30)
                         {
-                            if (String.IsNullOrEmpty(name))
+                            if (name.Equals(""))
                             {
                                 Command.all.Find("afk").Use(this, "auto: Not moved for " + Server.afkminutes + " minutes");
                                 if (AFK != null)
@@ -2339,7 +506,7 @@ namespace MCForge
         {
             string commandString =
                 "UPDATE Players SET IP='" + ip + "'" +
-                ", LastLogin='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "'" +
+                ", LastLogin='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "'" +
                 ", totalLogin=" + totalLogins +
                 ", totalDeaths=" + overallDeath +
                 ", Money=" + money +
@@ -2506,10 +673,10 @@ namespace MCForge
                 byte version = message[0];
                 name = enc.GetString(message, 1, 64).Trim();
                 string verify = enc.GetString(message, 65, 32).Trim();
-                //                byte type = message[129] // COMMENTED BY CODEIT.RIGHT;
+                byte type = message[129];
                 try
                 {
-                    Server.TempBan tBan = Server.tempBans.Find(tB => tB.name.ToLower() == name.ToLower(CultureInfo.CurrentCulture));
+                    Server.TempBan tBan = Server.tempBans.Find(tB => tB.name.ToLower() == name.ToLower());
                     if (tBan.allowedJoin < DateTime.Now)
                     {
                         Server.tempBans.Remove(tBan);
@@ -2522,7 +689,7 @@ namespace MCForge
                 catch { }
 
                 // Whitelist check.
-                if (Server.useWhitelist && !Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)))
+                if (Server.useWhitelist && !Server.devs.Contains(name.ToLower()))
                 {
                     if (Server.verify)
                     {
@@ -2547,7 +714,7 @@ namespace MCForge
                     }
                 }
 
-                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)))
+                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower()))
                 {
                     using (WebClient Client = new WebClient())
                     {
@@ -2556,7 +723,7 @@ namespace MCForge
                         {
                             try
                             {
-                                bool haspaid = Convert.ToBoolean(Client.DownloadString("http://www.minecraft.net/haspaid.jsp?user=" + name), CultureInfo.CurrentCulture);
+                                bool haspaid = Convert.ToBoolean(Client.DownloadString("http://www.minecraft.net/haspaid.jsp?user=" + name));
                                 if (!haspaid)
                                     Kick("Sorry, this is a premium server only!");
                                 break;
@@ -2644,7 +811,7 @@ namespace MCForge
                         return;
                     }
                 }
-                if (!Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)) && !VIP.Find(this))
+                if (!Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
                 {
                     // Check to see how many guests we have
                     if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
@@ -2669,7 +836,7 @@ namespace MCForge
                 {
                     if (verify == "--" || verify !=
                         BitConverter.ToString(md5.ComputeHash(enc.GetBytes(Server.salt + name)))
-                        .Replace("-", "").ToLower(CultureInfo.CurrentCulture).TrimStart('0'))
+                        .Replace("-", "").ToLower().TrimStart('0'))
                     {
                         if (!IPInPrivateRange(ip))
                         {
@@ -2690,7 +857,7 @@ namespace MCForge
                     }
                 }
 
-                try { left.Remove(name.ToLower(CultureInfo.CurrentCulture)); }
+                try { left.Remove(name.ToLower()); }
                 catch { }
 
                 group = Group.findPlayerGroup(name);
@@ -2714,7 +881,7 @@ namespace MCForge
                 //Test code to show when people come back with different accounts on the same IP
                 string temp = name + " is lately known as:";
                 bool found = false;
-                if (!ip.StartsWith("127.0.0.", StringComparison.CurrentCulture))
+                if (!ip.StartsWith("127.0.0."))
                 {
                     foreach (KeyValuePair<string, string> prev in left)
                     {
@@ -2763,27 +930,27 @@ namespace MCForge
 
                 if (Server.useMySQL)
                     MySQL.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
-                        " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', " + totalLogins +
+                        " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                         ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
                 else
                     SQLite.executeQuery("INSERT INTO Players (Name, IP, FirstLogin, LastLogin, totalLogin, Title, totalDeaths, Money, totalBlocks, totalKicked, TimeSpent)" +
-                    " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', " + totalLogins +
+                    " VALUES ('" + name + "', '" + ip + "', '" + firstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', " + totalLogins +
                     ", '" + prefix + "', " + overallDeath + ", " + money + ", " + loginBlocks + ", " + totalKicked + ", '" + time + "')");
 
             }
             else
             {
-                totalLogins = int.Parse(playerDb.Rows[0]["totalLogin"].ToString(), CultureInfo.CurrentCulture) + 1;
+                totalLogins = int.Parse(playerDb.Rows[0]["totalLogin"].ToString()) + 1;
                 time = playerDb.Rows[0]["TimeSpent"].ToString();
-                userID = int.Parse(playerDb.Rows[0]["ID"].ToString(), CultureInfo.CurrentCulture);
-                firstLogin = DateTime.Parse(playerDb.Rows[0]["firstLogin"].ToString(), CultureInfo.CurrentCulture);
+                userID = int.Parse(playerDb.Rows[0]["ID"].ToString());
+                firstLogin = DateTime.Parse(playerDb.Rows[0]["firstLogin"].ToString());
                 timeLogged = DateTime.Now;
-                if (!(playerDb.Rows[0]["Title"].ToString().Trim() != null && String.IsNullOrEmpty(playerDb.Rows[0]["Title"].ToString().Trim())))
+                if (playerDb.Rows[0]["Title"].ToString().Trim() != "")
                 {
                     string parse = playerDb.Rows[0]["Title"].ToString().Trim().Replace("[", "");
                     title = parse.Replace("]", "");
                 }
-                if (!(playerDb.Rows[0]["title_color"].ToString().Trim() != null && String.IsNullOrEmpty(playerDb.Rows[0]["title_color"].ToString().Trim())))
+                if (playerDb.Rows[0]["title_color"].ToString().Trim() != "")
                 {
                     titlecolor = c.Parse(playerDb.Rows[0]["title_color"].ToString().Trim());
                 }
@@ -2791,7 +958,7 @@ namespace MCForge
                 {
                     titlecolor = "";
                 }
-                if (!(playerDb.Rows[0]["color"].ToString().Trim() != null && String.IsNullOrEmpty(playerDb.Rows[0]["color"].ToString().Trim())))
+                if (playerDb.Rows[0]["color"].ToString().Trim() != "")
                 {
                     color = c.Parse(playerDb.Rows[0]["color"].ToString().Trim());
                 }
@@ -2800,10 +967,10 @@ namespace MCForge
                     color = group.color;
                 }
                 SetPrefix();
-                overallDeath = int.Parse(playerDb.Rows[0]["TotalDeaths"].ToString(), CultureInfo.CurrentCulture);
-                overallBlocks = long.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim(), CultureInfo.CurrentCulture);
-                money = int.Parse(playerDb.Rows[0]["Money"].ToString(), CultureInfo.CurrentCulture);
-                totalKicked = int.Parse(playerDb.Rows[0]["totalKicked"].ToString(), CultureInfo.CurrentCulture);
+                overallDeath = int.Parse(playerDb.Rows[0]["TotalDeaths"].ToString());
+                overallBlocks = long.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim());
+                money = int.Parse(playerDb.Rows[0]["Money"].ToString());
+                totalKicked = int.Parse(playerDb.Rows[0]["totalKicked"].ToString());
                 SendMessage("Welcome back " + color + prefix + name + Server.DefaultColor + "! You've been here " + totalLogins + " times!");
                 if (Server.muted.Contains(name))
                 {
@@ -2815,25 +982,25 @@ namespace MCForge
             if (PlayerConnect != null)
                 PlayerConnect(this);
             OnPlayerConnectEvent.Call(this);
-            if (Server.devs.Contains(this.name.ToLower(CultureInfo.CurrentCulture)))
+            if (Server.devs.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
                 {
                     color = "&9";
                 }
-                if ((prefix != null && String.IsNullOrEmpty(prefix)))
+                if (prefix == "")
                 {
                     title = "Dev";
                 }
                 SetPrefix();
             }
-            if (!(Server.server_owner != null && String.IsNullOrEmpty(Server.server_owner)) && Server.server_owner.ToLower(CultureInfo.CurrentCulture).Contains(this.name.ToLower(CultureInfo.CurrentCulture)))
+            if (Server.server_owner != "" && Server.server_owner.ToLower().Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
                 {
                     color = "&c";
                 }
-                if ((prefix != null && String.IsNullOrEmpty(prefix)))
+                if (prefix == "")
                 {
                     title = "Owner";
                 }
@@ -2892,7 +1059,7 @@ namespace MCForge
                 var agreed = File.ReadAllText("ranks/agreed.txt");
                 if (this.group.Permission == LevelPermission.Guest)
                 {
-                    if (!agreed.Contains(this.name.ToLower(CultureInfo.CurrentCulture)))
+                    if (!agreed.Contains(this.name.ToLower()))
                     {
                         SendMessage("&9You must read the &c/rules&9 and &c/agree&9 to them before you can build and use commands!");
                         jailed = true;
@@ -2952,7 +1119,7 @@ namespace MCForge
 
         public void SetPrefix()
         {
-            prefix = ((title != null && String.IsNullOrEmpty(title))) ? "" : ((titlecolor != null && String.IsNullOrEmpty(titlecolor))) ? "[" + title + "] " : "[" + titlecolor + title + color + "] ";
+            prefix = (title == "") ? "" : (titlecolor == "") ? "[" + title + "] " : "[" + titlecolor + title + color + "] ";
         }
 
         void HandleBlockchange(byte[] message)
@@ -3091,7 +1258,7 @@ namespace MCForge
             //bool test2 = false;
             if (Blockchange != null)
             {
-                if (Blockchange.Method.ToString().IndexOf("AboutBlockchange", StringComparison.CurrentCulture) == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
+                if (Blockchange.Method.ToString().IndexOf("AboutBlockchange") == -1 && !level.name.Contains("Museum " + Server.DefaultColor))
                 {
                     bP.deleted = true;
                     level.blockCache.Add(bP);
@@ -3122,8 +1289,8 @@ namespace MCForge
                 {
                     if (lastCMD != "click")
                     {
-                        Server.s.Log(name + " attempted to build with a " + Diff.ToString(CultureInfo.CurrentCulture) + " distance offset");
-                        GlobalMessageOps("To Ops &f-" + color + name + "&f- attempted to build with a " + Diff.ToString(CultureInfo.CurrentCulture) + " distance offset");
+                        Server.s.Log(name + " attempted to build with a " + Diff.ToString() + " distance offset");
+                        GlobalMessageOps("To Ops &f-" + color + name + "&f- attempted to build with a " + Diff.ToString() + " distance offset");
                         SendMessage("You can't build that far away.");
                         SendBlockchange(x, y, z, b); return;
                     }
@@ -3142,7 +1309,7 @@ namespace MCForge
                 }
             }
 
-            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)))
+            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()))
             {
                 if (grieferStoneWarn < 1)
                     SendMessage("Do not grief! This is your first warning!");
@@ -3205,7 +1372,7 @@ namespace MCForge
 
                 bP.deleted = true;
                 level.blockCache.Add(bP);
-                deleteBlock(b, x, y, z);
+                deleteBlock(b, type, x, y, z);
             }
             else
             {
@@ -3264,7 +1431,7 @@ namespace MCForge
                     string message = Messages.Rows[LastMsg]["Message"].ToString().Trim();
                     if (message != prevMsg || Server.repeatMessage)
                     {
-                        if (message.StartsWith("/", StringComparison.CurrentCulture))
+                        if (message.StartsWith("/"))
                         {
                             List<string> Message = message.Remove(0, 1).Split(' ').ToList();
                             string command = Message[0];
@@ -3288,13 +1455,12 @@ namespace MCForge
             catch { Player.SendMessage(p, "No message was stored."); return; }
         }
 
-        //  COMMENTED BY CODEIT.RIGHT
-        //        private bool checkOp()
-        //        {
-        //            return group.Permission < LevelPermission.Operator;
-        //        }
+        private bool checkOp()
+        {
+            return group.Permission < LevelPermission.Operator;
+        }
 
-        private void deleteBlock(byte b, ushort x, ushort y, ushort z)
+        private void deleteBlock(byte b, byte type, ushort x, ushort y, ushort z)
         {
             Random rand = new Random();
             int mx, mz;
@@ -3483,7 +1649,7 @@ namespace MCForge
 
         void HandleInput(object m)
         {
-            if (!loggedIn || trainGrab || !(following != null && String.IsNullOrEmpty(following)) || frozen)
+            if (!loggedIn || trainGrab || following != "" || frozen)
                 return;
             /*if (CheckIfInsideBlock())
 {
@@ -3492,7 +1658,7 @@ return;
 }*/
 
             byte[] message = (byte[])m;
-            //            byte thisid = message[0] // COMMENTED BY CODEIT.RIGHT;
+            byte thisid = message[0];
 
             if (this.incountdown == true && CountdownGame.gamestatus == CountdownGameStatus.InProgress && CountdownGame.freezemode == true)
             {
@@ -3822,21 +1988,21 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                 }
 
                 if (MessageHasBadColorCodes(this, text)) return;
-                if (!(storedMessage != null && String.IsNullOrEmpty(storedMessage)))
+                if (storedMessage != "")
                 {
-                    if (!text.EndsWith(">", StringComparison.CurrentCulture) && !text.EndsWith("<", StringComparison.CurrentCulture))
+                    if (!text.EndsWith(">") && !text.EndsWith("<"))
                     {
                         text = storedMessage.Replace("|>|", " ").Replace("|<|", "") + text;
                         storedMessage = "";
                     }
                 }
-                if (text.EndsWith(">", StringComparison.CurrentCulture))
+                if (text.EndsWith(">"))
                 {
                     storedMessage += text.Replace(">", "|>|");
                     SendMessage("Message appended!");
                     return;
                 }
-                else if (text.EndsWith("<", StringComparison.CurrentCulture))
+                else if (text.EndsWith("<"))
                 {
                     storedMessage += text.Replace("<", "|<|");
                     SendMessage("Message appended!");
@@ -3875,7 +2041,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                 // and in chat it will appear as
                 // /Command
                 // Suggested by McMrCat
-                if (text.StartsWith("//", StringComparison.CurrentCulture))
+                if (text.StartsWith("//"))
                 {
                     text = text.Remove(0, 1);
                     goto hello;
@@ -3894,10 +2060,10 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     int pos = text.IndexOf(' ');
                     if (pos == -1)
                     {
-                        HandleCommand(text.ToLower(CultureInfo.CurrentCulture), "");
+                        HandleCommand(text.ToLower(), "");
                         return;
                     }
-                    string cmd = text.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+                    string cmd = text.Substring(0, pos).ToLower();
                     string msg = text.Substring(pos + 1);
                     HandleCommand(cmd, msg);
                     return;
@@ -3907,12 +2073,12 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                 if (muted) { this.SendMessage("You are muted."); return; } //Muted: Only allow commands
 
                 // Lava Survival map vote recorder
-                if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower(CultureInfo.CurrentCulture)))
+                if (Server.lava.HasPlayer(this) && Server.lava.HasVote(text.ToLower()))
                 {
-                    if (Server.lava.AddVote(this, text.ToLower(CultureInfo.CurrentCulture)))
+                    if (Server.lava.AddVote(this, text.ToLower()))
                     {
-                        SendMessage("Your vote for &5" + text.ToLower(CultureInfo.CurrentCulture).Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
-                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower(CultureInfo.CurrentCulture).Capitalize() + Server.DefaultColor + ".");
+                        SendMessage("Your vote for &5" + text.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                        Server.lava.map.ChatLevelOps(name + " voted for &5" + text.ToLower().Capitalize() + Server.DefaultColor + ".");
                         return;
                     }
                     else
@@ -3925,13 +2091,13 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                 //CmdVoteKick core vote recorder
                 if (Server.voteKickInProgress && text.Length == 1)
                 {
-                    if (text.ToLower(CultureInfo.CurrentCulture) == "y")
+                    if (text.ToLower() == "y")
                     {
                         this.voteKickChoice = VoteKickChoice.Yes;
                         SendMessage("Thanks for voting!");
                         return;
                     }
-                    if (text.ToLower(CultureInfo.CurrentCulture) == "n")
+                    if (text.ToLower() == "n")
                     {
                         this.voteKickChoice = VoteKickChoice.No;
                         SendMessage("Thanks for voting!");
@@ -4001,7 +2167,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     string newtext = text;
                     if (text[0] == '@') newtext = text.Remove(0, 1).Trim();
 
-                    if ((whisperTo != null && String.IsNullOrEmpty(whisperTo)))
+                    if (whisperTo == "")
                     {
                         int pos = newtext.IndexOf(' ');
                         if (pos != -1)
@@ -4028,7 +2194,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     if (text[0] == '#') newtext = text.Remove(0, 1).Trim();
 
                     GlobalMessageOps("To Ops &f-" + color + name + "&f- " + newtext);
-                    if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)))
+                    if (group.Permission < Server.opchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Ops &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(OPs): " + name + ": " + newtext);
                     //Server.s.OpLog("(OPs): " + name + ": " + newtext);
@@ -4042,7 +2208,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     if (text[0] == '+') newtext = text.Remove(0, 1).Trim();
 
                     GlobalMessageAdmins("To Admins &f-" + color + name + "&f- " + newtext); //to make it easy on remote
-                    if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower(CultureInfo.CurrentCulture)))
+                    if (group.Permission < Server.adminchatperm && !Server.devs.Contains(name.ToLower()))
                         SendMessage("To Admins &f-" + color + name + "&f- " + newtext);
                     Server.s.Log("(Admins): " + name + ": " + newtext);
                     //Server.s.AdminLog("(Admins): " + name + ": " + newtext);
@@ -4059,8 +2225,8 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                         TntWarsGame it = TntWarsGame.GetTntWarsGame(this);
                         if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM)
                         {
-                            MCForge.player pl = it.FindPlayer(this);
-                            foreach (MCForge.player p in it.Players)
+                            TntWarsGame.player pl = it.FindPlayer(this);
+                            foreach (TntWarsGame.player p in it.Players)
                             {
                                 if (pl.Red && p.Red) SendMessage(p.p, "To Team " + c.red + "-" + color + name + c.red + "- " + Server.DefaultColor + newtext);
                                 if (pl.Blue && p.Blue) SendMessage(p.p, "To Team " + c.blue + "-" + color + name + c.blue + "- " + Server.DefaultColor + newtext);
@@ -4178,13 +2344,13 @@ return;
             {
                 if (Server.verifyadmins)
                 {
-                    if (cmd.ToLower(CultureInfo.CurrentCulture) == "setpass")
+                    if (cmd.ToLower() == "setpass")
                     {
                         Command.all.Find(cmd).Use(this, message);
                         Server.s.CommandUsed(this.name + " used /setpass");
                         return;
                     }
-                    if (cmd.ToLower(CultureInfo.CurrentCulture) == "pass")
+                    if (cmd.ToLower() == "pass")
                     {
                         Command.all.Find(cmd).Use(this, message);
                         Server.s.CommandUsed(this.name + " used /pass");
@@ -4193,19 +2359,19 @@ return;
                 }
                 if (Server.agreetorulesonentry)
                 {
-                    if (cmd.ToLower(CultureInfo.CurrentCulture) == "agree")
+                    if (cmd.ToLower() == "agree")
                     {
                         Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /agree");
                         return;
                     }
-                    if (cmd.ToLower(CultureInfo.CurrentCulture) == "rules")
+                    if (cmd.ToLower() == "rules")
                     {
                         Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /rules");
                         return;
                     }
-                    if (cmd.ToLower(CultureInfo.CurrentCulture) == "disagree")
+                    if (cmd.ToLower() == "disagree")
                     {
                         Command.all.Find(cmd).Use(this, String.Empty);
                         Server.s.CommandUsed(this.name + " used /disagree");
@@ -4213,7 +2379,7 @@ return;
                     }
                 }
 
-                if ((cmd != null && String.IsNullOrEmpty(cmd))) { SendMessage("No command entered."); return; }
+                if (cmd == String.Empty) { SendMessage("No command entered."); return; }
                 if (Server.agreetorulesonentry)
                 {
                     if (jailed)
@@ -4235,11 +2401,11 @@ return;
                         return;
                     }
                 }
-                if (cmd.ToLower(CultureInfo.CurrentCulture) == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
-                if (cmd.ToLower(CultureInfo.CurrentCulture) == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
-                if (cmd.ToLower(CultureInfo.CurrentCulture) == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
+                if (cmd.ToLower() == "care") { SendMessage("Dmitchell94 now loves you with all his heart."); return; }
+                if (cmd.ToLower() == "facepalm") { SendMessage("Fenderrock87's bot army just simultaneously facepalm'd at your use of this command."); return; }
+                if (cmd.ToLower() == "alpaca") { SendMessage("Leitrean's Alpaca Army just raped your woman and pillaged your villages!"); return; }
                 //DO NOT REMOVE THE TWO COMMANDS BELOW, /PONY AND /RAINBOWDASHLIKESCOOLTHINGS. -EricKilla
-                if (cmd.ToLower(CultureInfo.CurrentCulture) == "pony")
+                if (cmd.ToLower() == "pony")
                 {
                     if (ponycount < 2)
                     {
@@ -4254,7 +2420,7 @@ return;
                         OnBecomeBrony(this);
                     return;
                 }
-                if (cmd.ToLower(CultureInfo.CurrentCulture) == "rainbowdashlikescoolthings")
+                if (cmd.ToLower() == "rainbowdashlikescoolthings")
                 {
                     if (rdcount < 2)
                     {
@@ -4285,7 +2451,7 @@ return;
                 if (CommandHasBadColourCodes(this, message))
                     return;
                 string foundShortcut = Command.all.FindShort(cmd);
-                if (!(foundShortcut != null && String.IsNullOrEmpty(foundShortcut))) cmd = foundShortcut;
+                if (foundShortcut != "") cmd = foundShortcut;
                 if (OnCommand != null)
                     OnCommand(cmd, this, message);
                 if (PlayerCommand != null)
@@ -4298,7 +2464,7 @@ return;
                 }
                 try
                 {
-                    int foundCb = int.Parse(cmd, CultureInfo.CurrentCulture);
+                    int foundCb = int.Parse(cmd);
                     if (messageBind[foundCb] == null) { SendMessage("No CMD is stored on /" + cmd); return; }
                     message = messageBind[foundCb] + " " + message;
                     message = message.TrimEnd(' ');
@@ -4322,20 +2488,20 @@ return;
                         }
                         if (this.joker == true || this.muted == true)
                         {
-                            if (cmd.ToLower(CultureInfo.CurrentCulture) == "me")
+                            if (cmd.ToLower() == "me")
                             {
                                 SendMessage("Cannot use /me while muted or jokered.");
                                 return;
                             }
                         }
-                        if (cmd.ToLower(CultureInfo.CurrentCulture) != "setpass" || cmd.ToLower(CultureInfo.CurrentCulture) != "pass")
+                        if (cmd.ToLower() != "setpass" || cmd.ToLower() != "pass")
                         {
                             Server.s.CommandUsed(name + " used /" + cmd + " " + message);
                         }
                         try
                         {
-                            if (sendcommanddata)
-                            {
+                        	if (sendcommanddata)
+                        	{
                                 new Thread(() =>
                                 {
                                     using (WebClient wc = new WebClient())
@@ -4350,19 +2516,19 @@ return;
                                         }
                                     }
                                 }).Start();
-                            }
+							}
                             // Commands to not count into database. This line doesn't count "/review next" if no players are waiting for review.
-                            if (!(cmd.ToLower(CultureInfo.CurrentCulture) == "review" & message == "next" & Server.reviewlist.Count == 0))
+                            if (!(cmd.ToLower() == "review" & message == "next" & Server.reviewlist.Count == 0))
                             {
                                 if (Server.useMySQL)
                                 {
                                     MySQL.executeQuery("INSERT INTO Playercmds (Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-                                    " VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                    " VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
                                 }
                                 else
                                 {
                                     SQLite.executeQuery("INSERT INTO Playercmds (Time, Name, Rank, Mapname, Cmd, Cmdmsg)" +
-                                    " VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
+                                    " VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + name + "', '" + group.name + "', '" + level.name + "', '" + cmd + "', '" + message + "')");
                                 }
                             }
                         }
@@ -4384,24 +2550,24 @@ return;
                     }
                     else { SendMessage("You are not allowed to use \"" + cmd + "\"!"); }
                 }
-                else if (Block.Byte(cmd.ToLower(CultureInfo.CurrentCulture)) != Block.Zero)
+                else if (Block.Byte(cmd.ToLower()) != Block.Zero)
                 {
-                    HandleCommand("mode", cmd.ToLower(CultureInfo.CurrentCulture));
+                    HandleCommand("mode", cmd.ToLower());
                 }
                 else
                 {
                     bool retry = true;
 
-                    switch (cmd.ToLower(CultureInfo.CurrentCulture))
+                    switch (cmd.ToLower())
                     { //Check for command switching
-                        case "guest": message = message + " " + cmd.ToLower(CultureInfo.CurrentCulture); cmd = "setrank"; break;
-                        case "builder": message = message + " " + cmd.ToLower(CultureInfo.CurrentCulture); cmd = "setrank"; break;
+                        case "guest": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
+                        case "builder": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "advbuilder":
-                        case "adv": message = message + " " + cmd.ToLower(CultureInfo.CurrentCulture); cmd = "setrank"; break;
+                        case "adv": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "operator":
-                        case "op": message = message + " " + cmd.ToLower(CultureInfo.CurrentCulture); cmd = "setrank"; break;
+                        case "op": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "super":
-                        case "superop": message = message + " " + cmd.ToLower(CultureInfo.CurrentCulture); cmd = "setrank"; break;
+                        case "superop": message = message + " " + cmd.ToLower(); cmd = "setrank"; break;
                         case "cut": cmd = "copy"; message = "cut"; break;
                         case "admins": message = "superop"; cmd = "viewranks"; break;
                         case "ops": message = "op"; cmd = "viewranks"; break;
@@ -4611,20 +2777,20 @@ else goto retry;
                 sb.Replace("$name", "$" + name);
             else
                 sb.Replace("$name", name);
-            sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture));
-            sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss", CultureInfo.CurrentCulture));
+            sb.Replace("$date", DateTime.Now.ToString("yyyy-MM-dd"));
+            sb.Replace("$time", DateTime.Now.ToString("HH:mm:ss"));
             sb.Replace("$ip", ip);
             if (colorParse) sb.Replace("$color", color);
             sb.Replace("$rank", group.name);
             sb.Replace("$level", level.name);
-            sb.Replace("$deaths", overallDeath.ToString(CultureInfo.CurrentCulture));
-            sb.Replace("$money", money.ToString(CultureInfo.CurrentCulture));
-            sb.Replace("$blocks", overallBlocks.ToString(CultureInfo.CurrentCulture));
-            sb.Replace("$first", firstLogin.ToString(CultureInfo.CurrentCulture));
-            sb.Replace("$kicked", totalKicked.ToString(CultureInfo.CurrentCulture));
+            sb.Replace("$deaths", overallDeath.ToString());
+            sb.Replace("$money", money.ToString());
+            sb.Replace("$blocks", overallBlocks.ToString());
+            sb.Replace("$first", firstLogin.ToString());
+            sb.Replace("$kicked", totalKicked.ToString());
             sb.Replace("$server", Server.name);
             sb.Replace("$motd", Server.motd);
-            sb.Replace("$banned", Player.GetBannedCount().ToString(CultureInfo.CurrentCulture));
+            sb.Replace("$banned", Player.GetBannedCount().ToString());
             sb.Replace("$irc", Server.ircServer + " > " + Server.ircChannel);
 
             foreach (var customReplacement in Server.customdollars)
@@ -4744,7 +2910,7 @@ else goto retry;
         public void SendUserMOTD()
         {
             byte[] buffer = new byte[130];
-            //            Random rand = new Random() // COMMENTED BY CODEIT.RIGHT;
+            Random rand = new Random();
             buffer[0] = Server.version;
             //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
@@ -5005,12 +3171,12 @@ changed |= 4;*/
             if (MessageHasBadColorCodes(from, message))
                 return;
 
-            if (Server.lava.HasPlayer(from) && Server.lava.HasVote(message.ToLower(CultureInfo.CurrentCulture)))
+            if (Server.lava.HasPlayer(from) && Server.lava.HasVote(message.ToLower()))
             {
-                if (Server.lava.AddVote(from, message.ToLower(CultureInfo.CurrentCulture)))
+                if (Server.lava.AddVote(from, message.ToLower()))
                 {
-                    SendMessage(from, "Your vote for &5" + message.ToLower(CultureInfo.CurrentCulture).Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
-                    Server.lava.map.ChatLevelOps(from.name + " voted for &5" + message.ToLower(CultureInfo.CurrentCulture).Capitalize() + Server.DefaultColor + ".");
+                    SendMessage(from, "Your vote for &5" + message.ToLower().Capitalize() + Server.DefaultColor + " has been placed. Thanks!");
+                    Server.lava.map.ChatLevelOps(from.name + " voted for &5" + message.ToLower().Capitalize() + Server.DefaultColor + ".");
                     return;
                 }
                 else
@@ -5022,7 +3188,7 @@ changed |= 4;*/
 
             if (Server.voting == true)
             {
-                if (message.ToLower(CultureInfo.CurrentCulture) == "yes" || message.ToLower(CultureInfo.CurrentCulture) == "ye" || message.ToLower(CultureInfo.CurrentCulture) == "y")
+                if (message.ToLower() == "yes" || message.ToLower() == "ye" || message.ToLower() == "y")
                 {
                     if (!from.voted)
                     {
@@ -5037,7 +3203,7 @@ changed |= 4;*/
                         return;
                     }
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture) == "no" || message.ToLower(CultureInfo.CurrentCulture) == "n")
+                else if (message.ToLower() == "no" || message.ToLower() == "n")
                 {
                     if (!from.voted)
                     {
@@ -5056,7 +3222,7 @@ changed |= 4;*/
 
             if (Server.votingforlevel == true)
             {
-                if (message.ToLower(CultureInfo.CurrentCulture) == "1" || message.ToLower(CultureInfo.CurrentCulture) == "one")
+                if (message.ToLower() == "1" || message.ToLower() == "one")
                 {
                     if (!from.voted)
                     {
@@ -5071,7 +3237,7 @@ changed |= 4;*/
                         return;
                     }
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture) == "2" || message.ToLower(CultureInfo.CurrentCulture) == "two")
+                else if (message.ToLower() == "2" || message.ToLower() == "two")
                 {
                     if (!from.voted)
                     {
@@ -5086,7 +3252,7 @@ changed |= 4;*/
                         return;
                     }
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture) == "3" || message.ToLower(CultureInfo.CurrentCulture) == "random" || message.ToLower(CultureInfo.CurrentCulture) == "rand")
+                else if (message.ToLower() == "3" || message.ToLower() == "random" || message.ToLower() == "rand")
                 {
                     if (!from.voted)
                     {
@@ -5351,7 +3517,7 @@ changed |= 4;*/
             foreach (string s in checkmessagesplit)
             {
                 s.Trim();
-                if (s.StartsWith("%", StringComparison.CurrentCulture))
+                if (s.StartsWith("%"))
                 {
                     if (lastendwithcolour == true)
                     {
@@ -5369,7 +3535,7 @@ changed |= 4;*/
                         lastendwithcolour = true;
                     }
                 }
-                if (s.TrimEnd(Server.ColourCodesNoPercent).EndsWith("%", StringComparison.CurrentCulture))
+                if (s.TrimEnd(Server.ColourCodesNoPercent).EndsWith("%"))
                 {
                     lastendwithcolour = true;
                 }
@@ -5389,7 +3555,7 @@ changed |= 4;*/
             foreach (string s in checkmessagesplit)
             {
                 s.Trim();
-                if (s.StartsWith("%", StringComparison.CurrentCulture))
+                if (s.StartsWith("%"))
                 {
                     if (lastendwithcolour)
                     {
@@ -5407,7 +3573,7 @@ changed |= 4;*/
                         lastendwithcolour = true;
                     }
                 }
-                if (s.TrimEnd(Server.ColourCodesNoPercent).EndsWith("%", StringComparison.CurrentCulture))
+                if (s.TrimEnd(Server.ColourCodesNoPercent).EndsWith("%"))
                 {
                     lastendwithcolour = true;
                 }
@@ -5490,7 +3656,7 @@ changed |= 4;*/
             {
                 players.ForEach(delegate(Player p)
                 {
-                    if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower(CultureInfo.CurrentCulture)))
+                    if (p.group.Permission >= Server.opchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
                     }
@@ -5505,7 +3671,7 @@ changed |= 4;*/
             {
                 players.ForEach(delegate(Player p)
                 {
-                    if (p.group.Permission >= Server.adminchatperm || Server.devs.Contains(p.name.ToLower(CultureInfo.CurrentCulture)))
+                    if (p.group.Permission >= Server.adminchatperm || Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, message);
                     }
@@ -5526,7 +3692,7 @@ changed |= 4;*/
                     {
                         if (from.infected)
                         {
-                            if (!(Server.ZombieName != null && String.IsNullOrEmpty(Server.ZombieName)))
+                            if (Server.ZombieName != "")
                                 p.SendSpawn(from.id, c.red + Server.ZombieName + possession, x, y, z, rotx, roty);
                             else
                                 p.SendSpawn(from.id, c.red + from.name + possession, x, y, z, rotx, roty);
@@ -5570,7 +3736,7 @@ changed |= 4;*/
 
         public bool MarkPossessed(string marker = "")
         {
-            if (!(marker != null && String.IsNullOrEmpty(marker)))
+            if (marker != "")
             {
                 Player controller = Player.Find(marker);
                 if (controller == null)
@@ -5588,7 +3754,7 @@ changed |= 4;*/
         #endregion
         #region == DISCONNECTING ==
         public void Disconnect() { leftGame(); }
-        public void Kick(string kick) { leftGame(kick); }
+        public void Kick(string kickString) { leftGame(kickString); }
 
         internal void CloseSocket()
         {
@@ -5627,11 +3793,11 @@ changed |= 4;*/
             }
         }
 
-        public void leftGame(string kick = "", bool skip = false)
+        public void leftGame(string kickString = "", bool skip = false)
         {
 
             //Umm...fixed?
-            if ((name != null && String.IsNullOrEmpty(name)))
+            if (name == "")
             {
                 if (socket != null)
                     CloseSocket();
@@ -5701,9 +3867,9 @@ changed |= 4;*/
 
                 if (Server.afkset.Contains(name)) Server.afkset.Remove(name);
 
-                if ((kick != null && String.IsNullOrEmpty(kick))) kick = "Disconnected.";
+                if (kickString == "") kickString = "Disconnected.";
 
-                SendKick(kick);
+                SendKick(kickString);
 
 
                 if (loggedIn)
@@ -5733,7 +3899,7 @@ changed |= 4;*/
                     }
 
                     GlobalDie(this, false);
-                    if (kick == "Disconnected." || kick.IndexOf("Server shutdown", StringComparison.CurrentCulture) != -1 || kick == Server.customShutdownMessage)
+                    if (kickString == "Disconnected." || kickString.IndexOf("Server shutdown") != -1 || kickString == Server.customShutdownMessage)
                     {
                         if (!Directory.Exists("text/logout"))
                         {
@@ -5764,11 +3930,11 @@ changed |= 4;*/
                     else
                     {
                         totalKicked++;
-                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kick + Server.DefaultColor + ").", false);
+                        GlobalChat(this, "&c- " + color + prefix + name + Server.DefaultColor + " kicked (" + kickString + Server.DefaultColor + ").", false);
                         //IRCBot.Say(name + " kicked (" + kickString + ").");
-                        Server.s.Log(name + " kicked (" + kick + ").");
+                        Server.s.Log(name + " kicked (" + kickString + ").");
                         if (Server.notifyOnJoinLeave)
-                            Server.PopupNotify(name + " kicked (" + kick + ").");
+                            Server.PopupNotify(name + " kicked (" + kickString + ").");
                     }
 
                     try { save(); }
@@ -5778,7 +3944,7 @@ changed |= 4;*/
                     Server.s.PlayerListUpdate();
                     try
                     {
-                        left.Add(this.name.ToLower(CultureInfo.CurrentCulture), this.ip);
+                        left.Add(this.name.ToLower(), this.ip);
                     }
                     catch (Exception)
                     {
@@ -5802,7 +3968,7 @@ level.Unload();
                         level.Unload(true);
 
                     if (PlayerDisconnect != null)
-                        PlayerDisconnect(this, kick);
+                        PlayerDisconnect(this, kickString);
 
                     this.Dispose();
                 }
@@ -5847,16 +4013,16 @@ level.Unload();
                         Directory.CreateDirectory("extra/undo");
                     }
 
-                    if (!Directory.Exists("extra/undo/" + p.name.ToLower(CultureInfo.CurrentCulture))) Directory.CreateDirectory("extra/undo/" + p.name.ToLower(CultureInfo.CurrentCulture));
-                    di = new DirectoryInfo("extra/undo/" + p.name.ToLower(CultureInfo.CurrentCulture));
-                    File.Create("extra/undo/" + p.name.ToLower(CultureInfo.CurrentCulture) + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
-                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name.ToLower(CultureInfo.CurrentCulture) + "/" + di.GetFiles("*.undo").Length + ".undo"))
+                    if (!Directory.Exists("extra/undo/" + p.name.ToLower())) Directory.CreateDirectory("extra/undo/" + p.name.ToLower());
+                    di = new DirectoryInfo("extra/undo/" + p.name.ToLower());
+                    File.Create("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo").Dispose();
+                    using (StreamWriter w = File.CreateText("extra/undo/" + p.name.ToLower() + "/" + di.GetFiles("*.undo").Length + ".undo"))
                     {
                         foreach (UndoPos uP in p.UndoBuffer)
                         {
                             w.Write(uP.mapName + " " +
                                 uP.x + " " + uP.y + " " + uP.z + " " +
-                                uP.timePlaced.ToString(CultureInfo.CurrentCulture).Replace(' ', '&') + " " +
+                                uP.timePlaced.ToString().Replace(' ', '&') + " " +
                                 uP.type + " " + uP.newtype + " ");
                         }
                     }
@@ -5896,7 +4062,7 @@ catch { }*/
         public static bool Exists(string name)
         {
             foreach (Player p in players)
-            { if (p.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture)) { return true; } } return false;
+            { if (p.name.ToLower() == name.ToLower()) { return true; } } return false;
         }
         public static bool Exists(byte id)
         {
@@ -5911,8 +4077,8 @@ catch { }*/
 
             foreach (Player p in tempList)
             {
-                if (p.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture)) return p;
-                if (p.name.ToLower(CultureInfo.CurrentCulture).IndexOf(name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) != -1)
+                if (p.name.ToLower() == name.ToLower()) return p;
+                if (p.name.ToLower().IndexOf(name.ToLower()) != -1)
                 {
                     if (tempPlayer == null) tempPlayer = p;
                     else returnNull = true;
@@ -5978,14 +4144,14 @@ Next: continue;
 
                 if (lines.Count > 0)
                 {
-                    if (message[0].ToString(CultureInfo.CurrentCulture) == "&")
+                    if (message[0].ToString() == "&")
                         message = "> " + message.Trim();
                     else
                         message = "> " + color + message.Trim();
                 }
 
-                if (message.IndexOf("&", StringComparison.CurrentCulture) == message.IndexOf("&", message.IndexOf("&", StringComparison.CurrentCulture) + 1, StringComparison.CurrentCulture) - 2)
-                    message = message.Remove(message.IndexOf("&", StringComparison.CurrentCulture), 2);
+                if (message.IndexOf("&") == message.IndexOf("&", message.IndexOf("&") + 1) - 2)
+                    message = message.Remove(message.IndexOf("&"), 2);
 
                 if (message.Length <= limit) { lines.Add(message); break; }
                 for (int i = limit - 1; i > limit - 20; --i)
@@ -6112,13 +4278,19 @@ Next: continue;
         }
 
         #region getters
-        public ushort[] GetfootLocation()
+        public ushort[] footLocation
         {
-            return getLoc(false);
+            get
+            {
+                return getLoc(false);
+            }
         }
-        public ushort[] GetheadLocation()
+        public ushort[] headLocation
         {
-            return getLoc(true);
+            get
+            {
+                return getLoc(true);
+            }
         }
 
         public ushort[] getLoc(bool head)
@@ -6144,17 +4316,17 @@ Next: continue;
         public static bool IPInPrivateRange(string ip)
         {
             //Official loopback is 127.0.0.1/8
-            if (ip.StartsWith("127.0.0.", StringComparison.CurrentCulture) || ip.StartsWith("192.168.", StringComparison.CurrentCulture) || ip.StartsWith("10.", StringComparison.CurrentCulture))
+            if (ip.StartsWith("127.0.0.") || ip.StartsWith("192.168.") || ip.StartsWith("10."))
                 return true;
 
-            if (ip.StartsWith("172.", StringComparison.CurrentCulture))
+            if (ip.StartsWith("172."))
             {
                 string[] split = ip.Split('.');
                 if (split.Length >= 2)
                 {
                     try
                     {
-                        int secondPart = Convert.ToInt32(split[1], CultureInfo.CurrentCulture);
+                        int secondPart = Convert.ToInt32(split[1]);
                         return (secondPart >= 16 && secondPart <= 31);
                     }
                     catch/* (Exception ex)*/
@@ -6331,7 +4503,6 @@ Next: continue;
                 }
             }
         }
-
         public bool EnoughMoney(int amount)
         {
             if (this.money >= amount)

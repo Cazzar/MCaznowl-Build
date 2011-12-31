@@ -18,18 +18,17 @@
 
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
-    public class Cmd : Command
+    public class CmdQueue : Command
     {
         public override string name { get { return "queue"; } }
         public override string shortcut { get { return "qz"; } }
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public Cmd() { }
+        public CmdQueue() { }
 
         public override void Use(Player p, string message)
         {
@@ -67,7 +66,7 @@ namespace MCForge
                     FileInfo[] fi = di.GetFiles("*.lvl");
                     foreach (FileInfo file in fi)
                     {
-                        if (file.Name.Replace(".lvl", "").ToLower(CultureInfo.CurrentCulture).Equals(s.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture))
+                        if (file.Name.Replace(".lvl", "").ToLower().Equals(s.ToLower()))
                         {
                             yes = true;
                         }
@@ -76,7 +75,7 @@ namespace MCForge
                     {
                         p.SendMessage(s + " was queued.");
                         Server.queLevel = true;
-                        Server.nextLevel = s.ToLower(CultureInfo.CurrentCulture);
+                        Server.nextLevel = s.ToLower();
                         return;
                     }
                     else

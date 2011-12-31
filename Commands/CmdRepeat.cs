@@ -32,7 +32,7 @@ namespace MCForge
         {
             try
             {
-                if ((p.lastCMD != null && String.IsNullOrEmpty(p.lastCMD))) { Player.SendMessage(p, "No commands used yet."); return; }
+                if (p.lastCMD == "") { Player.SendMessage(p, "No commands used yet."); return; }
                 if (p.lastCMD.Length > 5)
                     if (p.lastCMD.Substring(0, 6) == "static") { Player.SendMessage(p, "Can't repeat static"); return; }
 

@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -29,7 +28,7 @@ namespace MCForge
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
         public CmdSpheroid() { }
-        public static byte wait/* = 0*/;
+        public static byte wait = 0;
 
         public override void Use(Player p, string message)
         {
@@ -38,7 +37,7 @@ namespace MCForge
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0;
 
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 cpos.type = Block.Zero;
                 cpos.vertical = false;
@@ -47,10 +46,10 @@ namespace MCForge
             {
                 cpos.type = Block.Byte(message);
                 cpos.vertical = false;
-                if (message.ToLower(CultureInfo.CurrentCulture) != "vertical" && !Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
+                if (message.ToLower() != "vertical" && !Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
                 if (cpos.type == Block.Zero)
                 {
-                    if (message.ToLower(CultureInfo.CurrentCulture) == "vertical")
+                    if (message.ToLower() == "vertical")
                     {
                         cpos.vertical = true;
                     }
@@ -64,7 +63,7 @@ namespace MCForge
             {
                 cpos.type = Block.Byte(message.Split(' ')[0]);
                 if (!Block.canPlace(p, cpos.type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
-                if (cpos.type == Block.Zero || message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) != "vertical")
+                if (cpos.type == Block.Zero || message.Split(' ')[1].ToLower() != "vertical")
                 {
                     Help(p); wait = 1; return;
                 }
@@ -226,57 +225,16 @@ namespace MCForge
             wait = 2;
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-//  COMMENTED BY CODEIT.RIGHT
-//        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
-//        {
-//            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
-//        }
-        struct Pos { public ushort x, y, z;
-        public override int GetHashCode()
+        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
         {
-            throw new NotImplementedException();
+            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
         }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct Pos { public ushort x, y, z; }
         struct CatchPos
         {
             public byte type;
             public ushort x, y, z;
             public bool vertical;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

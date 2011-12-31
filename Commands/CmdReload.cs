@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -38,7 +37,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             {
                 if (!File.Exists("levels/" + message + ".lvl"))
                 {
@@ -55,7 +54,7 @@ namespace MCForge
                     {
                         foreach (Player pl in Player.players)
                         {
-                            if (pl.level.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
+                            if (pl.level.name.ToLower() == message.ToLower())
                             {
                                 Command.all.Find("unload").Use(p, message);
                                 Command.all.Find("load").Use(p, message);
@@ -74,7 +73,7 @@ namespace MCForge
                     {
                         foreach (Player pl in Player.players)
                         {
-                            if (pl.level.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
+                            if (pl.level.name.ToLower() == message.ToLower())
                             {
                                 p.ignorePermission = true;
                                 Command.all.Find("unload").Use(p, message);

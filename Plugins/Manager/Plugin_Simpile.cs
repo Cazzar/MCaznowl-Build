@@ -53,7 +53,7 @@ namespace MCForge
                 return false;
             }
             String plugin_version = ((Plugin_Simple)instance).MCForge_Version;
-            if (!(plugin_version != null && String.IsNullOrEmpty(plugin_version)) && new Version(plugin_version) != Server.Version)
+            if (plugin_version != "" && new Version(plugin_version) != Server.Version)
             {
                 Server.s.Log("This plugin (" + ((Plugin_Simple)instance).name + ") isnt compatible with this version of MCForge!");
                 Thread.Sleep(1000);

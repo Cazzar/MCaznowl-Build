@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,7 +32,7 @@ namespace MCForge
         {
             if (message.Split(' ').Length != 2) { Help(p); return; }
             int newLimit;
-            try { newLimit = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture); }
+            try { newLimit = int.Parse(message.Split(' ')[1]); }
             catch { Player.SendMessage(p, "Invalid limit amount"); return; }
             if (newLimit < 1) { Player.SendMessage(p, "Cannot set below 1."); return; }
 
@@ -46,17 +45,17 @@ namespace MCForge
             }
             else
             {
-                switch (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture))
+                switch (message.Split(' ')[0].ToLower())
                 {
                     case "rp":
                     case "restartphysics":
                         Server.rpLimit = newLimit;
-                        Player.GlobalMessage("Custom /rp's limit was changed to &b" + newLimit.ToString(CultureInfo.CurrentCulture));
+                        Player.GlobalMessage("Custom /rp's limit was changed to &b" + newLimit.ToString());
                         break;
                     case "rpnorm":
                     case "rpnormal":
                         Server.rpNormLimit = newLimit;
-                        Player.GlobalMessage("Normal /rp's limit was changed to &b" + newLimit.ToString(CultureInfo.CurrentCulture));
+                        Player.GlobalMessage("Normal /rp's limit was changed to &b" + newLimit.ToString());
                         break;
 
                     default:

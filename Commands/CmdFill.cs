@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -39,8 +38,8 @@ namespace MCForge
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
-                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
+                string t = message.Substring(0, pos).ToLower();
+                string s = message.Substring(pos + 1).ToLower();
                 cpos.type = Block.Byte(t);
                 if (cpos.type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); return; }
 
@@ -53,9 +52,9 @@ namespace MCForge
                 else if (s == "vertical_z") cpos.fillType = FillType.VerticalZ;
                 else { Player.SendMessage(p, "Invalid fill type"); return; }
             }
-            else if (!(message != null && String.IsNullOrEmpty(message)))
+            else if (message != "")
             {
-                message = message.ToLower(CultureInfo.CurrentCulture);
+                message = message.ToLower();
                 if (message == "up") { cpos.fillType = FillType.Up; cpos.type = Block.Zero; }
                 else if (message == "down") { cpos.fillType = FillType.Down; cpos.type = Block.Zero; }
                 else if (message == "layer") { cpos.fillType = FillType.Layer; cpos.type = Block.Zero; }
@@ -130,7 +129,7 @@ namespace MCForge
                 {
                     foreach (Pos pos in buffer)
                     {
-                      Block1.Addblock(p, pos.x, pos.y, pos.z, cpos.type);
+                      BlockQueue.Addblock(p, pos.x, pos.y, pos.z, cpos.type);
                     }
                 }
                 else
@@ -251,48 +250,8 @@ namespace MCForge
             catch (Exception e) { Server.ErrorLog(e); return Block.Zero; }
         }
 
-        struct CatchPos { public ushort x, y, z; public byte type; public FillType fillType;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
-        public struct Pos { public ushort x, y, z;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; public byte type; public FillType fillType; }
+        public struct Pos { public ushort x, y, z; }
         public enum FillType : int
         {
             Default = 0,

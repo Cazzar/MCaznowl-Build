@@ -33,7 +33,7 @@ namespace MCForge
       public override void Use(Player p, string message)
       {
 	  
-         if ((message != null && String.IsNullOrEmpty(message))){Help(p); return;}
+         if (message == ""){Help(p); return;}
 		 
          Player plr = Player.Find(message.Split (' ')[0]);
          Group grp = Group.Find(message.Split (' ')[1]);

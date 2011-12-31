@@ -22,7 +22,6 @@ using System.IO;
 using System.Threading;
 using MCForge.Gui;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -53,13 +52,13 @@ namespace MCForge
     {
         //TODO: Implement report back feature
 
-        static Boolean NeedRestart/* = false*/;
+        static Boolean NeedRestart = false;
         static System.Timers.Timer RestartTimer = new System.Timers.Timer(30000);
 
         static bool _disposed;
-        static bool _reportBack/* = false*/;
-        static string _messagePath = "logs/" + DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture).Replace("/", "-") + ".txt";
-        static string _errorPath = "logs/errors/" + DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.CurrentCulture).Replace("/", "-") + "error.log";
+        static bool _reportBack = false;
+        static string _messagePath = "logs/" + DateTime.Now.ToString("yyyy-MM-dd").Replace("/", "-") + ".txt";
+        static string _errorPath = "logs/errors/" + DateTime.Now.ToString("yyyy-MM-dd").Replace("/", "-") + "error.log";
 
         static object _lockObject = new object();
         static object _fileLockObject = new object();
@@ -213,7 +212,7 @@ namespace MCForge
             try { sb.AppendLine("Target: " + e.TargetSite.Name); } catch { }
             try { sb.AppendLine("Trace: " + e.StackTrace); } catch { }
 
-            if (e.Message != null && e.Message.IndexOf("An existing connection was forcibly closed by the remote host", StringComparison.CurrentCulture) != -1)
+            if (e.Message != null && e.Message.IndexOf("An existing connection was forcibly closed by the remote host") != -1)
             {
                 NeedRestart = true;
             }

@@ -750,12 +750,12 @@ namespace MCForge.Remote
         string DecryptMobile(string textToDecrypt, string key)
         {
             var rijndaelCipher = new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 0x80,
-                BlockSize = 0x80
-            };
+                                     {
+                                         Mode = CipherMode.CBC,
+                                         Padding = PaddingMode.PKCS7,
+                                         KeySize = 0x80,
+                                         BlockSize = 0x80
+                                     };
 
             byte[] encryptedData = Convert.FromBase64String(textToDecrypt);
             byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
@@ -775,12 +775,12 @@ namespace MCForge.Remote
         string EncryptMobile(string textToEncrypt, string key)
         {
             var rijndaelCipher = new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 0x80,
-                BlockSize = 0x80
-            };
+                                     {
+                                         Mode = CipherMode.CBC,
+                                         Padding = PaddingMode.PKCS7,
+                                         KeySize = 0x80,
+                                         BlockSize = 0x80
+                                     };
 
             var pwdBytes = Encoding.UTF8.GetBytes(key);
             var keyBytes = new byte[0x10];

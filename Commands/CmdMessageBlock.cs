@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using MCForge.SQL;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -36,7 +35,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
 
             CatchPos cpos;
             cpos.message = "";
@@ -56,7 +55,7 @@ namespace MCForge
             }
             catch { cpos.type = Block.MsgWhite; cpos.message = message; }
 
-            if ((cpos.message != null && String.IsNullOrEmpty(cpos.message))) cpos.message = message.Substring(message.IndexOf(' ') + 1);
+            if (cpos.message == "") cpos.message = message.Substring(message.IndexOf(' ') + 1);
             p.blockchangeObject = cpos;
 
             Player.SendMessage(p, "Place where you wish the message block to go."); p.ClearBlockchange();
@@ -95,27 +94,7 @@ namespace MCForge
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
 
-        struct CatchPos { public string message; public byte type;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public string message; public byte type; }
 
         public void showMBs(Player p)
         {
@@ -129,7 +108,7 @@ namespace MCForge
 				{
 					for (i = 0; i < Messages.Rows.Count; i++)
 						p.SendBlockchange((ushort)Messages.Rows[i]["X"], (ushort)Messages.Rows[i]["Y"], (ushort)Messages.Rows[i]["Z"], Block.MsgWhite);
-					Player.SendMessage(p, "Now showing &a" + i.ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " MBs.");
+					Player.SendMessage(p, "Now showing &a" + i.ToString() + Server.DefaultColor + " MBs.");
 				}
 				else
 				{

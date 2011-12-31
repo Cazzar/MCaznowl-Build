@@ -40,14 +40,14 @@ namespace MCForge
                 init(SQLite.connString);
             }
 
-            private SQLiteTransactionHelper(string conn)
+            private SQLiteTransactionHelper(string connString)
             {
-                init(conn);
+                init(connString);
             }
 
-            private void init(string conn) {
+            private void init(string connString) {
 
-                connection = new SQLiteConnection(conn);
+                connection = new SQLiteConnection(connString);
                 connection.Open();
                 //connection.ChangeDatabase(Server.MySQLDatabaseName);
 
@@ -58,10 +58,10 @@ namespace MCForge
                 return Create(SQLite.connString);
             }
 
-            public static DatabaseTransactionHelper Create(string conn) {
+            public static DatabaseTransactionHelper Create(string connString) {
                 try
                 {
-                    return new SQLiteTransactionHelper(conn);
+                    return new SQLiteTransactionHelper(connString);
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +79,7 @@ namespace MCForge
                 } catch (Exception e) {
                     System.IO.File.AppendAllText("MySQL_error.log", DateTime.Now + " " + query + "\r\n");
                     Server.ErrorLog(e);
-                    throw;  // Ensures that only one error is thrown (though two will be caught.)
+                    throw e; // Ensures that only one error is thrown (though two will be caught.)
                 }
             }
 

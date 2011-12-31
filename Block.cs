@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -305,26 +304,14 @@ namespace MCForge
         public static List<Blocks> BlockList = new List<Blocks>();
         public class Blocks
         {
-            private byte _type; 
-
-            public byte type
-            {
-                get
-                {
-                    return _type;
-                }
-                set
-                {
-                    _type = value;
-                }
-            }
+            public byte type;
             public LevelPermission lowestRank;
             public List<LevelPermission> disallow = new List<LevelPermission>();
             public List<LevelPermission> allow = new List<LevelPermission>();
 
             public bool IncludeInBlockProperties()
             {
-                if (Block.Name(type).ToLower(CultureInfo.CurrentCulture) == "unknown")
+                if (Block.Name(type).ToLower() == "unknown")
                     return false;
 
                 if(type == Block.flagbase)
@@ -595,7 +582,7 @@ namespace MCForge
                     string[] colon = new string[] { " : " };
                     foreach (string line in lines)
                     {
-                        if (!(line != null && String.IsNullOrEmpty(line)) && line[0] != '#')
+                        if (line != "" && line[0] != '#')
                         {
                             //Name : Lowest : Disallow : Allow
                             string[] block = line.Split(colon, StringSplitOptions.None);
@@ -608,17 +595,17 @@ namespace MCForge
                             newBlock.type = Block.Byte(block[0]);
 
                             string[] disallow = new string[0];
-                            if (!(block[2] != null && String.IsNullOrEmpty(block[2])))
+                            if (block[2] != "")
                                 disallow = block[2].Split(',');
                             string[] allow = new string[0];
-                            if (!(block[3] != null && String.IsNullOrEmpty(block[3])))
+                            if (block[3] != "")
                                 allow = block[3].Split(',');
 
                             try
                             {
-                                newBlock.lowestRank = (LevelPermission)int.Parse(block[1], CultureInfo.CurrentCulture);
-                                foreach (string s in disallow) { newBlock.disallow.Add((LevelPermission)int.Parse(s, CultureInfo.CurrentCulture)); }
-                                foreach (string s in allow) { newBlock.allow.Add((LevelPermission)int.Parse(s, CultureInfo.CurrentCulture)); }
+                                newBlock.lowestRank = (LevelPermission)int.Parse(block[1]);
+                                foreach (string s in disallow) { newBlock.disallow.Add((LevelPermission)int.Parse(s)); }
+                                foreach (string s in allow) { newBlock.allow.Add((LevelPermission)int.Parse(s)); }
                             }
                             catch
                             {
@@ -1472,7 +1459,7 @@ namespace MCForge
         }
         public static byte Byte(string type)
         {
-            switch (type.ToLower(CultureInfo.CurrentCulture))
+            switch (type.ToLower())
             {
                 case "air": return 0;
                 case "stone": return 1;

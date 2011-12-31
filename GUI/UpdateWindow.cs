@@ -22,7 +22,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using System.Net;
-using System.Globalization;
 
 namespace MCForge.Gui
 {
@@ -89,19 +88,19 @@ namespace MCForge.Gui
 
                 foreach (string line in lines)
                 {
-                    if (!(line != null && String.IsNullOrEmpty(line)) && line[0] != '#')
+                    if (line != "" && line[0] != '#')
                     {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
                         string value = line.Split('=')[1].Trim();
 
-                        switch (key.ToLower(CultureInfo.CurrentCulture))
+                        switch (key.ToLower())
                         {
                             case "autoupdate":
-                                chkAutoUpdate.Checked = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                chkAutoUpdate.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "notify":
-                                chkNotify.Checked = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                chkNotify.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "restartcountdown":
                                 txtCountdown.Text = value;
@@ -119,7 +118,7 @@ namespace MCForge.Gui
             string chkNum = txtCountdown.Text.Trim();
             double Num;
             bool isNum = double.TryParse(chkNum, out Num);
-            if (!isNum || (txtCountdown.Text != null && String.IsNullOrEmpty(txtCountdown.Text)))
+            if (!isNum || txtCountdown.Text == "")
             {
                 MessageBox.Show("You must enter a number for the countdown");
             }

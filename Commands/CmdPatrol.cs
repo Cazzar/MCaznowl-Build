@@ -38,7 +38,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
             {
                 Help(p);
                 return;

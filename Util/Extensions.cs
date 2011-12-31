@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -106,7 +105,7 @@ namespace MCForge
             if (String.IsNullOrEmpty(str))
                 return String.Empty;
             char[] a = str.ToCharArray();
-            a[0] = char.ToUpper(a[0], CultureInfo.CurrentCulture);
+            a[0] = char.ToUpper(a[0]);
             return new string(a);
         }
         public static string Concatenate<T>(this List<T> list)

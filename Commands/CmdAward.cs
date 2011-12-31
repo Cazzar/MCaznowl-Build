@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,15 +31,15 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') == -1) { Help(p); return; }
+            if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
 
             bool give = true;
-            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "give")
+            if (message.Split(' ')[0].ToLower() == "give")
             {
                 give = true;
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
-            else if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "take")
+            else if (message.Split(' ')[0].ToLower() == "take")
             {
                 give = false;
                 message = message.Substring(message.IndexOf(' ') + 1);

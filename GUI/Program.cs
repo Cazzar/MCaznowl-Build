@@ -33,13 +33,12 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Reflection;
 using MCForge;
-using System.Globalization;
 
 namespace MCForge_.Gui
 {
     public static class Program
     {
-        public static bool usingConsole/* = false*/;
+        public static bool usingConsole = false;
         public static string parent = Path.GetFileName(Assembly.GetEntryAssembly().Location);
         public static string parentfullpath = Assembly.GetEntryAssembly().Location;
         public static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -51,10 +50,10 @@ namespace MCForge_.Gui
         //private static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
 
         [DllImport("kernel32")]
-        private static extern IntPtr GetConsoleWindow();
+        public static extern IntPtr GetConsoleWindow();
         [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        private static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        public static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
             Server.ErrorLog(ex);
@@ -64,7 +63,7 @@ namespace MCForge_.Gui
                 ExitProgram(true);
         }
 
-        private static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
+        public static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
         {
             Exception ex = e.Exception;
             Server.ErrorLog(ex);
@@ -106,12 +105,12 @@ namespace MCForge_.Gui
                     SW.Dispose();
                 }
 
-                if ((File.ReadAllText("Viewmode.cfg") != null && String.IsNullOrEmpty(File.ReadAllText("Viewmode.cfg")))) { skip = true; goto remake; }
+                if (File.ReadAllText("Viewmode.cfg") == "") { skip = true; goto remake; }
 
                 string[] foundView = File.ReadAllLines("Viewmode.cfg");
                 if (foundView[0][0] != '#') { skip = true; goto remake; }
 
-                if (foundView[4].Split(' ')[2].ToLower(CultureInfo.CurrentCulture) == "true")
+                if (foundView[4].Split(' ')[2].ToLower() == "true")
                 {
                     Server s = new Server();
                     s.OnLog += Console.WriteLine;
@@ -134,7 +133,7 @@ namespace MCForge_.Gui
                         ShowWindow(hConsole, 0);
                     }
                     UpdateCheck(true);
-                    if (foundView[5].Split(' ')[2].ToLower(CultureInfo.CurrentCulture) == "true")
+                    if (foundView[5].Split(' ')[2].ToLower() == "true")
                     {
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
@@ -166,7 +165,7 @@ namespace MCForge_.Gui
                         sentCmd = s.Substring(0, s.IndexOf(' '));
                         sentMsg = s.Substring(s.IndexOf(' ') + 1);
                     }
-                    else if (!(s != null && String.IsNullOrEmpty(s))) sentCmd = s;
+                    else if (s != String.Empty) sentCmd = s;
                     else goto talk;
 
                     try
@@ -177,7 +176,7 @@ namespace MCForge_.Gui
                         {
                             cmd.Use(null, sentMsg);
                             Console.WriteLine("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                            if (sentCmd.ToLower(CultureInfo.CurrentCulture) != "restart")
+                            if (sentCmd.ToLower() != "restart")
                                 continue;
                             break;
                         }
@@ -202,24 +201,24 @@ namespace MCForge_.Gui
                         if (spacePos == -1) { Console.WriteLine("No message entered."); continue; }
                         Player pl = Player.Find(s.Substring(0, spacePos));
                         if (pl == null) { Console.WriteLine("Player not found."); continue; }
-                        msg = String.Format(CultureInfo.CurrentCulture, "&9[>] {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s.Substring(spacePos + 1));
+                        msg = String.Format("&9[>] {0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s.Substring(spacePos + 1));
                         Player.SendMessage(pl, msg);
                     }
                     else if (s[0] == '#')
                     {
-                        msg = String.Format(CultureInfo.CurrentCulture, "To Ops -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
+                        msg = String.Format("To Ops -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessageOps(msg);
                         Server.IRC.Say(msg, true);
                     }
                     else if (s[0] == '+')
                     {
-                        msg = String.Format(CultureInfo.CurrentCulture, "To Admins -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
+                        msg = String.Format("To Admins -{0}Console [&a{1}{0}]&f- {2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessageAdmins(msg);
                         Server.IRC.Say(msg, true);
                     }
                     else
                     {
-                        msg = String.Format(CultureInfo.CurrentCulture, "{0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s);
+                        msg = String.Format("{0}Console [&a{1}{0}]: &f{2}", Server.DefaultColor, Server.ZallState, s);
                         Player.GlobalMessage(msg);
                         Server.IRC.Say(msg);
                     }
@@ -298,8 +297,8 @@ namespace MCForge_.Gui
 
         } */
 
-        public static bool CurrentUpdate/* = false*/;
-        static bool msgOpen/* = false*/;
+        public static bool CurrentUpdate = false;
+        static bool msgOpen = false;
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(120 * 60 * 1000);
 
         public static void UpdateCheck(bool wait = false, Player p = null)
@@ -322,9 +321,9 @@ namespace MCForge_.Gui
                                 //if (p != null) Server.restartcountdown = "20";  This is set by the user.  Why change it?
                                 Player.GlobalMessage("Update found. Prepare for restart in &f" + Server.restartcountdown + Server.DefaultColor + " seconds.");
                                 Server.s.Log("Update found. Prepare for restart in " + Server.restartcountdown + " seconds.");
-                                double nxtTime = Convert.ToDouble(Server.restartcountdown, CultureInfo.CurrentCulture);
+                                double nxtTime = Convert.ToDouble(Server.restartcountdown);
                                 DateTime nextupdate = DateTime.Now.AddMinutes(nxtTime);
-                                int timeLeft = Convert.ToInt32(Server.restartcountdown, CultureInfo.CurrentCulture);
+                                int timeLeft = Convert.ToInt32(Server.restartcountdown);
                                 System.Timers.Timer countDown = new System.Timers.Timer();
                                 countDown.Interval = 1000;
                                 countDown.Start();

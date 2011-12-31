@@ -15,7 +15,6 @@
 	permissions and limitations under the License.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +31,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
 			
 			var split = message.Split(' ');
 			
@@ -46,7 +45,7 @@ namespace MCForge
 			int amount = 0;
 			try
 			{
-	            amount = int.Parse(split[1], CultureInfo.CurrentCulture);
+	            amount = int.Parse(split[1]);
 			}
 			catch/* (Exception ex)*/
 			{

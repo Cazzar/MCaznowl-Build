@@ -21,7 +21,6 @@ using System.IO;
 using System.Timers;
 using MCForge;
 using System.Threading;
-using System.Globalization;
 
 
 public static class Checktimer
@@ -62,12 +61,12 @@ public static class Checktimer
                 if (line3.Contains(p.name))
                 {
                     string player = line3.Split(' ')[0];
-                    int period = Convert.ToInt32(line3.Split(' ')[3], CultureInfo.CurrentCulture);
-                    int minutes = Convert.ToInt32(line3.Split(' ')[4], CultureInfo.CurrentCulture);
-                    int hours = Convert.ToInt32(line3.Split(' ')[5], CultureInfo.CurrentCulture);
-                    int days = Convert.ToInt32(line3.Split(' ')[6], CultureInfo.CurrentCulture);
-                    int months = Convert.ToInt32(line3.Split(' ')[7], CultureInfo.CurrentCulture);
-                    int years = Convert.ToInt32(line3.Split(' ')[8], CultureInfo.CurrentCulture);
+                    int period = Convert.ToInt32(line3.Split(' ')[3]);
+                    int minutes = Convert.ToInt32(line3.Split(' ')[4]);
+                    int hours = Convert.ToInt32(line3.Split(' ')[5]);
+                    int days = Convert.ToInt32(line3.Split(' ')[6]);
+                    int months = Convert.ToInt32(line3.Split(' ')[7]);
+                    int years = Convert.ToInt32(line3.Split(' ')[8]);
                     Player who = Player.Find(player);
                     DateTime ExpireDate = new DateTime(years, months, days, hours, minutes, 0);
                     DateTime tocheck = ExpireDate.AddHours(Convert.ToDouble(period));

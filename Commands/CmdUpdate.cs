@@ -18,7 +18,6 @@
 using System;
 using System.Net;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,12 +32,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message.ToLower(CultureInfo.CurrentCulture) != "force" && message.ToLower(CultureInfo.CurrentCulture) != "help")
+            if (message.ToLower() != "force" && message.ToLower() != "help")
             {
                 if (p == null || p.group.Permission > defaultRank) MCForge_.Gui.Program.UpdateCheck(false, p);
                 else Player.SendMessage(p, "Ask an " + Group.findPerm(defaultRank).name + "+ to do it!");
             }
-            else if (message.ToLower(CultureInfo.CurrentCulture) == "help")
+            else if (message.ToLower() == "help")
             {
                 Help(p);
                 return;

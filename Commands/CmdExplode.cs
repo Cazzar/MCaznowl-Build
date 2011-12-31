@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using MCForge;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -43,7 +42,7 @@ namespace MCForge
         }
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number > 3) { Player.SendMessage(p, "What are you on about?"); return; }
             if (message == "me")
@@ -93,22 +92,22 @@ namespace MCForge
                             case 0: b = Block.rock; break;
                             case 1: b = Block.Byte(message); break;
                             case 3:
-                                x = Convert.ToUInt16(message.Split(' ')[0], CultureInfo.CurrentCulture);
-                                y = Convert.ToUInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
-                                z = Convert.ToUInt16(message.Split(' ')[2], CultureInfo.CurrentCulture);
+                                x = Convert.ToUInt16(message.Split(' ')[0]);
+                                y = Convert.ToUInt16(message.Split(' ')[1]);
+                                z = Convert.ToUInt16(message.Split(' ')[2]);
                                 break;
                             case 4:
                                 b = Block.Byte(message.Split(' ')[0]);
-                                x = Convert.ToUInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
-                                y = Convert.ToUInt16(message.Split(' ')[2], CultureInfo.CurrentCulture);
-                                z = Convert.ToUInt16(message.Split(' ')[3], CultureInfo.CurrentCulture);
+                                x = Convert.ToUInt16(message.Split(' ')[1]);
+                                y = Convert.ToUInt16(message.Split(' ')[2]);
+                                z = Convert.ToUInt16(message.Split(' ')[3]);
                                 break;
                             default: Player.SendMessage(p, "Invalid parameters"); return;
                         }
                     }
                     catch { Player.SendMessage(p, "Invalid parameters"); return; }
 
-//                    Level level = p.level // COMMENTED BY CODEIT.RIGHT;
+                    Level level = p.level;
 
                     if (y >= p.level.depth) y = (ushort)(p.level.depth - 1);
 

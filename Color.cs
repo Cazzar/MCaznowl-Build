@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -41,7 +40,7 @@ namespace MCForge
 
         public static string Parse(string str)
         {
-            switch (str.ToLower(CultureInfo.CurrentCulture))
+            switch (str.ToLower())
             {
                 case "black": return black;
                 case "navy": return navy;

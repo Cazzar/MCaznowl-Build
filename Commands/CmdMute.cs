@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -31,9 +30,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)) || message.Split(' ').Length > 2) { Help(p); return; }
+            if (message == "" || message.Split(' ').Length > 2) { Help(p); return; }
             Player who = Player.Find(message);
-            if (who == null && Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)) == false)
+            if (who == null && Server.devs.Contains(who.name.ToLower()) == false)
             {
                 if (Server.muted.Contains(message))
                 {
@@ -73,7 +72,7 @@ namespace MCForge
                 {
                     if (who != p) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher or equal rank."); return; }
                 }
-                if (Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)))
+                if (Server.devs.Contains(who.name.ToLower()))
                 {
                     Player.SendMessage(p, "You can't mute a MCForge Developer!");
                     return;

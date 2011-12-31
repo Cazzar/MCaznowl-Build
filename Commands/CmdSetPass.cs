@@ -57,7 +57,7 @@ namespace MCForge
                     return;
                 }
             }
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Help(p);
                 return;
@@ -74,7 +74,7 @@ namespace MCForge
             Player.SendMessage(p, "&c" + message);
             return;
         }
-        private static class Crypto
+        public class Crypto
         {
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
 

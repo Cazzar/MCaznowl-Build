@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -38,8 +37,8 @@ namespace MCForge
             if (number != 2) { Help(p); wait = 1; return; }
 
             int pos = message.IndexOf(' ');
-            string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
-            string t2 = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
+            string t = message.Substring(0, pos).ToLower();
+            string t2 = message.Substring(pos + 1).ToLower();
             byte type = Block.Byte(t);
             if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); wait = 1; return; }
             byte type2 = Block.Byte(t2);
@@ -96,13 +95,13 @@ namespace MCForge
                 return;
             }
 
-            Player.SendMessage(p, buffer.Count.ToString(CultureInfo.CurrentCulture) + " blocks.");
+            Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
 
             if (p.level.bufferblocks && !p.level.Instant)
             {
                 buffer.ForEach(delegate(Pos pos)
                 {
-                    Block1.Addblock(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
+                    BlockQueue.Addblock(p, pos.x, pos.y, pos.z, cpos.type2);                  //update block for everyone
                 });
             }
             else
@@ -124,52 +123,12 @@ namespace MCForge
         struct Pos
         {
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
         }
         struct CatchPos
         {
             public byte type;
             public byte type2;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
     }

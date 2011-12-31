@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,12 +31,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             Player who = Player.Find(message);
             if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
             else if (who == p) { Player.SendMessage(p, "Cannot freeze yourself."); return; }
             else if (p != null) { if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot freeze someone of equal or greater rank."); return; } }
-            if (Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)))
+            if (Server.devs.Contains(who.name.ToLower()))
             {
                 Player.SendMessage(p, "You can't freeze a MCForge Developer!");
                 return;

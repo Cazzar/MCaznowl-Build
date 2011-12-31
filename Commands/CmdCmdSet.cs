@@ -30,12 +30,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') == -1) { Help(p); return; }
+            if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
 
             string foundBlah = Command.all.FindShort(message.Split(' ')[0]);
 
             Command foundCmd;
-            if ((foundBlah != null && String.IsNullOrEmpty(foundBlah))) foundCmd = Command.all.Find(message.Split(' ')[0]);
+            if (foundBlah == "") foundCmd = Command.all.Find(message.Split(' ')[0]);
             else foundCmd = Command.all.Find(foundBlah);
 
             if (foundCmd == null) { Player.SendMessage(p, "Could not find command entered"); return; }

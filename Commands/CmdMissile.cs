@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -45,7 +44,7 @@ namespace MCForge
 
             if (p.aiming)
             {
-                if ((message != null && String.IsNullOrEmpty(message)))
+                if (message == "")
                 {
                     p.aiming = false;
                     Player.SendMessage(p, "Disabled missiles");
@@ -54,19 +53,19 @@ namespace MCForge
             }
 
             cpos.ending = 0;
-            if (message.ToLower(CultureInfo.CurrentCulture) == "destroy") cpos.ending = 1;
+            if (message.ToLower() == "destroy") cpos.ending = 1;
             if (p.allowTnt == false)
             {
-                if (message.ToLower(CultureInfo.CurrentCulture) == "explode")
+                if (message.ToLower() == "explode")
                 {
                     Player.SendMessage(p, "Since tnt usage is currently disabled, normal missile enabled"); cpos.ending = 1;
                 }
-                else if (message.ToLower(CultureInfo.CurrentCulture) == "teleport" || message.ToLower(CultureInfo.CurrentCulture) == "tp") cpos.ending = -1;
-                else if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+                else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
+                else if (message != "") { Help(p); return; }
             }
-            else if (message.ToLower(CultureInfo.CurrentCulture) == "explode") cpos.ending = 2;
-            else if (message.ToLower(CultureInfo.CurrentCulture) == "teleport" || message.ToLower(CultureInfo.CurrentCulture) == "tp") cpos.ending = -1;
-            else if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            else if (message.ToLower() == "explode") cpos.ending = 2;
+            else if (message.ToLower() == "teleport" || message.ToLower() == "tp") cpos.ending = -1;
+            else if (message != "") { Help(p); return; }
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             p.ClearBlockchange();
@@ -371,48 +370,8 @@ namespace MCForge
             Player.SendMessage(p, "Differs from /gun in that the missile is guided");
         }
 
-        public struct CatchPos { public ushort x, y, z;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
-        public struct Pos { public ushort x, y, z; public int ending;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        public struct CatchPos { public ushort x, y, z; }
+        public struct Pos { public ushort x, y, z; public int ending; }
 
         public void findNext(CatchPos lookedAt, ref CatchPos pos)
         {

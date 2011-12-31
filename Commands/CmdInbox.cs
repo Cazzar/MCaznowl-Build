@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using MCForge.SQL;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -39,7 +38,7 @@ namespace MCForge
             try
             {
                 if (Server.useMySQL) MySQL.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom CHAR(20), TimeSent DATETIME, Contents VARCHAR(255));"); else SQLite.executeQuery("CREATE TABLE if not exists `Inbox" + p.name + "` (PlayerFrom TEXT, TimeSent DATETIME, Contents TEXT);");
-                if ((message != null && String.IsNullOrEmpty(message)))
+                if (message == "")
                 {
                     DataTable Inbox = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Inbox" + p.name + "` ORDER BY TimeSent") : SQLite.fillData("SELECT * FROM `Inbox" + p.name + "` ORDER BY TimeSent");
 
@@ -51,15 +50,15 @@ namespace MCForge
                     }
                     Inbox.Dispose();
                 }
-                else if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "del" || message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "delete")
+                else if (message.Split(' ')[0].ToLower() == "del" || message.Split(' ')[0].ToLower() == "delete")
                 {
                     int FoundRecord = -1;
 
-                    if (message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) != "all")
+                    if (message.Split(' ')[1].ToLower() != "all")
                     {
                         try
                         {
-                            FoundRecord = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                            FoundRecord = int.Parse(message.Split(' ')[1]);
                         }
                         catch { Player.SendMessage(p, "Incorrect number given."); return; }
 
@@ -77,7 +76,7 @@ namespace MCForge
                     if (FoundRecord == -1)
                         queryString = Server.useMySQL ? "TRUNCATE TABLE `Inbox" + p.name + "`" : "DELETE FROM `Inbox" + p.name + "`"; 
                     else
-                        queryString = "DELETE FROM `Inbox" + p.name + "` WHERE PlayerFrom='" + Inbox.Rows[FoundRecord]["PlayerFrom"] + "' AND TimeSent='" + Convert.ToDateTime(Inbox.Rows[FoundRecord]["TimeSent"], CultureInfo.CurrentCulture).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture) + "'";
+                        queryString = "DELETE FROM `Inbox" + p.name + "` WHERE PlayerFrom='" + Inbox.Rows[FoundRecord]["PlayerFrom"] + "' AND TimeSent='" + Convert.ToDateTime(Inbox.Rows[FoundRecord]["TimeSent"]).ToString("yyyy-MM-dd HH:mm:ss") + "'";
 
                     if (Server.useMySQL) MySQL.executeQuery(queryString); else SQLite.executeQuery(queryString);
 
@@ -94,7 +93,7 @@ namespace MCForge
 
                     try
                     {
-                        FoundRecord = int.Parse(message, CultureInfo.CurrentCulture);
+                        FoundRecord = int.Parse(message);
                     }
                     catch { Player.SendMessage(p, "Incorrect number given."); return; }
 

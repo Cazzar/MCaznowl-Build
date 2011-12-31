@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -31,26 +30,14 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public List<CopyOwner> _list = new List<CopyOwner>(); 
-
-        public List<CopyOwner> list
-        {
-            get
-            {
-                return _list;
-            }
-            set
-            {
-                _list = value;
-            }
-        }
+        public List<CopyOwner> list = new List<CopyOwner>();
         public CmdStore() { }
 
         public override void Use(Player p, string message)
         {
             try
             {
-                if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+                if (message == "") { Help(p); return; }
 
                 if (message.IndexOf(' ') == -1)
                 {
@@ -65,7 +52,7 @@ namespace MCForge
 						File.Create("extra/copy/" + message + ".copy").Dispose();
 						using (StreamWriter sW = File.CreateText("extra/copy/" + message + ".copy"))
 						{
-							sW.WriteLine("Saved by: " + p.name + " at " + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss ", CultureInfo.CurrentCulture));
+							sW.WriteLine("Saved by: " + p.name + " at " + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss "));
 							for (int k = 0; k < p.CopyBuffer.Count; k++)
 							{
 								sW.WriteLine(p.CopyBuffer[k].x + " " + p.CopyBuffer[k].y + " " + p.CopyBuffer[k].z + " " + p.CopyBuffer[k].type);

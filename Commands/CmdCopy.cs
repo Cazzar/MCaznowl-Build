@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -30,34 +29,22 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        private int _allowoffset; 
-
-        public int allowoffset
-        {
-            get
-            {
-                return _allowoffset;
-            }
-            set
-            {
-                _allowoffset = value;
-            }
-        }
+        public int allowoffset = 0;
         public CmdCopy() { }
 
         public override void Use(Player p, string message)
         {
-            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "save")
+            if (message.Split(' ')[0].ToLower() == "save")
             {
                 if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
                 Savecopy(p, message.Split(' ')[1]); return;
             }
-            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "load")
+            if (message.Split(' ')[0].ToLower() == "load")
             {
                 if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
                 Loadcopy(p, message.Split(' ')[1]); return;
             }
-            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "delete")
+            if (message.Split(' ')[0].ToLower() == "delete")
             {
                 if (message.Split(' ').Length != 2 || String.IsNullOrEmpty(message.Split(' ')[1])) { Help(p); return; }
                 message = message.Split(' ')[1];
@@ -65,7 +52,7 @@ namespace MCForge
                 File.Delete("extra/savecopy/" + p.name + "/" + message + ".cpy");
                 Player.SendMessage(p, "Deleted copy " + message); return;
             }
-            if (message.ToLower(CultureInfo.CurrentCulture) == "list")
+            if (message.ToLower() == "list")
             {
                 if (!Directory.Exists("extra/savecopy/" + p.name)) { Player.SendMessage(p, "No such directory exists"); return; }
                 FileInfo[] fin = new DirectoryInfo("extra/savecopy/" + p.name).GetFiles();
@@ -81,8 +68,8 @@ namespace MCForge
             p.copyoffset[0] = 0; p.copyoffset[1] = 0; p.copyoffset[2] = 0;
             allowoffset = (message.IndexOf('@'));
             if (allowoffset != -1) { message = message.Replace("@ ", ""); }
-            if (message.ToLower(CultureInfo.CurrentCulture) == "cut") { cpos.type = 1; message = ""; }
-            else if (message.ToLower(CultureInfo.CurrentCulture) == "air") { cpos.type = 2; message = ""; }
+            if (message.ToLower() == "cut") { cpos.type = 1; message = ""; }
+            else if (message.ToLower() == "air") { cpos.type = 2; message = ""; }
             else if (message == "@") { message = ""; }
             else if (message.IndexOf(' ') != -1)
             {
@@ -106,7 +93,7 @@ namespace MCForge
 
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
 
-            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message != "") { Help(p); return; }
 
             Player.SendMessage(p, "Place two blocks to determine the edges.");
             p.ClearBlockchange();
@@ -201,7 +188,7 @@ namespace MCForge
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
             p.SendBlockchange(x, y, z, b);
-            //            CatchPos cpos = (CatchPos)p.blockchangeObject // COMMENTED BY CODEIT.RIGHT;
+            CatchPos cpos = (CatchPos)p.blockchangeObject;
 
 
             p.copyoffset[0] = (p.copystart[0] - x);
@@ -212,7 +199,7 @@ namespace MCForge
 
         void Savecopy(Player p, string message)
         {
-            if (message.EndsWith("#", StringComparison.CurrentCulture))
+            if (message.EndsWith("#"))
             {
                 if (!p.group.CanExecute(Command.all.Find("copysavenet")))
                 {
@@ -280,7 +267,7 @@ namespace MCForge
 
         void Loadcopy(Player p, string message)
         {
-            if (message.EndsWith("#", StringComparison.CurrentCulture))
+            if (message.EndsWith("#"))
             {
                 if (!p.group.CanExecute(Command.all.Find("copyloadnet")))
                 {
@@ -332,32 +319,29 @@ namespace MCForge
             Player.CopyPos pos; pos.x = x; pos.y = y; pos.z = z; pos.type = type;
             p.CopyBuffer.Add(pos);
         }
-        struct CatchPos
-        {
-            public ushort x, y, z; public int type; public List<byte> ignoreTypes;
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-        }
+        struct CatchPos { public ushort x, y, z; public int type; public List<byte> ignoreTypes; }
     }
 
+    public class CmdCopyLoadNet : Command
+    {
+        public override string name { get { return "copyloadnet"; } }
+        public override string shortcut { get { return ""; } }
+        public override string type { get { return "build"; } }
+        public override bool museumUsable { get { return false; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public CmdCopyLoadNet() { }
 
+        public override void Use(Player p, string message)
+        {
+            Command.all.Find("copy").Use(p, "load " + message + "#");
+        }
+
+        public override void Help(Player p)
+        {
+            Player.SendMessage(p, "/copyloadnet - Loads a copy from network location. Example below:");
+            Player.SendMessage(p, "/copyloadnet servername.com/directory/savename.cpy");
+        }
+    }
 
     public class CmdCopySaveNet : Command
     {

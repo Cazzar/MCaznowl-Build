@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -57,7 +56,7 @@ namespace MCForge
             {
                 try
                 {
-                    foundnum = Convert.ToInt16(message, CultureInfo.CurrentCulture);
+                    foundnum = Convert.ToInt16(message);
                     if (p.cmdBind[foundnum] == null) { Player.SendMessage(p, "No command stored here yet."); return; }
                     foundcmd = "/" + p.cmdBind[foundnum] + " " + p.messageBind[foundnum];
                     Player.SendMessage(p, "Stored command: &b" + foundcmd);
@@ -68,7 +67,7 @@ namespace MCForge
             {
                 try
                 {
-                    foundnum = Convert.ToInt16(message.Split(' ')[message.Split(' ').Length - 1], CultureInfo.CurrentCulture);
+                    foundnum = Convert.ToInt16(message.Split(' ')[message.Split(' ').Length - 1]);
                     foundcmd = message.Split(' ')[0];
                     if (message.Split(' ').Length > 2)
                     {

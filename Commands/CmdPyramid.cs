@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -45,8 +44,8 @@ namespace MCForge
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
-                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
+                string t = message.Substring(0, pos).ToLower();
+                string s = message.Substring(pos + 1).ToLower();
                 byte type = Block.Byte(t);
                 if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); wait = 1; return; }
                 if (!Block.canPlace(p, type)) { Player.SendMessage(p, "Cannot place that."); wait = 1; return; }
@@ -60,10 +59,10 @@ namespace MCForge
                 cpos.type = Block.Byte(message);
                 p.pyramidblock = t;
             }
-            else if (!(message != null && String.IsNullOrEmpty(message)))
+            else if (message != "")
             {
                 SolidType solid = SolidType.hollow;
-                message = message.ToLower(CultureInfo.CurrentCulture);
+                message = message.ToLower();
                 byte type; unchecked { type = (byte)-1; }
                 p.pyramidblock = "stone";
                 if (message == "solid") { solid = SolidType.solid; }
@@ -86,7 +85,7 @@ namespace MCForge
             }
             Player.SendMessage(p, "Place two blocks to determine the edges.");
             p.ClearBlockchange();
-            if ((p.pyramidblock != null && String.IsNullOrEmpty(p.pyramidblock)))
+            if (p.pyramidblock == "")
             {
                 p.pyramidblock = "stone";
             }
@@ -556,60 +555,19 @@ namespace MCForge
             finaltotal -= total;
             return finaltotal;
         }
-//  COMMENTED BY CODEIT.RIGHT
-//        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
-//        {
-//            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
-//        }
+        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
+        {
+            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
+        }
         struct Pos
         {
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
         }
         struct CatchPos
         {
             public SolidType solid;
             public byte type;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
         enum SolidType { solid, hollow, reverse };
         //<click command to stop text>
@@ -628,10 +586,10 @@ namespace MCForge
                 {
                     for (int value = 0; value < 3; value++)
                     {
-                        if (parameters[value].ToLower(CultureInfo.CurrentCulture) == "x" || parameters[value].ToLower(CultureInfo.CurrentCulture) == "y" || parameters[value].ToLower(CultureInfo.CurrentCulture) == "z")
+                        if (parameters[value].ToLower() == "x" || parameters[value].ToLower() == "y" || parameters[value].ToLower() == "z")
                             click[value] = p.lastClick[value];
                         else if (isValid(parameters[value], value, p))
-                            click[value] = ushort.Parse(parameters[value], CultureInfo.CurrentCulture);
+                            click[value] = ushort.Parse(parameters[value]);
                         else
                         {
                             Player.SendMessage(p, "\"" + parameters[value] + "\" was not valid");
@@ -650,7 +608,7 @@ namespace MCForge
             ushort testValue;
             try
             {
-                testValue = ushort.Parse(message, CultureInfo.CurrentCulture);
+                testValue = ushort.Parse(message);
             }
             catch { return false; }
             if (testValue < 0)

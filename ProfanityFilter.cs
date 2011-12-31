@@ -23,7 +23,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -62,11 +61,11 @@ namespace MCForge
             }
 
             // OK the file should exist now
-            var tempBadWords = File.ReadAllLines("text/badwords.txt").Where(s => s.StartsWith("#", StringComparison.CurrentCulture) == false || String.IsNullOrEmpty(s.Trim()));
+            var tempBadWords = File.ReadAllLines("text/badwords.txt").Where(s => s.StartsWith("#") == false || s.Trim().Equals(String.Empty));
 
             // Run the badwords through the reducer to ensure things like Ls become Is and everything is lowercase
             // Also remove lines starting with a "#" since they are comments
-            BadWords = from s in tempBadWords where !s.StartsWith("#", StringComparison.CurrentCulture) select Reduce(s.ToLower(CultureInfo.CurrentCulture));
+            BadWords = from s in tempBadWords where !s.StartsWith("#") select Reduce(s.ToLower());
         }
 
         public static string Parse(string text)
@@ -76,27 +75,26 @@ namespace MCForge
         }
 
         // Replace bad words only if the whole word matches
-//  COMMENTED BY CODEIT.RIGHT
-//        private static string ParseMatchWholeWords(string text)
-//        {
-//            var result = new List<string>();
-//            var originalWords = text.Split(' ');
-//            var reducedWords = Reduce(text).Split(' ');
-//            for (var i = 0; i < originalWords.Length; i++)
-//            {
-//                if (BadWords.Contains(reducedWords[i].ToLower(CultureInfo.CurrentCulture)))
-//                {
-//                    // A reduced word matched a bad word from our file!
-//                    result.Add(new String('*', originalWords[i].Length));
-//                }
-//                else
-//                {
-//                    result.Add(originalWords[i]);
-//                }
-//            }
-//
-//            return String.Join(" ", result.ToArray());
-//        }
+        private static string ParseMatchWholeWords(string text)
+        {
+            var result = new List<string>();
+            var originalWords = text.Split(' ');
+            var reducedWords = Reduce(text).Split(' ');
+            for (var i = 0; i < originalWords.Length; i++)
+            {
+                if (BadWords.Contains(reducedWords[i].ToLower()))
+                {
+                    // A reduced word matched a bad word from our file!
+                    result.Add(new String('*', originalWords[i].Length));
+                }
+                else
+                {
+                    result.Add(originalWords[i]);
+                }
+            }
+
+            return String.Join(" ", result.ToArray());
+        }
 
         // Replace any whole word containing a bad word inside it (including partial word matches)
         private static string ParseMatchPartialWords(string text)
@@ -136,7 +134,7 @@ namespace MCForge
 
         private static string Reduce(string text)
         {
-            text = text.ToLower(CultureInfo.CurrentCulture);
+            text = text.ToLower();
             foreach (var pattern in RegexReduce)
             {
                 text = Regex.Replace(text, pattern.Value, pattern.Key/*, RegexOptions.IgnoreCase*/);

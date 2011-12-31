@@ -50,7 +50,7 @@ namespace MCForge
                 return;
             }
             int number = message.Split(' ').Length;
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Help(p);
                 return;

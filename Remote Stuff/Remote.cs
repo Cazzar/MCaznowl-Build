@@ -23,26 +23,13 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using MCForge;
-using System.Globalization;
 
 namespace MCForge.Remote
 {
     public partial class Remote
     {
         //public static Remote This;
-        private string _ip; 
-
-        public string ip
-        {
-            get
-            {
-                return _ip;
-            }
-            set
-            {
-                _ip = value;
-            }
-        }
+        public string ip;
 
         byte[] _bu = new byte[0];
         readonly byte[] _tbu = new byte[0xFF];
@@ -50,47 +37,11 @@ namespace MCForge.Remote
         private bool Upcast { get; set; }
         public bool LoggedIn { get; protected set; }
 
-        private Socket _socket; 
-
-        public Socket Socket
-        {
-            get
-            {
-                return _socket;
-            }
-            set
-            {
-                _socket = value;
-            }
-        }
+        public Socket Socket;
         public static List<Remote> Remotes = new List<Remote>();
-        private int _protocal = 2; 
-
-        public int Protocal
-        {
-            get
-            {
-                return _protocal;
-            }
-            set
-            {
-                _protocal = value;
-            }
-        }
+        public int Protocal = 2;
         private readonly string _keyMobile;
-        private byte _remoteType = 4; 
-
-        public byte RemoteType
-        {
-            get
-            {
-                return _remoteType;
-            }
-            set
-            {
-                _remoteType = value;
-            }
-        }
+        public byte RemoteType = 4;
         public Remote()
         {
            // Remote.This = this;
@@ -342,21 +293,20 @@ namespace MCForge.Remote
             }
 
         }
-//  COMMENTED BY CODEIT.RIGHT
-//        void LogPacket(byte id, byte[] packet)
-//        {
-//            string s = "";
-//
-//            if (packet.Length >= 1)
-//            {
-//                s = packet.Aggregate(s, (current, b) => current + (b + ", "));
-//                Server.s.Log(string.Format(CultureInfo.CurrentCulture, "Packet {0} {{ {1}}}", id, s));
-//            }
-//            else
-//            {
-//                Server.s.Log(string.Format(CultureInfo.CurrentCulture, "Packet {0} had no DATA!", id));
-//            }
-//        }
+        void LogPacket(byte id, byte[] packet)
+        {
+            string s = "";
+
+            if (packet.Length >= 1)
+            {
+                s = packet.Aggregate(s, (current, b) => current + (b + ", "));
+                Server.s.Log(string.Format("Packet {0} {{ {1}}}", id, s));
+            }
+            else
+            {
+                Server.s.Log(string.Format("Packet {0} had no DATA!", id));
+            }
+        }
 
 
         public void Dispose()

@@ -22,7 +22,7 @@ using System.IO;
 
 namespace MCForge
 {
-    class MinecraftBeat : IBeat
+    class MinecraftBeat : Beat
     {
         public string URL { get { return "http://www.minecraft.net/heartbeat.jsp"; } }
         public string Parameters { get; set; }
@@ -42,7 +42,7 @@ namespace MCForge
                 string newHash = line.Substring(line.LastIndexOf('/') + 1);
 
                 // Run this code if we don't already have a hash or if the hash has changed
-                if (String.IsNullOrEmpty(Server.Hash) || !newHash.Equals(Server.Hash, StringComparison.CurrentCulture))
+                if (String.IsNullOrEmpty(Server.Hash) || !newHash.Equals(Server.Hash))
                 {
                     Server.Hash = newHash;
                     Server.URL = line;

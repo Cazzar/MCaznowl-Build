@@ -21,7 +21,6 @@ using System.Collections.Generic;
 //using System.Timers;
 using System.Text;
 using Sharkbite.Irc;
-using System.Globalization;
 //using System.Threading;
 
 namespace MCForge
@@ -36,8 +35,8 @@ namespace MCForge
 
         private Connection connection;
         private string server, channel, nick;
-        private bool reset/* = false*/;
-        private byte retries/* = 0*/;
+        private bool reset = false;
+        private byte retries = 0;
         public GlobalChatBot(string nick)
         {
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
@@ -96,10 +95,10 @@ namespace MCForge
             {
                 OnNewGlobalMessage(user.Nick, message);
             }
-            if (Server.devs.Contains(message.Split(':')[0]) && message.StartsWith("[Dev]", StringComparison.CurrentCulture) == false && message.StartsWith("[Developer]", StringComparison.CurrentCulture) == false) { message = "[Dev]" + message; }
+            if (Server.devs.Contains(message.Split(':')[0]) && message.StartsWith("[Dev]") == false && message.StartsWith("[Developer]") == false) { message = "[Dev]" + message; }
             try { Gui.Window.thisWindow.LogGlobalChat("> " + user.Nick + ": " + message); }
             catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }
-            Player.GlobalMessage(String.Format(CultureInfo.CurrentCulture, "{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
+            Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
 
         void Listener_OnRegistered()
@@ -121,7 +120,7 @@ namespace MCForge
 
         void Listener_OnKick(UserInfo user, string channel, string kickee, string reason)
         {
-            if (kickee.Trim().ToLower(CultureInfo.CurrentCulture) == nick.ToLower(CultureInfo.CurrentCulture))
+            if (kickee.Trim().ToLower() == nick.ToLower())
             {
                 Server.s.Log("Kicked from Global Chat: " + reason);
                 if (OnGlobalKicked != null) OnGlobalKicked(reason);

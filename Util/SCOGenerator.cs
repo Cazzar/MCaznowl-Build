@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace MCForge.Util
 {
-	internal static class SCOGenerator
+	class SCOGenerator
 	{
 		static Random random = new Random();
 		public static double pi = 3.141592653;
@@ -199,7 +199,7 @@ namespace MCForge.Util
 					{
                         if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
-//						int ox = x // COMMENTED BY CODEIT.RIGHT;
+						int ox = x;
 						int oy = y;
 						int oz = z;
 
@@ -249,7 +249,7 @@ namespace MCForge.Util
 		{
 			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
             List<Player.CopyPos> buffer = new List<Player.CopyPos>();
-//			double origionalhypotenuse = sqrt((height * height) + (radius * radius)) // COMMENTED BY CODEIT.RIGHT;
+			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
@@ -311,7 +311,7 @@ namespace MCForge.Util
 		{
 			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
             List<Player.CopyPos> buffer = new List<Player.CopyPos>();
-//			double origionalhypotenuse = sqrt((height * height) + (radius * radius)) // COMMENTED BY CODEIT.RIGHT;
+			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
@@ -372,7 +372,7 @@ namespace MCForge.Util
 		{
 			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
             List<Player.CopyPos> buffer = new List<Player.CopyPos>();
-//			double origionalhypotenuse = sqrt((height * height) + (radius * radius)) // COMMENTED BY CODEIT.RIGHT;
+			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{
@@ -445,7 +445,7 @@ namespace MCForge.Util
 					{
                         if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
-//						int ox = x // COMMENTED BY CODEIT.RIGHT;
+						int ox = x;
 						int oy = y;
 						int oz = z;
 
@@ -503,7 +503,7 @@ namespace MCForge.Util
 					{
                         if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
-//						int ox = x // COMMENTED BY CODEIT.RIGHT;
+						int ox = x;
 						int oy = y;
 						int oz = z;
 
@@ -561,7 +561,7 @@ namespace MCForge.Util
 					{
                         if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
-//						int ox = x // COMMENTED BY CODEIT.RIGHT;
+						int ox = x;
 						int oy = y;
 						int oz = z;
 
@@ -619,7 +619,7 @@ namespace MCForge.Util
 					{
                         if ((z + m) < 0 || (z + m) > p.level.length) continue;
 
-//						int ox = x // COMMENTED BY CODEIT.RIGHT;
+						int ox = x;
 						int oy = y;
 						int oz = z;
 
@@ -757,7 +757,7 @@ namespace MCForge.Util
 		{
 			//foreach (Player p in Player.players) if (p.level == l) p.SendBlockchange(x, y, z, 0);
             List<Player.CopyPos> buffer = new List<Player.CopyPos>();
-//			double origionalhypotenuse = sqrt((height * height) + (radius * radius)) // COMMENTED BY CODEIT.RIGHT;
+			double origionalhypotenuse = sqrt((height * height) + (radius * radius));
 
 			for (short k = 0; k <= height; k = (short)(k + 1))
 			{

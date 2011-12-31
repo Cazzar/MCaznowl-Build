@@ -24,7 +24,6 @@ using System.IO.Compression;
 using System.IO.Packaging;
 using MCForge.SQL;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge {
     class CmdServer : Command {
@@ -56,7 +55,7 @@ namespace MCForge {
                     Server.s.Log("Server is now private!");
                     break;
                 case "reset":  //made so ONLY the owner or console can use this command.
-                    if (p != null && !Server.server_owner.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) || Server.server_owner.Equals("Notch", StringComparison.CurrentCulture)) {
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
                         p.SendMessage("Sorry.  You must be the Server Owner or Console to reset the server.");
                         return;
                     }
@@ -78,7 +77,7 @@ namespace MCForge {
                     setToDefault();
                     goto case "reload";
                 case "reload":  // For security, only the owner and Console can use this.
-                    if (p != null && !Server.server_owner.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) || Server.server_owner.Equals("Notch", StringComparison.CurrentCulture)) {
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
                         p.SendMessage("Sorry.  You must be the Server Owner or Console to reload the server settings.");
                         return;
                     }
@@ -115,7 +114,7 @@ namespace MCForge {
                     Save(false, p);
                     break;
                 case "restore":
-                    if (p != null && !Server.server_owner.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) || Server.server_owner.Equals("Notch", StringComparison.CurrentCulture)) {
+                    if (p != null && !Server.server_owner.ToLower().Equals(p.name.ToLower()) || Server.server_owner.Equals("Notch")) {
                         p.SendMessage("Sorry.  You must be the defined Server Owner or Console to restore the server.");
                         return;
                     }
@@ -136,7 +135,7 @@ namespace MCForge {
         }
 
         private void Save(bool withFiles, bool withDB, Player p) {
-//            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage) // COMMENTED BY CODEIT.RIGHT;
+            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage);
             Thread doWork = new Thread(new ParameterizedThreadStart(CreatePackage));
             List<object> param = new List<object>();
             param.Add("MCForge.zip");
@@ -450,7 +449,7 @@ namespace MCForge {
                     }
                     // To make life easier, we reload settings now, to maker it less likely to need restart
                     Command.all.Find("server").Use(null, "reload"); //Reload, as console
-                    if (item.Uri.ToString().ToLower(CultureInfo.CurrentCulture).Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
+                    if (item.Uri.ToString().ToLower().Contains("sql.sql")) { // If it's in there, they backed it up, meaning they want it restored
                         Database.fillDatabase(item.GetStream());
                     }
                 }

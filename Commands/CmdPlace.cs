@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge.Commands
 {
@@ -45,15 +44,15 @@ namespace MCForge.Commands
                     case 0: b = Block.rock; break;
                     case 1: b = Block.Byte(message); break;
                     case 3:
-                        x = Convert.ToUInt16(message.Split(' ')[0], CultureInfo.CurrentCulture);
-                        y = Convert.ToUInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
-                        z = Convert.ToUInt16(message.Split(' ')[2], CultureInfo.CurrentCulture);
+                        x = Convert.ToUInt16(message.Split(' ')[0]);
+                        y = Convert.ToUInt16(message.Split(' ')[1]);
+                        z = Convert.ToUInt16(message.Split(' ')[2]);
                         break;
                     case 4:
                         b = Block.Byte(message.Split(' ')[0]);
-                        x = Convert.ToUInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
-                        y = Convert.ToUInt16(message.Split(' ')[2], CultureInfo.CurrentCulture);
-                        z = Convert.ToUInt16(message.Split(' ')[3], CultureInfo.CurrentCulture);
+                        x = Convert.ToUInt16(message.Split(' ')[1]);
+                        y = Convert.ToUInt16(message.Split(' ')[2]);
+                        z = Convert.ToUInt16(message.Split(' ')[3]);
                         break;
                     default: Player.SendMessage(p, "Invalid parameters"); return;
                 }
@@ -63,7 +62,7 @@ namespace MCForge.Commands
             if (b == Block.Zero) b = (byte)1;
             if (!Block.canPlace(p, b)) { Player.SendMessage(p, "Cannot place that block type."); return; }
 
-//            Level level = p.level // COMMENTED BY CODEIT.RIGHT;
+            Level level = p.level;
 
             if (y >= p.level.depth) y = (ushort)(p.level.depth - 1);
 

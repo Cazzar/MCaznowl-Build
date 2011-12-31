@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using MCForge.SQL;
-using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -37,7 +36,7 @@ namespace MCForge
         {
             CatchPos cpos;
 
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 p.ZoneCheck = true;
                 Player.SendMessage(p, "Place a block where you would like to check for zones.");
@@ -53,7 +52,7 @@ namespace MCForge
             {
                 if (p.canBuild == true) //Checks if player can build there
                 {
-                    switch (message.ToLower(CultureInfo.CurrentCulture)) //If true - they can delete the zone
+                    switch (message.ToLower()) //If true - they can delete the zone
                     {
                         case "del":
                             p.zoneDel = true;
@@ -74,7 +73,7 @@ namespace MCForge
             }
 
 
-            if (message.ToLower(CultureInfo.CurrentCulture) == "del all")
+            if (message.ToLower() == "del all")
             {
                 if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this, 2))
                 {
@@ -107,11 +106,11 @@ namespace MCForge
                 message = message.Split(' ')[0] + " grp" + Group.Find(message.Split(' ')[1]).name;
             }
 
-            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "add")
+            if (message.Split(' ')[0].ToLower() == "add")
             {
                 Player foundPlayer = Player.Find(message.Split(' ')[1]);
                 if (foundPlayer == null)
-                    cpos.Owner = message.Split(' ')[1].ToString(CultureInfo.CurrentCulture);
+                    cpos.Owner = message.Split(' ')[1].ToString();
                 else
                     cpos.Owner = foundPlayer.name;
             }
@@ -169,26 +168,6 @@ namespace MCForge
             Player.SendMessage(p, "Added zone for &b" + cpos.Owner);
         }
 
-        struct CatchPos { public ushort x, y, z; public string Owner;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; public string Owner; }
     }
 }

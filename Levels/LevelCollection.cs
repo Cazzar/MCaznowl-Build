@@ -26,19 +26,7 @@ namespace MCForge
 
     public class LevelCollection : List<Level>, ITypedList
     {
-        private ILevelViewBuilder __viewBuilder; 
-
-        protected ILevelViewBuilder _viewBuilder
-        {
-            get
-            {
-                return __viewBuilder;
-            }
-            set
-            {
-                __viewBuilder = value;
-            }
-        }
+        protected ILevelViewBuilder _viewBuilder;
 
         public LevelCollection(ILevelViewBuilder viewBuilder)
         {
@@ -47,19 +35,7 @@ namespace MCForge
 
         #region ITypedList Members
 
-        private PropertyDescriptorCollection __props; 
-
-        protected PropertyDescriptorCollection _props
-        {
-            get
-            {
-                return __props;
-            }
-            set
-            {
-                __props = value;
-            }
-        }
+        protected PropertyDescriptorCollection _props;
 
         public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {
@@ -83,7 +59,41 @@ namespace MCForge
         PropertyDescriptorCollection GetView();
     }
 
+    public class LevelListView : ILevelViewBuilder
+    {
+        public PropertyDescriptorCollection GetView()
+        {
+            List<PropertyDescriptor> props = new List<PropertyDescriptor>();
+            LevelMethodDelegate del = l => l.name;
+            props.Add(new LevelMethodDescriptor("Name", del, typeof(string)));
 
+            del = l => l.players.Count;
+            props.Add(new LevelMethodDescriptor("Players", del, typeof(int)));
+
+            del = l => l.physics;
+            props.Add(new LevelMethodDescriptor("Physics", del, typeof(int)));
+
+            del = delegate(Level l)
+            {
+                //return l.permissionvisit.ToString();
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionvisit);
+                return grp == null ? l.permissionvisit.ToString() : grp.name;
+            };
+            props.Add(new LevelMethodDescriptor("PerVisit", del, typeof(string)));
+
+            del = delegate(Level l)
+                      {
+                          //return l.permissionbuild.ToString();
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionbuild);
+                          return grp == null ? l.permissionbuild.ToString() : grp.name;
+                      };
+            props.Add(new LevelMethodDescriptor("PerBuild", del, typeof(string)));
+
+            PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
+            props.CopyTo(propArray);
+            return new PropertyDescriptorCollection(propArray);
+        }
+    }
 
     public class LevelListViewForTab : ILevelViewBuilder
     {
@@ -151,7 +161,7 @@ namespace MCForge
             del = delegate(Level l)
                       {
                           //return l.permissionvisit.ToString();
-                          Group grp = Group.GroupList.Find(g => g.Permission == l.permissionvisit);
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionvisit);
                           return grp == null ? l.permissionvisit.ToString() : grp.name;
                       };
             props.Add(new LevelMethodDescriptor("PerVisit", del, typeof(string)));
@@ -159,7 +169,7 @@ namespace MCForge
             del = delegate(Level l)
                       {
                           //return l.permissionbuild.ToString();
-                          Group grp = Group.GroupList.Find(g => g.Permission == l.permissionbuild);
+                Group grp = Group.GroupList.Find(g => g.Permission == l.permissionbuild);
                           return grp == null ? l.permissionbuild.ToString() : grp.name;
                       };
             props.Add(new LevelMethodDescriptor("PerBuild", del, typeof(string)));
@@ -176,32 +186,8 @@ namespace MCForge
 
     public class LevelMethodDescriptor : PropertyDescriptor
     {
-        private LevelMethodDelegate __method; 
-
-        protected LevelMethodDelegate _method
-        {
-            get
-            {
-                return __method;
-            }
-            set
-            {
-                __method = value;
-            }
-        }
-        private Type __methodReturnType; 
-
-        protected Type _methodReturnType
-        {
-            get
-            {
-                return __methodReturnType;
-            }
-            set
-            {
-                __methodReturnType = value;
-            }
-        }
+        protected LevelMethodDelegate _method;
+        protected Type _methodReturnType;
 
         public LevelMethodDescriptor(string name, LevelMethodDelegate method,
          Type methodReturnType)

@@ -26,13 +26,12 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Collections;
-using System.Globalization;
 
 namespace MCForge.Gui
 {
     public partial class LavaMapBrowser : Form
     {
-        private bool listing/* = false*/, loadingDet/* = false*/;
+        private bool listing = false, loadingDet = false;
         private string downloadUrl = "http://www.mcforge.net/lavamaps/dl.php";
         private string listUrl = "http://www.mcforge.net/lavamaps/listdata.php";
         private string imgUrl = "http://www.mcforge.net/lavamaps/thumb.php";
@@ -76,11 +75,11 @@ namespace MCForge.Gui
                     return;
                 }
 
-                if (btnDownload.Text.EndsWith("...", StringComparison.CurrentCulture))
+                if (btnDownload.Text.EndsWith("..."))
                     btnDownload.Text = "Downloading   ";
-                else if (btnDownload.Text.EndsWith(".. ", StringComparison.CurrentCulture))
+                else if (btnDownload.Text.EndsWith(".. "))
                     btnDownload.Text = "Downloading...";
-                else if (btnDownload.Text.EndsWith(".  ", StringComparison.CurrentCulture))
+                else if (btnDownload.Text.EndsWith(".  "))
                     btnDownload.Text = "Downloading.. ";
                 else
                     btnDownload.Text = "Downloading.  ";
@@ -168,7 +167,7 @@ namespace MCForge.Gui
                     MessageBox.Show("No data was recieved.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     goto end;
                 }
-                if (data.ToLower(CultureInfo.CurrentCulture).StartsWith("error", StringComparison.CurrentCulture))
+                if (data.ToLower().StartsWith("error"))
                 {
                     MessageBox.Show(data, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     goto end;
@@ -179,7 +178,7 @@ namespace MCForge.Gui
                 foreach (object obj in dataObj)
                 {
                     Hashtable tbl = (Hashtable)obj;
-                    lmc.Add(new LavaMapBrowserData(Convert.ToInt32(tbl["id"], CultureInfo.CurrentCulture), Convert.ToInt32(tbl["time"], CultureInfo.CurrentCulture), tbl["name"].ToString(), tbl["author"].ToString(), tbl["desc"].ToString(), tbl["image_location"].ToString()));
+                    lmc.Add(new LavaMapBrowserData(Convert.ToInt32(tbl["id"]), Convert.ToInt32(tbl["time"]), tbl["name"].ToString(), tbl["author"].ToString(), tbl["desc"].ToString(), tbl["image_location"].ToString()));
                 }
 
                 if (this.InvokeRequired)
@@ -263,7 +262,7 @@ namespace MCForge.Gui
         {
             if (mapData == null) return;
             int id = mapData.id;
-            string name = mapData.name.ToLower(CultureInfo.CurrentCulture).Replace(" ", "_");
+            string name = mapData.name.ToLower().Replace(" ", "_");
             downloadThread = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
             {
                 byte[] data;
@@ -272,7 +271,7 @@ namespace MCForge.Gui
                 {
                     try
                     {
-                        if (name == Server.mainLevel.name.ToLower(CultureInfo.CurrentCulture))
+                        if (name == Server.mainLevel.name.ToLower())
                         {
                             MessageBox.Show("Error: You cannot overwrite the main level!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             goto end;
@@ -290,7 +289,7 @@ namespace MCForge.Gui
                             goto end;
                         }
                         dataStr = new ASCIIEncoding().GetString(data).Trim();
-                        if (dataStr.ToLower(CultureInfo.CurrentCulture).StartsWith("error", StringComparison.CurrentCulture) || (dataStr != null && String.IsNullOrEmpty(dataStr)))
+                        if (dataStr.ToLower().StartsWith("error") || dataStr == "")
                         {
                             MessageBox.Show(dataStr, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             goto end;
@@ -306,7 +305,7 @@ namespace MCForge.Gui
                             goto end;
                         }
                         dataStr = new ASCIIEncoding().GetString(data).Trim();
-                        if (dataStr.ToLower(CultureInfo.CurrentCulture).StartsWith("error", StringComparison.CurrentCulture))
+                        if (dataStr.ToLower().StartsWith("error"))
                         {
                             MessageBox.Show(dataStr, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             goto end;
@@ -414,7 +413,7 @@ namespace MCForge.Gui
 
                 del = delegate(LavaMapBrowserData data)
                 {
-                    return data.dateTime.ToString("MM/dd/yyyy hh:mm tt", CultureInfo.CurrentCulture);
+                    return data.dateTime.ToString("MM/dd/yyyy hh:mm tt");
                 };
                 props.Add(new LavaMapMethodDescriptor("Submitted On", del, typeof(string)));
 

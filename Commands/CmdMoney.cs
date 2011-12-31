@@ -28,7 +28,7 @@ namespace MCForge
 		public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
 		public override void Use(Player p, string message)
 		{
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Player.SendMessage(p, "You currently have " + p.money + " " + Server.moneys + ".");
             }

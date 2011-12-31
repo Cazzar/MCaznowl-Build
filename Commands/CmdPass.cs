@@ -38,7 +38,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public CmdPass() { }
         public static string password = "";
-        public static bool gotpass/* = false*/;
+        public static bool gotpass = false;
 
         public override void Use(Player p, string message)
         {
@@ -71,7 +71,7 @@ namespace MCForge
                 return;
             }
             int foundone = 0;
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Help(p);
                 return;
@@ -138,7 +138,7 @@ namespace MCForge
             Player.SendMessage(p, "If you have &cforgotten your password, " + Server.DefaultColor + "contact " + Owner + " and they can reset it! &cIncorrect " + Server.DefaultColor + "Tries: &b" + p.passtries);
             return;
         }
-        private static class Crypto
+        public class Crypto
         {
             // This is the base encryption salt! DO NOT CHANGE IT!!!
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");

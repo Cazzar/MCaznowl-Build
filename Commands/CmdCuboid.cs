@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -46,8 +45,8 @@ namespace MCForge
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
-                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
+                string t = message.Substring(0, pos).ToLower();
+                string s = message.Substring(pos + 1).ToLower();
                 byte type = Block.Byte(t);
                 if (type == 255) { Player.SendMessage(p, "There is no block \"" + t + "\"."); wait = 1; return; }
 
@@ -64,12 +63,12 @@ namespace MCForge
                 CatchPos cpos; cpos.solid = solid; cpos.type = type;
                 cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
             }
-            else if (!(message != null && String.IsNullOrEmpty(message)))
+            else if (message != "")
             {
                 SolidType solid = SolidType.solid;
                 try
                 {
-                    msg = message.ToLower(CultureInfo.CurrentCulture);
+                    msg = message.ToLower();
                 }
                 catch { }
                 byte type; unchecked { type = (byte)-1; }
@@ -266,7 +265,7 @@ namespace MCForge
                 }
                 else
                 {
-                    Player.SendMessage(p, buffer.Count.ToString(CultureInfo.CurrentCulture) + " blocks.");
+                    Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
                     
                 }
                 wait = 2;
@@ -284,14 +283,14 @@ namespace MCForge
 
             if (p.pyramidsilent == false)
             {
-                Player.SendMessage(p, buffer.Count.ToString(CultureInfo.CurrentCulture) + " blocks.");
+                Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
             }
 
             if (p.level.bufferblocks && !p.level.Instant)
             {
                 buffer.ForEach(delegate(Pos pos)
                 {
-                    Block1.Addblock(p, pos.x, pos.y, pos.z, type);
+                    BlockQueue.Addblock(p, pos.x, pos.y, pos.z, type);
                 });
             }
             else
@@ -312,52 +311,12 @@ namespace MCForge
         struct Pos
         {
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
         }
         struct CatchPos
         {
             public SolidType solid;
             public byte type;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
         enum SolidType { solid, hollow, walls, holes, wire, random };
     }

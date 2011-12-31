@@ -24,268 +24,43 @@ using System.IO;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
-using System.Globalization;
 
 namespace MCForge
 {
-    public sealed class PlayerBot : IDisposable
+    public sealed class PlayerBot
     {
         public static List<PlayerBot> playerbots = new List<PlayerBot>(64);
 
-        private bool _hunt; 
+        public bool hunt = false;
+        public bool kill = false;
 
-        public bool hunt
-        {
-            get
-            {
-                return _hunt;
-            }
-            set
-            {
-                _hunt = value;
-            }
-        }
-        private bool _kill; 
+        public string AIName = "";
+        public string name;
+        public byte id;
+        public string color;
+        public Level level;
+        public int currentPoint = 0;
+        public int countdown = 0;
+        public bool nodUp = false;
+        public List<Pos> Waypoints = new List<Pos>();
+        public struct Pos { public string type, newscript; public int seconds, rotspeed; public ushort x, y, z; public byte rotx, roty; }
 
-        public bool kill
-        {
-            get
-            {
-                return _kill;
-            }
-            set
-            {
-                _kill = value;
-            }
-        }
-
-        private string _aiName = ""; 
-
-        public string AIName
-        {
-            get
-            {
-                return _aiName;
-            }
-            set
-            {
-                _aiName = value;
-            }
-        }
-        private string _name; 
-
-        public string name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        private byte _id; 
-
-        public byte id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
-        private string _color; 
-
-        public string color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        private Level _level; 
-
-        public Level level
-        {
-            get
-            {
-                return _level;
-            }
-            set
-            {
-                _level = value;
-            }
-        }
-        private int _currentPoint; 
-
-        public int currentPoint
-        {
-            get
-            {
-                return _currentPoint;
-            }
-            set
-            {
-                _currentPoint = value;
-            }
-        }
-        private int _countdown; 
-
-        public int countdown
-        {
-            get
-            {
-                return _countdown;
-            }
-            set
-            {
-                _countdown = value;
-            }
-        }
-        private bool _nodUp; 
-
-        public bool nodUp
-        {
-            get
-            {
-                return _nodUp;
-            }
-            set
-            {
-                _nodUp = value;
-            }
-        }
-        private List<Pos> _waypoints = new List<Pos>(); 
-
-        public List<Pos> Waypoints
-        {
-            get
-            {
-                return _waypoints;
-            }
-            set
-            {
-                _waypoints = value;
-            }
-        }
-        public struct Pos { public string type, newscript; public int seconds, rotspeed; public ushort x, y, z; public byte rotx, roty;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(Pos x, Pos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
-
-        private ushort[] _pos = new ushort[3] { 0, 0, 0 }; 
-
-        public ushort[] pos
-        {
-            get
-            {
-                return _pos;
-            }
-            set
-            {
-                _pos = value;
-            }
-        }
+        public ushort[] pos = new ushort[3] { 0, 0, 0 };
         ushort[] oldpos = new ushort[3] { 0, 0, 0 };
         ushort[] basepos = new ushort[3] { 0, 0, 0 };
-        private byte[] _rot = new byte[2] { 0, 0 }; 
-
-        public byte[] rot
-        {
-            get
-            {
-                return _rot;
-            }
-            set
-            {
-                _rot = value;
-            }
-        }
+        public byte[] rot = new byte[2] { 0, 0 };
         byte[] oldrot = new byte[2] { 0, 0 };
 
         ushort[] foundPos = new ushort[3] { 0, 0, 0 };
         byte[] foundRot = new byte[2] { 0, 0 };
-        bool movement/* = false*/;
-        private int _movementSpeed = 24; 
+        bool movement = false;
+        public int movementSpeed = 24;
+        bool jumping = false;
+        int currentjump = 0;
 
-        public int movementSpeed
-        {
-            get
-            {
-                return _movementSpeed;
-            }
-            set
-            {
-                _movementSpeed = value;
-            }
-        }
-        bool jumping/* = false*/;
-        int currentjump/* = 0*/;
-
-        private System.Timers.Timer _botTimer = new System.Timers.Timer(100); 
-
-        public System.Timers.Timer botTimer
-        {
-            get
-            {
-                return _botTimer;
-            }
-            set
-            {
-                _botTimer = value;
-            }
-        }
-        private System.Timers.Timer _moveTimer = new System.Timers.Timer(100 / 24); 
-
-        public System.Timers.Timer moveTimer
-        {
-            get
-            {
-                return _moveTimer;
-            }
-            set
-            {
-                _moveTimer = value;
-            }
-        }
-        private System.Timers.Timer _jumpTimer = new System.Timers.Timer(95); 
-
-        public System.Timers.Timer jumpTimer
-        {
-            get
-            {
-                return _jumpTimer;
-            }
-            set
-            {
-                _jumpTimer = value;
-            }
-        }
+        public System.Timers.Timer botTimer = new System.Timers.Timer(100);
+        public System.Timers.Timer moveTimer = new System.Timers.Timer(100 / 24);
+        public System.Timers.Timer jumpTimer = new System.Timers.Timer(95);
 
         #region == constructors ==
         public PlayerBot(string n, Level l)
@@ -728,8 +503,8 @@ namespace MCForge
 
             foreach (PlayerBot pB in PlayerBot.playerbots)
             {
-                if (pB.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture)) return pB;
-                if (pB.name.ToLower(CultureInfo.CurrentCulture).IndexOf(name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) != -1)
+                if (pB.name.ToLower() == name.ToLower()) return pB;
+                if (pB.name.ToLower().IndexOf(name.ToLower()) != -1)
                 {
                     if (tempPlayer == null) tempPlayer = pB;
                     else returnNull = true;
@@ -766,60 +541,16 @@ namespace MCForge
         {
             byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
         }
-//  COMMENTED BY CODEIT.RIGHT
-//        ushort NTHO(byte[] x, int offset)
-//        {
-//            byte[] y = new byte[2];
-//            Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
-//            return BitConverter.ToUInt16(y, 0);
-//        }
-//  COMMENTED BY CODEIT.RIGHT
-//        byte[] HTNO(short x)
-//        {
-//            byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
-//        }
-        #endregion
-
-        #region IDisposable Implementation
-
-        private bool disposed = false;
-
-        public void Dispose(bool disposing)
+        ushort NTHO(byte[] x, int offset)
         {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (level != null)
-                        level.Dispose();
-                    if (botTimer != null)
-                        botTimer.Dispose();
-                    if (moveTimer != null)
-                        moveTimer.Dispose();
-                    if (jumpTimer != null)
-                        jumpTimer.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
+            byte[] y = new byte[2];
+            Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
+            return BitConverter.ToUInt16(y, 0);
         }
-
-        public void Dispose()
+        byte[] HTNO(short x)
         {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
+            byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
         }
-
         #endregion
     }
 }

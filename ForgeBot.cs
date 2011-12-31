@@ -20,35 +20,22 @@ using System.IO;
 using System.Collections.Generic;
 using Sharkbite.Irc;
 using System.Text;
-using System.Globalization;
 //using System.Threading;
 
 namespace MCForge
 {
     public class ForgeBot
     {
-        public const string ColorSignal = "\x03";
-        public const string ResetSignal = "\x0F";
+        public static readonly string ColorSignal = "\x03";
+        public static readonly string ResetSignal = "\x0F";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
         private string nick;
         private string server;
-        private bool reset/* = false*/;
-        private byte retries/* = 0*/;
-        private string _usedCmd = ""; 
-
-        public string usedCmd
-        {
-            get
-            {
-                return _usedCmd;
-            }
-            set
-            {
-                _usedCmd = value;
-            }
-        }
+        private bool reset = false;
+        private byte retries = 0;
+        public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
             this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
@@ -142,8 +129,8 @@ namespace MCForge
 
         private void doJoinLeaveMessage(string who, string verb, string channel)
         {
-            Server.s.Log(String.Format(CultureInfo.CurrentCulture, "{0} has {1} channel {2}", who, verb, channel));
-            Player.GlobalMessage(String.Format(CultureInfo.CurrentCulture, "{0}[IRC] {1} has {2} the{3} channel", Server.IRCColour, who, verb, (channel == opchannel ? " operator" : "")));
+            Server.s.Log(String.Format("{0} has {1} channel {2}", who, verb, channel));
+            Player.GlobalMessage(String.Format("{0}[IRC] {1} has {2} the{3} channel", Server.IRCColour, who, verb, (channel == opchannel ? " operator" : "")));
         }
         void Player_PlayerDisconnect(Player p, string reason)
         {
@@ -211,13 +198,13 @@ namespace MCForge
                 return;
 		    if (channel == opchannel)
 		    {
-			    Server.s.Log(String.Format(CultureInfo.CurrentCulture, "(OPs): [IRC] {0}: {1}", user.Nick, message));
-			    Player.GlobalMessageOps(String.Format(CultureInfo.CurrentCulture, "To Ops &f-{0}[IRC] {1}&f- {2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+			    Server.s.Log(String.Format("(OPs): [IRC] {0}: {1}", user.Nick, message));
+			    Player.GlobalMessageOps(String.Format("To Ops &f-{0}[IRC] {1}&f- {2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
 		    }
 		    else
 		    {
-			    Server.s.Log(String.Format(CultureInfo.CurrentCulture, "[IRC] {0}: {1}", user.Nick, message));
-			    Player.GlobalMessage(String.Format(CultureInfo.CurrentCulture, "{0}[IRC] {1}: &f{2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
+			    Server.s.Log(String.Format("[IRC] {0}: {1}", user.Nick, message));
+			    Player.GlobalMessage(String.Format("{0}[IRC] {1}: &f{2}", Server.IRCColour, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message));
 		    }
         }
 
@@ -226,7 +213,7 @@ namespace MCForge
             Server.s.Log("Connected to IRC!");
             reset = false;
             retries = 0;
-            if (Server.ircIdentify && !(Server.ircPassword != null && String.IsNullOrEmpty(Server.ircPassword)))
+            if (Server.ircIdentify && Server.ircPassword != "")
             {
                 Server.s.Log("Identifying with NickServ");
                 connection.Sender.PrivateMessage("nickserv", "IDENTIFY " + Server.ircPassword);
@@ -253,7 +240,7 @@ namespace MCForge
             if (newNick.Split('|').Length == 2)
             {
                 key = newNick.Split('|')[1];
-                if (key != null && !(key != null && String.IsNullOrEmpty(key)))
+                if (key != null && key != "")
                 {
                     switch (key)
                     {

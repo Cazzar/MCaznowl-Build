@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -31,7 +30,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             bool totalUnban = false;
             if (message[0] == '@')
             {
@@ -47,7 +46,7 @@ namespace MCForge
                 {
                     foreach (Server.TempBan tban in Server.tempBans)
                     {
-                        if (tban.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
+                        if (tban.name.ToLower() == message.ToLower())
                         {
                             if (p != null)
                             {

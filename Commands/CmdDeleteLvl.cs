@@ -36,7 +36,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
             Level foundLevel = Level.Find(message);
             if (foundLevel != null) foundLevel.Unload();
 

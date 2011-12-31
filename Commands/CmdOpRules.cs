@@ -47,7 +47,7 @@ namespace MCForge
 			}
 
             Player who = null;
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
             {
                 who = Player.Find(message);
                  if (p.group.Permission < who.group.Permission) { Player.SendMessage(p, "You cant send /oprules to another player!"); return; }

@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge {
     public class CmdUndo : Command {
@@ -36,32 +35,32 @@ namespace MCForge {
             if (p != null)
                 p.RedoBuffer.Clear();
 
-            if ((message != null && String.IsNullOrEmpty(message))) {
+            if (message == "") {
                 if (p == null) {
                     Player.SendMessage(null, "Console doesn't have an undo buffer.");
                     return;
                 } else {
-                    message = p.name.ToLower(CultureInfo.CurrentCulture) + " 30";
+                    message = p.name.ToLower() + " 30";
                 }
             }
 
             try {
                 if (message.Split(' ').Length > 1) {
                     whoName = message.Split(' ')[0];
-                    who = message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "physics" ? null : Player.Find(message.Split(' ')[0]);
-                    undoPhysics = message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "physics";
-                    message = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
+                    who = message.Split(' ')[0].ToLower() == "physics" ? null : Player.Find(message.Split(' ')[0]);
+                    undoPhysics = message.Split(' ')[0].ToLower() == "physics";
+                    message = message.Split(' ')[1].ToLower();
 
                 } else {
-                    who = (p == null || message.ToLower(CultureInfo.CurrentCulture) == "physics") ? null : p;
-                    undoPhysics = message.ToLower(CultureInfo.CurrentCulture) == "physics";
+                    who = (p == null || message.ToLower() == "physics") ? null : p;
+                    undoPhysics = message.ToLower() == "physics";
                 }
                 //If user is undoing him/herself, then all is go.
                 //If user is undoing someone else, then restrictions are used.
                 if (p == who)
-                    seconds = ((message.ToLower(CultureInfo.CurrentCulture) != "all") ? long.Parse(message, CultureInfo.CurrentCulture) : int.MaxValue);
+                    seconds = ((message.ToLower() != "all") ? long.Parse(message) : int.MaxValue);
                 else
-                    seconds = getAllowed(p, message.ToLower(CultureInfo.CurrentCulture));
+                    seconds = getAllowed(p, message.ToLower());
             } catch {
                 Player.SendMessage(p, "Invalid seconds, or you're unable to use /xundo. Using 30 seconds."); //only run if seconds is an invalid number
                 seconds = 30;
@@ -160,22 +159,22 @@ namespace MCForge {
                     if (p != null)
                         p.RedoBuffer.Clear();
 
-                    if (Directory.Exists("extra/undo/" + whoName.ToLower(CultureInfo.CurrentCulture))) {
-                        di = new DirectoryInfo("extra/undo/" + whoName.ToLower(CultureInfo.CurrentCulture));
+                    if (Directory.Exists("extra/undo/" + whoName.ToLower())) {
+                        di = new DirectoryInfo("extra/undo/" + whoName.ToLower());
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undo/" + whoName.ToLower(CultureInfo.CurrentCulture) + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undo/" + whoName.ToLower() + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;
                     }
 
-                    if (Directory.Exists("extra/undoPrevious/" + whoName.ToLower(CultureInfo.CurrentCulture)))
+                    if (Directory.Exists("extra/undoPrevious/" + whoName.ToLower()))
                     {
-                        di = new DirectoryInfo("extra/undoPrevious/" + whoName.ToLower(CultureInfo.CurrentCulture));
+                        di = new DirectoryInfo("extra/undoPrevious/" + whoName.ToLower());
 
                         for (int i = di.GetFiles("*.undo").Length - 1; i >= 0; i--) {
-                            fileContent = File.ReadAllText("extra/undoPrevious/" + whoName.ToLower(CultureInfo.CurrentCulture) + "/" + i + ".undo").Split(' ');
+                            fileContent = File.ReadAllText("extra/undoPrevious/" + whoName.ToLower() + "/" + i + ".undo").Split(' ');
                             if (!undoBlah(fileContent, seconds, p)) break;
                         }
                         FoundUser = true;
@@ -213,7 +212,7 @@ namespace MCForge {
             if (param == "all" && p.group.CanExecute(Command.all.Find("xundo")))
                 secs = (p == null || p.group.maxUndo == MAX) ? int.MaxValue : p.group.maxUndo;
             else
-                secs = long.Parse(param, CultureInfo.CurrentCulture); //caught by try/catch in outer method
+                secs = long.Parse(param); //caught by try/catch in outer method
 
             if (secs == 0) secs = 5400;
 
@@ -237,18 +236,18 @@ namespace MCForge {
 
             for (int i = fileContent.Length / 7; i >= 0; i--) {
                 try {
-                    if (Convert.ToDateTime(fileContent[(i * 7) + 4].Replace('&', ' '), CultureInfo.CurrentCulture).AddSeconds(seconds) >= DateTime.Now) {
+                    if (Convert.ToDateTime(fileContent[(i * 7) + 4].Replace('&', ' ')).AddSeconds(seconds) >= DateTime.Now) {
                         Level foundLevel = Level.FindExact(fileContent[i * 7]);
                         if (foundLevel != null) {
                             Pos.mapName = foundLevel.name;
-                            Pos.x = Convert.ToUInt16(fileContent[(i * 7) + 1], CultureInfo.CurrentCulture);
-                            Pos.y = Convert.ToUInt16(fileContent[(i * 7) + 2], CultureInfo.CurrentCulture);
-                            Pos.z = Convert.ToUInt16(fileContent[(i * 7) + 3], CultureInfo.CurrentCulture);
+                            Pos.x = Convert.ToUInt16(fileContent[(i * 7) + 1]);
+                            Pos.y = Convert.ToUInt16(fileContent[(i * 7) + 2]);
+                            Pos.z = Convert.ToUInt16(fileContent[(i * 7) + 3]);
 
                             Pos.type = foundLevel.GetTile(Pos.x, Pos.y, Pos.z);
 
-                            if (Pos.type == Convert.ToByte(fileContent[(i * 7) + 6], CultureInfo.CurrentCulture) || Block.Convert(Pos.type) == Block.water || Block.Convert(Pos.type) == Block.lava || Pos.type == Block.grass) {
-                                Pos.newtype = Convert.ToByte(fileContent[(i * 7) + 5], CultureInfo.CurrentCulture);
+                            if (Pos.type == Convert.ToByte(fileContent[(i * 7) + 6]) || Block.Convert(Pos.type) == Block.water || Block.Convert(Pos.type) == Block.lava || Pos.type == Block.grass) {
+                                Pos.newtype = Convert.ToByte(fileContent[(i * 7) + 5]);
                                 Pos.timePlaced = DateTime.Now;
 
                                 foundLevel.Blockchange(Pos.x, Pos.y, Pos.z, Pos.newtype, true);

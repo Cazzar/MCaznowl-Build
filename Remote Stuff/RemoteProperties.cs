@@ -17,12 +17,10 @@
 */
 
 using System.IO;
-using System;
-using System.Globalization;
 
 namespace MCForge.Remote
 {
-    public static class RemoteProperties
+    public class RemoteProperties
     {
         public static void Load()
         {
@@ -33,13 +31,13 @@ namespace MCForge.Remote
                     try
                     {
                         if (line[0] == '#') continue;
-                        string value = line.Substring(line.IndexOf(" = ", StringComparison.CurrentCulture) + 3);
-                        switch (line.Substring(0, line.IndexOf(" = ", StringComparison.CurrentCulture)))
+                        string value = line.Substring(line.IndexOf(" = ") + 3);
+                        switch (line.Substring(0, line.IndexOf(" = ")))
                         {
                             case "RemoteEnable": RemoteServer.enableRemote = bool.Parse(value); break;
                             case "RemoteUsername": RemoteServer.Username = value; break;
                             case "RemotePassword": RemoteServer.Password = value; break;
-                            case "RemotePort": RemoteServer.port = int.Parse(value, CultureInfo.CurrentCulture); break;
+                            case "RemotePort": RemoteServer.port = int.Parse(value); break;
                         }
                     }
                     catch { Server.s.Log("Failed to load remote properties!"); }
@@ -56,7 +54,7 @@ namespace MCForge.Remote
                 File.Create(fileName).Dispose();
                 using (var w = File.CreateText(fileName))
                 {
-                    w.WriteLine("RemoteEnable = {0}", RemoteServer.enableRemote.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+                    w.WriteLine("RemoteEnable = {0}", RemoteServer.enableRemote.ToString().ToLower());
                     w.WriteLine("RemoteUsername = {0}", RemoteServer.Username);
                     w.WriteLine("RemotePassword = {0}", RemoteServer.Password);
                     w.WriteLine("RemotePort = {0}", RemoteServer.port);
@@ -64,7 +62,7 @@ namespace MCForge.Remote
             }
             catch
             {
-                Server.s.Log(string.Format(CultureInfo.CurrentCulture, "remote properties save failed {0}", fileName));
+                Server.s.Log(string.Format("remote properties save failed {0}", fileName));
             }
         }
     }

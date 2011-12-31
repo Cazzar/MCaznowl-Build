@@ -20,7 +20,6 @@
 using System;
 using System.Data;
 using MCForge.SQL;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -36,42 +35,42 @@ namespace MCForge
         {
             bool debug = false;
             Player who = null;
-            string timespanend = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
+            string timespanend = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string timespan = "thismonth";
             string timespanname = "This Month";
             bool tspanoption = false;
-            if ((message != null && String.IsNullOrEmpty(message)) && p != null) { who = p; } else { who = (message.Split(' ').Length > 1 ? Player.Find(message.Split(' ')[0]) : Player.Find(message)); }
+            if (message == "" && p != null) { who = p; } else { who = (message.Split(' ').Length > 1 ? Player.Find(message.Split(' ')[0]) : Player.Find(message)); }
             if (p != null && (message == "today" || message == "yesterday" || message == "thismonth" || message == "lastmonth" || message == "all")) { who = p; }
-            if (p == null && (message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (p == null && message == "") { Help(p); return; }
             if (message.Split(' ').Length == 1 && (message == "today" || message == "yesterday" || message == "thismonth" || message == "lastmonth" || message == "all")) { timespan = message; }
-            if (message.Split(' ').Length == 2 && (message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "today" || message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "yesterday" || message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "thismonth" || message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "lastmonth" || message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture) == "all")) { timespan = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture); }
+            if (message.Split(' ').Length == 2 && (message.Split(' ')[1].ToLower() == "today" || message.Split(' ')[1].ToLower() == "yesterday" || message.Split(' ')[1].ToLower() == "thismonth" || message.Split(' ')[1].ToLower() == "lastmonth" || message.Split(' ')[1].ToLower() == "all")) { timespan = message.Split(' ')[1].ToLower(); }
             if (debug) { Player.SendMessage(p, "Message = " + message); }
-            if (timespan.ToLower(CultureInfo.CurrentCulture) == "today") 
+            if (timespan.ToLower() == "today") 
             { 
-                timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00", CultureInfo.CurrentCulture); 
+                timespan = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); 
                 timespanname = "Today"; 
                 tspanoption = true; 
             }
-            if (timespan.ToLower(CultureInfo.CurrentCulture) == "yesterday") 
+            if (timespan.ToLower() == "yesterday") 
             { 
-                timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00", CultureInfo.CurrentCulture);
-                timespanend = DateTime.Now.ToString("yyyy-MM-dd 00:00:00", CultureInfo.CurrentCulture); 
+                timespan = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd 00:00:00");
+                timespanend = DateTime.Now.ToString("yyyy-MM-dd 00:00:00"); 
                 timespanname = "Yesterday"; 
                 tspanoption = true; 
             }
-            if (timespan.ToLower(CultureInfo.CurrentCulture) == "thismonth") 
+            if (timespan.ToLower() == "thismonth") 
             { 
-                timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00", CultureInfo.CurrentCulture); 
+                timespan = DateTime.Now.ToString("yyyy-MM-01 00:00:00"); 
                 tspanoption = true; 
             }
-            if (timespan.ToLower(CultureInfo.CurrentCulture) == "lastmonth") 
+            if (timespan.ToLower() == "lastmonth") 
             { 
-                timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00", CultureInfo.CurrentCulture);
-                timespanend = DateTime.Now.ToString("yyyy-MM-01 00:00:00", CultureInfo.CurrentCulture);
+                timespan = DateTime.Now.AddMonths(-1).ToString("yyyy-MM-01 00:00:00");
+                timespanend = DateTime.Now.ToString("yyyy-MM-01 00:00:00");
                 timespanname = "Last Month"; 
                 tspanoption = true; 
             }
-            if (timespan.ToLower(CultureInfo.CurrentCulture) == "all") 
+            if (timespan.ToLower() == "all") 
             { 
                 timespan = "0000-00-00 00:00:00"; 
                 timespanname = "ALL"; 

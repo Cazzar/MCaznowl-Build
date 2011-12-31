@@ -31,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
             {
                 Help(p);
                 return;
@@ -50,7 +50,7 @@ namespace MCForge
                     hasirc = "&cDisabled" + Server.DefaultColor + ".";
                 }
                 Player.SendMessage(p, "IRC is " + hasirc);
-                if (!(ircdetails != null && String.IsNullOrEmpty(ircdetails)))
+                if (ircdetails != "")
                 {
                     Player.SendMessage(p, "Location: " + ircdetails);
                 }

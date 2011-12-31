@@ -18,7 +18,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -34,7 +33,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (String.IsNullOrEmpty(message)) { Help(p); return; }
-            string[] s = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
+            string[] s = message.ToLower().Split(' ');
             if (p == null && (s[0] == "go" || s[0] == "setup")) { Player.SendMessage(p, "The \"" + s[0] + "\" command can only be used in-game!"); return; }
 
             if (s[0] == "go")
@@ -210,11 +209,11 @@ namespace MCForge
                                     Player.SendMessage(p, "Send AFK to main: " + (Server.lava.sendAfkMain ? "&aON" : "&cOFF"));
                                     break;
                                 case "votecount":
-                                    Server.lava.voteCount = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 2, 10);
+                                    Server.lava.voteCount = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 2, 10);
                                     Player.SendMessage(p, "Vote count: &b" + Server.lava.voteCount);
                                     break;
                                 case "votetime":
-                                    Server.lava.voteTime = double.Parse(s[3], CultureInfo.CurrentCulture);
+                                    Server.lava.voteTime = double.Parse(s[3]);
                                     Player.SendMessage(p, "Vote time: &b" + Server.lava.voteTime + "minute" + (Server.lava.voteTime == 1 ? "" : "s"));
                                     break;
                                 default:
@@ -244,7 +243,7 @@ namespace MCForge
                             Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minute" + (settings.floodTime == 1 ? "" : "s"));
                             Player.SendMessage(p, "Flood position: &b" + settings.blockFlood.ToString(", "));
                             Player.SendMessage(p, "Layer position: &b" + settings.blockLayer.ToString(", "));
-                            Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Safe zone: &b({0}) ({1})", settings.safeZone[0].ToString(", "), settings.safeZone[1].ToString(", ")));
+                            Player.SendMessage(p, String.Format("Safe zone: &b({0}) ({1})", settings.safeZone[0].ToString(", "), settings.safeZone[1].ToString(", ")));
                             return;
                         }
 
@@ -253,43 +252,43 @@ namespace MCForge
                             switch (s[2])
                             {
                                 case "fast":
-                                    settings.fast = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 0, 100);
+                                    settings.fast = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Fast lava chance: &b" + settings.fast + "%");
                                     break;
                                 case "killer":
-                                    settings.killer = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 0, 100);
+                                    settings.killer = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Killer lava/water chance: &b" + settings.killer + "%");
                                     break;
                                 case "destroy":
-                                    settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 0, 100);
+                                    settings.destroy = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Destroy blocks chance: &b" + settings.destroy + "%");
                                     break;
                                 case "water":
-                                    settings.water = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 0, 100);
+                                    settings.water = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Water flood chance: &b" + settings.water + "%");
                                     break;
                                 case "layer":
-                                    settings.layer = (byte)MathHelper.Clamp(decimal.Parse(s[3], CultureInfo.CurrentCulture), 0, 100);
+                                    settings.layer = (byte)MathHelper.Clamp(decimal.Parse(s[3]), 0, 100);
                                     Player.SendMessage(p, "Layer flood chance: &b" + settings.layer + "%");
                                     break;
                                 case "layerheight":
-                                    settings.layerHeight = int.Parse(s[3], CultureInfo.CurrentCulture);
+                                    settings.layerHeight = int.Parse(s[3]);
                                     Player.SendMessage(p, "Layer height: &b" + settings.layerHeight + " block" + (settings.layerHeight == 1 ? "" : "s"));
                                     break;
                                 case "layercount":
-                                    settings.layerCount = int.Parse(s[3], CultureInfo.CurrentCulture);
+                                    settings.layerCount = int.Parse(s[3]);
                                     Player.SendMessage(p, "Layer count: &b" + settings.layerCount);
                                     break;
                                 case "layertime":
-                                    settings.layerInterval = double.Parse(s[3], CultureInfo.CurrentCulture);
+                                    settings.layerInterval = double.Parse(s[3]);
                                     Player.SendMessage(p, "Layer time: &b" + settings.layerInterval + " minute" + (settings.layerInterval == 1 ? "" : "s"));
                                     break;
                                 case "roundtime":
-                                    settings.roundTime = double.Parse(s[3], CultureInfo.CurrentCulture);
+                                    settings.roundTime = double.Parse(s[3]);
                                     Player.SendMessage(p, "Round time: &b" + settings.roundTime + " minute" + (settings.roundTime == 1 ? "" : "s"));
                                     break;
                                 case "floodtime":
-                                    settings.floodTime = double.Parse(s[3], CultureInfo.CurrentCulture);
+                                    settings.floodTime = double.Parse(s[3]);
                                     Player.SendMessage(p, "Flood time: &b" + settings.floodTime + " minute" + (settings.floodTime == 1 ? "" : "s"));
                                     break;
                                 default:
@@ -386,7 +385,7 @@ namespace MCForge
             if (cpos.mode == 1) settings.blockLayer = new LavaSurvival.Pos(x, y, z);
             Server.lava.SaveMapSettings(settings);
 
-            Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Position set! &b({0}, {1}, {2})", x, y, z));
+            Player.SendMessage(p, String.Format("Position set! &b({0}, {1}, {2})", x, y, z));
         }
 
         public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
@@ -408,31 +407,11 @@ namespace MCForge
                 settings.safeZone = new LavaSurvival.Pos[] { new LavaSurvival.Pos(sx, sy, sz), new LavaSurvival.Pos(ex, ey, ez) };
                 Server.lava.SaveMapSettings(settings);
 
-                Player.SendMessage(p, String.Format(CultureInfo.CurrentCulture, "Safe zone set! &b({0}, {1}, {2}) ({3}, {4}, {5})", sx, sy, sz, ex, ey, ez));
+                Player.SendMessage(p, String.Format("Safe zone set! &b({0}, {1}, {2}) ({3}, {4}, {5})", sx, sy, sz, ex, ey, ez));
             }
         }
 
 
-        struct CatchPos { public ushort x, y, z; public byte mode;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; public byte mode; }
     }
 }

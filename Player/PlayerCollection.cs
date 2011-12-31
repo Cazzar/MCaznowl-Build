@@ -25,19 +25,7 @@ namespace MCForge
 
     public class PlayerCollection : List<Player>, ITypedList
     {
-        private IPlayerViewBuilder __viewBuilder; 
-
-        protected IPlayerViewBuilder _viewBuilder
-        {
-            get
-            {
-                return __viewBuilder;
-            }
-            set
-            {
-                __viewBuilder = value;
-            }
-        }
+        protected IPlayerViewBuilder _viewBuilder;
 
         public PlayerCollection(IPlayerViewBuilder viewBuilder)
         {
@@ -46,19 +34,7 @@ namespace MCForge
 
         #region ITypedList Members
 
-        private PropertyDescriptorCollection __props; 
-
-        protected PropertyDescriptorCollection _props
-        {
-            get
-            {
-                return __props;
-            }
-            set
-            {
-                __props = value;
-            }
-        }
+        protected PropertyDescriptorCollection _props;
 
         public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {
@@ -82,39 +58,43 @@ namespace MCForge
         PropertyDescriptorCollection GetView();
     }
 
+    public class PlayerListView : IPlayerViewBuilder
+    {
+        public PropertyDescriptorCollection GetView()
+        {
+            List<PropertyDescriptor> props = new List<PropertyDescriptor>();
+            /*PlayerMethodDelegate del = delegate(Player p)
+            {
+                return p.name;
+            };*/
+            props.Add(new PlayerMethodDescriptor("Name", p => p.name, typeof(string)));
 
+            props.Add(new PlayerMethodDescriptor("Map", p => p.level.name, typeof(string)));
+
+            props.Add(new PlayerMethodDescriptor("Rank", p => p.group.name, typeof(string)));
+
+            props.Add(new PlayerMethodDescriptor("Status", p =>
+                      {
+                          if (p.hidden)
+                              return "hidden";
+                          if (Server.afkset.Contains(p.name))
+                              return "afk";
+                          return "active";
+                      }, typeof(string)));
+
+            PropertyDescriptor[] propArray = new PropertyDescriptor[props.Count];
+            props.CopyTo(propArray);
+            return new PropertyDescriptorCollection(propArray);
+        }
+    }
 
 
     public delegate object PlayerMethodDelegate(Player player);
 
     public class PlayerMethodDescriptor : PropertyDescriptor
     {
-        private PlayerMethodDelegate __method; 
-
-        protected PlayerMethodDelegate _method
-        {
-            get
-            {
-                return __method;
-            }
-            set
-            {
-                __method = value;
-            }
-        }
-        private Type __methodReturnType; 
-
-        protected Type _methodReturnType
-        {
-            get
-            {
-                return __methodReturnType;
-            }
-            set
-            {
-                __methodReturnType = value;
-            }
-        }
+        protected PlayerMethodDelegate _method;
+        protected Type _methodReturnType;
 
         public PlayerMethodDescriptor(string name, PlayerMethodDelegate method,
          Type methodReturnType)

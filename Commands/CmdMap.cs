@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -29,11 +28,11 @@ namespace MCForge
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdMap() { }
-        public static bool gettinginfo/* = false*/;
+        public static bool gettinginfo = false;
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) message = p.level.name;
+            if (message == "") message = p.level.name;
 
             Level foundLevel;
 
@@ -76,7 +75,7 @@ namespace MCForge
             {
                 foundLevel = Level.Find(message.Split(' ')[0]);
 
-                if (foundLevel == null || message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "ps" || message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "rp") foundLevel = p.level;
+                if (foundLevel == null || message.Split(' ')[0].ToLower() == "ps" || message.Split(' ')[0].ToLower() == "rp") foundLevel = p.level;
                 else message = message.Substring(message.IndexOf(' ') + 1);
             }
 
@@ -84,8 +83,8 @@ namespace MCForge
                 if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Setting map options is reserved to " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+"); return; }
 
             string foundStart;
-            if (message.IndexOf(' ') == -1) foundStart = message.ToLower(CultureInfo.CurrentCulture);
-            else foundStart = message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture);
+            if (message.IndexOf(' ') == -1) foundStart = message.ToLower();
+            else foundStart = message.Split(' ')[0].ToLower();
 
             try
             {
@@ -99,14 +98,14 @@ namespace MCForge
                     case "grass": foundLevel.GrassGrow = !foundLevel.GrassGrow; foundLevel.ChatLevel("Growing grass: " + FoundCheck(foundLevel, foundLevel.GrassGrow)); if (p == null) Player.SendMessage(p, "Growing grass: " + FoundCheck(foundLevel, foundLevel.GrassGrow, true)); break;
                     case "ps":
                     case "physicspeed":
-                        if (int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture) < 10) { Player.SendMessage(p, "Cannot go below 10"); return; }
-                        foundLevel.speedPhysics = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                        if (int.Parse(message.Split(' ')[1]) < 10) { Player.SendMessage(p, "Cannot go below 10"); return; }
+                        foundLevel.speedPhysics = int.Parse(message.Split(' ')[1]);
                         foundLevel.ChatLevel("Physics speed: &b" + foundLevel.speedPhysics);
                         break;
                     case "overload":
-                        if (int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture) < 500) { Player.SendMessage(p, "Cannot go below 500 (default is 1500)"); return; }
-                        if (p != null && p.group.Permission < LevelPermission.Admin && int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture) > 2500) { Player.SendMessage(p, "Only SuperOPs may set higher than 2500"); return; }
-                        foundLevel.overload = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                        if (int.Parse(message.Split(' ')[1]) < 500) { Player.SendMessage(p, "Cannot go below 500 (default is 1500)"); return; }
+                        if (p != null && p.group.Permission < LevelPermission.Admin && int.Parse(message.Split(' ')[1]) > 2500) { Player.SendMessage(p, "Only SuperOPs may set higher than 2500"); return; }
+                        foundLevel.overload = int.Parse(message.Split(' ')[1]);
                         foundLevel.ChatLevel("Physics overload: &b" + foundLevel.overload);
                         break;
                     case "motd":
@@ -116,8 +115,8 @@ namespace MCForge
                         break;
                     case "death": foundLevel.Death = !foundLevel.Death; foundLevel.ChatLevel("Survival death: " + FoundCheck(foundLevel, foundLevel.Death)); if (p == null) Player.SendMessage(p, "Survival death: " + FoundCheck(foundLevel, foundLevel.Death, true)); break;
                     case "killer": foundLevel.Killer = !foundLevel.Killer; foundLevel.ChatLevel("Killer blocks: " + FoundCheck(foundLevel, foundLevel.Killer)); if (p == null) Player.SendMessage(p, "Killer blocks: " + FoundCheck(foundLevel, foundLevel.Killer, true)); break;
-                    case "fall": foundLevel.fall = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture); foundLevel.ChatLevel("Fall distance: &b" + foundLevel.fall); break;
-                    case "drown": foundLevel.drown = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture) * 10; foundLevel.ChatLevel("Drown time: &b" + (foundLevel.drown / 10)); break;
+                    case "fall": foundLevel.fall = int.Parse(message.Split(' ')[1]); foundLevel.ChatLevel("Fall distance: &b" + foundLevel.fall); break;
+                    case "drown": foundLevel.drown = int.Parse(message.Split(' ')[1]) * 10; foundLevel.ChatLevel("Drown time: &b" + (foundLevel.drown / 10)); break;
                     case "unload": foundLevel.unload = !foundLevel.unload; foundLevel.ChatLevel("Auto unload: " + FoundCheck(foundLevel, foundLevel.unload)); if (p == null) Player.SendMessage(p, "Auto unload: " + FoundCheck(foundLevel, foundLevel.unload, true)); break;
                     case "rp":
                     case "restartphysics": foundLevel.rp = !foundLevel.rp; foundLevel.ChatLevel("Auto physics: " + FoundCheck(foundLevel, foundLevel.rp)); if (p == null) Player.SendMessage(p, "Auto physics: " + FoundCheck(foundLevel, foundLevel.rp, true)); break;

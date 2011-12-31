@@ -43,7 +43,7 @@ namespace MCForge
                     endresult = endresult + "&c" + line + Server.DefaultColor + ", ";
                 }
             }
-            if ((endresult != null && String.IsNullOrEmpty(endresult)))
+            if (endresult == "")
             {
                 Player.SendMessage(p, "There are no players banned");
             }

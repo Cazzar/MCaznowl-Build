@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -39,13 +38,13 @@ namespace MCForge
             int CurrentPos = 0;
             bool FoundUser = false;
 
-            if ((message != null && String.IsNullOrEmpty(message))) message = p.name + " 300";
+            if (message == "") message = p.name + " 300";
 
             if (message.Split(' ').Length == 2)
             {
                 try
                 {
-                    seconds = Int64.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                    seconds = Int64.Parse(message.Split(' ')[1]);
                 }
                 catch
                 {
@@ -57,7 +56,7 @@ namespace MCForge
             {
                 try
                 {
-                    seconds = int.Parse(message, CultureInfo.CurrentCulture);
+                    seconds = int.Parse(message);
                     if (p != null) message = p.name + " " + message;
                 }
                 catch
@@ -154,19 +153,19 @@ namespace MCForge
             {
                 try
                 {
-                    if (Convert.ToDateTime(fileContent[(i * 7) + 4].Replace('&', ' '), CultureInfo.CurrentCulture).AddSeconds(seconds) >= DateTime.Now)
+                    if (Convert.ToDateTime(fileContent[(i * 7) + 4].Replace('&', ' ')).AddSeconds(seconds) >= DateTime.Now)
                     {
                         Level foundLevel = Level.Find(fileContent[i * 7]);
                         if (foundLevel != null && foundLevel == p.level)
                         {
                             Pos.mapName = foundLevel.name;
-                            Pos.x = Convert.ToUInt16(fileContent[(i * 7) + 1], CultureInfo.CurrentCulture);
-                            Pos.y = Convert.ToUInt16(fileContent[(i * 7) + 2], CultureInfo.CurrentCulture);
-                            Pos.z = Convert.ToUInt16(fileContent[(i * 7) + 3], CultureInfo.CurrentCulture);
+                            Pos.x = Convert.ToUInt16(fileContent[(i * 7) + 1]);
+                            Pos.y = Convert.ToUInt16(fileContent[(i * 7) + 2]);
+                            Pos.z = Convert.ToUInt16(fileContent[(i * 7) + 3]);
 
                             Pos.type = foundLevel.GetTile(Pos.x, Pos.y, Pos.z);
 
-                            if (Pos.type == Convert.ToByte(fileContent[(i * 7) + 6], CultureInfo.CurrentCulture) || Block.Convert(Pos.type) == Block.water || Block.Convert(Pos.type) == Block.lava)
+                            if (Pos.type == Convert.ToByte(fileContent[(i * 7) + 6]) || Block.Convert(Pos.type) == Block.water || Block.Convert(Pos.type) == Block.lava)
                             {
                                 if (Pos.type == Block.air || Block.Convert(Pos.type) == Block.water || Block.Convert(Pos.type) == Block.lava)
                                     p.SendBlockchange(Pos.x, Pos.y, Pos.z, Block.red);

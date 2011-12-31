@@ -18,7 +18,6 @@
 
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -122,11 +121,11 @@ namespace MCForge
                 who.SendUserType(Block.canPlace(who.group.Permission, Block.blackrock));
 
                 Boolean tryer = true;
-                string year = DateTime.Now.Year.ToString(CultureInfo.CurrentCulture);
-                string month = DateTime.Now.Month.ToString(CultureInfo.CurrentCulture);
-                string day = DateTime.Now.Day.ToString(CultureInfo.CurrentCulture);
-                string hour = DateTime.Now.Hour.ToString(CultureInfo.CurrentCulture);
-                string minute = DateTime.Now.Minute.ToString(CultureInfo.CurrentCulture);
+                string year = DateTime.Now.Year.ToString();
+                string month = DateTime.Now.Month.ToString();
+                string day = DateTime.Now.Day.ToString();
+                string hour = DateTime.Now.Hour.ToString();
+                string minute = DateTime.Now.Minute.ToString();
                 string assigner;
                 if (p == null)
                 {

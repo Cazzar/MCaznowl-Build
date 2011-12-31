@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -32,15 +31,15 @@ namespace MCForge
 
 		public override void Use(Player p, string message)
 		{
-			if ((message != null && String.IsNullOrEmpty(message))) message = p.name;
+			if (message == "") message = p.name;
 			Level lvl;
 			string[] text = new string[2];
 			text[0] = "";
 			text[1] = "";
 			try
 			{
-				text[0] = message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture);
-				text[1] = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
+				text[0] = message.Split(' ')[0].ToLower();
+				text[1] = message.Split(' ')[1].ToLower();
 			}
 			catch { }
 			{
@@ -55,7 +54,7 @@ namespace MCForge
 					}
 				}
 			}
-			if (text[0].ToLower(CultureInfo.CurrentCulture) == "all")
+			if (text[0].ToLower() == "all")
 			{
 				if (p != null && (int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "Reserved for " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+"); return; }
 

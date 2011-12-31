@@ -17,7 +17,6 @@
 	or implied. See the Licenses for the specific language governing
 	permissions and limitations under the Licenses.
 */
-using System.Globalization;
 namespace MCForge
 {
     using System;
@@ -37,17 +36,17 @@ namespace MCForge
             bool shutdown = true;
             string file = "stopShutdown";
             if (File.Exists(file)) { File.Delete(file); }
-            if ((message != null && String.IsNullOrEmpty(message))) { message = "Server is going to shutdown in " + secTime + " seconds"; }
+            if (message == "") { message = "Server is going to shutdown in " + secTime + " seconds"; }
             else
             {
                 if (message == "cancel") { File.Create(file).Close(); shutdown = false; message = "Shutdown cancelled"; }
                 else
                 {
-                    if (!message.StartsWith("0", StringComparison.CurrentCulture))
+                    if (!message.StartsWith("0"))
                     {
                         string[] split = message.Split(' ');
                         bool isNumber = false;
-                        try { secTime = Convert.ToInt32(split[0], CultureInfo.CurrentCulture); isNumber = true; }
+                        try { secTime = Convert.ToInt32(split[0]); isNumber = true; }
                         catch { secTime = 10; isNumber = false; }
                         if (split.Length > 1) { if (isNumber) { message = message.Substring(1 + split[0].Length); } }
                     }

@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -36,7 +35,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            string[] command = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
+            string[] command = message.ToLower().Split(' ');
             string msg1 = String.Empty;
             string msg2 = String.Empty;
             try
@@ -46,12 +45,12 @@ namespace MCForge
             }
             catch
             { }
-            if ((msg1 != null && String.IsNullOrEmpty(msg1)))
+            if (msg1 == "")
             {
                 Help(p);
                 return;
             }
-            if ((msg2 != null && String.IsNullOrEmpty(msg2)))
+            if (msg2 == "")
             {
                 Command.all.Find("rankmsg").Use(p, p.group.name + " " + msg1);
                 return;

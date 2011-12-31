@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,12 +32,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
                 if (File.Exists(@Server.backupLocation + "/" + p.level.name + "/" + message + "/" + p.level.name + ".lvl"))
                 {
                     try
                     {
-                        p.blockchangeObject = new CatchPos() { backup = int.Parse(message, CultureInfo.CurrentCulture) };
+                        p.blockchangeObject = new CatchPos() { backup = int.Parse(message) };
                         p.ClearBlockchange();
                         p.Blockchange += Blockchange1;
                         p.SendMessage("Select two corners for restore.");
@@ -99,7 +98,7 @@ namespace MCForge
                     for (ushort xx = Math.Min(cpos.x, x); xx <= Math.Max(cpos.x, x); ++xx)
                         for (ushort yy = Math.Min(cpos.y, y); yy <= Math.Max(cpos.y, y); ++yy)
                             for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
-                                Block1.Addblock(p, xx, yy, zz, blocks[xx + (zz * vars[0]) + (yy * vars[0] * vars[1])]);
+                                BlockQueue.Addblock(p, xx, yy, zz, blocks[xx + (zz * vars[0]) + (yy * vars[0] * vars[1])]);
                 }
                 else
                 {
@@ -119,26 +118,6 @@ namespace MCForge
         {
             public int backup;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(CatchPos x, CatchPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public override void Help(Player p)

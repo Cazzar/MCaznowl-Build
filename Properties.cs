@@ -21,7 +21,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -74,7 +73,7 @@ namespace MCForge
 
                 foreach (string line in lines)
                 {
-                    if (!(line != null && String.IsNullOrEmpty(line)) && line[0] != '#')
+                    if (line != "" && line[0] != '#')
                     {
                         //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
                         string key = line.Split('=')[0].Trim();
@@ -83,7 +82,7 @@ namespace MCForge
                             value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
                         string color = "";
 
-                        switch (key.ToLower(CultureInfo.CurrentCulture))
+                        switch (key.ToLower())
                         {
                             case "server-name":
                                 if (ValidString(value, "![]:.,{}~-+()?_/\\' "))
@@ -100,17 +99,17 @@ namespace MCForge
                                 else { Server.s.Log("motd invalid! setting to default."); }
                                 break;
                             case "port":
-                                try { Server.port = Convert.ToInt32(value, CultureInfo.CurrentCulture); }
+                                try { Server.port = Convert.ToInt32(value); }
                                 catch { Server.s.Log("port invalid! setting to default."); }
                                 break;
                             case "verify-names":
-                                Server.verify = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.verify = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "public":
-                                Server.pub = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.pub = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "world-chat":
-                                Server.worldChat = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.worldChat = (value.ToLower() == "true") ? true : false;
                                 break;
                             //case "guest-goto":
                             //    Server.guestGoto = (value.ToLower() == "true") ? true : false;
@@ -118,47 +117,47 @@ namespace MCForge
                             case "max-players":
                                 try
                                 {
-                                    if (Convert.ToByte(value, CultureInfo.CurrentCulture) > 128)
+                                    if (Convert.ToByte(value) > 128)
                                     {
                                         value = "128"; Server.s.Log("Max players has been lowered to 128.");
                                     }
-                                    else if (Convert.ToByte(value, CultureInfo.CurrentCulture) < 1)
+                                    else if (Convert.ToByte(value) < 1)
                                     {
                                         value = "1"; Server.s.Log("Max players has been increased to 1.");
                                     }
-                                    Server.players = Convert.ToByte(value, CultureInfo.CurrentCulture);
+                                    Server.players = Convert.ToByte(value);
                                 }
                                 catch { Server.s.Log("max-players invalid! setting to default."); }
                                 break;
                             case "max-guests":
                                 try
                                 {
-                                    if (Convert.ToByte(value, CultureInfo.CurrentCulture) > Server.players)
+                                    if (Convert.ToByte(value) > Server.players)
                                     {
-                                        value = Server.players.ToString(CultureInfo.CurrentCulture); Server.s.Log("Max guests has been lowered to " + Server.players.ToString(CultureInfo.CurrentCulture));
+                                        value = Server.players.ToString(); Server.s.Log("Max guests has been lowered to " + Server.players.ToString());
                                     }
-                                    else if (Convert.ToByte(value, CultureInfo.CurrentCulture) < 0)
+                                    else if (Convert.ToByte(value) < 0)
                                     {
                                         value = "0"; Server.s.Log("Max guests has been increased to 0.");
                                     }
-                                    Server.maxGuests = Convert.ToByte(value, CultureInfo.CurrentCulture);
+                                    Server.maxGuests = Convert.ToByte(value);
                                 }
                                 catch { Server.s.Log("max-guests invalid! setting to default."); }
                                 break;
                             case "max-maps":
                                 try
                                 {
-                                    if (Convert.ToByte(value, CultureInfo.CurrentCulture) > 100)
+                                    if (Convert.ToByte(value) > 100)
                                     {
                                         value = "100";
                                         Server.s.Log("Max maps has been lowered to 100.");
                                     }
-                                    else if (Convert.ToByte(value, CultureInfo.CurrentCulture) < 1)
+                                    else if (Convert.ToByte(value) < 1)
                                     {
                                         value = "1";
                                         Server.s.Log("Max maps has been increased to 1.");
                                     }
-                                    Server.maps = Convert.ToByte(value, CultureInfo.CurrentCulture);
+                                    Server.maps = Convert.ToByte(value);
                                 }
                                 catch
                                 {
@@ -166,10 +165,10 @@ namespace MCForge
                                 }
                                 break;
                             case "irc":
-                                Server.irc = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.irc = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "irc-colorsenable":
-                                Server.ircColorsEnable = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.ircColorsEnable = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "irc-server":
                                 Server.ircServer = value;
@@ -186,7 +185,7 @@ namespace MCForge
                             case "irc-port":
                                 try
                                 {
-                                    Server.ircPort = Convert.ToInt32(value, CultureInfo.CurrentCulture);
+                                    Server.ircPort = Convert.ToInt32(value);
                                 }
                                 catch
                                 {
@@ -196,7 +195,7 @@ namespace MCForge
                             case "irc-identify":
                                 try
                                 {
-                                    Server.ircIdentify = Convert.ToBoolean(value, CultureInfo.CurrentCulture);
+                                    Server.ircIdentify = Convert.ToBoolean(value);
                                 }
                                 catch
                                 {
@@ -207,12 +206,12 @@ namespace MCForge
                                 Server.ircPassword = value;
                                 break;
                             case "anti-tunnels":
-                                Server.antiTunnel = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.antiTunnel = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "max-depth":
                                 try
                                 {
-                                    Server.maxDepth = Convert.ToByte(value, CultureInfo.CurrentCulture);
+                                    Server.maxDepth = Convert.ToByte(value);
                                 }
                                 catch
                                 {
@@ -221,20 +220,20 @@ namespace MCForge
                                 break;
 
                             case "rplimit":
-                                try { Server.rpLimit = Convert.ToInt16(value, CultureInfo.CurrentCulture); }
+                                try { Server.rpLimit = Convert.ToInt16(value); }
                                 catch { Server.s.Log("rpLimit invalid! setting to default."); }
                                 break;
                             case "rplimit-norm":
-                                try { Server.rpNormLimit = Convert.ToInt16(value, CultureInfo.CurrentCulture); }
+                                try { Server.rpNormLimit = Convert.ToInt16(value); }
                                 catch { Server.s.Log("rpLimit-norm invalid! setting to default."); }
                                 break;
 
 
                             case "report-back":
-                                Server.reportBack = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.reportBack = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "backup-time":
-                                if (Convert.ToInt32(value, CultureInfo.CurrentCulture) > 1) { Server.backupInterval = Convert.ToInt32(value, CultureInfo.CurrentCulture); }
+                                if (Convert.ToInt32(value) > 1) { Server.backupInterval = Convert.ToInt32(value); }
                                 break;
                             case "backup-location":
                                 if (!value.Contains("System.Windows.Forms.TextBox, Text:"))
@@ -246,14 +245,14 @@ namespace MCForge
                             //    break;
 
                             case "physicsrestart":
-                                Server.physicsRestart = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.physicsRestart = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "deathcount":
-                                Server.deathcount = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.deathcount = (value.ToLower() == "true") ? true : false;
                                 break;
 
                             case "usemysql":
-                                Server.useMySQL = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.useMySQL = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "host":
                                 Server.MySQLHost = value;
@@ -276,17 +275,17 @@ namespace MCForge
                                 break;
                             case "defaultcolor":
                                 color = c.Parse(value);
-                                if ((color != null && String.IsNullOrEmpty(color)))
+                                if (color == "")
                                 {
-                                    color = c.Name(value); if (!(color != null && String.IsNullOrEmpty(color))) color = value; else { Server.s.Log("Could not find " + value); return; }
+                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
                                 Server.DefaultColor = color;
                                 break;
                             case "irc-color":
                                 color = c.Parse(value);
-                                if ((color != null && String.IsNullOrEmpty(color)))
+                                if (color == "")
                                 {
-                                    color = c.Name(value); if (!(color != null && String.IsNullOrEmpty(color))) color = value; else { Server.s.Log("Could not find " + value); return; }
+                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
                                 Server.IRCColour = color;
                                 break;
@@ -297,7 +296,7 @@ namespace MCForge
                             case "opchat-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -309,7 +308,7 @@ namespace MCForge
                             case "adminchat-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -339,47 +338,47 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "cheap-message-given":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.cheapMessageGiven = value;
+                                if (value != "") Server.cheapMessageGiven = value;
                                 break;
                             case "custom-ban":
                                 try { Server.customBan = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "custom-ban-message":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.customBanMessage = value;
+                                if (value != "") Server.customBanMessage = value;
                                 break;
                             case "custom-shutdown":
                                 try { Server.customShutdown = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "custom-shutdown-message":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.customShutdownMessage = value;
+                                if (value != "") Server.customShutdownMessage = value;
                                 break;
                             case "custom-griefer-stone":
                                 try { Server.customGrieferStone = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "custom-griefer-stone-message":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.customGrieferStoneMessage = value;
+                                if (value != "") Server.customGrieferStoneMessage = value;
                                 break;
                             case "custom-promote-message":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.customPromoteMessage = value;
+                                if (value != "") Server.customPromoteMessage = value;
                                 break;
                             case "custom-demote-message":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.customDemoteMessage = value;
+                                if (value != "") Server.customDemoteMessage = value;
                                 break;
                             case "rank-super":
                                 try { Server.rankSuper = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "default-rank":
-                                try { Server.defaultRank = value.ToLower(CultureInfo.CurrentCulture); }
+                                try { Server.defaultRank = value.ToLower(); }
                                 catch { }
                                 break;
                             case "afk-minutes":
                                 try
                                 {
-                                    Server.afkminutes = Convert.ToInt32(value, CultureInfo.CurrentCulture);
+                                    Server.afkminutes = Convert.ToInt32(value);
                                 }
                                 catch
                                 {
@@ -387,13 +386,13 @@ namespace MCForge
                                 }
                                 break;
                             case "afk-kick":
-                                try { Server.afkkick = Convert.ToInt32(value, CultureInfo.CurrentCulture); }
+                                try { Server.afkkick = Convert.ToInt32(value); }
                                 catch { Server.s.Log("irc-port invalid! setting to default."); }
                                 break;
                             case "afk-kick-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -407,13 +406,13 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "auto-update":
-                                Server.autoupdate = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.autoupdate = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "in-game-update-notify":
-                                Server.notifyPlayers = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.notifyPlayers = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "update-countdown":
-                                try { Server.restartcountdown = Convert.ToInt32(value, CultureInfo.CurrentCulture).ToString(CultureInfo.CurrentCulture); }
+                                try { Server.restartcountdown = Convert.ToInt32(value).ToString(); }
                                 catch { Server.restartcountdown = "10"; }
                                 break;
                             case "autoload":
@@ -425,7 +424,7 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "restarttime":
-                                try { Server.restarttime = DateTime.Parse(value, CultureInfo.CurrentCulture); }
+                                try { Server.restarttime = DateTime.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using defualt."); break; }
                                 break;
                             case "parse-emotes":
@@ -433,13 +432,13 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
                                 break;
                             case "use-whitelist":
-                                Server.useWhitelist = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.useWhitelist = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "premium-only":
-                                Server.PremiumPlayersOnly = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.PremiumPlayersOnly = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "allow-tp-to-higher-ranks":
-                                Server.higherranktp = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.higherranktp = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "agree-to-rules-on-entry":
                                 try { Server.agreetorulesonentry = bool.Parse(value); }
@@ -458,7 +457,7 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
                             case "money-name":
-                                if (!(value != null && String.IsNullOrEmpty(value))) Server.moneys = value;
+                                if (value != "") Server.moneys = value;
                                 break;
                             /*case "mono":
                                 try { Server.mono = bool.Parse(value); }
@@ -473,7 +472,7 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
                             case "host-state":
-                                if (!(value != null && String.IsNullOrEmpty(value)))
+                                if (value != "")
                                     Server.ZallState = value;
                                 break;
                             case "kick-on-hackrank":
@@ -481,11 +480,11 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "hackrank-kick-time":
-                                try { Server.hackrank_kick_time = int.Parse(value, CultureInfo.CurrentCulture); }
+                                try { Server.hackrank_kick_time = int.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "server-owner":
-                                if (!(value != null && String.IsNullOrEmpty(value)))
+                                if (value != "")
                                     Server.server_owner = value;
                                 break;
                             case "zombie-on-server-start":
@@ -505,7 +504,7 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "zombie-name-while-infected":
-                                if (!(value != null && String.IsNullOrEmpty(value)))
+                                if (value != "")
                                     Server.ZombieName = value;
                                 break;
                             case "enable-changing-levels":
@@ -521,11 +520,11 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "zombie-level-list":
-                                if (!(value != null && String.IsNullOrEmpty(value)))
+                                if (value != "")
                                 {
 
-                                    string input = value.Replace(" ", "").ToString(CultureInfo.CurrentCulture);
-                                        int itndex = input.IndexOf("#", StringComparison.CurrentCulture);
+                                    string input = value.Replace(" ", "").ToString();
+                                        int itndex = input.IndexOf("#");
                                     if (itndex > 0)
                                         input = input.Substring(0, itndex);
 
@@ -555,7 +554,7 @@ namespace MCForge
                             case "verify-admin-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -569,14 +568,14 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "spam-messages":
-                                try { Server.spamcounter = int.Parse(value, CultureInfo.CurrentCulture); }
+                                try { Server.spamcounter = int.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "spam-mute-time":
-                                try { Server.mutespamtime = int.Parse(value, CultureInfo.CurrentCulture); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                try { Server.mutespamtime = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "spam-counter-reset-time":
-                                try { Server.spamcountreset = int.Parse(value, CultureInfo.CurrentCulture); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                try { Server.spamcountreset = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
                             case "show-empty-ranks":
                                 try { Server.showEmptyRanks = bool.Parse(value); }
@@ -588,21 +587,21 @@ namespace MCForge
                                 break;
 
                             case "global-chat-nick":
-                                if (!(value != null && String.IsNullOrEmpty(value)))
+                                if (value != "")
                                     Server.GlobalChatNick = value;
                                 break;
 
                             case "global-chat-color":
                                 color = c.Parse(value);
-                                if ((color != null && String.IsNullOrEmpty(color)))
+                                if (color == "")
                                 {
-                                    color = c.Name(value); if (!(color != null && String.IsNullOrEmpty(color))) color = value; else { Server.s.Log("Could not find " + value); return; }
+                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
                                 Server.GlobalChatColor = color;
                                 break;
 
                             case "total-undo":
-                                try { Server.totalUndo = int.Parse(value, CultureInfo.CurrentCulture); }
+                                try { Server.totalUndo = int.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
 
@@ -618,7 +617,7 @@ namespace MCForge
                             case "griefer-stone-rank":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -644,12 +643,12 @@ namespace MCForge
                                 Server.UseTextures = bool.Parse(value);
                                 break;
                             case "send-command-usage":
-                                Player.sendcommanddata = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "review-view-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -661,7 +660,7 @@ namespace MCForge
                             case "review-enter-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -673,7 +672,7 @@ namespace MCForge
                             case "review-leave-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -685,14 +684,14 @@ namespace MCForge
                             case "review-cooldown":
                                 try
                                 {
-                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture);
+                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower());
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
                             case "review-clear-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -704,7 +703,7 @@ namespace MCForge
                             case "review-next-perm":
                                 try
                                 {
-                                    sbyte parsed = sbyte.Parse(value, CultureInfo.CurrentCulture);
+                                    sbyte parsed = sbyte.Parse(value);
                                     if (parsed < -50 || parsed > 120)
                                     {
                                         throw new FormatException();
@@ -721,7 +720,7 @@ namespace MCForge
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
                             case "translation-enabled":
-                                Server.transenabled = (value.ToLower(CultureInfo.CurrentCulture) == "true") ? true : false;
+                                Server.transenabled = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "translation-language":
                                 string langcode = value;
@@ -1051,7 +1050,7 @@ namespace MCForge
                                 }
                             if (langcode != "!ERROR!")
                             {
-                                Server.translang = value.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture);
+                                Server.translang = value.ToString().ToLower();
                             }
                             else
                             {
@@ -1086,7 +1085,7 @@ namespace MCForge
                 File.Create(givenPath).Dispose();
                 using (StreamWriter w = File.CreateText(givenPath))
                 {
-                    if (givenPath.IndexOf("server", StringComparison.CurrentCulture) != -1)
+                    if (givenPath.IndexOf("server") != -1)
                     {
                         SaveProps(w);
                     }
@@ -1184,62 +1183,62 @@ namespace MCForge
             w.WriteLine("# Server options");
             w.WriteLine("server-name = " + Server.name);
             w.WriteLine("motd = " + Server.motd);
-            w.WriteLine("port = " + Server.port.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("verify-names = " + Server.verify.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("public = " + Server.pub.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("max-players = " + Server.players.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("max-guests = " + Server.maxGuests.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("max-maps = " + Server.maps.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("world-chat = " + Server.worldChat.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("check-updates = " + Server.checkUpdates.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("auto-update = " + Server.autoupdate.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("in-game-update-notify = " + Server.notifyPlayers.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("update-countdown = " + Server.restartcountdown.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("autoload = " + Server.AutoLoad.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("auto-restart = " + Server.autorestart.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("port = " + Server.port.ToString());
+            w.WriteLine("verify-names = " + Server.verify.ToString().ToLower());
+            w.WriteLine("public = " + Server.pub.ToString().ToLower());
+            w.WriteLine("max-players = " + Server.players.ToString());
+            w.WriteLine("max-guests = " + Server.maxGuests.ToString());
+            w.WriteLine("max-maps = " + Server.maps.ToString());
+            w.WriteLine("world-chat = " + Server.worldChat.ToString().ToLower());
+            w.WriteLine("check-updates = " + Server.checkUpdates.ToString().ToLower());
+            w.WriteLine("auto-update = " + Server.autoupdate.ToString().ToLower());
+            w.WriteLine("in-game-update-notify = " + Server.notifyPlayers.ToString().ToLower());
+            w.WriteLine("update-countdown = " + Server.restartcountdown.ToString().ToLower());
+            w.WriteLine("autoload = " + Server.AutoLoad.ToString().ToLower());
+            w.WriteLine("auto-restart = " + Server.autorestart.ToString().ToLower());
             w.WriteLine("restarttime = " + Server.restarttime.ToShortTimeString());
             w.WriteLine("restart-on-error = " + Server.restartOnError);
             w.WriteLine("main-name = " + Server.level);
             //w.WriteLine("guest-goto = " + Server.guestGoto);
             w.WriteLine();
             w.WriteLine("# irc bot options");
-            w.WriteLine("irc = " + Server.irc.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("irc-colorsenable = " + Server.ircColorsEnable.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("irc = " + Server.irc.ToString().ToLower());
+            w.WriteLine("irc-colorsenable = " + Server.ircColorsEnable.ToString().ToLower());
             w.WriteLine("irc-nick = " + Server.ircNick);
             w.WriteLine("irc-server = " + Server.ircServer);
             w.WriteLine("irc-channel = " + Server.ircChannel);
             w.WriteLine("irc-opchannel = " + Server.ircOpChannel);
-            w.WriteLine("irc-port = " + Server.ircPort.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("irc-identify = " + Server.ircIdentify.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("irc-port = " + Server.ircPort.ToString());
+            w.WriteLine("irc-identify = " + Server.ircIdentify.ToString());
             w.WriteLine("irc-password = " + Server.ircPassword);
             w.WriteLine();
             w.WriteLine("# other options");
-            w.WriteLine("anti-tunnels = " + Server.antiTunnel.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("max-depth = " + Server.maxDepth.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("rplimit = " + Server.rpLimit.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("rplimit-norm = " + Server.rpNormLimit.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("physicsrestart = " + Server.physicsRestart.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("old-help = " + Server.oldHelp.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("deathcount = " + Server.deathcount.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("afk-minutes = " + Server.afkminutes.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("afk-kick = " + Server.afkkick.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("afk-kick-perm = " + ((sbyte)Server.afkkickperm).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("premium-only = " + Server.PremiumPlayersOnly.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("anti-tunnels = " + Server.antiTunnel.ToString().ToLower());
+            w.WriteLine("max-depth = " + Server.maxDepth.ToString().ToLower());
+            w.WriteLine("rplimit = " + Server.rpLimit.ToString().ToLower());
+            w.WriteLine("rplimit-norm = " + Server.rpNormLimit.ToString().ToLower());
+            w.WriteLine("physicsrestart = " + Server.physicsRestart.ToString().ToLower());
+            w.WriteLine("old-help = " + Server.oldHelp.ToString().ToLower());
+            w.WriteLine("deathcount = " + Server.deathcount.ToString().ToLower());
+            w.WriteLine("afk-minutes = " + Server.afkminutes.ToString());
+            w.WriteLine("afk-kick = " + Server.afkkick.ToString());
+            w.WriteLine("afk-kick-perm = " + ((sbyte)Server.afkkickperm).ToString());
+            w.WriteLine("parse-emotes = " + Server.parseSmiley.ToString().ToLower());
+            w.WriteLine("dollar-before-dollar = " + Server.dollardollardollar.ToString().ToLower());
+            w.WriteLine("use-whitelist = " + Server.useWhitelist.ToString().ToLower());
+            w.WriteLine("premium-only = " + Server.PremiumPlayersOnly.ToString().ToLower());
             w.WriteLine("money-name = " + Server.moneys);
-            w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("log-heartbeat = " + Server.logbeat.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("notify-on-join-leave = " + Server.notifyOnJoinLeave.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("host-state = " + Server.ZallState.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("server-owner = " + Server.server_owner.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("opchat-perm = " + ((sbyte)Server.opchatperm).ToString());
+            w.WriteLine("adminchat-perm = " + ((sbyte)Server.adminchatperm).ToString());
+            w.WriteLine("log-heartbeat = " + Server.logbeat.ToString());
+            w.WriteLine("force-cuboid = " + Server.forceCuboid.ToString());
+            w.WriteLine("profanity-filter = " + Server.profanityFilter.ToString());
+            w.WriteLine("notify-on-join-leave = " + Server.notifyOnJoinLeave.ToString());
+            w.WriteLine("repeat-messages = " + Server.repeatMessage.ToString());
+            w.WriteLine("host-state = " + Server.ZallState.ToString());
+            w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
+            w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
+            w.WriteLine("server-owner = " + Server.server_owner.ToString());
             w.WriteLine("zombie-on-server-start = " + Server.startZombieModeOnStartup);
             w.WriteLine("no-respawning-during-zombie = " + Server.noRespawn);
             w.WriteLine("no-level-saving-during-zombie = " + Server.noLevelSaving);
@@ -1250,18 +1249,18 @@ namespace MCForge
             w.WriteLine("use-level-list = " + Server.UseLevelList);
             string dogCsv = string.Join(",", Server.LevelList.ToArray());
             w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
-            w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("send-command-usage = " + Player.sendcommanddata.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("total-undo = " + Server.totalUndo.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
+            w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString().ToLower());
+            w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString().ToLower());
+            w.WriteLine("send-command-usage = " + Player.sendcommanddata.ToString());
+            w.WriteLine("total-undo = " + Server.totalUndo.ToString());
             w.WriteLine();
             w.WriteLine("# backup options");
-            w.WriteLine("backup-time = " + Server.backupInterval.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("backup-time = " + Server.backupInterval.ToString());
             w.WriteLine("backup-location = " + Server.backupLocation);
             w.WriteLine();
             w.WriteLine("#Error logging");
-            w.WriteLine("report-back = " + Server.reportBack.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("report-back = " + Server.reportBack.ToString().ToLower());
             w.WriteLine();
             w.WriteLine("#MySQL information");
             w.WriteLine("UseMySQL = " + Server.useMySQL);
@@ -1280,68 +1279,68 @@ namespace MCForge
             w.WriteLine("mono = " + Server.mono);
             w.WriteLine();*/
             w.WriteLine("#Custom Messages");
-            w.WriteLine("custom-ban = " + Server.customBan.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("custom-ban = " + Server.customBan.ToString().ToLower());
             w.WriteLine("custom-ban-message = " + Server.customBanMessage);
-            w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("custom-shutdown = " + Server.customShutdown.ToString().ToLower());
             w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
-            w.WriteLine("custom-griefer-stone = " + Server.customGrieferStone.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("custom-griefer-stone = " + Server.customGrieferStone.ToString().ToLower());
             w.WriteLine("custom-griefer-stone-message = " + Server.customGrieferStoneMessage);
             w.WriteLine("custom-promote-message = " + Server.customPromoteMessage);
             w.WriteLine("custom-demote-message = " + Server.customDemoteMessage);
-            w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
+            w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
             w.WriteLine();
-            w.WriteLine("cheapmessage = " + Server.cheapMessage.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("cheapmessage = " + Server.cheapMessage.ToString().ToLower());
             w.WriteLine("cheap-message-given = " + Server.cheapMessageGiven);
-            w.WriteLine("rank-super = " + Server.rankSuper.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("rank-super = " + Server.rankSuper.ToString().ToLower());
             try { w.WriteLine("default-rank = " + Server.defaultRank); }
             catch { w.WriteLine("default-rank = guest"); }
             w.WriteLine();
-            w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("kick-on-hackrank = " + Server.hackrank_kick.ToString().ToLower());
+            w.WriteLine("hackrank-kick-time = " + Server.hackrank_kick_time.ToString());
             w.WriteLine();
             w.WriteLine("#Admin Verification");
-            w.WriteLine("admin-verification = " + Server.verifyadmins.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("verify-admin-perm = " + ((sbyte)Server.verifyadminsrank).ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("admin-verification = " + Server.verifyadmins.ToString().ToLower());
+            w.WriteLine("verify-admin-perm = " + ((sbyte)Server.verifyadminsrank).ToString());
             w.WriteLine();
             w.WriteLine("#Spam Control");
-            w.WriteLine("mute-on-spam = " + Server.checkspam.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("spam-messages = " + Server.spamcounter.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("spam-mute-time = " + Server.mutespamtime.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("spam-counter-reset-time = " + Server.spamcountreset.ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("mute-on-spam = " + Server.checkspam.ToString().ToLower());
+            w.WriteLine("spam-messages = " + Server.spamcounter.ToString());
+            w.WriteLine("spam-mute-time = " + Server.mutespamtime.ToString());
+            w.WriteLine("spam-counter-reset-time = " + Server.spamcountreset.ToString());
             w.WriteLine();
             w.WriteLine("#Show Empty Ranks in /players");
-            w.WriteLine("show-empty-ranks = " + Server.showEmptyRanks.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("show-empty-ranks = " + Server.showEmptyRanks.ToString().ToLower());
             w.WriteLine();
             w.WriteLine("#Global Chat Settings");
-            w.WriteLine("global-chat-enabled = " + Server.UseGlobalChat.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("global-chat-enabled = " + Server.UseGlobalChat.ToString().ToLower());
             w.WriteLine("global-chat-nick = " + Server.GlobalChatNick);
             w.WriteLine("global-chat-color = " + Server.GlobalChatColor);
             w.WriteLine();
             w.WriteLine("#Griefer_stone Settings");
-            w.WriteLine("griefer-stone-tempban = " + Server.grieferStoneBan.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("griefer-stone-tempban = " + Server.grieferStoneBan.ToString().ToLower());
             w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
-            w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString());
             w.WriteLine();
             w.WriteLine("#WoM Settings");
-            w.WriteLine("wom-direct = " + Server.WomDirect.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
             w.WriteLine("wom-textures = " + Server.UseTextures);
             w.WriteLine("");
             w.WriteLine("#Review settings");
-            w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("review-enter-perm = " + ((sbyte)Server.reviewenter).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("review-leave-perm = " + ((sbyte)Server.reviewleave).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("review-cooldown = " + Server.reviewcooldown.ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString(CultureInfo.CurrentCulture));
-            w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString(CultureInfo.CurrentCulture));
+            w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
+            w.WriteLine("review-enter-perm = " + ((sbyte)Server.reviewenter).ToString());
+            w.WriteLine("review-leave-perm = " + ((sbyte)Server.reviewleave).ToString());
+            w.WriteLine("review-cooldown = " + Server.reviewcooldown.ToString());
+            w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
+            w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
             w.WriteLine("bufferblocks = " + Server.bufferblocks);
             w.WriteLine("");
             w.WriteLine("#Translation settings");
-            w.WriteLine("translation-enabled = " + Server.transenabled.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
-            w.WriteLine("translation-language = " + Server.translang.ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+            w.WriteLine("translation-enabled = " + Server.transenabled.ToString().ToLower());
+            w.WriteLine("translation-language = " + Server.translang.ToString().ToLower());
         }
     }
 }

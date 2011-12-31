@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -35,7 +34,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             string alltext = File.ReadAllText("text/rankinfo.txt");
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 Help(p);
                 Player.SendMessage(p, "&cYou need to enter a player!");
@@ -64,16 +63,16 @@ namespace MCForge
                     string assigner = line3.Split(' ')[1];
                     Group newrankcolor = Group.Find(newrank);
                     Group oldrankcolor = Group.Find(oldrank);
-                    int minutes = Convert.ToInt32(line3.Split(' ')[2], CultureInfo.CurrentCulture);
-                    int hours = Convert.ToInt32(line3.Split(' ')[3], CultureInfo.CurrentCulture);
-                    int days = Convert.ToInt32(line3.Split(' ')[4], CultureInfo.CurrentCulture);
-                    int months = Convert.ToInt32(line3.Split(' ')[5], CultureInfo.CurrentCulture);
-                    int years = Convert.ToInt32(line3.Split(' ')[6], CultureInfo.CurrentCulture);
+                    int minutes = Convert.ToInt32(line3.Split(' ')[2]);
+                    int hours = Convert.ToInt32(line3.Split(' ')[3]);
+                    int days = Convert.ToInt32(line3.Split(' ')[4]);
+                    int months = Convert.ToInt32(line3.Split(' ')[5]);
+                    int years = Convert.ToInt32(line3.Split(' ')[6]);
                     DateTime ExpireDate = new DateTime(years, months, days, hours, minutes, 0);
                     Player.SendMessage(p, "&1Rank Information of " + message);
                     Player.SendMessage(p, "&aNew rank: " + newrankcolor.color + newrank);
                     Player.SendMessage(p, "&aOld Rank: " + oldrankcolor.color + oldrank);
-                    Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString(CultureInfo.CurrentCulture));
+                    Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString());
                     Player.SendMessage(p, "&aRanked by: " + assigner);
                 }
             }

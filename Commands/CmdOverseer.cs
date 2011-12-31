@@ -18,7 +18,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Globalization;
 namespace MCForge
 {
     public class CmdOverseer : Command
@@ -32,13 +31,13 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
 
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
-//            Player who = Player.Find(message.Split(' ')[0]) // COMMENTED BY CODEIT.RIGHT;
-            string cmd = message.Split(' ')[0].ToUpper(CultureInfo.CurrentCulture);
+            if (message == "") { Help(p); return; }
+            Player who = Player.Find(message.Split(' ')[0]);
+            string cmd = message.Split(' ')[0].ToUpper();
 
             string par;
             try
-            { par = message.Split(' ')[1].ToUpper(CultureInfo.CurrentCulture); }
+            { par = message.Split(' ')[1].ToUpper(); }
             catch
             { par = ""; }
 
@@ -67,7 +66,7 @@ namespace MCForge
                 }
                 else if (par == "2")
                 {
-                    string mapname = p.name.ToLower(CultureInfo.CurrentCulture) + "2";
+                    string mapname = p.name.ToLower() + "2";
                     if (!Server.levels.Any(l => l.name == mapname))
                     {
                         Command.all.Find("load").Use(p, mapname);
@@ -78,7 +77,7 @@ namespace MCForge
             // Set Spawn (if you are on your own map level)
             else if (cmd == "SPAWN")
             {
-                if ((p.name.ToUpper(CultureInfo.CurrentCulture) == p.level.name.ToUpper(CultureInfo.CurrentCulture)) || (p.name.ToUpper(CultureInfo.CurrentCulture) + "00" == p.level.name.ToUpper(CultureInfo.CurrentCulture)) || (p.name.ToUpper(CultureInfo.CurrentCulture) + "2" == p.level.name.ToUpper(CultureInfo.CurrentCulture)))
+                if ((p.name.ToUpper() == p.level.name.ToUpper()) || (p.name.ToUpper() + "00" == p.level.name.ToUpper()) || (p.name.ToUpper() + "2" == p.level.name.ToUpper()))
                 {
                     Command.all.Find("setspawn").Use(p, "");
                 }
@@ -89,13 +88,13 @@ namespace MCForge
             {
                 if (par == "ADD")
                 {
-                    if ((File.Exists(@"levels\" + p.name.ToLower(CultureInfo.CurrentCulture) + ".lvl")) || (File.Exists(@"levels\" + p.name.ToLower(CultureInfo.CurrentCulture) + "00.lvl")))
+                    if ((File.Exists(@"levels\" + p.name.ToLower() + ".lvl")) || (File.Exists(@"levels\" + p.name.ToLower() + "00.lvl")))
                     {
-                        if (!File.Exists(@"levels\" + p.name.ToLower(CultureInfo.CurrentCulture) + "2.lvl"))
+                        if (!File.Exists(@"levels\" + p.name.ToLower() + "2.lvl"))
                         {
                             Player.SendMessage(p, p.color + p.name + Server.DefaultColor + " you already have a map, let me create a second one for you.");
                             string mType;
-                            if (par2.ToUpper(CultureInfo.CurrentCulture) == "" || par2.ToUpper(CultureInfo.CurrentCulture) == "DESERT" || par2.ToUpper(CultureInfo.CurrentCulture) == "FLAT" || par2.ToUpper(CultureInfo.CurrentCulture) == "FOREST" || par2.ToUpper(CultureInfo.CurrentCulture) == "ISLAND" || par2.ToUpper(CultureInfo.CurrentCulture) == "MOUNTAINS" || par2.ToUpper(CultureInfo.CurrentCulture) == "OCEAN" || par2.ToUpper(CultureInfo.CurrentCulture) == "PIXEL" || par2.ToUpper(CultureInfo.CurrentCulture) == "SPACE")
+                            if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL" || par2.ToUpper() == "SPACE")
                             {
                                 if (par2 != "")
                                 {
@@ -106,7 +105,7 @@ namespace MCForge
                                     mType = "flat";
                                 }
                                 Player.SendMessage(p, "Creating your 2nd map, " + p.color + p.name);
-                                Command.all.Find("newlvl").Use(p, p.name.ToLower(CultureInfo.CurrentCulture) + "2 " + mSize(p) + " " + mType);
+                                Command.all.Find("newlvl").Use(p, p.name.ToLower() + "2 " + mSize(p) + " " + mType);
                             }
                             else
                             {
@@ -122,7 +121,7 @@ namespace MCForge
                     else
                     {
                         string mType;
-                        if (par2.ToUpper(CultureInfo.CurrentCulture) == "" || par2.ToUpper(CultureInfo.CurrentCulture) == "DESERT" || par2.ToUpper(CultureInfo.CurrentCulture) == "FLAT" || par2.ToUpper(CultureInfo.CurrentCulture) == "FOREST" || par2.ToUpper(CultureInfo.CurrentCulture) == "ISLAND" || par2.ToUpper(CultureInfo.CurrentCulture) == "MOUNTAINS" || par2.ToUpper(CultureInfo.CurrentCulture) == "OCEAN" || par2.ToUpper(CultureInfo.CurrentCulture) == "PIXEL" || par2.ToUpper(CultureInfo.CurrentCulture) == "SPACE")
+                        if (par2.ToUpper() == "" || par2.ToUpper() == "DESERT" || par2.ToUpper() == "FLAT" || par2.ToUpper() == "FOREST" || par2.ToUpper() == "ISLAND" || par2.ToUpper() == "MOUNTAINS" || par2.ToUpper() == "OCEAN" || par2.ToUpper() == "PIXEL" || par2.ToUpper() == "SPACE")
                         {
                             if (par2 != "")
                             {
@@ -133,7 +132,7 @@ namespace MCForge
                                 mType = "flat";
                             }
                             Player.SendMessage(p, "Creating your map, " + p.color + p.name);
-                            Command.all.Find("newlvl").Use(p, p.name.ToLower(CultureInfo.CurrentCulture) + " " + mSize(p) + " " + mType);
+                            Command.all.Find("newlvl").Use(p, p.name.ToLower() + " " + mSize(p) + " " + mType);
                         }
                         else
                         {
@@ -144,7 +143,7 @@ namespace MCForge
                 }
                 else if (par == "PHYSICS")
                 {
-                    if ((p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture), StringComparison.CurrentCulture)) || (p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture) + "00", StringComparison.CurrentCulture)) || (p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture) + "2", StringComparison.CurrentCulture)))
+                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
                     {
                         if (par2 != "")
                         {
@@ -188,7 +187,7 @@ namespace MCForge
                     }
                     else if (par2 == "2")
                     {
-                        Command.all.Find("deletelvl").Use(p, p.name.ToLower(CultureInfo.CurrentCulture) + "2");
+                        Command.all.Find("deletelvl").Use(p, p.name.ToLower() + "2");
                         Player.SendMessage(p, "Your 2nd map has been removed.");
                         return;
                     }
@@ -215,7 +214,7 @@ namespace MCForge
                 // Add Zone to your personal map(took a while to get it to work(it was a big derp))
                 else if (par == "ADD")
                 {
-                    if ((p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture), StringComparison.CurrentCulture)) || (p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture) + "00", StringComparison.CurrentCulture)) || (p.level.name.ToUpper(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture) + "2", StringComparison.CurrentCulture)))
+                    if ((p.level.name.ToUpper().Equals(p.name.ToUpper())) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "00")) || (p.level.name.ToUpper().Equals(p.name.ToUpper() + "2")))
                     {
                         if (par2 != "")
                         {
@@ -231,10 +230,10 @@ namespace MCForge
                 }
                 else if (par == "DEL")
                 {
-                    if ((p.level.name.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToUpper(CultureInfo.CurrentCulture), StringComparison.CurrentCulture)) || (p.level.name.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToLower(CultureInfo.CurrentCulture) + "00", StringComparison.CurrentCulture)) || (p.level.name.ToLower(CultureInfo.CurrentCulture).Equals(p.name.ToLower(CultureInfo.CurrentCulture) + "2", StringComparison.CurrentCulture)))
+                    if ((p.level.name.ToLower().Equals(p.name.ToUpper())) || (p.level.name.ToLower().Equals(p.name.ToLower() + "00")) || (p.level.name.ToLower().Equals(p.name.ToLower() + "2")))
                     {
                         // I need to add the ability to delete a single zone, I need help!
-                        if ((par2.ToUpper(CultureInfo.CurrentCulture) == "ALL") || (par2.ToUpper(CultureInfo.CurrentCulture) == ""))
+                        if ((par2.ToUpper() == "ALL") || (par2.ToUpper() == ""))
                         {
                             Command zone = Command.all.Find("zone");
                             Command click = Command.all.Find("click");
@@ -299,13 +298,13 @@ namespace MCForge
              * I need to figure out how to add a system to do this with the players second map.
              */
             string r = "";
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\levels\\" + p.name.ToLower(CultureInfo.CurrentCulture) + "00.lvl"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\levels\\" + p.name.ToLower() + "00.lvl"))
             {
-                r = p.name.ToLower(CultureInfo.CurrentCulture) + "00";
+                r = p.name.ToLower() + "00";
             }
             else
             {
-                r = p.name.ToLower(CultureInfo.CurrentCulture);
+                r = p.name.ToLower();
             }
             if (Ext == true) { r = r + ".lvl"; }
             return r;

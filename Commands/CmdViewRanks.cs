@@ -32,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message == "") { Help(p); return; }
 
             Group foundGroup = Group.Find(message);
             if (foundGroup == null)
@@ -48,7 +48,7 @@ namespace MCForge
                 totalList += ", " + s;
             }
 
-            if ((totalList != null && String.IsNullOrEmpty(totalList)))
+            if (totalList == "")
             {
                 Player.SendMessage(p, "No one has the rank of " + foundGroup.color + foundGroup.name);
                 return;

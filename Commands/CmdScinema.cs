@@ -18,11 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
-    public class CmdSCinema : Command, IDisposable
+    public class CmdSCinema : Command
     {
 
 
@@ -57,7 +56,7 @@ namespace MCForge
                     damn.Close();
                     damn.Dispose();
                     StreamWriter temp = File.AppendText(Filepath);
-                    temp.WriteLine(String.Format(CultureInfo.CurrentCulture, "{0:00000}", 0)); //number of last frame Frame. in this case 0
+                    temp.WriteLine(String.Format("{0:00000}", 0)); //number of last frame Frame. in this case 0
                     temp.Flush();
                     temp.Close();
                     temp.Dispose();
@@ -119,7 +118,7 @@ namespace MCForge
                     for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
                     {
                         b = p.level.GetTile(xx, yy, zz);
-                        BufferAdd((ushort)(xx - cpos.x), (ushort)(yy - cpos.y), (ushort)(zz - cpos.z), b, CBuffer);
+                        BufferAdd(p, (ushort)(xx - cpos.x), (ushort)(yy - cpos.y), (ushort)(zz - cpos.z), b, CBuffer);
                     }
                 }
             }
@@ -133,7 +132,7 @@ namespace MCForge
 				{
 					temp += (Char)ReadStream.ReadByte();
 				}
-				FrameNumber = int.Parse(temp, CultureInfo.CurrentCulture);
+				FrameNumber = int.Parse(temp);
 				//framecount aquired(hopefully)
 				//now we have to add 1 to that and write it back in the file
 				FrameNumber++;
@@ -141,7 +140,7 @@ namespace MCForge
 				int Fnum = FrameNumber;
 				for (int i = 4; i >= 0; i--)
 				{
-					ba[i] = Byte.Parse((Fnum % 10).ToString(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture);
+					ba[i] = Byte.Parse((Fnum % 10).ToString());
 					ba[i] += 48;
 					//ba[i] = (Byte)49;
 					Fnum /= 10;
@@ -154,7 +153,7 @@ namespace MCForge
 				}
 			}
             cin = File.AppendText(Filepath);
-            cin.Write("[Frame" + String.Format(CultureInfo.CurrentCulture, "{0:00000}", FrameNumber) + "]{");
+            cin.Write("[Frame" + String.Format("{0:00000}", FrameNumber) + "]{");
             //written frameheader
             foreach (Player.CopyPos CP in CBuffer)
             {
@@ -180,7 +179,7 @@ namespace MCForge
             Player.SendMessage(p, "/sCinema [name] - Saves a given Frame to the File. Can be Played by pCinema");
         }
 
-        void BufferAdd(ushort x, ushort y, ushort z, byte type, List<Player.CopyPos> Buf)
+        void BufferAdd(Player p, ushort x, ushort y, ushort z, byte type, List<Player.CopyPos> Buf)
         {
             Player.CopyPos pos;
             pos.x = x;
@@ -190,65 +189,9 @@ namespace MCForge
             Buf.Add(pos);
         }
 
-        struct CatchPos { public ushort x, y, z;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; }
 
 
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (cin != null)
-                        cin.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }
 

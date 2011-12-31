@@ -18,7 +18,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -31,7 +30,7 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public override void Use(Player p, string message)
         {
-            if((message != null && String.IsNullOrEmpty(message)))
+            if(message == "")
             {
                 Help(p);
                 return;
@@ -51,7 +50,7 @@ namespace MCForge
 			}
 
             double result = 0;
-			float num1 = float.Parse(split[0], CultureInfo.CurrentCulture);
+			float num1 = float.Parse(split[0]);
 			String operation = split[1];
 			
 			// All 2-parameter operations go here
@@ -92,7 +91,7 @@ namespace MCForge
 					return;
 				}
 				
-				float num2 = float.Parse(split[2], CultureInfo.CurrentCulture);
+				float num2 = float.Parse(split[2]);
 				
 				switch(operation)
 				{

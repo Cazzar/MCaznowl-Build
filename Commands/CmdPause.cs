@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -34,7 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if ((message != null && String.IsNullOrEmpty(message)))
+            if (message == "")
             {
                 if (p != null)
                 {
@@ -51,7 +50,7 @@ namespace MCForge
             {
                 try
                 {
-                    foundNum = int.Parse(message, CultureInfo.CurrentCulture);
+                    foundNum = int.Parse(message);
                     if (p != null)
                     {
                         foundLevel = p.level;
@@ -71,7 +70,7 @@ namespace MCForge
             {
                 try
                 {
-                    foundNum = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                    foundNum = int.Parse(message.Split(' ')[1]);
                     foundLevel = Level.Find(message.Split(' ')[0]);
                 }
                 catch

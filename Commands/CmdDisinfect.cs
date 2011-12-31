@@ -14,7 +14,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Player who = null;
-            if ((message != null && String.IsNullOrEmpty(message))) { who = p; message = p.name; } else { who = Player.Find(message); }
+            if (message == "") { who = p; message = p.name; } else { who = Player.Find(message); }
             if (!who.infected || !Server.zombie.GameInProgess())
             {
                 p.SendMessage("Cannot disinfect player");

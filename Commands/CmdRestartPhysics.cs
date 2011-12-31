@@ -17,7 +17,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -35,10 +34,10 @@ namespace MCForge
             CatchPos cpos;
             cpos.x = 0; cpos.y = 0; cpos.z = 0;
 
-            message = message.ToLower(CultureInfo.CurrentCulture);
+            message = message.ToLower();
             cpos.extraInfo = "";
 
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
             {
                 int currentLoop = 0; string[] storedArray; bool skip = false;
 
@@ -60,8 +59,8 @@ namespace MCForge
                                 storedArray = message.Split(' ');
                                 try
                                 {
-                                    storedArray[currentLoop + 1] = Block.Byte(message.Split(' ')[currentLoop + 1].ToString(CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture)).ToString(CultureInfo.CurrentCulture);
-                                    if (storedArray[currentLoop + 1].ToString(CultureInfo.CurrentCulture) == "255") throw new OverflowException();
+                                    storedArray[currentLoop + 1] = Block.Byte(message.Split(' ')[currentLoop + 1].ToString().ToLower()).ToString();
+                                    if (storedArray[currentLoop + 1].ToString() == "255") throw new OverflowException();
                                 }
                                 catch { Player.SendMessage(p, "Invalid block type."); return; }
 
@@ -77,7 +76,7 @@ namespace MCForge
                     {
                         try
                         {
-                            if (int.Parse(s, CultureInfo.CurrentCulture) < 1) { Player.SendMessage(p, "Values must be above 0"); return; }
+                            if (int.Parse(s) < 1) { Player.SendMessage(p, "Values must be above 0"); return; }
                         }
                         catch { Player.SendMessage(p, "/rp [text] [num] [text] [num]"); return; }
                     }
@@ -140,7 +139,7 @@ namespace MCForge
 
             try
             {
-                if ((cpos.extraInfo != null && String.IsNullOrEmpty(cpos.extraInfo)))
+                if (cpos.extraInfo == "")
                 {
                     if (buffer.Count > Server.rpNormLimit)
                     {
@@ -170,26 +169,6 @@ namespace MCForge
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
 
-        struct CatchPos { public ushort x, y, z; public string extraInfo;
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(Object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator !=(CatchPos x, CatchPos y)
-        {
-            throw new NotImplementedException();
-        }
-        }
+        struct CatchPos { public ushort x, y, z; public string extraInfo; }
     }
 }

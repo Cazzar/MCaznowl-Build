@@ -17,7 +17,6 @@
 */
 using System;
 using System.IO;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -38,7 +37,7 @@ namespace MCForge
                 Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
-            string foundPath = message.Split(' ')[1].ToLower(CultureInfo.CurrentCulture);
+            string foundPath = message.Split(' ')[1].ToLower();
 
             if (!Player.ValidName(foundPath)) { Player.SendMessage(p, "Invalid AI name!"); return; }
             if (foundPath == "hunt" || foundPath == "kill") { Player.SendMessage(p, "Reserved for special AI."); return; }
@@ -70,7 +69,7 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    if (message.Split(' ')[2].ToLower(CultureInfo.CurrentCulture) == "last")
+                                    if (message.Split(' ')[2].ToLower() == "last")
                                     {
                                         string[] Lines = File.ReadAllLines("bots/" + foundPath);
                                         string[] outLines = new string[Lines.Length - 1];
@@ -149,7 +148,7 @@ namespace MCForge
 			{
 				using (SW = File.AppendText("bots/" + foundPath))
 				{
-					switch (additional.ToLower(CultureInfo.CurrentCulture))
+					switch (additional.ToLower())
 					{
 						case "":
 						case "walk":
@@ -160,19 +159,19 @@ namespace MCForge
 							SW.WriteLine("teleport " + p.pos[0] + " " + p.pos[1] + " " + p.pos[2] + " " + p.rot[0] + " " + p.rot[1]);
 							break;
 						case "wait":
-							SW.WriteLine("wait " + int.Parse(extra, CultureInfo.CurrentCulture)); break;
+							SW.WriteLine("wait " + int.Parse(extra)); break;
 						case "nod":
-							SW.WriteLine("nod " + int.Parse(extra, CultureInfo.CurrentCulture) + " " + int.Parse(more, CultureInfo.CurrentCulture)); break;
+							SW.WriteLine("nod " + int.Parse(extra) + " " + int.Parse(more)); break;
 						case "speed":
-							SW.WriteLine("speed " + int.Parse(extra, CultureInfo.CurrentCulture)); break;
+							SW.WriteLine("speed " + int.Parse(extra)); break;
 						case "remove":
 							SW.WriteLine("remove"); break;
 						case "reset":
 							SW.WriteLine("reset"); break;
 						case "spin":
-							SW.WriteLine("spin " + int.Parse(extra, CultureInfo.CurrentCulture) + " " + int.Parse(more, CultureInfo.CurrentCulture)); break;
+							SW.WriteLine("spin " + int.Parse(extra) + " " + int.Parse(more)); break;
 						case "reverse":
-							for (int i = allLines.Length - 1; i > 0; i--) if (allLines[i][0] != '#' && !(allLines[i] != null && String.IsNullOrEmpty(allLines[i]))) SW.WriteLine(allLines[i]);
+							for (int i = allLines.Length - 1; i > 0; i--) if (allLines[i][0] != '#' && allLines[i] != "") SW.WriteLine(allLines[i]);
 							break;
 						case "linkscript":
 							if (extra != "10") SW.WriteLine("linkscript " + extra); else Player.SendMessage(p, "Linkscript requires a script as a parameter");

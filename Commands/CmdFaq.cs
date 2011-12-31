@@ -48,7 +48,7 @@ namespace MCForge
 			}
 
             Player who = null;
-            if (!(message != null && String.IsNullOrEmpty(message)))
+            if (message != "")
             {
                 if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this))
                 { Player.SendMessage(p, "You cant send the FAQ to another player!"); return; }

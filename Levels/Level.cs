@@ -28,7 +28,6 @@ using MCForge.Gui;
 //using MCForge.Levels.Textures;
 using MCForge.SQL;
 using Timer = System.Timers.Timer;
-using System.Globalization;
 
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
@@ -73,852 +72,81 @@ namespace MCForge
         private readonly List<Update> ListUpdate = new List<Update>(); //A list of block to change after calculation
 
         private readonly Dictionary<int, sbyte> leaves = new Dictionary<int, sbyte>();
-        // Holds block state for leaf decay
+                                                // Holds block state for leaf decay
 
         private readonly Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>();
-        // Holds random flow data for liqiud physics
-
-        private bool _death; 
-
-        public bool Death
-        {
-            get
-            {
-                return _death;
-            }
-            set
-            {
-                _death = value;
-            }
-        }
-        private Extras _extras = new Extras(); 
-
-        public Extras Extras
-        {
-            get
-            {
-                return _extras;
-            }
-            set
-            {
-                _extras = value;
-            }
-        }
-        private bool _grassDestroy = true; 
-
-        public bool GrassDestroy
-        {
-            get
-            {
-                return _grassDestroy;
-            }
-            set
-            {
-                _grassDestroy = value;
-            }
-        }
-        private bool _grassGrow = true; 
-
-        public bool GrassGrow
-        {
-            get
-            {
-                return _grassGrow;
-            }
-            set
-            {
-                _grassGrow = value;
-            }
-        }
-        private bool _instant; 
-
-        public bool Instant
-        {
-            get
-            {
-                return _instant;
-            }
-            set
-            {
-                _instant = value;
-            }
-        }
-        private bool _killer = true; 
-
-        public bool Killer
-        {
-            get
-            {
-                return _killer;
-            }
-            set
-            {
-                _killer = value;
-            }
-        }
-        private List<UndoPos> _undoBuffer = new List<UndoPos>(); 
-
-        public List<UndoPos> UndoBuffer
-        {
-            get
-            {
-                return _undoBuffer;
-            }
-            set
-            {
-                _undoBuffer = value;
-            }
-        }
-        private List<Zone> _zoneList; 
-
-        public List<Zone> ZoneList
-        {
-            get
-            {
-                return _zoneList;
-            }
-            set
-            {
-                _zoneList = value;
-            }
-        }
-        private bool _ai = true; 
-
-        public bool ai
-        {
-            get
-            {
-                return _ai;
-            }
-            set
-            {
-                _ai = value;
-            }
-        }
-        private bool _backedup; 
-
-        public bool backedup
-        {
-            get
-            {
-                return _backedup;
-            }
-            set
-            {
-                _backedup = value;
-            }
-        }
-        private List<BlockPos> _blockCache = new List<BlockPos>(); 
-
-        public List<BlockPos> blockCache
-        {
-            get
-            {
-                return _blockCache;
-            }
-            set
-            {
-                _blockCache = value;
-            }
-        }
-        private byte[] _blocks; 
-
-        public byte[] blocks
-        {
-            get
-            {
-                return _blocks;
-            }
-            set
-            {
-                _blocks = value;
-            }
-        }
-
-        private bool _cancelsave1; 
-
-        public bool cancelsave1
-        {
-            get
-            {
-                return _cancelsave1;
-            }
-            set
-            {
-                _cancelsave1 = value;
-            }
-        }
-        private bool _cancelunload; 
-
-        public bool cancelunload
-        {
-            get
-            {
-                return _cancelunload;
-            }
-            set
-            {
-                _cancelunload = value;
-            }
-        }
-        private bool _changed; 
-
-        public bool changed
-        {
-            get
-            {
-                return _changed;
-            }
-            set
-            {
-                _changed = value;
-            }
-        }
-        private bool _countdowninprogress; 
-
-        public bool countdowninprogress
-        {
-            get
-            {
-                return _countdowninprogress;
-            }
-            set
-            {
-                _countdowninprogress = value;
-            }
-        }
-        private bool _ctfmode; 
-
-        public bool ctfmode
-        {
-            get
-            {
-                return _ctfmode;
-            }
-            set
-            {
-                _ctfmode = value;
-            }
-        }
-        private int _currentUndo; 
-
-        public int currentUndo
-        {
-            get
-            {
-                return _currentUndo;
-            }
-            set
-            {
-                _currentUndo = value;
-            }
-        }
-        private ushort _depth; 
-
-        public ushort depth
-        {
-            get
-            {
-                return _depth;
-            }
-            set
-            {
-                _depth = value;
-            }
-        } // y       THIS IS STUPID, SHOULD HAVE BEEN Z
-        private int _drown = 70; 
-
-        public int drown
-        {
-            get
-            {
-                return _drown;
-            }
-            set
-            {
-                _drown = value;
-            }
-        }
-        private bool _edgeWater; 
-
-        public bool edgeWater
-        {
-            get
-            {
-                return _edgeWater;
-            }
-            set
-            {
-                _edgeWater = value;
-            }
-        }
-        private int _fall = 9; 
-
-        public int fall
-        {
-            get
-            {
-                return _fall;
-            }
-            set
-            {
-                _fall = value;
-            }
-        }
-        private bool _finite; 
-
-        public bool finite
-        {
-            get
-            {
-                return _finite;
-            }
-            set
-            {
-                _finite = value;
-            }
-        }
-        private bool _fishstill; 
-
-        public bool fishstill
-        {
-            get
-            {
-                return _fishstill;
-            }
-            set
-            {
-                _fishstill = value;
-            }
-        }
-        private bool _growTrees; 
-
-        public bool growTrees
-        {
-            get
-            {
-                return _growTrees;
-            }
-            set
-            {
-                _growTrees = value;
-            }
-        }
-        private bool _guns = true; 
-
-        public bool guns
-        {
-            get
-            {
-                return _guns;
-            }
-            set
-            {
-                _guns = value;
-            }
-        }
-        private ushort _height; 
-
-        public ushort height
-        {
-            get
-            {
-                return _height;
-            }
-            set
-            {
-                _height = value;
-            }
-        } // z      THIS IS STUPID, SHOULD HAVE BEEN Y
-        private int _id; 
-
-        public int id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
-        private byte _jailroty; 
-
-        public byte jailroty
-        {
-            get
-            {
-                return _jailroty;
-            }
-            set
-            {
-                _jailroty = value;
-            }
-        }
-        private byte _jailrotx; 
-
-        public byte jailrotx
-        {
-            get
-            {
-                return _jailrotx;
-            }
-            set
-            {
-                _jailrotx = value;
-            }
-        }
-
-        private ushort _jailz; 
-
-        public ushort jailz
-        {
-            get
-            {
-                return _jailz;
-            }
-            set
-            {
-                _jailz = value;
-            }
-        }
-        private ushort _jaily; 
-
-        public ushort jaily
-        {
-            get
-            {
-                return _jaily;
-            }
-            set
-            {
-                _jaily = value;
-            }
-        }
-        private ushort _jailx; 
-
-        public ushort jailx
-        {
-            get
-            {
-                return _jailx;
-            }
-            set
-            {
-                _jailx = value;
-            }
-        }
-        private int _lastCheck; 
-
-        public int lastCheck
-        {
-            get
-            {
-                return _lastCheck;
-            }
-            set
-            {
-                _lastCheck = value;
-            }
-        }
-        private int _lastUpdate; 
-
-        public int lastUpdate
-        {
-            get
-            {
-                return _lastUpdate;
-            }
-            set
-            {
-                _lastUpdate = value;
-            }
-        }
-        private bool _leafDecay; 
-
-        public bool leafDecay
-        {
-            get
-            {
-                return _leafDecay;
-            }
-            set
-            {
-                _leafDecay = value;
-            }
-        }
-        private bool _loadOnGoto = true; 
-
-        public bool loadOnGoto
-        {
-            get
-            {
-                return _loadOnGoto;
-            }
-            set
-            {
-                _loadOnGoto = value;
-            }
-        }
-        private string _motd = "ignore"; 
-
-        public string motd
-        {
-            get
-            {
-                return _motd;
-            }
-            set
-            {
-                _motd = value;
-            }
-        }
-        private string _name; 
-
-        public string name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        private int _overload = 1500; 
-
-        public int overload
-        {
-            get
-            {
-                return _overload;
-            }
-            set
-            {
-                _overload = value;
-            }
-        }
-        private LevelPermission _perbuildmax = LevelPermission.Nobody; 
-
-        public LevelPermission perbuildmax
-        {
-            get
-            {
-                return _perbuildmax;
-            }
-            set
-            {
-                _perbuildmax = value;
-            }
-        }
-
-        private LevelPermission _permissionbuild = LevelPermission.Builder; 
-
-        public LevelPermission permissionbuild
-        {
-            get
-            {
-                return _permissionbuild;
-            }
-            set
-            {
-                _permissionbuild = value;
-            }
-        }
-        // What ranks can go to this map (excludes banned)
-
-        private LevelPermission _permissionvisit = LevelPermission.Guest; 
-
-        public LevelPermission permissionvisit
-        {
-            get
-            {
-                return _permissionvisit;
-            }
-            set
-            {
-                _permissionvisit = value;
-            }
-        }
-        private LevelPermission _pervisitmax = LevelPermission.Nobody; 
-
-        public LevelPermission pervisitmax
-        {
-            get
-            {
-                return _pervisitmax;
-            }
-            set
-            {
-                _pervisitmax = value;
-            }
-        }
-
-        private bool _physPause; 
-
-        public bool physPause
-        {
-            get
-            {
-                return _physPause;
-            }
-            set
-            {
-                _physPause = value;
-            }
-        }
-        private DateTime _physResume; 
-
-        public DateTime physResume
-        {
-            get
-            {
-                return _physResume;
-            }
-            set
-            {
-                _physResume = value;
-            }
-        }
-        private Thread _physThread; 
-
-        public Thread physThread
-        {
-            get
-            {
-                return _physThread;
-            }
-            set
-            {
-                _physThread = value;
-            }
-        }
-        private Timer _physTimer = new Timer(1000); 
-
-        public Timer physTimer
-        {
-            get
-            {
-                return _physTimer;
-            }
-            set
-            {
-                _physTimer = value;
-            }
-        }
-        private int _physics; 
-
-        public int physics
-        {
-            get
-            {
-                return _physics;
-            }
-            set
-            {
-                _physics = value;
-            }
-        }
-        private bool _randomFlow = true; 
-
-        public bool randomFlow
-        {
-            get
-            {
-                return _randomFlow;
-            }
-            set
-            {
-                _randomFlow = value;
-            }
-        }
-        private bool _realistic = true; 
-
-        public bool realistic
-        {
-            get
-            {
-                return _realistic;
-            }
-            set
-            {
-                _realistic = value;
-            }
-        }
-        private byte _rotx; 
-
-        public byte rotx
-        {
-            get
-            {
-                return _rotx;
-            }
-            set
-            {
-                _rotx = value;
-            }
-        }
-        private byte _roty; 
-
-        public byte roty
-        {
-            get
-            {
-                return _roty;
-            }
-            set
-            {
-                _roty = value;
-            }
-        }
-        private bool _rp = true; 
-
-        public bool rp
-        {
-            get
-            {
-                return _rp;
-            }
-            set
-            {
-                _rp = value;
-            }
-        }
-        private ushort _spawnx; 
-
-        public ushort spawnx
-        {
-            get
-            {
-                return _spawnx;
-            }
-            set
-            {
-                _spawnx = value;
-            }
-        }
-        private ushort _spawny; 
-
-        public ushort spawny
-        {
-            get
-            {
-                return _spawny;
-            }
-            set
-            {
-                _spawny = value;
-            }
-        }
-        private ushort _spawnz; 
-
-        public ushort spawnz
-        {
-            get
-            {
-                return _spawnz;
-            }
-            set
-            {
-                _spawnz = value;
-            }
-        }
-
-        private int _speedPhysics = 250; 
-
-        public int speedPhysics
-        {
-            get
-            {
-                return _speedPhysics;
-            }
-            set
-            {
-                _speedPhysics = value;
-            }
-        }
+                                                 // Holds random flow data for liqiud physics
+
+        public bool Death;
+        public ExtrasCollection Extras = new ExtrasCollection();
+        public bool GrassDestroy = true;
+        public bool GrassGrow = true;
+        public bool Instant;
+        public bool Killer = true;
+        public List<UndoPos> UndoBuffer = new List<UndoPos>();
+        public List<Zone> ZoneList;
+        public bool ai = true;
+        public bool backedup;
+        public List<BlockPos> blockCache = new List<BlockPos>();
+        public byte[] blocks;
+
+        public bool cancelsave1;
+        public bool cancelunload;
+        public bool changed;
+        public bool countdowninprogress;
+        public bool ctfmode;
+        public int currentUndo;
+        public ushort depth; // y       THIS IS STUPID, SHOULD HAVE BEEN Z
+        public int drown = 70;
+        public bool edgeWater;
+        public int fall = 9;
+        public bool finite;
+        public bool fishstill;
+        public bool growTrees;
+        public bool guns = true;
+        public ushort height; // z      THIS IS STUPID, SHOULD HAVE BEEN Y
+        public int id;
+        public byte jailrotx, jailroty;
+
+        public ushort jailx, jaily, jailz;
+        public int lastCheck;
+        public int lastUpdate;
+        public bool leafDecay;
+        public bool loadOnGoto = true;
+        public string motd = "ignore";
+        public string name;
+        public int overload = 1500;
+        public LevelPermission perbuildmax = LevelPermission.Nobody;
+
+        public LevelPermission permissionbuild = LevelPermission.Builder;
+                               // What ranks can go to this map (excludes banned)
+
+        public LevelPermission permissionvisit = LevelPermission.Guest;
+        public LevelPermission pervisitmax = LevelPermission.Nobody;
+
+        public bool physPause;
+        public DateTime physResume;
+        public Thread physThread;
+        public Timer physTimer = new Timer(1000);
+        public int physics;
+        public bool randomFlow = true;
+        public bool realistic = true;
+        public byte rotx;
+        public byte roty;
+        public bool rp = true;
+        public ushort spawnx;
+        public ushort spawny;
+        public ushort spawnz;
+
+        public int speedPhysics = 250;
         //public LevelTextures textures;
 
-        private string _theme = "Normal"; 
-
-        public string theme
-        {
-            get
-            {
-                return _theme;
-            }
-            set
-            {
-                _theme = value;
-            }
-        }
-        private bool _unload = true; 
-
-        public bool unload
-        {
-            get
-            {
-                return _unload;
-            }
-            set
-            {
-                _unload = value;
-            }
-        }
-        private ushort _width; 
-
-        public ushort width
-        {
-            get
-            {
-                return _width;
-            }
-            set
-            {
-                _width = value;
-            }
-        } // x
-        private bool _worldChat = true; 
-
-        public bool worldChat
-        {
-            get
-            {
-                return _worldChat;
-            }
-            set
-            {
-                _worldChat = value;
-            }
-        }
-        private bool _bufferblocks = Server.bufferblocks; 
-
-        public bool bufferblocks
-        {
-            get
-            {
-                return _bufferblocks;
-            }
-            set
-            {
-                _bufferblocks = value;
-            }
-        }
-        private List<Block1.block> _blockqueue = new List<Block1.block>(); 
-
-        public List<Block1.block> blockqueue
-        {
-            get
-            {
-                return _blockqueue;
-            }
-            set
-            {
-                _blockqueue = value;
-            }
-        }
+        public string theme = "Normal";
+        public bool unload = true;
+        public ushort width; // x
+        public bool worldChat = true;
+        public bool bufferblocks = Server.bufferblocks;
+        public List<BlockQueue.block> blockqueue = new List<BlockQueue.block>();
 
         public List<C4.C4s> C4list = new List<C4.C4s>();
 
@@ -942,10 +170,10 @@ namespace MCForge
             }
 
             name = n;
-            blocks = new byte[width * depth * height];
+            blocks = new byte[width*depth*height];
             ZoneList = new List<Zone>();
 
-            var half = (ushort)(depth / 2);
+            var half = (ushort) (depth/2);
             switch (type)
             {
                 case "flat":
@@ -984,7 +212,7 @@ namespace MCForge
                         for (z = 0; z < height; ++z)
                             for (y = 0; y < depth; ++y)
                                 if (y == 0 || y == depth - 1 || x == 0 || x == width - 1 || z == 0 || z == height - 1)
-                                    SetTile(x, y, z, (byte)random.Next(21, 36));
+                                    SetTile(x, y, z, (byte) random.Next(21, 36));
 
                     break;
 
@@ -1005,7 +233,7 @@ namespace MCForge
                                     {
                                         for (int i = 1; i < (depth - y); ++i)
                                         {
-                                            SetTile(x, (ushort)(depth - i), z, Block.lava);
+                                            SetTile(x, (ushort) (depth - i), z, Block.lava);
                                         }
                                     }
                                 }
@@ -1020,15 +248,13 @@ namespace MCForge
                     Server.MapGen.GenerateMap(this, type, seed, useSeed);
                     break;
 
-                //no need for default
+                    //no need for default
             }
-            spawnx = (ushort)(width / 2);
-            spawny = (ushort)(depth * 0.75f);
-            spawnz = (ushort)(height / 2);
-            /*rotx = 0*/
-            ;
-            /*roty = 0*/
-            ;
+            spawnx = (ushort) (width/2);
+            spawny = (ushort) (depth*0.75f);
+            spawnz = (ushort) (height/2);
+            rotx = 0;
+            roty = 0;
             //textures = new LevelTextures(this);
             //season = new SeasonsCore(this);
         }
@@ -1072,7 +298,7 @@ namespace MCForge
 
         public void CopyBlocks(byte[] source, int offset)
         {
-            blocks = new byte[width * depth * height];
+            blocks = new byte[width*depth*height];
             Array.Copy(source, offset, blocks, 0, blocks.Length);
 
             for (int i = 0; i < blocks.Length; i++)
@@ -1120,7 +346,7 @@ namespace MCForge
             }
             if (TntWarsGame.Find(this) != null)
             {
-                foreach (MCForge.player pl in TntWarsGame.Find(this).Players)
+                foreach (TntWarsGame.player pl in TntWarsGame.Find(this).Players)
                 {
                     pl.p.CurrentTntGameNumber = -1;
                     Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
@@ -1153,7 +379,7 @@ namespace MCForge
                 GC.WaitForPendingFinalizers();
 
                 if (!silent) Player.GlobalMessageOps("&3" + name + Server.DefaultColor + " was unloaded.");
-                Server.s.Log(string.Format(CultureInfo.CurrentCulture, "{0} was unloaded.", name));
+                Server.s.Log(string.Format("{0} was unloaded.", name));
             }
             return true;
         }
@@ -1173,9 +399,9 @@ namespace MCForge
                 foreach (BlockPos bP in tempCache)
                 {
                     int deleted = bP.deleted ? 1 : 0;
-                    transaction.Execute(String.Format(CultureInfo.CurrentCulture, template, bP.name,
-                                                      bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int)bP.x,
-                                                      (int)bP.y, (int)bP.z, bP.type, deleted));
+                    transaction.Execute(String.Format(template, bP.name,
+                                                      bP.TimePerformed.ToString("yyyy-MM-dd HH:mm:ss"), (int) bP.x,
+                                                      (int) bP.y, (int) bP.z, bP.type, deleted));
                 }
                 transaction.Commit();
             }
@@ -1217,8 +443,8 @@ namespace MCForge
 
             foreach (Level level in Server.levels)
             {
-                if (level.name.ToLower(CultureInfo.CurrentCulture) == levelName) return level;
-                if (level.name.ToLower(CultureInfo.CurrentCulture).IndexOf(levelName.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) == -1) continue;
+                if (level.name.ToLower() == levelName) return level;
+                if (level.name.ToLower().IndexOf(levelName.ToLower()) == -1) continue;
                 if (tempLevel == null) tempLevel = level;
                 else returnNull = true;
             }
@@ -1228,7 +454,7 @@ namespace MCForge
 
         public static Level FindExact(string levelName)
         {
-            return Server.levels.Find(lvl => levelName.ToLower(CultureInfo.CurrentCulture) == lvl.name.ToLower(CultureInfo.CurrentCulture));
+            return Server.levels.Find(lvl => levelName.ToLower() == lvl.name.ToLower());
         }
 
         public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type)
@@ -1239,7 +465,7 @@ namespace MCForge
         public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type, bool addaction)
         {
             string errorLocation = "start";
-        retry:
+            retry:
             try
             {
                 if (x < 0 || y < 0 || z < 0) return;
@@ -1346,7 +572,7 @@ namespace MCForge
                                     }
                                     else
                                     {
-                                        if (Zn.Owner.ToLower(CultureInfo.CurrentCulture) == p.name.ToLower(CultureInfo.CurrentCulture) && !p.ZoneCheck)
+                                        if (Zn.Owner.ToLower() == p.name.ToLower() && !p.ZoneCheck)
                                         {
                                             AllowBuild = true;
                                             break;
@@ -1375,7 +601,7 @@ namespace MCForge
 
                     if (!AllowBuild || p.ZoneCheck)
                     {
-                        if (!(Owners != null && String.IsNullOrEmpty(Owners))) Player.SendMessage(p, "This zone belongs to &b" + Owners.Remove(0, 2) + ".");
+                        if (Owners != "") Player.SendMessage(p, "This zone belongs to &b" + Owners.Remove(0, 2) + ".");
                         else Player.SendMessage(p, "This zone belongs to no one.");
 
                         p.ZoneSpam = DateTime.Now;
@@ -1389,7 +615,7 @@ namespace MCForge
                 #endregion
 
                 errorLocation = "Map rank checking";
-                if ((Owners != null && String.IsNullOrEmpty(Owners)))
+                if (Owners == "")
                 {
                     if (p.group.Permission < permissionbuild && (!inZone || !AllowBuild))
                     {
@@ -1400,7 +626,7 @@ namespace MCForge
                 }
 
                 errorLocation = "Map Max Rank Checking";
-                if ((Owners != null && String.IsNullOrEmpty(Owners)))
+                if (Owners == "")
                 {
                     if (p.group.Permission > perbuildmax && (!inZone || !AllowBuild))
                     {
@@ -1486,42 +712,42 @@ namespace MCForge
                     SW.WriteLine("#Level properties for " + level.name);
                     SW.WriteLine("#Drown-time in seconds is [drown time] * 200 / 3 / 1000");
                     SW.WriteLine("Theme = " + level.theme);
-                    SW.WriteLine("Physics = " + level.physics.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Physics speed = " + level.speedPhysics.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Physics overload = " + level.overload.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Finite mode = " + level.finite.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Animal AI = " + level.ai.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Edge water = " + level.edgeWater.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Survival death = " + level.Death.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Fall = " + level.fall.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Drown = " + level.drown.ToString(CultureInfo.CurrentCulture));
+                    SW.WriteLine("Physics = " + level.physics.ToString());
+                    SW.WriteLine("Physics speed = " + level.speedPhysics.ToString());
+                    SW.WriteLine("Physics overload = " + level.overload.ToString());
+                    SW.WriteLine("Finite mode = " + level.finite.ToString());
+                    SW.WriteLine("Animal AI = " + level.ai.ToString());
+                    SW.WriteLine("Edge water = " + level.edgeWater.ToString());
+                    SW.WriteLine("Survival death = " + level.Death.ToString());
+                    SW.WriteLine("Fall = " + level.fall.ToString());
+                    SW.WriteLine("Drown = " + level.drown.ToString());
                     SW.WriteLine("MOTD = " + level.motd);
-                    SW.WriteLine("JailX = " + level.jailx.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("JailY = " + level.jaily.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("JailZ = " + level.jailz.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("Unload = " + level.unload.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("WorldChat = " + level.worldChat.ToString(CultureInfo.CurrentCulture));
+                    SW.WriteLine("JailX = " + level.jailx.ToString());
+                    SW.WriteLine("JailY = " + level.jaily.ToString());
+                    SW.WriteLine("JailZ = " + level.jailz.ToString());
+                    SW.WriteLine("Unload = " + level.unload.ToString());
+                    SW.WriteLine("WorldChat = " + level.worldChat.ToString());
                     SW.WriteLine("PerBuild = " +
-                                 (Group.Exists(PermissionToName(level.permissionbuild).ToLower(CultureInfo.CurrentCulture))
-                                      ? PermissionToName(level.permissionbuild).ToLower(CultureInfo.CurrentCulture)
+                                 (Group.Exists(PermissionToName(level.permissionbuild).ToLower())
+                                      ? PermissionToName(level.permissionbuild).ToLower()
                                       : PermissionToName(LevelPermission.Builder)));
                     SW.WriteLine("PerVisit = " +
-                                 (Group.Exists(PermissionToName(level.permissionvisit).ToLower(CultureInfo.CurrentCulture))
-                                      ? PermissionToName(level.permissionvisit).ToLower(CultureInfo.CurrentCulture)
+                                 (Group.Exists(PermissionToName(level.permissionvisit).ToLower())
+                                      ? PermissionToName(level.permissionvisit).ToLower()
                                       : PermissionToName(LevelPermission.Guest)));
                     SW.WriteLine("PerBuildMax = " +
-                                 (Group.Exists(PermissionToName(level.perbuildmax).ToLower(CultureInfo.CurrentCulture))
-                                      ? PermissionToName(level.perbuildmax).ToLower(CultureInfo.CurrentCulture)
+                                 (Group.Exists(PermissionToName(level.perbuildmax).ToLower())
+                                      ? PermissionToName(level.perbuildmax).ToLower()
                                       : PermissionToName(LevelPermission.Nobody)));
                     SW.WriteLine("PerVisitMax = " +
-                                 (Group.Exists(PermissionToName(level.pervisitmax).ToLower(CultureInfo.CurrentCulture))
-                                      ? PermissionToName(level.pervisitmax).ToLower(CultureInfo.CurrentCulture)
+                                 (Group.Exists(PermissionToName(level.pervisitmax).ToLower())
+                                      ? PermissionToName(level.pervisitmax).ToLower()
                                       : PermissionToName(LevelPermission.Nobody)));
-                    SW.WriteLine("Guns = " + level.guns.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("LeafDecay = " + level.leafDecay.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("RandomFlow = " + level.randomFlow.ToString(CultureInfo.CurrentCulture));
-                    SW.WriteLine("GrowTrees = " + level.growTrees.ToString(CultureInfo.CurrentCulture));
+                    SW.WriteLine("Guns = " + level.guns.ToString());
+                    SW.WriteLine("LoadOnGoto = " + level.loadOnGoto.ToString());
+                    SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
+                    SW.WriteLine("RandomFlow = " + level.randomFlow.ToString());
+                    SW.WriteLine("GrowTrees = " + level.growTrees.ToString());
                 }
             }
             catch (Exception)
@@ -1531,7 +757,7 @@ namespace MCForge
         }
 
         public void Blockchange(ushort x, ushort y, ushort z, byte type, bool overRide = false, string extraInfo = "")
-        //Block change made by physics
+            //Block change made by physics
         {
             if (x < 0 || y < 0 || z < 0) return;
             if (x >= width || y >= depth || z >= height) return;
@@ -1583,7 +809,7 @@ namespace MCForge
                 SetTile(x, y, z, type); //Updates server level blocks
 
                 if (physics > 0)
-                    if (Block.Physics(type) || !(extraInfo != null && String.IsNullOrEmpty(extraInfo))) AddCheck(PosToInt(x, y, z), extraInfo);
+                    if (Block.Physics(type) || extraInfo != "") AddCheck(PosToInt(x, y, z), extraInfo);
             }
             catch
             {
@@ -1635,7 +861,7 @@ namespace MCForge
                 if (changed || !File.Exists(path) || Override)
                 {
                     GZipStream gs;
-                    using (FileStream fs = File.Create(string.Format(CultureInfo.CurrentCulture, "{0}.back", path)))
+                    using (FileStream fs = File.Create(string.Format("{0}.back", path)))
                     {
                         gs = new GZipStream(fs, CompressionMode.Compress);
 
@@ -1651,14 +877,14 @@ namespace MCForge
                         BitConverter.GetBytes(spawny).CopyTo(header, 10);
                         header[12] = rotx;
                         header[13] = roty;
-                        header[14] = (byte)permissionvisit;
-                        header[15] = (byte)permissionbuild;
+                        header[14] = (byte) permissionvisit;
+                        header[15] = (byte) permissionbuild;
                         gs.Write(header, 0, header.Length);
                         var level = new byte[blocks.Length];
                         for (int i = 0; i < blocks.Length; ++i)
                         {
                             if (blocks[i] < 57)
-                            //CHANGED THIS TO INCOPARATE SOME MORE SPACE THAT I NEEDED FOR THE door_orange_air ETC.
+                                //CHANGED THIS TO INCOPARATE SOME MORE SPACE THAT I NEEDED FOR THE door_orange_air ETC.
                             {
                                 level[i] = blocks[i];
                             }
@@ -1670,14 +896,14 @@ namespace MCForge
                         gs.Write(level, 0, level.Length);
                         gs.Close();
 
-                        File.Delete(string.Format(CultureInfo.CurrentCulture, "{0}.backup", path));
-                        File.Copy(string.Format(CultureInfo.CurrentCulture, "{0}.back", path), path + ".backup");
+                        File.Delete(string.Format("{0}.backup", path));
+                        File.Copy(string.Format("{0}.back", path), path + ".backup");
                         File.Delete(path);
-                        File.Move(string.Format(CultureInfo.CurrentCulture, "{0}.back", path), path);
+                        File.Move(string.Format("{0}.back", path), path);
 
                         SaveSettings(this);
 
-                        Server.s.Log(string.Format(CultureInfo.CurrentCulture, "SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
+                        Server.s.Log(string.Format("SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
                                                    Player.players.Count, Server.players));
                         changed = false;
 
@@ -1739,23 +965,23 @@ namespace MCForge
             {
                 int backupNumber = 1;
                 string backupPath = @Server.backupLocation;
-                if (Directory.Exists(string.Format(CultureInfo.CurrentCulture, "{0}/{1}", backupPath, name)))
+                if (Directory.Exists(string.Format("{0}/{1}", backupPath, name)))
                 {
-                    backupNumber = Directory.GetDirectories(string.Format(CultureInfo.CurrentCulture, "{0}/" + name, backupPath)).Length + 1;
+                    backupNumber = Directory.GetDirectories(string.Format("{0}/" + name, backupPath)).Length + 1;
                 }
                 else
                 {
                     Directory.CreateDirectory(backupPath + "/" + name);
                 }
-                string path = string.Format(CultureInfo.CurrentCulture, "{0}/" + name + "/" + backupNumber, backupPath);
-                if (!(backupName != null && String.IsNullOrEmpty(backupName)))
+                string path = string.Format("{0}/" + name + "/" + backupNumber, backupPath);
+                if (backupName != "")
                 {
-                    path = string.Format(CultureInfo.CurrentCulture, "{0}/" + name + "/" + backupName, backupPath);
+                    path = string.Format("{0}/" + name + "/" + backupName, backupPath);
                 }
                 Directory.CreateDirectory(path);
 
-                string BackPath = string.Format(CultureInfo.CurrentCulture, "{0}/{1}.lvl", path, name);
-                string current = string.Format(CultureInfo.CurrentCulture, "levels/{0}.lvl", name);
+                string BackPath = string.Format("{0}/{1}.lvl", path, name);
+                string current = string.Format("levels/{0}.lvl", name);
                 try
                 {
                     File.Copy(current, BackPath, true);
@@ -1765,7 +991,7 @@ namespace MCForge
                 catch (Exception e)
                 {
                     Server.ErrorLog(e);
-                    Server.s.Log(string.Format(CultureInfo.CurrentCulture, "FAILED TO INCREMENTAL BACKUP :{0}", name));
+                    Server.s.Log(string.Format("FAILED TO INCREMENTAL BACKUP :{0}", name));
                     return -1;
                 }
             }
@@ -1804,7 +1030,7 @@ namespace MCForge
             }
             CreateLeveldb(givenName);
 
-            string path = string.Format(CultureInfo.CurrentCulture, "levels/{0}.lvl", givenName);
+            string path = string.Format("levels/{0}.lvl", givenName);
             if (File.Exists(path))
             {
                 FileStream fs = File.OpenRead(path);
@@ -1853,7 +1079,7 @@ namespace MCForge
 
                     var level = new Level(givenName, vars[0], vars[2], vars[1], "empty")
                                     {
-                                        permissionbuild = (LevelPermission)30,
+                                        permissionbuild = (LevelPermission) 30,
                                         spawnx = vars[3],
                                         spawnz = vars[4],
                                         spawny = vars[5],
@@ -1865,7 +1091,7 @@ namespace MCForge
 
                     level.setPhysics(phys);
 
-                    var blocks = new byte[level.width * level.height * level.depth];
+                    var blocks = new byte[level.width*level.height*level.depth];
                     gs.Read(blocks, 0, blocks.Length);
                     level.blocks = blocks;
                     gs.Close();
@@ -1878,20 +1104,20 @@ namespace MCForge
                         Zone Zn;
                         for (int i = 0; i < ZoneDB.Rows.Count; ++i)
                         {
-                            Zn.smallX = ushort.Parse(ZoneDB.Rows[i]["SmallX"].ToString(), CultureInfo.CurrentCulture);
-                            Zn.smallY = ushort.Parse(ZoneDB.Rows[i]["SmallY"].ToString(), CultureInfo.CurrentCulture);
-                            Zn.smallZ = ushort.Parse(ZoneDB.Rows[i]["SmallZ"].ToString(), CultureInfo.CurrentCulture);
-                            Zn.bigX = ushort.Parse(ZoneDB.Rows[i]["BigX"].ToString(), CultureInfo.CurrentCulture);
-                            Zn.bigY = ushort.Parse(ZoneDB.Rows[i]["BigY"].ToString(), CultureInfo.CurrentCulture);
-                            Zn.bigZ = ushort.Parse(ZoneDB.Rows[i]["BigZ"].ToString(), CultureInfo.CurrentCulture);
+                            Zn.smallX = ushort.Parse(ZoneDB.Rows[i]["SmallX"].ToString());
+                            Zn.smallY = ushort.Parse(ZoneDB.Rows[i]["SmallY"].ToString());
+                            Zn.smallZ = ushort.Parse(ZoneDB.Rows[i]["SmallZ"].ToString());
+                            Zn.bigX = ushort.Parse(ZoneDB.Rows[i]["BigX"].ToString());
+                            Zn.bigY = ushort.Parse(ZoneDB.Rows[i]["BigY"].ToString());
+                            Zn.bigZ = ushort.Parse(ZoneDB.Rows[i]["BigZ"].ToString());
                             Zn.Owner = ZoneDB.Rows[i]["Owner"].ToString();
                             level.ZoneList.Add(Zn);
                         }
                     }
 
-                    level.jailx = (ushort)(level.spawnx * 32);
-                    level.jaily = (ushort)(level.spawny * 32);
-                    level.jailz = (ushort)(level.spawnz * 32);
+                    level.jailx = (ushort) (level.spawnx*32);
+                    level.jaily = (ushort) (level.spawny*32);
+                    level.jailz = (ushort) (level.spawnz*32);
                     level.jailrotx = level.rotx;
                     level.jailroty = level.roty;
 
@@ -1904,9 +1130,9 @@ namespace MCForge
                         for (int i = 0; i < foundDB.Rows.Count; ++i)
                         {
                             if (
-                                !Block.portal(level.GetTile(ushort.Parse(foundDB.Rows[i]["EntryX"].ToString(), CultureInfo.CurrentCulture),
-                                                            ushort.Parse(foundDB.Rows[i]["EntryY"].ToString(), CultureInfo.CurrentCulture),
-                                                            ushort.Parse(foundDB.Rows[i]["EntryZ"].ToString(), CultureInfo.CurrentCulture))))
+                                !Block.portal(level.GetTile(ushort.Parse(foundDB.Rows[i]["EntryX"].ToString()),
+                                                            ushort.Parse(foundDB.Rows[i]["EntryY"].ToString()),
+                                                            ushort.Parse(foundDB.Rows[i]["EntryZ"].ToString()))))
                             {
                                 Database.executeQuery("DELETE FROM `Portals" + givenName + "` WHERE EntryX=" +
                                                       foundDB.Rows[i]["EntryX"] + " AND EntryY=" +
@@ -1920,9 +1146,9 @@ namespace MCForge
                         for (int i = 0; i < foundDB.Rows.Count; ++i)
                         {
                             if (
-                                !Block.mb(level.GetTile(ushort.Parse(foundDB.Rows[i]["X"].ToString(), CultureInfo.CurrentCulture),
-                                                        ushort.Parse(foundDB.Rows[i]["Y"].ToString(), CultureInfo.CurrentCulture),
-                                                        ushort.Parse(foundDB.Rows[i]["Z"].ToString(), CultureInfo.CurrentCulture))))
+                                !Block.mb(level.GetTile(ushort.Parse(foundDB.Rows[i]["X"].ToString()),
+                                                        ushort.Parse(foundDB.Rows[i]["Y"].ToString()),
+                                                        ushort.Parse(foundDB.Rows[i]["Z"].ToString()))))
                             {
                                 Database.executeQuery("DELETE FROM `Messages" + givenName + "` WHERE X=" +
                                                       foundDB.Rows[i]["X"] + " AND Y=" + foundDB.Rows[i]["Y"] +
@@ -1950,21 +1176,21 @@ namespace MCForge
                             try
                             {
                                 if (line[0] == '#') continue;
-                                string value = line.Substring(line.IndexOf(" = ", StringComparison.CurrentCulture) + 3);
+                                string value = line.Substring(line.IndexOf(" = ") + 3);
 
-                                switch (line.Substring(0, line.IndexOf(" = ", StringComparison.CurrentCulture)).ToLower(CultureInfo.CurrentCulture))
+                                switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                                 {
                                     case "theme":
                                         level.theme = value;
                                         break;
                                     case "physics":
-                                        level.setPhysics(int.Parse(value, CultureInfo.CurrentCulture));
+                                        level.setPhysics(int.Parse(value));
                                         break;
                                     case "physics speed":
-                                        level.speedPhysics = int.Parse(value, CultureInfo.CurrentCulture);
+                                        level.speedPhysics = int.Parse(value);
                                         break;
                                     case "physics overload":
-                                        level.overload = int.Parse(value, CultureInfo.CurrentCulture);
+                                        level.overload = int.Parse(value);
                                         break;
                                     case "finite mode":
                                         level.finite = bool.Parse(value);
@@ -1979,22 +1205,22 @@ namespace MCForge
                                         level.Death = bool.Parse(value);
                                         break;
                                     case "fall":
-                                        level.fall = int.Parse(value, CultureInfo.CurrentCulture);
+                                        level.fall = int.Parse(value);
                                         break;
                                     case "drown":
-                                        level.drown = int.Parse(value, CultureInfo.CurrentCulture);
+                                        level.drown = int.Parse(value);
                                         break;
                                     case "motd":
                                         level.motd = value;
                                         break;
                                     case "jailx":
-                                        level.jailx = ushort.Parse(value, CultureInfo.CurrentCulture);
+                                        level.jailx = ushort.Parse(value);
                                         break;
                                     case "jaily":
-                                        level.jaily = ushort.Parse(value, CultureInfo.CurrentCulture);
+                                        level.jaily = ushort.Parse(value);
                                         break;
                                     case "jailz":
-                                        level.jailz = ushort.Parse(value, CultureInfo.CurrentCulture);
+                                        level.jailz = ushort.Parse(value);
                                         break;
                                     case "unload":
                                         level.unload = bool.Parse(value);
@@ -2046,7 +1272,7 @@ namespace MCForge
                     {
                     }
 
-                    Server.s.Log(string.Format(CultureInfo.CurrentCulture, "Level \"{0}\" loaded.", level.name));
+                    Server.s.Log(string.Format("Level \"{0}\" loaded.", level.name));
                     if (LevelLoaded != null)
                         LevelLoaded(level);
                     return level;
@@ -2082,9 +1308,9 @@ namespace MCForge
                     try
                     {
                         if (line[0] == '#') continue;
-                        string value = line.Substring(line.IndexOf(" = ", StringComparison.CurrentCulture) + 3);
+                        string value = line.Substring(line.IndexOf(" = ") + 3);
 
-                        switch (line.Substring(0, line.IndexOf(" = ", StringComparison.CurrentCulture)).ToLower(CultureInfo.CurrentCulture))
+                        switch (line.Substring(0, line.IndexOf(" = ")).ToLower())
                         {
                             case "loadongoto":
                                 return bool.Parse(value);
@@ -2117,7 +1343,7 @@ namespace MCForge
                     Player.players.Where(
                         pl =>
                         pl.level == this &&
-                        (pl.group.Permission >= Server.opchatperm || Server.devs.Contains(pl.name.ToLower(CultureInfo.CurrentCulture)))))
+                        (pl.group.Permission >= Server.opchatperm || Server.devs.Contains(pl.name.ToLower()))))
             {
                 pl.SendMessage(message);
             }
@@ -2130,7 +1356,7 @@ namespace MCForge
                     Player.players.Where(
                         pl =>
                         pl.level == this &&
-                        (pl.group.Permission >= Server.adminchatperm || Server.devs.Contains(pl.name.ToLower(CultureInfo.CurrentCulture)))))
+                        (pl.group.Permission >= Server.adminchatperm || Server.devs.Contains(pl.name.ToLower()))))
             {
                 pl.SendMessage(message);
             }
@@ -2156,7 +1382,7 @@ namespace MCForge
             {
                 try
                 {
-                retry:
+                    retry:
                     if (wait > 0) Thread.Sleep(wait);
                     if (physics == 0 || ListCheck.Count == 0)
                     {
@@ -2169,9 +1395,9 @@ namespace MCForge
                     if (physics > 0) CalcPhysics();
 
                     TimeSpan Took = DateTime.Now - Start;
-                    wait = speedPhysics - (int)Took.TotalMilliseconds;
+                    wait = speedPhysics - (int) Took.TotalMilliseconds;
 
-                    if (wait < (int)(-overload * 0.75f))
+                    if (wait < (int) (-overload*0.75f))
                     {
                         Level Cause = this;
 
@@ -2208,22 +1434,22 @@ namespace MCForge
         {
             if (x < 0 || x >= width || y < 0 || y >= depth || z < 0 || z >= height)
                 return -1;
-            return x + (z * width) + (y * width * height);
+            return x + (z*width) + (y*width*height);
             //alternate method: (h * widthY + y) * widthX + x;
         }
 
         public void IntToPos(int pos, out ushort x, out ushort y, out ushort z)
         {
-            y = (ushort)(pos / width / height);
-            pos -= y * width * height;
-            z = (ushort)(pos / width);
-            pos -= z * width;
-            x = (ushort)pos;
+            y = (ushort) (pos/width/height);
+            pos -= y*width*height;
+            z = (ushort) (pos/width);
+            pos -= z*width;
+            x = (ushort) pos;
         }
 
         public int IntOffset(int pos, int x, int y, int z)
         {
-            return pos + x + z * width + y * width * height;
+            return pos + x + z*width + y*width*height;
         }
 
         public static LevelPermission PermissionFromName(string name)
@@ -2235,7 +1461,7 @@ namespace MCForge
         public static string PermissionToName(LevelPermission perm)
         {
             Group foundGroup = Group.findPerm(perm);
-            return foundGroup != null ? foundGroup.name : ((int)perm).ToString(CultureInfo.CurrentCulture);
+            return foundGroup != null ? foundGroup.name : ((int) perm).ToString();
         }
 
         public List<Player> getPlayers()
@@ -2281,8 +1507,8 @@ namespace MCForge
                                                   {
                                                       PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
                                                   }
-                                              newPhysic:
-                                                  if (!(foundInfo != null && String.IsNullOrEmpty(foundInfo)))
+                                                  newPhysic:
+                                                  if (foundInfo != "")
                                                   {
                                                       int currentLoop = 0;
                                                       if (!foundInfo.Contains("wait"))
@@ -2294,7 +1520,7 @@ namespace MCForge
 
                                                       foreach (string s in C.extraInfo.Split(' '))
                                                       {
-                                                          if (currentLoop % 2 == 0)
+                                                          if (currentLoop%2 == 0)
                                                           {
                                                               //Type of code
                                                               switch (s)
@@ -2303,7 +1529,7 @@ namespace MCForge
                                                                       wait = true;
                                                                       waitnum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
                                                                   case "door":
                                                                       door = true;
@@ -2313,7 +1539,7 @@ namespace MCForge
                                                           currentLoop++;
                                                       }
 
-                                                  startCheck:
+                                                      startCheck:
                                                       if (wait)
                                                       {
                                                           int storedInt = 0;
@@ -2324,42 +1550,42 @@ namespace MCForge
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 1, 0, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 1, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, -1, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 0, 1);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 0, -1);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                           }
 
@@ -2367,10 +1593,10 @@ namespace MCForge
                                                           {
                                                               wait = false;
                                                               C.extraInfo =
-                                                                  C.extraInfo.Substring(0, C.extraInfo.IndexOf("wait ", StringComparison.CurrentCulture)) +
+                                                                  C.extraInfo.Substring(0, C.extraInfo.IndexOf("wait ")) +
                                                                   C.extraInfo.Substring(
                                                                       C.extraInfo.IndexOf(' ',
-                                                                                          C.extraInfo.IndexOf("wait ", StringComparison.CurrentCulture) +
+                                                                                          C.extraInfo.IndexOf("wait ") +
                                                                                           5) + 1);
                                                               //C.extraInfo = C.extraInfo.Substring(8);
                                                               goto startCheck;
@@ -2385,23 +1611,23 @@ namespace MCForge
                                                       switch (blocks[C.b])
                                                       {
                                                           case Block.door_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door2_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door3_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door4_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door5_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door6_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door7_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door8_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door10_air:
-                                                          //door_air         Change any door blocks nearby into door_air
+                                                              //door_air         Change any door blocks nearby into door_air
                                                           case Block.door12_air:
                                                           case Block.door13_air:
                                                           case Block.door_iron_air:
@@ -2526,8 +1752,8 @@ namespace MCForge
                                                   {
                                                       PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
                                                   }
-                                              newPhysic:
-                                                  if (!(foundInfo != null && String.IsNullOrEmpty(foundInfo)))
+                                                  newPhysic:
+                                                  if (foundInfo != "")
                                                   {
                                                       int currentLoop = 0;
                                                       if (!foundInfo.Contains("wait"))
@@ -2550,7 +1776,7 @@ namespace MCForge
 
                                                       foreach (string s in C.extraInfo.Split(' '))
                                                       {
-                                                          if (currentLoop % 2 == 0)
+                                                          if (currentLoop%2 == 0)
                                                           {
                                                               //Type of code
                                                               switch (s)
@@ -2559,31 +1785,31 @@ namespace MCForge
                                                                       wait = true;
                                                                       waitnum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
                                                                   case "drop":
                                                                       drop = true;
                                                                       dropnum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
                                                                   case "dissipate":
                                                                       dissipate = true;
                                                                       dissipatenum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
                                                                   case "revert":
                                                                       revert = true;
                                                                       reverttype =
                                                                           Byte.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
                                                                   case "explode":
                                                                       explode = true;
                                                                       explodenum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
 
                                                                   case "finite":
@@ -2594,7 +1820,7 @@ namespace MCForge
                                                                       rainbow = true;
                                                                       rainbownum =
                                                                           int.Parse(
-                                                                              C.extraInfo.Split(' ')[currentLoop + 1], CultureInfo.CurrentCulture);
+                                                                              C.extraInfo.Split(' ')[currentLoop + 1]);
                                                                       break;
 
                                                                   case "door":
@@ -2605,7 +1831,7 @@ namespace MCForge
                                                           currentLoop++;
                                                       }
 
-                                                  startCheck:
+                                                      startCheck:
                                                       if (wait)
                                                       {
                                                           int storedInt = 0;
@@ -2616,42 +1842,42 @@ namespace MCForge
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 1, 0, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 1, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, -1, 0);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 0, 1);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                               storedInt = IntOffset(C.b, 0, 0, -1);
                                                               if (Block.tDoor(blocks[storedInt]))
                                                               {
                                                                   AddUpdate(storedInt, Block.air, false,
                                                                             "wait 10 door 1 revert " +
-                                                                            blocks[storedInt].ToString(CultureInfo.CurrentCulture));
+                                                                            blocks[storedInt].ToString());
                                                               }
                                                           }
 
@@ -2659,10 +1885,10 @@ namespace MCForge
                                                           {
                                                               wait = false;
                                                               C.extraInfo =
-                                                                  C.extraInfo.Substring(0, C.extraInfo.IndexOf("wait ", StringComparison.CurrentCulture)) +
+                                                                  C.extraInfo.Substring(0, C.extraInfo.IndexOf("wait ")) +
                                                                   C.extraInfo.Substring(
                                                                       C.extraInfo.IndexOf(' ',
-                                                                                          C.extraInfo.IndexOf("wait ", StringComparison.CurrentCulture) +
+                                                                                          C.extraInfo.IndexOf("wait ") +
                                                                                           5) + 1);
                                                               //C.extraInfo = C.extraInfo.Substring(8);
                                                               goto startCheck;
@@ -2731,16 +1957,16 @@ namespace MCForge
                                                               }
                                                           if (drop)
                                                               if (rand.Next(1, 100) <= dropnum)
-                                                                  if (GetTile(x, (ushort)(y - 1), z) == Block.air ||
-                                                                      GetTile(x, (ushort)(y - 1), z) == Block.lava ||
-                                                                      GetTile(x, (ushort)(y - 1), z) == Block.water)
+                                                                  if (GetTile(x, (ushort) (y - 1), z) == Block.air ||
+                                                                      GetTile(x, (ushort) (y - 1), z) == Block.lava ||
+                                                                      GetTile(x, (ushort) (y - 1), z) == Block.water)
                                                                   {
                                                                       if (rand.Next(1, 100) <
-                                                                          int.Parse(C.extraInfo.Split(' ')[1], CultureInfo.CurrentCulture))
+                                                                          int.Parse(C.extraInfo.Split(' ')[1]))
                                                                       {
                                                                           if (
                                                                               AddUpdate(
-                                                                                  PosToInt(x, (ushort)(y - 1), z),
+                                                                                  PosToInt(x, (ushort) (y - 1), z),
                                                                                   blocks[C.b], false, C.extraInfo))
                                                                           {
                                                                               AddUpdate(C.b, Block.air);
@@ -2936,11 +2162,11 @@ namespace MCForge
                                                                       {
                                                                           AddUpdate(C.b, Block.air);
                                                                           //was placed near sponge
-                                                                          if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                          if (C.extraInfo.IndexOf("wait") == -1)
                                                                               C.time = 255;
                                                                       }
 
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1 &&
+                                                                      if (C.extraInfo.IndexOf("wait") == -1 &&
                                                                           liquids.ContainsKey(C.b))
                                                                           if (liquids[C.b][0] && liquids[C.b][1] &&
                                                                               liquids[C.b][2] && liquids[C.b][3] &&
@@ -2978,7 +2204,7 @@ namespace MCForge
                                                                           //was placed near sponge
                                                                       }
 
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                      if (C.extraInfo.IndexOf("wait") == -1)
                                                                           C.time = 255;
                                                                   }
                                                               }
@@ -2997,7 +2223,7 @@ namespace MCForge
                                                                   case Block.air:
                                                                       AddUpdate(PosToInt(x, (ushort)(y - 1), z),
                                                                                 Block.WaterDown);
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1) C.time = 255;
+                                                                      if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
                                                                       break;
                                                                   case Block.air_flood_down:
                                                                       break;
@@ -3020,7 +2246,7 @@ namespace MCForge
                                                                           PhysWater(
                                                                               PosToInt(x, y, (ushort)(z - 1)),
                                                                               blocks[C.b]);
-                                                                          if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                          if (C.extraInfo.IndexOf("wait") == -1)
                                                                               C.time = 255;
                                                                       }
                                                                       break;
@@ -3035,7 +2261,7 @@ namespace MCForge
                                                                   case Block.air:
                                                                       AddUpdate(PosToInt(x, (ushort)(y - 1), z),
                                                                                 Block.LavaDown);
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1) C.time = 255;
+                                                                      if (C.extraInfo.IndexOf("wait") == -1) C.time = 255;
                                                                       break;
                                                                   case Block.air_flood_down:
                                                                       break;
@@ -3058,7 +2284,7 @@ namespace MCForge
                                                                           PhysLava(
                                                                               PosToInt(x, y, (ushort)(z - 1)),
                                                                               blocks[C.b]);
-                                                                          if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                          if (C.extraInfo.IndexOf("wait") == -1)
                                                                               C.time = 255;
                                                                       }
                                                                       break;
@@ -3191,11 +2417,11 @@ namespace MCForge
                                                                       {
                                                                           AddUpdate(C.b, Block.air);
                                                                           //was placed near sponge
-                                                                          if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                          if (C.extraInfo.IndexOf("wait") == -1)
                                                                               C.time = 255;
                                                                       }
 
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1 &&
+                                                                      if (C.extraInfo.IndexOf("wait") == -1 &&
                                                                           liquids.ContainsKey(C.b))
                                                                           if (liquids[C.b][0] && liquids[C.b][1] &&
                                                                               liquids[C.b][2] && liquids[C.b][3] &&
@@ -3227,7 +2453,7 @@ namespace MCForge
                                                                           //was placed near sponge
                                                                       }
 
-                                                                      if (C.extraInfo.IndexOf("wait", StringComparison.CurrentCulture) == -1)
+                                                                      if (C.extraInfo.IndexOf("wait") == -1)
                                                                           C.time = 255;
                                                                   }
                                                               }
@@ -4201,7 +3427,7 @@ namespace MCForge
                                                                               AddUpdate(IntOffset(C.b, 0, -1, 0),
                                                                                         Block.obsidian, true,
                                                                                         "wait 5 revert " +
-                                                                                        Block.red.ToString(CultureInfo.CurrentCulture));
+                                                                                        Block.red.ToString());
 
                                                                               InnerChange = true;
                                                                               break;
@@ -4229,7 +3455,7 @@ namespace MCForge
                                                                               AddUpdate(IntOffset(C.b, 0, -1, 0),
                                                                                         Block.glass, true,
                                                                                         "wait 5 revert " +
-                                                                                        Block.op_air.ToString(CultureInfo.CurrentCulture));
+                                                                                        Block.op_air.ToString());
                                                                               InnerChange = true;
                                                                               break;
                                                                           }
@@ -4632,7 +3858,7 @@ namespace MCForge
                                                                           {
                                                                               AddUpdate(IntOffset(oldNum, 0, 0, 0),
                                                                                         Block.snaketail, true,
-                                                                                        string.Format(CultureInfo.CurrentCulture, "wait 5 revert {0}", Block.air));
+                                                                                        string.Format("wait 5 revert {0}", Block.air));
                                                                               goto removeSelf_Snake;
                                                                           }
 
@@ -4669,7 +3895,7 @@ namespace MCForge
                                                                               AddUpdate(IntOffset(oldNum, 0, 0, 0),
                                                                                         Block.snaketail, true,
                                                                                         "wait 5 revert " +
-                                                                                        Block.air.ToString(CultureInfo.CurrentCulture));
+                                                                                        Block.air.ToString());
                                                                               goto removeSelf_Snake;
                                                                           }
 
@@ -4706,7 +3932,7 @@ namespace MCForge
                                                                               AddUpdate(IntOffset(oldNum, 0, 0, 0),
                                                                                         Block.snaketail, true,
                                                                                         "wait 5 revert " +
-                                                                                        Block.air.ToString(CultureInfo.CurrentCulture));
+                                                                                        Block.air.ToString());
                                                                               goto removeSelf_Snake;
                                                                           }
 
@@ -4743,7 +3969,7 @@ namespace MCForge
                                                                               AddUpdate(IntOffset(oldNum, 0, 0, 0),
                                                                                         Block.snaketail, true,
                                                                                         "wait 5 revert " +
-                                                                                        Block.air.ToString(CultureInfo.CurrentCulture));
+                                                                                        Block.air.ToString());
                                                                               goto removeSelf_Snake;
                                                                           }
 
@@ -5902,13 +5128,13 @@ namespace MCForge
                     ushort x, y, z;
                     IntToPos(b, out x, out y, out z);
                     AddCheck(b, extraInfo);
-                    Blockchange(x, y, z, (byte)type, true);
+                    Blockchange(x, y, z, (byte) type, true);
                     return true;
                 }
 
                 if (!ListUpdate.Exists(Update => Update.b == b))
                 {
-                    ListUpdate.Add(new Update(b, (byte)type, extraInfo));
+                    ListUpdate.Add(new Update(b, (byte) type, extraInfo));
                     return true;
                 }
                 else
@@ -5916,7 +5142,7 @@ namespace MCForge
                     if (type == 12 || type == 13)
                     {
                         ListUpdate.RemoveAll(Update => Update.b == b);
-                        ListUpdate.Add(new Update(b, (byte)type, extraInfo));
+                        ListUpdate.Add(new Update(b, (byte) type, extraInfo));
                         return true;
                     }
                 }
@@ -5972,7 +5198,7 @@ namespace MCForge
                                               {
                                                   if (s == "revert")
                                                   {
-                                                      Blockchange(x, y, z, Byte.Parse(C.extraInfo.Split(' ')[i + 1], CultureInfo.CurrentCulture));
+                                                      Blockchange(x, y, z, Byte.Parse(C.extraInfo.Split(' ')[i + 1]));
                                                       break;
                                                   }
                                                   i++;
@@ -6247,8 +5473,8 @@ namespace MCForge
 
             switch (blocks[b])
             {
-                //case 8:     //active water
-                //case 10:    //active_lava
+                    //case 8:     //active water
+                    //case 10:    //active_lava
                 case 6: //shrub
                 case 12: //sand
                 case 13: //gravel
@@ -6486,48 +5712,46 @@ namespace MCForge
         }
 
         //================================================================================================================
-        //  COMMENTED BY CODEIT.RIGHT
-        //        private void PhysFall(byte newBlock, ushort x, ushort y, ushort z, bool random)
-        //        {
-        //            var randNum = new Random();
-        //            byte b;
-        //            if (!random)
-        //            {
-        //                b = GetTile((ushort) (x + 1), y, z);
-        //                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x + 1), y, z, newBlock);
-        //                b = GetTile((ushort) (x - 1), y, z);
-        //                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x - 1), y, z, newBlock);
-        //                b = GetTile(x, y, (ushort) (z + 1));
-        //                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z + 1), newBlock);
-        //                b = GetTile(x, y, (ushort) (z - 1));
-        //                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z - 1), newBlock);
-        //            }
-        //            else
-        //            {
-        //                if (GetTile((ushort) (x + 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
-        //                    Blockchange((ushort) (x + 1), y, z, newBlock);
-        //                if (GetTile((ushort) (x - 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
-        //                    Blockchange((ushort) (x - 1), y, z, newBlock);
-        //                if (GetTile(x, y, (ushort) (z + 1)) == Block.air && randNum.Next(1, 10) < 3)
-        //                    Blockchange(x, y, (ushort) (z + 1), newBlock);
-        //                if (GetTile(x, y, (ushort) (z - 1)) == Block.air && randNum.Next(1, 10) < 3)
-        //                    Blockchange(x, y, (ushort) (z - 1), newBlock);
-        //            }
-        //        }
+        private void PhysFall(byte newBlock, ushort x, ushort y, ushort z, bool random)
+        {
+            var randNum = new Random();
+            byte b;
+            if (!random)
+            {
+                b = GetTile((ushort) (x + 1), y, z);
+                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x + 1), y, z, newBlock);
+                b = GetTile((ushort) (x - 1), y, z);
+                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x - 1), y, z, newBlock);
+                b = GetTile(x, y, (ushort) (z + 1));
+                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z + 1), newBlock);
+                b = GetTile(x, y, (ushort) (z - 1));
+                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z - 1), newBlock);
+            }
+            else
+            {
+                if (GetTile((ushort) (x + 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange((ushort) (x + 1), y, z, newBlock);
+                if (GetTile((ushort) (x - 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange((ushort) (x - 1), y, z, newBlock);
+                if (GetTile(x, y, (ushort) (z + 1)) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange(x, y, (ushort) (z + 1), newBlock);
+                if (GetTile(x, y, (ushort) (z - 1)) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange(x, y, (ushort) (z - 1), newBlock);
+            }
+        }
 
         //================================================================================================================
-        //  COMMENTED BY CODEIT.RIGHT
-        //        private void PhysReplace(int b, byte typeA, byte typeB) //replace any typeA with typeB
-        //        {
-        //            if (b == -1)
-        //            {
-        //                return;
-        //            }
-        //            if (blocks[b] == typeA)
-        //            {
-        //                AddUpdate(b, typeB);
-        //            }
-        //        }
+        private void PhysReplace(int b, byte typeA, byte typeB) //replace any typeA with typeB
+        {
+            if (b == -1)
+            {
+                return;
+            }
+            if (blocks[b] == typeA)
+            {
+                AddUpdate(b, typeB);
+            }
+        }
 
         //================================================================================================================
         private bool PhysLeaf(int b)
@@ -6543,13 +5767,13 @@ namespace MCForge
                 {
                     for (zz = -dist; zz <= dist; zz++)
                     {
-                        type = GetTile((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz));
+                        type = GetTile((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz));
                         if (type == Block.trunk)
-                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = 0;
+                            leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz))] = 0;
                         else if (type == Block.leaf)
-                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -2;
+                            leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz))] = -2;
                         else
-                            leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] = -1;
+                            leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz))] = -1;
                     }
                 }
             }
@@ -6564,55 +5788,55 @@ namespace MCForge
                         {
                             try
                             {
-                                if (leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz))] == i - 1)
+                                if (leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz))] == i - 1)
                                 {
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx - 1), (ushort)(y + yy),
-                                                                    (ushort)(z + zz))) &&
-                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx - 1), (ushort) (y + yy),
+                                                                    (ushort) (z + zz))) &&
+                                        leaves[PosToInt((ushort) (x + xx - 1), (ushort) (y + yy), (ushort) (z + zz))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx - 1), (ushort)(y + yy), (ushort)(z + zz))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx - 1), (ushort) (y + yy), (ushort) (z + zz))] =
+                                            (sbyte) i;
 
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx + 1), (ushort)(y + yy),
-                                                                    (ushort)(z + zz))) &&
-                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx + 1), (ushort) (y + yy),
+                                                                    (ushort) (z + zz))) &&
+                                        leaves[PosToInt((ushort) (x + xx + 1), (ushort) (y + yy), (ushort) (z + zz))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx + 1), (ushort)(y + yy), (ushort)(z + zz))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx + 1), (ushort) (y + yy), (ushort) (z + zz))] =
+                                            (sbyte) i;
 
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy - 1),
-                                                                    (ushort)(z + zz))) &&
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx), (ushort) (y + yy - 1),
+                                                                    (ushort) (z + zz))) &&
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy - 1), (ushort) (z + zz))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy - 1), (ushort)(z + zz))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy - 1), (ushort) (z + zz))] =
+                                            (sbyte) i;
 
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy + 1),
-                                                                    (ushort)(z + zz))) &&
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx), (ushort) (y + yy + 1),
+                                                                    (ushort) (z + zz))) &&
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy + 1), (ushort) (z + zz))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy + 1), (ushort)(z + zz))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy + 1), (ushort) (z + zz))] =
+                                            (sbyte) i;
 
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy),
-                                                                    (ushort)(z + zz - 1))) &&
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx), (ushort) (y + yy),
+                                                                    (ushort) (z + zz - 1))) &&
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz - 1))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz - 1))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz - 1))] =
+                                            (sbyte) i;
 
                                     if (
-                                        leaves.ContainsKey(PosToInt((ushort)(x + xx), (ushort)(y + yy),
-                                                                    (ushort)(z + zz + 1))) &&
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] ==
+                                        leaves.ContainsKey(PosToInt((ushort) (x + xx), (ushort) (y + yy),
+                                                                    (ushort) (z + zz + 1))) &&
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz + 1))] ==
                                         -2)
-                                        leaves[PosToInt((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz + 1))] =
-                                            (sbyte)i;
+                                        leaves[PosToInt((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz + 1))] =
+                                            (sbyte) i;
                                 }
                             }
                             catch
@@ -6629,22 +5853,21 @@ namespace MCForge
         }
 
         //================================================================================================================
-        //  COMMENTED BY CODEIT.RIGHT
-        //        private byte PhysFlowDirections(int b, bool down = true, bool up = false)
-        //        {
-        //            byte dir = 0;
-        //            ushort x, y, z;
-        //            IntToPos(b, out x, out y, out z);
-        //
-        //            if (GetTile((ushort) (x + 1), y, z) == Block.air) dir++;
-        //            if (GetTile((ushort) (x - 1), y, z) == Block.air) dir++;
-        //            if (up && GetTile(x, (ushort) (y + 1), z) == Block.air) dir++;
-        //            if (down && GetTile(x, (ushort) (y - 1), z) == Block.air) dir++;
-        //            if (GetTile(x, y, (ushort) (z + 1)) == Block.air) dir++;
-        //            if (GetTile(x, y, (ushort) (z - 1)) == Block.air) dir++;
-        //
-        //            return dir;
-        //        }
+        private byte PhysFlowDirections(int b, bool down = true, bool up = false)
+        {
+            byte dir = 0;
+            ushort x, y, z;
+            IntToPos(b, out x, out y, out z);
+
+            if (GetTile((ushort) (x + 1), y, z) == Block.air) dir++;
+            if (GetTile((ushort) (x - 1), y, z) == Block.air) dir++;
+            if (up && GetTile(x, (ushort) (y + 1), z) == Block.air) dir++;
+            if (down && GetTile(x, (ushort) (y - 1), z) == Block.air) dir++;
+            if (GetTile(x, y, (ushort) (z + 1)) == Block.air) dir++;
+            if (GetTile(x, y, (ushort) (z - 1)) == Block.air) dir++;
+
+            return dir;
+        }
 
         //================================================================================================================
 
@@ -6699,42 +5922,42 @@ namespace MCForge
             {
                 try
                 {
-                    PhysDoor((ushort)(x + 1), y, z, instaUpdate);
+                    PhysDoor((ushort) (x + 1), y, z, instaUpdate);
                 }
                 catch
                 {
                 }
                 try
                 {
-                    PhysDoor((ushort)(x - 1), y, z, instaUpdate);
+                    PhysDoor((ushort) (x - 1), y, z, instaUpdate);
                 }
                 catch
                 {
                 }
                 try
                 {
-                    PhysDoor(x, y, (ushort)(z + 1), instaUpdate);
+                    PhysDoor(x, y, (ushort) (z + 1), instaUpdate);
                 }
                 catch
                 {
                 }
                 try
                 {
-                    PhysDoor(x, y, (ushort)(z - 1), instaUpdate);
+                    PhysDoor(x, y, (ushort) (z - 1), instaUpdate);
                 }
                 catch
                 {
                 }
                 try
                 {
-                    PhysDoor(x, (ushort)(y - 1), z, instaUpdate);
+                    PhysDoor(x, (ushort) (y - 1), z, instaUpdate);
                 }
                 catch
                 {
                 }
                 try
                 {
-                    PhysDoor(x, (ushort)(y + 1), z, instaUpdate);
+                    PhysDoor(x, (ushort) (y + 1), z, instaUpdate);
                 }
                 catch
                 {
@@ -6758,15 +5981,15 @@ namespace MCForge
                                             Blockchange(x, y, z, Block.air);
                                             return;
                                         }
-                                        int b1 = IntOffset(C.b, xx * 3, yy * 3, zz * 3);
-                                        int b2 = IntOffset(C.b, xx * 2, yy * 2, zz * 2);
+                                        int b1 = IntOffset(C.b, xx*3, yy*3, zz*3);
+                                        int b2 = IntOffset(C.b, xx*2, yy*2, zz*2);
                                         bool unblocked = blocks[b1] == Block.air && blocks[b2] == Block.air &&
                                                          !ListUpdate.Exists(Update => Update.b == b1) &&
                                                          !ListUpdate.Exists(Update => Update.b == b2);
                                         if (unblocked)
                                         {
-                                            AddUpdate(IntOffset(C.b, xx * 3, yy * 3, zz * 3), Block.rockethead);
-                                            AddUpdate(IntOffset(C.b, xx * 2, yy * 2, zz * 2), Block.fire);
+                                            AddUpdate(IntOffset(C.b, xx*3, yy*3, zz*3), Block.rockethead);
+                                            AddUpdate(IntOffset(C.b, xx*2, yy*2, zz*2), Block.fire);
                                         }
                                     }
                                     else if (b == Block.firework)
@@ -6794,7 +6017,7 @@ namespace MCForge
                                             Blockchange(x, y, z, Block.air);
                                             return;
                                         }
-                                        MakeExplosion((ushort)(x + xx), (ushort)(y + yy), (ushort)(z + zz), 0);
+                                        MakeExplosion((ushort) (x + xx), (ushort) (y + yy), (ushort) (z + zz), 0);
                                     }
                                 }
                             }
@@ -6827,7 +6050,7 @@ namespace MCForge
 
             if (Block.tDoor(blocks[foundInt]))
             {
-                AddUpdate(foundInt, Block.air, false, "wait 16 door 1 revert " + blocks[foundInt].ToString(CultureInfo.CurrentCulture));
+                AddUpdate(foundInt, Block.air, false, "wait 16 door 1 revert " + blocks[foundInt].ToString());
             }
 
             if (Block.odoor(blocks[foundInt]) != Block.Zero) AddUpdate(foundInt, Block.odoor(blocks[foundInt]), true);
@@ -6849,10 +6072,10 @@ namespace MCForge
                     for (zz = (z - (size + 1)); zz <= (z + (size + 1)); ++zz)
                         try
                         {
-                            b = GetTile((ushort)xx, (ushort)yy, (ushort)zz);
+                            b = GetTile((ushort) xx, (ushort) yy, (ushort) zz);
                             if (b == Block.tnt)
                             {
-                                AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
+                                AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.smalltnt);
                             }
                             else if (b != Block.smalltnt && b != Block.bigtnt && b != Block.nuketnt)
                             {
@@ -6864,15 +6087,15 @@ namespace MCForge
                                     }
                                 }
                                 if (rand.Next(1, 11) <= 4)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.tntexplosion);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.air);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.air);
                                 else
-                                    AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), "drop 50 dissipate 8");
+                                    AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), "drop 50 dissipate 8");
                             }
                             else
                             {
-                                AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
+                                AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz));
                             }
                         }
                         catch
@@ -6883,7 +6106,7 @@ namespace MCForge
                 for (yy = (y - (size + 2)); yy <= (y + (size + 2)); ++yy)
                     for (zz = (z - (size + 2)); zz <= (z + (size + 2)); ++zz)
                     {
-                        b = GetTile((ushort)xx, (ushort)yy, (ushort)zz);
+                        b = GetTile((ushort) xx, (ushort) yy, (ushort) zz);
                         if (rand.Next(1, 10) < 7)
                             if (Block.Convert(b) != Block.tnt)
                             {
@@ -6895,19 +6118,19 @@ namespace MCForge
                                     }
                                 }
                                 if (rand.Next(1, 11) <= 4)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.tntexplosion);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.air);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.air);
                                 else
-                                    AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), "drop 50 dissipate 8");
+                                    AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), "drop 50 dissipate 8");
                             }
                         if (b == Block.tnt)
                         {
-                            AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
+                            AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.smalltnt);
                         }
                         else if (b == Block.smalltnt || b == Block.bigtnt || b == Block.nuketnt)
                         {
-                            AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
+                            AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz));
                         }
                     }
 
@@ -6915,7 +6138,7 @@ namespace MCForge
                 for (yy = (y - (size + 3)); yy <= (y + (size + 3)); ++yy)
                     for (zz = (z - (size + 3)); zz <= (z + (size + 3)); ++zz)
                     {
-                        b = GetTile((ushort)xx, (ushort)yy, (ushort)zz);
+                        b = GetTile((ushort) xx, (ushort) yy, (ushort) zz);
                         if (rand.Next(1, 10) < 3)
                             if (Block.Convert(b) != Block.tnt)
                             {
@@ -6927,19 +6150,19 @@ namespace MCForge
                                     }
                                 }
                                 if (rand.Next(1, 11) <= 4)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.tntexplosion);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.tntexplosion);
                                 else if (rand.Next(1, 11) <= 8)
-                                    AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.air);
+                                    AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.air);
                                 else
-                                    AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), "drop 50 dissipate 8");
+                                    AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), "drop 50 dissipate 8");
                             }
                         if (b == Block.tnt)
                         {
-                            AddUpdate(PosToInt((ushort)xx, (ushort)yy, (ushort)zz), Block.smalltnt);
+                            AddUpdate(PosToInt((ushort) xx, (ushort) yy, (ushort) zz), Block.smalltnt);
                         }
                         else if (b == Block.smalltnt || b == Block.bigtnt || b == Block.nuketnt)
                         {
-                            AddCheck(PosToInt((ushort)xx, (ushort)yy, (ushort)zz));
+                            AddCheck(PosToInt((ushort) xx, (ushort) yy, (ushort) zz));
                         }
                     }
             //Server.s.Log("Explosion: " + (DateTime.Now - start).TotalMilliseconds.ToString());
@@ -6958,9 +6181,9 @@ namespace MCForge
             // Not using override, since override = true makes it more likely that a colored block will be generated with no extraInfo, because it sets a Check for that position with no extraInfo.
             AddUpdate(PosToInt(x, y, z), Block.air);
 
-            for (xx = (ushort)(x - (size + 1)); xx <= (ushort)(x + (size + 1)); ++xx)
-                for (yy = (ushort)(y - (size + 1)); yy <= (ushort)(y + (size + 1)); ++yy)
-                    for (zz = (ushort)(z - (size + 1)); zz <= (ushort)(z + (size + 1)); ++zz)
+            for (xx = (ushort) (x - (size + 1)); xx <= (ushort) (x + (size + 1)); ++xx)
+                for (yy = (ushort) (y - (size + 1)); yy <= (ushort) (y + (size + 1)); ++yy)
+                    for (zz = (ushort) (z - (size + 1)); zz <= (ushort) (z + (size + 1)); ++zz)
                         if (GetTile(xx, yy, zz) == Block.air)
                             if (rand.Next(1, 40) < 2)
                                 AddUpdate(PosToInt(xx, yy, zz),
@@ -6976,14 +6199,14 @@ namespace MCForge
             var bufferfiniteWater = new List<int>();
             var bufferfiniteWaterList = new List<Pos>();
 
-            if (GetTile(x, (ushort)(y - 1), z) == Block.air)
+            if (GetTile(x, (ushort) (y - 1), z) == Block.air)
             {
-                AddUpdate(PosToInt(x, (ushort)(y - 1), z), blocks[C.b], false, C.extraInfo);
+                AddUpdate(PosToInt(x, (ushort) (y - 1), z), blocks[C.b], false, C.extraInfo);
                 AddUpdate(C.b, Block.air);
                 C.extraInfo = "";
             }
-            else if (GetTile(x, (ushort)(y - 1), z) == Block.waterstill ||
-                     GetTile(x, (ushort)(y - 1), z) == Block.lavastill)
+            else if (GetTile(x, (ushort) (y - 1), z) == Block.waterstill ||
+                     GetTile(x, (ushort) (y - 1), z) == Block.lavastill)
             {
                 AddUpdate(C.b, Block.air);
                 C.extraInfo = "";
@@ -7002,9 +6225,9 @@ namespace MCForge
 
                 Pos pos;
 
-                for (var xx = (ushort)(x - 2); xx <= x + 2; ++xx)
+                for (var xx = (ushort) (x - 2); xx <= x + 2; ++xx)
                 {
-                    for (var zz = (ushort)(z - 2); zz <= z + 2; ++zz)
+                    for (var zz = (ushort) (z - 2); zz <= z + 2; ++zz)
                     {
                         pos.x = xx;
                         pos.z = zz;
@@ -7015,13 +6238,13 @@ namespace MCForge
                 foreach (int i in bufferfiniteWater)
                 {
                     pos = bufferfiniteWaterList[i];
-                    if (GetTile(pos.x, (ushort)(y - 1), pos.z) == Block.air &&
+                    if (GetTile(pos.x, (ushort) (y - 1), pos.z) == Block.air &&
                         GetTile(pos.x, y, pos.z) == Block.air)
                     {
-                        if (pos.x < x) pos.x = (ushort)(Math.Floor((double)(pos.x + x) / 2));
-                        else pos.x = (ushort)(Math.Ceiling((double)(pos.x + x) / 2));
-                        if (pos.z < z) pos.z = (ushort)(Math.Floor((double)(pos.z + z) / 2));
-                        else pos.z = (ushort)(Math.Ceiling((double)(pos.z + z) / 2));
+                        if (pos.x < x) pos.x = (ushort) (Math.Floor((double) (pos.x + x)/2));
+                        else pos.x = (ushort) (Math.Ceiling((double) (pos.x + x)/2));
+                        if (pos.z < z) pos.z = (ushort) (Math.Floor((double) (pos.z + z)/2));
+                        else pos.z = (ushort) (Math.Ceiling((double) (pos.z + z)/2));
 
                         if (GetTile(pos.x, y, pos.z) == Block.air)
                         {
@@ -7040,26 +6263,6 @@ namespace MCForge
         public struct Pos
         {
             public ushort x, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Pos x, Pos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         #endregion
@@ -7073,26 +6276,6 @@ namespace MCForge
             public string name;
             public byte type;
             public ushort x, y, z;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(BlockPos x, BlockPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(BlockPos x, BlockPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         #endregion
@@ -7105,26 +6288,6 @@ namespace MCForge
             public byte newType;
             public byte oldType;
             public DateTime timePerformed;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(UndoPos x, UndoPos y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(UndoPos x, UndoPos y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         #endregion
@@ -7136,26 +6299,6 @@ namespace MCForge
             public string Owner;
             public ushort bigX, bigY, bigZ;
             public ushort smallX, smallY, smallZ;
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool Equals(Object obj)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator ==(Zone x, Zone y)
-            {
-                throw new NotImplementedException();
-            }
-
-            public static bool operator !=(Zone x, Zone y)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         #endregion
@@ -7182,7 +6325,7 @@ namespace MCForge
             }
             public static sbyte NextCircuit(Level lvl)
             {
-                sbyte number = 1;
+                sbyte number = 1; 
                 foreach (C4s c4 in lvl.C4list)
                 {
                     number++;
@@ -7227,50 +6370,28 @@ namespace MCForge
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
+public class Check
+{
+    public int b;
+    public string extraInfo = "";
+    public byte time;
+    public MCForge.Player p;
 
+    public Check(int b, string extraInfo = "", MCForge.Player placer = null)
+    {
+        this.b = b;
+        time = 0;
+        this.extraInfo = extraInfo;
+        p = placer;
+    }
+}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 public class Update
 {
-    private int _b; 
-
-    public int b
-    {
-        get
-        {
-            return _b;
-        }
-        set
-        {
-            _b = value;
-        }
-    }
-    private string _extraInfo = ""; 
-
-    public string extraInfo
-    {
-        get
-        {
-            return _extraInfo;
-        }
-        set
-        {
-            _extraInfo = value;
-        }
-    }
-    private byte _type; 
-
-    public byte type
-    {
-        get
-        {
-            return _type;
-        }
-        set
-        {
-            _type = value;
-        }
-    }
+    public int b;
+    public string extraInfo = "";
+    public byte type;
 
     public Update(int b, byte type, string extraInfo = "")
     {

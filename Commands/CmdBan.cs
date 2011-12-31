@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using System.Globalization;
 
 namespace MCForge
 {
@@ -33,7 +32,7 @@ namespace MCForge
         {
             try
             {
-                if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+                if (message == "") { Help(p); return; }
                 bool stealth = false; bool totalBan = false;
                 if (message[0] == '#')
                 {
@@ -89,7 +88,7 @@ namespace MCForge
                         Player.SendMessage(p, "Invalid name \"" + message + "\".");
                         return;
                     }
-                    if (Server.devs.Contains(message.ToLower(CultureInfo.CurrentCulture)))
+                    if (Server.devs.Contains(message.ToLower()))
                     {
                         Player.SendMessage(p, "You can't ban a MCForge Developer!");
                         if (p != null)
@@ -119,7 +118,7 @@ namespace MCForge
                         Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
                         return;
                     }
-                    string oldgroup = foundGroup.name.ToString(CultureInfo.CurrentCulture);
+                    string oldgroup = foundGroup.name.ToString();
                     foundGroup.playerList.Remove(message);
                     foundGroup.playerList.Save();
                     if (p != null)
@@ -140,7 +139,7 @@ namespace MCForge
                         Player.SendMessage(p, "Invalid name \"" + who.name + "\".");
                         return;
                     }
-                    if (Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)))
+                    if (Server.devs.Contains(who.name.ToLower()))
                     {
                         Player.SendMessage(p, "You can't ban an MCForge Developer!");
                         if (p != null)
@@ -168,7 +167,7 @@ namespace MCForge
                         Player.SendMessage(p, "You cannot ban a person ranked equal or higher than you.");
                         return;
                     }
-                    string oldgroup = who.group.name.ToString(CultureInfo.CurrentCulture);
+                    string oldgroup = who.group.name.ToString();
                     who.group.playerList.Remove(message);
                     who.group.playerList.Save();
 
@@ -194,12 +193,12 @@ namespace MCForge
                 if (p != null)
                 {
                     Server.IRC.Say(message + " was banned by " + p.name + ".");
-                    Server.s.Log("BANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by " + p.name);
+                    Server.s.Log("BANNED: " + message.ToLower() + " by " + p.name);
                 }
                 else
                 {
                     Server.IRC.Say(message + " was banned by console.");
-                    Server.s.Log("BANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by console.");
+                    Server.s.Log("BANNED: " + message.ToLower() + " by console.");
                 }
 
                 if (totalBan == true)
