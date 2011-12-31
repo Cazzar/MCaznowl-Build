@@ -92,6 +92,7 @@
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
+    <Compile Include="Plugins\LevelEvents\OnLevelUnloadEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnBlockChangeEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMessageRecieveEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMySQLSaveEvent.cs" />
@@ -602,9 +603,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\TranslateService\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Plugins\LevelEvents\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
