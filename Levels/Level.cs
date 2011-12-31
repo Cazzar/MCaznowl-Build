@@ -288,6 +288,7 @@ namespace MCForge
         #endregion
 
         public event OnPhysicsUpdate PhysicsUpdate = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelUnload LevelUnload = null;
         public static event OnLevelSave LevelSave = null;
         public static event OnLevelSave onLevelSave = null;
@@ -328,6 +329,7 @@ namespace MCForge
             if (Server.lava.active && Server.lava.map == this) return false;
             if (LevelUnload != null)
                 LevelUnload(this);
+            OnLevelUnloadEvent.Call(this);
             if (cancelunload)
             {
                 Server.s.Log("Unload canceled by Plugin! (Map: " + name + ")");
