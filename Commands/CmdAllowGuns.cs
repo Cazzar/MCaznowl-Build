@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -67,7 +68,7 @@ namespace MCForge
             if (p != null)
             {
                 Level foundLevel;
-                if (message == "")
+                if ((message != null && String.IsNullOrEmpty(message)))
                 {
                     if (p.level.guns == true)
                     {
@@ -76,7 +77,7 @@ namespace MCForge
                         Level.SaveSettings(p.level);
                         foreach (Player pl in Player.players)
                         {
-                            if (pl.level.name.ToLower() == p.level.name.ToLower())
+                            if (pl.level.name.ToLower(CultureInfo.CurrentCulture) == p.level.name.ToLower(CultureInfo.CurrentCulture))
                             {
                                 pl.aiming = false;
                                 p.aiming = false;
@@ -95,7 +96,7 @@ namespace MCForge
                     }
                 }
 
-                if (message != "")
+                if (!(message != null && String.IsNullOrEmpty(message)))
                 {
                     foundLevel = Level.Find(message);
                     if (!File.Exists("levels/" + message + ".lvl"))
@@ -109,11 +110,11 @@ namespace MCForge
                         Level.SaveSettings(foundLevel);
                         foreach (Player pl in Player.players)
                         {
-                            if (pl.level.name.ToLower() == message.ToLower())
+                            if (pl.level.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
                             {
                                 pl.aiming = false;
                             }
-                            if (p.level.name.ToLower() == message.ToLower())
+                            if (p.level.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
                             {
                                 p.aiming = false;
 
@@ -151,7 +152,7 @@ namespace MCForge
                     Player.SendMessage(p, "Gun usage has been disabled on " + message + "!");
                     foreach (Player pl in Player.players)
                     {
-                        if (pl.level.name.ToLower() == message.ToLower())
+                        if (pl.level.name.ToLower(CultureInfo.CurrentCulture) == message.ToLower(CultureInfo.CurrentCulture))
                         {
                             pl.aiming = false;
                             return;

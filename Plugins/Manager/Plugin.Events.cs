@@ -31,23 +31,23 @@ namespace MCForge
         /// <param name="e">The event to check</param>
         /// <param name="p">The Player that event is related to</param>
         /// <returns>This returns true or false, true means its stopped, false means its not</returns>
-        public static bool IsPlayerEventCancled(PlayerEvents e, Player p)
+        public static bool IsPlayerEventCancled(PlayerEvent e, Player p)
         {
             switch (e)
             {
-                case PlayerEvents.BlockChange:
+                case PlayerEvent.BlockChange:
                     return p.cancelBlock;
-                case PlayerEvents.PlayerChat:
+                case PlayerEvent.PlayerChat:
                     return p.cancelchat;
-                case PlayerEvents.PlayerCommand:
+                case PlayerEvent.PlayerCommand:
                     return p.cancelcommand;
-                case PlayerEvents.PlayerMove:
+                case PlayerEvent.PlayerMove:
                     return p.cancelmove;
-                case PlayerEvents.MYSQLSave:
+                case PlayerEvent.MYSQLSave:
                     return p.cancelmysql;
-                case PlayerEvents.PlayerRankChange:
+                case PlayerEvent.PlayerRankChange:
                     return Group.cancelrank;
-                case PlayerEvents.MessageRecieve:
+                case PlayerEvent.MessageRecieve:
                     return p.cancelmessage;
                 default:
                     return false;
@@ -57,20 +57,20 @@ namespace MCForge
         /// Cancel a server event
         /// </summary>
         /// <param name="e">The event you want to cancel</param>
-        public static void CancelServerEvent(ServerEvents e)
+        public static void CancelServerEvent(ServerEvent e)
         {
             switch (e)
             {
-                case ServerEvents.ConsoleCommand:
+                case ServerEvent.ConsoleCommand:
                     Server.cancelcommand = true;
                     break;
-                case ServerEvents.ServerAdminLog:
+                case ServerEvent.ServerAdminLog:
                     Server.canceladmin = true;
                     break;
-                case ServerEvents.ServerLog:
+                case ServerEvent.ServerLog:
                     Server.cancellog = true;
                     break;
-                case ServerEvents.ServerOpLog:
+                case ServerEvent.ServerOpLog:
                     Server.canceloplog = true;
                     break;
             }
@@ -80,14 +80,14 @@ namespace MCForge
         /// </summary>
         /// <param name="e">The event to cancel</param>
         /// <param name="l">The level to cancel the event on</param>
-        public static void CancelLevelEvent(LevelEvents e, Level l)
+        public static void CancelLevelEvent(LevelEvent e, Level l)
         {
             switch (e)
             {
-                case LevelEvents.LevelUnload:
+                case LevelEvent.LevelUnload:
                     l.cancelunload = true;
                     break;
-                case LevelEvents.LevelSave:
+                case LevelEvent.LevelSave:
                     l.cancelsave1 = true;
                     break;
 
@@ -99,13 +99,13 @@ namespace MCForge
         /// <param name="e">The event you want to check</param>
         /// <param name="l">The level to check the event on</param>
         /// <returns></returns>
-        public static bool IsLevelEventCancel(LevelEvents e, Level l)
+        public static bool IsLevelEventCancel(LevelEvent e, Level l)
         {
             switch (e)
             {
-                case LevelEvents.LevelUnload:
+                case LevelEvent.LevelUnload:
                     return l.cancelunload;
-                case LevelEvents.LevelSave:
+                case LevelEvent.LevelSave:
                     return l.cancelsave1;
                 default:
                     return false;
@@ -116,14 +116,14 @@ namespace MCForge
         /// Cancel Global Level Event
         /// </summary>
         /// <param name="e">The event you want to cancel</param>
-        public static void CancelGlobalLevelEvent(GlobalLevelEvents e)
+        public static void CancelGlobalLevelEvent(GlobalLevelEvent e)
         {
             switch (e)
             {
-                case GlobalLevelEvents.LevelLoad:
+                case GlobalLevelEvent.LevelLoad:
                     Level.cancelload = true;
                     break;
-                case GlobalLevelEvents.LevelSave:
+                case GlobalLevelEvent.LevelSave:
                     Level.cancelsave = true;
                     break;
             }
@@ -133,13 +133,13 @@ namespace MCForge
         /// </summary>
         /// <param name="e">The event to check</param>
         /// <returns></returns>
-        public static bool IsGlobalLevelEventCanceled(GlobalLevelEvents e)
+        public static bool IsGlobalLevelEventCanceled(GlobalLevelEvent e)
         {
             switch (e)
             {
-                case GlobalLevelEvents.LevelLoad:
+                case GlobalLevelEvent.LevelLoad:
                     return Level.cancelload;
-                case GlobalLevelEvents.LevelSave:
+                case GlobalLevelEvent.LevelSave:
                     return Level.cancelsave;
                 default:
                     return false;
@@ -150,30 +150,30 @@ namespace MCForge
         /// </summary>
         /// <param name="e">The event that you want to cancel</param>
         /// <param name="p">The Player that event is related to</param>
-        public static void CancelPlayerEvent(PlayerEvents e, Player p) {
+        public static void CancelPlayerEvent(PlayerEvent e, Player p) {
             //TODO
             //Add some more events to be canceled
             switch (e)
             {
-                case PlayerEvents.BlockChange:
+                case PlayerEvent.BlockChange:
                     p.cancelBlock = true;
                     break;
-                case PlayerEvents.PlayerChat:
+                case PlayerEvent.PlayerChat:
                     p.cancelchat = true;
                     break;
-                case PlayerEvents.PlayerCommand:
+                case PlayerEvent.PlayerCommand:
                     p.cancelcommand = true;
                     break;
-                case PlayerEvents.PlayerMove:
+                case PlayerEvent.PlayerMove:
                     p.cancelmove = true;
                     break;
-                case PlayerEvents.MYSQLSave:
+                case PlayerEvent.MYSQLSave:
                     p.cancelmysql = true;
                     break;
-                case PlayerEvents.PlayerRankChange:
+                case PlayerEvent.PlayerRankChange:
                     Group.cancelrank = true;
                     break;
-                case PlayerEvents.MessageRecieve:
+                case PlayerEvent.MessageRecieve:
                     p.cancelmessage = true;
                     break;
             }

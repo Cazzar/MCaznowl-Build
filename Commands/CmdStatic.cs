@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -35,11 +36,11 @@ namespace MCForge
             p.ClearBlockchange();
             p.BlockAction = 0;
 
-            Player.SendMessage(p, "Static mode: &a" + p.staticCommands.ToString());
+            Player.SendMessage(p, "Static mode: &a" + p.staticCommands.ToString(CultureInfo.CurrentCulture));
 
             try
             {
-                if (message != "")
+                if (!(message != null && String.IsNullOrEmpty(message)))
                 {
                     if (message.IndexOf(' ') == -1)
                     {

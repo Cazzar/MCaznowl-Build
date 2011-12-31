@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -34,10 +35,10 @@ namespace MCForge
             CatchPos cpos;
             cpos.distance = 20;
 
-            if (message != "")
+            if (!(message != null && String.IsNullOrEmpty(message)))
                 try
                 {
-                    cpos.distance = int.Parse(message);
+                    cpos.distance = int.Parse(message, CultureInfo.CurrentCulture);
                 }
                 catch { Help(p); return; }
 
@@ -111,7 +112,47 @@ namespace MCForge
             Player.SendMessage(p, buffer.Count + " blocks.");
         }
 
-        struct CatchPos { public ushort x, y, z; public int distance; }
-        struct Pos { public ushort x, y, z; }
+        struct CatchPos { public ushort x, y, z; public int distance;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
+        struct Pos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
     }
 }

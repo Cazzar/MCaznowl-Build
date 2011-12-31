@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -16,7 +17,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             Player.SendMessage(p, "mc://127.0.0.1:25565/" + message + "/" + CalculateMD5Hash(message + Server.salt));
         }
 
@@ -31,7 +32,7 @@ namespace MCForge
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
             {
-                sb.Append(hash[i].ToString("X2"));
+                sb.Append(hash[i].ToString("X2", CultureInfo.CurrentCulture));
             }
             return sb.ToString();
         }

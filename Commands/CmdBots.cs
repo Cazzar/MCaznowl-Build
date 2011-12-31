@@ -34,14 +34,14 @@ namespace MCForge
             message = "";
             foreach (PlayerBot Pb in PlayerBot.playerbots)
             {
-                if (Pb.AIName != "") message += ", " + Pb.name + "(" + Pb.level.name + ")[" + Pb.AIName + "]";
+                if (!(Pb.AIName != null && String.IsNullOrEmpty(Pb.AIName))) message += ", " + Pb.name + "(" + Pb.level.name + ")[" + Pb.AIName + "]";
                 else if (Pb.hunt) message += ", " + Pb.name + "(" + Pb.level.name + ")[Hunt]";
                 else message += ", " + Pb.name + "(" + Pb.level.name + ")";
 
                 if (Pb.kill) message += "-kill";
             }
 
-            if (message != "") Player.SendMessage(p, "&1Bots: " + Server.DefaultColor + message.Remove(0, 2));
+            if (!(message != null && String.IsNullOrEmpty(message))) Player.SendMessage(p, "&1Bots: " + Server.DefaultColor + message.Remove(0, 2));
             else Player.SendMessage(p, "No bots are alive.");
         }
         public override void Help(Player p)

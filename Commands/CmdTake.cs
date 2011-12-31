@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -38,7 +39,7 @@ namespace MCForge
             if (who == p) { Player.SendMessage(p, "Sorry. Can't allow you to take money from yourself"); return; }
 
             int amountTaken;
-            try { amountTaken = int.Parse(message.Split(' ')[1]); }
+            try { amountTaken = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture); }
             catch { Player.SendMessage(p, "Invalid amount"); return; }
 
             if (who.money - amountTaken < 0) { Player.SendMessage(p, "Players cannot have less than 0 " + Server.moneys); return; }

@@ -30,9 +30,45 @@ namespace MCForge
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public CmdChain() { }
         // Fields
-        public int x;
-        public int y;
-        public int z;
+        private int _x; 
+
+        public int x
+        {
+            get
+            {
+                return _x;
+            }
+            set
+            {
+                _x = value;
+            }
+        }
+        private int _y; 
+
+        public int y
+        {
+            get
+            {
+                return _y;
+            }
+            set
+            {
+                _y = value;
+            }
+        }
+        private int _z; 
+
+        public int z
+        {
+            get
+            {
+                return _z;
+            }
+            set
+            {
+                _z = value;
+            }
+        }
 
         // Methods
         public override void Help(Player p)

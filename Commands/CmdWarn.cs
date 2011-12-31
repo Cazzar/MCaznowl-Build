@@ -32,7 +32,7 @@ namespace MCForge
         {
             string warnedby;
 
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             Player who = Player.Find(message.Split(' ')[0]);
 

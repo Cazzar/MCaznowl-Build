@@ -17,12 +17,25 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
     public sealed class CommandList
     {
-        public List<Command> commands = new List<Command>();
+        private List<Command> _commands = new List<Command>(); 
+
+        public List<Command> commands
+        {
+            get
+            {
+                return _commands;
+            }
+            set
+            {
+                _commands = value;
+            }
+        }
         public CommandList() { }
         public void Add(Command cmd) { commands.Add(cmd); }
         public void AddRange(List<Command> listCommands)
@@ -45,14 +58,14 @@ namespace MCForge
         public bool Contains(Command cmd) { return commands.Contains(cmd); }
         public bool Contains(string name)
         {
-            name = name.ToLower(); foreach (Command cmd in commands)
+            name = name.ToLower(CultureInfo.CurrentCulture); foreach (Command cmd in commands)
             {
-                if (cmd.name == name.ToLower()) { return true; }
+                if (cmd.name == name.ToLower(CultureInfo.CurrentCulture)) { return true; }
             } return false;
         }
         public Command Find(string name)
         {
-            name = name.ToLower(); foreach (Command cmd in commands)
+            name = name.ToLower(CultureInfo.CurrentCulture); foreach (Command cmd in commands)
             {
                 if (cmd.name == name || cmd.shortcut == name) { return cmd; }
             } return null;
@@ -60,9 +73,9 @@ namespace MCForge
 
         public string FindShort(string shortcut)
         {
-            if (shortcut == "") return "";
+            if ((shortcut != null && String.IsNullOrEmpty(shortcut))) return "";
 
-            shortcut = shortcut.ToLower();
+            shortcut = shortcut.ToLower(CultureInfo.CurrentCulture);
             foreach (Command cmd in commands)
             {
                 if (cmd.shortcut == shortcut) return cmd.name;

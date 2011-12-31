@@ -19,6 +19,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using MCForge.SQL;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -61,7 +62,7 @@ namespace MCForge
             message += "&f" + b + " = " + Block.Name(b);
             Player.SendMessage(p, message + Server.DefaultColor + ".");
             message = p.level.foundInfo(x, y, z);
-            if (message != "") Player.SendMessage(p, "Physics information: &a" + message);
+            if (!(message != null && String.IsNullOrEmpty(message))) Player.SendMessage(p, "Physics information: &a" + message);
 
             DataTable Blocks = Server.useMySQL ? MySQL.fillData("SELECT * FROM `Block" + p.level.name + "` WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z) : SQLite.fillData("SELECT * FROM Block" + p.level.name + " WHERE X=" + (int)x + " AND Y=" + (int)y + " AND Z=" + (int)z);
 
@@ -71,10 +72,10 @@ namespace MCForge
             {
                 foundOne = true;
                 Username = Blocks.Rows[i]["Username"].ToString();
-                TimePerformed = DateTime.Parse(Blocks.Rows[i]["TimePerformed"].ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+                TimePerformed = DateTime.Parse(Blocks.Rows[i]["TimePerformed"].ToString(), CultureInfo.CurrentCulture).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                 //Server.s.Log(Blocks.Rows[i]["Type"].ToString());
-                BlockUsed = Block.Name(Convert.ToByte(Blocks.Rows[i]["Type"])).ToString();
-                Deleted = Convert.ToBoolean(Blocks.Rows[i]["Deleted"]);
+                BlockUsed = Block.Name(Convert.ToByte(Blocks.Rows[i]["Type"], CultureInfo.CurrentCulture)).ToString(CultureInfo.CurrentCulture);
+                Deleted = Convert.ToBoolean(Blocks.Rows[i]["Deleted"], CultureInfo.CurrentCulture);
 
                 if (!Deleted)
                     Player.SendMessage(p, "&3Created by " + Server.FindColor(Username.Trim()) + Username.Trim() + Server.DefaultColor + ", using &3" + BlockUsed);
@@ -90,7 +91,7 @@ namespace MCForge
                 foundOne = true;
                 Deleted = inCache[i].deleted;
                 Username = inCache[i].name;
-                TimePerformed = inCache[i].TimePerformed.ToString("yyyy-MM-dd HH:mm:ss");
+                TimePerformed = inCache[i].TimePerformed.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture);
                 BlockUsed = Block.Name(inCache[i].type);
 
                 if (!Deleted)

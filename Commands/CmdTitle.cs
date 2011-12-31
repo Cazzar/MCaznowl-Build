@@ -17,6 +17,7 @@
 */
 using System;
 using MCForge.SQL;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             int pos = message.IndexOf(' ');
             Player who = Player.Find(message.Split(' ')[0]);
@@ -54,9 +55,9 @@ namespace MCForge
                 return;
             }
 
-            if (newTitle != "")
+            if (!(newTitle != null && String.IsNullOrEmpty(newTitle)))
             {
-                newTitle = newTitle.ToString().Trim().Replace("[", "");
+                newTitle = newTitle.ToString(CultureInfo.CurrentCulture).Trim().Replace("[", "");
                 newTitle = newTitle.Replace("]", "");
                 /* if (newTitle[0].ToString() != "[") newTitle = "[" + newTitle;
                 if (newTitle.Trim()[newTitle.Trim().Length - 1].ToString() != "]") newTitle = newTitle.Trim() + "]";
@@ -66,14 +67,14 @@ namespace MCForge
             if (newTitle.Length > 17) { Player.SendMessage(p, "Title must be under 17 letters."); return; }
             if (p != null && !Server.devs.Contains(p.name))
             {
-                if (Server.devs.Contains(who.name) || newTitle.ToLower() == "dev" || (newTitle.ToLower().Contains("dev") && newTitle.ToLower().Contains("%"))) { Player.SendMessage(p, "Can't let you do that, starfox."); return; }
+                if (Server.devs.Contains(who.name) || newTitle.ToLower(CultureInfo.CurrentCulture) == "dev" || (newTitle.ToLower(CultureInfo.CurrentCulture).Contains("dev") && newTitle.ToLower(CultureInfo.CurrentCulture).Contains("%"))) { Player.SendMessage(p, "Can't let you do that, starfox."); return; }
             }
 
-            if (newTitle != "")
+            if (!(newTitle != null && String.IsNullOrEmpty(newTitle)))
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " was given the title of &b[" + newTitle + "]", false);
             else Player.GlobalChat(who, who.color + who.prefix + who.name + Server.DefaultColor + " had their title removed.", false);
 
-            if (newTitle == "")
+            if ((newTitle != null && String.IsNullOrEmpty(newTitle)))
             {
                 query = "UPDATE Players SET Title = '' WHERE Name = '" + who.name + "'";
             }

@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,14 +31,14 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (p == null)
             {
                 Player.SendMessage(p, "This command can only be used in-game");
                 return;
             }
             if (message.Split(' ').Length > 2) { Help(p); return; }
-            message = message.ToLower();
+            message = message.ToLower(CultureInfo.CurrentCulture);
             if (message == "clear")
             {
                 for (byte d = 0; d < 128; d++) p.bindings[d] = d;

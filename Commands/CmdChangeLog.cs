@@ -40,7 +40,7 @@ namespace MCForge.Commands
             // This is done so that a player will only see the latest changes even if multiple version info exists in the changelog
             // Because of this, its really important that blank lines are ONLY used to separate different versions
             string[] strArray = File.ReadAllLines("changelog.txt").TakeWhile(s => !String.IsNullOrEmpty(s.Trim())).ToArray();
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 for (int j = 0; j < strArray.Length; j++)
                 {

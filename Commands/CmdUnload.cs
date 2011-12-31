@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,7 +33,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message.ToLower() == "empty")
+            if (message.ToLower(CultureInfo.CurrentCulture) == "empty")
             {
                 Boolean Empty = true, AnyEmpty = false;
 

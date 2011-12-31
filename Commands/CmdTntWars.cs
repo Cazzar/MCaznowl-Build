@@ -20,6 +20,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,9 +33,45 @@ namespace MCForge
 		public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
 		public CmdTntWars() { }
 
-        public bool DeleteZone = false;
-        public bool CheckZone = false;
-        public bool NoTntZone = false;
+        private bool _deleteZone; 
+
+        public bool DeleteZone
+        {
+            get
+            {
+                return _deleteZone;
+            }
+            set
+            {
+                _deleteZone = value;
+            }
+        }
+        private bool _checkZone; 
+
+        public bool CheckZone
+        {
+            get
+            {
+                return _checkZone;
+            }
+            set
+            {
+                _checkZone = value;
+            }
+        }
+        private bool _noTntZone; 
+
+        public bool NoTntZone
+        {
+            get
+            {
+                return _noTntZone;
+            }
+            set
+            {
+                _noTntZone = value;
+            }
+        }
 
 		public override void Use(Player p, string message)
 		{
@@ -46,11 +83,11 @@ namespace MCForge
 			text[4] = "";
 			try
 			{
-				text[0] = message.ToLower().Split(' ')[0];
-				text[1] = message.ToLower().Split(' ')[1];
-				text[2] = message.ToLower().Split(' ')[2];
-				text[3] = message.ToLower().Split(' ')[3];
-				text[4] = message.ToLower().Split(' ')[4];
+				text[0] = message.ToLower(CultureInfo.CurrentCulture).Split(' ')[0];
+				text[1] = message.ToLower(CultureInfo.CurrentCulture).Split(' ')[1];
+				text[2] = message.ToLower(CultureInfo.CurrentCulture).Split(' ')[2];
+				text[3] = message.ToLower(CultureInfo.CurrentCulture).Split(' ')[3];
+				text[4] = message.ToLower(CultureInfo.CurrentCulture).Split(' ')[4];
 			}
 			catch { }
 
@@ -98,7 +135,7 @@ namespace MCForge
 					{
 						TntWarsGame it;
 						bool add = true;
-						if (text[1] == "red" || text[1] == "r" || text[1] == "1" || text[1] == "blue" || text[1] == "b" || text[1] == "2" || text[1] == "auto" || text[1] == "a" || text[1] == "")
+						if (text[1] == "red" || text[1] == "r" || text[1] == "1" || text[1] == "blue" || text[1] == "b" || text[1] == "2" || text[1] == "auto" || text[1] == "a" || (text[1] != null && String.IsNullOrEmpty(text[1])))
 						{
 							it = TntWarsGame.Find(p.level);
 							if (it == null)
@@ -129,7 +166,7 @@ namespace MCForge
 								}
 							}
 						}
-						TntWarsGame.player pl = new TntWarsGame.player(p);
+						MCForge.player pl = new MCForge.player(p);
 						if (it.GameStatus == TntWarsGame.TntWarsGameStatus.AboutToStart || it.GameStatus == TntWarsGame.TntWarsGameStatus.GracePeriod || it.GameStatus == TntWarsGame.TntWarsGameStatus.InProgress)
 						{
 							pl.spec = true;
@@ -297,7 +334,7 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    foreach (TntWarsGame.player who in gm.Players)
+                                    foreach (MCForge.player who in gm.Players)
                                     {
                                         Player.SendMessage(who.p, "TNT Wars Rules: (sent to all current players by " + p.color + p.name + Server.DefaultColor + " )");
                                         Player.SendMessage(who.p, "The aim of the game is to blow up people using TNT!");
@@ -366,7 +403,7 @@ namespace MCForge
 								int count = 1;
 								foreach (var pl in pls)
 								{
-									Player.SendMessage(p, count.ToString() + ": " + pl.p.name + " - " + pl.Score.ToString());
+									Player.SendMessage(p, count.ToString(CultureInfo.CurrentCulture) + ": " + pl.p.name + " - " + pl.Score.ToString());
 									if (count >= max)
 									{
 										break;
@@ -391,8 +428,8 @@ namespace MCForge
 								if (tntwrs.GameMode == TntWarsGame.TntWarsGameMode.TDM)
 								{
 									Player.SendMessage(p, "TNT Wars Scores:");
-									Player.SendMessage(p, c.red + "RED: " + c.white + tntwrs.RedScore + " " + c.red + "(" + (tntwrs.ScoreLimit - tntwrs.RedScore).ToString() + " needed)");
-									Player.SendMessage(p, c.blue + "BLUE: " + c.white + tntwrs.BlueScore + " " + c.red + "(" + (tntwrs.ScoreLimit - tntwrs.BlueScore).ToString() + " needed)");
+									Player.SendMessage(p, c.red + "RED: " + c.white + tntwrs.RedScore + " " + c.red + "(" + (tntwrs.ScoreLimit - tntwrs.RedScore).ToString(CultureInfo.CurrentCulture) + " needed)");
+									Player.SendMessage(p, c.blue + "BLUE: " + c.white + tntwrs.BlueScore + " " + c.red + "(" + (tntwrs.ScoreLimit - tntwrs.BlueScore).ToString(CultureInfo.CurrentCulture) + " needed)");
 								}
 								else
 								{
@@ -428,7 +465,7 @@ namespace MCForge
 				case "pl":
 				case "p":
 					Player.SendMessage(p, "TNT Wars: People playing TNT Wars on '" + TntWarsGame.GetTntWarsGame(p).lvl.name + "':");
-					foreach (TntWarsGame.player pl in TntWarsGame.GetTntWarsGame(p).Players)
+					foreach (MCForge.player pl in TntWarsGame.GetTntWarsGame(p).Players)
 					{
 						if (TntWarsGame.GetTntWarsGame(p).GameMode == TntWarsGame.TntWarsGameMode.TDM)
 						{
@@ -457,7 +494,7 @@ namespace MCForge
 				case "hlth":
 					if (TntWarsGame.GetTntWarsGame(p).GameStatus == TntWarsGame.TntWarsGameStatus.InProgress)
 					{
-						Player.SendMessage(p, "TNT Wars: You have " + p.TntWarsHealth.ToString() + " health left");
+						Player.SendMessage(p, "TNT Wars: You have " + p.TntWarsHealth.ToString(CultureInfo.CurrentCulture) + " health left");
 					}
 					else
 					{
@@ -484,7 +521,7 @@ namespace MCForge
 						{
 							if (it.GameStatus == TntWarsGame.TntWarsGameStatus.InProgress || it.GameStatus == TntWarsGame.TntWarsGameStatus.GracePeriod || it.GameStatus == TntWarsGame.TntWarsGameStatus.AboutToStart)
 							{
-								if (text[1] != "stop" && text[1] != "s" && text[1] != "" && text[1] != "status" && text[1] != "ready" && text[1] != "check" && text[1] != "info" && text[1] != "r" && text[1] != "c")
+								if (text[1] != "stop" && text[1] != "s" && !(text[1] != null && String.IsNullOrEmpty(text[1])) && text[1] != "status" && text[1] != "ready" && text[1] != "check" && text[1] != "info" && text[1] != "r" && text[1] != "c")
 								{
 									Player.SendMessage(p, "TNT Wars Error: Cannot edit current game because it is currently running!");
 									return;
@@ -529,7 +566,7 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    foreach (TntWarsGame.player pl in it.Players)
+                                    foreach (MCForge.player pl in it.Players)
                                     {
                                         pl.p.CurrentTntGameNumber = -1;
                                         Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
@@ -556,7 +593,7 @@ namespace MCForge
                                     Command.all.Find("restore").Use(null, it.BackupNumber + it.lvl.name);
                                     it.RedScore = 0;
                                     it.BlueScore = 0;
-                                    foreach (TntWarsGame.player pl in it.Players)
+                                    foreach (MCForge.player pl in it.Players)
                                     {
                                         pl.Score = 0;
                                         pl.spec = false;
@@ -617,7 +654,7 @@ namespace MCForge
                                 }
                                 else
                                 {
-                                    foreach (TntWarsGame.player pl in it.Players)
+                                    foreach (MCForge.player pl in it.Players)
                                     {
                                         pl.p.canBuild = true;
                                         pl.p.PlayingTntWars = false;
@@ -669,7 +706,7 @@ namespace MCForge
                             case "level":
                             case "l":
                             case "lvl":
-                                if (text[2] == "")
+                                if ((text[2] != null && String.IsNullOrEmpty(text[2])))
                                 {
                                     it.lvl = p.level;
                                 }
@@ -696,7 +733,7 @@ namespace MCForge
                                 int number = 1;
                                 try
                                 {
-                                    number = int.Parse(text[2]);
+                                    number = int.Parse(text[2], CultureInfo.CurrentCulture);
                                 }
                                 catch
                                 {
@@ -712,7 +749,7 @@ namespace MCForge
                                     }
                                     else
                                     {
-                                        Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now " + number.ToString());
+                                        Player.SendMessage(p, "TNT Wars: Number of TNTs placeable by a player at a time is now " + number.ToString(CultureInfo.CurrentCulture));
                                     }
                                     it.CheckAllSetUp(p);
                                 }
@@ -731,7 +768,7 @@ namespace MCForge
                                     }
                                 }
                                 string msg;
-                                if (text[2] != "")
+                                if (!(text[2] != null && String.IsNullOrEmpty(text[2])))
                                 {
                                     switch (text[2])
                                     {
@@ -797,7 +834,7 @@ namespace MCForge
                                     case "ATM":
                                     case "c":
                                     case "t":
-                                        Player.SendMessage(p, "TNT Wars: Current grace time is " + it.GracePeriodSecs.ToString() + " seconds long!");
+                                        Player.SendMessage(p, "TNT Wars: Current grace time is " + it.GracePeriodSecs.ToString(CultureInfo.CurrentCulture) + " seconds long!");
                                         break;
 
                                     default:
@@ -814,7 +851,7 @@ namespace MCForge
                                         else
                                         {
                                             it.GracePeriodSecs = numb;
-                                            Player.SendMessage(p, "TNT Wars: Grace period is now " + numb.ToString() + " seconds long!");
+                                            Player.SendMessage(p, "TNT Wars: Grace period is now " + numb.ToString(CultureInfo.CurrentCulture) + " seconds long!");
                                             return;
                                         }
                                         break;
@@ -856,7 +893,7 @@ namespace MCForge
                                             {
                                                 Player.SendMessage(p, "TNT Wars: Changed gamemode to Team Deathmatch");
                                             }
-                                            foreach (TntWarsGame.player pl in it.Players)
+                                            foreach (MCForge.player pl in it.Players)
                                             {
                                                 {
                                                     Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
@@ -903,11 +940,11 @@ namespace MCForge
                                             if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
                                             {
                                                 it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
-                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                             }
                                             else
                                             {
-                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                             }
                                         }
                                         else
@@ -941,13 +978,13 @@ namespace MCForge
                                             if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
                                             {
                                                 it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
-                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                             }
                                             else
                                             {
-                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                             }
-                                            foreach (TntWarsGame.player pl in it.Players)
+                                            foreach (MCForge.player pl in it.Players)
                                             {
                                                 pl.p.color = pl.OldColor;
                                                 pl.p.SetPrefix();
@@ -976,7 +1013,7 @@ namespace MCForge
                                                 }
                                                 int Red = it.RedTeam();
                                                 int Blue = it.BlueTeam();
-                                                foreach (TntWarsGame.player pl in it.Players)
+                                                foreach (MCForge.player pl in it.Players)
                                                 {
                                                     {
                                                         Player.SendMessage(pl.p, "TNT Wars: Changed gamemode to Team Deathmatch");
@@ -1021,11 +1058,11 @@ namespace MCForge
                                                 if (it.ScoreLimit == TntWarsGame.Properties.DefaultFFAmaxScore)
                                                 {
                                                     it.ScoreLimit = TntWarsGame.Properties.DefaultTDMmaxScore;
-                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                                 else
                                                 {
-                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                             }
                                             else
@@ -1039,11 +1076,11 @@ namespace MCForge
                                                 if (it.ScoreLimit == TntWarsGame.Properties.DefaultTDMmaxScore)
                                                 {
                                                     it.ScoreLimit = TntWarsGame.Properties.DefaultFFAmaxScore;
-                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                                 else
                                                 {
-                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is still " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                             }
 
@@ -1170,7 +1207,7 @@ namespace MCForge
                                             case "ATM":
                                             case "c":
                                             case "t":
-                                                Player.SendMessage(p, "TNT Wars: Score limit is " + it.ScoreLimit.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score limit is " + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 break;
 
                                             default:
@@ -1181,11 +1218,11 @@ namespace MCForge
                                                 int numb = -1;
                                                 if (int.TryParse(text[3], out numb) == false)
                                                 { Player.SendMessage(p, "TNT Wars Error: Invalid number '" + text[3] + "'"); return; }
-                                                if (numb <= it.ScorePerKill) { Player.SendMessage(p, "TNT Wars Error: Minimum score limit of " + it.ScorePerKill.ToString() + " points"); return; }
+                                                if (numb <= it.ScorePerKill) { Player.SendMessage(p, "TNT Wars Error: Minimum score limit of " + it.ScorePerKill.ToString(CultureInfo.CurrentCulture) + " points"); return; }
                                                 else
                                                 {
                                                     it.ScoreLimit = numb;
-                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + numb.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score limit is now " + numb.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 break;
@@ -1272,13 +1309,13 @@ namespace MCForge
                                             case "enable":
                                                 if (it.MultiKillBonus > 0)
                                                 {
-                                                    Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already enabled (at " + it.MultiKillBonus.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars Error: Multikill bonuses are already enabled (at " + it.MultiKillBonus.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 else
                                                 {
                                                     it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
-                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                                 break;
 
@@ -1300,7 +1337,7 @@ namespace MCForge
                                                 if (it.MultiKillBonus == 0)
                                                 {
                                                     it.MultiKillBonus = TntWarsGame.Properties.DefaultMultiKillBonus;
-                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Multikill bonuses are now enabled at " + it.MultiKillBonus.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 else
@@ -1316,7 +1353,7 @@ namespace MCForge
                                             case "ATM":
                                             case "c":
                                             case "t":
-                                                Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is " + it.MultiKillBonus.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is " + it.MultiKillBonus.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 break;
 
                                             default:
@@ -1331,7 +1368,7 @@ namespace MCForge
                                                 else
                                                 {
                                                     it.MultiKillBonus = numb;
-                                                    Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is now " + numb.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is now " + numb.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 break;
@@ -1351,7 +1388,7 @@ namespace MCForge
                                             case "ATM":
                                             case "c":
                                             case "t":
-                                                Player.SendMessage(p, "TNT Wars: Score per kill is " + it.ScorePerKill.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score per kill is " + it.ScorePerKill.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 break;
 
                                             default:
@@ -1366,7 +1403,7 @@ namespace MCForge
                                                 else
                                                 {
                                                     it.ScorePerKill = numb;
-                                                    Player.SendMessage(p, "TNT Wars: Score per kill is now " + numb.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score per kill is now " + numb.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 break;
@@ -1385,13 +1422,13 @@ namespace MCForge
                                             case "enable":
                                                 if (it.ScorePerAssist > 0)
                                                 {
-                                                    Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already enabled (at " + it.ScorePerAssist.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars Error: Assist bonuses are already enabled (at " + it.ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 else
                                                 {
                                                     it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
-                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 }
                                                 break;
 
@@ -1413,7 +1450,7 @@ namespace MCForge
                                                 if (it.ScorePerAssist == 0)
                                                 {
                                                     it.ScorePerAssist = TntWarsGame.Properties.DefaultAssistScore;
-                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Assist bonuses are now enabled at " + it.ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 else
@@ -1429,7 +1466,7 @@ namespace MCForge
                                             case "ATM":
                                             case "c":
                                             case "t":
-                                                Player.SendMessage(p, "TNT Wars: Score per assist is " + it.ScorePerAssist.ToString() + " points!");
+                                                Player.SendMessage(p, "TNT Wars: Score per assist is " + it.ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " points!");
                                                 break;
 
                                             default:
@@ -1444,7 +1481,7 @@ namespace MCForge
                                                 else
                                                 {
                                                     it.ScorePerAssist = numb;
-                                                    Player.SendMessage(p, "TNT Wars: Score per assist is now " + numb.ToString() + " points!");
+                                                    Player.SendMessage(p, "TNT Wars: Score per assist is now " + numb.ToString(CultureInfo.CurrentCulture) + " points!");
                                                     return;
                                                 }
                                                 break;
@@ -1763,18 +1800,18 @@ namespace MCForge
                                 if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Hard) { Player.SendMessage(p, "Game difficulty: " + c.green + "Hard"); }
                                 if (it.GameDifficulty == TntWarsGame.TntWarsDifficulty.Extreme) { Player.SendMessage(p, "Game difficulty: " + c.green + "Extreme"); }
                                 //4
-                                if (it.TntPerPlayerAtATime >= 1) { Player.SendMessage(p, "TNT per player at a time: " + c.green + it.TntPerPlayerAtATime.ToString()); }
+                                if (it.TntPerPlayerAtATime >= 1) { Player.SendMessage(p, "TNT per player at a time: " + c.green + it.TntPerPlayerAtATime.ToString(CultureInfo.CurrentCulture)); }
                                 else if (it.TntPerPlayerAtATime == 0) { Player.SendMessage(p, "TNT per player at a time: " + c.green + "unlimited"); }
                                 //5
                                 if (it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "enabled"); }
                                 if (!it.GracePeriod) { Player.SendMessage(p, "Grace period: " + c.green + "disabled"); }
                                 //6
-                                Player.SendMessage(p, "Grace period time: " + c.green + it.GracePeriodSecs.ToString() + " seconds");
+                                Player.SendMessage(p, "Grace period time: " + c.green + it.GracePeriodSecs.ToString(CultureInfo.CurrentCulture) + " seconds");
                                 //7
                                 if (it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "enabled"); }
                                 if (!it.BalanceTeams) { Player.SendMessage(p, "Balance teams: " + c.green + "disabled"); }
                                 //8
-                                Player.SendMessage(p, "Score limit: " + c.green + it.ScoreLimit.ToString() + " points");
+                                Player.SendMessage(p, "Score limit: " + c.green + it.ScoreLimit.ToString(CultureInfo.CurrentCulture) + " points");
                                 //9
                                 if (it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "enabled"); }
                                 if (!it.Streaks) { Player.SendMessage(p, "Streaks: " + c.green + "disabled"); }
@@ -1782,10 +1819,10 @@ namespace MCForge
                                 if (it.MultiKillBonus == 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "disabled"); }
                                 if (it.MultiKillBonus != 0) { Player.SendMessage(p, "Multikill bonus: " + c.green + "enabled"); }
                                 //11
-                                Player.SendMessage(p, "Score per kill: " + c.green + it.ScorePerKill.ToString() + " points");
+                                Player.SendMessage(p, "Score per kill: " + c.green + it.ScorePerKill.ToString(CultureInfo.CurrentCulture) + " points");
                                 //12
                                 if (it.ScorePerAssist == 0) { Player.SendMessage(p, "Assists: " + c.green + "disabled"); }
-                                if (it.ScorePerAssist != 0) { Player.SendMessage(p, "Assists : " + c.green + "enabled (at " + it.ScorePerAssist.ToString() + " points)"); }
+                                if (it.ScorePerAssist != 0) { Player.SendMessage(p, "Assists : " + c.green + "enabled (at " + it.ScorePerAssist.ToString(CultureInfo.CurrentCulture) + " points)"); }
                                 //13
                                 if (it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "enabled"); }
                                 if (!it.TeamKills) { Player.SendMessage(p, "Team killing: " + c.green + "disabled"); }
@@ -1925,6 +1962,26 @@ namespace MCForge
             return;
         }
 
-        struct CatchPos { public ushort x, y, z; }
+        struct CatchPos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
     }
 }

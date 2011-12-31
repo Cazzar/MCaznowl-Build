@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using MCForge.SQL;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using SData.Types;
 
@@ -35,7 +36,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             Player pl = Player.Find(message); 
             if (pl != null && !pl.hidden)
             { 
@@ -44,9 +45,9 @@ namespace MCForge
                 return; 
             }
 
-            if (message.IndexOf("'") != -1) { Player.SendMessage(p, "Cannot parse request."); return; }
+            if (message.IndexOf("'", StringComparison.CurrentCulture) != -1) { Player.SendMessage(p, "Cannot parse request."); return; }
 
-            string FoundRank = Group.findPlayer(message.ToLower());
+            string FoundRank = Group.findPlayer(message.ToLower(CultureInfo.CurrentCulture));
 
             DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT * FROM Players WHERE Name='" + message + "'") : SQLite.fillData("SELECT * FROM Players WHERE Name='" + message + "'");
             if (playerDb.Rows.Count == 0) { Player.SendMessage(p, Group.Find(FoundRank).color + message + Server.DefaultColor + " has the rank of " + Group.Find(FoundRank).color + FoundRank); return; }
@@ -76,12 +77,12 @@ namespace MCForge
                 Player.SendMessage(p, "> > the IP of " + playerDb.Rows[0]["IP"]);
                 if (Server.useWhitelist)
                 {
-                    if (Server.whiteList.Contains(message.ToLower()))
+                    if (Server.whiteList.Contains(message.ToLower(CultureInfo.CurrentCulture)))
                     {
                         Player.SendMessage(p, "> > Player is &fWhitelisted");
                     }
                 }
-                if (Server.devs.Contains(message.ToLower()))
+                if (Server.devs.Contains(message.ToLower(CultureInfo.CurrentCulture)))
                 {
                     Player.SendMessage(p, Server.DefaultColor + "> > Player is a &9Developer");
                 }

@@ -13,7 +13,7 @@ namespace MCForge
         public CmdAka() { }
         public override void Use(Player p, string message)
         {
-            if (message == "") message = p.name;
+            if ((message != null && String.IsNullOrEmpty(message))) message = p.name;
 
             if (!p.aka)
             {

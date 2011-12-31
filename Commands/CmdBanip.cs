@@ -21,6 +21,7 @@ using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 using MCForge.SQL;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -37,12 +38,12 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (message[0] == '@')
             {
                 message = message.Remove(0, 1).Trim();
                 Player who = Player.Find(message);
-                if (Server.devs.Contains(message.ToLower()))
+                if (Server.devs.Contains(message.ToLower(CultureInfo.CurrentCulture)))
                 {
                     Player.SendMessage(p, "You can't ban a MCForge Developer!");
                     if (p != null)
@@ -95,7 +96,7 @@ namespace MCForge
                     message = who.ip;
             }
 
-            if (message.Equals("127.0.0.1")) { Player.SendMessage(p, "You can't ip-ban the server!"); return; }
+            if (message.Equals("127.0.0.1", StringComparison.CurrentCulture)) { Player.SendMessage(p, "You can't ip-ban the server!"); return; }
             if (message.IndexOf('.') == -1) { Player.SendMessage(p, "Invalid IP!"); return; }
             if (message.Split('.').Length != 4) { Player.SendMessage(p, "Invalid IP!"); return; }
             if (p != null && p.ip == message) { Player.SendMessage(p, "You can't ip-ban yourself.!"); return; } 
@@ -120,7 +121,7 @@ namespace MCForge
                 foreach (string opname in opNamesWithThatIP)
                 {
                     // If one of these guys is a dev, don't allow the ipban to proceed! 
-                    if (Server.devs.Contains(opname.ToLower()))
+                    if (Server.devs.Contains(opname.ToLower(CultureInfo.CurrentCulture)))
                     {
                         Player.SendMessage(p, "You can't ban a MCForge Developer!");
                         if (p != null)
@@ -155,14 +156,14 @@ namespace MCForge
 
             if (p != null)
             {
-                Server.IRC.Say(message.ToLower() + " was ip-banned by " + p.name + ".");
-                Server.s.Log("IP-BANNED: " + message.ToLower() + " by " + p.name + ".");
+                Server.IRC.Say(message.ToLower(CultureInfo.CurrentCulture) + " was ip-banned by " + p.name + ".");
+                Server.s.Log("IP-BANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by " + p.name + ".");
                 Player.GlobalMessage(message + " was &8ip-banned" + Server.DefaultColor + " by " + p.color + p.name + Server.DefaultColor + ".");
             }
             else
             {
-                Server.IRC.Say(message.ToLower() + " was ip-banned by console.");
-                Server.s.Log("IP-BANNED: " + message.ToLower() + " by console.");
+                Server.IRC.Say(message.ToLower(CultureInfo.CurrentCulture) + " was ip-banned by console.");
+                Server.s.Log("IP-BANNED: " + message.ToLower(CultureInfo.CurrentCulture) + " by console.");
                 Player.GlobalMessage(message + " was &8ip-banned" + Server.DefaultColor + " by console.");
             }
             Server.bannedIP.Add(message);

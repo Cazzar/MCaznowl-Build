@@ -30,14 +30,14 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message != "")
+            if (!(message != null && String.IsNullOrEmpty(message)))
             {
                 Help(p);
                 Player.SendMessage(p, "&cThis command contains no arguments");
                 return;
             }
             string alltext = File.ReadAllText("text/tempranks.txt");
-            if (alltext == "")
+            if ((alltext != null && String.IsNullOrEmpty(alltext)))
             {
                 Player.SendMessage(p, "&cThere are no players with a temporary rank assigned.");
                 return;

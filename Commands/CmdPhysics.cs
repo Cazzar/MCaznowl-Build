@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,7 +31,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "")
+            if ((message != null && String.IsNullOrEmpty(message)))
             {
                 foreach (Level l in Server.levels)
                 {
@@ -44,7 +45,7 @@ namespace MCForge
                 int temp = 0; Level level = null;
                 if (message.Split(' ').Length == 1)
                 {
-                    temp = int.Parse(message);
+                    temp = int.Parse(message, CultureInfo.CurrentCulture);
                     if (p != null)
                     {
                         level = p.level;
@@ -56,7 +57,7 @@ namespace MCForge
                 }
                 else
                 {
-                    temp = System.Convert.ToInt16(message.Split(' ')[1]);
+                    temp = System.Convert.ToInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
                     string nameStore = message.Split(' ')[0];
                     level = Level.Find(nameStore);
                 }

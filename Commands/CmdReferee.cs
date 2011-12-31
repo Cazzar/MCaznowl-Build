@@ -17,7 +17,7 @@ namespace MCForge
             if (p.referee)
             {
                 p.referee = false;
-                LevelPermission perm = Group.findPlayerGroup(name).Permission;
+//                LevelPermission perm = Group.findPlayerGroup(name).Permission // COMMENTED BY CODEIT.RIGHT;
                 Player.GlobalDie(p, false);
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is no longer a referee", false);
                 if (Server.zombie.GameInProgess())

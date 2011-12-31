@@ -34,7 +34,7 @@ namespace MCForge
         { // TODO
             try
             {
-                if (message != "") { Help(p); return; }
+                if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
                 message = "";
                 string message2 = "";
                 bool Once = false;
@@ -67,7 +67,7 @@ namespace MCForge
                     }
                 });
                 Player.SendMessage(p, "Loaded: " + message.Remove(0, 2));
-                if (message2 != "")
+                if (!(message2 != null && String.IsNullOrEmpty(message2)))
                     Player.SendMessage(p, "Can't Goto: " + message2);
                 Player.SendMessage(p, "Use &4/unloaded for unloaded levels.");
             }

@@ -17,6 +17,7 @@
 */
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -33,12 +34,12 @@ namespace MCForge
         {
             Level foundLevel;
 
-            if (message == "") { foundLevel = p.level; }
+            if ((message != null && String.IsNullOrEmpty(message))) { foundLevel = p.level; }
             else foundLevel = Level.Find(message);
 
             if (foundLevel == null) { Player.SendMessage(p, "Could not find specified level."); return; }
 
-            Player.SendMessage(p, "&b" + foundLevel.name + Server.DefaultColor + ": Width=" + foundLevel.width.ToString() + " Height=" + foundLevel.depth.ToString() + " Depth=" + foundLevel.height.ToString());
+            Player.SendMessage(p, "&b" + foundLevel.name + Server.DefaultColor + ": Width=" + foundLevel.width.ToString(CultureInfo.CurrentCulture) + " Height=" + foundLevel.depth.ToString(CultureInfo.CurrentCulture) + " Depth=" + foundLevel.height.ToString(CultureInfo.CurrentCulture));
 
             switch (foundLevel.physics)
             {
@@ -68,7 +69,7 @@ namespace MCForge
             if (Directory.Exists(@Server.backupLocation + "/" + foundLevel.name))
             {
                 int latestBackup = Directory.GetDirectories(@Server.backupLocation + "/" + foundLevel.name).Length;
-                Player.SendMessage(p, "Latest backup: &a" + latestBackup + Server.DefaultColor + " at &a" + Directory.GetCreationTime(@Server.backupLocation + "/" + foundLevel.name + "/" + latestBackup).ToString("yyyy-MM-dd HH:mm:ss")); // + Directory.GetCreationTime(@Server.backupLocation + "/" + latestBackup + "/").ToString("yyyy-MM-dd HH:mm:ss"));
+                Player.SendMessage(p, "Latest backup: &a" + latestBackup + Server.DefaultColor + " at &a" + Directory.GetCreationTime(@Server.backupLocation + "/" + foundLevel.name + "/" + latestBackup).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture)); // + Directory.GetCreationTime(@Server.backupLocation + "/" + latestBackup + "/").ToString("yyyy-MM-dd HH:mm:ss"));
             }
             else
             {

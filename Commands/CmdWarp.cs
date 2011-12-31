@@ -17,6 +17,7 @@
 */
 using System;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,7 +31,7 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (p == null) { Player.SendMessage(p, "This command can only be used in-game"); return; }
-            string[] command = message.ToLower().Split(' ');
+            string[] command = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
             string par0 = String.Empty;
             string par1 = String.Empty;
             string par2 = String.Empty;
@@ -44,7 +45,7 @@ namespace MCForge
             if (par0 == "list" || par0 == "view" || par0 == "l" || par0 == "v")
             {
                 Player.SendMessage(p, "Warps:");
-                foreach (Warp.Wrp wr in Warp.Warps)
+                foreach (MCForge.Wrp wr in Warp.Warps)
                 {
                     if (Level.Find(wr.lvlname) != null)
                     {
@@ -136,7 +137,7 @@ namespace MCForge
             {
                 if (Warp.WarpExists(par0) == true)
                 {
-                    Warp.Wrp w = new Warp.Wrp();
+                    MCForge.Wrp w = new MCForge.Wrp();
                     w = Warp.GetWarp(par0);
                     Level lvl = Level.Find(w.lvlname);
                     if (lvl != null)

@@ -24,7 +24,7 @@ using System.Text;
 
 namespace MCForge
 {
-    public interface Beat
+    public interface IBeat
     {
         string URL { get; }
         string Parameters { get; set; }

@@ -66,7 +66,7 @@ namespace MCForge
             {
                 foreach (Pos Pos in stored)
                 {
-                    BlockQueue.Addblock(p, Pos.x, Pos.y, Pos.z, b2);
+                    Block1.Addblock(p, Pos.x, Pos.y, Pos.z, b2);
                 }
             }
             else
@@ -80,7 +80,27 @@ namespace MCForge
             Player.SendMessage(p, "&4/replaceall finished!");
             wait = 2;
         }
-        public struct Pos { public ushort x, y, z; }
+        public struct Pos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(Pos x, Pos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
 
         public override void Help(Player p)
         {

@@ -46,9 +46,9 @@ namespace MCForge
                 p.isFlying = false;
                 try
                 {
-                    p.level.blockqueue.RemoveAll((BlockQueue.block b) => { if (b.p == p) return true; return false; });
+                    p.level.blockqueue.RemoveAll((Block1.block b) => { if (b.p == p) return true; return false; });
                 }
-                finally { BlockQueue.resume(); }
+                finally { Block1.resume(); }
                 Player.SendMessage(p, "Every toggle or action was aborted.");
                 return;
             }

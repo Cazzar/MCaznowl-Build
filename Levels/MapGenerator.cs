@@ -17,6 +17,7 @@
 */
 // Copyright 2009, 2010 Matvei Stefarov <me@matvei.org>
 using System;
+using System.Globalization;
 
 /*
 This generator was developed by Neko_baron.
@@ -32,7 +33,7 @@ namespace MCForge
 
     public class MapGenerator
     {
-        static bool Inuse = false;
+        static bool Inuse/* = false*/;
         static float[] terrain;
         static float[] overlay;
         static float[] overlay2;
@@ -56,14 +57,14 @@ namespace MCForge
                 terrain = new float[Lvl.width * Lvl.height];  //hmm 
                 overlay = new float[Lvl.width * Lvl.height];
 
-                if (!type.Equals("ocean"))
+                if (!type.Equals("ocean", StringComparison.CurrentCulture))
                 { overlay2 = new float[Lvl.width * Lvl.height]; }
 
                 //float dispAux, pd;
                 ushort WaterLevel = (ushort)(Lvl.depth / 2 + 2);
                 ushort LavaLevel = 5;
 
-                if (type.Equals("ocean"))
+                if (type.Equals("ocean", StringComparison.CurrentCulture))
                 {
                     WaterLevel = (ushort)(Lvl.depth * 0.85f);
                 }
@@ -76,12 +77,12 @@ namespace MCForge
                 //CREATE OVERLAY
                 //GenerateFault(overlay, Lvl, "overlay", rand);
                 Server.s.Log("Creating overlay");
-                GeneratePerlinNoise(overlay, Lvl, "", rand);
+                GeneratePerlinNoise(overlay, Lvl, rand);
 
-                if (!type.Equals("ocean") && type != "desert")
+                if (!type.Equals("ocean", StringComparison.CurrentCulture) && type != "desert")
                 {
                     Server.s.Log("Planning trees");
-                    GeneratePerlinNoise(overlay2, Lvl, "", rand);
+                    GeneratePerlinNoise(overlay2, Lvl, rand);
                 }
 
                 Server.s.Log("Converting height map");
@@ -132,7 +133,7 @@ namespace MCForge
                     ushort x = (ushort)(bb % Lvl.width);
                     ushort y = (ushort)(bb / Lvl.width);
                     ushort z;
-                    if (type.Equals("island"))
+                    if (type.Equals("island", StringComparison.CurrentCulture))
                     {
                         z = Evaluate(Lvl, Range(terrain[bb], RangeLow - NegateEdge(x, y, Lvl), RangeHigh - NegateEdge(x, y, Lvl)));
                     }
@@ -153,7 +154,7 @@ namespace MCForge
                                 }
                                 else if (overlay[bb] < 0.72f)    //If not zoned for rocks or gravel
                                 {
-                                    if (type.Equals("island"))      //increase sand height for island
+                                    if (type.Equals("island", StringComparison.CurrentCulture))      //increase sand height for island
                                     {
                                         if (z > WaterLevel + 2)
                                         {
@@ -202,7 +203,7 @@ namespace MCForge
 
 
 
-                            if (!type.Equals("ocean"))
+                            if (!type.Equals("ocean", StringComparison.CurrentCulture))
                             {
                                 if (overlay[bb] < 0.65f && overlay2[bb] < TreeDens)
                                 {
@@ -352,17 +353,17 @@ namespace MCForge
             float DispMax, DispMin, DispChange;
             DispMax = 0.01f;
             DispChange = -0.0025f;
-            if (type.Equals("mountains"))
+            if (type.Equals("mountains", StringComparison.CurrentCulture))
             {
                 DispMax = 0.02f;
                 startheight = 0.6f;
             }
-            else if (type.Equals("hell"))
+            else if (type.Equals("hell", StringComparison.CurrentCulture))
             {
                 DispMax = 0.02f;
                 startheight = 0.04f;
             }
-            else if (type.Equals("overlay"))
+            else if (type.Equals("overlay", StringComparison.CurrentCulture))
             {
                 DispMax = 0.02f;
                 DispChange = -0.01f;
@@ -382,7 +383,7 @@ namespace MCForge
             halfX = (ushort)(Lvl.width / 2);
             halfZ = (ushort)(Lvl.height / 2);
             int numIterations = (int)((Lvl.width + Lvl.height));
-            Server.s.Log("Iterations = " + numIterations.ToString());
+            Server.s.Log("Iterations = " + numIterations.ToString(CultureInfo.CurrentCulture));
             for (k = 0; k < numIterations; k++)
             {
                 //s.Log("itteration " + k.ToString());
@@ -439,7 +440,7 @@ namespace MCForge
 
         //hur hur, more copy pasted code :/
         #region ==PerlinGen==
-        void GeneratePerlinNoise(float[] array, Level Lvl, string type, Random rand)
+        void GeneratePerlinNoise(float[] array, Level Lvl, Random rand)
         {
             GenerateNormalized(array, 0.7f, 8, Lvl.width, Lvl.height, rand.Next(), 64);
         }
@@ -641,7 +642,7 @@ namespace MCForge
         public void AddNotchPineTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
         {
             throw new NotImplementedException();
-            byte height = (byte)Rand.Next(7, 12);
+//            byte height = (byte)Rand.Next(7, 12) // COMMENTED BY CODEIT.RIGHT;
         }
 
         public void AddNotchSwampTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
@@ -806,17 +807,18 @@ namespace MCForge
         }
 
         //Averages over 5 points
-        float GetAverage5(ushort x, ushort y, Level Lvl)
-        {
-            divide = 0.0f;
-            float temp = GetPixel(x, y, Lvl);
-            temp += GetPixel((ushort)(x + 1), y, Lvl);
-            temp += GetPixel((ushort)(x - 1), y, Lvl);
-            temp += GetPixel(x, (ushort)(y + 1), Lvl);
-            temp += GetPixel(x, (ushort)(y - 1), Lvl);
-
-            return temp / divide;
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        float GetAverage5(ushort x, ushort y, Level Lvl)
+//        {
+//            divide = 0.0f;
+//            float temp = GetPixel(x, y, Lvl);
+//            temp += GetPixel((ushort)(x + 1), y, Lvl);
+//            temp += GetPixel((ushort)(x - 1), y, Lvl);
+//            temp += GetPixel(x, (ushort)(y + 1), Lvl);
+//            temp += GetPixel(x, (ushort)(y - 1), Lvl);
+//
+//            return temp / divide;
+//        }
         //Averages over 9 points
         float GetAverage9(ushort x, ushort y, Level Lvl)
         {

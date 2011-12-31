@@ -36,8 +36,8 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
-            if (message.IndexOf("'") != -1) { Player.SendMessage(p, "Cannot parse request."); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
+            if (message.IndexOf("'", StringComparison.CurrentCulture) != -1) { Player.SendMessage(p, "Cannot parse request."); return; }
 
             DataTable playerDb = Server.useMySQL ? MySQL.fillData("SELECT Name FROM Players WHERE IP='" + message + "'") : SQLite.fillData("SELECT Name FROM Players WHERE IP='" + message + "'");
 

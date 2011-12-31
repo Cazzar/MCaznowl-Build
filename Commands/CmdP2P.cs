@@ -20,6 +20,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Globalization;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
@@ -40,14 +41,14 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number > 2) { Help(p); return; }
             if (number == 2)
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
+                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
                 Player who = Player.Find(t);
                 Player who2 = Player.Find(s);
                 if (who == null)
@@ -83,7 +84,7 @@ namespace MCForge
                     Player.SendMessage(p, "You cannot force a player of higher rank to tp to another player!");
                     return;
                 }
-                if (s == "")
+                if ((s != null && String.IsNullOrEmpty(s)))
                 {
                     Player.SendMessage(p, "You did not specify player 2!");
                     return;

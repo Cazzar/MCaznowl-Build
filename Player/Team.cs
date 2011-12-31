@@ -128,7 +128,7 @@ namespace MCForge
 
         public void Drawflag()
         {
-            
+
             ushort x = flagLocation[0];
             ushort y = flagLocation[1];
             ushort z = flagLocation[2];
@@ -177,7 +177,7 @@ namespace MCForge
                 tempFlagblock.y = y;
                 tempFlagblock.z = z;
             }
-            
+
 
         }
 

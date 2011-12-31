@@ -18,6 +18,7 @@
 */
 using System;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -30,7 +31,7 @@ namespace MCForge
                 public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
                 public override void Use(Player p, string message)
                 {
-					if(message == "")
+					if((message != null && String.IsNullOrEmpty(message)))
 					{
 						Help(p);
 						return;
@@ -61,7 +62,7 @@ namespace MCForge
 					int time = 120;
 					try
 					{
-                    	time = Convert.ToInt32(message.Split(' ')[1]);
+                    	time = Convert.ToInt32(message.Split(' ')[1], CultureInfo.CurrentCulture);
 					}
 					catch/* (Exception ex)*/
 					{

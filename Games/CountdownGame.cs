@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
-    class CountdownGame
+    internal static class CountdownGame
     {
         public static List<Player> players = new List<Player>();
 
@@ -20,9 +21,9 @@ namespace MCForge
 
         public static int speed;
 
-        public static bool freezemode = false;
+        public static bool freezemode/* = false*/;
 
-        public static bool cancel = false;
+        public static bool cancel/* = false*/;
 
         public static string speedtype;
 
@@ -176,7 +177,7 @@ namespace MCForge
                     RemoveSquare(nextsquare);
                     if (squaresleft.Count % 10 == 0 && gamestatus != CountdownGameStatus.Finished)
                     {
-                        mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString() + " Players left!!");
+                        mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString(CultureInfo.CurrentCulture) + " Players left!!");
                     }
                     if (cancel == true)
                     {
@@ -273,7 +274,7 @@ namespace MCForge
                         RemoveSquare(nextsquare);
                         if (squaresleft.Count % 10 == 0 && gamestatus != CountdownGameStatus.Finished)
                         {
-                            mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString() + " Players left!!");
+                            mapon.ChatLevel(squaresleft.Count + " Squares Left and " + playersleft.ToString(CultureInfo.CurrentCulture) + " Players left!!");
                         }
                         if (cancel == true)
                         {
@@ -287,8 +288,8 @@ namespace MCForge
 
         public static void RemoveSquare(string square)
         {
-            int column = int.Parse(square.Split(':')[0]);
-            int row = int.Parse(square.Split(':')[1]);
+            int column = int.Parse(square.Split(':')[0], CultureInfo.CurrentCulture);
+            int row = int.Parse(square.Split(':')[1], CultureInfo.CurrentCulture);
             ushort x1 = (ushort)(27 - (row * 3));
             ushort x2 = (ushort)(28 - (row * 3));
             ushort y = 4;
@@ -384,7 +385,7 @@ namespace MCForge
                 row = 1;
                 while (row <= 7)
                 {
-                    squaresleft.Add(column.ToString() + ":" + row.ToString());
+                    squaresleft.Add(column.ToString(CultureInfo.CurrentCulture) + ":" + row.ToString(CultureInfo.CurrentCulture));
                     row = row + 1;
                 }
                 column = column + 1;
@@ -487,7 +488,7 @@ namespace MCForge
                     }
                     break;
                 default:
-                    mapon.ChatLevel("Now there are " + playersleft.ToString() + " players left!!");
+                    mapon.ChatLevel("Now there are " + playersleft.ToString(CultureInfo.CurrentCulture) + " players left!!");
                     break;
             }
         }
@@ -519,7 +520,7 @@ namespace MCForge
                     }
                     break;
                 default:
-                    mapon.ChatLevel("Now there are " + playersleft.ToString() + " players left!!");
+                    mapon.ChatLevel("Now there are " + playersleft.ToString(CultureInfo.CurrentCulture) + " players left!!");
                     break;
             }
         }
@@ -667,8 +668,8 @@ namespace MCForge
                                 string nextsquare = squaresleft.ElementAt(randnum);
                                 squaresleft.Remove(nextsquare);
                                 {
-                                    int column = int.Parse(nextsquare.Split(':')[0]);
-                                    int row = int.Parse(nextsquare.Split(':')[1]);
+                                    int column = int.Parse(nextsquare.Split(':')[0], CultureInfo.CurrentCulture);
+                                    int row = int.Parse(nextsquare.Split(':')[1], CultureInfo.CurrentCulture);
                                     ushort x1 = (ushort)(27 - (row * 3));
                                     ushort x2 = (ushort)(28 - (row * 3));
                                     ushort y = 4;

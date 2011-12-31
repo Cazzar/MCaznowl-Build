@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -81,9 +82,9 @@ namespace MCForge
 
                 try
                 {
-                    ushort x = System.Convert.ToUInt16(message.Split(' ')[0]);
-                    ushort y = System.Convert.ToUInt16(message.Split(' ')[1]);
-                    ushort z = System.Convert.ToUInt16(message.Split(' ')[2]);
+                    ushort x = System.Convert.ToUInt16(message.Split(' ')[0], CultureInfo.CurrentCulture);
+                    ushort y = System.Convert.ToUInt16(message.Split(' ')[1], CultureInfo.CurrentCulture);
+                    ushort z = System.Convert.ToUInt16(message.Split(' ')[2], CultureInfo.CurrentCulture);
                     x *= 32; x += 16;
                     y *= 32; y += 32;
                     z *= 32; z += 16;

@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -32,9 +33,9 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (p == null) { Player.SendMessage(p, "You cannot use this command from the console"); return; }
-            if (message.ToLower() == "all")
+            if (message.ToLower(CultureInfo.CurrentCulture) == "all")
             {
                 try
                 {

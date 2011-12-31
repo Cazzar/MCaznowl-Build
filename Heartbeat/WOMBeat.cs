@@ -5,7 +5,7 @@ using System.Net;
 
 namespace MCForge
 {
-    class WOMBeat : Beat
+    class WOMBeat : IBeat
     {
         public string URL { get { return "http://direct.worldofminecraft.com/hb.php"; } }
         public string Parameters { get; set; }
@@ -15,7 +15,7 @@ namespace MCForge
             string url = "http://direct.worldofminecraft.com/server.php";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
             string flag = "&flags=%5B" + flags + "%5D";
-            if (flags.StartsWith("["))
+            if (flags.StartsWith("[", StringComparison.CurrentCulture))
                 flag = "&flags=" + flags;
             string Parameters = "ip=" + IP + "&port=" + Port + "&salt=" + Server.salt + "&alt=" + Name.Replace(' ', '+') + "&desc=" + Disc.Replace(' ', '+') + flag;
 

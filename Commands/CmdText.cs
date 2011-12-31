@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -34,7 +35,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message.ToLower() == "superops" || message.ToLower() == "ops" || message.ToLower() == "advbuilders" || message.ToLower() == "builders")
+            if (message.ToLower(CultureInfo.CurrentCulture) == "superops" || message.ToLower(CultureInfo.CurrentCulture) == "ops" || message.ToLower(CultureInfo.CurrentCulture) == "advbuilders" || message.ToLower(CultureInfo.CurrentCulture) == "builders")
             {
                 p.SendMessage("You cannot try to promote yourself with /text! You have been reported to all Ops!");
                 Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " tried to promote themselves by using /text!!");
@@ -57,7 +58,7 @@ namespace MCForge
 
             try
             {
-                if (param[0].ToLower() == "delete")
+                if (param[0].ToLower(CultureInfo.CurrentCulture) == "delete")
                 {
                     string filename = SanitizeFileName(param[1]) + ".txt";
                     if (File.Exists("extra/text/" + filename))
@@ -91,7 +92,7 @@ namespace MCForge
                         message = message.Substring(message.IndexOf(' ') + 1);
 
                     string contents = message;
-                    if (contents == "")
+                    if ((contents != null && String.IsNullOrEmpty(contents)))
                     {
                         Help(p);
                         return;

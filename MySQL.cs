@@ -23,6 +23,7 @@ using System.Text;
 using System.IO;
 using MySql.Data.MySqlClient;
 using MySql.Data.Types;
+using System.Globalization;
 //using System.Data.SQLite;
 
 namespace MCForge
@@ -33,35 +34,35 @@ namespace MCForge
         {
             private static string connStringFormat = "Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}";
 
-            public static string connString { get { return String.Format(connStringFormat, Server.MySQLHost, Server.MySQLPort, Server.MySQLUsername, Server.MySQLPassword, Server.DatabasePooling); } }
-            public static void executeQuery(string queryString, bool createDB = false)
+            public static string connString { get { return String.Format(CultureInfo.CurrentCulture, connStringFormat, Server.MySQLHost, Server.MySQLPort, Server.MySQLUsername, Server.MySQLPassword, Server.DatabasePooling); } }
+            public static void executeQuery(string query, bool createDB = false)
             {
-                Database.executeQuery(queryString, createDB);
+                Database.executeQuery(query, createDB);
             }
 
-            public static DataTable fillData(string queryString, bool skipError = false)
+            public static DataTable fillData(string query, bool skipError = false)
             {
-                return Database.fillData(queryString, skipError);
+                return Database.fillData(query, skipError);
             }
 
-            internal static void execute(string queryString, bool createDB = false) {
+            internal static void execute(string query, bool createDB = false) {
                 using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
                     if (!createDB) {
                         conn.ChangeDatabase(Server.MySQLDatabaseName);
                     }
-                    using (MySqlCommand cmd = new MySqlCommand(queryString, conn)) {
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn)) {
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                 }
             }
 
-            internal static void fill(string queryString, DataTable toReturn) {
+            internal static void fill(string query, DataTable toReturn) {
                 using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
                     conn.ChangeDatabase(Server.MySQLDatabaseName);
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(query, conn)) {
                         da.Fill(toReturn);
                     }
                     conn.Close();

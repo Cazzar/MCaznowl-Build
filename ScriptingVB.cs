@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 
 namespace MCForge
@@ -63,7 +64,7 @@ namespace MCForge
 
                          "\t\tPublic Overrides ReadOnly Property name() As String" + Environment.NewLine +
                          "\t\t\tGet" + Environment.NewLine +
-                         "\t\t\t\tReturn \"" + CmdName.ToLower() + "\"" + Environment.NewLine +
+                         "\t\t\t\tReturn \"" + CmdName.ToLower(CultureInfo.CurrentCulture) + "\"" + Environment.NewLine +
                          "\t\t\tEnd Get" + Environment.NewLine +
                          "\t\tEnd Property" + Environment.NewLine +
                          Environment.NewLine +
@@ -104,7 +105,7 @@ namespace MCForge
                          Environment.NewLine +
                          "' This one controls what happens when you use /help [commandname]." +   Environment.NewLine +
                          "\t\tPublic Overrides Sub Help(p As Player)" + Environment.NewLine +
-                         "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower() + " - Does stuff.  Example command.\")" + Environment.NewLine +
+                         "\t\t\tPlayer.SendMessage(p, \"/" + CmdName.ToLower(CultureInfo.CurrentCulture) + " - Does stuff.  Example command.\")" + Environment.NewLine +
 
                          "\t\tEnd Sub" + Environment.NewLine +
                          "\tEnd Class" + Environment.NewLine +
@@ -230,25 +231,25 @@ namespace MCForge
             string[] autocmds = File.ReadAllLines("text/cmdautoloadVB.txt");
             foreach (string cmd in autocmds)
             {
-                if (cmd == "")
+                if ((cmd != null && String.IsNullOrEmpty(cmd)))
                 {
                     continue;
                 }
-                string error = ScriptingVB.Load("Cmd" + cmd.ToLower());
+                string error = ScriptingVB.Load("Cmd" + cmd.ToLower(CultureInfo.CurrentCulture));
                 if (error != null)
                 {
                     Server.s.Log(error);
                     error = null;
                     continue;
                 }
-                Server.s.Log("AUTOLOAD: Loaded [VB] " + cmd.ToLower() + ".dll");
+                Server.s.Log("AUTOLOAD: Loaded [VB] " + cmd.ToLower(CultureInfo.CurrentCulture) + ".dll");
             }
         }
 
        
         public static string Load(string command)
         {
-            if (command.Length < 3 || command.Substring(0, 3).ToLower() != "cmd")
+            if (command.Length < 3 || command.Substring(0, 3).ToLower(CultureInfo.CurrentCulture) != "cmd")
             {
                 return "Invalid command name specified.";
             }
@@ -301,7 +302,7 @@ namespace MCForge
         private static string ClassName(string name)
         {
             char[] conv = name.ToCharArray();
-            conv[0] = char.ToUpper(conv[0]);
+            conv[0] = char.ToUpper(conv[0], CultureInfo.CurrentCulture);
             return "Cmd" + new string(conv);
         }
     }

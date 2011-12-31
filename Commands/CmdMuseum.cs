@@ -23,6 +23,7 @@ using System.Data;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -41,7 +42,7 @@ namespace MCForge
             string path;
 
             if (message.Split(' ').Length == 1) path = "levels/" + message + ".lvl";
-            else if (message.Split(' ').Length == 2) try { path = @Server.backupLocation + "/" + message.Split(' ')[0] + "/" + int.Parse(message.Split(' ')[1]) + "/" + message.Split(' ')[0] + ".lvl"; }
+            else if (message.Split(' ').Length == 2) try { path = @Server.backupLocation + "/" + message.Split(' ')[0] + "/" + int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture) + "/" + message.Split(' ')[0] + ".lvl"; }
                 catch { Help(p); return; }
             else { Help(p); return; }
 

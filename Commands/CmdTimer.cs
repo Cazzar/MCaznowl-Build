@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -35,12 +36,12 @@ namespace MCForge
             if (p.cmdTimer == true) { Player.SendMessage(p, "Can only have one timer at a time. Use /abort to cancel your previous timer."); return; }
 
             System.Timers.Timer messageTimer = new System.Timers.Timer(5000);
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             int TotalTime = 0;
             try
             {
-                TotalTime = int.Parse(message.Split(' ')[0]);
+                TotalTime = int.Parse(message.Split(' ')[0], CultureInfo.CurrentCulture);
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
             catch

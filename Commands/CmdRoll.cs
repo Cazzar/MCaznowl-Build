@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,12 +32,12 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             int min, max; Random rand = new Random();
-            try { min = int.Parse(message.Split(' ')[0]); }
+            try { min = int.Parse(message.Split(' ')[0], CultureInfo.CurrentCulture); }
             catch { min = 1; }
-            try { max = int.Parse(message.Split(' ')[1]); }
+            try { max = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture); }
             catch { max = 7; }
 
-            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " rolled a &a" + rand.Next(Math.Min(min, max), Math.Max(min, max) + 1).ToString() + Server.DefaultColor + " (" + Math.Min(min, max) + "|" + Math.Max(min, max) + ")");
+            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " rolled a &a" + rand.Next(Math.Min(min, max), Math.Max(min, max) + 1).ToString(CultureInfo.CurrentCulture) + Server.DefaultColor + " (" + Math.Min(min, max) + "|" + Math.Max(min, max) + ")");
         }
         public override void Help(Player p)
         {

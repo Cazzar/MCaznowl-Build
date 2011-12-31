@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,14 +32,14 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "" || message.IndexOf(' ') == -1) { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message)) || message.IndexOf(' ') == -1) { Help(p); return; }
 
             bool add = true;
-            if (message.Split(' ')[0].ToLower() == "add")
+            if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "add")
             {
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
-            else if (message.Split(' ')[0].ToLower() == "del")
+            else if (message.Split(' ')[0].ToLower(CultureInfo.CurrentCulture) == "del")
             {
                 add = false;
                 message = message.Substring(message.IndexOf(' ') + 1);
@@ -46,7 +47,7 @@ namespace MCForge
 
             if (add)
             {
-                if (message.IndexOf(":") == -1) { Player.SendMessage(p, "&cMissing a colon!"); Help(p); return; }
+                if (message.IndexOf(":", StringComparison.CurrentCulture) == -1) { Player.SendMessage(p, "&cMissing a colon!"); Help(p); return; }
                 string awardName = message.Split(':')[0].Trim();
                 string description = message.Split(':')[1].Trim();
 

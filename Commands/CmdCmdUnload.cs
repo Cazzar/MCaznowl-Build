@@ -32,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (Command.core.Contains(message.Split(' ')[0]))
             {
                 Player.SendMessage(p, "/" + message.Split(' ')[0] + " is a core command, you cannot unload it!");

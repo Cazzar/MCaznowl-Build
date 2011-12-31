@@ -37,9 +37,9 @@ namespace MCForge
             {
                 string skin = (message.Split(' ').Length == 2) ? message.Split(' ')[1] : "";
                 message = message.Split(' ')[0];
-                if (message == "")
+                if ((message != null && String.IsNullOrEmpty(message)))
                 {
-                    if (p.possess == "")
+                    if ((p.possess != null && String.IsNullOrEmpty(p.possess)))
                     {
                         Help(p);
                         return;
@@ -105,17 +105,17 @@ namespace MCForge
                         Player.SendMessage(p, "Cannot possess someone of equal or greater rank.");
                         return;
                     }
-                    if (who.possess != "")
+                    if (!(who.possess != null && String.IsNullOrEmpty(who.possess)))
                     {
                         Player.SendMessage(p, "That player is currently possessing someone!");
                         return;
                     }
-                    if (who.following != "")
+                    if (!(who.following != null && String.IsNullOrEmpty(who.following)))
                     {
                         Player.SendMessage(p, "That player is either following someone or already possessed.");
                         return;
                     }
-                    if (p.possess != "")
+                    if (!(p.possess != null && String.IsNullOrEmpty(p.possess)))
                     {
                         Player oldwho = Player.Find(p.possess);
                         if (oldwho != null)

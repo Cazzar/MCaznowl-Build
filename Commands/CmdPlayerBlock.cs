@@ -14,6 +14,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -28,19 +29,19 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player"); return; }
             try
             {
                 if (message.Split(' ').Length == 2)
                 {
-                    who.blockCount = int.Parse(message.Split(' ')[1]);
+                    who.blockCount = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
                 }
             }
             finally
             {
-                p.SendMessage(who.color + who.name + Server.DefaultColor + " has " + who.blockCount.ToString() + " blocks.");
+                p.SendMessage(who.color + who.name + Server.DefaultColor + " has " + who.blockCount.ToString(CultureInfo.CurrentCulture) + " blocks.");
             }
         }
         public override void Help(Player p)

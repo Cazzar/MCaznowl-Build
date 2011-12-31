@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -19,14 +20,14 @@ namespace MCForge
         public CmdCountdown() { }
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (p == null)
             {
                 Server.s.Log("'null' or console tried to use /countdown. This command is limited to ingame, sorry!!");
                 return;
             }
 
-            string[] command = message.ToLower().Split(' ');
+            string[] command = message.ToLower(CultureInfo.CurrentCulture).Split(' ');
             string par0 = String.Empty;
             string par1 = String.Empty;
             string par2 = String.Empty;
@@ -421,7 +422,7 @@ namespace MCForge
                                     p.SendMessage("You didn't specify a speed, resorting to 'normal'");
                                     goto case "normal"; //More efficient
                             }
-                            if (par2 == null || par2.Trim() == "")
+                            if (par2 == null || (par2.Trim() != null && String.IsNullOrEmpty(par2.Trim())))
                             {
                                 CountdownGame.freezemode = false;
                             }

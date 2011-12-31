@@ -22,6 +22,7 @@ using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -52,8 +53,8 @@ namespace MCForge
 
             foreach (Plugin p in tempList)
             {
-                if (p.name.ToLower() == name.ToLower()) return p;
-                if (p.name.ToLower().IndexOf(name.ToLower()) != -1)
+                if (p.name.ToLower(CultureInfo.CurrentCulture) == name.ToLower(CultureInfo.CurrentCulture)) return p;
+                if (p.name.ToLower(CultureInfo.CurrentCulture).IndexOf(name.ToLower(CultureInfo.CurrentCulture), StringComparison.CurrentCulture) != -1)
                 {
                     if (tempPlayer == null) tempPlayer = p;
                     else returnNull = true;
@@ -155,7 +156,7 @@ namespace MCForge
                 catch { }
                 Server.ErrorLog(e);
 				Server.s.Log("The plugin " + pluginname + " failed to load!");
-				if (creator != "")
+				if (!(creator != null && String.IsNullOrEmpty(creator)))
 					Server.s.Log("You can go bug " + creator + " about it");
 				Thread.Sleep(1000);
             }

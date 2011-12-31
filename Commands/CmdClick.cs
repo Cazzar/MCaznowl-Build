@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -49,10 +50,10 @@ namespace MCForge
                 {
                     for (int value = 0; value < 3; value++)
                     {
-                        if (parameters[value].ToLower() == "x" || parameters[value].ToLower() == "y" || parameters[value].ToLower() == "z")
+                        if (parameters[value].ToLower(CultureInfo.CurrentCulture) == "x" || parameters[value].ToLower(CultureInfo.CurrentCulture) == "y" || parameters[value].ToLower(CultureInfo.CurrentCulture) == "z")
                             click[value] = p.lastClick[value];
                         else if (isValid(parameters[value], value, p))
-                            click[value] = ushort.Parse(parameters[value]);
+                            click[value] = ushort.Parse(parameters[value], CultureInfo.CurrentCulture);
                         else
                         {
                             Player.SendMessage(p, "\"" + parameters[value] + "\" was not valid");
@@ -77,7 +78,7 @@ namespace MCForge
         {
             ushort testValue;
             try {
-                testValue = ushort.Parse(message);
+                testValue = ushort.Parse(message, CultureInfo.CurrentCulture);
             } catch { return false; }
 
             if (testValue < 0)

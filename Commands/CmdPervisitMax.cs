@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -39,7 +40,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             int number = message.Split(' ').Length;
             if (number > 2 || number < 1) { Help(p); return; }
             if (number == 1)
@@ -62,8 +63,8 @@ namespace MCForge
             else
             {
                 int pos = message.IndexOf(' ');
-                string t = message.Substring(0, pos).ToLower();
-                string s = message.Substring(pos + 1).ToLower();
+                string t = message.Substring(0, pos).ToLower(CultureInfo.CurrentCulture);
+                string s = message.Substring(pos + 1).ToLower(CultureInfo.CurrentCulture);
                 LevelPermission Perm = Level.PermissionFromName(s);
                 if (Perm == LevelPermission.Null) { Player.SendMessage(p, "Not a valid rank"); return; }
 

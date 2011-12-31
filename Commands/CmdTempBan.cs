@@ -17,6 +17,7 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace MCForge
 {
@@ -31,13 +32,13 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (message.IndexOf(' ') == -1) message = message + " 60";
 
             Player who = Player.Find(message.Split(' ')[0]);
             if (who == null) { Player.SendMessage(p, "Could not find player"); return; }
             if (p != null && who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot ban someone of the same rank"); return; }
-            if (Server.devs.Contains(who.name.ToLower()))
+            if (Server.devs.Contains(who.name.ToLower(CultureInfo.CurrentCulture)))
             {
                 Player.SendMessage(p, "You can't ban a MCForge Developer!");
                 if (p != null)
@@ -53,7 +54,7 @@ namespace MCForge
             int minutes;
             try
             {
-                minutes = int.Parse(message.Split(' ')[1]);
+                minutes = int.Parse(message.Split(' ')[1], CultureInfo.CurrentCulture);
             } catch { Player.SendMessage(p, "Invalid minutes"); return; }
             if (minutes > 1440) { Player.SendMessage(p, "Cannot ban for more than a day"); return; }
             if (minutes < 1) { Player.SendMessage(p, "Cannot ban someone for less than a minute"); return; }

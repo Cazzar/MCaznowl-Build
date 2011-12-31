@@ -28,12 +28,24 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public string loadname;
+        private string _loadname; 
+
+        public string loadname
+        {
+            get
+            {
+                return _loadname;
+            }
+            set
+            {
+                _loadname = value;
+            }
+        }
         public CmdPaste() { }
         
         public override void Use(Player p, string message)
         {
-            if (message != "") { Help(p); return; }
+            if (!(message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
 
             CatchPos cpos;
             cpos.x = 0; cpos.y = 0; cpos.z = 0; p.blockchangeObject = cpos;
@@ -64,7 +76,7 @@ namespace MCForge
                     Pos1.z = (ushort)(Math.Abs(pos.z) + z);
 
                     if (pos.type != Block.air || p.copyAir)
-                        unchecked { if (p.level.GetTile(Pos1.x, Pos1.y, Pos1.z) != Block.Zero) BlockQueue.Addblock(p, (ushort)(Pos1.x + p.copyoffset[0]), (ushort)(Pos1.y + p.copyoffset[1]), (ushort)(Pos1.z + p.copyoffset[2]), pos.type); }
+                        unchecked { if (p.level.GetTile(Pos1.x, Pos1.y, Pos1.z) != Block.Zero) Block1.Addblock(p, (ushort)(Pos1.x + p.copyoffset[0]), (ushort)(Pos1.y + p.copyoffset[1]), (ushort)(Pos1.z + p.copyoffset[2]), pos.type); }
                 });
             }
             else
@@ -85,6 +97,26 @@ namespace MCForge
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
 
-        struct CatchPos { public ushort x, y, z; }
+        struct CatchPos { public ushort x, y, z;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(CatchPos x, CatchPos y)
+        {
+            throw new NotImplementedException();
+        }
+        }
     }
 }

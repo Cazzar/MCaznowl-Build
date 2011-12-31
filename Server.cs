@@ -34,15 +34,16 @@ using System.Security.Cryptography;
 
 using MonoTorrent.Client;
 using MCForge.SQL;
+using System.Globalization;
 
 namespace MCForge
 {
-    public class Server
+    public class Server : IDisposable
     {
-        public static bool cancelcommand = false;
-        public static bool canceladmin = false;
-        public static bool cancellog = false;
-        public static bool canceloplog = false;
+        public static bool cancelcommand/* = false*/;
+        public static bool canceladmin/* = false*/;
+        public static bool cancellog/* = false*/;
+        public static bool canceloplog/* = false*/;
         public static string apppath = Application.StartupPath;
         public delegate void OnConsoleCommand(string cmd, string message);
         public static event OnConsoleCommand ConsoleCommand;
@@ -70,7 +71,7 @@ namespace MCForge
         public static ForgeBot IRC;
         public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
-        public static bool UseTextures = false;
+        public static bool UseTextures/* = false*/;
         public static Thread blockThread;
         //public static List<MySql.Data.MySqlClient.MySqlCommand> mySQLCommands = new List<MySql.Data.MySqlClient.MySqlCommand>();
 
@@ -98,9 +99,9 @@ namespace MCForge
         public static List<string> Chatrooms = new List<string>();
         //Other
         public static bool higherranktp = true;
-        public static bool agreetorulesonentry = false;
-        public static bool UseCTF = false;
-        public static bool ServerSetupFinished = false;
+        public static bool agreetorulesonentry/* = false*/;
+        public static bool UseCTF/* = false*/;
+        public static bool ServerSetupFinished/* = false*/;
         public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
@@ -112,7 +113,27 @@ namespace MCForge
         public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
-        public struct TempBan { public string name; public DateTime allowedJoin; }
+        public struct TempBan { public string name; public DateTime allowedJoin;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(TempBan x, TempBan y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(TempBan x, TempBan y)
+        {
+            throw new NotImplementedException();
+        }
+        }
 
         public static MapGenerator MapGen;
 
@@ -124,11 +145,31 @@ namespace MCForge
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
         //Translate settings initialize
-        public static bool transenabled = false;
+        public static bool transenabled/* = false*/;
         public static string translang = "en";
         public static List<string> transignore = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
-        public struct levelID { public int ID; public string name; }
+        public struct levelID { public int ID; public string name;
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(levelID x, levelID y)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(levelID x, levelID y)
+        {
+            throw new NotImplementedException();
+        }
+        }
 
         public static List<string> afkset = new List<string>();
         public static List<string> ircafkset = new List<string>();
@@ -146,11 +187,11 @@ namespace MCForge
         public static bool autorestart;
         public static DateTime restarttime;
 
-        public static bool chatmod = false;
+        public static bool chatmod/* = false*/;
 
         //Global VoteKick In Progress Flag
-        public static bool voteKickInProgress = false;
-        public static int voteKickVotesNeeded = 0;
+        public static bool voteKickInProgress/* = false*/;
+        public static int voteKickVotesNeeded/* = 0*/;
 
 
         //WoM Direct
@@ -162,36 +203,48 @@ namespace MCForge
         public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
         // Extra storage for custom commands
-        public ExtrasCollection Extras = new ExtrasCollection();
+        private Extras _extras = new Extras(); 
+
+        public Extras Extras
+        {
+            get
+            {
+                return _extras;
+            }
+            set
+            {
+                _extras = value;
+            }
+        }
 
         //Color list as a char array
         public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
         //Zombie
         public static ZombieGame zombie;
-        public static bool ZombieModeOn = false;
-        public static bool startZombieModeOnStartup = false;
+        public static bool ZombieModeOn/* = false*/;
+        public static bool startZombieModeOnStartup/* = false*/;
         public static bool noRespawn = true;
         public static bool noLevelSaving = true;
         public static bool noPillaring = true;
         public static string ZombieName = "";
-        public static int gameStatus = 0; //0 = not started, 1 = always on, 2 = one time, 3 = certain amount of rounds, 4 = stop game next round
-        public static bool queLevel = false;
-        public static bool queZombie = false;
+        public static int gameStatus/* = 0*/; //0 = not started, 1 = always on, 2 = one time, 3 = certain amount of rounds, 4 = stop game next round
+        public static bool queLevel/* = false*/;
+        public static bool queZombie/* = false*/;
         public static string nextZombie = "";
         public static string nextLevel = "";
-        public static bool zombieRound = false;
+        public static bool zombieRound/* = false*/;
         public static string lastPlayerToInfect = "";
-        public static int infectCombo = 0;
-        public static int YesVotes = 0;
-        public static int NoVotes = 0;
-        public static bool voting = false;
-        public static bool votingforlevel = false;
-        public static int Level1Vote = 0;
-        public static int Level2Vote = 0;
-        public static int Level3Vote = 0;
+        public static int infectCombo/* = 0*/;
+        public static int YesVotes/* = 0*/;
+        public static int NoVotes/* = 0*/;
+        public static bool voting/* = false*/;
+        public static bool votingforlevel/* = false*/;
+        public static int Level1Vote/* = 0*/;
+        public static int Level2Vote/* = 0*/;
+        public static int Level3Vote/* = 0*/;
         public static bool ChangeLevels = true;
-        public static bool UseLevelList = false;
+        public static bool UseLevelList/* = false*/;
         public static bool ZombieOnlyServer = true;
         public static List<String> LevelList = new List<String>();
         public static string lastLevelVote1 = "";
@@ -224,7 +277,7 @@ namespace MCForge
 //        public static bool guestGoto = false;
 
         //Spam Prevention
-        public static bool checkspam = false;
+        public static bool checkspam/* = false*/;
         public static int spamcounter = 8;
         public static int mutespamtime = 60;
         public static int spamcountreset = 5;
@@ -239,15 +292,15 @@ namespace MCForge
 //        public static bool console = false; // never used
         public static bool reportBack = true;
 
-        public static bool irc = false;
-        public static bool ircColorsEnable = false;
+        public static bool irc/* = false*/;
+        public static bool ircColorsEnable/* = false*/;
 //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
         public static string ircChannel = "#changethis";
         public static string ircOpChannel = "#changethistoo";
-        public static bool ircIdentify = false;
+        public static bool ircIdentify/* = false*/;
         public static string ircPassword = "";
         public static bool verifyadmins = true;
         public static LevelPermission verifyadminsrank = LevelPermission.Operator;
@@ -266,23 +319,23 @@ namespace MCForge
 
         public static bool physicsRestart = true;
         public static bool deathcount = true;
-        public static bool AutoLoad = false;
+        public static bool AutoLoad/* = false*/;
         public static int physUndo = 20000;
         public static int totalUndo = 200;
         public static bool rankSuper = true;
-        public static bool oldHelp = false;
+        public static bool oldHelp/* = false*/;
         public static bool parseSmiley = true;
-        public static bool useWhitelist = false;
-        public static bool PremiumPlayersOnly = false;
-        public static bool forceCuboid = false;
-        public static bool profanityFilter = false;
-        public static bool notifyOnJoinLeave = false;
-        public static bool repeatMessage = false;
-        public static bool globalignoreops = false;
+        public static bool useWhitelist/* = false*/;
+        public static bool PremiumPlayersOnly/* = false*/;
+        public static bool forceCuboid/* = false*/;
+        public static bool profanityFilter/* = false*/;
+        public static bool notifyOnJoinLeave/* = false*/;
+        public static bool repeatMessage/* = false*/;
+        public static bool globalignoreops/* = false*/;
 
         public static bool checkUpdates = true;
 
-        public static bool useMySQL = false;
+        public static bool useMySQL/* = false*/;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
@@ -309,38 +362,38 @@ namespace MCForge
         public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
         public static string cheapMessageGiven = " is now being cheap and being immortal";
-        public static bool customBan = false;
+        public static bool customBan/* = false*/;
         public static string customBanMessage = "You're banned!";
-        public static bool customShutdown = false;
+        public static bool customShutdown/* = false*/;
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
-        public static bool customGrieferStone = false;
+        public static bool customGrieferStone/* = false*/;
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
         public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
         public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
-        public static bool logbeat = false;
-        public static bool adminsjoinsilent = false;
+        public static bool logbeat/* = false*/;
+        public static bool adminsjoinsilent/* = false*/;
         public static bool mono { get { return (Type.GetType("Mono.Runtime") != null); } }
         public static string server_owner = "Notch";
-        public static bool WomDirect = false;
-        public static bool UseSeasons = false;
-        public static bool guestLimitNotify = false;
+        public static bool WomDirect/* = false*/;
+        public static bool UseSeasons/* = false*/;
+        public static bool guestLimitNotify/* = false*/;
         public static bool guestJoinNotify = true;
         public static bool guestLeaveNotify = true;
 
-        public static bool flipHead = false;
+        public static bool flipHead/* = false*/;
 
-        public static bool shuttingDown = false;
-        public static bool restarting = false;
+        public static bool shuttingDown/* = false*/;
+        public static bool restarting/* = false*/;
 
         //hackrank stuff
         public static bool hackrank_kick = true;
         public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
 
         // lol useless junk here lolololasdf poop
-        public static bool showEmptyRanks = false;
+        public static bool showEmptyRanks/* = false*/;
         public static byte grieferStoneType = 1;
         public static bool grieferStoneBan = true;
         public static LevelPermission grieferStoneRank = LevelPermission.Guest;
@@ -502,7 +555,7 @@ namespace MCForge
             else
             {
                 string bantext = File.ReadAllText("text/bans.txt");
-                if (!bantext.Contains("%20") && bantext != "")
+                if (!bantext.Contains("%20") && !(bantext != null && String.IsNullOrEmpty(bantext)))
                 {
                     bantext = bantext.Replace("~", "%20");
                     bantext = bantext.Replace("-", "%20");
@@ -539,7 +592,7 @@ namespace MCForge
                     string line;
                     while ((line = r.ReadLine()) != null)
                     {
-                        if (!line.StartsWith("//"))
+                        if (!line.StartsWith("//", StringComparison.CurrentCulture))
                         {
                             var split = line.Split(new char[] { ':' }, 2);
                             if (split.Length == 2 && !String.IsNullOrEmpty(split[0]))
@@ -732,9 +785,9 @@ namespace MCForge
                             string _line = line.Trim();
                             try
                             {
-                                if (_line == "") { continue; }
+                                if ((_line != null && String.IsNullOrEmpty(_line))) { continue; }
                                 if (_line[0] == '#') { continue; }
-                                int index = _line.IndexOf("=");
+                                int index = _line.IndexOf("=", StringComparison.CurrentCulture);
 
                                 string key = _line.Split('=')[0].Trim();
                                 string value;
@@ -747,7 +800,7 @@ namespace MCForge
                                     value = "0";
                                 }
 
-                                if (!key.Equals(mainLevel.name))
+                                if (!key.Equals(mainLevel.name, StringComparison.CurrentCulture))
                                 {
                                     Command.all.Find("load").Use(null, key + " " + value);
                                     Level l = Level.FindExact(key);
@@ -763,7 +816,7 @@ namespace MCForge
                                 {
                                     try
                                     {
-                                        int temp = int.Parse(value);
+                                        int temp = int.Parse(value, CultureInfo.CurrentCulture);
                                         if (temp >= 0 && temp <= 3)
                                         {
                                             mainLevel.setPhysics(temp);
@@ -946,7 +999,7 @@ processThread.Start();
                                 {
                                     unchecked { p.SendPos((byte)-1, p.pos[0], p.pos[1], p.pos[2], p.rot[0], p.rot[1]); } continue;
                                 }
-                                else if (p.following != "")
+                                else if (!(p.following != null && String.IsNullOrEmpty(p.following)))
                                 {
                                     who = Player.Find(p.following);
                                     if (who == null || who.level != p.level)
@@ -971,7 +1024,7 @@ processThread.Start();
                                         unchecked { p.SendPos((byte)-1, who.pos[0], who.pos[1], who.pos[2], who.rot[0], who.rot[1]); }
                                     }
                                 }
-                                else if (p.possess != "")
+                                else if (!(p.possess != null && String.IsNullOrEmpty(p.possess)))
                                 {
                                     who = Player.Find(p.possess);
                                     if (who == null || who.level != p.level)
@@ -1021,7 +1074,7 @@ processThread.Start();
                         ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
-                BlockQueue.Start();
+                Block1.Start();
             });
         }
 
@@ -1179,15 +1232,15 @@ processThread.Start();
             {
                 if (!systemMsg)
                 {
-                    OnLog(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnLog(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
                 else
                 {
-                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
             }
             
-            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message + Environment.NewLine);
         }
 
         public void OpLog(string message, bool systemMsg = false)
@@ -1205,15 +1258,15 @@ processThread.Start();
             {
                 if (!systemMsg)
                 {
-                    OnOp(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnOp(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
                 else
                 {
-                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
             }
 
-            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message + Environment.NewLine);
         }
 
         public void AdminLog(string message, bool systemMsg = false)
@@ -1231,15 +1284,15 @@ processThread.Start();
             {
                 if (!systemMsg)
                 {
-                    OnAdmin(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnAdmin(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
                 else
                 {
-                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
+                    OnSystem(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
                 }
             }
 
-            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message + Environment.NewLine);
         }
 
         public void ErrorCase(string message)
@@ -1250,8 +1303,8 @@ processThread.Start();
 
         public void CommandUsed(string message)
         {
-            if (OnCommand != null) OnCommand(DateTime.Now.ToString("(HH:mm:ss) ") + message);
-            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
+            if (OnCommand != null) OnCommand(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message);
+            Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ", CultureInfo.CurrentCulture) + message + Environment.NewLine);
         }
 
         public static void ErrorLog(Exception ex)
@@ -1297,5 +1350,65 @@ processThread.Start();
             }
             catch { }
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (process != null)
+                        process.Dispose();
+                    if (updateTimer != null)
+                        updateTimer.Dispose();
+                    if (messageTimer != null)
+                        messageTimer.Dispose();
+                    if (cloneTimer != null)
+                        cloneTimer.Dispose();
+                    if (ctf != null)
+                        ctf.Dispose();
+                    if (PCCounter != null)
+                        PCCounter.Dispose();
+                    if (ProcessCounter != null)
+                        ProcessCounter.Dispose();
+                    if (mainLevel != null)
+                        mainLevel.Dispose();
+                    if (Extras != null)
+                        Extras.Dispose();
+                    if (zombie != null)
+                        zombie.Dispose();
+                    if (lava != null)
+                        lava.Dispose();
+                    if (omnibanCheckTimer != null)
+                        omnibanCheckTimer.Dispose();
+                    if (s != null)
+                        s.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }
