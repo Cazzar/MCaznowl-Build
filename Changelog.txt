@@ -61,11 +61,11 @@ v5.4.0.0
 - Re-added shortcut /m for /repeat (Due to complaints.)
 - Removed /zombiespawn due to it being able to crash servers.
 - Revamped /review, so it now uses a queue. 
-	-/review enter - enters you into the review queue (/review does the same for those who can't use /review next).
-	-/review next - will take an op to the next person in the review queue.
-	-/review view - lists everyone in the review queue. 
-	-/review leave - using this will remove you from the queue.
-	-/review clear - clears the review queue.
+	- /review enter - enters you into the review queue (/review does the same for those who can't use /review next).
+	- /review next - will take an op to the next person in the review queue.
+	- /review view - lists everyone in the review queue. 
+	- /review leave - using this will remove you from the queue.
+	- /review clear - clears the review queue.
 	-There is a new tab in the properties window for /review. 
 - Using @@ before a message will send a whisper message to the console.	
 
