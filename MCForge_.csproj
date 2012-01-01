@@ -112,6 +112,7 @@
     <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
+    <Compile Include="SingleInstance.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
