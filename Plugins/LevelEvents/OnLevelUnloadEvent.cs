@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the LevelUnload Event class
+    /// </summary>
     public class OnLevelUnloadEvent
     {
         internal static List<OnLevelUnloadEvent> events = new List<OnLevelUnloadEvent>();
@@ -46,6 +49,11 @@ namespace MCForge
             }
             events = temp;
         }
+        /// <summary>
+        /// Find a event
+        /// </summary>
+        /// <param name="plugin">The plugin that registered this event</param>
+        /// <returns>The event</returns>
         public static OnLevelUnloadEvent Find(Plugin plugin)
         {
             foreach (OnLevelUnloadEvent p in events.ToArray())
@@ -55,6 +63,12 @@ namespace MCForge
             }
             return null;
         }
+        /// <summary>
+        /// Register this event
+        /// </summary>
+        /// <param name="method">This is the delegate that will get called when this event occurs</param>
+        /// <param name="priority">The priority (imporantce) of this call</param>
+        /// <param name="plugin">The plugin object that is registering the event</param>
         public static void Register(Level.OnLevelUnload method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
@@ -62,6 +76,10 @@ namespace MCForge
             events.Add(new OnLevelUnloadEvent(method, priority, plugin));
             Organize();
         }
+        /// <summary>
+        /// UnRegister this event
+        /// </summary>
+        /// <param name="plugin">The plugin object that has this event registered</param>
         public static void UnRegister(Plugin plugin)
         {
             if (Find(plugin) == null)

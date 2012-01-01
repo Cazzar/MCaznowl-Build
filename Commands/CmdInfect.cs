@@ -3,6 +3,10 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /infect
+    /// use /help infect in-game for more info
+    /// </summary>
     public class CmdInfect : Command
     {
         public override string name { get { return "infect"; } }

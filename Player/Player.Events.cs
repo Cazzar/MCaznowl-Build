@@ -2,6 +2,9 @@
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the player object
+    /// </summary>
     public partial class Player
     {
         internal bool cancelcommand = false;
@@ -11,10 +14,26 @@ namespace MCForge
         internal bool cancelmysql = false;
         internal bool cancelmessage = false;
         //Should people be able to cancel this event?
+        /// <summary>
+        /// This delegate is called when the MOTD is sent to the player
+        /// </summary>
+        /// <param name="p">The player the server is sending the buffer to</param>
+        /// <param name="buffer">The byte data its sending</param>
         public delegate void MOTDSent(Player p, byte[] buffer);
+        /// <summary>
+        /// This event is called when the server is sending the MOTD to a player
+        /// </summary>
         public static event MOTDSent OnSendMOTD;
         //Should people be able to cancel this event?
+        /// <summary>
+        /// This delegate is used when the server sent the map to a player (Not before but after)
+        /// </summary>
+        /// <param name="p">The player that got the map</param>
+        /// <param name="buffer">The byte data</param>
         public delegate void MapSent(Player p, byte[] buffer);
+        /// <summary>
+        /// This event is called whenever the server sends a map to a player
+        /// </summary>
         public static event MapSent OnSendMap;
         /// <summary>
         /// This is called when a player goes AFK

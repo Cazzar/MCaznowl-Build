@@ -22,6 +22,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// These are server event that can be canceled
+    /// </summary>
     public enum ServerEvents
     {
     	//TODO
@@ -31,6 +34,9 @@ namespace MCForge
     	ServerAdminLog,
     	ConsoleCommand
     }
+    /// <summary>
+    /// These are player events that can be canceled
+    /// </summary>
     public enum PlayerEvents
     {
         PlayerCommand,
@@ -41,11 +47,17 @@ namespace MCForge
         MYSQLSave,
         PlayerRankChange
     }
+    /// <summary>
+    /// These are Global (static) level events that can be canceled
+    /// </summary>
     public enum GlobalLevelEvents
     {
         LevelLoad,
         LevelSave
     }
+    /// <summary>
+    /// These are level events that can be canceled
+    /// </summary>
     public enum LevelEvents
     {
         LevelUnload,

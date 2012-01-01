@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /splace
+    /// use /help splace in game for more info
+    /// </summary>
     public class CmdSPlace : Command
     {
         public override string name { get { return "splace"; } }

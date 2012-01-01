@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /pcreate
+    /// use /help pcreate in-game for more info
+    /// </summary>
     public class CmdPCreate : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }

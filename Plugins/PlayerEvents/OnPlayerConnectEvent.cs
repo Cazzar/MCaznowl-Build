@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This event is called whenever a player connects to the server
+    /// </summary>
     public class OnPlayerConnectEvent
     {
         internal static List<OnPlayerConnectEvent> events = new List<OnPlayerConnectEvent>();
@@ -55,6 +58,13 @@ namespace MCForge
             }
             return null;
         }
+        /// <summary>
+        /// Register this event
+        /// This will call the method "method" everytime this event is triggered
+        /// </summary>
+        /// <param name="method">This is the delegate that will get called when this event occurs</param>
+        /// <param name="priority">The priority (imporantce) of this call</param>
+        /// <param name="plugin">The plugin object that is registering the event</param>
         public static void Register(Player.OnPlayerConnect method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
@@ -62,6 +72,10 @@ namespace MCForge
             events.Add(new OnPlayerConnectEvent(method, priority, plugin));
             Organize();
         }
+        /// <summary>
+        /// UnRegister this event
+        /// </summary>
+        /// <param name="plugin">The plugin object that has this event registered</param>
         public static void UnRegister(Plugin plugin)
         {
             if (Find(plugin) == null)

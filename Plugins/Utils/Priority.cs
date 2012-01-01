@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// Importance
+    /// </summary>
     public enum Priority : byte
     {
         Low = 0,

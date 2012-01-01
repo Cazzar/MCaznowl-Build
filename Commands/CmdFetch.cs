@@ -22,6 +22,10 @@ using System.Threading;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /fetch
+    /// use /help fetch in-game for more info
+    /// </summary>
 	public class CmdFetch : Command
 	{
 		public override string name { get { return "fetch"; } }

@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace MCForge
 {
+    /// <summary>
+    /// You can use this class to store extra information for the server
+    /// For Example:
+    /// This is useful if you want to store the value "lives" for the player object to 
+    /// </summary>
     public class ExtrasCollection : IDisposable
     {
         private Dictionary<string, object> _objects = new Dictionary<string, object>();

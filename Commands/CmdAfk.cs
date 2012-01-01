@@ -21,6 +21,10 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /afk
+    /// use /help afk in-game for more info
+    /// </summary>
     class CmdAfk : Command
     {
         public override string name { get { return "afk"; } }
