@@ -26,7 +26,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public static string keywords { get { return "head fix flip troll"; } }
         public CmdFlipHead() { }
 
         public override void Use(Player p, string message)

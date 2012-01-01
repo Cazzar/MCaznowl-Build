@@ -30,7 +30,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public static string keywords { get { return "troll cat"; } }
         public override void Use(Player p, string message)
         {
             if (p == null) { Player.SendMessage(p, "This command can only be used in-game!"); return; }

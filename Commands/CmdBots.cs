@@ -27,7 +27,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
-        public static string keywords { get { return "bot list ai"; } }
         public CmdBots() { }
 
         public override void Use(Player p, string message)

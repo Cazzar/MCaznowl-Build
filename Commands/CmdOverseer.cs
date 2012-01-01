@@ -27,7 +27,6 @@ namespace MCForge
         public override string type { get { return "commands"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
-        public static string keywords { get { return "over see map level lvl"; } }
         public CmdOverseer() { }
         public override void Use(Player p, string message)
         {

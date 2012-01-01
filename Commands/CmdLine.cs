@@ -28,7 +28,6 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
-        public static string keywords { get { return "draw block paint"; } }
         public CmdLine() { }
 
         public override void Use(Player p, string message)

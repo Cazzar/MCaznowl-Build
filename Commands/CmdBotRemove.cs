@@ -27,7 +27,6 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
-        public static string keywords { get { return "bot remove del"; } }
         public string[,] botlist;
         public CmdBotRemove() { }
 

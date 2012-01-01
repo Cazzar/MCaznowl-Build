@@ -28,7 +28,6 @@ namespace MCForge
         public override string type { get { return "game"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
-        public static string keywords { get { return "lava surv"; } }
         public CmdLavaSurvival() { }
 
         public override void Use(Player p, string message)

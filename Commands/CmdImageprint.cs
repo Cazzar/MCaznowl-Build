@@ -33,7 +33,6 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
-        public static string keywords { get { return "jpg bmp gif png image print"; } }
         public CmdImageprint() { }
 
         public override void Use(Player p, string message)

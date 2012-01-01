@@ -34,7 +34,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
-        public static string keywords { get { return "no rules"; } }
         public CmdDisagree() { }
 
         public override void Use(Player p, string message)

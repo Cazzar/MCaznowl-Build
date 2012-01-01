@@ -10,7 +10,6 @@ namespace MCForge
         public override string type { get { return "game"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public static string keywords { get { return "virus inf"; } }
         public CmdInfect() { }
         public override void Use(Player p, string message)
         {

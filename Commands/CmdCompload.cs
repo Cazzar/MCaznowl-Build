@@ -27,7 +27,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
         public override bool museumUsable { get { return true; } }
-        public static string keywords { get { return "cmd command custom load compile"; } }
         public override void Help(Player p) { Player.SendMessage(p, "/compload <command> - Compiles AND loads <command> for use (shortcut = /cml)"); }
         public override void Use(Player p, string message)
         {

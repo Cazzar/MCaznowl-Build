@@ -15,7 +15,6 @@ namespace MCForge.Commands
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public static string keywords { get { return "money cash " + Server.moneys; } }
         public override void Use(Player p, string message)
         {
             string[] command = message.Trim().Split(' ');

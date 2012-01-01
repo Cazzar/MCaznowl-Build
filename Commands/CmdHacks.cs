@@ -32,7 +32,6 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public static string keywords { get { return "hack fake"; } }
         public CmdHacks() { }
 
         public override void Use(Player p, string message)

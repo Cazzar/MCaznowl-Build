@@ -29,7 +29,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public static string keywords { get { return "joke troll fun"; } }
+        public static string keywords { get { return ""; } }
         public CmdJoker() { }
 
         public override void Use(Player p, string message)

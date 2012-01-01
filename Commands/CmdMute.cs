@@ -26,7 +26,6 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public static string keywords { get { return "voice chat player"; } }
         public CmdMute() { }
 
         public override void Use(Player p, string message)

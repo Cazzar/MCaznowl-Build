@@ -28,7 +28,6 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public static string keywords { get { return "grab block mushroom brown"; } }
         public CmdChain() { }
         // Fields
         public int x;

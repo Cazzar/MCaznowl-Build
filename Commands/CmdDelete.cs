@@ -27,7 +27,6 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public static string keywords { get { return "del mode"; } }
         public CmdDelete() { }
 
         public override void Use(Player p, string message)

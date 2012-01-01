@@ -26,7 +26,6 @@ namespace MCForge
         public override string name { get { return "impersonate"; } }
         public override string shortcut { get { return "imp"; } }
         public override string type { get { return "other"; } }
-        public static string keywords { get { return "possess player"; } }
         public void SendIt(Player p, string message, Player player)
         {
             if (message.Split(' ').Length > 1)
