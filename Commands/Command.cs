@@ -28,7 +28,6 @@ namespace MCForge
 		public abstract string type { get; }
 		public abstract bool museumUsable { get; }
         public abstract LevelPermission defaultRank { get; }
-        public override string keywords { get; }
 		public abstract void Use(Player p, string message);
 		public abstract void Help(Player p);
 		public bool isIntervalized;

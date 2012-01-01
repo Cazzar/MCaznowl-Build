@@ -24,6 +24,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
         public override bool museumUsable { get { return false; } }
+        public static string keywords { get { return "zone map lvl level entire"; } }
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/ozone <rank/player> - Zones the entire map to <rank/player>");

@@ -26,6 +26,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public static string keywords { get { return "move all player pos"; } }
         public override void Use(Player p, string message)
         {
             Level level = Level.Find(message.Split(' ')[0]);
