@@ -91,6 +91,7 @@
     <Compile Include="Commands\CmdC4.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
+    <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
     <Compile Include="GUI\WoM.cs">
