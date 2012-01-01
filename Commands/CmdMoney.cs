@@ -25,7 +25,7 @@ namespace MCForge
 		public override string shortcut { get { return ""; } }
 		public override string type { get { return "other"; } }
 		public override bool museumUsable { get { return true; } }
-		public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
 		public override void Use(Player p, string message)
 		{
             if (message == "")

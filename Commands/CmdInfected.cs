@@ -10,7 +10,7 @@ namespace MCForge
     public class CmdInfected : Command
     {
         public override string name { get { return "infected"; } }
-        public override string shortcut { get { return "infected"; } }
+        public override string shortcut { get { return ""; } }
         public override string type { get { return "game"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }

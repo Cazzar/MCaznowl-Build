@@ -27,7 +27,7 @@ namespace MCForge
 		public abstract string shortcut { get; }
 		public abstract string type { get; }
 		public abstract bool museumUsable { get; }
-		public abstract LevelPermission defaultRank { get; }
+        public abstract LevelPermission defaultRank { get; }
 		public abstract void Use(Player p, string message);
 		public abstract void Help(Player p);
 		public bool isIntervalized;
@@ -242,6 +242,7 @@ namespace MCForge
 			all.Add(new CmdSave());
 			all.Add(new CmdSay());
 			all.Add(new CmdSCinema());
+            all.Add(new CmdSearch());
 			all.Add(new CmdSeen());
 			all.Add(new CmdSend());
 			all.Add(new CmdSendCmd());
