@@ -25,7 +25,7 @@ namespace MCForge
       public override string shortcut { get { return "frk"; } } 
       public override string type { get { return "other"; } }
       public override bool museumUsable { get { return true; } }
-      public override string keywords { get { return "rank mod fake troll"; } }
+      public static string keywords { get { return "rank mod fake troll"; } }
       public override void Help(Player p)
       {
          Player.SendMessage(p, "/fakerank <name> <rank> - Sends a fake rank change message.");

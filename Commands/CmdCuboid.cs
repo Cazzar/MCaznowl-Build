@@ -28,7 +28,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
-        public override string keywords { get { return "box set area block"; } }
+        public static string keywords { get { return "box set area block"; } }
         public CmdCuboid() { }
         public static byte wait;
 

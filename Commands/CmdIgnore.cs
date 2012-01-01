@@ -32,7 +32,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
-        public override string keywords { get { return "abort chat player"; } }
+        public static string keywords { get { return "abort chat player"; } }
         public CmdIgnore() { }
         public static byte lastused = 0;
         public static string ignore = "";

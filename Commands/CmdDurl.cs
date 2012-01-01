@@ -12,7 +12,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
-        public override string keywords { get { return "url wom"; } }
+        public static string keywords { get { return "url wom"; } }
         public CmdDurl() { }
 
         public override void Use(Player p, string message)

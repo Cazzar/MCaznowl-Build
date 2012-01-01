@@ -34,7 +34,7 @@ namespace MCForge
 		public override string type { get { return "other"; } }
 		public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
-        public override string keywords { get { return "gif image cinema cin"; } }
+        public static string keywords { get { return "gif image cinema cin"; } }
 
         String msg = "";
         int picHeight = 0;

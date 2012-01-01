@@ -27,7 +27,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public override string keywords { get { return "god life inf"; } }
+        public static string keywords { get { return "god life inf"; } }
         public CmdInvincible() { }
 
         public override void Use(Player p, string message)

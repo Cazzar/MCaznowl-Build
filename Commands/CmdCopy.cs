@@ -29,7 +29,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public override string keywords { get { return "clipboard blocks save"; } }
+        public static string keywords { get { return "clipboard blocks save"; } }
         public int allowoffset = 0;
         public CmdCopy() { }
 
@@ -330,7 +330,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
-        public override string keywords { get { return "new clipboard copy load"; } }
+        public static string keywords { get { return "new clipboard copy load"; } }
         public CmdCopyLoadNet() { }
 
         public override void Use(Player p, string message)
@@ -352,7 +352,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public override string keywords { get { return "copy save clipboard"; } }
+        public static string keywords { get { return "copy save clipboard"; } }
         public CmdCopySaveNet() { }
 
         public override void Use(Player p, string message)

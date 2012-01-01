@@ -28,7 +28,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public override string keywords { get { return "chat room join leave del add remove"; } }
+        public static string keywords { get { return "chat room join leave del add remove"; } }
         public override void Use(Player p, string message)
         {
             if (p == null)
