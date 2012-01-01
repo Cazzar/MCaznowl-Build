@@ -30,6 +30,7 @@ namespace MCForge
         public override string type { get { return "game"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override string keywords { get { return "capture flag"; } }
         public CmdCTF() { }
 
         public override void Use(Player p, string message)

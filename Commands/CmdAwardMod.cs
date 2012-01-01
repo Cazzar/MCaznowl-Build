@@ -27,6 +27,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
+        public override string keywords { get { return "trophy add del price"; } }
         public CmdAwardMod() { }
 
         public override void Use(Player p, string message)

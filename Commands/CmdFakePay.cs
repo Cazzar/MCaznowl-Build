@@ -24,6 +24,7 @@ namespace MCForge
         public override string shortcut { get { return "fpay"; } }
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
+        public override string keywords { get { return "fake troll pay " + Server.moneys; } }
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/fakepay <name> <amount> - Sends a fake give change message.");

@@ -26,6 +26,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override string keywords { get { return "kick mod punish"; } }
         public CmdBan() { }
 
         public override void Use(Player p, string message)

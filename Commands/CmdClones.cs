@@ -33,6 +33,7 @@ namespace MCForge
         public override string type { get { return "information"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
+        public override string keywords { get { return "clone ip player info"; } }
         public CmdClones() { }
 
         public override void Use(Player p, string message)

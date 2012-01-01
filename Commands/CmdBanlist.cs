@@ -27,6 +27,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override string keywords { get { return "list ban info mod"; } }
         public CmdBanlist() { }
 
         public override void Use(Player p, string message)
@@ -56,7 +57,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            
+            Player.SendMessage(p, "/banlist - shows who's banned on server");
         }
     }
 }

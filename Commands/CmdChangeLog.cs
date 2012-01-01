@@ -28,6 +28,7 @@ namespace MCForge.Commands
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override string keywords { get { return "mcforge change log"; } }
         public override void Use(Player p, string message)
         {
             if (!File.Exists("changelog.txt"))

@@ -242,6 +242,7 @@ namespace MCForge
 			all.Add(new CmdSave());
 			all.Add(new CmdSay());
 			all.Add(new CmdSCinema());
+            all.Add(new CmdSearch());
 			all.Add(new CmdSeen());
 			all.Add(new CmdSend());
 			all.Add(new CmdSendCmd());

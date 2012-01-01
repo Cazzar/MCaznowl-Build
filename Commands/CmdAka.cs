@@ -10,6 +10,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override string keywords { get { return "nick reset user name"; } }
         public CmdAka() { }
         public override void Use(Player p, string message)
         {
