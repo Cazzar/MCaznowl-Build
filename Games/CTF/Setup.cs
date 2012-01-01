@@ -3,26 +3,44 @@ using System.IO;
 using System.Collections.Generic;
 namespace MCForge.CTF
 {
-
+    /// <summary>
+    /// This is the plugin CTFSetup
+    /// This plugin will create CTF Config files for you by using the command
+    /// /ctfsetup in-game
+    /// </summary>
     public class Setup : Plugin_Simple
     {
         Dictionary<Player, Data> cache = new Dictionary<Player, Data>();
-        public Player.OnPlayerCommand command;
-        public Player.OnPlayerChat chat;
-        public Player.BlockchangeEventHandler2 block;
-        public Player.OnPlayerDisconnect disconnect;
+        Player.OnPlayerCommand command;
+        Player.OnPlayerChat chat;
+        Player.BlockchangeEventHandler2 block;
+        Player.OnPlayerDisconnect disconnect;
+        /// <summary>
+        /// This is the creator of the plugin
+        /// </summary>
         public override string creator
         {
             get { return "GamezGalaxy"; }
         }
+        /// <summary>
+        /// This is the server version the plugin can run on
+        /// </summary>
         public override string MCForge_Version
         {
             get { return ""; }
         }
+        /// <summary>
+        /// This is the name of the plugin
+        /// </summary>
         public override string name
         {
             get { return "/ctfsetup"; }
         }
+        /// <summary>
+        /// This is the load method, the load method is called whenever the plugin is loaded
+        /// this can be when the server starts up, or when using /pload
+        /// </summary>
+        /// <param name="startup">Is the plugin being loaded at server startup?</param>
         public override void Load(bool startup)
         {
             block = new Player.BlockchangeEventHandler2(blockuse);
@@ -34,12 +52,12 @@ namespace MCForge.CTF
             Player.PlayerBlockChange += block;
             Player.PlayerDisconnect += disconnect;
         }
-        public void disconnectuse(Player p, string reason)
+        void disconnectuse(Player p, string reason)
         {
             if (cache.ContainsKey(p))
                 cache.Remove(p);
         }
-        public void blockuse(Player p, ushort x, ushort y, ushort z, byte type)
+        void blockuse(Player p, ushort x, ushort y, ushort z, byte type)
         {
             if (cache.ContainsKey(p))
             {
@@ -67,7 +85,7 @@ namespace MCForge.CTF
                 }
             }
         }
-        public void Finish(Player p, int bx, int by, int bz, int rx, int ry, int rz)
+        void Finish(Player p, int bx, int by, int bz, int rx, int ry, int rz)
         {
             Player.SendMessage(p, "I'll set the tag points and capture points to there default");
             Player.SendMessage(p, "You can change them by going into CTF/<mapname>.config :)");
@@ -111,7 +129,7 @@ namespace MCForge.CTF
             if (File.Exists("CTF/maps/" + cache[p].current.name + ".lvl")) File.Delete("CTF/maps/" + cache[p].current.name + ".lvl");
             File.Copy("levels/" + cache[p].current.name + ".lvl", "CTF/maps/" + cache[p].current.name + ".lvl");
         }
-        public void chatuse(Player p, string message)
+        void chatuse(Player p, string message)
         {
             if (message.ToLower() == "random")
             {
@@ -167,7 +185,7 @@ namespace MCForge.CTF
                 }
             }
         }
-        public void commanduse(string cmd, Player p, string message)
+        void commanduse(string cmd, Player p, string message)
         {
             if (cmd.ToLower() == "ctfsetup")
             {
@@ -183,6 +201,14 @@ namespace MCForge.CTF
                 cache.Add(p, d);
             }
         }
+        /// <summary>
+        /// This is the unload method
+        /// This method is called when the plugin is unloaded, this can be at
+        /// Server shutdown
+        /// or
+        /// using /punload
+        /// </summary>
+        /// <param name="shutdown">Is the server shutting down?</param>
         public override void Unload(bool shutdown)
         {
             Player.PlayerCommand -= command;
@@ -191,7 +217,7 @@ namespace MCForge.CTF
             Player.PlayerDisconnect -= disconnect;
         }
     }
-    public class Data
+    class Data
     {
         public Step s;
         public Level current;
@@ -212,7 +238,7 @@ namespace MCForge.CTF
 
         }
     }
-    public enum Step
+    enum Step
     {
         GetCenter,
         GetBlueFlag,

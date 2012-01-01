@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MCForge
 {
-    public static class FindReference
+    internal static class FindReference
     {
         public static ushort writeLetter(Player p, char c, ushort x, ushort y, ushort z, byte b, int direction)
         {

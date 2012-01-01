@@ -5,6 +5,10 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /punload
+    /// use /help punload in-game for more info
+    /// </summary>
     public class CmdPUnload : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }

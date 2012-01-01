@@ -21,6 +21,10 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the group object
+    /// Where ranks and there data are stored
+    /// </summary>
     public class Group
     {
         public delegate void RankSet(Player p, Group newrank);
@@ -31,7 +35,7 @@ namespace MCForge
         public static event GroupLoad OnGroupLoad;
         public static bool cancelrank = false;
         //Move along...nothing to see here...
-        public static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) OnPlayerRankSet(p, newrank); }
+        internal static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) OnPlayerRankSet(p, newrank); }
         public string name;
         public string trueName;
         public string color;
@@ -42,11 +46,23 @@ namespace MCForge
         public string fileName;
         public PlayerList playerList;
 
+        /// <summary>
+        /// Create a new group object
+        /// </summary>
         public Group()
         {
             Permission = LevelPermission.Null;
         }
 
+        /// <summary>
+        /// Create a new group object
+        /// </summary>
+        /// <param name="Perm">The permission of the group</param>
+        /// <param name="maxB">The maxblocks this group can cuboid</param>
+        /// <param name="maxUn">The max undo this group can do</param>
+        /// <param name="fullName">The group full name</param>
+        /// <param name="newColor">The color of the group (Not including the &)</param>
+        /// <param name="file">The file path where the current players of this group are stored</param>
         public Group(LevelPermission Perm, int maxB, long maxUn, string fullName, char newColor, string file) {
             Permission = Perm;
             maxBlocks = maxB;
@@ -60,18 +76,27 @@ namespace MCForge
             else
                 playerList = new PlayerList();
         }
-
+        /// <summary>
+        /// Fill the commands that this group can use
+        /// </summary>
         public void fillCommands()
         {
             CommandList _commands = new CommandList();
             GrpCommands.AddCommands(out _commands, Permission);
             commands = _commands;
         }
-
+        /// <summary>
+        /// Check to see if this group can excute cmd
+        /// </summary>
+        /// <param name="cmd">The command object to check</param>
+        /// <returns>True if this group can use it, false if they cant</returns>
         public bool CanExecute(Command cmd) { return commands.Contains(cmd); }
 
         public static List<Group> GroupList = new List<Group>();
         public static Group standard;
+        /// <summary>
+        /// Load up all server groups
+        /// </summary>
         public static void InitAll()
         {
             GroupList = new List<Group>();
@@ -262,6 +287,10 @@ namespace MCForge
                 OnGroupLoad();
             saveGroups(GroupList);
         }
+        /// <summary>
+        /// Save givenList group
+        /// </summary>
+        /// <param name="givenList">The list of groups to save</param>
         public static void saveGroups(List<Group> givenList)
         {
 			File.Create("properties/ranks.properties").Dispose();
@@ -312,7 +341,11 @@ namespace MCForge
             if (OnGroupSave != null)
                 OnGroupSave();
         }
-
+        /// <summary>
+        /// Check to see if group /name/ exists
+        /// </summary>
+        /// <param name="name">The name of the group to search for</param>
+        /// <returns>Return true if it does exists, returns false if it doesnt</returns>
         public static bool Exists(string name)
         {
             name = name.ToLower();
@@ -321,6 +354,11 @@ namespace MCForge
                 if (gr.name == name) { return true; }
             } return false;
         }
+        /// <summary>
+        /// Find the group with the name /name/
+        /// </summary>
+        /// <param name="name">The name of the group</param>
+        /// <returns>The group object with that name</returns>
         public static Group Find(string name)
         {
             name = name.ToLower();
@@ -335,6 +373,11 @@ namespace MCForge
                 if (gr.name == name.ToLower()) { return gr; }
             } return null;
         }
+        /// <summary>
+        /// Find the group with the permission /Perm/
+        /// </summary>
+        /// <param name="Perm">The level permission to search for</param>
+        /// <returns>The group object with that level permission</returns>
         public static Group findPerm(LevelPermission Perm)
         {
             foreach (Group grp in GroupList)
@@ -343,6 +386,11 @@ namespace MCForge
             }
             return null;
         }
+        /// <summary>
+        /// Find the group with the permission /Perm/
+        /// </summary>
+        /// <param name="Perm">The level permission to search for</param>
+        /// <returns>The group object with that level permission</returns>
         public static Group findPermInt(int Perm)
         {
             foreach (Group grp in GroupList)
@@ -351,7 +399,11 @@ namespace MCForge
             }
             return null;
         }
-
+        /// <summary>
+        /// Get the group name that player /playerName/ is in
+        /// </summary>
+        /// <param name="playerName">The player Name</param>
+        /// <returns>The group name</returns>
         public static string findPlayer(string playerName)
         {
             foreach (Group grp in Group.GroupList)
@@ -360,6 +412,11 @@ namespace MCForge
             }
             return Group.standard.name;
         }
+        /// <summary>
+        /// Find the group object that the player /playerName/ is in
+        /// </summary>
+        /// <param name="playerName">The player name</param>
+        /// <returns>The group object that the player is in</returns>
         public static Group findPlayerGroup(string playerName)
         {
             foreach (Group grp in Group.GroupList)

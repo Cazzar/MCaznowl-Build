@@ -6,9 +6,14 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// These are extra permissions for certain commands
+    /// </summary>
     public static class CommandOtherPerms
     {
-
+        /// <summary>
+        /// Restore the permissions to there defaults
+        /// </summary>
         public static void AddDefaultPerms()
         {
             Add(Command.all.Find("ban"), (int)LevelPermission.AdvBuilder, "The lowest rank that can be banned");

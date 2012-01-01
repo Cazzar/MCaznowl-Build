@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This event is called whenever the player goes AFK
+    /// </summary>
     public class OnPlayerAFKEvent
     {
         internal static List<OnPlayerAFKEvent> events = new List<OnPlayerAFKEvent>();
@@ -55,6 +58,12 @@ namespace MCForge
             }
             return null;
         }
+        /// <summary>
+        /// Register this event
+        /// </summary>
+        /// <param name="method">This is the delegate that will get called when this event occurs</param>
+        /// <param name="priority">The priority (imporantce) of this call</param>
+        /// <param name="plugin">The plugin object that is registering the event</param>
         public static void Register(Player.OnAFK method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
@@ -62,6 +71,10 @@ namespace MCForge
             events.Add(new OnPlayerAFKEvent(method, priority, plugin));
             Organize();
         }
+        /// <summary>
+        /// UnRegister this event
+        /// </summary>
+        /// <param name="plugin">The plugin object that has this event registered</param>
         public static void UnRegister(Plugin plugin)
         {
             if (Find(plugin) == null)

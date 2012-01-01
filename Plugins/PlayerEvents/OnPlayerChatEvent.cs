@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This event is called whenever a player chats on the server
+    /// </summary>
     public class OnPlayerChatEvent
     {
         internal static List<OnPlayerChatEvent> events = new List<OnPlayerChatEvent>();
@@ -46,6 +49,7 @@ namespace MCForge
             }
             events = temp;
         }
+
         public static OnPlayerChatEvent Find(Plugin plugin)
         {
             foreach (OnPlayerChatEvent p in events.ToArray())
@@ -55,6 +59,12 @@ namespace MCForge
             }
             return null;
         }
+        /// <summary>
+        /// Register this event
+        /// </summary>
+        /// <param name="method">This is the delegate that will get called when this event occurs</param>
+        /// <param name="priority">The priority (imporantce) of this call</param>
+        /// <param name="plugin">The plugin object that is registering the event</param>
         public static void Register(Player.OnPlayerChat method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
@@ -62,6 +72,10 @@ namespace MCForge
             events.Add(new OnPlayerChatEvent(method, priority, plugin));
             Organize();
         }
+        /// <summary>
+        /// UnRegister this event
+        /// </summary>
+        /// <param name="plugin">The plugin object that has this event registered</param>
         public static void UnRegister(Plugin plugin)
         {
             if (Find(plugin) == null)

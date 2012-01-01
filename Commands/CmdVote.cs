@@ -2,6 +2,9 @@
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /vote
+    /// </summary>
     public class CmdVote : Command
     {
         public override string name { get { return "vote"; } }

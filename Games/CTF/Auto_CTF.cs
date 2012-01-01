@@ -25,20 +25,36 @@ using MCForge.SQL;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the team class for CTF
+    /// </summary>
     public class Teams
     {
         public string color;
         public int points = 0;
         public List<Player> members;
+        /// <summary>
+        /// Create a new Team Object
+        /// </summary>
+        /// <param name="color">The color code that the team will have</param>
         public Teams(string color)
         {
             this.color = c.Parse(color);
             members = new List<Player>();
         }
+        /// <summary>
+        /// Add a player to the team
+        /// </summary>
+        /// <param name="p">The player to add</param>
         public void Add(Player p)
         {
             members.Add(p);
         }
+        /// <summary>
+        /// Checks to see if the player is on this team
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns>If true, then that player is on the team. Otherwise that player isnt</returns>
         public bool isOnTeam(Player p)
         {
             if (members.IndexOf(p) != -1)
@@ -47,7 +63,7 @@ namespace MCForge
                 return false;
         }
     }
-    public class Data
+    internal class Data
     {
         public Player p;
         public int cap = 0;
@@ -62,7 +78,7 @@ namespace MCForge
             blue = team; this.p = p;
         }
     }
-    public class Base
+    internal class Base
     {
         public ushort x;
         public ushort y;
@@ -99,6 +115,9 @@ namespace MCForge
         {
         }
     }
+    /// <summary>
+    /// This is the CTF gamemode
+    /// </summary>
     public class Auto_CTF
     {
         public System.Timers.Timer tagging = new System.Timers.Timer(500);
@@ -127,6 +146,10 @@ namespace MCForge
         List<string> maps = new List<string>();
         List<Data> cache = new List<Data>();
         string mapname = "";
+        /// <summary>
+        /// Load a map into CTF
+        /// </summary>
+        /// <param name="map">The map to load</param>
         public void LoadMap(string map)
         {
             mapname = map;
@@ -207,6 +230,9 @@ namespace MCForge
             Command.all.Find("load").Use(null, "ctf");
             mainlevel = Level.Find("ctf");
         }
+        /// <summary>
+        /// Create a new CTF object
+        /// </summary>
         public Auto_CTF()
         {
             //Load some configs
@@ -237,6 +263,9 @@ namespace MCForge
             tagging.Elapsed += new System.Timers.ElapsedEventHandler(tagging_Elapsed);
             tagging.Start();
         }
+        /// <summary>
+        /// Stop the CTF game (if its running)
+        /// </summary>
         public void Stop()
         {
             tagging.Stop();
@@ -324,6 +353,9 @@ namespace MCForge
             }
 
         }
+        /// <summary>
+        /// Start the CTF game
+        /// </summary>
         public void Start()
         {
             if (Level.Find("ctf") != null)
@@ -523,7 +555,7 @@ namespace MCForge
                 }
             }
         }
-        public Data GetPlayer(Player p)
+        internal Data GetPlayer(Player p)
         {
             foreach (Data d in cache)
             {
@@ -711,7 +743,7 @@ namespace MCForge
                 }
             }
         }
-        public bool OnSide(ushort z, Base b)
+        internal bool OnSide(ushort z, Base b)
         {
             if (b.z < zline && z / 32 < zline)
                 return true;
