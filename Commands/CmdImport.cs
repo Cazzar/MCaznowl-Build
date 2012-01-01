@@ -29,6 +29,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override string keywords { get { return "dat imp extra"; } }
         public CmdImport() { }
 
         public override void Use(Player p, string message)

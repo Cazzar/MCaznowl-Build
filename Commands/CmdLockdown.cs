@@ -41,6 +41,7 @@ namespace MCForge
         // LevelPermission.Builder, LevelPermission.AdvBuilder, LevelPermission.Operator, LevelPermission.Admin
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 
+        public override string keywords { get { return "lock down level map lvl player"; } }
         // This is where the magic happens, naturally.
         // p is the player object for the player executing the command.  message is everything after the command invocation itself.
         public override void Use(Player p, string message)

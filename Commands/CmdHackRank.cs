@@ -35,6 +35,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+        public override string keywords { get { return "fake rank color set mod"; } }
         private string m_old_color;
 
         public CmdHackRank() { }

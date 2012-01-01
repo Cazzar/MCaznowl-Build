@@ -30,6 +30,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
+        public override string keywords { get { return "labyrint create"; } }
         public static int randomizer = 0;
         public static bool[,] wall;
         public override void Use(Player p, string message)
