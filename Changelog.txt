@@ -1,3 +1,9 @@
+v5.5.0.0
+- Added /search
+
+v5.4.0.1
+- Fixed an issue where auto-updated users did not download a vital .dll file. 
+
 v5.4.0.0
 - Fixed SQLite on Mono.
 - Fixed a chat bug which would cause all players to crash.

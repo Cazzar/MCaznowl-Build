@@ -130,7 +130,6 @@ namespace MCForge
         {
             Player.SendMessage(p, "/store <filename> - Stores your copied item to the server as <filename>.");
             Player.SendMessage(p, "/store delete <filename> - Deletes saved copy file.  Only " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + "+ and file creator may delete.");
-            return;
         }
     }
 }
