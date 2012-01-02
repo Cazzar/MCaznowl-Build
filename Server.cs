@@ -1029,6 +1029,7 @@ processThread.Start();
                 Log("Finished setting up server");
                 ServerSetupFinished = true;
                 Checktimer.StartTimer();
+                Commands.CommandKeywords.SetKeyWords();
                 try
                 {
                     if (Server.lava.startOnStartup)
