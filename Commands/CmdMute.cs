@@ -32,8 +32,13 @@ namespace MCForge
         {
             if (message == "" || message.Split(' ').Length > 2) { Help(p); return; }
             Player who = Player.Find(message);
-            if (who == null && Server.devs.Contains(who.name.ToLower()) == false)
+            if (who == null)
             {
+                if (Server.devs.Contains(who.name.ToLower()))
+                {
+                    Player.SendMessage(p, "The player entered is not online, or is a developer.");
+                    return;
+                }
                 if (Server.muted.Contains(message))
                 {
                     Server.muted.Remove(message);
@@ -42,11 +47,9 @@ namespace MCForge
                     return;
                 }
             }   
-            else
-            {
-                Player.SendMessage(p, "The player entered is not online, or is a developer.");
-                return;
-            }
+            
+                
+            
             if (who == p)
             {
                 if (p.muted)
