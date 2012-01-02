@@ -895,7 +895,6 @@ namespace MCForge
                         }
                         gs.Write(level, 0, level.Length);
                         gs.Close();
-
                         File.Delete(string.Format("{0}.backup", path));
                         File.Copy(string.Format("{0}.back", path), path + ".backup");
                         File.Delete(path);
@@ -1057,7 +1056,7 @@ namespace MCForge
 
                         rot[0] = header[12];
                         rot[1] = header[13];
-
+                        
                         //level.permissionvisit = (LevelPermission)header[14];
                         //level.permissionbuild = (LevelPermission)header[15];
                     }
@@ -1120,8 +1119,7 @@ namespace MCForge
                     level.jailz = (ushort) (level.spawnz*32);
                     level.jailrotx = level.rotx;
                     level.jailroty = level.roty;
-
-                    level.physThread = new Thread(level.Physics);
+                    level.StartPhysics();
                     //level.season = new SeasonsCore(level);
                     try
                     {
@@ -1374,7 +1372,16 @@ namespace MCForge
             }
             physics = newValue;
         }
-
+        public void StartPhysics()
+        {
+            if (physThread != null)
+            {
+                if (physThread.ThreadState == ThreadState.Running)
+                    return;
+            }
+            physThread = new Thread(Physics);
+            physThread.Start();
+        }
         public void Physics()
         {
             int wait = speedPhysics;
@@ -1382,12 +1389,11 @@ namespace MCForge
             {
                 try
                 {
-                    retry:
                     if (wait > 0) Thread.Sleep(wait);
                     if (physics == 0 || ListCheck.Count == 0)
                     {
                         lastCheck = 0;
-                        goto retry;
+                        break;
                     }
 
                     DateTime Start = DateTime.Now;

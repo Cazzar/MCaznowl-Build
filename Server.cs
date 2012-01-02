@@ -718,9 +718,7 @@ namespace MCForge
 
                     // fenderrock - Make sure the level does have a physics thread
                     if (mainLevel.physThread == null)
-                        mainLevel.physThread = new Thread(new ThreadStart(mainLevel.Physics));
-
-                    mainLevel.physThread.Start();
+                        mainLevel.StartPhysics();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });

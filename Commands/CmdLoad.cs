@@ -139,8 +139,6 @@ namespace MCForge
                 lock (Server.levels) {
                     Server.addLevel(level);
                 }
-
-                level.physThread.Start();
                 Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
                 try
                 {
