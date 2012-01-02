@@ -23,10 +23,6 @@ using System.Collections.Generic;
 
 namespace MCForge
 {
-    /// <summary>
-    /// This is the command /ctf
-    /// use /help ctf in-game for more info
-    /// </summary>
     public class CmdCTF : Command
     {
         public override string name { get { return "ctf"; } }
@@ -43,7 +39,7 @@ namespace MCForge
                 Server.s.Log("You must be in-game");
                 return;
             }
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (message == "start")
             {
                 //Prevent null errors :/
