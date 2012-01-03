@@ -78,7 +78,7 @@ namespace MCForge
                     {
                         File.Copy(@Server.backupLocation + "/" + lvl.name + "/" + text[0] + "/" + lvl.name + ".lvl", "levels/" + lvl.name + ".lvl", true);
                         Level temp = Level.Load(lvl.name);
-                        temp.physThread.Start();
+                        temp.StartPhysics();
                         if (temp != null)
                         {
                             lvl.spawnx = temp.spawnx;
