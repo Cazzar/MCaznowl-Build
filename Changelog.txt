@@ -1,5 +1,8 @@
 v5.5.0.0
 - Added /search
+- Changed heartbeat to stop site overload
+- Fixed random CPU spikes
+- Fixed /mute
 
 v5.4.0.1
 - Fixed an issue where auto-updated users did not download a vital .dll file. 
