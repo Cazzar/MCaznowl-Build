@@ -1,6 +1,6 @@
-v5.5.0.0
+v5.4.0.2
 - Added /search
-- Changed heartbeat to stop site overload
+- Fixed heartbeat to stop site overload
 - Fixed random CPU spikes
 - Fixed /mute
 
