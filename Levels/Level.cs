@@ -1361,8 +1361,7 @@ namespace MCForge
         }
 
         public void setPhysics(int newValue)
-        {
-            StartPhysics();
+        {   
             if (physics == 0 && newValue != 0 && blocks != null)
             {
                 for (int i = 0; i < blocks.Length; i++)
@@ -1372,6 +1371,7 @@ namespace MCForge
                             AddCheck(i);
             }
             physics = newValue;
+            StartPhysics();
         }
         public void StartPhysics()
         {
