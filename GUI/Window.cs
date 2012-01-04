@@ -65,6 +65,10 @@ namespace MCForge.Gui
 
         private void Window_Load(object sender, EventArgs e)
         {
+            if (SingleInstance.SingleApplication.Run() == false)
+            {
+                return;
+           }
             btnProperties.Enabled = false;
             thisWindow = this;
             MaximizeBox = false;
