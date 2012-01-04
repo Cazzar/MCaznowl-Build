@@ -51,9 +51,12 @@ namespace MCForge
                 }
             if (Server.devs.Contains(who.name.ToLower()))
             {
-                Player.SendMessage(p, "You can't kick a MCForge Developer!");
-                Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + " but failed, because " + who.color + who.name +" is a developer.", false);
-                return;
+            	if (!Server.devs.Contains(p.name.ToLower()))
+            	{
+                    Player.SendMessage(p, "You can't kick a MCForge Developer!");
+                    Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + Server.DefaultColor + " but failed, because " + who.color + who.name + Server.DefaultColor + " is a developer", false);
+                    return;
+	        }
             }
             who.Kick(message);
         }
