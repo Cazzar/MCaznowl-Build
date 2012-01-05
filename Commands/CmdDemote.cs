@@ -60,7 +60,7 @@ namespace MCForge
             }
 
             if (nextGroup != null)
-                Command.all.Find("setrank").Use(p, foundName + " " + nextGroup.name);
+                Command.all.Find("setrank").Use(p, foundName + " " + nextGroup.name + " " + Server.customDemoteMessage);
             else
                 Player.SendMessage(p, "No higher ranks exist");
         }

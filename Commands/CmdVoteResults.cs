@@ -3,6 +3,10 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /voteresults
+    /// use /help voteresults in-game for more info
+    /// </summary>
     public class CmdVoteResults : Command
     {
         public override string name { get { return "voteresults"; } }

@@ -15,7 +15,6 @@ permissions and limitations under the Licenses.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace MCForge
@@ -75,7 +74,7 @@ namespace MCForge
             }
 
             string alltext = File.ReadAllText("text/tempranks.txt");
-            if (alltext.Contains(player) == true)
+            if (alltext.Contains(player))
             {
                 Player.SendMessage(p, "&cThe player already has a temporary rank assigned!");
                 return;
@@ -128,7 +127,7 @@ namespace MCForge
             {
                 StreamWriter sw;
                 sw = File.AppendText("text/tempranks.txt");
-                sw.WriteLine(player + " " + rank + " " + oldrank + " " + period + " " + minute + " " + hour + " " + day + " " + month + " " + year + " " + assigner);
+                sw.WriteLine(who.name + " " + rank + " " + oldrank + " " + period + " " + minute + " " + hour + " " + day + " " + month + " " + year + " " + assigner);
                 sw.Close();
             }
             catch
@@ -143,7 +142,6 @@ namespace MCForge
                 }
                 else
                 {
-                    Group oldgroup = Group.findPlayerGroup(who.name);
                     Group newgroup = Group.Find(rank);
                     Command.all.Find("setrank").Use(null, who.name + " " + newgroup.name);
                     Player.SendMessage(p, "Temporary rank (" + rank + ") is assigned succesfully to " + player + " for " + period + " hours");

@@ -35,8 +35,8 @@ namespace MCForge.Remote
                         switch (line.Substring(0, line.IndexOf(" = ")))
                         {
                             case "RemoteEnable": RemoteServer.enableRemote = bool.Parse(value); break;
-                            case "RemoteUsername": RemoteServer.username = value; break;
-                            case "RemotePassword": RemoteServer.password = value; break;
+                            case "RemoteUsername": RemoteServer.Username = value; break;
+                            case "RemotePassword": RemoteServer.Password = value; break;
                             case "RemotePort": RemoteServer.port = int.Parse(value); break;
                         }
                     }
@@ -55,8 +55,8 @@ namespace MCForge.Remote
                 using (var w = File.CreateText(fileName))
                 {
                     w.WriteLine("RemoteEnable = {0}", RemoteServer.enableRemote.ToString().ToLower());
-                    w.WriteLine("RemoteUsername = {0}", RemoteServer.username);
-                    w.WriteLine("RemotePassword = {0}", RemoteServer.password);
+                    w.WriteLine("RemoteUsername = {0}", RemoteServer.Username);
+                    w.WriteLine("RemotePassword = {0}", RemoteServer.Password);
                     w.WriteLine("RemotePort = {0}", RemoteServer.port);
                 }
             }

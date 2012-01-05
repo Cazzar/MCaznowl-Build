@@ -6,9 +6,14 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// These are extra permissions for certain commands
+    /// </summary>
     public static class CommandOtherPerms
     {
-
+        /// <summary>
+        /// Restore the permissions to there defaults
+        /// </summary>
         public static void AddDefaultPerms()
         {
             Add(Command.all.Find("ban"), (int)LevelPermission.AdvBuilder, "The lowest rank that can be banned");
@@ -49,7 +54,7 @@ namespace MCForge
             Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use pyramids with /draw", 2);
             Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use spheres with /draw", 3);
             Add(Command.all.Find("draw"), (int)Command.all.Find("draw").defaultRank, "The lowest rank that can use volcanos with /draw", 4);
-
+            Add(Command.core.Find("tntwars"), (int)LevelPermission.Operator, "The lowest rank that can use admin commands for tntwars", 1);
         }
 
         public static List<OtherPerms> list = new List<OtherPerms>();

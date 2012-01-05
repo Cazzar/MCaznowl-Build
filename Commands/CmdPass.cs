@@ -67,7 +67,7 @@ namespace MCForge
             }
             if (p.passtries == 3)
             {
-                p.Kick("Did you really think you could keep on guessing? =S");
+                p.Kick("Did you really think you could keep on guessing?");
                 return;
             }
             int foundone = 0;
@@ -95,7 +95,7 @@ namespace MCForge
             {
                 foreach (FileInfo file in fi)
                 {
-                    if (file.Name.Replace(".xml", "").ToLower() == p.name.ToLower())
+                    if (file.Name.Replace(".xml", "") == p.name)
                     {
                         foundone++;
                     }

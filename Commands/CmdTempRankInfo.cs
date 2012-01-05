@@ -15,7 +15,6 @@ permissions and limitations under the Licenses.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.IO;
 
@@ -36,16 +35,14 @@ namespace MCForge
             if (alltext.Contains(message) == false)
             {
                 Player.SendMessage(p, "&cPlayer &a" + message + "&c Has not been assigned a temporary rank. Cannot unnasign.");
-                goto end;
+                return;
             }
             if (message == "")
             {
                 Help(p);
                 Player.SendMessage(p, "&cYou need to enter a player!");
-                goto end;
+                return;
             }
-
-
 
             foreach (string line3 in File.ReadAllLines("text/tempranks.txt"))
             {
@@ -67,12 +64,9 @@ namespace MCForge
                     Player.SendMessage(p, "&aOld Rank: " + oldrank);
                     Player.SendMessage(p, "&aDate of assignment: " + ExpireDate.ToString());
                     Player.SendMessage(p, "&aDate of expiry: " + tocheck.ToString());
-                    Player.SendMessage(p, "&aTempranked by: " + tempranker.ToString());
+                    Player.SendMessage(p, "&aTempranked by: " + tempranker);
                 }
             }
-
-        end:
-            Thread.Sleep(0);
         }
 
         public override void Help(Player p)

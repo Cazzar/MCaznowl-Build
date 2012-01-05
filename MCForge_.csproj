@@ -49,6 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\Source\General.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\MCForge_.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
@@ -68,6 +69,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -86,12 +89,39 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdC4.cs" />
+    <Compile Include="Commands\CmdSearch.cs" />
+    <Compile Include="Commands\CmdTntWars.cs" />
+    <Compile Include="Commands\CommandKeywords.cs" />
+    <Compile Include="Games\CTF\Setup.cs" />
+    <Compile Include="Games\TntWarsGame.cs" />
+    <Compile Include="GUI\WoM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\WoM.Designer.cs">
+      <DependentUpon>WoM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins\LevelEvents\OnLevelUnloadEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnBlockChangeEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnMessageRecieveEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnMySQLSaveEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerAFKEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerChatEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerCommandEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerConnectEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
+    <Compile Include="Plugins\Utils\Priority.cs" />
+    <Compile Include="SingleInstance.cs" />
+    <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
     <Compile Include="Commands\CmdDescend.cs" />
+    <Compile Include="Commands\CmdOpStats.cs" />
     <Compile Include="Commands\CmdPumpkin.cs" />
     <Compile Include="Commands\CmdRankInfo.cs" />
     <Compile Include="Commands\CmdReview.cs" />
+    <Compile Include="Commands\CmdTranslate.cs" />
     <Compile Include="Commands\CmdVIP.cs" />
     <Compile Include="Commands\CmdZTime.cs" />
     <Compile Include="Commands\CmdBlockSpeed.cs" />
@@ -224,10 +254,10 @@
     <Compile Include="Commands\CmdPLoad.cs" />
     <Compile Include="Commands\CmdPUnload.cs" />
     <Compile Include="Commands\CommandOtherPerms.cs" />
-    <Compile Include="CTF\Auto_CTF.cs" />
+    <Compile Include="Games\CTF\Auto_CTF.cs" />
     <Compile Include="Edit.cs" />
     <Compile Include="GlobalChatBot.cs" />
-    <Compile Include="CountdownGame.cs" />
+    <Compile Include="Games\CountdownGame.cs" />
     <Compile Include="Economy.cs" />
     <Compile Include="ForgeBot.cs" />
     <Compile Include="GUI\EditText.cs">
@@ -242,28 +272,15 @@
     <Compile Include="GUI\LavaMapBrowser.Designer.cs">
       <DependentUpon>LavaMapBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Textures.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Textures.Designer.cs">
-      <DependentUpon>Textures.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\WoM.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\WoM.Designer.cs">
-      <DependentUpon>WoM.cs</DependentUpon>
-    </Compile>
     <Compile Include="Heartbeat\WOMBeat.cs" />
-    <Compile Include="LavaSurvival.cs" />
+    <Compile Include="Games\LavaSurvival.cs" />
     <Compile Include="Levels\BlockQueue.cs" />
-    <Compile Include="Levels\WoM Textures\Texture_Settings.cs" />
     <Compile Include="MySQLTransactionHelper.cs" />
     <Compile Include="OmniBan.cs" />
     <Compile Include="Player\Player.Events.cs" />
-    <Compile Include="Plugins\Events.cs" />
-    <Compile Include="Plugins\Plugin_Manager.cs" />
-    <Compile Include="Plugins\Plugin_Simpile.cs" />
+    <Compile Include="Plugins\Utils\Events.cs" />
+    <Compile Include="Plugins\Manager\Plugin_Manager.cs" />
+    <Compile Include="Plugins\Manager\Plugin_Simpile.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -273,6 +290,11 @@
     <Compile Include="Remote Stuff\Remote.Mobile.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
+    <Compile Include="Service References\TranslateService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Util\BigEndianBitConverter.cs" />
     <Compile Include="Util\EBitConverter.cs" />
     <Compile Include="Util\Endianness.cs" />
@@ -437,7 +459,6 @@
     <Compile Include="Heartbeat\Beat.cs" />
     <Compile Include="Heartbeat\MCForgeBeat.cs" />
     <Compile Include="Heartbeat\MinecraftBeat.cs" />
-    <Compile Include="Heartbeat\TChaloBeat.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\ConvertDAT.cs" />
     <Compile Include="MySQL.cs" />
@@ -486,7 +507,7 @@
     <Compile Include="Remote Stuff\Remote.Handler.cs" />
     <Compile Include="Remote Stuff\RemoteProperties.cs" />
     <Compile Include="Remote Stuff\RemoteServer.cs" />
-    <Compile Include="ZombieGame.cs" />
+    <Compile Include="Games\ZombieGame.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>
@@ -496,9 +517,6 @@
     <EmbeddedResource Include="GUI\PropertyWindow.resx">
       <DependentUpon>PropertyWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Textures.resx">
-      <DependentUpon>Textures.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
@@ -514,6 +532,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -539,13 +558,42 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\TranslateService\MCForge.TranslateService.GetTranslationsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TranslateService\MCForge.TranslateService.TranslateArrayResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TranslateService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\TranslateService\configuration.svcinfo" />
+    <None Include="Service References\TranslateService\configuration91.svcinfo" />
     <None Include="app.config" />
     <Compile Include="Commands\CmdVoteKick.cs" />
-    <Compile Include="Plugins\Plugin.Events.cs" />
+    <Compile Include="Plugins\Manager\Plugin.Events.cs" />
+    <Content Include="mcf.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Remote Stuff\Remote.Events.cs" />
+    <None Include="Service References\TranslateService\soap.wsdl" />
+    <None Include="Service References\TranslateService\soap.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\soap3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TranslateService\SoapService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Changelog.txt">
@@ -558,10 +606,17 @@
     <Content Include="MCForge.ico" />
     <Compile Include="Player\VoteKickChoice.cs" />
     <Content Include="mcpony.png" />
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TranslateService\" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

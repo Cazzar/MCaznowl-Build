@@ -27,6 +27,7 @@ namespace MCForge
     public class ForgeBot
     {
         public static readonly string ColorSignal = "\x03";
+        public static readonly string ResetSignal = "\x0F";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
@@ -134,12 +135,20 @@ namespace MCForge
         void Player_PlayerDisconnect(Player p, string reason)
         {
             if (Server.irc && IsConnected())
+            if (Server.guestLeaveNotify == false && p.group.Permission <= LevelPermission.Guest)
+			{
+			return;
+			}
                 connection.Sender.PublicMessage(channel, p.name + " left the game (" + reason + ")");
         }
 
         void Player_PlayerConnect(Player p)
         {
             if (Server.irc && IsConnected())
+            if (Server.guestJoinNotify == false && p.group.Permission <= LevelPermission.Guest)
+			{
+			return;
+			}
                 connection.Sender.PublicMessage(channel, p.name + " joined the game");
         }
 
@@ -252,7 +261,9 @@ namespace MCForge
         }
         void Player_PlayerChat(Player p, string message)
         {
-            if (Server.irc && IsConnected())
+            if (Server.ircColorsEnable == true && Server.irc && IsConnected())
+                Say(p.color + p.prefix + p.name + ": &0" + message, p.opchat);
+            if (Server.ircColorsEnable == false && Server.irc && IsConnected())
                 Say(p.name + ": " + message, p.opchat);
         }
         public void Connect()

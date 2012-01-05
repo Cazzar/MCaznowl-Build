@@ -193,49 +193,51 @@ namespace MCForge.Levels.Textures
         static readonly Regex HttpFirstLine = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
         public void ServeCfg(Player p, byte[] buffer)
         {
-            NetworkStream stream = new NetworkStream(p.socket);
-            using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
+            using (NetworkStream stream = new NetworkStream(p.socket))
             {
-                string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-                var match = HttpFirstLine.Match(firstLine);
-                if (match.Success)
+                using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
                 {
-                    string worldName = match.Groups[1].Value;
-                    bool firstTime = match.Groups[2].Success;
-                    Level l = Level.Find(worldName);
-                    if (l != null)
+                    string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+                    Server.s.Log(firstLine);
+                    var match = HttpFirstLine.Match(firstLine);
+                    if (match.Success)
                     {
-                        string cfg = "";
-                        if (cachecfg == "" || update)
+                        string worldName = match.Groups[1].Value;
+                        bool firstTime = match.Groups[2].Success;
+                        Level l = Level.Find(worldName);
+                        if (l != null)
                         {
-                            if (!File.Exists("extra/cfg/" + l.name + ".cfg"))
-                                l.textures.CreateCFG();
-                            cfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
-                            cachecfg = cfg;
-                            update = false;
+                            string cfg = "";
+                            if (cachecfg == "" || update)
+                            {
+                                if (!File.Exists("extra/cfg/" + l.name + ".cfg"))
+                                    l.textures.CreateCFG();
+                                cfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
+                                cachecfg = cfg;
+                                update = false;
+                            }
+                            else
+                                cfg = cachecfg;
+                            byte[] content = Encoding.UTF8.GetBytes(cfg);
+                            textWriter.WriteLine("HTTP/1.1 200 OK");
+                            textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
+                            textWriter.WriteLine("Content-Type: text/plain");
+                            textWriter.WriteLine("Content-Length: " + content.Length); //idk
+                            textWriter.WriteLine();
+                            textWriter.WriteLine(cfg);
                         }
                         else
-                            cfg = cachecfg;
-                        byte[] content = Encoding.UTF8.GetBytes(cfg);
-                        textWriter.WriteLine("HTTP/1.1 200 OK");
-                        textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
-                        textWriter.WriteLine("Content-Type: text/plain");
-                        textWriter.WriteLine("Content-Length: " + content.Length);
-                        textWriter.WriteLine();
-                        textWriter.WriteLine(cfg);
+                        {
+                            textWriter.WriteLine("HTTP/1.1 404 Not Found"); Server.s.Log("A");
+                        }
                     }
                     else
                     {
-                        textWriter.WriteLine("HTTP/1.1 404 Not Found"); Server.s.Log("A");
+                        textWriter.WriteLine("HTTP/1.1 400 Bad Request"); Server.s.Log("B");
                     }
-                }
-                else
-                {
-                    textWriter.WriteLine("HTTP/1.1 400 Bad Request"); Server.s.Log("B");
+                    p.dontmindme = true;
                 }
             }
-            //stream.Close();
-            //p.socket.Close();
         }
         static int ParseHexColor(string text)
         {

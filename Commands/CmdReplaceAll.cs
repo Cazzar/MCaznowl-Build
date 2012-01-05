@@ -61,11 +61,20 @@ namespace MCForge
             if (stored.Count > (p.group.maxBlocks * 2)) { Player.SendMessage(p, "Cannot replace more than " + (p.group.maxBlocks * 2) + " blocks."); wait = 1; return; }
 
             Player.SendMessage(p, stored.Count + " blocks out of " + currentBlock + " are " + Block.Name(b1));
-            
 
-            foreach (Pos Pos in stored)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
-                p.level.Blockchange(p, Pos.x, Pos.y, Pos.z, b2);
+                foreach (Pos Pos in stored)
+                {
+                    BlockQueue.Addblock(p, Pos.x, Pos.y, Pos.z, b2);
+                }
+            }
+            else
+            {
+                foreach (Pos Pos in stored)
+                {
+                    p.level.Blockchange(p, Pos.x, Pos.y, Pos.z, b2);
+                }
             }
 
             Player.SendMessage(p, "&4/replaceall finished!");

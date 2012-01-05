@@ -25,20 +25,36 @@ using MCForge.SQL;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the team class for CTF
+    /// </summary>
     public class Teams
     {
         public string color;
         public int points = 0;
         public List<Player> members;
+        /// <summary>
+        /// Create a new Team Object
+        /// </summary>
+        /// <param name="color">The color code that the team will have</param>
         public Teams(string color)
         {
             this.color = c.Parse(color);
             members = new List<Player>();
         }
+        /// <summary>
+        /// Add a player to the team
+        /// </summary>
+        /// <param name="p">The player to add</param>
         public void Add(Player p)
         {
             members.Add(p);
         }
+        /// <summary>
+        /// Checks to see if the player is on this team
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns>If true, then that player is on the team. Otherwise that player isnt</returns>
         public bool isOnTeam(Player p)
         {
             if (members.IndexOf(p) != -1)
@@ -47,7 +63,7 @@ namespace MCForge
                 return false;
         }
     }
-    public class Data
+    internal class Data
     {
         public Player p;
         public int cap = 0;
@@ -62,12 +78,35 @@ namespace MCForge
             blue = team; this.p = p;
         }
     }
-    public class Base
+    internal class Base
     {
         public ushort x;
         public ushort y;
         public ushort z;
+        public ushort spawnx = 0;
+        public ushort spawny = 0;
+        public ushort spawnz = 0;
         public byte block;
+        public void SendToSpawn(Level mainlevel, Auto_CTF game, Player p1)
+        {
+            Random rand = new Random();
+            if (spawnx == 0 && spawny == 0 && spawnz == 0)
+            {
+                ushort xx = (ushort)(rand.Next(0, mainlevel.width));
+                ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
+                ushort zz = (ushort)(rand.Next(0, mainlevel.height));
+                while (mainlevel.GetTile(xx, yy, zz) != Block.air && game.OnSide((ushort)(zz * 32), this))
+                {
+                    xx = (ushort)(rand.Next(0, mainlevel.width));
+                    yy = (ushort)(rand.Next(0, mainlevel.depth));
+                    zz = (ushort)(rand.Next(0, mainlevel.height));
+                }
+                unchecked { p1.SendPos((byte)-1, (ushort)(xx * 32), (ushort)(yy * 32), (ushort)(zz * 32), p1.rot[0], p1.rot[1]); }
+            }
+            else
+                unchecked { p1.SendPos((byte)-1, spawnx, spawny, spawnz, p1.rot[0], p1.rot[1]); }
+
+        }
         public Base(ushort x, ushort y, ushort z, Teams team)
         {
             this.x = x; this.y = y; this.z = z;
@@ -76,6 +115,9 @@ namespace MCForge
         {
         }
     }
+    /// <summary>
+    /// This is the CTF gamemode
+    /// </summary>
     public class Auto_CTF
     {
         public System.Timers.Timer tagging = new System.Timers.Timer(500);
@@ -104,6 +146,10 @@ namespace MCForge
         List<string> maps = new List<string>();
         List<Data> cache = new List<Data>();
         string mapname = "";
+        /// <summary>
+        /// Load a map into CTF
+        /// </summary>
+        /// <param name="map">The map to load</param>
         public void LoadMap(string map)
         {
             mapname = map;
@@ -142,6 +188,27 @@ namespace MCForge
                     case "base.red.block":
                         redbase.block = Block.Byte(l.Split('=')[1]);
                         break;
+                    case "base.blue.block":
+                        bluebase.block = Block.Byte(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawnx":
+                        bluebase.spawnx = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawny":
+                        bluebase.spawny = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.blue.spawnz":
+                        bluebase.spawnz = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawnx":
+                        redbase.spawnx = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawny":
+                        redbase.spawny = ushort.Parse(l.Split('=')[1]);
+                        break;
+                    case "base.red.spawnz":
+                        redbase.spawnz = ushort.Parse(l.Split('=')[1]);
+                        break;
                     case "base.blue.x":
                         bluebase.x = ushort.Parse(l.Split('=')[1]);
                         break;
@@ -163,6 +230,9 @@ namespace MCForge
             Command.all.Find("load").Use(null, "ctf");
             mainlevel = Level.Find("ctf");
         }
+        /// <summary>
+        /// Create a new CTF object
+        /// </summary>
         public Auto_CTF()
         {
             //Load some configs
@@ -193,6 +263,9 @@ namespace MCForge
             tagging.Elapsed += new System.Timers.ElapsedEventHandler(tagging_Elapsed);
             tagging.Start();
         }
+        /// <summary>
+        /// Stop the CTF game (if its running)
+        /// </summary>
         public void Stop()
         {
             tagging.Stop();
@@ -231,17 +304,7 @@ namespace MCForge
                             {
                                 GetPlayer(p1).tagging = true;
                                 Player.SendMessage(p1, p.color + p.name + Server.DefaultColor + " tagged you!");
-                                Random rand = new Random();
-                                ushort xx = (ushort)(rand.Next(0, mainlevel.width));
-                                ushort yy = (ushort)(rand.Next(0, mainlevel.depth));
-                                ushort zz = (ushort)(rand.Next(0, mainlevel.height));
-                                while (mainlevel.GetTile(xx, yy, zz) != Block.air && OnSide((ushort)(zz * 32), b))
-                                {
-                                    xx = (ushort)(rand.Next(0, mainlevel.width));
-                                    yy = (ushort)(rand.Next(0, mainlevel.depth));
-                                    zz = (ushort)(rand.Next(0, mainlevel.height));
-                                }
-                                unchecked { p1.SendPos((byte)-1, (ushort)(xx * 32), (ushort)(yy * 32), (ushort)(zz * 32), p1.rot[0], p1.rot[1]); }
+                                b.SendToSpawn(mainlevel, this, p1);
                                 Thread.Sleep(300);
                                 if (GetPlayer(p1).hasflag)
                                 {
@@ -290,6 +353,9 @@ namespace MCForge
             }
 
         }
+        /// <summary>
+        /// Start the CTF game
+        /// </summary>
         public void Start()
         {
             if (Level.Find("ctf") != null)
@@ -489,7 +555,7 @@ namespace MCForge
                 }
             }
         }
-        public Data GetPlayer(Player p)
+        internal Data GetPlayer(Player p)
         {
             foreach (Data d in cache)
             {
@@ -677,7 +743,7 @@ namespace MCForge
                 }
             }
         }
-        bool OnSide(ushort z, Base b)
+        internal bool OnSide(ushort z, Base b)
         {
             if (b.z < zline && z / 32 < zline)
                 return true;

@@ -34,6 +34,11 @@ namespace MCForge
             Player who = Player.Find(message);
             if (who == null)
             {
+                if (Server.devs.Contains(who.name.ToLower()))
+                {
+                    Player.SendMessage(p, "The player entered is not online, or is a developer.");
+                    return;
+                }
                 if (Server.muted.Contains(message))
                 {
                     Server.muted.Remove(message);
@@ -41,9 +46,10 @@ namespace MCForge
                     Server.muted.Save("muted.txt");
                     return;
                 }
-                Player.SendMessage(p, "The player entered is not online.");
-                return;
-            }
+            }   
+            
+                
+            
             if (who == p)
             {
                 if (p.muted)
@@ -68,6 +74,11 @@ namespace MCForge
                 if (p != null)
                 {
                     if (who != p) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot mute someone of a higher or equal rank."); return; }
+                }
+                if (Server.devs.Contains(who.name.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't mute a MCForge Developer!");
+                    return;
                 }
                 who.muted = true;
                 Player.GlobalChat(who, who.color + who.name + Server.DefaultColor + " has been &8muted", false);

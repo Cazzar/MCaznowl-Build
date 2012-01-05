@@ -108,7 +108,8 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        public static List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized"});
+        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "fenderrock87", "edh649", "shade2010", "hypereddie10", "erickilla", "the_legacy", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "herocane", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk" });
+        public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
         public struct TempBan { public string name; public DateTime allowedJoin; }
@@ -122,6 +123,10 @@ namespace MCForge
         public static List<Level> levels;
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
+        //Translate settings initialize
+        public static bool transenabled = false;
+        public static string translang = "en";
+        public static List<string> transignore = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -198,7 +203,7 @@ namespace MCForge
 
         // OmniBan
         public static OmniBan omniban;
-        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 30);
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 120);
 
         //Settings
         #region Server Settings
@@ -235,6 +240,7 @@ namespace MCForge
         public static bool reportBack = true;
 
         public static bool irc = false;
+        public static bool ircColorsEnable = false;
 //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
@@ -309,6 +315,8 @@ namespace MCForge
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static bool customGrieferStone = false;
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
+        public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
+        public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
@@ -319,6 +327,8 @@ namespace MCForge
         public static bool WomDirect = false;
         public static bool UseSeasons = false;
         public static bool guestLimitNotify = false;
+        public static bool guestJoinNotify = true;
+        public static bool guestLeaveNotify = true;
 
         public static bool flipHead = false;
 
@@ -459,6 +469,25 @@ namespace MCForge
                         Log("Downloading System.Data.SQLite.dll failed, please try again later");
                     }
                 }
+                if (!File.Exists("sqlite3.dll"))
+                {
+                    Log("sqlite3.dll doesn't exist, Downloading");
+                    try
+                    {
+                        using (WebClient WEB = new WebClient())
+                        {
+                            WEB.DownloadFile("http://www.mcforge.net/sqlite3.dll", "sqlite3.dll");
+                        }
+                        if (File.Exists("sqlite3.dll"))
+                        {
+                            Log("sqlite3.dll download succesful!");
+                        }
+                    }
+                    catch
+                    {
+                        Log("Downloading sqlite3.dll failed, please try again later");
+                    }
+                }
                 if (!File.Exists("Sharkbite.Thresher.dll"))
                 {
                     Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
@@ -484,9 +513,11 @@ namespace MCForge
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
             if (!Directory.Exists("text")) Directory.CreateDirectory("text");
-            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt");
-            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt");
-            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt");
+            if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt").Dispose();
+            if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt").Dispose();
+            if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt").Dispose();
+            if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt").Dispose();
+            // DO NOT STICK ANYTHING IN BETWEEN HERE!!!!!!!!!!!!!!!
             else
             {
                 string bantext = File.ReadAllText("text/bans.txt");
@@ -595,7 +626,8 @@ namespace MCForge
                     return;
                 }
                 Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
-                
+				Database.executeQuery("CREATE TABLE if not exists Playercmds (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
+
                 // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
                 if (Server.useMySQL) {
                     // Check if the color column exists.
@@ -649,7 +681,7 @@ namespace MCForge
                         {
                             if (File.Exists("levels/" + Server.level + ".lvl.backup"))
                             {
-                                Log("Attempting to load backup.");
+                                Log("Attempting to load backup of " + Server.level + ".");
                                 File.Copy("levels/" + Server.level + ".lvl.backup", "levels/" + Server.level + ".lvl", true);
                                 mainLevel = Level.Load(Server.level);
                                 if (mainLevel == null)
@@ -666,6 +698,13 @@ namespace MCForge
                                 Level.CreateLeveldb(Server.level);
                             }
                         }
+                        //Wom Textures
+                        /*if (Server.UseTextures)
+                        {
+                            mainLevel.textures.sendwomid = true;
+                            mainLevel.textures.MOTD = Server.motd;
+                            mainLevel.textures.CreateCFG();
+                        }*/
                     }
                     else
                     {
@@ -679,9 +718,7 @@ namespace MCForge
 
                     // fenderrock - Make sure the level does have a physics thread
                     if (mainLevel.physThread == null)
-                        mainLevel.physThread = new Thread(new ThreadStart(mainLevel.Physics));
-
-                    mainLevel.physThread.Start();
+                        mainLevel.StartPhysics();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
             });
@@ -700,6 +737,7 @@ namespace MCForge
 
             ml.Queue(delegate
             {
+                transignore.AddRange(File.ReadAllLines("text/transexceptions.txt"));
                 if (File.Exists("text/autoload.txt"))
                 {
                     try
@@ -777,6 +815,7 @@ namespace MCForge
 
             ml.Queue(delegate
             {
+                Translate.Init();
                 Log("Creating listening socket on port " + Server.port + "... ");
                 if (Setup())
                 {
@@ -988,6 +1027,7 @@ processThread.Start();
                 Log("Finished setting up server");
                 ServerSetupFinished = true;
                 Checktimer.StartTimer();
+                Commands.CommandKeywords.SetKeyWords();
                 try
                 {
                     if (Server.lava.startOnStartup)

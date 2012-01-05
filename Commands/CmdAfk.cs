@@ -21,6 +21,10 @@ using System.Text;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /afk
+    /// use /help afk in-game for more info
+    /// </summary>
     class CmdAfk : Command
     {
         public override string name { get { return "afk"; } }
@@ -28,6 +32,7 @@ namespace MCForge
         public override string type { get { return "information"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
+        public static string keywords { get { return ""; } }
         public CmdAfk() { }
 
         public override void Use(Player p, string message)

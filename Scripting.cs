@@ -224,7 +224,42 @@ namespace MCForge
             }
             try
             {
-                Assembly asm = Assembly.LoadFrom("extra/commands/dll/" + command + ".dll");
+                //Allows unloading and deleting dlls without server restart
+                object instance = null;
+                Assembly lib = null;
+                using (FileStream fs = File.Open("extra/commands/dll/" + command + ".dll", FileMode.Open))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[1024];
+                        int read = 0;
+                        while ((read = fs.Read(buffer, 0, 1024)) > 0)
+                            ms.Write(buffer, 0, read);
+                        lib = Assembly.Load(ms.ToArray());
+                        ms.Close();
+                        ms.Dispose();
+                    }
+                    fs.Close();
+                    fs.Dispose();
+                }
+                try
+                {
+                    foreach (Type t in lib.GetTypes())
+                    {
+                        if (t.BaseType == typeof(Command))
+                        {
+                            instance = Activator.CreateInstance(t);
+                            Command.all.Add((Command)instance);
+                        }
+                    }
+                }
+                catch { }
+                if (instance == null)
+                {
+                    Server.s.Log("The command " + command + " couldnt be loaded!");
+                    throw new BadImageFormatException();
+                }
+                /*Assembly asm = Assembly.LoadFrom("extra/commands/dll/" + command + ".dll");
                 Type[] types = asm.GetTypes();
                 foreach(var type in types)
                 {
@@ -234,7 +269,7 @@ namespace MCForge
                         Command.all.Add((Command)instance);
                     }
                 }
-                //Type type = asm.GetTypes()[0];
+                //Type type = asm.GetTypes()[0];*/
                 
             }
             catch (FileNotFoundException e)

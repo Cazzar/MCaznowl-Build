@@ -28,6 +28,7 @@ namespace MCForge
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
+        
         public string loadname;
         public CmdPaste() { }
         
@@ -55,7 +56,7 @@ namespace MCForge
 
             Player.UndoPos Pos1;
             //p.UndoBuffer.Clear();
-            if (p.level.bufferblocks)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
                 p.CopyBuffer.ForEach(delegate(Player.CopyPos pos)
                 {

@@ -23,13 +23,14 @@ namespace MCForge
     {
         public override string name { get { return "ztime"; } }
         public override string shortcut { get { return "zt"; } }
-        public override string type { get { return "information"; } }
+        public override string type { get { return "broken"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public CmdZTime() { }
 
         public override void Use(Player p, string message)
-        {
+        {        
+        	return;
             if (Server.zombie.ZombieStatus() == 0) { Player.SendMessage(p, "There is no Zombie Survival game currently in progress."); return; }
             if (!Server.zombieRound) { p.SendMessage("The current zombie round hasn't started yet!"); return; }
 

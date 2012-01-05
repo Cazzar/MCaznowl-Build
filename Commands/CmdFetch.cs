@@ -22,13 +22,17 @@ using System.Threading;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /fetch
+    /// use /help fetch in-game for more info
+    /// </summary>
 	public class CmdFetch : Command
 	{
 		public override string name { get { return "fetch"; } }
 		public override string shortcut { get { return "fb"; } }
 		public override string type { get { return "mod"; } }
 		public override bool museumUsable { get { return false; } }
-		public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
 		public override void Use(Player p, string message)
 		{
             if (p == null)

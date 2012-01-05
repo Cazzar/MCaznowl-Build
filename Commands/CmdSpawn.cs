@@ -41,6 +41,21 @@ namespace MCForge
                     Server.zombie.InfectPlayer(p);
                 }
             }
+            if (p.PlayingTntWars)
+            {
+                TntWarsGame it = TntWarsGame.GetTntWarsGame(p);
+                if (it.GameMode == TntWarsGame.TntWarsGameMode.TDM && it.GameStatus != TntWarsGame.TntWarsGameStatus.WaitingForPlayers && it.GameStatus != TntWarsGame.TntWarsGameStatus.Finished && it.RedSpawn != null && it.BlueSpawn != null)
+                unchecked
+                {
+                    p.SendPos((byte)-1,
+                                (ushort)((0.5 + (it.FindPlayer(p).Blue ? it.BlueSpawn[0] : it.RedSpawn[0]) * 32)),
+                                (ushort)((1 + (it.FindPlayer(p).Blue ? it.BlueSpawn[1] : it.RedSpawn[1]) * 32)),
+                                (ushort)((0.5 + (it.FindPlayer(p).Blue ? it.BlueSpawn[2] : it.RedSpawn[2]) * 32)),
+                                (byte)(it.FindPlayer(p).Blue ? it.BlueSpawn[3] : it.RedSpawn[3]),
+                                (byte)(it.FindPlayer(p).Blue ? it.BlueSpawn[4] : it.RedSpawn[4]));
+                    return;
+                }
+            }
             unchecked
             {
                 p.SendPos((byte)-1, x, y, z,

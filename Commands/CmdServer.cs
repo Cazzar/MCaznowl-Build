@@ -212,6 +212,7 @@ namespace MCForge {
             Server.reportBack = true;
 
             Server.irc = false;
+            Server.ircColorsEnable = false;
 //            Server.safemode = false;
             Server.ircPort = 6667;
             Server.ircNick = "ForgeBot";
@@ -284,6 +285,8 @@ namespace MCForge {
             Server.customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
             Server.customGrieferStone = false;
             Server.customGrieferStoneMessage = "Oh noes! You were caught griefing!";
+            Server.customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
+            Server.customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
             Server.moneys = "moneys";
             Server.opchatperm = LevelPermission.Operator;
             Server.adminchatperm = LevelPermission.Admin;

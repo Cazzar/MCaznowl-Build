@@ -15,9 +15,7 @@ permissions and limitations under the Licenses.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Threading;
 
 namespace MCForge
 {
@@ -36,22 +34,19 @@ namespace MCForge
             {
                 Help(p);
                 Player.SendMessage(p, "&cThis command contains no arguments");
-                goto end;
+                return;
             }
             string alltext = File.ReadAllText("text/tempranks.txt");
             if (alltext == "")
             {
                 Player.SendMessage(p, "&cThere are no players with a temporary rank assigned.");
-                goto end;
+                return;
             }
             Player.SendMessage(p, "&ePlayers with a temporary rank assigned:");
             foreach (string line in File.ReadAllLines("text/tempranks.txt"))
             {
-                string printtoconsole = line.Split(' ')[0];
-                Player.SendMessage(p, "&a" + printtoconsole);
+                Player.SendMessage(p, "&a" + line.Split(' ')[0]);
             }
-        end:
-            Thread.Sleep(0);
         }
         public override void Help(Player p)
         {

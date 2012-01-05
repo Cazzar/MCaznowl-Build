@@ -3,6 +3,9 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /endround
+    /// </summary>
     public class CmdEndRound : Command
     {
         public override string name { get { return "endround"; } }

@@ -339,6 +339,47 @@ namespace MCForge.Gui
             this.chkNoLevelSavingDuringZombie = new System.Windows.Forms.CheckBox();
             this.chkNoRespawnDuringZombie = new System.Windows.Forms.CheckBox();
             this.chkZombieOnServerStart = new System.Windows.Forms.CheckBox();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.SlctdTntWrsPlyrs = new System.Windows.Forms.TextBox();
+            this.label87 = new System.Windows.Forms.Label();
+            this.SlctdTntWrdStatus = new System.Windows.Forms.TextBox();
+            this.label86 = new System.Windows.Forms.Label();
+            this.lblMOTD = new System.Windows.Forms.Label();
+            this.SlctdTntWrsLvl = new System.Windows.Forms.TextBox();
+            this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.groupBox36 = new System.Windows.Forms.GroupBox();
+            this.TntWrsStreaksChck = new System.Windows.Forms.CheckBox();
+            this.groupBox35 = new System.Windows.Forms.GroupBox();
+            this.TntWrsMpsList = new System.Windows.Forms.ListBox();
+            this.TntWrsCrtNwTntWrsBt = new System.Windows.Forms.Button();
+            this.groupBox34 = new System.Windows.Forms.GroupBox();
+            this.TntWrsDiffSlctBt = new System.Windows.Forms.Button();
+            this.TntWrsDiffAboutBt = new System.Windows.Forms.Button();
+            this.TntWrsDiffCombo = new System.Windows.Forms.ComboBox();
+            this.groupBox33 = new System.Windows.Forms.GroupBox();
+            this.TntWrsTKchck = new System.Windows.Forms.CheckBox();
+            this.TntWrsBlnceTeamsChck = new System.Windows.Forms.CheckBox();
+            this.TntWrsTmsChck = new System.Windows.Forms.CheckBox();
+            this.groupBox32 = new System.Windows.Forms.GroupBox();
+            this.label90 = new System.Windows.Forms.Label();
+            this.TntWrsGraceTimeChck = new System.Windows.Forms.NumericUpDown();
+            this.TntWrsGracePrdChck = new System.Windows.Forms.CheckBox();
+            this.groupBox31 = new System.Windows.Forms.GroupBox();
+            this.TntWrsMltiKlChck = new System.Windows.Forms.CheckBox();
+            this.TntWrsMltiKlScPrUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TntWrsAsstChck = new System.Windows.Forms.CheckBox();
+            this.TntWrsAstsScrUpDwn = new System.Windows.Forms.NumericUpDown();
+            this.label89 = new System.Windows.Forms.Label();
+            this.TntWrsScrPrKlUpDwn = new System.Windows.Forms.NumericUpDown();
+            this.label88 = new System.Windows.Forms.Label();
+            this.TntWrsScrLmtUpDwn = new System.Windows.Forms.NumericUpDown();
+            this.groupBox30 = new System.Windows.Forms.GroupBox();
+            this.TntWrsStrtGame = new System.Windows.Forms.Button();
+            this.TntWrsDltGame = new System.Windows.Forms.Button();
+            this.TntWrsEndGame = new System.Windows.Forms.Button();
+            this.TntWrsRstGame = new System.Windows.Forms.Button();
+            this.EditTntWarsGameBT = new System.Windows.Forms.Button();
+            this.TntWarsGamesList = new System.Windows.Forms.ListBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.numCountReset = new System.Windows.Forms.NumericUpDown();
@@ -430,6 +471,20 @@ namespace MCForge.Gui
             this.groupBox20.SuspendLayout();
             this.tabPage11.SuspendLayout();
             this.groupBox16.SuspendLayout();
+            this.tabPage14.SuspendLayout();
+            this.groupBox29.SuspendLayout();
+            this.groupBox36.SuspendLayout();
+            this.groupBox35.SuspendLayout();
+            this.groupBox34.SuspendLayout();
+            this.groupBox33.SuspendLayout();
+            this.groupBox32.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsGraceTimeChck)).BeginInit();
+            this.groupBox31.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsMltiKlScPrUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsAstsScrUpDwn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrPrKlUpDwn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrLmtUpDwn)).BeginInit();
+            this.groupBox30.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).BeginInit();
@@ -1741,7 +1796,7 @@ namespace MCForge.Gui
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
             this.tabPage2.Controls.Add(this.txtGrpMOTD);
-            this.tabPage2.Controls.Add(this.label85);
+            this.tabPage2.Controls.Add(this.lblMOTD);
             this.tabPage2.Controls.Add(this.txtMaxUndo);
             this.tabPage2.Controls.Add(this.label52);
             this.tabPage2.Controls.Add(this.lblColor);
@@ -1773,14 +1828,14 @@ namespace MCForge.Gui
             this.txtGrpMOTD.TabIndex = 17;
             this.txtGrpMOTD.TextChanged += new System.EventHandler(this.txtGrpMOTD_TextChanged);
             // 
-            // label85
+            // lblMOTD
             // 
-            this.label85.AutoSize = true;
-            this.label85.Location = new System.Drawing.Point(37, 179);
-            this.label85.Name = "label85";
-            this.label85.Size = new System.Drawing.Size(38, 13);
-            this.label85.TabIndex = 16;
-            this.label85.Text = "MOTD:";
+            this.lblMOTD.AutoSize = true;
+            this.lblMOTD.Location = new System.Drawing.Point(37, 179);
+            this.lblMOTD.Name = "lblMOTD";
+            this.lblMOTD.Size = new System.Drawing.Size(38, 13);
+            this.lblMOTD.TabIndex = 16;
+            this.lblMOTD.Text = "MOTD:";
             // 
             // txtMaxUndo
             // 
@@ -3171,11 +3226,13 @@ namespace MCForge.Gui
             // 
             this.tabControl2.Controls.Add(this.tabPage10);
             this.tabControl2.Controls.Add(this.tabPage11);
+            this.tabControl2.Controls.Add(this.tabPage14);
             this.tabControl2.Location = new System.Drawing.Point(9, 7);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(476, 499);
             this.tabControl2.TabIndex = 0;
+            this.tabControl2.Click += new System.EventHandler(this.tabControl2_Click);
             // 
             // tabPage10
             // 
@@ -3675,6 +3732,525 @@ namespace MCForge.Gui
             this.chkZombieOnServerStart.UseVisualStyleBackColor = true;
             this.chkZombieOnServerStart.CheckedChanged += new System.EventHandler(this.chkZombieOnServerStart_CheckedChanged);
             // 
+            // tabPage14
+            // 
+            this.tabPage14.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage14.Controls.Add(this.SlctdTntWrsPlyrs);
+            this.tabPage14.Controls.Add(this.label87);
+            this.tabPage14.Controls.Add(this.SlctdTntWrdStatus);
+            this.tabPage14.Controls.Add(this.label86);
+            this.tabPage14.Controls.Add(this.label85);
+            this.tabPage14.Controls.Add(this.SlctdTntWrsLvl);
+            this.tabPage14.Controls.Add(this.groupBox29);
+            this.tabPage14.Controls.Add(this.EditTntWarsGameBT);
+            this.tabPage14.Controls.Add(this.TntWarsGamesList);
+            this.tabPage14.Location = new System.Drawing.Point(4, 22);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage14.Size = new System.Drawing.Size(468, 473);
+            this.tabPage14.TabIndex = 2;
+            this.tabPage14.Text = "TNT Wars";
+            // 
+            // SlctdTntWrsPlyrs
+            // 
+            this.SlctdTntWrsPlyrs.Location = new System.Drawing.Point(426, 6);
+            this.SlctdTntWrsPlyrs.Name = "SlctdTntWrsPlyrs";
+            this.SlctdTntWrsPlyrs.ReadOnly = true;
+            this.SlctdTntWrsPlyrs.Size = new System.Drawing.Size(36, 21);
+            this.SlctdTntWrsPlyrs.TabIndex = 9;
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.Location = new System.Drawing.Point(375, 9);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(45, 13);
+            this.label87.TabIndex = 8;
+            this.label87.Text = "Players:";
+            // 
+            // SlctdTntWrdStatus
+            // 
+            this.SlctdTntWrdStatus.Location = new System.Drawing.Point(234, 6);
+            this.SlctdTntWrdStatus.Name = "SlctdTntWrdStatus";
+            this.SlctdTntWrdStatus.ReadOnly = true;
+            this.SlctdTntWrdStatus.Size = new System.Drawing.Size(135, 21);
+            this.SlctdTntWrdStatus.TabIndex = 7;
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Location = new System.Drawing.Point(188, 9);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(40, 13);
+            this.label86.TabIndex = 6;
+            this.label86.Text = "Status:";
+            // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Location = new System.Drawing.Point(6, 9);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(35, 13);
+            this.label85.TabIndex = 5;
+            this.label85.Text = "Level:";
+            // 
+            // SlctdTntWrsLvl
+            // 
+            this.SlctdTntWrsLvl.Location = new System.Drawing.Point(47, 6);
+            this.SlctdTntWrsLvl.Name = "SlctdTntWrsLvl";
+            this.SlctdTntWrsLvl.ReadOnly = true;
+            this.SlctdTntWrsLvl.Size = new System.Drawing.Size(135, 21);
+            this.SlctdTntWrsLvl.TabIndex = 4;
+            // 
+            // groupBox29
+            // 
+            this.groupBox29.Controls.Add(this.groupBox36);
+            this.groupBox29.Controls.Add(this.groupBox35);
+            this.groupBox29.Controls.Add(this.groupBox34);
+            this.groupBox29.Controls.Add(this.groupBox33);
+            this.groupBox29.Controls.Add(this.groupBox32);
+            this.groupBox29.Controls.Add(this.groupBox31);
+            this.groupBox29.Controls.Add(this.groupBox30);
+            this.groupBox29.Location = new System.Drawing.Point(9, 33);
+            this.groupBox29.Name = "groupBox29";
+            this.groupBox29.Size = new System.Drawing.Size(453, 268);
+            this.groupBox29.TabIndex = 3;
+            this.groupBox29.TabStop = false;
+            this.groupBox29.Text = "Edit Selected Game";
+            // 
+            // groupBox36
+            // 
+            this.groupBox36.Controls.Add(this.TntWrsStreaksChck);
+            this.groupBox36.Location = new System.Drawing.Point(355, 20);
+            this.groupBox36.Name = "groupBox36";
+            this.groupBox36.Size = new System.Drawing.Size(92, 103);
+            this.groupBox36.TabIndex = 10;
+            this.groupBox36.TabStop = false;
+            this.groupBox36.Text = "Other:";
+            // 
+            // TntWrsStreaksChck
+            // 
+            this.TntWrsStreaksChck.AutoSize = true;
+            this.TntWrsStreaksChck.Checked = true;
+            this.TntWrsStreaksChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsStreaksChck.Location = new System.Drawing.Point(7, 21);
+            this.TntWrsStreaksChck.Name = "TntWrsStreaksChck";
+            this.TntWrsStreaksChck.Size = new System.Drawing.Size(61, 17);
+            this.TntWrsStreaksChck.TabIndex = 0;
+            this.TntWrsStreaksChck.Text = "Streaks";
+            this.TntWrsStreaksChck.UseVisualStyleBackColor = true;
+            this.TntWrsStreaksChck.CheckedChanged += new System.EventHandler(this.TntWrsStreaksChck_CheckedChanged);
+            // 
+            // groupBox35
+            // 
+            this.groupBox35.Controls.Add(this.TntWrsMpsList);
+            this.groupBox35.Controls.Add(this.TntWrsCrtNwTntWrsBt);
+            this.groupBox35.Location = new System.Drawing.Point(196, 20);
+            this.groupBox35.Name = "groupBox35";
+            this.groupBox35.Size = new System.Drawing.Size(152, 71);
+            this.groupBox35.TabIndex = 9;
+            this.groupBox35.TabStop = false;
+            this.groupBox35.Text = "New Game";
+            // 
+            // TntWrsMpsList
+            // 
+            this.TntWrsMpsList.FormattingEnabled = true;
+            this.TntWrsMpsList.Location = new System.Drawing.Point(7, 20);
+            this.TntWrsMpsList.Name = "TntWrsMpsList";
+            this.TntWrsMpsList.Size = new System.Drawing.Size(82, 43);
+            this.TntWrsMpsList.TabIndex = 1;
+            this.TntWrsMpsList.SelectedIndexChanged += new System.EventHandler(this.TntWrsMpsList_SelectedIndexChanged);
+            // 
+            // TntWrsCrtNwTntWrsBt
+            // 
+            this.TntWrsCrtNwTntWrsBt.Enabled = false;
+            this.TntWrsCrtNwTntWrsBt.Location = new System.Drawing.Point(95, 20);
+            this.TntWrsCrtNwTntWrsBt.Name = "TntWrsCrtNwTntWrsBt";
+            this.TntWrsCrtNwTntWrsBt.Size = new System.Drawing.Size(51, 45);
+            this.TntWrsCrtNwTntWrsBt.TabIndex = 0;
+            this.TntWrsCrtNwTntWrsBt.Text = "Create";
+            this.TntWrsCrtNwTntWrsBt.UseVisualStyleBackColor = true;
+            this.TntWrsCrtNwTntWrsBt.Click += new System.EventHandler(this.TntWrsCrtNwTntWrsBt_Click);
+            // 
+            // groupBox34
+            // 
+            this.groupBox34.Controls.Add(this.TntWrsDiffSlctBt);
+            this.groupBox34.Controls.Add(this.TntWrsDiffAboutBt);
+            this.groupBox34.Controls.Add(this.TntWrsDiffCombo);
+            this.groupBox34.Location = new System.Drawing.Point(6, 20);
+            this.groupBox34.Name = "groupBox34";
+            this.groupBox34.Size = new System.Drawing.Size(178, 103);
+            this.groupBox34.TabIndex = 8;
+            this.groupBox34.TabStop = false;
+            this.groupBox34.Text = "Difficulty";
+            // 
+            // TntWrsDiffSlctBt
+            // 
+            this.TntWrsDiffSlctBt.Location = new System.Drawing.Point(6, 45);
+            this.TntWrsDiffSlctBt.Name = "TntWrsDiffSlctBt";
+            this.TntWrsDiffSlctBt.Size = new System.Drawing.Size(166, 23);
+            this.TntWrsDiffSlctBt.TabIndex = 2;
+            this.TntWrsDiffSlctBt.Text = "Select Difficulty";
+            this.TntWrsDiffSlctBt.UseVisualStyleBackColor = true;
+            this.TntWrsDiffSlctBt.Click += new System.EventHandler(this.TntWrsDiffSlctBt_Click);
+            // 
+            // TntWrsDiffAboutBt
+            // 
+            this.TntWrsDiffAboutBt.Location = new System.Drawing.Point(6, 74);
+            this.TntWrsDiffAboutBt.Name = "TntWrsDiffAboutBt";
+            this.TntWrsDiffAboutBt.Size = new System.Drawing.Size(166, 23);
+            this.TntWrsDiffAboutBt.TabIndex = 1;
+            this.TntWrsDiffAboutBt.Text = "About Difficulties";
+            this.TntWrsDiffAboutBt.UseVisualStyleBackColor = true;
+            this.TntWrsDiffAboutBt.Click += new System.EventHandler(this.TntWrsDiffAboutBt_Click);
+            // 
+            // TntWrsDiffCombo
+            // 
+            this.TntWrsDiffCombo.FormattingEnabled = true;
+            this.TntWrsDiffCombo.Items.AddRange(new object[] {
+            "Easy",
+            "Normal",
+            "Hard",
+            "Extreme"});
+            this.TntWrsDiffCombo.Location = new System.Drawing.Point(6, 20);
+            this.TntWrsDiffCombo.Name = "TntWrsDiffCombo";
+            this.TntWrsDiffCombo.Size = new System.Drawing.Size(166, 21);
+            this.TntWrsDiffCombo.TabIndex = 0;
+            // 
+            // groupBox33
+            // 
+            this.groupBox33.Controls.Add(this.TntWrsTKchck);
+            this.groupBox33.Controls.Add(this.TntWrsBlnceTeamsChck);
+            this.groupBox33.Controls.Add(this.TntWrsTmsChck);
+            this.groupBox33.Location = new System.Drawing.Point(196, 175);
+            this.groupBox33.Name = "groupBox33";
+            this.groupBox33.Size = new System.Drawing.Size(152, 87);
+            this.groupBox33.TabIndex = 7;
+            this.groupBox33.TabStop = false;
+            this.groupBox33.Text = "Teams:";
+            // 
+            // TntWrsTKchck
+            // 
+            this.TntWrsTKchck.AutoSize = true;
+            this.TntWrsTKchck.Location = new System.Drawing.Point(7, 68);
+            this.TntWrsTKchck.Name = "TntWrsTKchck";
+            this.TntWrsTKchck.Size = new System.Drawing.Size(73, 17);
+            this.TntWrsTKchck.TabIndex = 2;
+            this.TntWrsTKchck.Text = "Team Kills";
+            this.TntWrsTKchck.UseVisualStyleBackColor = true;
+            this.TntWrsTKchck.CheckedChanged += new System.EventHandler(this.TntWrsTKchck_CheckedChanged);
+            // 
+            // TntWrsBlnceTeamsChck
+            // 
+            this.TntWrsBlnceTeamsChck.AutoSize = true;
+            this.TntWrsBlnceTeamsChck.Checked = true;
+            this.TntWrsBlnceTeamsChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsBlnceTeamsChck.Location = new System.Drawing.Point(7, 44);
+            this.TntWrsBlnceTeamsChck.Name = "TntWrsBlnceTeamsChck";
+            this.TntWrsBlnceTeamsChck.Size = new System.Drawing.Size(96, 17);
+            this.TntWrsBlnceTeamsChck.TabIndex = 1;
+            this.TntWrsBlnceTeamsChck.Text = "Balance Teams";
+            this.TntWrsBlnceTeamsChck.UseVisualStyleBackColor = true;
+            this.TntWrsBlnceTeamsChck.CheckedChanged += new System.EventHandler(this.TntWrsBlnceTeamsChck_CheckedChanged);
+            // 
+            // TntWrsTmsChck
+            // 
+            this.TntWrsTmsChck.AutoSize = true;
+            this.TntWrsTmsChck.Checked = true;
+            this.TntWrsTmsChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsTmsChck.Location = new System.Drawing.Point(7, 21);
+            this.TntWrsTmsChck.Name = "TntWrsTmsChck";
+            this.TntWrsTmsChck.Size = new System.Drawing.Size(104, 17);
+            this.TntWrsTmsChck.TabIndex = 0;
+            this.TntWrsTmsChck.Text = "Teams (TDM/FFA)";
+            this.TntWrsTmsChck.UseVisualStyleBackColor = true;
+            this.TntWrsTmsChck.CheckedChanged += new System.EventHandler(this.TntWrsTmsChck_CheckedChanged);
+            // 
+            // groupBox32
+            // 
+            this.groupBox32.Controls.Add(this.label90);
+            this.groupBox32.Controls.Add(this.TntWrsGraceTimeChck);
+            this.groupBox32.Controls.Add(this.TntWrsGracePrdChck);
+            this.groupBox32.Location = new System.Drawing.Point(196, 97);
+            this.groupBox32.Name = "groupBox32";
+            this.groupBox32.Size = new System.Drawing.Size(152, 73);
+            this.groupBox32.TabIndex = 6;
+            this.groupBox32.TabStop = false;
+            this.groupBox32.Text = "Grace Period";
+            // 
+            // label90
+            // 
+            this.label90.AutoSize = true;
+            this.label90.Location = new System.Drawing.Point(3, 45);
+            this.label90.Name = "label90";
+            this.label90.Size = new System.Drawing.Size(80, 13);
+            this.label90.TabIndex = 2;
+            this.label90.Text = "Time (Seconds):";
+            // 
+            // TntWrsGraceTimeChck
+            // 
+            this.TntWrsGraceTimeChck.Location = new System.Drawing.Point(89, 43);
+            this.TntWrsGraceTimeChck.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.TntWrsGraceTimeChck.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.TntWrsGraceTimeChck.Name = "TntWrsGraceTimeChck";
+            this.TntWrsGraceTimeChck.Size = new System.Drawing.Size(57, 21);
+            this.TntWrsGraceTimeChck.TabIndex = 1;
+            this.TntWrsGraceTimeChck.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.TntWrsGraceTimeChck.ValueChanged += new System.EventHandler(this.TntWrsGraceTimeChck_ValueChanged);
+            // 
+            // TntWrsGracePrdChck
+            // 
+            this.TntWrsGracePrdChck.AutoSize = true;
+            this.TntWrsGracePrdChck.Checked = true;
+            this.TntWrsGracePrdChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsGracePrdChck.Location = new System.Drawing.Point(6, 20);
+            this.TntWrsGracePrdChck.Name = "TntWrsGracePrdChck";
+            this.TntWrsGracePrdChck.Size = new System.Drawing.Size(87, 17);
+            this.TntWrsGracePrdChck.TabIndex = 0;
+            this.TntWrsGracePrdChck.Text = "Grace Period";
+            this.TntWrsGracePrdChck.UseVisualStyleBackColor = true;
+            this.TntWrsGracePrdChck.CheckedChanged += new System.EventHandler(this.TntWrsGracePrdChck_CheckedChanged);
+            // 
+            // groupBox31
+            // 
+            this.groupBox31.Controls.Add(this.TntWrsMltiKlChck);
+            this.groupBox31.Controls.Add(this.TntWrsMltiKlScPrUpDown);
+            this.groupBox31.Controls.Add(this.TntWrsAsstChck);
+            this.groupBox31.Controls.Add(this.TntWrsAstsScrUpDwn);
+            this.groupBox31.Controls.Add(this.label89);
+            this.groupBox31.Controls.Add(this.TntWrsScrPrKlUpDwn);
+            this.groupBox31.Controls.Add(this.label88);
+            this.groupBox31.Controls.Add(this.TntWrsScrLmtUpDwn);
+            this.groupBox31.Location = new System.Drawing.Point(6, 129);
+            this.groupBox31.Name = "groupBox31";
+            this.groupBox31.Size = new System.Drawing.Size(184, 133);
+            this.groupBox31.TabIndex = 5;
+            this.groupBox31.TabStop = false;
+            this.groupBox31.Text = "Scores";
+            // 
+            // TntWrsMltiKlChck
+            // 
+            this.TntWrsMltiKlChck.AutoSize = true;
+            this.TntWrsMltiKlChck.Checked = true;
+            this.TntWrsMltiKlChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsMltiKlChck.Location = new System.Drawing.Point(11, 102);
+            this.TntWrsMltiKlChck.Name = "TntWrsMltiKlChck";
+            this.TntWrsMltiKlChck.Size = new System.Drawing.Size(122, 17);
+            this.TntWrsMltiKlChck.TabIndex = 8;
+            this.TntWrsMltiKlChck.Text = "MultiKills (Score Per:";
+            this.TntWrsMltiKlChck.UseVisualStyleBackColor = true;
+            this.TntWrsMltiKlChck.CheckedChanged += new System.EventHandler(this.TntWrsMltiKlChck_CheckedChanged);
+            // 
+            // TntWrsMltiKlScPrUpDown
+            // 
+            this.TntWrsMltiKlScPrUpDown.Location = new System.Drawing.Point(140, 101);
+            this.TntWrsMltiKlScPrUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.TntWrsMltiKlScPrUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TntWrsMltiKlScPrUpDown.Name = "TntWrsMltiKlScPrUpDown";
+            this.TntWrsMltiKlScPrUpDown.Size = new System.Drawing.Size(38, 21);
+            this.TntWrsMltiKlScPrUpDown.TabIndex = 7;
+            this.TntWrsMltiKlScPrUpDown.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.TntWrsMltiKlScPrUpDown.ValueChanged += new System.EventHandler(this.TntWrsMltiKlScPrUpDown_ValueChanged);
+            // 
+            // TntWrsAsstChck
+            // 
+            this.TntWrsAsstChck.AutoSize = true;
+            this.TntWrsAsstChck.Checked = true;
+            this.TntWrsAsstChck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TntWrsAsstChck.Location = new System.Drawing.Point(23, 75);
+            this.TntWrsAsstChck.Name = "TntWrsAsstChck";
+            this.TntWrsAsstChck.Size = new System.Drawing.Size(111, 17);
+            this.TntWrsAsstChck.TabIndex = 6;
+            this.TntWrsAsstChck.Text = "Assists (Score Per:";
+            this.TntWrsAsstChck.UseVisualStyleBackColor = true;
+            this.TntWrsAsstChck.CheckedChanged += new System.EventHandler(this.TntWrsAsstChck_CheckedChanged);
+            // 
+            // TntWrsAstsScrUpDwn
+            // 
+            this.TntWrsAstsScrUpDwn.Location = new System.Drawing.Point(140, 74);
+            this.TntWrsAstsScrUpDwn.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.TntWrsAstsScrUpDwn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TntWrsAstsScrUpDwn.Name = "TntWrsAstsScrUpDwn";
+            this.TntWrsAstsScrUpDwn.Size = new System.Drawing.Size(38, 21);
+            this.TntWrsAstsScrUpDwn.TabIndex = 4;
+            this.TntWrsAstsScrUpDwn.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.TntWrsAstsScrUpDwn.ValueChanged += new System.EventHandler(this.TntWrsAstsScrUpDwn_ValueChanged);
+            // 
+            // label89
+            // 
+            this.label89.AutoSize = true;
+            this.label89.Location = new System.Drawing.Point(63, 49);
+            this.label89.Name = "label89";
+            this.label89.Size = new System.Drawing.Size(71, 13);
+            this.label89.TabIndex = 3;
+            this.label89.Text = "Score Per Kill:";
+            // 
+            // TntWrsScrPrKlUpDwn
+            // 
+            this.TntWrsScrPrKlUpDwn.Location = new System.Drawing.Point(140, 47);
+            this.TntWrsScrPrKlUpDwn.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.TntWrsScrPrKlUpDwn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.TntWrsScrPrKlUpDwn.Name = "TntWrsScrPrKlUpDwn";
+            this.TntWrsScrPrKlUpDwn.Size = new System.Drawing.Size(38, 21);
+            this.TntWrsScrPrKlUpDwn.TabIndex = 2;
+            this.TntWrsScrPrKlUpDwn.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.TntWrsScrPrKlUpDwn.ValueChanged += new System.EventHandler(this.TntWrsScrPrKlUpDwn_ValueChanged);
+            // 
+            // label88
+            // 
+            this.label88.AutoSize = true;
+            this.label88.Location = new System.Drawing.Point(72, 22);
+            this.label88.Name = "label88";
+            this.label88.Size = new System.Drawing.Size(62, 13);
+            this.label88.TabIndex = 1;
+            this.label88.Text = "Score Limit:";
+            // 
+            // TntWrsScrLmtUpDwn
+            // 
+            this.TntWrsScrLmtUpDwn.Location = new System.Drawing.Point(140, 20);
+            this.TntWrsScrLmtUpDwn.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.TntWrsScrLmtUpDwn.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.TntWrsScrLmtUpDwn.Name = "TntWrsScrLmtUpDwn";
+            this.TntWrsScrLmtUpDwn.Size = new System.Drawing.Size(38, 21);
+            this.TntWrsScrLmtUpDwn.TabIndex = 0;
+            this.TntWrsScrLmtUpDwn.Value = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            this.TntWrsScrLmtUpDwn.ValueChanged += new System.EventHandler(this.TntWrsScrLmtUpDwn_ValueChanged);
+            // 
+            // groupBox30
+            // 
+            this.groupBox30.Controls.Add(this.TntWrsStrtGame);
+            this.groupBox30.Controls.Add(this.TntWrsDltGame);
+            this.groupBox30.Controls.Add(this.TntWrsEndGame);
+            this.groupBox30.Controls.Add(this.TntWrsRstGame);
+            this.groupBox30.Location = new System.Drawing.Point(354, 129);
+            this.groupBox30.Name = "groupBox30";
+            this.groupBox30.Size = new System.Drawing.Size(93, 133);
+            this.groupBox30.TabIndex = 4;
+            this.groupBox30.TabStop = false;
+            this.groupBox30.Text = "Status";
+            // 
+            // TntWrsStrtGame
+            // 
+            this.TntWrsStrtGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TntWrsStrtGame.Location = new System.Drawing.Point(6, 17);
+            this.TntWrsStrtGame.Name = "TntWrsStrtGame";
+            this.TntWrsStrtGame.Size = new System.Drawing.Size(80, 23);
+            this.TntWrsStrtGame.TabIndex = 0;
+            this.TntWrsStrtGame.Text = "Start Game";
+            this.TntWrsStrtGame.UseVisualStyleBackColor = true;
+            this.TntWrsStrtGame.Click += new System.EventHandler(this.TntWrsStrtGame_Click);
+            // 
+            // TntWrsDltGame
+            // 
+            this.TntWrsDltGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TntWrsDltGame.Location = new System.Drawing.Point(6, 104);
+            this.TntWrsDltGame.Name = "TntWrsDltGame";
+            this.TntWrsDltGame.Size = new System.Drawing.Size(80, 23);
+            this.TntWrsDltGame.TabIndex = 3;
+            this.TntWrsDltGame.Text = "Delete Game";
+            this.TntWrsDltGame.UseVisualStyleBackColor = true;
+            this.TntWrsDltGame.Click += new System.EventHandler(this.TntWrsDltGame_Click);
+            // 
+            // TntWrsEndGame
+            // 
+            this.TntWrsEndGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TntWrsEndGame.Location = new System.Drawing.Point(6, 46);
+            this.TntWrsEndGame.Name = "TntWrsEndGame";
+            this.TntWrsEndGame.Size = new System.Drawing.Size(80, 23);
+            this.TntWrsEndGame.TabIndex = 1;
+            this.TntWrsEndGame.Text = "End Game";
+            this.TntWrsEndGame.UseVisualStyleBackColor = true;
+            this.TntWrsEndGame.Click += new System.EventHandler(this.TntWrsEndGame_Click);
+            // 
+            // TntWrsRstGame
+            // 
+            this.TntWrsRstGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TntWrsRstGame.Location = new System.Drawing.Point(6, 75);
+            this.TntWrsRstGame.Name = "TntWrsRstGame";
+            this.TntWrsRstGame.Size = new System.Drawing.Size(80, 23);
+            this.TntWrsRstGame.TabIndex = 2;
+            this.TntWrsRstGame.Text = "Reset Game";
+            this.TntWrsRstGame.UseVisualStyleBackColor = true;
+            this.TntWrsRstGame.Click += new System.EventHandler(this.TntWrsRstGame_Click);
+            // 
+            // EditTntWarsGameBT
+            // 
+            this.EditTntWarsGameBT.Location = new System.Drawing.Point(9, 307);
+            this.EditTntWarsGameBT.Name = "EditTntWarsGameBT";
+            this.EditTntWarsGameBT.Size = new System.Drawing.Size(453, 23);
+            this.EditTntWarsGameBT.TabIndex = 1;
+            this.EditTntWarsGameBT.Text = "Edit";
+            this.EditTntWarsGameBT.UseVisualStyleBackColor = true;
+            this.EditTntWarsGameBT.Click += new System.EventHandler(this.EditTntWarsGameBT_Click);
+            // 
+            // TntWarsGamesList
+            // 
+            this.TntWarsGamesList.FormattingEnabled = true;
+            this.TntWarsGamesList.Location = new System.Drawing.Point(9, 333);
+            this.TntWarsGamesList.Name = "TntWarsGamesList";
+            this.TntWarsGamesList.Size = new System.Drawing.Size(453, 134);
+            this.TntWarsGamesList.TabIndex = 0;
+            // 
             // tabPage8
             // 
             this.tabPage8.BackColor = System.Drawing.Color.Transparent;
@@ -4133,6 +4709,25 @@ namespace MCForge.Gui
             this.tabPage11.ResumeLayout(false);
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
+            this.tabPage14.ResumeLayout(false);
+            this.tabPage14.PerformLayout();
+            this.groupBox29.ResumeLayout(false);
+            this.groupBox36.ResumeLayout(false);
+            this.groupBox36.PerformLayout();
+            this.groupBox35.ResumeLayout(false);
+            this.groupBox34.ResumeLayout(false);
+            this.groupBox33.ResumeLayout(false);
+            this.groupBox33.PerformLayout();
+            this.groupBox32.ResumeLayout(false);
+            this.groupBox32.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsGraceTimeChck)).EndInit();
+            this.groupBox31.ResumeLayout(false);
+            this.groupBox31.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsMltiKlScPrUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsAstsScrUpDwn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrPrKlUpDwn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrLmtUpDwn)).EndInit();
+            this.groupBox30.ResumeLayout(false);
             this.tabPage8.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
@@ -4478,7 +5073,49 @@ namespace MCForge.Gui
         private System.Windows.Forms.GroupBox groupBox28;
         private System.Windows.Forms.NumericUpDown nudCooldownTime;
         private System.Windows.Forms.Label label84;
-        private System.Windows.Forms.Label label85;
+        private System.Windows.Forms.Label lblMOTD;
         private System.Windows.Forms.TextBox txtGrpMOTD;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.TextBox SlctdTntWrdStatus;
+        private System.Windows.Forms.Label label86;
+        private System.Windows.Forms.Label label85;
+        private System.Windows.Forms.TextBox SlctdTntWrsLvl;
+        private System.Windows.Forms.GroupBox groupBox29;
+        private System.Windows.Forms.Button EditTntWarsGameBT;
+        private System.Windows.Forms.ListBox TntWarsGamesList;
+        private System.Windows.Forms.TextBox SlctdTntWrsPlyrs;
+        private System.Windows.Forms.Label label87;
+        private System.Windows.Forms.GroupBox groupBox30;
+        private System.Windows.Forms.Button TntWrsStrtGame;
+        private System.Windows.Forms.Button TntWrsDltGame;
+        private System.Windows.Forms.Button TntWrsEndGame;
+        private System.Windows.Forms.Button TntWrsRstGame;
+        private System.Windows.Forms.GroupBox groupBox31;
+        private System.Windows.Forms.CheckBox TntWrsAsstChck;
+        private System.Windows.Forms.NumericUpDown TntWrsAstsScrUpDwn;
+        private System.Windows.Forms.Label label89;
+        private System.Windows.Forms.NumericUpDown TntWrsScrPrKlUpDwn;
+        private System.Windows.Forms.Label label88;
+        private System.Windows.Forms.NumericUpDown TntWrsScrLmtUpDwn;
+        private System.Windows.Forms.CheckBox TntWrsMltiKlChck;
+        private System.Windows.Forms.NumericUpDown TntWrsMltiKlScPrUpDown;
+        private System.Windows.Forms.GroupBox groupBox32;
+        private System.Windows.Forms.Label label90;
+        private System.Windows.Forms.NumericUpDown TntWrsGraceTimeChck;
+        private System.Windows.Forms.GroupBox groupBox33;
+        private System.Windows.Forms.CheckBox TntWrsTKchck;
+        private System.Windows.Forms.CheckBox TntWrsBlnceTeamsChck;
+        private System.Windows.Forms.CheckBox TntWrsTmsChck;
+        private System.Windows.Forms.CheckBox TntWrsGracePrdChck;
+        private System.Windows.Forms.GroupBox groupBox34;
+        private System.Windows.Forms.Button TntWrsDiffAboutBt;
+        private System.Windows.Forms.ComboBox TntWrsDiffCombo;
+        private System.Windows.Forms.GroupBox groupBox35;
+        private System.Windows.Forms.Button TntWrsCrtNwTntWrsBt;
+        private System.Windows.Forms.GroupBox groupBox36;
+        private System.Windows.Forms.ListBox TntWrsMpsList;
+        private System.Windows.Forms.Button TntWrsDiffSlctBt;
+        private System.Windows.Forms.CheckBox TntWrsStreaksChck;
+>>>>>>> master
     }
 }

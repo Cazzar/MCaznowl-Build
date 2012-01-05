@@ -32,11 +32,19 @@ namespace MCForge
             int i = 0;
             for (i = 0; i < 20; i++)
             {
-                Player.GlobalMessage(".");
+                Player.players.ForEach(delegate(Player p1) { BlankMessage(p1); });
             }
             Player.GlobalMessage("%4Global Chat Cleared.");
         }
-
+        //Yes this does work
+        //Trust me...I'm a doctor
+        public void BlankMessage(Player p)
+        {
+            byte[] buffer = new byte[65];
+            Player.StringFormat(" ", 64).CopyTo(buffer, 1);
+            p.SendRaw(13, buffer);
+            buffer = null;
+        }
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/globalcls - Clears the chat for all users.");

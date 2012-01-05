@@ -38,7 +38,7 @@ namespace MCForge
             }
             else
             {
-                Player.SendMessage(p, "Players who are " + c.green + "alive " + c.yellow + "are:");
+                Player.SendMessage(p, "Players who are " + c.green + "alive " + Server.DefaultColor + "are:");
                 string playerstring = "";
                 ZombieGame.alive.ForEach(delegate(Player player)
                 {

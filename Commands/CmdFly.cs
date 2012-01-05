@@ -47,25 +47,27 @@ namespace MCForge
             Thread flyThread = new Thread(new ThreadStart(delegate
             {
                 Pos pos;
+                ushort[] oldpos = new ushort[3];
                 List<Pos> buffer = new List<Pos>();
                 while (p.isFlying)
                 {
                     Thread.Sleep(20);
+                    if (p.pos == oldpos) continue;
                     try
                     {
                         List<Pos> tempBuffer = new List<Pos>();
-
+                        List<Pos> toRemove = new List<Pos>();
                         ushort x = (ushort)((p.pos[0]) / 32);
                         ushort y = (ushort)((p.pos[1] - 60) / 32);
                         ushort z = (ushort)((p.pos[2]) / 32);
 
                         try
                         {
-                            for (ushort xx = (ushort)(x - 2); xx <= x + 2; xx++)
+                            for (ushort xx = (ushort)(x - 1); xx <= x + 1; xx++)
                             {
                                 for (ushort yy = (ushort)(y - 1); yy <= y; yy++)
                                 {
-                                    for (ushort zz = (ushort)(z - 2); zz <= z + 2; zz++)
+                                    for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
                                         if (p.level.GetTile(xx, yy, zz) == Block.air)
                                         {
@@ -75,22 +77,6 @@ namespace MCForge
                                     }
                                 }
                             }
-
-                            List<Pos> toRemove = new List<Pos>();
-                            foreach (Pos cP in buffer)
-                            {
-                                if (!tempBuffer.Contains(cP))
-                                {
-                                    p.SendBlockchange(cP.x, cP.y, cP.z, Block.air);
-                                    toRemove.Add(cP);
-                                }
-                            }
-
-                            foreach (Pos cP in toRemove)
-                            {
-                                buffer.Remove(cP);
-                            }
-
                             foreach (Pos cP in tempBuffer)
                             {
                                 if (!buffer.Contains(cP))
@@ -99,13 +85,25 @@ namespace MCForge
                                     p.SendBlockchange(cP.x, cP.y, cP.z, Block.glass);
                                 }
                             }
-
+                            foreach (Pos cP in buffer)
+                            {
+                                if (!tempBuffer.Contains(cP))
+                                {
+                                    p.SendBlockchange(cP.x, cP.y, cP.z, Block.air);
+                                    toRemove.Add(cP);
+                                }
+                            }
+                            foreach (Pos cP in toRemove)
+                            {
+                                buffer.Remove(cP);
+                            }
                             tempBuffer.Clear();
                             toRemove.Clear();
                         }
                         catch { }
                     }
                     catch { }
+                    p.pos.CopyTo(oldpos, 0);
                 }
 
                 foreach (Pos cP in buffer)

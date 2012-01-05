@@ -3,6 +3,9 @@ using System.IO;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /pload
+    /// </summary>
     public class CmdPLoad : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }

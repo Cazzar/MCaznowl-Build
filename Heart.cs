@@ -19,12 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Net;
 using System.IO;
 using System.Threading;
-using System.ComponentModel;
-using System.Collections;
 
 namespace MCForge
 {
@@ -95,8 +92,6 @@ namespace MCForge
                     }
                 };
                 MCForgeBeatTimer.Start();
-
-                System.Timers.Timer WomBeat = new System.Timers.Timer(500);
             }));
             backupThread.Start();
         }
@@ -132,7 +127,7 @@ namespace MCForge
                     //Server.s.Log(beat.Parameters);
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
-                    request.UserAgent = "Opera/9.23 (Nintendo Wii; U; ; 1038-58; Wii Internet Channel/1.0; en)"; // LOLOLOLOLOLOL
+                    request.UserAgent = "Mozilla/5.0 (compatible; Konqueror/3.5; Windows NT 6.0) KHTML/3.5.6 (like Gecko)";
                     request.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
                     byte[] formData = Encoding.ASCII.GetBytes(beat.Parameters);
                     request.ContentLength = formData.Length;
@@ -333,5 +328,5 @@ namespace MCForge
                                                  '=', '+', '$', ',', '/', '?', '%', '#', '[', ']' };
     }
 
-    public enum BeatType { Minecraft, TChalo, MCForge }
+    public enum BeatType { Minecraft, MCForge }
 }

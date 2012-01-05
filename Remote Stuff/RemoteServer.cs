@@ -26,9 +26,9 @@ namespace MCForge.Remote
     {
         public static Socket listen;
         public static int port = 5050;
-        public static int protocal = 2;
-        public static string username = "head";
-        public static string password = "lols";
+        public static int Protocol = 2;
+        public static string Username = "head";
+        public static string Password = "lols";
         public static bool enableRemote = true;
         public static int tries = 0;
 
@@ -66,9 +66,9 @@ namespace MCForge.Remote
                     if (tries < 5)
                     {
                         p.Socket = listen.EndAccept(result);
-                        new Thread(new ThreadStart(p.Start)).Start();
+                        new Thread(p.Start).Start();
 
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                        listen.BeginAccept(Accept, null);
                         begin = true;
                     }
                     else
@@ -88,7 +88,7 @@ namespace MCForge.Remote
                 if (p != null)
                     p.Disconnect();
                 if (begin) return;
-                listen.BeginAccept(new AsyncCallback(Accept), null);
+                listen.BeginAccept(Accept, null);
             }
             catch (Exception e)
             {
@@ -97,7 +97,7 @@ namespace MCForge.Remote
                 if (p != null)
                     p.Disconnect();
                 if (begin) return;
-                listen.BeginAccept(new AsyncCallback(Accept), null);
+                listen.BeginAccept(Accept, null);
             }
         }
 

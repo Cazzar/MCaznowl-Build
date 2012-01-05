@@ -17,18 +17,11 @@
 */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
-using System.Net.Mail;
 using MCForge;
 using System.Net;
 
@@ -68,33 +61,14 @@ namespace MCForge.Gui
             InitializeComponent();
         }
 
-        /*private void Window_Minimize(object sender, EventArgs e)
-        {
-            /*     if (!Minimized)
-                  {
-                      Minimized = true;
-                      ntf.Text = "MCZall";
-                      ntf.Icon = this.Icon;
-                      ntf.Click += delegate
-                      {
-                          try
-                          {
-                              Minimized = false;
-                              this.ShowInTaskbar = true;
-                              this.Show();
-                              WindowState = FormWindowState.Normal;
-                          }
-                          catch (Exception ex) { MessageBox.Show(ex.Message); }
-                      };
-                      ntf.Visible = true;
-                      this.ShowInTaskbar = false;
-                  } */
-        /*}*/
-
         public static Window thisWindow;
 
         private void Window_Load(object sender, EventArgs e)
         {
+            if (SingleInstance.SingleApplication.Run() == false)
+            {
+                return;
+           }
             btnProperties.Enabled = false;
             thisWindow = this;
             MaximizeBox = false;
@@ -455,36 +429,29 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtInput.Text == null || txtInput.Text.Trim() == "") { return; }
                 string text = txtInput.Text.Trim();
-                string newtext = text;
-                if (txtInput.Text[0] == '#')
+                if (String.IsNullOrEmpty(text)) return; 
+                switch (text[0])
                 {
-                    newtext = text.Remove(0, 1).Trim();
-                    Player.GlobalMessageOps(newtext);
-                    Server.s.OpLog("(OPs): Console: " + newtext);
-                    //IRCBot.Say("Console: " + newtext, true);
-                    Server.IRC.Say("Console: " + newtext, true);
-                    //   WriteLine("(OPs):<CONSOLE> " + txtInput.Text);
-                    txtInput.Clear();
+                    case '#':
+                        text = text.Remove(0, 1);
+                        Player.GlobalMessageOps(text);
+                        Server.s.OpLog("(OPs): Console: " + text);
+                        Server.IRC.Say("Console: " + text, true);
+                        break;
+                    case '+':
+                        text = text.Remove(0, 1);
+                        Player.GlobalMessageAdmins(text);
+                        Server.s.AdminLog("(Admins): Console: " + text);
+                        Server.IRC.Say("Console: " + text, true);
+                        break;
+                    default:
+                        Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + text);
+                        Server.IRC.Say("Console [" + Server.ZallState + "]: " + text);
+                        WriteLine("<CONSOLE> " + text);
+                        break;
                 }
-                else if (txtInput.Text[0] == '+')
-                {
-                    newtext = text.Remove(0, 1).Trim();
-                    Player.GlobalMessageAdmins(newtext);
-                    Server.s.AdminLog("(Admins): Console: " + newtext);
-                    //IRCBot.Say("Console: " + newtext, true);
-                    Server.IRC.Say("Console: " + newtext, true);
-                    txtInput.Clear();
-                }
-                else
-                {
-                    Player.GlobalMessage("Console [&a" + Server.ZallState + Server.DefaultColor + "]:&f " + txtInput.Text);
-                    //IRCBot.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
-                    Server.IRC.Say("Console [" + Server.ZallState + "]: " + txtInput.Text);
-                    WriteLine("<CONSOLE> " + txtInput.Text);
-                    txtInput.Clear();
-                }
+                txtInput.Clear();
             }
         }
 
@@ -501,9 +468,8 @@ namespace MCForge.Gui
                     return;
                 }
 
-                if (txtCommands.Text[0] == '/')
-                    if (txtCommands.Text.Length > 1)
-                        txtCommands.Text = txtCommands.Text.Substring(1);
+                if (txtCommands.Text[0] == '/' && txtCommands.Text.Length > 1)
+                    txtCommands.Text = txtCommands.Text.Substring(1);
 
                 if (txtCommands.Text.IndexOf(' ') != -1)
                 {
@@ -520,35 +486,39 @@ namespace MCForge.Gui
                 }
 
                 new Thread(() =>{
-                try
-                {
-                    Command.all.Find(sentCmd).Use(null, sentMsg);
-                    newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
                     try
                     {
+                        Command commandcmd = Command.all.Find(sentCmd);
+                        if (commandcmd == null)
+                        {
+                            Server.s.Log("No such command!");
+                            return;
+                        }
+                        commandcmd.Use(null, sentMsg);
+                        newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
                         if (Player.sendcommanddata)
                         {
-                            Command commandcmd = Command.all.Find(sentCmd);
-                            WebClient wc = new WebClient();
-                            wc.DownloadString("http://mcforge.mcderp.net/cmdusage.php?cmd=" + commandcmd.name);
+                            new Thread(() =>
+                            {
+                                using (WebClient wc = new WebClient())
+                                {
+                                    try
+                                    {
+                                        wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
+                                    }
+                                    catch
+                                    {
+                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                    }
+                                }
+                            }).Start();
                         }
                     }
-                    catch 
+                    catch (Exception ex)
                     {
-                        Server.s.Log("The command data sending failed! if this happens more often I suggest to turn it off");
+                        Server.ErrorLog(ex);
+                        newCommand("CONSOLE: Failed command.");
                     }
-                }
-                catch (Exception ex)
-                {
-                    if (!Command.all.Contains(sentCmd))
-                    {
-                        Server.s.Log("No such command!");
-                        Server.s.Log("CONSOLE: Failed command.");
-                        return;
-                    }
-                    Server.ErrorLog(ex);
-                    newCommand("CONSOLE: Failed command.");
-                }
                 }).Start();
 
                 txtCommands.Clear();
@@ -573,42 +543,14 @@ namespace MCForge.Gui
             }
         }
 
-        //void ChangeCheck(string newCheck) { Server.ZallState = newCheck; }
-
         private void btnProperties_Click_1(object sender, EventArgs e)
         {
             if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
             PropertyForm.Show();
         }
 
-        private void btnUpdate_Click_1(object sender, EventArgs e)
-        {
-            if (!MCForge_.Gui.Program.CurrentUpdate)
-                MCForge_.Gui.Program.UpdateCheck();
-            else
-            {
-                Thread messageThread = new Thread(new ThreadStart(delegate
-                {
-                    MessageBox.Show("Already checking for updates.");
-                })); messageThread.Start();
-            }
-        }
-
         public static bool prevLoaded = false;
         Form PropertyForm;
-
-        /*private void gBChat_Enter(object sender, EventArgs e)
-        {
-
-        }*/
-
-        private void btnExtra_Click_1(object sender, EventArgs e)
-        {
-            if (!prevLoaded) { PropertyForm = new PropertyWindow(); prevLoaded = true; }
-            PropertyForm.Show();
-            PropertyForm.Top = this.Top + this.Height - txtCommandsUsed.Height;
-            PropertyForm.Left = this.Left;
-        }
 
         private void Window_Resize(object sender, EventArgs e)
         {
@@ -620,22 +562,6 @@ namespace MCForge.Gui
             this.Show();
             this.BringToFront();
             WindowState = FormWindowState.Normal;
-        }
-
-        private void tmrRestart_Tick(object sender, EventArgs e)
-        {
-            if (Server.autorestart)
-            {
-                if (DateTime.Now.TimeOfDay.CompareTo(Server.restarttime.TimeOfDay) > 0 && (DateTime.Now.TimeOfDay.CompareTo(Server.restarttime.AddSeconds(1).TimeOfDay)) < 0)
-                {
-                    Player.GlobalMessage("The time is now " + DateTime.Now.TimeOfDay);
-                    Player.GlobalMessage("The server will now begin auto restart procedures.");
-                    Server.s.Log("The time is now " + DateTime.Now.TimeOfDay);
-                    Server.s.Log("The server will now begin auto restart procedures.");
-
-                    MCForge_.Gui.Program.ExitProgram(true);
-                }
-            }
         }
 
         private void openConsole_Click(object sender, EventArgs e)
@@ -689,52 +615,27 @@ namespace MCForge.Gui
 
         private void clonesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("clones").Use(null, p.name);
-            }*/
             playerselect("clones");
         }
 
         private void voiceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("voice").Use(null, p.name);
-            }*/
             playerselect("voice");
         }
 
         private void whoisToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("whois").Use(null, p.name);
-            }*/
             playerselect("whois");
         }
 
         private void kickToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("kick").Use(null, p.name + " You have been kicked by the console.");
-            }*/
             playerselect("kick", " You have been kicked by the console.");
         }
 
 
         private void banToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("ban").Use(null, p.name);
-            }*/
             playerselect("ban");
         }
 
@@ -749,93 +650,43 @@ namespace MCForge.Gui
                 Command.all.Find(com).Use(null, GetSelectedPlayer().name + args);
         }
 
-        private void unloadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("unload").Use(null, l.name);
-            }*/
-            levelcommand("unload");
-        }
-
         private void finiteModeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " finite");
-            }*/
             levelcommand("map", " finite");
         }
 
         private void animalAIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " ai");
-            }*/
             levelcommand("map", " ai");
         }
 
         private void edgeWaterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " edge");
-            }*/
             levelcommand("map", " edge");
         }
 
         private void growingGrassToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " grass");
-            }*/
             levelcommand("map", " grass");
         }
 
         private void survivalDeathToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " death");
-            }*/
             levelcommand("map", " death");
         }
 
         private void killerBlocksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " killer");
-            }*/
             levelcommand("map", " killer");
         }
 
         private void rPChatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("map").Use(null, l.name + " chat");
-            }*/
             levelcommand("map", " chat");
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Level l = GetSelectedLevel();
-            if (l != null)
-            {
-                Command.all.Find("save").Use(null, l.name);
-            }*/
             levelcommand("save");
         }
 
@@ -926,45 +777,14 @@ namespace MCForge.Gui
             e.PaintParts &= ~DataGridViewPaintParts.Focus;
         }
 
-        private void dgvPlayersTAB_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            e.PaintParts &= ~DataGridViewPaintParts.Focus;
-        }
-
         private void promoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("promote").Use(null, p.name);
-            }*/
             playerselect("promote");
         }
 
         private void demoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*Player p = GetSelectedPlayer();
-            if (p != null)
-            {
-                Command.all.Find("demote").Use(null, p.name);
-            }*/
             playerselect("demote");
-        }
-
-        private void toolStripMenuItem12_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedLevelTab() != null)
-            {
-                Command.all.Find("unload").Use(null, GetSelectedLevelTab().name);
-            }
-        }
-
-        private void toolStripMenuItem21_Click(object sender, EventArgs e)
-        {
-            if (GetSelectedLevelTab() != null)
-            {
-                Command.all.Find("save").Use(null, GetSelectedLevelTab().name);
-            }
         }
 
         #region Tabs
@@ -2116,33 +1936,17 @@ namespace MCForge.Gui
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (GetSelectedLevel() != null)
+            /*if (GetSelectedLevel() != null)
             {
                 GUI.Textures textures = new GUI.Textures();
                 textures.l = GetSelectedLevel();
                 textures.Show();
-            }
+            }*/
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
-
-
-
-        /*private void txtLog_TextChanged(object sender, EventArgs e)
-        {
-
-        }*/
-
-
-
-
-
-
-
-
     }
 }

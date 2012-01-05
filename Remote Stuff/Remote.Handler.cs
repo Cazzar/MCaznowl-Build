@@ -25,7 +25,7 @@ namespace MCForge.Remote
         public bool HandleLogin(string message)
         {
             if (!String.IsNullOrEmpty(message))
-                return message.Split(':')[0] == RemoteServer.username && message.Split(':')[1] == RemoteServer.password;
+                return message.Split(':')[0] == RemoteServer.Username && message.Split(':')[1] == RemoteServer.Password;
             return false;
         }
         public void RemoteChat(string m)
@@ -47,7 +47,7 @@ namespace MCForge.Remote
                         }
 
                         StringBuilder lol = new StringBuilder();
-                        for (int i = 1; i <= args.Length - 1; i++)
+                        for (int i = 1; i < args.Length; i++)
                         {
                             lol.Append(" " + args[i]);
                         }
@@ -86,7 +86,7 @@ namespace MCForge.Remote
                         messaged = EncryptMobile(messaged, _keyMobile);
                         byte[] buffed = new byte[(messaged.Length * 2) + 3];
                         util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
-                        buffed[0] = (byte)4;
+                        buffed[0] = 3;
                         Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
                         SendData(0x05, buffed);
 
@@ -105,16 +105,12 @@ namespace MCForge.Remote
                         util.EndianBitConverter.Big.GetBytes((short)messaged.Length).CopyTo(buffed, 1);
                         buffed[0] = 1;
                         Encoding.BigEndianUnicode.GetBytes(messaged).CopyTo(buffed, 3);
-
                         SendData(0x05, buffed);
                     }
                     else
                     {
                         m = "[Remote]: " + m;
-                        byte[] buffed = new byte[(m.Length) + 2];
-                        BitConverter.GetBytes((short)m.Length).CopyTo(buffed, 0);
-                        Encoding.UTF8.GetBytes(m).CopyTo(buffed, 2);
-                        SendData(0x12, buffed);
+                        SendData(18, new byte[]{0xA});
                     }
                     Logger.Write(string.Format("{0}{1}{2}", DateTime.Now.ToString("(HH:mm:ss) "), m, Environment.NewLine));  //Did it like this to avoid OnLog event
                     Player.GlobalMessage(string.Format("{0}[Remote]: {1}{2}", c.navy, c.white, m));

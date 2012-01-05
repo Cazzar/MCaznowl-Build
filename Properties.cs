@@ -167,6 +167,9 @@ namespace MCForge
                             case "irc":
                                 Server.irc = (value.ToLower() == "true") ? true : false;
                                 break;
+                            case "irc-colorsenable":
+                                Server.ircColorsEnable = (value.ToLower() == "true") ? true : false;
+                                break;
                             case "irc-server":
                                 Server.ircServer = value;
                                 break;
@@ -358,6 +361,12 @@ namespace MCForge
                             case "custom-griefer-stone-message":
                                 if (value != "") Server.customGrieferStoneMessage = value;
                                 break;
+                            case "custom-promote-message":
+                                if (value != "") Server.customPromoteMessage = value;
+                                break;
+                            case "custom-demote-message":
+                                if (value != "") Server.customDemoteMessage = value;
+                                break;
                             case "rank-super":
                                 try { Server.rankSuper = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); break; }
@@ -526,6 +535,14 @@ namespace MCForge
                                 try { Server.guestLimitNotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
                                 break;
+                            case "guest-join-notify":
+                                try { Server.guestJoinNotify = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "guest-leave-notify":
+                                try { Server.guestLeaveNotify = bool.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
                             case "ignore-ops":
                                 try { Server.globalignoreops = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -583,6 +600,11 @@ namespace MCForge
                                 Server.GlobalChatColor = color;
                                 break;
 
+                            case "total-undo":
+                                try { Server.totalUndo = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+
                             case "griefer-stone-tempban":
                                 try { Server.grieferStoneBan = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -620,7 +642,7 @@ namespace MCForge
                             case "wom-textures":
                                 Server.UseTextures = bool.Parse(value);
                                 break;
-                            case "send-command-data":
+                            case "send-command-usage":
                                 Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
                                 break;
                             case "review-view-perm":
@@ -696,6 +718,344 @@ namespace MCForge
                                     Server.bufferblocks = bool.Parse(value);
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
+                                break;
+                            case "translation-enabled":
+                                Server.transenabled = (value.ToLower() == "true") ? true : false;
+                                break;
+                            case "translation-language":
+                                string langcode = value;
+                            switch (langcode)
+                                {
+                                    case "af":
+                                        langcode = "Afrikaans";
+                                        break;
+                                    case "ar-sa":
+                                        langcode = "Arabic (Saudi Arabia)";
+                                        break;
+                                    case "ar-eg":
+                                        langcode = "Arabic (Egypt)";
+                                        break;
+                                    case "ar-dz":
+                                        langcode = "Arabic (Algeria)";
+                                        break;
+                                    case "ar-tn":
+                                        langcode = "Arabic (Tunisia)";
+                                        break;
+                                    case "ar-ye":
+                                        langcode = "Arabic (Yemen)";
+                                        break;
+                                    case "ar-jo":
+                                        langcode = "Arabic (Jordan)";
+                                        break;
+                                    case "ar-kw":
+                                        langcode = "Arabic (Kuwait)";
+                                        break;
+                                    case "ar-bh":
+                                        langcode = "Arabic (Bahrain)";
+                                        break;
+                                    case "eu":
+                                        langcode = "Basque";
+                                        break;
+                                    case "be":
+                                        langcode = "Belarusian";
+                                        break;
+                                    case "zh-tw":
+                                        langcode = "Chinese (Taiwan)";
+                                        break;
+                                    case "zh-hk":
+                                        langcode = "Chinese (Hong Kong SAR)";
+                                        break;
+                                    case "hr":
+                                        langcode = "Croatian";
+                                        break;
+                                    case "da":
+                                        langcode = "Danish";
+                                        break;
+                                    case "nl-be":
+                                        langcode = "Dutch (Belgium)";
+                                        break;
+                                    case "en-us":
+                                        langcode = "English (United States)";
+                                        break;
+                                    case "en-au":
+                                        langcode = "English (Australia)";
+                                        break;
+                                    case "en-nz":
+                                        langcode = "English (New Zealand)";
+                                        break;
+                                    case "en-za":
+                                        langcode = "English (South Africa)";
+                                        break;
+                                    case "en-tt":
+                                        langcode = "English (Trinidad)";
+                                        break;
+                                    case "fo":
+                                        langcode = "Faeroese";
+                                        break;
+                                    case "fi":
+                                        langcode = "Finnish";
+                                        break;
+                                    case "fr-be":
+                                        langcode = "French (Belgium)";
+                                        break;
+                                    case "fr-ch":
+                                        langcode = "French (Switzerland)";
+                                        break;
+                                    case "gd":
+                                        langcode = "Gaelic (Scotland)";
+                                        break;
+                                    case "de":
+                                        langcode = "German (Standard)";
+                                        break;
+                                    case "de-at":
+                                        langcode = "German (Austria)";
+                                        break;
+                                    case "de-li":
+                                        langcode = "German (Liechtenstein)";
+                                        break;
+                                    case "he":
+                                        langcode = "Hebrew";
+                                        break;
+                                    case "hu":
+                                        langcode = "Hungarian";
+                                        break;
+                                    case "id":
+                                        langcode = "Indonesian";
+                                        break;
+                                    case "it-ch":
+                                        langcode = "Italian (Switzerland)";
+                                        break;
+                                    case "ko":
+                                        langcode = "Korean";
+                                        break;
+                                    case "lv":
+                                        langcode = "Latvian";
+                                        break;
+                                    case "mk":
+                                        langcode = "Macedonian (FYROM)";
+                                        break;
+                                    case "mt":
+                                        langcode = "Maltese";
+                                        break;
+                                    case "no":
+                                        langcode = "Norwegian (Nynorsk)";
+                                        break;
+                                    case "pt-br":
+                                        langcode = "Portuguese (Brazil)";
+                                        break;
+                                    case "rm":
+                                        langcode = "Rhaeto-Romanic";
+                                        break;
+                                    case "ro-mo":
+                                        langcode = "Romanian (Republic of Moldova)";
+                                        break;
+                                    case "ru-mo":
+                                        langcode = "Russian (Republic of Moldova)";
+                                        break;
+                                    case "sr":
+                                        langcode = "Serbian (Cyrillic)";
+                                        break;
+                                    case "sk":
+                                        langcode = "Slovak";
+                                        break;
+                                    case "sb":
+                                        langcode = "Sorbian";
+                                        break;
+                                    case "es-mx":
+                                        langcode = "Spanish (Mexico)";
+                                        break;
+                                    case "es-cr":
+                                        langcode = "Spanish (Costa Rica)";
+                                        break;
+                                    case "es-do":
+                                        langcode = "Spanish (Dominican Republic)";
+                                        break;
+                                    case "es-co":
+                                        langcode = "Spanish (Colombia)";
+                                        break;
+                                    case "es-ar":
+                                        langcode = "Spanish (Argentina)";
+                                        break;
+                                    case "es-cl":
+                                        langcode = "Spanish (Chile)";
+                                        break;
+                                    case "es-py":
+                                        langcode = "Spanish (Paraguay)";
+                                        break;
+                                    case "es-sv":
+                                        langcode = "Spanish (El Salvador)";
+                                        break;
+                                    case "es-ni":
+                                        langcode = "Spanish (Nicaragua)";
+                                        break;
+                                    case "sx":
+                                        langcode = "Sutu";
+                                        break;
+                                    case "sv-fi":
+                                        langcode = "Swedish (Finland)";
+                                        break;
+                                    case "ts":
+                                        langcode = "Tsonga";
+                                        break;
+                                    case "tr":
+                                        langcode = "Turkish";
+                                        break;
+                                    case "ur":
+                                        langcode = "Urdu";
+                                        break;
+                                    case "vi":
+                                        langcode = "Vietnamese";
+                                        break;
+                                    case "ji":
+                                        langcode = "Yiddish";
+                                        break;
+                                    case "sq":
+                                        langcode = "Albanian";
+                                        break;
+                                    case "ar-iq":
+                                        langcode = "Arabic (Iraq)";
+                                        break;
+                                    case "ar-ly":
+                                        langcode = "Arabic (Libya)";
+                                        break;
+                                    case "ar-ma":
+                                        langcode = "Arabic (Morocco)";
+                                        break;
+                                    case "ar-om":
+                                        langcode = "Arabic (Oman)";
+                                        break;
+                                    case "ar-sy":
+                                        langcode = "Arabic (Syria)";
+                                        break;
+                                    case "ar-lb":
+                                        langcode = "Arabic (Lebanon)";
+                                        break;
+                                    case "ar-ae":
+                                        langcode = "Arabic (U.A.E.)";
+                                        break;
+                                    case "ar-qa":
+                                        langcode = "Arabic (Qatar)";
+                                        break;
+                                    case "bg":
+                                        langcode = "Bulgarian";
+                                        break;
+                                    case "ca":
+                                        langcode = "Catalan";
+                                        break;
+                                    case "zh-cn":
+                                        langcode = "Chinese (PRC)";
+                                        break;
+                                    case "zh-sg":
+                                        langcode = "Chinese (Singapore)";
+                                        break;
+                                    case "cs":
+                                        langcode = "Czech";
+                                        break;
+                                    case "nl":
+                                        langcode = "Dutch (Standard)";
+                                        break;
+                                    case "en":
+                                        langcode = "English";
+                                        break;
+                                    case "en-gb":
+                                        langcode = "English (United Kingdom)";
+                                        break;
+                                    case "en-ca":
+                                        langcode = "English (Canada)";
+                                        break;
+                                    case "en-ie":
+                                        langcode = "English (Ireland)";
+                                        break;
+                                    case "en-jm":
+                                        langcode = "English (Jamaica)";
+                                        break;
+                                    case "en-bz":
+                                        langcode = "English (Belize)";
+                                        break;
+                                    case "et":
+                                        langcode = "Farsi";
+                                        break;
+                                    case "fr":
+                                        langcode = "French (Standard)";
+                                        break;
+                                    case "ga":
+                                        langcode = "Irish";
+                                        break;
+                                    case "el":
+                                        langcode = "Greek";
+                                        break;
+                                    case "hi":
+                                        langcode = "Hindi";
+                                        break;
+                                    case "it":
+                                        langcode = "Italian (Standard)";
+                                        break;
+                                    case "is":
+                                        langcode = "Icelandic";
+                                        break;
+                                    case "ja":
+                                        langcode = "Japanese";
+                                        break;
+                                    case "lt":
+                                        langcode = "Lithuanian";
+                                        break;
+                                    case "ms":
+                                        langcode = "Malaysian";
+                                        break;
+                                    case "pl":
+                                        langcode = "Polish";
+                                        break;
+                                    case "pt":
+                                        langcode = "Portuguese";
+                                        break;
+                                    case "ro":
+                                        langcode = "Romanian";
+                                        break;
+                                    case "ru":
+                                        langcode = "Russian";
+                                        break;
+                                    case "sz":
+                                        langcode = "Sami (Lappish) ";
+                                        break;
+                                    case "sl":
+                                        langcode = "Slovenian ";
+                                        break;
+                                    case "es":
+                                        langcode = "Spanish";
+                                        break;
+                                    case "sv":
+                                        langcode = "Swedish";
+                                        break;
+                                    case "th":
+                                        langcode = "Thai";
+                                        break;
+                                    case "tn":
+                                        langcode = "Tswana";
+                                        break;
+                                    case "uk":
+                                        langcode = "Ukrainian";
+                                        break;
+                                    case "ve":
+                                        langcode = "Venda";
+                                        break;
+                                    case "xh":
+                                        langcode = "Xhosa";
+                                        break;
+                                    case "zu":
+                                        langcode = "Zulu";
+                                        break;
+                                    default:
+                                        langcode = "!ERROR!";
+                                        break;
+                                }
+                            if (langcode != "!ERROR!")
+                            {
+                                Server.translang = value.ToString().ToLower();
+                            }
+                            else
+                            {
+                                Server.translang = "en";
+                            }
                                 break;
 
                         }
@@ -781,6 +1141,10 @@ namespace MCForge
             w.WriteLine("#   zombie-survival-only-server\t=\tiEXPERIMENTAL! Makes the server only for Zombie Survival (etc. changes main level)");
             w.WriteLine("#   use-level-list\t=\tOnly gets levels for changing levels in Zombie Survival from zombie-level-list.");
             w.WriteLine("#   zombie-level-list\t=\tList of levels for changing levels (Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
+            w.WriteLine("#   total-undo\t=\tTrack changes made by the last X people logged on for undo purposes. Folder is rotated when full, so when set to 200, will actually track around 400.");
+            w.WriteLine("#   guest-limit-notify\t=\tShow -Too Many Guests- message in chat when maxGuests has been reached. Default false");
+            w.WriteLine("#   guest-join-notify\t=\tShows when guests and lower ranks join server in chat and IRC. Default true");
+            w.WriteLine("#   guest-leave-notify\t=\tShows when guests and lower ranks leave server in chat and IRC. Default true");
             w.WriteLine();
             w.WriteLine("#   UseMySQL\t=\tUse MySQL (true) or use SQLite (false)");
             w.WriteLine("#   Host\t=\tThe host name for the database (usually 127.0.0.1)");
@@ -839,6 +1203,7 @@ namespace MCForge
             w.WriteLine();
             w.WriteLine("# irc bot options");
             w.WriteLine("irc = " + Server.irc.ToString().ToLower());
+            w.WriteLine("irc-colorsenable = " + Server.ircColorsEnable.ToString().ToLower());
             w.WriteLine("irc-nick = " + Server.ircNick);
             w.WriteLine("irc-server = " + Server.ircServer);
             w.WriteLine("irc-channel = " + Server.ircChannel);
@@ -885,7 +1250,10 @@ namespace MCForge
             string dogCsv = string.Join(",", Server.LevelList.ToArray());
             w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
-            w.WriteLine("send-command-data = " + Player.sendcommanddata.ToString());
+            w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString().ToLower());
+            w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString().ToLower());
+            w.WriteLine("send-command-usage = " + Player.sendcommanddata.ToString());
+            w.WriteLine("total-undo = " + Server.totalUndo.ToString());
             w.WriteLine();
             w.WriteLine("# backup options");
             w.WriteLine("backup-time = " + Server.backupInterval.ToString());
@@ -917,6 +1285,8 @@ namespace MCForge
             w.WriteLine("custom-shutdown-message = " + Server.customShutdownMessage);
             w.WriteLine("custom-griefer-stone = " + Server.customGrieferStone.ToString().ToLower());
             w.WriteLine("custom-griefer-stone-message = " + Server.customGrieferStoneMessage);
+            w.WriteLine("custom-promote-message = " + Server.customPromoteMessage);
+            w.WriteLine("custom-demote-message = " + Server.customDemoteMessage);
             w.WriteLine("allow-tp-to-higher-ranks = " + Server.higherranktp.ToString().ToLower());
             w.WriteLine("ignore-ops = " + Server.globalignoreops.ToString().ToLower());
             w.WriteLine();
@@ -952,11 +1322,12 @@ namespace MCForge
             w.WriteLine("griefer-stone-type = " + Block.Name(Server.grieferStoneType));
             w.WriteLine("griefer-stone-rank = " + ((sbyte)Server.grieferStoneRank).ToString());
             w.WriteLine();
-            w.WriteLine("#WoM Direct thingy");
+            w.WriteLine("#WoM Settings");
             w.WriteLine("wom-direct = " + Server.WomDirect.ToString().ToLower());
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
+            w.WriteLine("wom-textures = " + Server.UseTextures);
             w.WriteLine("");
             w.WriteLine("#Review settings");
             w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
@@ -966,6 +1337,10 @@ namespace MCForge
             w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
             w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
             w.WriteLine("bufferblocks = " + Server.bufferblocks);
+            w.WriteLine("");
+            w.WriteLine("#Translation settings");
+            w.WriteLine("translation-enabled = " + Server.transenabled.ToString().ToLower());
+            w.WriteLine("translation-language = " + Server.translang.ToString().ToLower());
         }
     }
 }

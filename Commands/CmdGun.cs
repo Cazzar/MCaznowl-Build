@@ -6,6 +6,10 @@ using System.Threading;
 
 namespace MCForge
 {
+    /// <summary>
+    /// This is the command /gun
+    /// use /help gun in-game for more info
+    /// </summary>
     public class CmdGun : Command
     {
         public override string name { get { return "gun"; } }
