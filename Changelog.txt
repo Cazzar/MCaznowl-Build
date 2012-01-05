@@ -1,5 +1,6 @@
 v5.4.0.3
--Fixed a serious issue that made physics not work at random times. 
+-Fixed a serious issue that made physics not work properly.
+-Made it so you have to read the Global Chat rules, and agree to them using /gcaccept, before using Global Chat.
 -Removed a piece of code that only allowed people to have one instance of MCForge running on a single computer. 
 
 v5.4.0.2
