@@ -961,7 +961,7 @@ namespace MCForge.Gui
             foreach (Control tP in tabControl.Controls)
                 if (tP is TabPage && tP != tabPage3 && tP != tabPage5)
                     foreach (Control ctrl in tP.Controls)
-                        if (ctrl is TextBox)
+                        if (ctrl is TextBox && ctrl.Name.ToLower() != "txtgrpmotd")
                             if (ctrl.Text == "")
                             {
                                 MessageBox.Show("A textbox has been left empty. It must be filled.\n" + ctrl.Name);
@@ -1053,6 +1053,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             txtLimit.Text = foundRank.maxBlocks.ToString();
             txtMaxUndo.Text = foundRank.maxUndo.ToString();
             cmbColor.SelectedIndex = cmbColor.Items.IndexOf(c.Name(foundRank.color));
+            txtGrpMOTD.Text = String.IsNullOrEmpty(foundRank.MOTD) ? String.Empty : foundRank.MOTD;
             txtFileName.Text = foundRank.fileName;
         }
 
@@ -1146,7 +1147,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void btnAddRank_Click(object sender, EventArgs e)
         {
-            Group newGroup = new Group((LevelPermission)5, 600, 30, "CHANGEME", '1', "CHANGEME.txt");
+            Group newGroup = new Group((LevelPermission)5, 600, 30, "CHANGEME", '1', String.Empty, "CHANGEME.txt");
             storedRanks.Add(newGroup);
             listRanks.Items.Add(newGroup.trueName + " = " + (int)newGroup.Permission);
         }
@@ -2232,6 +2233,11 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 reviewlist_update();
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void txtGrpMOTD_TextChanged(object sender, EventArgs e)
+        {
+            if (txtGrpMOTD.Text != null) storedRanks[listRanks.SelectedIndex].MOTD = txtGrpMOTD.Text;
         }
 
         public void LoadTNTWarsTab(object sender, EventArgs e)
