@@ -127,6 +127,8 @@ namespace MCForge
         public static bool transenabled = false;
         public static string translang = "en";
         public static List<string> transignore = new List<string>();
+        //Global Chat Rules Accepted list
+        public static List<string> gcaccepted = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
         public struct levelID { public int ID; public string name; }
 
@@ -516,6 +518,7 @@ namespace MCForge
             if (!File.Exists("text/tempranks.txt")) File.CreateText("text/tempranks.txt").Dispose();
             if (!File.Exists("text/rankinfo.txt")) File.CreateText("text/rankinfo.txt").Dispose();
             if (!File.Exists("text/transexceptions.txt")) File.CreateText("text/transexceptions.txt").Dispose();
+            if (!File.Exists("text/gcaccepted.txt")) File.CreateText("text/gcaccepted.txt").Dispose();
             if (!File.Exists("text/bans.txt")) File.CreateText("text/bans.txt").Dispose();
             // DO NOT STICK ANYTHING IN BETWEEN HERE!!!!!!!!!!!!!!!
             else
@@ -816,6 +819,14 @@ namespace MCForge
             ml.Queue(delegate
             {
                 Translate.Init();
+                foreach (string line in File.ReadAllLines("text/transexceptions.txt"))
+                {
+                    transignore.Add(line); //loading all playernames of people who turned off translation
+                }
+                foreach (string line in File.ReadAllLines("text/gcaccepted.txt"))
+                {
+                    gcaccepted.Add(line); //loading all playernames of people who turned off translation
+                }
                 Log("Creating listening socket on port " + Server.port + "... ");
                 if (Setup())
                 {

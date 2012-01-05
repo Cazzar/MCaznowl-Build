@@ -90,6 +90,7 @@
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdC4.cs" />
+    <Compile Include="Commands\CmdGcaccept.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
