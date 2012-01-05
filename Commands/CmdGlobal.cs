@@ -13,7 +13,7 @@ namespace MCForge
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdGlobal() { }
-
+        //bla
         public override void Use(Player p, string message)
         {
             if (String.IsNullOrEmpty(message)) { Help(p); return; }
