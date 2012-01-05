@@ -45,6 +45,7 @@ namespace MCForge
         public CommandList commands;
         public string fileName;
         public PlayerList playerList;
+        public string MOTD = String.Empty;
 
         /// <summary>
         /// Create a new group object
@@ -62,14 +63,16 @@ namespace MCForge
         /// <param name="maxUn">The max undo this group can do</param>
         /// <param name="fullName">The group full name</param>
         /// <param name="newColor">The color of the group (Not including the &)</param>
+        /// <param name="motd">the custom MOTD for the group</param>
         /// <param name="file">The file path where the current players of this group are stored</param>
-        public Group(LevelPermission Perm, int maxB, long maxUn, string fullName, char newColor, string file) {
+        public Group(LevelPermission Perm, int maxB, long maxUn, string fullName, char newColor, string motd, string file) {
             Permission = Perm;
             maxBlocks = maxB;
             maxUndo = maxUn;
             trueName = fullName;
             name = trueName.ToLower();
             color = "&" + newColor;
+            MOTD = motd;
             fileName = file;
             if (name != "nobody")
                 playerList = PlayerList.Load(fileName, this);
@@ -107,7 +110,11 @@ namespace MCForge
 
                 Group thisGroup = new Group();
                 int gots = 0, version = 1;
-                if (lines.Length > 0 && lines[0] == "#Version 2") version = 2;
+                if (lines.Length > 0 && lines[0].StartsWith("#Version "))
+                {
+                    try { version = int.Parse(lines[0].Remove(0, 9)); }
+                    catch { Server.s.Log("The ranks.properties version header is invalid! Ranks may fail to load!"); }
+                }
 
                 foreach (string s in lines)
                 {
@@ -229,9 +236,14 @@ namespace MCForge
                                             gots++;
                                             thisGroup.fileName = value;
                                             break;
+                                        case "motd":
+                                            if (!String.IsNullOrEmpty(value))
+                                                thisGroup.MOTD = value;
+                                            gots++;
+                                               break;
                                     }
 
-                                    if ((gots >= 4 && version < 2) || gots >= 5)
+                                    if ((gots >= 4 && version < 2) || (gots >= 5 && version < 3) || gots >= 6)
                                     {
                                         if (version < 2) {
                                             if ((int)thisGroup.Permission >= 100)
@@ -240,7 +252,7 @@ namespace MCForge
                                                 thisGroup.maxUndo = 5400;
                                         }
 
-                                        GroupList.Add(new Group(thisGroup.Permission, thisGroup.maxBlocks, thisGroup.maxUndo, thisGroup.trueName, thisGroup.color[0], thisGroup.fileName));
+                                        GroupList.Add(new Group(thisGroup.Permission, thisGroup.maxBlocks, thisGroup.maxUndo, thisGroup.trueName, thisGroup.color[0], thisGroup.MOTD, thisGroup.fileName));
                                     }
                                 }
                             }
@@ -254,13 +266,13 @@ namespace MCForge
                 }
             }
 
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Banned) == null) GroupList.Add(new Group(LevelPermission.Banned, 1, 1, "Banned", '8', "banned.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Guest) == null) GroupList.Add(new Group(LevelPermission.Guest, 1, 120, "Guest", '7', "guest.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Builder) == null) GroupList.Add(new Group(LevelPermission.Builder, 400, 300, "Builder", '2', "builders.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.AdvBuilder) == null) GroupList.Add(new Group(LevelPermission.AdvBuilder, 1200, 900, "AdvBuilder", '3', "advbuilders.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Operator) == null) GroupList.Add(new Group(LevelPermission.Operator, 2500, 5400, "Operator", 'c', "operators.txt"));
-            if (GroupList.Find(grp => grp.Permission == LevelPermission.Admin) == null) GroupList.Add(new Group(LevelPermission.Admin, 65536, int.MaxValue, "SuperOP", 'e', "uberOps.txt"));
-            GroupList.Add(new Group(LevelPermission.Nobody, 65536, -1, "Nobody", '0', "nobody.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Banned) == null) GroupList.Add(new Group(LevelPermission.Banned, 1, 1, "Banned", '8', String.Empty, "banned.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Guest) == null) GroupList.Add(new Group(LevelPermission.Guest, 1, 120, "Guest", '7', String.Empty, "guest.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Builder) == null) GroupList.Add(new Group(LevelPermission.Builder, 400, 300, "Builder", '2', String.Empty, "builders.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.AdvBuilder) == null) GroupList.Add(new Group(LevelPermission.AdvBuilder, 1200, 900, "AdvBuilder", '3', String.Empty, "advbuilders.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Operator) == null) GroupList.Add(new Group(LevelPermission.Operator, 2500, 5400, "Operator", 'c', String.Empty, "operators.txt"));
+            if (GroupList.Find(grp => grp.Permission == LevelPermission.Admin) == null) GroupList.Add(new Group(LevelPermission.Admin, 65536, int.MaxValue, "SuperOP", 'e', String.Empty, "uberOps.txt"));
+            GroupList.Add(new Group(LevelPermission.Nobody, 65536, -1, "Nobody", '0', String.Empty, "nobody.txt"));
 
             bool swap = true; Group storedGroup;
             while (swap)
@@ -296,7 +308,7 @@ namespace MCForge
 			File.Create("properties/ranks.properties").Dispose();
 			using (StreamWriter SW = File.CreateText("properties/ranks.properties"))
 			{
-                SW.WriteLine("#Version 2");
+                SW.WriteLine("#Version 3");
 				SW.WriteLine("#RankName = string");
 				SW.WriteLine("#     The name of the rank, use capitalization.");
 				SW.WriteLine("#");
@@ -321,6 +333,9 @@ namespace MCForge
 				SW.WriteLine("#     The file which players of this rank will be stored in");
 				SW.WriteLine("#		It doesn't need to be a .txt file, but you may as well");
 				SW.WriteLine("#		Generally a good idea to just use the same file name as the rank name");
+                SW.WriteLine("#MOTD = string");
+                SW.WriteLine("#		Alternate MOTD players of the rank will see when joining the server.");
+                SW.WriteLine("#		Leave blank to use the server MOTD.");
 				SW.WriteLine();
 				SW.WriteLine();
 
@@ -333,6 +348,7 @@ namespace MCForge
                         SW.WriteLine("Limit = " + grp.maxBlocks);
                         SW.WriteLine("MaxUndo = " + grp.maxUndo);
 						SW.WriteLine("Color = " + grp.color[1]);
+                        SW.WriteLine("MOTD = " + grp.MOTD);
 						SW.WriteLine("FileName = " + grp.fileName);
 						SW.WriteLine();
 					}

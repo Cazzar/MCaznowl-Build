@@ -79,8 +79,8 @@ namespace MCForge.Remote
                     string[] stringers = messages.Split('*');
                     if (stringers.Length == 4)
                     {
-                        var newGroup = new Group(((LevelPermission)int.Parse(stringers[3])), int.Parse(stringers[2]), 0,
-                            stringers[0], stringers[1][1], "NEWRANK" + int.Parse(stringers[3]) + ".txt");
+                        Group newGroup = new Group(((LevelPermission)int.Parse(stringers[3])), int.Parse(stringers[2]), 0,
+                            stringers[0], stringers[1][1], String.Empty, "NEWRANK" + int.Parse(stringers[3]).ToString() + ".txt");
 
                         Group.GroupList.Add(newGroup);
                         Group.saveGroups(Group.GroupList);

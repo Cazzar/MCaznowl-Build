@@ -2891,10 +2891,15 @@ else goto retry;
             byte[] buffer = new byte[130];
             buffer[0] = (byte)8;
             StringFormat(Server.name, 64).CopyTo(buffer, 1);
-            //if (!Server.UseTextures)
-            StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            
+            //if (Server.UseTextures)
+            //    StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name + "~motd", 64).CopyTo(buffer, 65);
             //else
-            //    StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65);
+            //{
+            if (!String.IsNullOrEmpty(group.MOTD)) StringFormat(group.MOTD, 64).CopyTo(buffer, 65);
+            else StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            //}
+            
             if (Block.canPlace(this, Block.blackrock))
                 buffer[129] = 100;
             else
@@ -2912,8 +2917,14 @@ else goto retry;
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat("cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
-            if (level.motd == "ignore") { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat(Server.motd, 64).CopyTo(buffer, 65); }
+            //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            if (level.motd == "ignore")
+            {
+                StringFormat(Server.name, 64).CopyTo(buffer, 1);
+                if (!String.IsNullOrEmpty(group.MOTD)) StringFormat(group.MOTD, 64).CopyTo(buffer, 65);
+                else StringFormat(Server.motd, 64).CopyTo(buffer, 65);
+            }
+
             else StringFormat(level.motd, 128).CopyTo(buffer, 1);
 
             if (Block.canPlace(this.group.Permission, Block.blackrock))

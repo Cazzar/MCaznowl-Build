@@ -160,6 +160,8 @@ namespace MCForge.Gui
             this.label20 = new System.Windows.Forms.Label();
             this.listBlocks = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtGrpMOTD = new System.Windows.Forms.TextBox();
+            this.label85 = new System.Windows.Forms.Label();
             this.txtMaxUndo = new System.Windows.Forms.TextBox();
             this.label52 = new System.Windows.Forms.Label();
             this.lblColor = new System.Windows.Forms.Label();
@@ -342,7 +344,7 @@ namespace MCForge.Gui
             this.label87 = new System.Windows.Forms.Label();
             this.SlctdTntWrdStatus = new System.Windows.Forms.TextBox();
             this.label86 = new System.Windows.Forms.Label();
-            this.label85 = new System.Windows.Forms.Label();
+            this.lblMOTD = new System.Windows.Forms.Label();
             this.SlctdTntWrsLvl = new System.Windows.Forms.TextBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.groupBox36 = new System.Windows.Forms.GroupBox();
@@ -1793,6 +1795,8 @@ namespace MCForge.Gui
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage2.Controls.Add(this.txtGrpMOTD);
+            this.tabPage2.Controls.Add(this.lblMOTD);
             this.tabPage2.Controls.Add(this.txtMaxUndo);
             this.tabPage2.Controls.Add(this.label52);
             this.tabPage2.Controls.Add(this.lblColor);
@@ -1816,6 +1820,23 @@ namespace MCForge.Gui
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Ranks";
             // 
+            // txtGrpMOTD
+            // 
+            this.txtGrpMOTD.Location = new System.Drawing.Point(81, 176);
+            this.txtGrpMOTD.Name = "txtGrpMOTD";
+            this.txtGrpMOTD.Size = new System.Drawing.Size(100, 21);
+            this.txtGrpMOTD.TabIndex = 17;
+            this.txtGrpMOTD.TextChanged += new System.EventHandler(this.txtGrpMOTD_TextChanged);
+            // 
+            // lblMOTD
+            // 
+            this.lblMOTD.AutoSize = true;
+            this.lblMOTD.Location = new System.Drawing.Point(37, 179);
+            this.lblMOTD.Name = "lblMOTD";
+            this.lblMOTD.Size = new System.Drawing.Size(38, 13);
+            this.lblMOTD.TabIndex = 16;
+            this.lblMOTD.Text = "MOTD:";
+            // 
             // txtMaxUndo
             // 
             this.txtMaxUndo.Location = new System.Drawing.Point(81, 122);
@@ -1836,7 +1857,7 @@ namespace MCForge.Gui
             // 
             // lblColor
             // 
-            this.lblColor.Location = new System.Drawing.Point(179, 144);
+            this.lblColor.Location = new System.Drawing.Point(185, 147);
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(26, 23);
             this.lblColor.TabIndex = 13;
@@ -1847,7 +1868,7 @@ namespace MCForge.Gui
             this.cmbColor.FormattingEnabled = true;
             this.cmbColor.Location = new System.Drawing.Point(81, 149);
             this.cmbColor.Name = "cmbColor";
-            this.cmbColor.Size = new System.Drawing.Size(92, 21);
+            this.cmbColor.Size = new System.Drawing.Size(100, 21);
             this.cmbColor.TabIndex = 12;
             this.cmbColor.SelectedIndexChanged += new System.EventHandler(this.cmbColor_SelectedIndexChanged);
             // 
@@ -1862,7 +1883,7 @@ namespace MCForge.Gui
             // 
             // txtFileName
             // 
-            this.txtFileName.Location = new System.Drawing.Point(81, 206);
+            this.txtFileName.Location = new System.Drawing.Point(81, 227);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(100, 21);
             this.txtFileName.TabIndex = 4;
@@ -1895,7 +1916,7 @@ namespace MCForge.Gui
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(21, 209);
+            this.label14.Location = new System.Drawing.Point(21, 230);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 13);
             this.label14.TabIndex = 3;
@@ -5052,6 +5073,8 @@ namespace MCForge.Gui
         private System.Windows.Forms.GroupBox groupBox28;
         private System.Windows.Forms.NumericUpDown nudCooldownTime;
         private System.Windows.Forms.Label label84;
+        private System.Windows.Forms.Label lblMOTD;
+        private System.Windows.Forms.TextBox txtGrpMOTD;
         private System.Windows.Forms.TabPage tabPage14;
         private System.Windows.Forms.TextBox SlctdTntWrdStatus;
         private System.Windows.Forms.Label label86;
@@ -5093,5 +5116,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.ListBox TntWrsMpsList;
         private System.Windows.Forms.Button TntWrsDiffSlctBt;
         private System.Windows.Forms.CheckBox TntWrsStreaksChck;
+>>>>>>> master
     }
 }

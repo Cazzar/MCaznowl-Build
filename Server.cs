@@ -203,7 +203,7 @@ namespace MCForge
 
         // OmniBan
         public static OmniBan omniban;
-        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 30);
+        public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 120);
 
         //Settings
         #region Server Settings

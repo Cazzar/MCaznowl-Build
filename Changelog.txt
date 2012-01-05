@@ -1,5 +1,9 @@
-v5.5.0.0
-- Added /search
+v5.4.0.2
+- Added new command: 
+	- /search - Allows you to search all the blocks, ranks, players, and commands. (Does not support Custom Commands).
+- Modified MCForge Heartbeat to reduce site load.
+- Fixed an issue where physics would cause random CPU usage spikes.
+- Fixed an issue in /mute that counted everyone as offline. 
 
 v5.4.0.1
 - Fixed an issue where auto-updated users did not download a vital .dll file. 
