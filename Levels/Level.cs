@@ -1394,7 +1394,8 @@ namespace MCForge
                     if (physics == 0 || ListCheck.Count == 0)
                     {
                         lastCheck = 0;
-                        break;
+                        wait = speedPhysics;
+                        continue;
                     }
 
                     DateTime Start = DateTime.Now;
