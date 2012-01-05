@@ -5116,6 +5116,5 @@ namespace MCForge.Gui
         private System.Windows.Forms.ListBox TntWrsMpsList;
         private System.Windows.Forms.Button TntWrsDiffSlctBt;
         private System.Windows.Forms.CheckBox TntWrsStreaksChck;
->>>>>>> master
     }
 }
