@@ -76,7 +76,7 @@ namespace MCForge
 
         private readonly Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>();
                                                  // Holds random flow data for liqiud physics
-
+        bool physicssate = false;
         public bool Death;
         public ExtrasCollection Extras = new ExtrasCollection();
         public bool GrassDestroy = true;
@@ -1382,6 +1382,7 @@ namespace MCForge
             }
             physThread = new Thread(Physics);
             physThread.Start();
+            physicssate = true;
         }
         public void Physics()
         {
@@ -1435,6 +1436,7 @@ namespace MCForge
                     wait = speedPhysics;
                 }
             }
+            physicssate = false;
         }
 
         public int PosToInt(ushort x, ushort y, ushort z)
@@ -5112,12 +5114,14 @@ namespace MCForge
                         {
                             if (C2.b == b)
                             {
-                                C2.extraInfo = extraInfo;
+                                C2.extraInfo = extraInfo; //Dont need to check physics here because if the list is active, then physics is active :)
                                 return;
                             }
                         }
                     }
                 }
+                if (!physicssate && physics > 0)
+                    StartPhysics();
             }
             catch
             {
@@ -5134,7 +5138,7 @@ namespace MCForge
                 {
                     ushort x, y, z;
                     IntToPos(b, out x, out y, out z);
-                    AddCheck(b, extraInfo);
+                    AddCheck(b, extraInfo); //Dont need to check physics here....AddCheck will do that
                     Blockchange(x, y, z, (byte) type, true);
                     return true;
                 }
@@ -5142,6 +5146,8 @@ namespace MCForge
                 if (!ListUpdate.Exists(Update => Update.b == b))
                 {
                     ListUpdate.Add(new Update(b, (byte) type, extraInfo));
+                    if (!physicssate && physics > 0)
+                        StartPhysics();
                     return true;
                 }
                 else
@@ -5150,6 +5156,8 @@ namespace MCForge
                     {
                         ListUpdate.RemoveAll(Update => Update.b == b);
                         ListUpdate.Add(new Update(b, (byte) type, extraInfo));
+                        if (!physicssate && physics > 0)
+                            StartPhysics();
                         return true;
                     }
                 }
