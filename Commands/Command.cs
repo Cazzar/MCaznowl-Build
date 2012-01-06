@@ -39,6 +39,11 @@ namespace MCForge
 		public static CommandList core = new CommandList();
 		public static void InitAll()
 		{
+            //mapping commands
+            all.Add(new CmdAllow());
+            all.Add(new CmdAllowed());
+            all.Add(new CmdDisallow());
+
 			all.Add(new CmdAbort());
 			all.Add(new CmdAbout());
 			all.Add(new CmdAdminChat());

@@ -150,6 +150,8 @@ namespace MCForge
 
         public List<C4.C4s> C4list = new List<C4.C4s>();
 
+        public List<string> AllowedPlayers = new List<string>();
+
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
             onLevelSave += null;
@@ -748,6 +750,7 @@ namespace MCForge
                     SW.WriteLine("LeafDecay = " + level.leafDecay.ToString());
                     SW.WriteLine("RandomFlow = " + level.randomFlow.ToString());
                     SW.WriteLine("GrowTrees = " + level.growTrees.ToString());
+                    SW.WriteLine("AllowedPlayers = " + string.Join(",", level.AllowedPlayers.ToArray()));
                 }
             }
             catch (Exception)
@@ -1257,6 +1260,9 @@ namespace MCForge
                                         break;
                                     case "growtrees":
                                         level.growTrees = bool.Parse(value);
+                                        break;
+                                    case "allowedplayers":
+                                        level.AllowedPlayers = value.Split(',').ToList();
                                         break;
                                 }
                             }

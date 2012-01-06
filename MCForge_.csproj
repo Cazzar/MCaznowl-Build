@@ -89,7 +89,10 @@
     <Compile Include="AutoSaver.cs" />
     <Compile Include="Ban.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Commands\CmdAllow.cs" />
+    <Compile Include="Commands\CmdAllowed.cs" />
     <Compile Include="Commands\CmdC4.cs" />
+    <Compile Include="Commands\CmdDisallow.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />

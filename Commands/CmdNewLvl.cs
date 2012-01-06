@@ -34,7 +34,61 @@ namespace MCForge
         {
             if (message == "") { Help(p); return; }
 
-            string[] parameters = message.Split(' '); // Grab the parameters from the player's message
+            string[] parameters = { p.name, "64", "64", "64", "flat" }; // message.Split(' '); // Grab the parameters from the player's message
+            if (p != null || p.group.Permission <= LevelPermission.Operator)
+            {
+                //some advanced coding for more custom params defaults will be player.name 64 64 64 flat user can specify the own params
+                string[] parameters2 = message.Split(' ');
+
+                switch (message.Split(' ').Length)
+                {
+                    case 1:
+                        //set width to be first param
+                        parameters[1] = parameters2[0];
+                        break;
+                    case 2:
+                        //set width to be first param
+                        parameters[1] = parameters2[0];
+                        //set height to be 2nd param
+                        parameters[2] = parameters2[1];
+                        break;
+                    case 3:
+                        //set width to be first param
+                        parameters[1] = parameters2[0];
+                        //set height to be 2nd param
+                        parameters[2] = parameters2[1];
+                        //set depth to be 3rd param
+                        parameters[3] = parameters2[2];
+                        break;
+                    case 4:
+                        //set width to be first param
+                        parameters[1] = parameters2[0];
+                        //set height to be 2nd param
+                        parameters[2] = parameters2[1];
+                        //set depth to be 3rd param
+                        parameters[3] = parameters2[2];
+                        //set level type to be 4th param
+                        parameters[4] = parameters2[3];
+                        break;
+                    case 5:
+                        //set width to be first param
+                        parameters[1] = parameters2[0];
+                        //set height to be 2nd param
+                        parameters[2] = parameters2[1];
+                        //set depth to be 3rd param
+                        parameters[3] = parameters2[2];
+                        //set level type to be 4th param
+                        parameters[4] = parameters2[3];
+                        //set level seed to be last param
+                        parameters[5] = parameters2[4];
+                        break;
+                    default:
+                        Player.SendMessage(p, "Too many parameters");
+                        Help(p);
+                        return;
+                }
+            } else { parameters = message.Split(' '); }
+
             if (parameters.Length >= 5 && parameters.Length <= 6) // make sure there are 5 or 6 params
             {
                 switch (parameters[4])
@@ -119,7 +173,7 @@ namespace MCForge
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/newlvl - creates a new level.");
-            Player.SendMessage(p, "/newlvl mapname 128 64 128 type seed");
+            Player.SendMessage(p, "/newlvl 128 64 128 type seed");
             Player.SendMessage(p, "Valid sizes: 16, 32, 64, 128, 256, 512, 1024"); //Update this to add more?
             Player.SendMessage(p, "Valid types: island, mountains, forest, ocean, flat, pixel, desert, space, rainbow, and hell");
             Player.SendMessage(p, "The seed is optional, and controls how the level is generated.");
