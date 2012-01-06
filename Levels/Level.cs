@@ -161,7 +161,10 @@ namespace MCForge
 
         public List<C4.C4s> C4list = new List<C4.C4s>();
 
+        //mapping specific code
         public List<string> AllowedPlayers = new List<string>();
+        public List<string> Liked = new List<string>();
+        public List<string> Disliked = new List<string>();
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
@@ -1503,6 +1506,29 @@ namespace MCForge
         public List<Player> getPlayers()
         {
             return Player.players.Where(p => p.level == this).ToList();
+        }
+
+        //mapping code
+        public void like(Player p, bool dislike = false)
+        {
+            if (dislike)
+            {
+                if (this.Liked.Contains(p.name.ToLower()))
+                    this.Liked.Remove(p.name.ToLower());
+                this.Disliked.Add(p.name.ToLower());
+            }
+            else
+                this.Liked.Add(p.name.ToLower());
+        }
+
+        //for when someone wants to code a plugin or if i decide to make offline /like//dislike for Admins
+        public bool like(string playername, bool dislike = false)
+        {
+            Player p = null;
+            p = Player.Find(playername);
+            if (p == null) return false;
+            like(p, dislike);
+            return true;
         }
 
         #region ==Physics==

@@ -24,7 +24,7 @@ namespace MCForge
     {
         public override string name { get { return "allowed"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "mod"; } }
+        public override string type { get { return "info"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public CmdAllowed() { }
@@ -43,19 +43,33 @@ namespace MCForge
                         return;
                     }
                 }
+                else
+                {
+                    lvl = Level.Find(p.name);
+                    if (lvl == null)
+                    {
+                        Player.SendMessage(p, "You do not have a level, type /newlvl to make a new level");
+                        return;
+                    }
+                }
             }
             else
             {
                 lvl = Level.Find(p.name);
+                if (lvl == null)
+                {
+                    Player.SendMessage(p, "You do not have a level, type /newlvl to make a new level");
+                    return;
+                }
             }
+            string allowed = string.Join(", ", lvl.AllowedPlayers.ToArray());
 
-            Player.SendMessage(p, string.Join(", ", lvl.AllowedPlayers.ToArray()));
+            Player.SendMessage(p, string.IsNullOrEmpty(allowed) ? "Nobody is allowed" : "Allowed players: " + c.gold + allowed);
 
         }
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/allowed - Shows the players on your maps build allow list");
-            if (p.group.Permission > LevelPermission.Operator) Player.SendMessage(p, "/allow [map] [player] - Adds [player] on [maps] build allow list");
         }
     }
 }

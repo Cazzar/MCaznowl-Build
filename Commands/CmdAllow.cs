@@ -70,16 +70,11 @@ namespace MCForge
             }
             if (who == null)
             {
-                Player.SendMessage(p, "\"" + name + "\" does not seem to be online checking if they are allowed");
-                message = message.ToLower();
-                if (lvl.AllowedPlayers.Contains(message))
-                    lvl.AllowedPlayers.Remove(message);
-                else
-                    Player.SendMessage(p, "Player not found on your allowed list");
+                Player.SendMessage(p, "\"" + name + "\" does not seem to be online use /offlineallow to allow offline users");
                 return;
             }
 
-            lvl.AllowedPlayers.Remove(who.name.ToLower());
+            lvl.AllowedPlayers.Add(who.name.ToLower());
         }
     }
 }
