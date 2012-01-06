@@ -768,6 +768,8 @@ namespace MCForge
                     SW.WriteLine("RandomFlow = " + level.randomFlow.ToString());
                     SW.WriteLine("GrowTrees = " + level.growTrees.ToString());
                     SW.WriteLine("AllowedPlayers = " + string.Join(",", level.AllowedPlayers.ToArray()));
+                    SW.WriteLine("Liked = " + string.Join(",", level.Liked.ToArray()));
+                    SW.WriteLine("Disliked = " + string.Join(",", level.Disliked.ToArray()));
                 }
             }
             catch (Exception)
@@ -1286,6 +1288,12 @@ namespace MCForge
                                         break;
                                     case "allowedplayers":
                                         level.AllowedPlayers = value.Split(',').ToList();
+                                        break;
+                                    case "liked":
+                                        level.Liked = value.Split(',').ToList();
+                                        break;
+                                    case "disliked":
+                                        level.Disliked = value.Split(',').ToList();
                                         break;
                                 }
                             }
