@@ -49,7 +49,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\Source\General.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\MCForge_.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
@@ -93,6 +94,7 @@
     <Compile Include="Commands\CmdAllowed.cs" />
     <Compile Include="Commands\CmdC4.cs" />
     <Compile Include="Commands\CmdDisallow.cs" />
+    <Compile Include="Commands\CmdGcaccept.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
@@ -115,7 +117,6 @@
     <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
-    <Compile Include="SingleInstance.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />

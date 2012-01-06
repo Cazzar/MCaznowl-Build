@@ -22,6 +22,7 @@ using System.Text;
 
 namespace MCForge
 {
+    //derp idk just need to edit this so I can commit :/
     public static class ServerSettings
     {
         // Don't even try referencing this from Program.cs, you'll break the updater and it will fail miserably.

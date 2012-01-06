@@ -76,7 +76,7 @@ namespace MCForge
 
         private readonly Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>();
                                                  // Holds random flow data for liqiud physics
-
+        bool physicssate = false;
         public bool Death;
         public ExtrasCollection Extras = new ExtrasCollection();
         public bool GrassDestroy = true;
@@ -128,7 +128,18 @@ namespace MCForge
         public DateTime physResume;
         public Thread physThread;
         public Timer physTimer = new Timer(1000);
-        public int physics;
+        public Timer physChecker = new Timer(1000);
+        public int physics
+        {
+            get { return Physicsint; }
+            set
+            {
+                if (value > 0 && Physicsint == 0)
+                    StartPhysics();
+                Physicsint = value;
+            }
+        }
+        int Physicsint;
         public bool randomFlow = true;
         public bool realistic = true;
         public byte rotx;
@@ -361,8 +372,11 @@ namespace MCForge
             }
             try
             {
+                physChecker.Stop();
+                physChecker.Dispose();
                 physThread.Abort();
                 physThread.Join();
+                
             }
             catch
             {
@@ -1123,6 +1137,12 @@ namespace MCForge
                     level.jailrotx = level.rotx;
                     level.jailroty = level.roty;
                     level.StartPhysics();
+                    level.physChecker.Elapsed += delegate
+                    {
+                        if (!level.physicssate && level.physics > 0)
+                            level.StartPhysics();
+                    };
+                    level.physChecker.Start();
                     //level.season = new SeasonsCore(level);
                     try
                     {
@@ -1377,7 +1397,7 @@ namespace MCForge
                             AddCheck(i);
             }
             physics = newValue;
-            StartPhysics();
+            //StartPhysics(); This isnt needed, the physics will start when we set the new value above
         }
         public void StartPhysics()
         {
@@ -1388,6 +1408,7 @@ namespace MCForge
             }
             physThread = new Thread(Physics);
             physThread.Start();
+            physicssate = true;
         }
         public void Physics()
         {
@@ -1400,7 +1421,8 @@ namespace MCForge
                     if (physics == 0 || ListCheck.Count == 0)
                     {
                         lastCheck = 0;
-                        break;
+                        wait = speedPhysics;
+                        continue;
                     }
 
                     DateTime Start = DateTime.Now;
@@ -1441,6 +1463,7 @@ namespace MCForge
                     wait = speedPhysics;
                 }
             }
+            physicssate = false;
         }
 
         public int PosToInt(ushort x, ushort y, ushort z)
@@ -5118,12 +5141,14 @@ namespace MCForge
                         {
                             if (C2.b == b)
                             {
-                                C2.extraInfo = extraInfo;
+                                C2.extraInfo = extraInfo; //Dont need to check physics here because if the list is active, then physics is active :)
                                 return;
                             }
                         }
                     }
                 }
+                if (!physicssate && physics > 0)
+                    StartPhysics();
             }
             catch
             {
@@ -5140,7 +5165,7 @@ namespace MCForge
                 {
                     ushort x, y, z;
                     IntToPos(b, out x, out y, out z);
-                    AddCheck(b, extraInfo);
+                    AddCheck(b, extraInfo); //Dont need to check physics here....AddCheck will do that
                     Blockchange(x, y, z, (byte) type, true);
                     return true;
                 }
@@ -5148,6 +5173,8 @@ namespace MCForge
                 if (!ListUpdate.Exists(Update => Update.b == b))
                 {
                     ListUpdate.Add(new Update(b, (byte) type, extraInfo));
+                    if (!physicssate && physics > 0)
+                        StartPhysics();
                     return true;
                 }
                 else
@@ -5156,6 +5183,8 @@ namespace MCForge
                     {
                         ListUpdate.RemoveAll(Update => Update.b == b);
                         ListUpdate.Add(new Update(b, (byte) type, extraInfo));
+                        if (!physicssate && physics > 0)
+                            StartPhysics();
                         return true;
                     }
                 }
