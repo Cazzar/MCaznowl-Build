@@ -43,6 +43,9 @@ namespace MCForge
             all.Add(new CmdAllow());
             all.Add(new CmdAllowed());
             all.Add(new CmdDisallow());
+            all.Add(new CmdLike());
+            all.Add(new CmdLiked());
+            all.Add(new CmdDislike());
 
 			all.Add(new CmdAbort());
 			all.Add(new CmdAbout());
