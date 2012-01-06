@@ -20,7 +20,8 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdCmdLoad : Command
     {

@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 using MCForge;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdExplode : Command
     {

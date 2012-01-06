@@ -26,7 +26,8 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdSetPass : Command
     {

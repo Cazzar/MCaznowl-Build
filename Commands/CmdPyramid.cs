@@ -22,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdPyramid : Command
     {

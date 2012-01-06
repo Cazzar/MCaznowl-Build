@@ -20,7 +20,8 @@ using System;
 using System.IO;
 using System.Net;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdPumpkin : Command
     {

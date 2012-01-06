@@ -21,7 +21,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdMissile : Command
     {

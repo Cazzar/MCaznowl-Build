@@ -17,7 +17,8 @@
 */
 ﻿using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     using System;
     public class CmdCompLoad : Command

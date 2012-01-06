@@ -15,7 +15,8 @@
 	or implied. See the Licenses for the specific language governing
 	permissions and limitations under the Licenses.
 */
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     using System;
     public class CmdImpersonate : Command

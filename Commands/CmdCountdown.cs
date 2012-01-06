@@ -7,7 +7,8 @@ using System.Net;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdCountdown : Command
     {

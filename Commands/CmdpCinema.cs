@@ -21,7 +21,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdpCinema : Command
     {

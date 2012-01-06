@@ -21,7 +21,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdStore : Command
     {

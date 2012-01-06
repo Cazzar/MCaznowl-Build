@@ -17,8 +17,8 @@
 */
 using System;
 using System.Collections.Generic;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdAwardMod : Command
     {

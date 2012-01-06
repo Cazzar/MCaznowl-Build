@@ -20,7 +20,8 @@
 using System;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     /// <summary>
     /// This is the command /fetch

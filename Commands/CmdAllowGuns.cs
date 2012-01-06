@@ -23,7 +23,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdAllowGuns : Command
     {

@@ -23,8 +23,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 using System.Text.RegularExpressions;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdAgree : Command
     {

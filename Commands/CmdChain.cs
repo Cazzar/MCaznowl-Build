@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdChain : Command
     {
