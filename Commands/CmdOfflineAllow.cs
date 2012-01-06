@@ -69,6 +69,7 @@ namespace MCForge
             }
 
             lvl.AllowedPlayers.Add(message.ToLower());
+            Player.SendMessage(p, "\"" + c.gold + message + Server.DefaultColor + "\" was added to the allow list.");
         }
     }
 }

@@ -502,6 +502,13 @@ namespace MCForge
             catch (Exception e) { Kick("Login failed!"); Server.ErrorLog(e); }
         }
 
+        #region mappingcode
+        public int GetMaxMaps()
+        {
+            return ((int)group.Permission / 10) + 1;
+        }
+        #endregion
+
         public void save()
         {
             string commandString =

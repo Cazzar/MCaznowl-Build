@@ -42,6 +42,7 @@ namespace MCForge
                 {
                     message = parameters[1];
                     lvl = Level.Find(parameters[0]);
+                    who = Player.Find(parameters[1]);
                     if (lvl == null)
                     {
                         Player.SendMessage(p, "Map not found");
@@ -74,7 +75,8 @@ namespace MCForge
                 return;
             }
 
-            lvl.AllowedPlayers.Add(who.name.ToLower());
+            lvl.AllowedPlayers.Add(who.name.ToLower();
+            Player.SendMessage(p, "\"" + who.color + who.name + Server.DefaultColor + "\" was added to the allow list.");
         }
     }
 }

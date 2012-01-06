@@ -64,6 +64,7 @@ namespace MCForge
             }
             string allowed = string.Join(", ", lvl.AllowedPlayers.ToArray());
 
+            Player.SendMessage(p, p.GetMaxMaps().ToString());
             Player.SendMessage(p, string.IsNullOrEmpty(allowed) ? "Nobody is allowed" : "Allowed players: " + c.gold + allowed);
 
         }

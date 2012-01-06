@@ -70,7 +70,7 @@ namespace MCForge
             }
             if (who == null)
             {
-                Player.SendMessage(p, "\"" + name + "\" does not seem to be online checking if they are allowed");
+                Player.SendMessage(p, "\"" + message + "\" does not seem to be online checking if they are allowed");
                 message = message.ToLower();
                 if (lvl.AllowedPlayers.Contains(message))
                     lvl.AllowedPlayers.Remove(message);
@@ -80,6 +80,7 @@ namespace MCForge
             }
 
             lvl.AllowedPlayers.Remove(who.name.ToLower());
+            Player.SendMessage(p, "\"" + c.gold + message + "\" was removed from the allow list.");
         }
     }
 }
