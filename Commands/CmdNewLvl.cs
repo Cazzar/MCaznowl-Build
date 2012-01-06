@@ -32,7 +32,7 @@ namespace MCForge
 
         public override void Use(Player p, string message)
         {
-            if (message == "") { Help(p); return; }
+            //if (message == "") { Help(p); return; }
 
             string[] parameters = { p.name, "64", "64", "64", "flat" }; // message.Split(' '); // Grab the parameters from the player's message
             if (p != null || p.group.Permission <= LevelPermission.Operator)
