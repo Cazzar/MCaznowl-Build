@@ -22,7 +22,7 @@ using System.Collections.Generic;
 //using MySql.Data.Types;
 
 using MCForge;
-namespace MCForge.Commands
+namespace MCForge
 {
     public class CmdCTF : Command
     {
