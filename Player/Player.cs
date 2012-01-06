@@ -1239,6 +1239,16 @@ namespace MCForge
                 }
             }
 
+            if (level.name.ToLower() != name.ToLower())
+            {
+                if (!(level.AllowedPlayers.Contains(name.ToLower())))
+                {
+                    SendMessage("You cannot build on others maps without being allowed by the owner");
+                    SendBlockchange(x, y, z, b);
+                    return;
+                }
+            }
+
             if (Server.lava.active && Server.lava.HasPlayer(this) && Server.lava.IsPlayerDead(this))
             {
                 SendMessage("You are out of the round, and cannot build.");

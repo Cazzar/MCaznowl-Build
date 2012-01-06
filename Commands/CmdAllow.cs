@@ -70,7 +70,7 @@ namespace MCForge
             }
             if (who == null)
             {
-                Player.SendMessage(p, "\"" + name + "\" does not seem to be online use /offlineallow to allow offline users");
+                Player.SendMessage(p, "\"" + message + "\" does not seem to be online use /offlineallow to allow offline users");
                 return;
             }
 

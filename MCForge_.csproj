@@ -98,6 +98,7 @@
     <Compile Include="Commands\CmdGcaccept.cs" />
     <Compile Include="Commands\CmdLike.cs" />
     <Compile Include="Commands\CmdLiked.cs" />
+    <Compile Include="Commands\CmdOfflineAllow.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
