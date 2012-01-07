@@ -128,7 +128,7 @@ namespace MCForge
         public DateTime physResume;
         public Thread physThread;
         public Timer physTimer = new Timer(1000);
-        public Timer physChecker = new Timer(1000);
+        //public Timer physChecker = new Timer(1000);
         public int physics
         {
             get { return Physicsint; }
@@ -370,8 +370,8 @@ namespace MCForge
             }
             try
             {
-                physChecker.Stop();
-                physChecker.Dispose();
+                //physChecker.Stop();
+                //physChecker.Dispose();
                 physThread.Abort();
                 physThread.Join();
                 
@@ -1134,12 +1134,12 @@ namespace MCForge
                     level.jailrotx = level.rotx;
                     level.jailroty = level.roty;
                     level.StartPhysics();
-                    level.physChecker.Elapsed += delegate
-                    {
-                        if (!level.physicssate && level.physics > 0)
-                            level.StartPhysics();
-                    };
-                    level.physChecker.Start();
+                    //level.physChecker.Elapsed += delegate
+                    //{
+                    //    if (!level.physicssate && level.physics > 0)
+                    //        level.StartPhysics();
+                    //};
+                    //level.physChecker.Start();
                     //level.season = new SeasonsCore(level);
                     try
                     {
@@ -1395,14 +1395,19 @@ namespace MCForge
         }
         public void StartPhysics()
         {
-            if (physThread != null)
+            lock (this)
             {
-                if (physThread.ThreadState == ThreadState.Running)
+                if (physThread != null)
+                {
+                    if (physThread.ThreadState == ThreadState.Running)
+                        return;
+                }
+                if (ListCheck.Count == 0)
                     return;
+                physThread = new Thread(Physics);
+                physThread.Start();
+                physicssate = true;
             }
-            physThread = new Thread(Physics);
-            physThread.Start();
-            physicssate = true;
         }
         public void Physics()
         {
@@ -1416,7 +1421,7 @@ namespace MCForge
                     {
                         lastCheck = 0;
                         wait = speedPhysics;
-                        continue;
+                        break;
                     }
 
                     DateTime Start = DateTime.Now;
@@ -1458,6 +1463,7 @@ namespace MCForge
                 }
             }
             physicssate = false;
+            physThread.Abort();
         }
 
         public int PosToInt(ushort x, ushort y, ushort z)
@@ -5113,9 +5119,10 @@ namespace MCForge
                     #endregion
                 }
             }
-            catch
+            catch (Exception e)
             {
                 Server.s.Log("Level physics error");
+                Server.ErrorLog(e);
             }
         }
 
