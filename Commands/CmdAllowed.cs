@@ -64,12 +64,13 @@ namespace MCForge
             }
             string allowed = string.Join(", ", lvl.AllowedPlayers.ToArray());
 
-            Player.SendMessage(p, string.IsNullOrEmpty(allowed) ? "Nobody is allowed" : "Allowed players: " + c.gold + allowed);
+            Player.SendMessage(p, string.IsNullOrEmpty(allowed) ? "Nobody is allowed to build" : "Allowed players: " + c.gold + allowed);
 
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/allowed - Shows the players on your maps build allow list");
+            Player.SendMessage(p, "/allowed <map> - Shows the players on your maps build allow list");
+            Player.SendMessage(p, "Use /allowed <map> to check your extra maps or who can build on others maps");
         }
     }
 }

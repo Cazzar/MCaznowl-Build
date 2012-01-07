@@ -37,6 +37,28 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             if (message == "") { Help(p); return; }
+
+            //check if the player owns the map (map name is their name or starts with their name)
+            if (p.group.Permission < LevelPermission.Operator)
+            {
+                if (message.Split('.').Length >= 2)
+                {
+                    if (message.Split('.')[0].ToLower() != p.name.ToLower())
+                    {
+                        Player.SendMessage(p, "You cannot delete maps you do not own");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (message.ToLower() != p.name.ToLower())
+                    {
+                        Player.SendMessage(p, "You cannot delete maps you do not own");
+                        return;
+                    }
+                }
+            }
+
             Level foundLevel = Level.Find(message);
             if (foundLevel != null) foundLevel.Unload();
 
