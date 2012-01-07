@@ -18,7 +18,8 @@
 using System;
 using MCForge.SQL;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdTitle : Command
     {

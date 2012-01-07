@@ -19,7 +19,8 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdChatRoom : Command
     {

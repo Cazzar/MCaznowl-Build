@@ -27,7 +27,8 @@ using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Net;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdReport : Command
     {

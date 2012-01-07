@@ -18,7 +18,8 @@
 using System;
 using System.IO;
 using System.Linq;
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdOverseer : Command
     {

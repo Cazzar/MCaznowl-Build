@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     /// <summary>
     /// This is the command /afk

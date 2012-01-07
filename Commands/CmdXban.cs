@@ -17,7 +17,9 @@
 */
 using System;
 
-namespace MCForge {
+using MCForge;
+namespace MCForge.Commands
+{
     public class CmdXban : Command {
 
         public override string name { get { return "xban"; } }

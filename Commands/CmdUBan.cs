@@ -17,7 +17,9 @@
 */
 using System;
 
-namespace MCForge {
+using MCForge;
+namespace MCForge.Commands
+{
     public class CmdUBan : Command {
 
         public override string name { get { return "uban"; } }

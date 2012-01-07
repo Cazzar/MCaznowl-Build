@@ -21,7 +21,8 @@ using System.Threading;
 using System.Collections;
 using System.Security.Cryptography;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdMaze : Command
     {

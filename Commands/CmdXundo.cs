@@ -16,8 +16,9 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-
-namespace MCForge {
+using MCForge;
+namespace MCForge.Commands
+{
     public class CmdXundo : Command {
 
         public override string name { get { return "xundo"; } }

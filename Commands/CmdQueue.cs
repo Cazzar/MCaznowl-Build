@@ -19,7 +19,8 @@
 using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdQueue : Command
     {

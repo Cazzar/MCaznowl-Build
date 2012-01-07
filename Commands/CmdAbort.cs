@@ -17,7 +17,8 @@
 */
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdAbort : Command
     {

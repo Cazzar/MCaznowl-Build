@@ -19,7 +19,8 @@ Created by Snowl (David D.) and Cazzar (Cayde D.)
 
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdZombieGame : Command
     {

@@ -21,7 +21,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
 	public class CmdTntWars : Command
 	{

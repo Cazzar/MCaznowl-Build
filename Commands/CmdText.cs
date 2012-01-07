@@ -21,7 +21,8 @@ using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdText : Command
     {

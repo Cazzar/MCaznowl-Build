@@ -22,7 +22,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdFaq : Command
     {

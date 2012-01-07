@@ -21,7 +21,8 @@ using System.Text;
 using System.IO;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdRestore : Command
     {

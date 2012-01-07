@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdRestoreSelection : Command
     {

@@ -14,7 +14,8 @@ permissions and limitations under the Licenses.
 */
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdHelp : Command
     {

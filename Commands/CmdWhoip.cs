@@ -22,8 +22,8 @@ using System.IO;
 using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdWhoip : Command
     {

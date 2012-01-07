@@ -18,7 +18,8 @@
 using System;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdWarp : Command
     {

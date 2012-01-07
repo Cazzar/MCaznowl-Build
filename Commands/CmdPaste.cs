@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdPaste : Command
     {

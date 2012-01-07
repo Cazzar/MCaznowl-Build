@@ -25,7 +25,9 @@ using System.IO.Packaging;
 using MCForge.SQL;
 using System.Threading;
 
-namespace MCForge {
+using MCForge;
+namespace MCForge.Commands
+{
     class CmdServer : Command {
         public override string name { get { return "server"; } }
         public override string shortcut { get { return "serv"; } }

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
+using MCForge;
 namespace MCForge
 {
     public class CmdCTF : Command

@@ -19,7 +19,8 @@ using System;
 using System.IO;
 using System.Data;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdSave : Command
     {

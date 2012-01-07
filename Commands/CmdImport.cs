@@ -20,7 +20,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdImport : Command
     {

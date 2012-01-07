@@ -23,7 +23,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdHacks : Command
     {

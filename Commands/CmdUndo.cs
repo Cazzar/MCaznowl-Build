@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MCForge {
+using MCForge;
+namespace MCForge.Commands
+{
     public class CmdUndo : Command {
         public override string name { get { return "undo"; } }
         public override string shortcut { get { return "u"; } }

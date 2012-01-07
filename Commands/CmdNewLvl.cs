@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdNewLvl : Command
     {

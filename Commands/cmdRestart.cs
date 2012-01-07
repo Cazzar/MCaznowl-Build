@@ -22,7 +22,8 @@ using System.Text;
 using MCForge.Gui;
 using System.Diagnostics;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdRestart : Command
     {
