@@ -31,6 +31,13 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             Level lvl = null;
+
+            if (p == null)
+            {
+                Player.SendMessage(p, "You have to be ingame to do that!");
+                return;
+            }
+
             if (message == "") { Help(p); return; } else { lvl = Level.Find(message); }
 
             if (lvl == null)
@@ -39,7 +46,14 @@ namespace MCForge
                 return;
             }
 
+            if (lvl.name.Split('.')[1].ToLower() == p.name.ToLower())
+            {
+                Player.SendMessage(p, "You cannot like your own map!");
+                return;
+            }
+
             lvl.like(p.name);
+            Player.SendMessage(p, "Added map to your like list");
         }
         public override void Help(Player p)
         {

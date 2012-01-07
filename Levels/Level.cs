@@ -1526,7 +1526,11 @@ namespace MCForge
                 this.Disliked.Add(p.name.ToLower());
             }
             else
+            {
+                if (this.Disliked.Contains(p.name.ToLower()))
+                    this.Disliked.Remove(p.name.ToLower());
                 this.Liked.Add(p.name.ToLower());
+            }
         }
 
         //for when someone wants to code a plugin or if i decide to make offline /like//dislike for Admins
