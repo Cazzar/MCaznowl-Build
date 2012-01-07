@@ -355,6 +355,10 @@ namespace MCForge
         public static LevelPermission reviewnext = LevelPermission.Operator;
         public static LevelPermission reviewclear = LevelPermission.Operator;
 
+        public static int NormalReward = 10;
+        public static int ActiveReward = 20;
+        public static int InactiveReward = 0;
+
         #endregion
 
         public static MainLoop ml;

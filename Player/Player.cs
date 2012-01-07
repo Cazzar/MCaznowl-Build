@@ -984,6 +984,37 @@ namespace MCForge
                     muted = true;
                     GlobalMessage(name + " is still muted from the last time they went offline.");
                 }
+
+                DateTime now = DateTime.Now;
+                DateTime lastlogin = DateTime.Parse(playerDb.Rows[0]["LastLogin"].ToString());
+
+                TimeSpan ts = now - lastlogin;
+                int LastLoginDays = ts.Days;
+
+                if (LastLoginDays < 1)
+                {
+                    //no bonus
+                }
+                if (LastLoginDays == 1 || LastLoginDays == 2)
+                {
+                    //active
+                    money += Server.ActiveReward;
+                    SendMessage("You have got " + Server.ActiveReward + Server.moneys + " for being active! good work!");
+                }
+                if (LastLoginDays <= 3 && LastLoginDays >= 5)
+                {
+                    //casual
+                    money += Server.NormalReward;
+                    SendMessage("You have got " + Server.NormalReward + Server.moneys + " for being casually active.");
+                }
+                if (LastLoginDays <= 3 && LastLoginDays >= 5)
+                {
+                    //casual
+                    money += Server.NormalReward;
+                    SendMessage("You have got " + Server.NormalReward + Server.moneys + " for being casually active.");
+                }
+
+                //TODO: Add code for activity reward here
             }
             playerDb.Dispose();
             if (PlayerConnect != null)

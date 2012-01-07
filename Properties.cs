@@ -91,6 +91,21 @@ namespace MCForge
                                 }
                                 else { Server.s.Log("server-name invalid! setting to default."); }
                                 break;
+
+                            #region mappingcode
+                            case "activebonus":
+                                try { Server.ActiveReward = int.Parse(value); } catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "normalbonus":
+                                try { Server.NormalReward = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            case "inactivebonus":
+                                try { Server.InactiveReward = int.Parse(value); }
+                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
+                                break;
+                            #endregion
+                            
                             case "motd":
                                 if (ValidString(value, "=![]&:.,{}~-+()?_/\\' ")) // allow = in the motd
                                 {
@@ -1057,7 +1072,6 @@ namespace MCForge
                                 Server.translang = "en";
                             }
                                 break;
-
                         }
                     }
                 }
@@ -1341,6 +1355,10 @@ namespace MCForge
             w.WriteLine("#Translation settings");
             w.WriteLine("translation-enabled = " + Server.transenabled.ToString().ToLower());
             w.WriteLine("translation-language = " + Server.translang.ToString().ToLower());
+            w.WriteLine("");
+            w.WriteLine("ActiveBonus = " + Server.ActiveReward);
+            w.WriteLine("InactiveBonus = " + Server.InactiveReward);
+            w.WriteLine("NormalBonus = " + Server.NormalReward);
         }
     }
 }
