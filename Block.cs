@@ -76,6 +76,11 @@ namespace MCForge
         public const byte obsidian = (byte)49;
         public const byte Zero = 0xff;
 
+        //custom caznowl blocks
+        public const byte op_lair = (byte)50;
+        public const byte lava_raiser = (byte)51;
+        public const byte lava_timer = (byte)99;
+
         //Custom blocks
         public const byte door_orange_air = (byte)57;
         public const byte door_yellow_air = (byte)58;
