@@ -1246,7 +1246,7 @@ namespace MCForge
                 }
             }
 
-            if (level.name.ToLower() != name.ToLower())
+            if (level.name.Split('.')[0].ToLower() != name.ToLower())
             {
                 if (!(level.AllowedPlayers.Contains(name.ToLower())))
                 {

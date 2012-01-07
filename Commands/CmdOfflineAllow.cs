@@ -34,6 +34,11 @@ namespace MCForge
 
             if (message == "") { Help(p); return; }
 
+            string mapnumber = null;
+            if (message.Split(' ').Length == 2)
+                mapnumber = message.Split(' ')[1];
+            message = message.Split(' ')[0];
+
             if (p.group.Permission > LevelPermission.Operator)
             {
                 string[] parameters = message.Split(' ');
@@ -47,10 +52,21 @@ namespace MCForge
                         return;
                     }
                 }
-                else lvl = Level.Find(p.name);
+                else
+                {
+                    if (string.IsNullOrEmpty(mapnumber))
+                        lvl = Level.Find(p.name);
+                    else
+                        lvl = Level.Find(p.name + "." + mapnumber);
+                }
             }
             else
-                lvl = Level.Find(p.name);
+            {
+                if (string.IsNullOrEmpty(mapnumber))
+                    lvl = Level.Find(p.name);
+                else
+                    lvl = Level.Find(p.name + "." + mapnumber);
+            }
 
             allowPlayer(p, lvl, message);
 

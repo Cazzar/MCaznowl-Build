@@ -35,6 +35,11 @@ namespace MCForge
 
             if (message == "") { Help(p); return; } else { who = Player.Find(message); }
 
+            string mapnumber = null;
+            if (message.Split(' ').Length == 2)
+                mapnumber = message.Split(' ')[1];
+            message = message.Split(' ')[0];
+
             if (p.group.Permission > LevelPermission.Operator)
             {
                 string[] parameters = message.Split(' ');
@@ -48,17 +53,28 @@ namespace MCForge
                         return;
                     }
                 }
-                else lvl = Level.Find(p.name);
+                else
+                {
+                    if (string.IsNullOrEmpty(mapnumber))
+                        lvl = Level.Find(p.name);
+                    else
+                        lvl = Level.Find(p.name + "." + mapnumber);
+                }
             }
-            else 
-                lvl = Level.Find(p.name);
+            else
+            {
+                if (string.IsNullOrEmpty(mapnumber))
+                    lvl = Level.Find(p.name);
+                else
+                    lvl = Level.Find(p.name + "." + mapnumber);
+            }
 
             DisallowPlayer(p, who, lvl, message);
 
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/disallow [player] - removes a player on your maps build allow list");
+            Player.SendMessage(p, "/disallow [player] <mapnumber> - removes a player on your maps build allow list");
             if (p.group.Permission > LevelPermission.Operator) Player.SendMessage(p, "/disallow [map] [player] - removes [player] on [maps] build allow list");
         }
         void DisallowPlayer(Player p, Player who, Level lvl, string message)

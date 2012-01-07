@@ -35,6 +35,11 @@ namespace MCForge
 
             if (message == "") { Help(p); return; } else { who = Player.Find(message); }
 
+            string mapnumber = null;
+            if (message.Split(' ').Length == 2)
+                mapnumber = message.Split(' ')[1];
+            message = message.Split(' ')[0];
+
             if (p.group.Permission > LevelPermission.Operator)
             {
                 string[] parameters = message.Split(' ');
@@ -49,17 +54,29 @@ namespace MCForge
                         return;
                     }
                 }
-                else lvl = Level.Find(p.name);
+                else
+                {
+                    if (string.IsNullOrEmpty(mapnumber))
+                        lvl = Level.Find(p.name);
+                    else
+                        lvl = Level.Find(p.name + "." + mapnumber);
+                }
             }
             else
-                lvl = Level.Find(p.name);
+            {
+                if (string.IsNullOrEmpty(mapnumber))
+                    lvl = Level.Find(p.name);
+                else
+                    lvl = Level.Find(p.name + "." + mapnumber);
+            }
+
 
             allowPlayer(p, who, lvl, message);
 
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/allow [player] - Adds a player on your maps build allow list");
+            Player.SendMessage(p, "/allow [player] <mapnumber> - Adds a player on your maps build allow list");
             if (p.group.Permission > LevelPermission.Operator) Player.SendMessage(p, "/allow [map] [player] - Adds [player] on [maps] build allow list");
         }
         void allowPlayer(Player p, Player who, Level lvl, string message)
@@ -75,7 +92,7 @@ namespace MCForge
                 return;
             }
 
-            lvl.AllowedPlayers.Add(who.name.ToLower();
+            lvl.AllowedPlayers.Add(who.name.ToLower());
             Player.SendMessage(p, "\"" + who.color + who.name + Server.DefaultColor + "\" was added to the allow list.");
         }
     }

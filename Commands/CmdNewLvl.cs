@@ -35,60 +35,64 @@ namespace MCForge
             //if (message == "") { Help(p); return; }
 
             string[] parameters = { p.name, "64", "64", "64", "flat" }; // message.Split(' '); // Grab the parameters from the player's message
-            if (p != null || p.group.Permission <= LevelPermission.Operator)
+            if (p != null)
             {
-                //some advanced coding for more custom params defaults will be player.name 64 64 64 flat user can specify the own params
-                string[] parameters2 = message.Split(' ');
-
-                switch (message.Split(' ').Length)
+                if (p.group.Permission <= LevelPermission.Operator)
                 {
-                    case 1:
-                        //set width to be first param
-                        parameters[1] = parameters2[0];
-                        break;
-                    case 2:
-                        //set width to be first param
-                        parameters[1] = parameters2[0];
-                        //set height to be 2nd param
-                        parameters[2] = parameters2[1];
-                        break;
-                    case 3:
-                        //set width to be first param
-                        parameters[1] = parameters2[0];
-                        //set height to be 2nd param
-                        parameters[2] = parameters2[1];
-                        //set depth to be 3rd param
-                        parameters[3] = parameters2[2];
-                        break;
-                    case 4:
-                        //set width to be first param
-                        parameters[1] = parameters2[0];
-                        //set height to be 2nd param
-                        parameters[2] = parameters2[1];
-                        //set depth to be 3rd param
-                        parameters[3] = parameters2[2];
-                        //set level type to be 4th param
-                        parameters[4] = parameters2[3];
-                        break;
-                    case 5:
-                        //set width to be first param
-                        parameters[1] = parameters2[0];
-                        //set height to be 2nd param
-                        parameters[2] = parameters2[1];
-                        //set depth to be 3rd param
-                        parameters[3] = parameters2[2];
-                        //set level type to be 4th param
-                        parameters[4] = parameters2[3];
-                        //set level seed to be last param
-                        parameters[5] = parameters2[4];
-                        break;
-                    default:
-                        Player.SendMessage(p, "Too many parameters");
-                        Help(p);
-                        return;
-                }
-            } else { parameters = message.Split(' '); }
+                    //some advanced coding for more custom params defaults will be player.name 64 64 64 flat user can specify the own params
+                    string[] parameters2 = message.Split(' ');
 
+                    switch (message.Split(' ').Length)
+                    {
+                        case 1:
+                            //set width to be first param
+                            parameters[1] = parameters2[0];
+                            break;
+                        case 2:
+                            //set width to be first param
+                            parameters[1] = parameters2[0];
+                            //set height to be 2nd param
+                            parameters[2] = parameters2[1];
+                            break;
+                        case 3:
+                            //set width to be first param
+                            parameters[1] = parameters2[0];
+                            //set height to be 2nd param
+                            parameters[2] = parameters2[1];
+                            //set depth to be 3rd param
+                            parameters[3] = parameters2[2];
+                            break;
+                        case 4:
+                            //set width to be first param
+                            parameters[1] = parameters2[0];
+                            //set height to be 2nd param
+                            parameters[2] = parameters2[1];
+                            //set depth to be 3rd param
+                            parameters[3] = parameters2[2];
+                            //set level type to be 4th param
+                            parameters[4] = parameters2[3];
+                            break;
+                        case 5:
+                            //set width to be first param
+                            parameters[1] = parameters2[0];
+                            //set height to be 2nd param
+                            parameters[2] = parameters2[1];
+                            //set depth to be 3rd param
+                            parameters[3] = parameters2[2];
+                            //set level type to be 4th param
+                            parameters[4] = parameters2[3];
+                            //set level seed to be last param
+                            parameters[5] = parameters2[4];
+                            break;
+                        default:
+                            Player.SendMessage(p, "Too many parameters");
+                            Help(p);
+                            return;
+                    }
+                }
+                else { parameters = message.Split(' '); }
+            }
+            else { parameters = message.Split(' '); }
             if (parameters.Length >= 5 && parameters.Length <= 6) // make sure there are 5 or 6 params
             {
                 switch (parameters[4])
@@ -110,6 +114,7 @@ namespace MCForge
                 }
 
                 string name = parameters[0].ToLower();
+                int mapnumber = 0;
                 ushort x = 1, y = 1, z = 1;
                 int seed = 0;
                 bool useSeed = false;
@@ -131,7 +136,51 @@ namespace MCForge
                 if (!isGood(z)) { Player.SendMessage(p, z + " is not a good dimension! Use a power of 2 next time."); }
 
                 if (!Player.ValidName(name)) { Player.SendMessage(p, "Invalid name!"); return; }
-                if (System.IO.File.Exists("levels/" + name + ".lvl")) { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
+                //if (System.IO.File.Exists("levels/" + name + ".lvl")) { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
+
+                StringBuilder dir = new StringBuilder("levels/" + name);
+                dir.Append(mapnumber != 0 ? "." + mapnumber.ToString() : "");
+                dir.Append(".lvl");
+
+                while (System.IO.File.Exists(dir.ToString()))
+                {
+                    if (p != null)
+                    {
+                        if (mapnumber < p.GetMaxMaps())
+                        {
+                            Server.s.Log(mapnumber.ToString());
+                            Server.s.Log(dir.ToString());
+                            Server.s.Log(p.GetMaxMaps().ToString());
+                            mapnumber++;
+                            dir = null;
+                            dir = new StringBuilder("levels/" + name);
+                            dir.Append(mapnumber != 0 ? "." + mapnumber.ToString() : "");
+                            dir.Append(".lvl");
+                        }
+                        else { Player.SendMessage(p, "You have used up your maps!"); return; }
+                    }
+                    else { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
+                }
+
+                name = name + "." + mapnumber.ToString();
+
+                /*retry:
+                StringBuilder dir = new StringBuilder("levels/" + name);
+                dir.Append(mapnumber != 0 ? "." + mapnumber.ToString() : "");
+                dir.Append(".lvl");
+                if (System.IO.File.Exists(dir.ToString()))
+                {
+                    if (p != null)
+                    {
+                        if (mapnumber <= p.GetMaxMaps())
+                        {
+                            mapnumber++;
+                            goto retry;
+                        }
+                        else { Player.SendMessage(p, "You have used up your maps!"); return; }
+                    }
+                    else { Player.SendMessage(p, "Level \"" + name + "\" already exists!"); return; }
+                }*/
 
                 /*try
                 {
