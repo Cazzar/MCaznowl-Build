@@ -44,6 +44,13 @@ namespace MCForge
 
                     switch (message.Split(' ').Length)
                     {
+                        case 0:
+                            //attempted workaround for "invalid dimensions"
+                            parameters[1] = "64";
+                            parameters[2] = "64";
+                            parameters[3] = "64";
+                            parameters[4] = "flat";
+                            break;
                         case 1:
                             //set width to be first param
                             parameters[1] = parameters2[0];
