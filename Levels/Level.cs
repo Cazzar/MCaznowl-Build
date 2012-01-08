@@ -637,11 +637,14 @@ namespace MCForge
                 errorLocation = "Map rank checking";
                 if (Owners == "")
                 {
-                    if (p.group.Permission < permissionbuild && (!inZone || !AllowBuild || !PerbuildEvade.Contains(p)))
+                    if (p.group.Permission < permissionbuild && (!inZone || !AllowBuild))
                     {
-                        p.SendBlockchange(x, y, z, b);
-                        Player.SendMessage(p, "Must be at least " + PermissionToName(permissionbuild) + " to build here");
-                        return;
+                        if (!PerbuildEvade.Contains(p))
+                        {
+                            p.SendBlockchange(x, y, z, b);
+                            Player.SendMessage(p, "Must be at least " + PermissionToName(permissionbuild) + " to build here");
+                            return;
+                        }
                     }
                 }
 

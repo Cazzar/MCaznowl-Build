@@ -4040,6 +4040,11 @@ level.Unload();
                         Server.PopupNotify(ip + " disconnected.");
                 }
 
+                foreach (Level lvl in Server.levels)
+                {
+                    if (lvl.PerbuildEvade.Contains(this))
+                        lvl.PerbuildEvade.Remove(this);
+                }
                 Server.zombie.InfectedPlayerDC();
 
             }

@@ -25,7 +25,7 @@ namespace MCForge.Commands
     {
         public override string name { get { return "like"; } }
         public override string shortcut { get { return ""; } }
-        public override string type { get { return "mod"; } }
+        public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public CmdLike() { }

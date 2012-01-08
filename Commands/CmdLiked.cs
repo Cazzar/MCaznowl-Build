@@ -23,7 +23,7 @@ namespace MCForge.Commands
 {
     public class CmdLiked : Command
     {
-        public override string name { get { return "Liked"; } }
+        public override string name { get { return "liked"; } }
         public override string shortcut { get { return ""; } }
         public override string type { get { return "info"; } }
         public override bool museumUsable { get { return true; } }
@@ -32,7 +32,7 @@ namespace MCForge.Commands
         public override void Use(Player p, string message)
         {
             Level lvl = null;
-            lvl = Level.Find(p.name);
+            lvl = Level.Find(message);
 
             if (lvl == null)
             {
