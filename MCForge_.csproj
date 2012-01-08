@@ -101,6 +101,7 @@
     <Compile Include="Commands\CmdLiked.cs" />
     <Compile Include="Commands\CmdOfflineAllow.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
+    <Compile Include="Commands\CmdSubmit.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />

@@ -31,6 +31,10 @@ namespace MCForge.Commands
         public CmdBuildAllow() { }
         public override void Use(Player p, string message)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                Help(p);
+            }
             var remove = false;
             if (message.Split(' ').Length == 2)
             {
