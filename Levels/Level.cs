@@ -162,9 +162,10 @@ namespace MCForge
         public List<C4.C4s> C4list = new List<C4.C4s>();
 
         //mapping specific code
-        public List<string> AllowedPlayers = new List<string>();
-        public List<string> Liked = new List<string>();
-        public List<string> Disliked = new List<string>();
+        public List<string> AllowedPlayers   = new List<string>();
+        public List<string> Liked            = new List<string>();
+        public List<string> Disliked         = new List<string>();
+        public List<Player> PerbuildEvade    = new List<Player>();
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {

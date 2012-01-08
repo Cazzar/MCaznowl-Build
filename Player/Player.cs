@@ -1277,7 +1277,7 @@ namespace MCForge
                 }
             }
 
-            if (level.name.Split('.')[0].ToLower() != name.ToLower())
+            if (level.name.Split('.')[0].ToLower() != name.ToLower() || level.name.ToLower().StartsWith("freebuild_"))
             {
                 if (!(level.AllowedPlayers.Contains(name.ToLower())))
                 {
