@@ -504,7 +504,7 @@ namespace MCForge.Gui
                                     }
                                     catch
                                     {
-                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                        Server.s.Log("The command data sending failed! If this happens often you should turn it off.");
                                     }
                                 }
                             }).Start();
