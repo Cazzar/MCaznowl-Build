@@ -18,7 +18,8 @@
 
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdLiked : Command
     {
