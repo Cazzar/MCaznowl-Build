@@ -61,6 +61,14 @@ namespace MCForge.Commands
             {
                 if (param[0] == "map")
                 {
+
+                    if (p.group.Permission < LevelPermission.Operator)
+                        if (param[1].Split('.')[0] != p.name)
+                        {
+                            Player.SendMessage(p, "You cannot lockdown others maps!");
+                            return;
+                        }
+
                     if (!Directory.Exists("text/lockdown/map"))
                     {
                         p.SendMessage("Could not locate the map folder, creating one now.");
