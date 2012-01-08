@@ -1007,11 +1007,11 @@ namespace MCForge
                     money += Server.NormalReward;
                     SendMessage("You have got " + Server.NormalReward + Server.moneys + " for being casually active.");
                 }
-                if (LastLoginDays <= 3 && LastLoginDays >= 5)
+                if (LastLoginDays >= 7 )
                 {
                     //casual
-                    money += Server.NormalReward;
-                    SendMessage("You have got " + Server.NormalReward + Server.moneys + " for being casually active.");
+                    money += Server.InactiveReward;
+                    SendMessage("You have got " + Server.InactiveReward + Server.moneys + " for being inactive. A bigger reward for you if you are more active!");
                 }
 
                 //TODO: Add code for activity reward here
