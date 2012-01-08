@@ -504,7 +504,7 @@ namespace MCForge.Gui
                                     }
                                     catch
                                     {
-                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                        Server.s.Log("The command data sending failed! If this happens often you should turn it off.");
                                     }
                                 }
                             }).Start();
@@ -550,7 +550,7 @@ namespace MCForge.Gui
 
         private void Window_Resize(object sender, EventArgs e)
         {
-            this.Hide();
+            this.ShowInTaskbar = (this.WindowState != FormWindowState.Minimized);
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)

@@ -158,6 +158,7 @@ namespace MCForge
         public bool worldChat = true;
         public bool bufferblocks = Server.bufferblocks;
         public List<BlockQueue.block> blockqueue = new List<BlockQueue.block>();
+        private readonly object physThreadLock = new object();
 
         public List<C4.C4s> C4list = new List<C4.C4s>();
 
@@ -1416,7 +1417,7 @@ namespace MCForge
         }
         public void StartPhysics()
         {
-            lock (this)
+            lock (physThreadLock)
             {
                 if (physThread != null)
                 {
